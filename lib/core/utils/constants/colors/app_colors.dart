@@ -6,8 +6,13 @@ class AppColors {
   AppColors._();
 
   static const greyScale = _GreyScale();
-  static const Color transparent = Colors.transparent;
 
+  /// DESIGN COLORS
+  static const Color primaryColor = Color(0xff2B75CC);
+  static const Color splashBackgroundColor = Color(0xff203787);
+
+  ///  DEFAULT APP COLORS
+  static const Color transparent = Colors.transparent;
   static const Color white = Color(0xffffffff);
   static const Color black = Color(0xff000000);
   static const Color red = Color(0xFFFF5757);

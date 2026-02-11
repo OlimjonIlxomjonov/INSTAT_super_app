@@ -9,10 +9,11 @@ class TElevatedButtonTheme {
   static final lightElevatedButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: .circular(5)),
+      shape: RoundedRectangleBorder(borderRadius: .circular(12)),
       foregroundColor: AppColors.white,
-      backgroundColor: AppColors.blue,
-      minimumSize: Size(double.infinity, appH(45)),
+      padding: EdgeInsets.symmetric(vertical: appH(14), horizontal: appW(14)),
+      backgroundColor: AppColors.primaryColor,
+      // minimumSize: Size(double.infinity, appH(45)),
       textStyle: AppTextStyles.source.medium(fontSize: 14),
     ),
   );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
-import 'package:my_template/features/home/presentation/screens/home_page.dart';
+import 'package:my_template/features/main_app/home/presentation/screens/home_page.dart';
 import 'package:my_template/features/settings/presentation/screens/settings_page.dart';
 
 class AppBottomNavBar extends StatefulWidget {

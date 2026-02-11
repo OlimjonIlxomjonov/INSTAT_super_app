@@ -16,5 +16,6 @@ class TAppTheme {
     inputDecorationTheme: TTextFieldTheme.lightInputDecoration,
     textTheme: TTextTheme.lightTextTheme,
     elevatedButtonTheme: TElevatedButtonTheme.lightElevatedButtonTheme,
+    bottomSheetTheme: BottomSheetThemeData(backgroundColor: AppColors.white),
   );
 }

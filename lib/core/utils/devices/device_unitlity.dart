@@ -1,11 +1,16 @@
 import 'package:flutter/services.dart';
 
 class TDeviceUtils {
-  static Future<void> setStatusBarColor(Color color) async {
+  static Future<void> setStatusBarColor(
+    Color color, {
+    bool isBright = false,
+  }) async {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         systemNavigationBarColor: color,
-        systemNavigationBarIconBrightness: Brightness.dark,
+        systemNavigationBarIconBrightness: isBright
+            ? Brightness.light
+            : Brightness.dark,
       ),
     );
   }
