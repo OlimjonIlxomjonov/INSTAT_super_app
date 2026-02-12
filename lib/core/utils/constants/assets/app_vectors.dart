@@ -4,7 +4,7 @@ abstract class AppVectors {
   static const baseOnboardingPath = 'assets/onboarding_images/';
   static const format = '.svg';
 
-  // home base path
+  // home_edu base path
   static const baseHomePath = 'assets/home_page/';
 
   /// ONBOARDING
@@ -17,7 +17,7 @@ abstract class AppVectors {
   /// one id logo
   static const String oneIdLogo = 'assets/images/oneid_logo.svg';
 
-  /// home
+  /// home_edu
   static const String homeInstatLogo = 'assets/images/c_home_instat_logo.svg';
   static const String onlineEduBack = '${baseHomePath}online_edu_back.svg';
   static const String bookSectioBack = '${baseHomePath}book_section_back.svg';

@@ -24,4 +24,6 @@ abstract class AppStrings {
 
   static const String studyingCourses = "O’qilayotgan kurslar";
   static const String popularCourses = 'Eng ommabop kurslar';
+  static const String allCourses = 'Barcha kurslar';
+  static const String coursesTitle = 'Kurslar';
 }

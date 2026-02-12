@@ -6,34 +6,39 @@ class MiniAppSectionCard extends StatelessWidget {
   final String mainImage;
   final String backgroundImage;
   final String title;
+  final void Function(BuildContext context) onTap;
 
   const MiniAppSectionCard({
     super.key,
     required this.mainImage,
     required this.backgroundImage,
     required this.title,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(image: SvgImageProvider(backgroundImage)),
-      ),
-      child: Column(
-        children: [
-          Expanded(
-            child: Align(
-              child: Image.asset(
-                mainImage,
-                width: 140,
-                height: 140,
-                fit: BoxFit.contain,
+    return GestureDetector(
+      onTap: () => onTap(context),
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(image: SvgImageProvider(backgroundImage)),
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: Align(
+                child: Image.asset(
+                  mainImage,
+                  width: 140,
+                  height: 140,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
-          ),
-          Text(title, style: AppTextStyles.source.bold(fontSize: 16)),
-        ],
+            Text(title, style: AppTextStyles.source.bold(fontSize: 16)),
+          ],
+        ),
       ),
     );
   }

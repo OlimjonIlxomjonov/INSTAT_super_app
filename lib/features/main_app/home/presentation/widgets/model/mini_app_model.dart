@@ -1,16 +1,15 @@
-import 'package:my_template/core/utils/constants/assets/app_images.dart';
-import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
+import 'package:flutter/cupertino.dart';
 
 class MiniAppModel {
   final String mainImage;
   final String backgroundImage;
   final String title;
+  final void Function(BuildContext context) onTap;
 
   const MiniAppModel({
     required this.mainImage,
     required this.backgroundImage,
     required this.title,
+    required this.onTap,
   });
-
-
 }

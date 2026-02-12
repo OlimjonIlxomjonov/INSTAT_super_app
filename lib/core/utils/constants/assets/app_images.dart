@@ -4,7 +4,7 @@ abstract class AppImages {
   static const baseOnboardingPath = 'assets/onboarding_images/';
   static const format = '.png';
 
-  // base home params
+  // baseHome params
   static const baseHomePath = 'assets/home_page/';
 
   // images

@@ -10,6 +10,7 @@ class AppColors {
   /// DESIGN COLORS
   static const Color primaryColor = Color(0xff2B75CC);
   static const Color splashBackgroundColor = Color(0xff203787);
+  static const Color eduCategorySelectedBg = Color(0xffF2F8FE);
 
   ///  DEFAULT APP COLORS
   static const Color transparent = Colors.transparent;
