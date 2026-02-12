@@ -10,6 +10,7 @@ class ActiveCoursesWg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ValueNotifier<double> _valueNotifier = ValueNotifier(0);
+
     return Container(
       margin: .only(bottom: appH(12)),
       padding: .all(8),

@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/strings/app_strings.dart';
+import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/title_with_layout_selector_wg.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_sheet.dart';
 import 'package:my_template/core/utils/widgets/popular_courses_card/expanded_courses_card_wg.dart';
 import 'package:my_template/core/utils/widgets/popular_courses_card/minimal_courses_card_wg.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/detailed_course_info_page.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class ShowAllCoursesBottomSheetPage extends StatelessWidget {
+class ShowAllCoursesBottomSheetPage extends StatefulWidget {
   const ShowAllCoursesBottomSheetPage({super.key});
+
+  @override
+  State<ShowAllCoursesBottomSheetPage> createState() =>
+      _ShowAllCoursesBottomSheetPageState();
+}
+
+class _ShowAllCoursesBottomSheetPageState
+    extends State<ShowAllCoursesBottomSheetPage> {
+  CoursesLayout layout = CoursesLayout.grid;
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +61,27 @@ class ShowAllCoursesBottomSheetPage extends StatelessWidget {
               sliver: SliverToBoxAdapter(
                 child: Column(
                   children: [
-                    TitleWithLayoutSelectorWg(),
+                    TitleWithLayoutSelectorWg(
+                      onChanged: (v) => setState(() => layout = v),
+                      layout: layout,
+                    ),
                     Column(
                       children: List.generate(5, (index) {
                         return Skeletonizer(
                           enabled: false,
-                          child: ExpandedCoursesCardWg(), // EXPANDED
-                          // child: MinimalCoursesCardWg(), // MINIMAL
+                          child: layout == CoursesLayout.grid
+                              ? ExpandedCoursesCardWg(
+                                  onTap: () => openMiniAppSheet(
+                                    context,
+                                    child: DetailedCourseInfoPage(),
+                                  ),
+                                )
+                              : MinimalCoursesCardWg(
+                                  onTap: () => openMiniAppSheet(
+                                    context,
+                                    child: DetailedCourseInfoPage(),
+                                  ),
+                                ),
                         );
                       }),
                     ),

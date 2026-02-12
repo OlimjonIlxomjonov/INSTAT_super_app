@@ -1,0 +1,1 @@
+enum CoursesLayout { grid, list }
