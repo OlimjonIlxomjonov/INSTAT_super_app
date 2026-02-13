@@ -11,8 +11,9 @@ import 'package:my_template/core/utils/widgets/extend_section/extend_section_see
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_sheet.dart';
 import 'package:my_template/core/utils/widgets/popular_courses_card/popular_courses_card_wg.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/detailed_course_info_page.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/show_all_courses_bottom_sheet_page.dart';
-import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/widgets_edu/status_achievements_card_wg.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/widgets_edu/status_achievements_card_wg.dart';
 
 class HomeEduPage extends StatelessWidget {
   const HomeEduPage({super.key});
@@ -22,20 +23,20 @@ class HomeEduPage extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            floating: true,
-            automaticallyImplyLeading: false,
-            actions: [
-              TextButton(
-                onPressed: () {
-                  AppRoute.close();
-                },
-                child: Text('close'),
-              ),
-            ],
-          ),
+          // SliverAppBar(
+          //   floating: true,
+          //   automaticallyImplyLeading: false,
+          //   actions: [
+          //     TextButton(
+          //       onPressed: () {
+          //         AppRoute.close();
+          //       },
+          //       child: Text('close'),
+          //     ),
+          //   ],
+          // ),
           SliverPadding(
-            padding: .symmetric(horizontal: appW(20)),
+            padding: .only(left: appW(20), right: appW(20), top: appH(20)),
             sliver: SliverAppBar(
               automaticallyImplyLeading: true,
               leading: CircleAvatar(
@@ -156,7 +157,12 @@ class HomeEduPage extends StatelessWidget {
                           padding: EdgeInsets.only(right: appW(12)),
                           child: SizedBox(
                             width: appW(300),
-                            child: PopularCoursesCardWg(),
+                            child: PopularCoursesCardWg(
+                              onTap: () => openMiniAppSheet(
+                                context,
+                                child: DetailedCourseInfoPage(),
+                              ),
+                            ),
                           ),
                         );
                       },

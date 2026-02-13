@@ -13,6 +13,7 @@ import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_sheet
 import 'package:my_template/core/utils/widgets/popular_courses_card/popular_courses_card_wg.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/detailed_course_info_page.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/home_edu_page.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/mini_app_section_card.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/model/mini_app_model.dart';
@@ -123,7 +124,12 @@ class HomePage extends StatelessWidget {
                       padding: EdgeInsets.only(right: appW(12)),
                       child: SizedBox(
                         width: appW(300),
-                        child: PopularCoursesCardWg(),
+                        child: PopularCoursesCardWg(
+                          onTap: () => openMiniAppSheet(
+                            context,
+                            child: DetailedCourseInfoPage(),
+                          ),
+                        ),
                       ),
                     );
                   },

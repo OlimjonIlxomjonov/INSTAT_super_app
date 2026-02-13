@@ -1,59 +1,54 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
+import 'package:my_template/core/utils/widgets/custom_tab_bar/custom_tab_bar_wg.dart';
+import 'package:my_template/core/utils/widgets/detailed_course_info_header/deatiled_course_info_header_wg.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/about_this_course_tab.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/course_comments_tab.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/course_plan_tab.dart';
 
 class DetailedCourseInfoPage extends StatelessWidget {
   const DetailedCourseInfoPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: .start,
-              children: [
-                /// HEADER IMAGE WITH ARROW BACK
-                Stack(
-                  children: [
-                    Image.asset(
-                      height: appH(320),
-                      width: double.infinity,
-                      'assets/home_page/temp_course_dummy.png',
-                      fit: BoxFit.cover,
-                    ),
-                    Padding(
-                      padding: .only(left: appW(10), top: appH(10)),
-                      child: IconButton(
-                        onPressed: () {},
-                        style: IconButton.styleFrom(
-                          backgroundColor: AppColors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: .circular(8),
-                          ),
-                        ),
-                        icon: Icon(IconlyLight.arrow_left_2, size: 20),
-                      ),
-                    ),
-                  ],
-                ),
-
-                Padding(
-                  padding: .fromLTRB(appW(20), appH(16), appW(20), 0),
-                  child: Column(
-                    crossAxisAlignment: .start,
-                    children: [
-                      Text('Kotegoriya nomi'),
-                      Text('Statistika (Tarmoqlar va sohalar bo’yicha)'),
-                    ],
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            const DetailedCourseInfoHeaderWg(),
+            SliverAppBar(
+              pinned: true,
+              backgroundColor: AppColors.white,
+              elevation: 0,
+              automaticallyImplyLeading: false,
+              toolbarHeight: 0,
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(appH(90)),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+                  child: CustomTabBarWg(
+                    firstTab: "Kurs haqida",
+                    secondTab: "O’quv reja",
+                    thirdTab: "Izohlar",
                   ),
                 ),
-              ],
+              ),
             ),
+          ],
+          body: TabBarView(
+            children: const [
+              AboutThisCourseTab(),
+              CoursePlanTab(),
+              CourseCommentsTab(),
+            ],
           ),
-        ],
+        ),
+        bottomNavigationBar: CustomBottomNavContainerWg(
+          buttonText: 'Sotib olish - 800 000 UZS',
+        ),
       ),
     );
   }

@@ -1,0 +1,51 @@
+import 'package:flutter/material.dart';
+import 'package:my_template/core/utils/constants/colors/app_colors.dart';
+import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
+import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+
+class CustomBottomNavContainerWg extends StatelessWidget {
+  final String buttonText;
+  final Widget? anotherButton;
+
+  const CustomBottomNavContainerWg({
+    super.key,
+    required this.buttonText,
+    this.anotherButton,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Container(
+        padding: .symmetric(vertical: appH(20), horizontal: appW(20)),
+        decoration: BoxDecoration(
+          borderRadius: .only(topRight: .circular(24), topLeft: .circular(24)),
+          color: AppColors.white,
+          boxShadow: [
+            BoxShadow(
+              offset: Offset(0, -1),
+              color: AppColors.greyScale.grey200,
+              spreadRadius: 0,
+              blurRadius: 20,
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            if (anotherButton != null) Expanded(child: anotherButton!),
+            SizedBox(width: appW(12)),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {},
+                child: Text(
+                  buttonText,
+                  style: AppTextStyles.source.medium(fontSize: 13),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

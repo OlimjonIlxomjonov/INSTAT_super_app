@@ -27,6 +27,8 @@ dependencies:
   google_nav_bar: ^5.0.7
   line_icons: ^2.0.3
   skeletonizer: ^2.1.2
+  flutter_rating: ^2.0.2
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:

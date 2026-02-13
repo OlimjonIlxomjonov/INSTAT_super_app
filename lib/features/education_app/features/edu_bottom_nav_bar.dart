@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:iconly/iconly.dart';
-import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/home_edu_page.dart';
+import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/screens_edu/stats_edu_page.dart';
+import 'package:my_template/features/education_app/features/table_edu/presentation_edu/screens_edu/table_edu_page.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/user_courses_edu_page.dart';
+import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/user_profile_edu.dart';
 
 class EduBottomNavBar extends StatefulWidget {
   const EduBottomNavBar({super.key});
@@ -19,16 +22,17 @@ class _EduBottomNavBarState extends State<EduBottomNavBar> {
 
   final List<Widget> eduPages = [
     HomeEduPage(),
-    HomeEduPage(),
-    HomeEduPage(),
-    HomeEduPage(),
-    HomeEduPage(),
+    TableEduPage(),
+    UserCoursesEduPage(),
+    StatsEduPage(),
+    UserProfileEdu(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: eduPages[_currentIndex],
+      // body: IndexedStack(index: _currentIndex, children: eduPages),
       bottomNavigationBar: Container(
         padding: .symmetric(vertical: 20),
         decoration: BoxDecoration(

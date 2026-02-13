@@ -11,6 +11,8 @@ class AppColors {
   static const Color primaryColor = Color(0xff2B75CC);
   static const Color splashBackgroundColor = Color(0xff203787);
   static const Color eduCategorySelectedBg = Color(0xffF2F8FE);
+  static const Color orange500 = Color(0xffFA7319);
+  static const Color orange50 = Color(0xffFFF3EB);
 
   ///  DEFAULT APP COLORS
   static const Color transparent = Colors.transparent;
