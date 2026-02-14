@@ -14,6 +14,12 @@ class AppColors {
   static const Color orange500 = Color(0xffFA7319);
   static const Color orange50 = Color(0xffFFF3EB);
 
+  /// TASKS BAR COLOR INDICATOR
+  static const Color greyNewCard = Color(0xffD1D1D1);
+  static const Color yellowMidTimeCard = Color(0xffF6B51E);
+  static const Color greenDoneTaskCard = Color(0xff1FC16B);
+  static const Color redFailedTaskCard = Color(0xffFB3748);
+
   ///  DEFAULT APP COLORS
   static const Color transparent = Colors.transparent;
   static const Color white = Color(0xffffffff);

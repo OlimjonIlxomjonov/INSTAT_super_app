@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
+import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 
 class CoursePlanTab extends StatelessWidget {
@@ -27,6 +28,7 @@ class CoursePlanTab extends StatelessWidget {
                     controlAffinity: ListTileControlAffinity.leading,
                     title: Text(
                       "Tarmoqlar bo‘yicha statistika asoslariasoslari",
+                      style: AppTextStyles.source.regular(fontSize: 14),
                     ),
                     initiallyExpanded: index == 0 ? true : false,
                     tilePadding: .only(
@@ -42,6 +44,7 @@ class CoursePlanTab extends StatelessWidget {
                           leading: Icon(Icons.video_collection),
                           title: Text(
                             'Statistik ko‘rsatkichlar va ularning turlari',
+                            style: AppTextStyles.source.regular(fontSize: 13),
                           ),
                           tileColor: AppColors.greyScale.grey100,
                         ),

@@ -14,27 +14,20 @@ import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart'
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/detailed_course_info_page.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/show_all_courses_bottom_sheet_page.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/widgets_edu/status_achievements_card_wg.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
 
 class HomeEduPage extends StatelessWidget {
   const HomeEduPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    void goToPageActiveCourses() {
+      openMiniAppSheet(context, child: DetailedUserBoughtCoursesEduPage());
+    }
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          // SliverAppBar(
-          //   floating: true,
-          //   automaticallyImplyLeading: false,
-          //   actions: [
-          //     TextButton(
-          //       onPressed: () {
-          //         AppRoute.close();
-          //       },
-          //       child: Text('close'),
-          //     ),
-          //   ],
-          // ),
           SliverPadding(
             padding: .only(left: appW(20), right: appW(20), top: appH(20)),
             sliver: SliverAppBar(
@@ -104,8 +97,8 @@ class HomeEduPage extends StatelessWidget {
                     title: AppStrings.studyingCourses,
                     onTap: () {},
                   ),
-                  ActiveCoursesWg(),
-                  ActiveCoursesWg(),
+                  ActiveCoursesWg(onTap: goToPageActiveCourses),
+                  ActiveCoursesWg(onTap: goToPageActiveCourses),
                 ],
               ),
             ),

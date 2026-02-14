@@ -28,7 +28,7 @@ class SliverDefaultAppBarWg extends StatelessWidget {
           onPressed: () {
             AppRoute.close();
           },
-          icon: Icon(IconlyLight.arrow_left_2),
+          icon: Icon(IconlyLight.arrow_left_2, size: 20),
         ),
         centerTitle: true,
         title: myTitle != null

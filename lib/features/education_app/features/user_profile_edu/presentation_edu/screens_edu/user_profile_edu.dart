@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
-import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
-import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/profile_settings_tile/profile_settings_tile_wg.dart';
 
 class UserProfileEdu extends StatelessWidget {
@@ -17,13 +14,14 @@ class UserProfileEdu extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           /// HEADER
-          SliverDefaultAppBarWg(),
+          // SliverDefaultAppBarWg(),
 
           /// USER AVATAR
           SliverToBoxAdapter(
             child: Column(
               crossAxisAlignment: .center,
               children: [
+                SizedBox(height: appH(15)),
                 CircleAvatar(radius: 75),
                 SizedBox(height: appH(15)),
                 Text(

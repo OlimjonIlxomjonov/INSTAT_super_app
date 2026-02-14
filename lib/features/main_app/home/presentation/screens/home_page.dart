@@ -5,16 +5,18 @@ import 'package:my_template/core/utils/constants/assets/app_images.dart';
 import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/strings/app_strings.dart';
+import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/active_courses/active_courses_wg.dart';
+import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_sheet.dart';
 import 'package:my_template/core/utils/widgets/popular_courses_card/popular_courses_card_wg.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/detailed_course_info_page.dart';
-import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/home_edu_page.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/mini_app_section_card.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/model/mini_app_model.dart';
 
@@ -29,7 +31,11 @@ class HomePage extends StatelessWidget {
         backgroundImage: AppVectors.onlineEduBack,
         title: "Onlayn ta’lim",
         onTap: (context) {
-          openMiniAppSheet(context, child: EduBottomNavBar());
+          openMiniAppSheet(
+            showHandler: true,
+            context,
+            child: EduBottomNavBar(),
+          );
         },
       ),
       MiniAppModel(
@@ -101,9 +107,22 @@ class HomePage extends StatelessWidget {
                     title: AppStrings.studyingCourses,
                     onTap: () {},
                   ),
-                  ActiveCoursesWg(),
-                  ActiveCoursesWg(),
-
+                  ActiveCoursesWg(
+                    onTap: () {
+                      openMiniAppSheet(
+                        context,
+                        child: DetailedUserBoughtCoursesEduPage(),
+                      );
+                    },
+                  ),
+                  ActiveCoursesWg(
+                    onTap: () {
+                      openMiniAppSheet(
+                        context,
+                        child: DetailedUserBoughtCoursesEduPage(),
+                      );
+                    },
+                  ),
                   ExtendSectionSeeAllWg(
                     title: AppStrings.popularCourses,
                     onTap: () {},

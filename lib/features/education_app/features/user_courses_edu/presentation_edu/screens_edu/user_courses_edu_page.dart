@@ -10,6 +10,7 @@ import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_sheet
 import 'package:my_template/core/utils/widgets/popular_courses_card/expanded_courses_card_wg.dart';
 import 'package:my_template/core/utils/widgets/popular_courses_card/minimal_courses_card_wg.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/detailed_course_info_page.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
 
 class UserCoursesEduPage extends StatefulWidget {
   const UserCoursesEduPage({super.key});
@@ -78,13 +79,13 @@ class _UserCoursesEduPageState extends State<UserCoursesEduPage> {
                     ? ExpandedCoursesCardWg(
                         onTap: () => openMiniAppSheet(
                           context,
-                          child: DetailedCourseInfoPage(),
+                          child: DetailedUserBoughtCoursesEduPage(),
                         ),
                       )
                     : MinimalCoursesCardWg(
                         onTap: () => openMiniAppSheet(
                           context,
-                          child: DetailedCourseInfoPage(),
+                          child: DetailedUserBoughtCoursesEduPage(),
                         ),
                       ),
               ),
