@@ -20,4 +20,7 @@ abstract class AppImages {
   static const bookSection = "${baseHomePath}c_book_section.png";
   static const mikroMalumotlar = "${baseHomePath}c_minkro_info_section.png";
   static const elektronJurnal = "${baseHomePath}c_elektron_jurnal_section.png";
+
+  /// finished the lesson test
+  static const trophy = "${basePath}Trophy-temp.png";
 }

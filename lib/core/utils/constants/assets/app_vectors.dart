@@ -25,4 +25,7 @@ abstract class AppVectors {
       '${baseHomePath}mikro_info_section_back.svg';
   static const String elektronJurnalBack =
       '${baseHomePath}elektron_jurnal_section_back.svg';
+  static const String trophyBackground = "${basePath}temp_Icon.svg";
+  static const String finishFullCourseTestDialogImg =
+      "${basePath}finish_full_course_test_dialog_img.svg";
 }

@@ -47,6 +47,7 @@ class DetailedCourseInfoPage extends StatelessWidget {
           ),
         ),
         bottomNavigationBar: CustomBottomNavContainerWg(
+          onTap: () {},
           buttonText: 'Sotib olish - 800 000 UZS',
         ),
       ),

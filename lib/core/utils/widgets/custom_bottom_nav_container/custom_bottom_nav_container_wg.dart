@@ -6,11 +6,13 @@ import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 class CustomBottomNavContainerWg extends StatelessWidget {
   final String buttonText;
   final Widget? anotherButton;
+  final VoidCallback onTap;
 
   const CustomBottomNavContainerWg({
     super.key,
     required this.buttonText,
     this.anotherButton,
+    required this.onTap,
   });
 
   @override
@@ -36,7 +38,7 @@ class CustomBottomNavContainerWg extends StatelessWidget {
             SizedBox(width: appW(12)),
             Expanded(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: onTap,
                 child: Text(
                   buttonText,
                   style: AppTextStyles.source.medium(fontSize: 13),
