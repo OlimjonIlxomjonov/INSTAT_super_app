@@ -172,7 +172,9 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    AppRoute.close();
+                  },
                   child: Text('Davom etish'),
                 ),
               ),

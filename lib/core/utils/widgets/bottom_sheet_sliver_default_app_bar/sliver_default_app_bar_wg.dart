@@ -8,8 +8,14 @@ import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 class SliverDefaultAppBarWg extends StatelessWidget {
   final String? myTitle;
   final List<Widget>? customActions;
+  final PreferredSizeWidget? appBarBottom;
 
-  const SliverDefaultAppBarWg({super.key, this.myTitle, this.customActions});
+  const SliverDefaultAppBarWg({
+    super.key,
+    this.myTitle,
+    this.customActions,
+    this.appBarBottom,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +41,7 @@ class SliverDefaultAppBarWg extends StatelessWidget {
             ? Text(myTitle!, style: AppTextStyles.source.semiBold(fontSize: 18))
             : SizedBox.shrink(),
         actions: customActions ?? [SizedBox.shrink()],
+        bottom: appBarBottom,
       ),
     );
   }

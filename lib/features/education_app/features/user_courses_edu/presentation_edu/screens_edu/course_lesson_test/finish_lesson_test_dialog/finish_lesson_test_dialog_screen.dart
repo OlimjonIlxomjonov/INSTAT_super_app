@@ -14,6 +14,7 @@ Future<void> finishLessonTestDialogScreen(
   required ConfettiController confettiController,
 }) {
   return showDialog(
+    barrierDismissible: false,
     context: context,
     builder: (_) {
       return Stack(
