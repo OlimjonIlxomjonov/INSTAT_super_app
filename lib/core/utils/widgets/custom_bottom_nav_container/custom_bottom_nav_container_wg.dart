@@ -41,7 +41,7 @@ class CustomBottomNavContainerWg extends StatelessWidget {
                 onPressed: onTap,
                 child: Text(
                   buttonText,
-                  style: AppTextStyles.source.medium(fontSize: 13),
+                  style: AppTextStyles.source.medium(fontSize: 14),
                 ),
               ),
             ),

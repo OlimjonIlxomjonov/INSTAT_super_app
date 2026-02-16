@@ -20,6 +20,11 @@ class AppColors {
   static const Color greenDoneTaskCard = Color(0xff1FC16B);
   static const Color redFailedTaskCard = Color(0xffFB3748);
 
+  /// TICKETS STATUS BACKGROUND COLOR
+  static const Color successStatus = Color(0xffE3F7EC);
+  static const Color declinedStatus = Color(0xffFFF3EB);
+  static const Color waitingStatus = Color(0xffFFEBEC);
+
   ///  DEFAULT APP COLORS
   static const Color transparent = Colors.transparent;
   static const Color white = Color(0xffffffff);

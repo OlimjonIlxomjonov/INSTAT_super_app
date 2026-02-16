@@ -28,4 +28,8 @@ abstract class AppVectors {
   static const String trophyBackground = "${basePath}temp_Icon.svg";
   static const String finishFullCourseTestDialogImg =
       "${basePath}finish_full_course_test_dialog_img.svg";
+
+  static const String uzbekistanFlag = "${basePath}uzbekistan_flag.svg";
+  static const String ukFlag = "${basePath}united_kingdom_flag.svg";
+  static const String russiaFlag = "${basePath}russian_flag.svg";
 }

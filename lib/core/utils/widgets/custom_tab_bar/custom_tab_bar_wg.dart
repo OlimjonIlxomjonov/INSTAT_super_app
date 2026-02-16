@@ -22,6 +22,7 @@ class CustomTabBarWg extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: TabBar(
+        indicatorWeight: 0,
         dividerColor: Colors.transparent,
         splashFactory: NoSplash.splashFactory,
         overlayColor: WidgetStateProperty.all(Colors.transparent),
@@ -30,8 +31,9 @@ class CustomTabBarWg extends StatelessWidget {
           color: AppColors.primaryColor,
           borderRadius: BorderRadius.circular(12),
         ),
-        labelStyle: AppTextStyles.source.medium(fontSize: 14),
+        labelStyle: AppTextStyles.source.medium(fontSize: 13),
         labelColor: AppColors.white,
+        labelPadding: .zero,
         unselectedLabelColor: AppColors.greyScale.grey400,
         tabs: [
           Tab(text: firstTab),

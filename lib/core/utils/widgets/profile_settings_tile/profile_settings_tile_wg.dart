@@ -5,7 +5,7 @@ import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart'
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 
 class ProfileSettingsTileWg extends StatelessWidget {
-  final IconData leadingIcon;
+  final IconData? leadingIcon;
   final String title;
   final Widget? trailingIcon;
   final VoidCallback onTap;
@@ -13,7 +13,7 @@ class ProfileSettingsTileWg extends StatelessWidget {
 
   const ProfileSettingsTileWg({
     super.key,
-    required this.leadingIcon,
+    this.leadingIcon,
     required this.title,
     this.trailingIcon,
     required this.onTap,
@@ -29,10 +29,12 @@ class ProfileSettingsTileWg extends StatelessWidget {
       child: ListTile(
         onTap: onTap,
         contentPadding: AppPadding.horizontal20x(),
-        leading: Icon(
-          leadingIcon,
-          color: isLogOut ? AppColors.red : AppColors.greyScale.grey800,
-        ),
+        leading: leadingIcon != null
+            ? Icon(
+                leadingIcon,
+                color: isLogOut ? AppColors.red : AppColors.greyScale.grey800,
+              )
+            : null,
         title: Text(
           title,
           style: AppTextStyles.source.medium(

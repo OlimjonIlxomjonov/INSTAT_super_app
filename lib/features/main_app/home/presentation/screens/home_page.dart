@@ -16,6 +16,7 @@ import 'package:my_template/core/utils/widgets/popular_courses_card/popular_cour
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/detailed_course_info_page.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/show_all_courses_bottom_sheet_page.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/mini_app_section_card.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/model/mini_app_model.dart';
@@ -105,7 +106,15 @@ class HomePage extends StatelessWidget {
                 delegate: SliverChildListDelegate([
                   ExtendSectionSeeAllWg(
                     title: AppStrings.studyingCourses,
-                    onTap: () {},
+                    onTap: () {
+                      openMiniAppSheet(
+                        context,
+                        showHandler: true,
+                        child: EduBottomNavBar(openPageByIndex: 2),
+                      );
+
+                      /// LEAD TO "USER COURSES" PAGE
+                    },
                   ),
                   ActiveCoursesWg(
                     onTap: () {
@@ -125,7 +134,12 @@ class HomePage extends StatelessWidget {
                   ),
                   ExtendSectionSeeAllWg(
                     title: AppStrings.popularCourses,
-                    onTap: () {},
+                    onTap: () {
+                      openMiniAppSheet(
+                        context,
+                        child: ShowAllCoursesBottomSheetPage(),
+                      );
+                    },
                   ),
                 ]),
               ),

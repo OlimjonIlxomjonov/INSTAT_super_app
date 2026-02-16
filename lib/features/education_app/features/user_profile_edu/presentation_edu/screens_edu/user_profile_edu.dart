@@ -3,10 +3,24 @@ import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_sheet.dart';
 import 'package:my_template/core/utils/widgets/profile_settings_tile/profile_settings_tile_wg.dart';
+import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/app_language_settings_model_component.dart';
+import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/edu_tickets/edu_tickets_settings_component.dart';
+import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/favourite_course_settings_component.dart';
+import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/notification_settings_edu_component.dart';
+import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/sertificats_settings_component.dart';
+import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/widgets_edu/dot_swtich_wg.dart';
 
-class UserProfileEdu extends StatelessWidget {
+class UserProfileEdu extends StatefulWidget {
   const UserProfileEdu({super.key});
+
+  @override
+  State<UserProfileEdu> createState() => _UserProfileEduState();
+}
+
+class _UserProfileEduState extends State<UserProfileEdu> {
+  bool biometrickSwitchState = false;
 
   @override
   Widget build(BuildContext context) {
@@ -74,20 +88,33 @@ class UserProfileEdu extends StatelessWidget {
                 ProfileSettingsTileWg(
                   leadingIcon: IconlyLight.notification,
                   title: 'Bildirishnomalar',
-                  onTap: () {},
+                  onTap: () {
+                    openMiniAppSheet(
+                      context,
+                      child: NotificationSettingsEduComponent(),
+                    );
+                  },
                 ),
                 ProfileSettingsTileWg(
                   leadingIcon: Icons.language,
                   title: 'Ilova tili',
-                  onTap: () {},
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => AppLanguageSettingsModelComponent(),
+                    );
+                  },
                 ),
                 ProfileSettingsTileWg(
                   leadingIcon: Icons.fingerprint,
                   title: 'Biometrik autentifikatsiyalar',
-                  trailingIcon: Switch.adaptive(
-                    padding: .zero,
-                    value: false,
-                    onChanged: (newValue) {},
+                  trailingIcon: DotSwitch(
+                    value: biometrickSwitchState,
+                    onChanged: (bool newSwitchState) {
+                      setState(() {
+                        biometrickSwitchState = newSwitchState;
+                      });
+                    },
                   ),
                   onTap: () {},
                 ),
@@ -103,17 +130,32 @@ class UserProfileEdu extends StatelessWidget {
                 ProfileSettingsTileWg(
                   leadingIcon: IconlyLight.document,
                   title: 'Sertificatlar',
-                  onTap: () {},
+                  onTap: () {
+                    openMiniAppSheet(
+                      context,
+                      child: SertificatsSettingsComponent(),
+                    );
+                  },
                 ),
                 ProfileSettingsTileWg(
                   leadingIcon: IconlyLight.heart,
                   title: 'Saqlanganlar',
-                  onTap: () {},
+                  onTap: () {
+                    openMiniAppSheet(
+                      context,
+                      child: FavouriteCourseSettingsComponent(),
+                    );
+                  },
                 ),
                 ProfileSettingsTileWg(
                   leadingIcon: Icons.list_alt,
                   title: 'Tikketlar',
-                  onTap: () {},
+                  onTap: () {
+                    openMiniAppSheet(
+                      context,
+                      child: EduTicketsSettingsComponent(),
+                    );
+                  },
                 ),
                 ProfileSettingsTileWg(
                   leadingIcon: Icons.message_outlined,

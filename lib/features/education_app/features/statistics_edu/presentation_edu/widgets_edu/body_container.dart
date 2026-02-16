@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
+import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 
 class BodyContainer extends StatelessWidget {
   final String title;
@@ -20,9 +21,11 @@ class BodyContainer extends StatelessWidget {
         border: .all(color: AppColors.greyScale.grey200),
       ),
       child: Column(
+        crossAxisAlignment: .start,
         mainAxisSize: .min,
         children: [
           Text(title, style: AppTextStyles.source.medium(fontSize: 18)),
+          SizedBox(height: appH(12)),
           body,
         ],
       ),

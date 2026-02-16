@@ -7,15 +7,15 @@ class TTextFieldTheme {
 
   static InputDecorationTheme lightInputDecoration = InputDecorationTheme(
     border: OutlineInputBorder().copyWith(
-      borderRadius: .circular(5),
+      borderRadius: .circular(10),
       borderSide: BorderSide(color: AppColors.greyScale.grey300, width: 1),
     ),
     enabledBorder: OutlineInputBorder().copyWith(
-      borderRadius: .circular(5),
+      borderRadius: .circular(10),
       borderSide: BorderSide(color: AppColors.greyScale.grey300, width: 1),
     ),
     focusedBorder: OutlineInputBorder().copyWith(
-      borderRadius: .circular(5),
+      borderRadius: .circular(10),
       borderSide: BorderSide(color: AppColors.blue, width: 1),
     ),
     labelStyle: AppTextStyles.source.regular(

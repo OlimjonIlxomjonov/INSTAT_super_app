@@ -11,16 +11,18 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/user_profile_edu.dart';
 
 class EduBottomNavBar extends StatefulWidget {
-  const EduBottomNavBar({super.key});
+  final int? openPageByIndex;
+
+  const EduBottomNavBar({super.key, this.openPageByIndex});
 
   @override
   State<EduBottomNavBar> createState() => _EduBottomNavBarState();
 }
 
 class _EduBottomNavBarState extends State<EduBottomNavBar> {
-  int _currentIndex = 0;
+  late int _currentIndex;
 
-  final List<Widget> eduPages = [
+  final List<Widget> eduPages = const [
     HomeEduPage(),
     TableEduPage(),
     UserCoursesEduPage(),
@@ -29,20 +31,27 @@ class _EduBottomNavBarState extends State<EduBottomNavBar> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.openPageByIndex ?? 0;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: eduPages[_currentIndex],
-      // body: IndexedStack(index: _currentIndex, children: eduPages),
+      body: IndexedStack(index: _currentIndex, children: eduPages),
       bottomNavigationBar: Container(
-        padding: .symmetric(vertical: 20),
+        padding: const EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
-          borderRadius: .only(topRight: .circular(24), topLeft: .circular(24)),
+          borderRadius: const BorderRadius.only(
+            topRight: Radius.circular(24),
+            topLeft: Radius.circular(24),
+          ),
           color: AppColors.white,
           boxShadow: [
             BoxShadow(
-              offset: Offset(0, -1),
+              offset: const Offset(0, -1),
               color: AppColors.greyScale.grey200,
-              spreadRadius: 0,
               blurRadius: 20,
             ),
           ],
@@ -50,22 +59,18 @@ class _EduBottomNavBarState extends State<EduBottomNavBar> {
         child: SafeArea(
           child: GNav(
             selectedIndex: _currentIndex,
-            onTabChange: (int newIndex) {
-              setState(() {
-                _currentIndex = newIndex;
-              });
-            },
+            onTabChange: (newIndex) => setState(() => _currentIndex = newIndex),
             tabBorderRadius: 12,
             curve: Curves.easeInOut,
-            duration: Duration(milliseconds: 200),
-            mainAxisAlignment: .spaceEvenly,
+            duration: const Duration(milliseconds: 200),
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             gap: 8,
             color: AppColors.greyScale.grey600,
             activeColor: AppColors.white,
             iconSize: 24,
             tabBackgroundColor: AppColors.primaryColor,
             padding: EdgeInsets.all(appW(12)),
-            tabs: [
+            tabs: const [
               GButton(icon: IconlyLight.home, text: 'Bosh sahifa'),
               GButton(icon: Icons.table_chart_outlined, text: 'Jadval'),
               GButton(icon: LineIcons.book, text: 'Kurslarim'),
