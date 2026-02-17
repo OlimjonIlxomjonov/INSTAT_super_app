@@ -35,7 +35,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   Widget build(BuildContext context) {
-    TDeviceUtils.setStatusBarColor(AppColors.white);
+    TDeviceUtils.systemNavigationBar(AppColors.white);
 
     return Scaffold(
       extendBody: true,

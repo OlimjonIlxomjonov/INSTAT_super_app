@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
+import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 
 Future<void> openMiniAppSheet(
   BuildContext context, {
   required Widget child,
   bool showHandler = false,
-}) {
+}) async {
+  TDeviceUtils.setStatusBarColor(Colors.transparent, darkIcons: false);
   return showModalBottomSheet(
     context: context,
     useSafeArea: true,
@@ -15,7 +17,7 @@ Future<void> openMiniAppSheet(
     showDragHandle: false,
     isDismissible: false,
     backgroundColor: Colors.transparent,
-    barrierColor: AppColors.greyScale.grey200.withValues(alpha: 0.7),
+    // barrierColor: AppColors.black,
     builder: (_) {
       return SizedBox(
         height: AppResponsiveness.screenHeight - 30,

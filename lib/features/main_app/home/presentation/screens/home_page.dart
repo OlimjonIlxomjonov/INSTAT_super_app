@@ -5,12 +5,11 @@ import 'package:my_template/core/utils/constants/assets/app_images.dart';
 import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/strings/app_strings.dart';
-import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/active_courses/active_courses_wg.dart';
-import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_sheet.dart';
 import 'package:my_template/core/utils/widgets/popular_courses_card/popular_courses_card_wg.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
@@ -37,6 +36,11 @@ class HomePage extends StatelessWidget {
             context,
             child: EduBottomNavBar(),
           );
+          // openMiniAppSheetFamily(
+          //   showHandler: true,
+          //   context,
+          //   child: EduBottomNavBar(),
+          // );
         },
       ),
       MiniAppModel(
@@ -59,7 +63,14 @@ class HomePage extends StatelessWidget {
       ),
     ];
 
-    TDeviceUtils.setStatusBarColor(AppColors.white);
+    void goToPageActiveCourses() {
+      openMiniAppSheetFamily(
+        context,
+        child: DetailedUserBoughtCoursesEduPage(),
+      );
+    }
+
+    TDeviceUtils.systemNavigationBar(AppColors.white);
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
@@ -116,26 +127,12 @@ class HomePage extends StatelessWidget {
                       /// LEAD TO "USER COURSES" PAGE
                     },
                   ),
-                  ActiveCoursesWg(
-                    onTap: () {
-                      openMiniAppSheet(
-                        context,
-                        child: DetailedUserBoughtCoursesEduPage(),
-                      );
-                    },
-                  ),
-                  ActiveCoursesWg(
-                    onTap: () {
-                      openMiniAppSheet(
-                        context,
-                        child: DetailedUserBoughtCoursesEduPage(),
-                      );
-                    },
-                  ),
+                  ActiveCoursesWg(onTap: goToPageActiveCourses),
+                  ActiveCoursesWg(onTap: goToPageActiveCourses),
                   ExtendSectionSeeAllWg(
                     title: AppStrings.popularCourses,
                     onTap: () {
-                      openMiniAppSheet(
+                      openMiniAppSheetFamily(
                         context,
                         child: ShowAllCoursesBottomSheetPage(),
                       );
@@ -158,7 +155,7 @@ class HomePage extends StatelessWidget {
                       child: SizedBox(
                         width: appW(300),
                         child: PopularCoursesCardWg(
-                          onTap: () => openMiniAppSheet(
+                          onTap: () => openMiniAppSheetFamily(
                             context,
                             child: DetailedCourseInfoPage(),
                           ),

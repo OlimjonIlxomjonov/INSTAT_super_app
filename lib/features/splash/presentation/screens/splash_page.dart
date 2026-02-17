@@ -33,7 +33,7 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    TDeviceUtils.setStatusBarColor(
+    TDeviceUtils.systemNavigationBar(
       AppColors.splashBackgroundColor,
       isBright: true,
     );

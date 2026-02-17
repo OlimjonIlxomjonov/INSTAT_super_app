@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+import 'package:my_template/core/utils/devices/device_unitlity.dart';
 
 Future<void> customBottomSheetWg(
   BuildContext context, {
   required Widget child,
-}) {
+}) async {
+  TDeviceUtils.setStatusBarColor(Colors.transparent, darkIcons: false);
+
   return showModalBottomSheet(
-    showDragHandle: true,
     isScrollControlled: true,
     useSafeArea: true,
+    showDragHandle: true,
     context: context,
     builder: (context) {
-      return SizedBox(
-        height: AppResponsiveness.screenHeight - 100,
-        child: Column(children: [Expanded(child: child)]),
-      );
+      return SafeArea(child: ListView(shrinkWrap: true, children: [child]));
     },
   );
 }

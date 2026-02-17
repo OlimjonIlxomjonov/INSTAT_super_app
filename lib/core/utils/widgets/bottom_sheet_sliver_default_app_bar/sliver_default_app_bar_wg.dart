@@ -31,6 +31,7 @@ class SliverDefaultAppBarWg extends StatelessWidget {
               side: BorderSide(color: AppColors.greyScale.grey200),
             ),
           ),
+
           onPressed: () {
             AppRoute.close();
           },

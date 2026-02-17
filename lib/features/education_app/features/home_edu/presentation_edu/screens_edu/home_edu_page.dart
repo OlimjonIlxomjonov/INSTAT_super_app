@@ -1,14 +1,18 @@
+import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/strings/app_strings.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
+import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/active_courses/active_courses_wg.dart';
 import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_sheet.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/sub_bottom_sheet_opener.dart';
 import 'package:my_template/core/utils/widgets/popular_courses_card/popular_courses_card_wg.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/detailed_course_info_page.dart';
@@ -22,7 +26,10 @@ class HomeEduPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void goToPageActiveCourses() {
-      openMiniAppSheet(context, child: DetailedUserBoughtCoursesEduPage());
+      openMiniAppSheetFamily(
+        context,
+        child: DetailedUserBoughtCoursesEduPage(),
+      );
     }
 
     return Scaffold(
@@ -151,10 +158,21 @@ class HomeEduPage extends StatelessWidget {
                           child: SizedBox(
                             width: appW(300),
                             child: PopularCoursesCardWg(
-                              onTap: () => openMiniAppSheet(
-                                context,
-                                child: DetailedCourseInfoPage(),
-                              ),
+                              onTap: () {
+                                // openMiniAppSheet(
+                                //   context,
+                                //   child: DetailedCourseInfoPage(),
+                                // );
+                                // subBottomSheetOpener(
+                                //   context,
+                                //   child: DetailedCourseInfoPage(),
+                                // );
+
+                                openMiniAppSheetFamily(
+                                  context,
+                                  child: DetailedCourseInfoPage(),
+                                );
+                              },
                             ),
                           ),
                         );

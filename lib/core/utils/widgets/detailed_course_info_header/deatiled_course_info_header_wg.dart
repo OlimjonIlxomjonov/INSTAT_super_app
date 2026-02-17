@@ -1,3 +1,4 @@
+import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/routes/route_generator.dart';
@@ -27,7 +28,8 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                 padding: .only(left: appW(10), top: appH(10)),
                 child: IconButton(
                   onPressed: () {
-                    AppRoute.close();
+                    // AppRoute.close();
+                    FamilyModalSheet.of(context).popPage();
                   },
                   style: IconButton.styleFrom(
                     backgroundColor: AppColors.white,

@@ -82,7 +82,7 @@ class _LogInOptionsPageState extends State<LogInOptionsPage> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = AppResponsiveness.screenHeight;
-    TDeviceUtils.setStatusBarColor(AppColors.white);
+    TDeviceUtils.systemNavigationBar(AppColors.white);
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: Column(
