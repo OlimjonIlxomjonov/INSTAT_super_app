@@ -11,7 +11,6 @@ class ActiveCoursesWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ValueNotifier<double> _valueNotifier = ValueNotifier(0);
 
     return GestureDetector(
       onTap: onTap,

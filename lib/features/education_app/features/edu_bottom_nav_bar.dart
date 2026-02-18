@@ -22,13 +22,7 @@ class EduBottomNavBar extends StatefulWidget {
 class _EduBottomNavBarState extends State<EduBottomNavBar> {
   late int _currentIndex;
 
-  final List<Widget> eduPages = const [
-    HomeEduPage(),
-    TableEduPage(),
-    UserCoursesEduPage(),
-    StatsEduPage(),
-    UserProfileEdu(),
-  ];
+  void _goToTab(int index) => setState(() => _currentIndex = index);
 
   @override
   void initState() {
@@ -38,6 +32,13 @@ class _EduBottomNavBarState extends State<EduBottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> eduPages = [
+      HomeEduPage(onTap: () => _goToTab(2)),
+      TableEduPage(),
+      UserCoursesEduPage(),
+      StatsEduPage(),
+      UserProfileEdu(),
+    ];
     return Scaffold(
       body: IndexedStack(index: _currentIndex, children: eduPages),
       bottomNavigationBar: Container(

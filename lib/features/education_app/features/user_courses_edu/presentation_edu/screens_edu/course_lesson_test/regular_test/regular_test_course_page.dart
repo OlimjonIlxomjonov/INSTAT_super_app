@@ -1,10 +1,9 @@
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating/flutter_rating.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iconly/iconly.dart';
+import 'package:lottie/lottie.dart';
 import 'package:my_template/core/routes/route_generator.dart';
-import 'package:my_template/core/utils/constants/assets/app_images.dart';
 import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
@@ -13,7 +12,6 @@ import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/finish_lesson_test_dialog/finish_lesson_test_dialog_screen.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/default_custom_tile_wg.dart';
-import 'package:svg_image_provider/svg_image_provider.dart';
 
 class RegularTestCoursePage extends StatefulWidget {
   const RegularTestCoursePage({super.key});
@@ -134,15 +132,19 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
           /// FINISH THE ONE LESSON TEST DIALOG
           finishLessonTestDialogScreen(
             context,
-            header: Container(
-              width: 230,
-              height: 174,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: SvgImageProvider(AppVectors.trophyBackground),
+            header: Stack(
+              children: [
+                SvgPicture.asset(AppVectors.trophyBackground),
+                SizedBox(
+                  width: 230,
+                  height: 174,
+                  child: Lottie.asset(
+                    'assets/animation/Trophy.json',
+                    repeat: false,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-              child: Image.asset(AppImages.trophy),
+              ],
             ),
             title: 'Ajoyib natija',
             subTitle:

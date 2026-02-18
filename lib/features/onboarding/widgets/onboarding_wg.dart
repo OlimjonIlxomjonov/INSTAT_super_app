@@ -52,9 +52,9 @@ class OnboardingWg extends StatelessWidget {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Colors.white.withOpacity(0.0),
-                      Colors.white.withOpacity(0.85),
-                      Colors.white.withOpacity(1.0),
+                      Colors.white.withValues(alpha: 0.0),
+                      Colors.white.withValues(alpha: 0.85),
+                      Colors.white.withValues(alpha: 1.0),
                     ],
                     stops: [0.0, 0.65, 1.0],
                   ),

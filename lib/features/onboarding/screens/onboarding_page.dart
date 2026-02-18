@@ -6,8 +6,6 @@ import 'package:my_template/core/utils/constants/strings/app_strings.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/features/auth/presentation/screens/log_in_options_page.dart';
-import 'package:my_template/features/auth/presentation/screens/log_in_page.dart';
-import 'package:my_template/features/main_app/home/presentation/screens/home_page.dart';
 import 'package:my_template/features/onboarding/widgets/onboarding_wg.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 

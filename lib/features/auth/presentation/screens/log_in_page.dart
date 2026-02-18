@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/theme/custom_themes/app_text_theme.dart';
-import 'package:my_template/features/app_bottom_nav_bar.dart';
 import 'package:my_template/features/auth/presentation/widgets/auth_text_field_wg.dart';
-import 'package:my_template/features/main_app/home/presentation/screens/home_page.dart';
 import 'package:my_template/features/onboarding/screens/onboarding_page.dart';
 
 class LogInPage extends StatefulWidget {

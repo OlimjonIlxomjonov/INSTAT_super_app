@@ -73,7 +73,5 @@ Widget ticketsStatusSwitchCase(TicketStatus status) {
           ],
         ),
       );
-    default:
-      return SizedBox.shrink();
   }
 }

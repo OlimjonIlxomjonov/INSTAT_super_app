@@ -125,24 +125,17 @@ class TasksCardWg extends StatelessWidget {
   Widget circularStatusCheckBox() {
     switch (isTaskDone) {
       case true:
-        return Container(
-          width: 20,
-          height: 20,
-          decoration: BoxDecoration(
-            color: AppColors.green,
-            border: .all(width: 2, color: AppColors.greenDoneTaskCard),
-            shape: .circle,
-          ),
-        );
+        return Icon(Icons.check_circle, color: AppColors.greenDoneTaskCard);
       case false:
         return Container(
           width: 20,
           height: 20,
           decoration: BoxDecoration(
-            color: AppColors.red,
-            border: .all(width: 2, color: AppColors.redFailedTaskCard),
-            shape: .circle,
+            color: AppColors.redFailedTaskCard,
+            shape: BoxShape.circle,
           ),
+          alignment: .center,
+          child: Icon(Icons.close, color: AppColors.white, size: 20),
         );
       default:
         return Container(

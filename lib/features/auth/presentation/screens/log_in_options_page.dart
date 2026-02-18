@@ -42,11 +42,6 @@ class _LogInOptionsPageState extends State<LogInOptionsPage> {
             isConnectedToInternet = false;
           });
           break;
-        default:
-          setState(() {
-            isConnectedToInternet = false;
-          });
-          break;
       }
     });
   }
@@ -94,7 +89,7 @@ class _LogInOptionsPageState extends State<LogInOptionsPage> {
           ),
         ],
       ),
-      bottomSheet: Container(
+      bottomSheet: SizedBox(
         width: double.infinity,
         height: screenHeight / 1.6,
         child: Padding(
