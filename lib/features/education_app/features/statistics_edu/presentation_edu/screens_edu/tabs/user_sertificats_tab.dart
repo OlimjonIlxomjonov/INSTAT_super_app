@@ -6,27 +6,26 @@ class UserSertificatsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          BodyContainer(
-            title: 'Sertifikatlar',
-            body: GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: 5,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                childAspectRatio: 1.33,
-              ),
-              itemBuilder: (context, index) {
-                return Image.asset('assets/images/sertificat_temp.png');
-              },
+    return Column(
+      mainAxisSize: .min,
+      children: [
+        BodyContainer(
+          title: 'Sertifikatlar',
+          body: GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: 5,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              childAspectRatio: 1.33,
             ),
+            itemBuilder: (context, index) {
+              return Image.asset('assets/images/sertificat_temp.png');
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

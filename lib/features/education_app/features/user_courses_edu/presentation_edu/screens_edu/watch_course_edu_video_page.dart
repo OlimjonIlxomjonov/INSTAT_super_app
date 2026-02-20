@@ -1,6 +1,9 @@
+import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/routes/route_generator.dart';
+import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
@@ -21,17 +24,24 @@ class WatchCourseEduVideoPage extends StatelessWidget {
             child: Stack(
               children: [
                 /// HERE WILL BE A VIDEO PLAYER
-                Image.asset(
-                  height: appH(320),
-                  width: double.infinity,
-                  'assets/home_page/temp_course_dummy.png',
-                  fit: BoxFit.cover,
+                ClipRRect(
+                  borderRadius: .only(
+                    bottomRight: .circular(20),
+                    bottomLeft: .circular(20),
+                  ),
+                  child: Image.asset(
+                    height: appH(320),
+                    width: double.infinity,
+                    'assets/home_page/temp_course_dummy.png',
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 Padding(
                   padding: .only(left: appW(10), top: appH(10)),
                   child: IconButton(
                     onPressed: () {
-                      AppRoute.close();
+                      FamilyModalSheet.of(context).popPage();
+                      // AppRoute.close();
                     },
                     style: IconButton.styleFrom(
                       backgroundColor: AppColors.white,
@@ -133,7 +143,7 @@ class WatchCourseEduVideoPage extends StatelessWidget {
                     DefaultCustomTileWg(
                       tileMaxLines: 1,
                       tileOverflow: .ellipsis,
-                      tileLeading: Icon(IconlyLight.folder),
+                      tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
                       onTap: () {},
                       tileTitle: 'Tahlil, taqqoslash va prognozlash',
                       subTitle: '3.4 MB',
@@ -149,7 +159,7 @@ class WatchCourseEduVideoPage extends StatelessWidget {
                     DefaultCustomTileWg(
                       tileMaxLines: 1,
                       tileOverflow: .ellipsis,
-                      tileLeading: Icon(IconlyLight.folder),
+                      tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
                       onTap: () {
                         openMiniAppSheet(
                           context,

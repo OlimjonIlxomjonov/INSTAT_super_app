@@ -111,6 +111,7 @@ class HomePage extends StatelessWidget {
               sliver: SliverAppBar(pinned: true, title: AppSearchbarWg()),
             ),
 
+            /// EDU ACTIVE COURSES
             SliverPadding(
               padding: EdgeInsets.symmetric(horizontal: appW(20)),
               sliver: SliverList(
@@ -142,6 +143,7 @@ class HomePage extends StatelessWidget {
               ),
             ),
 
+            /// EDU POPULAR COURSES
             SliverToBoxAdapter(
               child: SizedBox(
                 height: appH(250),
@@ -166,6 +168,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
+            SliverToBoxAdapter(child: SizedBox(height: 20)),
           ],
         ),
       ),

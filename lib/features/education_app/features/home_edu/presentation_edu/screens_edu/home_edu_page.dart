@@ -3,6 +3,7 @@ import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/strings/app_strings.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
+import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/active_courses/active_courses_wg.dart';
 import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
@@ -16,10 +17,29 @@ import 'package:my_template/features/education_app/features/home_edu/presentatio
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/widgets_edu/status_achievements_card_wg.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
 
-class HomeEduPage extends StatelessWidget {
+class HomeEduPage extends StatefulWidget {
   final VoidCallback onTap;
 
   const HomeEduPage({super.key, required this.onTap});
+
+  @override
+  State<HomeEduPage> createState() => _HomeEduPageState();
+}
+
+class _HomeEduPageState extends State<HomeEduPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    TDeviceUtils.setStatusBarColor(AppColors.black, darkIcons: false);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    TDeviceUtils.setStatusBarColor(AppColors.transparent, darkIcons: true);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +120,7 @@ class HomeEduPage extends StatelessWidget {
                   /// Active courses
                   ExtendSectionSeeAllWg(
                     title: AppStrings.studyingCourses,
-                    onTap: onTap,
+                    onTap: widget.onTap,
                   ),
                   ActiveCoursesWg(onTap: goToPageActiveCourses),
                   ActiveCoursesWg(onTap: goToPageActiveCourses),

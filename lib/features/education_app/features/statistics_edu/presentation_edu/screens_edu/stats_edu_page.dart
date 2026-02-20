@@ -8,6 +8,7 @@ import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_b
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_sheet.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/screens_edu/detailed_user_stats_edu_page.dart';
+import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/screens_edu/temp_detailed_user_edu.dart';
 
 class StatsEduPage extends StatelessWidget {
   const StatsEduPage({super.key});
@@ -30,7 +31,8 @@ class StatsEduPage extends StatelessWidget {
                 openMiniAppSheet(
                   showHandler: true,
                   context,
-                  child: DetailedUserStatsEduPage(),
+                  // child: DetailedUserStatsEduPage(),
+                  child: TempDetailedUserEdu(),
                 );
               },
               child: Column(

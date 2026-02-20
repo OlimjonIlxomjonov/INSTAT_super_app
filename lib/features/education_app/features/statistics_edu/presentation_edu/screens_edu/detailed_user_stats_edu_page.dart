@@ -61,25 +61,29 @@ class DetailedUserStatsEduPage extends StatelessWidget {
               ),
             ),
 
-            // SliverFillRemaining(
-            //   child: TabBarView(
-            //     children: [UserInfoTab(), UserInfoTab(), UserInfoTab()],
-            //   ),
-            // ),
-            SliverSafeArea(
-              sliver: SliverToBoxAdapter(
-                child: SizedBox(
-                  height: AppResponsiveness.screenWidth,
-                  child: TabBarView(
-                    children: [
-                      UserInfoTab(),
-                      UserAchievementsTab(),
-                      UserSertificatsTab(),
-                    ],
-                  ),
-                ),
+            SliverFillRemaining(
+              child: TabBarView(
+                children: [
+                  UserInfoTab(),
+                  UserAchievementsTab(),
+                  UserSertificatsTab(),
+                ],
               ),
             ),
+            // SliverSafeArea(
+            //   sliver: SliverToBoxAdapter(
+            //     child: SizedBox(
+            //       height: AppResponsiveness.screenWidth,
+            //       child: TabBarView(
+            //         children: [
+            //           UserInfoTab(),
+            //           UserAchievementsTab(),
+            //           UserSertificatsTab(),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

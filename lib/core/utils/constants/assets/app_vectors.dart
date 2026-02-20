@@ -32,4 +32,5 @@ abstract class AppVectors {
   static const String uzbekistanFlag = "${basePath}uzbekistan_flag.svg";
   static const String ukFlag = "${basePath}united_kingdom_flag.svg";
   static const String russiaFlag = "${basePath}russian_flag.svg";
+  static const String pdfIcon = "${basePath}pdf_icon.svg";
 }

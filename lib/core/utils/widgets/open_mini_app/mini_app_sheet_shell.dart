@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
+import 'package:my_template/core/utils/devices/device_unitlity.dart';
 
-class MiniAppSheetShell extends StatelessWidget {
+class MiniAppSheetShell extends StatefulWidget {
   const MiniAppSheetShell({
     super.key,
     required this.child,
@@ -13,11 +14,27 @@ class MiniAppSheetShell extends StatelessWidget {
   final bool showHandle;
 
   @override
-  Widget build(BuildContext context) {
+  State<MiniAppSheetShell> createState() => _MiniAppSheetShellState();
+}
 
+class _MiniAppSheetShellState extends State<MiniAppSheetShell> {
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   TDeviceUtils.setStatusBarColor(AppColors.transparent, darkIcons: false);
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   TDeviceUtils.setStatusBarColor(Colors.transparent, darkIcons: false);
+  //   super.dispose();
+  // }
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
-        if (showHandle)
+        if (widget.showHandle)
           GestureDetector(
             onVerticalDragEnd: (details) {
               if ((details.primaryVelocity ?? 0) > 600) {
@@ -27,7 +44,7 @@ class MiniAppSheetShell extends StatelessWidget {
             child: Container(
               width: 40,
               height: 4,
-              margin: const EdgeInsets.symmetric(vertical: 10),
+              margin: .only(top: 20, bottom: 10),
               decoration: BoxDecoration(
                 color: AppColors.greyScale.grey300,
                 borderRadius: BorderRadius.circular(30),
@@ -40,7 +57,7 @@ class MiniAppSheetShell extends StatelessWidget {
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),
             ),
-            child: child,
+            child: widget.child,
           ),
         ),
       ],

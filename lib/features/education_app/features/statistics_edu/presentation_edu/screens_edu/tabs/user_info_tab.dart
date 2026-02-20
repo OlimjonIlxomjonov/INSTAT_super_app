@@ -25,7 +25,6 @@ class UserInfoTab extends StatelessWidget {
     const userStudyProcessTrailing = ['23 ta', '5 ta', '96%', '467 soat'];
 
     return ListView(
-      padding: AppPadding.horizontal20x(),
       children: [
         userProfileInfoCardWg(
           'Foydalanuvchi ma’lumoti',

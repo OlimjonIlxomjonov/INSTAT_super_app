@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
+import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 
 Future<void> finishLessonTestDialogScreen(
@@ -43,11 +46,12 @@ Future<void> finishLessonTestDialogScreen(
           Align(
             alignment: .topCenter,
             child: ConfettiWidget(
-              emissionFrequency: 0.08,
+              emissionFrequency: 0.05,
               blastDirectionality: .explosive,
+              numberOfParticles: 50,
               confettiController: confettiController,
               shouldLoop: false,
-              colors: [AppColors.primaryColor, AppColors.orange500],
+              colors: [AppColors.primaryColor, AppColors.yellowMidTimeCard],
             ),
           ),
         ],

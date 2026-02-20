@@ -17,11 +17,17 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
           /// HEADER IMAGE WITH ARROW BACK
           Stack(
             children: [
-              Image.asset(
-                height: appH(320),
-                width: double.infinity,
-                'assets/home_page/temp_course_dummy.png',
-                fit: BoxFit.cover,
+              ClipRRect(
+                borderRadius: .only(
+                  bottomLeft: .circular(20),
+                  bottomRight: .circular(20),
+                ),
+                child: Image.asset(
+                  height: appH(320),
+                  width: double.infinity,
+                  'assets/home_page/temp_course_dummy.png',
+                  fit: BoxFit.cover,
+                ),
               ),
               Padding(
                 padding: .only(left: appW(10), top: appH(10)),

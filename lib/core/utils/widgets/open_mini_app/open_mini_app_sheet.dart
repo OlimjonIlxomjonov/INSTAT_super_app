@@ -8,7 +8,6 @@ Future<void> openMiniAppSheet(
   required Widget child,
   bool showHandler = false,
 }) async {
-  TDeviceUtils.setStatusBarColor(Colors.transparent, darkIcons: false);
   return showModalBottomSheet(
     context: context,
     useSafeArea: true,
@@ -17,10 +16,10 @@ Future<void> openMiniAppSheet(
     showDragHandle: false,
     isDismissible: false,
     backgroundColor: Colors.transparent,
-    // barrierColor: AppColors.black,
+    barrierColor: AppColors.black,
     builder: (_) {
       return SizedBox(
-        height: AppResponsiveness.screenHeight - 30,
+        height: AppResponsiveness.screenHeight - 45,
         child: ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           child: Material(

@@ -9,6 +9,7 @@ class EduTicketsChatComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TDeviceUtils.systemNavigationBar(AppColors.white);
     return Scaffold(
       resizeToAvoidBottomInset: true,
 
@@ -20,7 +21,7 @@ class EduTicketsChatComponent extends StatelessWidget {
             sliver: SliverToBoxAdapter(
               child: Column(
                 children: [
-                  // your chat messages here
+                  // messages
                 ],
               ),
             ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
-import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 
 class BodyContainer extends StatelessWidget {
@@ -13,7 +12,6 @@ class BodyContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: AppPadding.horizontal20x(),
       width: double.infinity,
       padding: .all(12),
       decoration: BoxDecoration(
