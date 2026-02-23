@@ -11,7 +11,7 @@ class EduCategoriesWg extends StatelessWidget {
     /// border / icon / text = AppColors.primaryColor
     return Container(
       padding: .symmetric(vertical: appH(6), horizontal: appW(10)),
-      margin: .only(left: appW(12), top: appH(24)),
+      margin: .only(left: appW(12), ),
       decoration: BoxDecoration(
         borderRadius: .circular(10),
         border: .all(color: AppColors.greyScale.grey200),

@@ -4,6 +4,7 @@ import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/strings/app_strings.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
+import 'package:my_template/core/utils/general_widgets/mini_app_home_header/mini_app_home_header_wg.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/active_courses/active_courses_wg.dart';
 import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
@@ -29,14 +30,12 @@ class HomeEduPage extends StatefulWidget {
 class _HomeEduPageState extends State<HomeEduPage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     TDeviceUtils.setStatusBarColor(AppColors.black, darkIcons: false);
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     TDeviceUtils.setStatusBarColor(AppColors.transparent, darkIcons: true);
     super.dispose();
   }
@@ -53,29 +52,8 @@ class _HomeEduPageState extends State<HomeEduPage> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverPadding(
-            padding: .only(left: appW(20), right: appW(20), top: appH(20)),
-            sliver: SliverAppBar(
-              automaticallyImplyLeading: true,
-              leading: CircleAvatar(
-                backgroundColor: AppColors.greyScale.grey300,
-              ),
-              title: Column(
-                crossAxisAlignment: .start,
-                children: [
-                  Text(
-                    'Hayrli kun! ✌️',
-                    style: AppTextStyles.source.regular(fontSize: 14),
-                  ),
-                  Text(
-                    'Afzal Pulatov',
-                    style: AppTextStyles.source.medium(fontSize: 16),
-                  ),
-                ],
-              ),
-              actions: [Icon(IconlyLight.notification)],
-            ),
-          ),
+          /// HOME HEADER
+          MiniAppHomeHeaderWg(),
           SliverPadding(
             padding: .symmetric(horizontal: appW(20), vertical: appH(10)),
             sliver: SliverAppBar(

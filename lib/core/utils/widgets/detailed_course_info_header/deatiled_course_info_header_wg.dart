@@ -4,6 +4,7 @@ import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 
 class DetailedCourseInfoHeaderWg extends StatelessWidget {
   const DetailedCourseInfoHeaderWg({super.key});
@@ -34,7 +35,8 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                 child: IconButton(
                   onPressed: () {
                     // AppRoute.close();
-                    FamilyModalSheet.of(context).popPage();
+                    // FamilyModalSheet.of(context).popPage();
+                    FamilyNavigation.familyClose(context);
                   },
                   style: IconButton.styleFrom(
                     backgroundColor: AppColors.white,

@@ -19,6 +19,7 @@ import 'package:my_template/features/education_app/features/home_edu/presentatio
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/mini_app_section_card.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/model/mini_app_model.dart';
+import 'package:my_template/features/online_library_app/features/online_lib_bottom_nav_bar.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -36,18 +37,19 @@ class HomePage extends StatelessWidget {
             context,
             child: EduBottomNavBar(),
           );
-          // openMiniAppSheetFamily(
-          //   showHandler: true,
-          //   context,
-          //   child: EduBottomNavBar(),
-          // );
         },
       ),
       MiniAppModel(
         mainImage: AppImages.bookSection,
         backgroundImage: AppVectors.bookSectioBack,
         title: "Raqamli kutubxona",
-        onTap: (context) {},
+        onTap: (context) {
+          openMiniAppSheet(
+            showHandler: true,
+            context,
+            child: OnlineLibBottomNavBar(),
+          );
+        },
       ),
       MiniAppModel(
         mainImage: AppImages.mikroMalumotlar,

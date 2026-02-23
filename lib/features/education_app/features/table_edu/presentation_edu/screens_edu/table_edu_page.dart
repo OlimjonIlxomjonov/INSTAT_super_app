@@ -7,6 +7,7 @@ import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/layout_buttons/layout_buttons_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/custom_bottom_sheet_wg.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/sub_bottom_sheet_opener.dart';
 import 'package:my_template/features/education_app/features/table_edu/presentation_edu/screens_edu/detailed_task_edu_child.dart';
 import 'package:my_template/features/education_app/features/table_edu/presentation_edu/widgets_edu/layout_grid_calendar_wg.dart';
 import 'package:my_template/features/education_app/features/table_edu/presentation_edu/widgets_edu/layout_list_calendar_wg.dart';
@@ -75,7 +76,7 @@ class _TableEduPageState extends State<TableEduPage> {
                           'Ushbu topshiriq kurs davomida o‘rganilgan statistik ma’lumotlarni real tarmoqlar va sohalar kesimida tahlil qilishga qaratilgan.',
                       deadlineDate: ' Bugun  15:00',
                       onTap: () {
-                        customBottomSheetWg(
+                        subBottomSheetOpener(
                           context,
                           child: DetailedTaskEduChild(),
                         );

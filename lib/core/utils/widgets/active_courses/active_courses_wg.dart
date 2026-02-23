@@ -6,12 +6,16 @@ import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 
 class ActiveCoursesWg extends StatelessWidget {
   final VoidCallback onTap;
+  final bool showCircularProgBar;
 
-  const ActiveCoursesWg({super.key, required this.onTap});
+  const ActiveCoursesWg({
+    super.key,
+    required this.onTap,
+    this.showCircularProgBar = true,
+  });
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -29,7 +33,7 @@ class ActiveCoursesWg extends StatelessWidget {
                 'assets/home_page/temp_course_dummy.png',
                 fit: BoxFit.cover,
                 width: appW(64),
-                height: appH(60),
+                height: appH(showCircularProgBar ? 60 : 80),
               ),
             ),
             SizedBox(width: appW(12)),
@@ -52,36 +56,58 @@ class ActiveCoursesWg extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: AppTextStyles.source.medium(fontSize: 16),
                   ),
-                  Text(
-                    '7/24 Mavzu',
-                    style: AppTextStyles.source.regular(fontSize: 13),
+                  Row(
+                    mainAxisAlignment: .spaceBetween,
+                    children: [
+                      Text(
+                        '7/24 Mavzu',
+                        style: AppTextStyles.source.regular(fontSize: 13),
+                      ),
+                      if (!showCircularProgBar)
+                        Text(
+                          '25%',
+                          style: AppTextStyles.source.regular(
+                            fontSize: 12,
+                            color: AppColors.greyScale.grey600,
+                          ),
+                        ),
+                    ],
                   ),
+                  SizedBox(height: 9),
+                  if (!showCircularProgBar)
+                    LinearProgressIndicator(
+                      value: 0.25,
+                      color: AppColors.primaryColor,
+                      borderRadius: .circular(12),
+                      minHeight: 8,
+                    ),
                 ],
               ),
             ),
             SizedBox(width: appW(12)),
-            SizedBox(
-              width: appW(56),
-              height: appH(56),
-              child: DashedCircularProgressBar(
-                progress: 5,
-                maxProgress: 10,
-                corners: StrokeCap.butt,
-                foregroundColor: AppColors.primaryColor,
-                backgroundColor: Color(0xffeeeeee),
-                foregroundStrokeWidth: 4,
-                backgroundStrokeWidth: 4,
-                animation: true,
-                width: 5,
-                height: 5,
-                child: Center(
-                  child: Text(
-                    '50%',
-                    style: AppTextStyles.source.medium(fontSize: 12),
+            if (showCircularProgBar)
+              SizedBox(
+                width: appW(56),
+                height: appH(56),
+                child: DashedCircularProgressBar(
+                  progress: 5,
+                  maxProgress: 10,
+                  corners: StrokeCap.butt,
+                  foregroundColor: AppColors.primaryColor,
+                  backgroundColor: Color(0xffeeeeee),
+                  foregroundStrokeWidth: 4,
+                  backgroundStrokeWidth: 4,
+                  animation: true,
+                  width: 5,
+                  height: 5,
+                  child: Center(
+                    child: Text(
+                      '50%',
+                      style: AppTextStyles.source.medium(fontSize: 12),
+                    ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ),

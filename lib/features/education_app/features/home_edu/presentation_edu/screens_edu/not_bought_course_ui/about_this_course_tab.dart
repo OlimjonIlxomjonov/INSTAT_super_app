@@ -4,9 +4,12 @@ import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
+import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/mini_app_sheet_shell.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/popular_courses_card/popular_courses_card_wg.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/detailed_course_info_page.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/see_all_similar_courses/see_all_similar_courses.dart';
 
 class AboutThisCourseTab extends StatelessWidget {
   const AboutThisCourseTab({super.key});
@@ -56,7 +59,13 @@ class AboutThisCourseTab extends StatelessWidget {
         /// SIMILAR COURSES
         Padding(
           padding: .symmetric(horizontal: appW(20)),
-          child: ExtendSectionSeeAllWg(title: "O’xshash kurslar", onTap: () {}),
+          child: ExtendSectionSeeAllWg(
+            title: "O’xshash kurslar",
+            onTap: () {
+              FamilyNavigation.familyPush(context, SeeAllSimilarCourses());
+              // openMiniAppSheetFamily(context, child: SeeAllSimilarCourses());
+            },
+          ),
         ),
         SizedBox(
           height: appH(250),
@@ -81,10 +90,14 @@ class AboutThisCourseTab extends StatelessWidget {
                       //   child: DetailedCourseInfoPage(),
                       // );
 
-                      FamilyModalSheet.of(context).pushPage(
-                        MiniAppSheetShell(
-                          child: const DetailedCourseInfoPage(),
-                        ),
+                      // FamilyModalSheet.of(context).pushPage(
+                      //   MiniAppSheetShell(
+                      //     child: const DetailedCourseInfoPage(),
+                      //   ),
+                      // );
+                      FamilyNavigation.familyPush(
+                        context,
+                        DetailedCourseInfoPage(),
                       );
                     },
                   ),

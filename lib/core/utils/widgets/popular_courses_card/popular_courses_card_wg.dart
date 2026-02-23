@@ -12,6 +12,7 @@ class PopularCoursesCardWg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: .opaque,
       onTap: onTap,
       child: SizedBox(
         width: appW(300),
