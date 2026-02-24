@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
-import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/mini_app_sheet_shell.dart';
 
 Future<T?> openMiniAppSheetFamily<T>(

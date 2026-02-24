@@ -9,7 +9,7 @@ class UserCommentsWg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: .only(bottom: 9),
+      margin: .only(bottom: 9, left: 8, right: 10),
       padding: .all(12),
       decoration: BoxDecoration(
         color: AppColors.greyScale.grey50,
@@ -41,6 +41,8 @@ class UserCommentsWg extends StatelessWidget {
           SizedBox(height: appH(8)),
           Text(
             'This course is carefully crafted to take you on a complete learning journey—from understanding the core principles of design to building real-world projects that showcase your skills.',
+            maxLines: 4,
+            overflow: .ellipsis,
             style: AppTextStyles.source.regular(
               fontSize: 14,
               color: AppColors.greyScale.grey600,

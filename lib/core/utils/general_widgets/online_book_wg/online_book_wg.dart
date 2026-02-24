@@ -55,13 +55,13 @@ class BookGridItem extends StatelessWidget {
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.95),
+                      color: Colors.white.withValues(alpha: 0.95),
                       borderRadius: BorderRadius.circular(14),
                       boxShadow: [
                         BoxShadow(
                           blurRadius: 10,
                           offset: const Offset(0, 4),
-                          color: Colors.black.withOpacity(0.08),
+                          color: Colors.black.withValues(alpha: 0.08),
                         ),
                       ],
                     ),
@@ -102,6 +102,29 @@ class BookGridItem extends StatelessWidget {
                     ),
                   ),
                 ),
+
+                Positioned(
+                  right: 10,
+                  bottom: 10,
+                  child: oldPrice != null
+                      ? Material(
+                          color: Colors.white.withValues(alpha: 0.95),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Text(
+                              price,
+                              style: AppTextStyles.source.regular(
+                                fontSize: 14,
+                                color: AppColors.primaryColor,
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox.shrink(),
+                ),
               ],
             ),
           ),
@@ -124,7 +147,7 @@ class BookGridItem extends StatelessWidget {
           // Title
           Text(
             title,
-            maxLines: 2,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: AppTextStyles.source.medium(fontSize: 15),
           ),
@@ -132,16 +155,18 @@ class BookGridItem extends StatelessWidget {
           const SizedBox(height: 4),
 
           // Price row
-          Row(
+          Column(
+            crossAxisAlignment: .start,
             children: [
-              Text(
-                price,
-                style: AppTextStyles.source.regular(
-                  fontSize: 14,
-                  color: AppColors.primaryColor,
+              if (oldPrice == null)
+                Text(
+                  price,
+                  style: AppTextStyles.source.regular(
+                    fontSize: 14,
+                    color: AppColors.primaryColor,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 4),
+
               if (oldPrice != null)
                 Text(
                   oldPrice!,

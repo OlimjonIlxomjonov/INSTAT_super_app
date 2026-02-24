@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/strings/app_strings.dart';
-import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/general_widgets/mini_app_home_header/mini_app_home_header_wg.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';

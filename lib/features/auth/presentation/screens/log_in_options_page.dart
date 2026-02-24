@@ -12,7 +12,6 @@ import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart'
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
-import 'package:my_template/features/auth/presentation/screens/temp_book.dart';
 import 'package:my_template/features/auth/presentation/widgets/continue_with_options.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/home_page.dart';
 

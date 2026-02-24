@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
-import 'package:my_template/core/utils/devices/device_unitlity.dart';
 
 class MiniAppSheetShell extends StatefulWidget {
   const MiniAppSheetShell({

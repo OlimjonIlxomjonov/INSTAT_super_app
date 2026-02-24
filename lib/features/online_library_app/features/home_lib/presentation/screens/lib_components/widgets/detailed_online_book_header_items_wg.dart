@@ -8,6 +8,7 @@ class DetailedOnlineBookHeaderItemsWg extends StatelessWidget {
   final IconData? icon;
 
   const DetailedOnlineBookHeaderItemsWg({
+    super.key,
     required this.value,
     required this.label,
     this.icon,

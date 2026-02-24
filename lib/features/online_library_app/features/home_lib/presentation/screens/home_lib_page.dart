@@ -120,7 +120,7 @@ class _HomeLibPageState extends State<HomeLibPage> {
                   author: 'Antuan de Sent-Ekzyuperi',
                   title: 'Jajji shahzoda',
                   price: '300 000 UZS',
-                  oldPrice: '330 000 UZS',
+                  oldPrice: index.isOdd ? null : '330 000 UZS',
                   onTap: () {
                     openMiniAppSheetFamily(
                       context,

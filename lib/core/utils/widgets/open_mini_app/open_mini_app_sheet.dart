@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
-import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 
 Future<void> openMiniAppSheet(
