@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class AppColors {
@@ -23,6 +22,9 @@ class AppColors {
   static const Color successStatus = Color(0xffE3F7EC);
   static const Color declinedStatus = Color(0xffFFF3EB);
   static const Color waitingStatus = Color(0xffFFEBEC);
+
+  /// star color
+  static const Color yellow500 = Color(0xffF6B51E);
 
   ///  DEFAULT APP COLORS
   static const Color transparent = Colors.transparent;

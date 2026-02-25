@@ -72,6 +72,7 @@ class SeeAllOnlineBooksComponent extends StatelessWidget {
                     title: 'Jajji shahzoda',
                     price: '300 000 UZS',
                     oldPrice: '330 000 UZS',
+                    isBoughtBook: false,
                     onTap: () {
                       openMiniAppSheetFamily(
                         context,

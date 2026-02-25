@@ -9,18 +9,21 @@ class BookGridItem extends StatelessWidget {
     required this.rating,
     required this.author,
     required this.title,
-    required this.price,
-    required this.oldPrice,
+    this.price,
+    this.oldPrice,
     this.onFavTap,
     this.onTap,
+    required this.isBoughtBook,
   });
 
+  final bool isBoughtBook;
   final String imagePath;
   final double rating;
   final String author;
   final String title;
-  final String price;
-  final String? oldPrice;
+
+  // final String ;
+  final String? oldPrice, price;
   final VoidCallback? onFavTap, onTap;
 
   @override
@@ -106,7 +109,7 @@ class BookGridItem extends StatelessWidget {
                 Positioned(
                   right: 10,
                   bottom: 10,
-                  child: oldPrice != null
+                  child: oldPrice != null && !isBoughtBook
                       ? Material(
                           color: Colors.white.withValues(alpha: 0.95),
                           shape: RoundedRectangleBorder(
@@ -115,7 +118,7 @@ class BookGridItem extends StatelessWidget {
                           child: Padding(
                             padding: EdgeInsets.all(5),
                             child: Text(
-                              price,
+                              price!,
                               style: AppTextStyles.source.regular(
                                 fontSize: 14,
                                 color: AppColors.primaryColor,
@@ -155,29 +158,67 @@ class BookGridItem extends StatelessWidget {
           const SizedBox(height: 4),
 
           // Price row
-          Column(
-            crossAxisAlignment: .start,
-            children: [
-              if (oldPrice == null)
-                Text(
-                  price,
-                  style: AppTextStyles.source.regular(
-                    fontSize: 14,
-                    color: AppColors.primaryColor,
-                  ),
-                ),
+          !isBoughtBook
+              ? Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    if (oldPrice == null)
+                      Text(
+                        price ?? '',
+                        style: AppTextStyles.source.regular(
+                          fontSize: 14,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
 
-              if (oldPrice != null)
-                Text(
-                  oldPrice!,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: .w300,
-                    decoration: .lineThrough,
-                  ),
+                    if (oldPrice != null)
+                      Text(
+                        oldPrice!,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: .w300,
+                          decoration: .lineThrough,
+                        ),
+                      ),
+                  ],
+                )
+              : Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          'Sahifa',
+                          style: AppTextStyles.source.regular(
+                            fontSize: 13,
+                            color: AppColors.greyScale.grey600,
+                          ),
+                        ),
+                        Text(
+                          ' (122/354)',
+                          style: AppTextStyles.source.regular(
+                            fontSize: 13,
+                            color: AppColors.greyScale.grey400,
+                          ),
+                        ),
+                        Spacer(),
+                        Text(
+                          '75%',
+                          style: AppTextStyles.source.regular(
+                            fontSize: 13,
+                            color: AppColors.greyScale.grey600,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 6),
+                    LinearProgressIndicator(
+                      value: .3,
+                      borderRadius: .circular(10),
+                      color: AppColors.primaryColor,
+                      minHeight: 6,
+                    ),
+                  ],
                 ),
-            ],
-          ),
         ],
       ),
     );

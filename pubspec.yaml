@@ -35,7 +35,8 @@ dependencies:
   family_bottom_sheet: ^0.1.0
   lottie: ^3.3.2
   carousel_slider: ^5.1.2
-#  turnable_page: ^1.0.1  # Book swiper effect
+  #  turnable_page: ^1.0.1  # Book swiper effect
+  page_flip: ^0.2.5+1
 
 dev_dependencies:
   flutter_test:

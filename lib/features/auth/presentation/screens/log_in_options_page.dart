@@ -56,7 +56,8 @@ class _LogInOptionsPageState extends State<LogInOptionsPage> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
+                AppRoute.open(HomePage());
               },
               child: Text('OK'),
             ),

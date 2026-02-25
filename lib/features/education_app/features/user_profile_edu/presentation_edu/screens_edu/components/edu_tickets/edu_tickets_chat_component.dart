@@ -12,7 +12,6 @@ class EduTicketsChatComponent extends StatelessWidget {
     TDeviceUtils.systemNavigationBar(AppColors.white);
     return Scaffold(
       resizeToAvoidBottomInset: true,
-
       body: CustomScrollView(
         slivers: [
           SliverDefaultAppBarWg(myTitle: 'Chat'),

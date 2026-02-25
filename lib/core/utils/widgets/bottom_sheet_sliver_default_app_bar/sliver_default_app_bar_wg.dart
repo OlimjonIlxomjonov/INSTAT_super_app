@@ -30,29 +30,28 @@ class SliverDefaultAppBarWg extends StatelessWidget {
       }
     }
 
-    return SliverPadding(
-      padding: .only(top: appH(20), left: appW(20), right: appW(20)),
-      sliver: SliverAppBar(
-        floating: true,
-        leading: IconButton(
-          style: IconButton.styleFrom(
-            backgroundColor: AppColors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: .circular(8),
-              side: BorderSide(color: AppColors.greyScale.grey200),
-            ),
+    return SliverAppBar(
+      toolbarHeight: 70,
+      leadingWidth: 80,
+      floating: true,
+      actionsPadding: EdgeInsets.only(right: 20),
+      leading: IconButton(
+        style: IconButton.styleFrom(
+          backgroundColor: AppColors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: .circular(8),
+            side: BorderSide(color: AppColors.greyScale.grey200),
           ),
-
-          onPressed: onClose,
-          icon: Icon(IconlyLight.arrow_left_2, size: 20),
         ),
-        centerTitle: true,
-        title: myTitle != null
-            ? Text(myTitle!, style: AppTextStyles.source.semiBold(fontSize: 18))
-            : SizedBox.shrink(),
-        actions: customActions ?? [SizedBox.shrink()],
-        bottom: appBarBottom,
+        onPressed: onClose,
+        icon: Icon(IconlyLight.arrow_left_2, size: 20),
       ),
+      centerTitle: true,
+      title: myTitle != null
+          ? Text(myTitle!, style: AppTextStyles.source.semiBold(fontSize: 18))
+          : SizedBox.shrink(),
+      actions: customActions ?? [SizedBox.shrink()],
+      bottom: appBarBottom,
     );
   }
 }

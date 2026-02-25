@@ -4,12 +4,13 @@ import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 
 class EduCustomTextAreaWg extends StatelessWidget {
-  final String hintText, helperText;
+  final String hintText;
+  final String? helperText;
 
   const EduCustomTextAreaWg({
     super.key,
     required this.hintText,
-    required this.helperText,
+    this.helperText,
   });
 
   @override
@@ -23,22 +24,24 @@ class EduCustomTextAreaWg extends StatelessWidget {
           color: AppColors.greyScale.grey400,
         ),
         hintText: hintText,
-        helper: Row(
-          children: [
-            Icon(
-              IconlyLight.danger,
-              size: 20,
-              color: AppColors.greyScale.grey600,
-            ),
-            Text(
-              helperText,
-              style: AppTextStyles.source.regular(
-                fontSize: 12,
-                color: AppColors.greyScale.grey600,
-              ),
-            ),
-          ],
-        ),
+        helper: helperText != null
+            ? Row(
+                children: [
+                  Icon(
+                    IconlyLight.danger,
+                    size: 20,
+                    color: AppColors.greyScale.grey600,
+                  ),
+                  Text(
+                    helperText!,
+                    style: AppTextStyles.source.regular(
+                      fontSize: 12,
+                      color: AppColors.greyScale.grey600,
+                    ),
+                  ),
+                ],
+              )
+            : SizedBox.shrink(),
       ),
       maxLines: null,
     );

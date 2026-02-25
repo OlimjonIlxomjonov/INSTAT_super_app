@@ -35,6 +35,13 @@ class _HomeLibPageState extends State<HomeLibPage> {
     super.dispose();
   }
 
+  void activeCourseOpener() {
+    openMiniAppSheetFamily(
+      context,
+      child: DetailedOnlineBookComponent(isBookBought: true),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,8 +73,14 @@ class _HomeLibPageState extends State<HomeLibPage> {
                     title: 'O’qilayotgan kitoblar',
                     onTap: widget.onTap,
                   ),
-                  ActiveCoursesWg(showCircularProgBar: false, onTap: () {}),
-                  ActiveCoursesWg(showCircularProgBar: false, onTap: () {}),
+                  ActiveCoursesWg(
+                    showCircularProgBar: false,
+                    onTap: activeCourseOpener,
+                  ),
+                  ActiveCoursesWg(
+                    showCircularProgBar: false,
+                    onTap: activeCourseOpener,
+                  ),
                   SizedBox(height: appH(18)),
                 ],
               ),
@@ -127,6 +140,7 @@ class _HomeLibPageState extends State<HomeLibPage> {
                       child: DetailedOnlineBookComponent(),
                     );
                   },
+                  isBoughtBook: false,
                 );
               },
             ),

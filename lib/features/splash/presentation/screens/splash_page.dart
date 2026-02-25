@@ -57,10 +57,10 @@ class _SplashPageState extends State<SplashPage> {
             ),
           ),
 
-          // ✅ logo
+          //  logo
           Center(child: SvgPicture.asset(AppVectors.mainAppLogo)),
 
-          // ✅ bottom text
+          //  bottom text
           SafeArea(
             child: Padding(
               padding: EdgeInsets.only(bottom: appH(20)),
