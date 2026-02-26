@@ -5,6 +5,7 @@ import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
+import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/core/utils/general_widgets/bought_book_opener/bought_book_opener_wg.dart';
 import 'package:my_template/core/utils/general_widgets/custom_rating_star/custom_rating_star_wg.dart';
 import 'package:my_template/core/utils/general_widgets/online_book_wg/online_book_wg.dart';
@@ -14,7 +15,7 @@ import 'package:my_template/core/utils/widgets/comment_section/user_comments_wg.
 import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
-import 'package:my_template/core/utils/widgets/open_mini_app/custom_bottom_sheet_wg.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/sub_bottom_sheet_opener.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/see_all_course_comments/see_all_course_comments.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/leave_comment_section.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/similar_onilne_books_component.dart';
@@ -22,9 +23,13 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/widgets/vertical_divider_wg.dart';
 
 class DetailedOnlineBookComponent extends StatefulWidget {
-  final bool isBookBought;
+  final bool isBookBought, isOffline;
 
-  const DetailedOnlineBookComponent({super.key, this.isBookBought = false});
+  const DetailedOnlineBookComponent({
+    super.key,
+    this.isBookBought = false,
+    this.isOffline = false,
+  });
 
   @override
   State<DetailedOnlineBookComponent> createState() =>
@@ -144,9 +149,14 @@ class _DetailedOnlineBookComponentState
                   ExtendSectionSeeAllWg(
                     title: 'Izohlar',
                     onTap: () {
-                      customBottomSheetWg(
+                      // customBottomSheetWg(
+                      //   context,
+                      //   child: SeeAllCourseComments(),
+                      // );
+                      subBottomSheetOpener(
                         context,
                         child: SeeAllCourseComments(),
+                        isExpanded: true,
                       );
                     },
                   ),
@@ -155,13 +165,13 @@ class _DetailedOnlineBookComponentState
             ),
           ),
 
-          /// SIMILAR BOOKS
+          /// COMMENTS
           SliverToBoxAdapter(
             child: CarouselSlider(
               options: CarouselOptions(
                 height: 220,
                 viewportFraction: 0.85,
-                enableInfiniteScroll: false,
+                enableInfiniteScroll: true,
                 padEnds: false,
                 autoPlay: true,
               ),
@@ -174,6 +184,8 @@ class _DetailedOnlineBookComponentState
               ].map((i) => const UserCommentsWg()).toList(),
             ),
           ),
+
+          /// BOOKS
           if (!widget.isBookBought)
             SliverPadding(
               padding: AppPadding.horizontal20x(),
@@ -205,19 +217,19 @@ class _DetailedOnlineBookComponentState
                     child: Padding(
                       padding: .only(left: 10, right: 10),
                       child: BookGridItem(
-                        imagePath: 'assets/images/temp_book.jpg',
+                        type: BookCardType.market,
+                        title: "Jajji shahzoda",
+                        author: "Antuan de Sent-Ekzyuperi",
                         rating: 4.5,
-                        author: 'Antuan de Sent-Ekzyuperi',
-                        title: 'Jajji shahzoda',
-                        price: '300 000 UZS',
-                        oldPrice: index.isOdd ? null : '330 000 UZS',
+                        price: "300 000 UZS",
+                        oldPrice: "330 000 UZS",
+                        imagePath: 'assets/images/temp_book.jpg',
                         onTap: () {
                           FamilyNavigation.familyPush(
                             context,
                             DetailedOnlineBookComponent(),
                           );
                         },
-                        isBoughtBook: false,
                       ),
                     ),
                   ),
@@ -228,12 +240,14 @@ class _DetailedOnlineBookComponentState
           SliverPadding(padding: .only(bottom: 20)),
         ],
       ),
-      bottomNavigationBar: CustomBottomNavContainerWg(
-        buttonText: widget.isBookBought
-            ? 'O’qishni davom ettirish'
-            : 'Sotib olish - 800 000 UZS',
-        onTap: onButtonPressed,
-      ),
+      bottomNavigationBar: !widget.isOffline
+          ? CustomBottomNavContainerWg(
+              buttonText: widget.isBookBought
+                  ? 'O’qishni davom ettirish'
+                  : 'Sotib olish - 800 000 UZS',
+              onTap: onButtonPressed,
+            )
+          : SizedBox.shrink(),
     );
   }
 }

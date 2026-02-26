@@ -32,9 +32,9 @@ class SliverDefaultAppBarWg extends StatelessWidget {
 
     return SliverAppBar(
       toolbarHeight: 70,
-      leadingWidth: 80,
+      leadingWidth: 70,
       floating: true,
-      actionsPadding: EdgeInsets.only(right: 20),
+      actionsPadding: EdgeInsets.only(right: 10),
       leading: IconButton(
         style: IconButton.styleFrom(
           backgroundColor: AppColors.white,

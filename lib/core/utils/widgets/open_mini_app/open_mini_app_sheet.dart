@@ -15,7 +15,7 @@ Future<void> openMiniAppSheet(
     showDragHandle: false,
     isDismissible: false,
     backgroundColor: Colors.transparent,
-    barrierColor: AppColors.black,
+    // barrierColor: AppColors.black,
     builder: (_) {
       return SizedBox(
         height: AppResponsiveness.screenHeight - 45,

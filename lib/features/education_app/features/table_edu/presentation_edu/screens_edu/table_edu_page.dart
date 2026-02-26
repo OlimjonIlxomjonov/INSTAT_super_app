@@ -78,6 +78,7 @@ class _TableEduPageState extends State<TableEduPage> {
                         subBottomSheetOpener(
                           context,
                           child: DetailedTaskEduChild(),
+                          isExpanded: false,
                         );
                       },
                       daysLeft: ' 0 kun qoldi',

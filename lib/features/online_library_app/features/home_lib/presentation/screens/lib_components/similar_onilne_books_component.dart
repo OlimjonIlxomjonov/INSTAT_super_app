@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
+import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/core/utils/general_widgets/online_book_wg/online_book_wg.dart';
 import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
@@ -46,13 +47,13 @@ class SimilarOnlineBooksComponent extends StatelessWidget {
               itemCount: 6,
               itemBuilder: (context, index) {
                 return BookGridItem(
-                  isBoughtBook: false ,
-                  imagePath: 'assets/images/temp_book.jpg',
+                  type: BookCardType.market,
+                  title: "Jajji shahzoda",
+                  author: "Antuan de Sent-Ekzyuperi",
                   rating: 4.5,
-                  author: 'Antuan de Sent-Ekzyuperi',
-                  title: 'Jajji shahzoda',
-                  price: '300 000 UZS',
-                  oldPrice: index.isOdd ? null : '330 000 UZS',
+                  price: "300 000 UZS",
+                  oldPrice: "330 000 UZS",
+                  imagePath: 'assets/images/temp_book.jpg',
                   onTap: () {
                     FamilyNavigation.familyPush(
                       context,

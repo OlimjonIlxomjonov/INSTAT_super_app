@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
+import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/core/utils/general_widgets/mini_app_home_header/mini_app_home_header_wg.dart';
 import 'package:my_template/core/utils/general_widgets/online_book_wg/online_book_wg.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
@@ -23,18 +24,6 @@ class HomeLibPage extends StatefulWidget {
 }
 
 class _HomeLibPageState extends State<HomeLibPage> {
-  @override
-  void initState() {
-    super.initState();
-    TDeviceUtils.setStatusBarColor(AppColors.black, darkIcons: false);
-  }
-
-  @override
-  void dispose() {
-    TDeviceUtils.setStatusBarColor(AppColors.transparent, darkIcons: true);
-    super.dispose();
-  }
-
   void activeCourseOpener() {
     openMiniAppSheetFamily(
       context,
@@ -48,15 +37,14 @@ class _HomeLibPageState extends State<HomeLibPage> {
       body: CustomScrollView(
         slivers: [
           MiniAppHomeHeaderWg(),
-          SliverPadding(
-            padding: .symmetric(horizontal: appW(20), vertical: appH(10)),
-            sliver: SliverAppBar(
-              toolbarHeight: appH(56) + appH(24),
-              pinned: true,
-              automaticallyImplyLeading: false,
-              titleSpacing: 0,
-              title: AppSearchbarWg(),
-            ),
+
+          /// search
+          SliverAppBar(
+            toolbarHeight: appH(56) + appH(24),
+            pinned: true,
+            automaticallyImplyLeading: false,
+            titleSpacing: 20,
+            title: AppSearchbarWg(),
           ),
           SliverPadding(
             padding: AppPadding.horizontal20x(),
@@ -106,7 +94,8 @@ class _HomeLibPageState extends State<HomeLibPage> {
               child: ExtendSectionSeeAllWg(
                 title: 'Kitoblar',
                 onTap: () {
-                  openMiniAppSheet(
+                  openMiniAppSheetFamily(
+                    showHandler: false,
                     context,
                     child: SeeAllOnlineBooksComponent(),
                   );
@@ -123,24 +112,24 @@ class _HomeLibPageState extends State<HomeLibPage> {
                 crossAxisCount: 2,
                 mainAxisSpacing: 16,
                 crossAxisSpacing: 16,
-                childAspectRatio: 0.56,
+                childAspectRatio: 0.52,
               ),
               itemCount: 6,
               itemBuilder: (context, index) {
                 return BookGridItem(
-                  imagePath: 'assets/images/temp_book.jpg',
+                  type: BookCardType.market,
+                  title: "Jajji shahzoda",
+                  author: "Antuan de Sent-Ekzyuperi",
                   rating: 4.5,
-                  author: 'Antuan de Sent-Ekzyuperi',
-                  title: 'Jajji shahzoda',
-                  price: '300 000 UZS',
-                  oldPrice: index.isOdd ? null : '330 000 UZS',
+                  price: "300 000 UZS",
+                  oldPrice: index.isOdd ? "330 000 UZS" : null,
+                  imagePath: 'assets/images/temp_book.jpg',
                   onTap: () {
                     openMiniAppSheetFamily(
                       context,
                       child: DetailedOnlineBookComponent(),
                     );
                   },
-                  isBoughtBook: false,
                 );
               },
             ),

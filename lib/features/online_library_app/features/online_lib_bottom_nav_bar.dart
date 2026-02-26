@@ -4,8 +4,11 @@ import 'package:iconly/iconly.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/home_lib_page.dart';
+import 'package:my_template/features/online_library_app/features/offline_books_lib/presentation_lib/screens_lib/offline_books_lib_page.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/presentation_lib/screens_lib/user_online_book_cart_lib_page.dart';
+import 'package:my_template/features/online_library_app/features/user_online_book_profile_lib/presentation_lib/screens_lib/user_online_book_profile_lib.dart';
 import 'package:my_template/features/online_library_app/features/user_online_books_lib/presentation_lib/screens_lib/user_online_books_lib_page.dart';
 
 class OnlineLibBottomNavBar extends StatefulWidget {
@@ -19,6 +22,7 @@ class OnlineLibBottomNavBar extends StatefulWidget {
 
 class _OnlineLibBottomNavBarState extends State<OnlineLibBottomNavBar> {
   late int _currentIndex;
+  Key _navKey = UniqueKey();
 
   void _goToTab(int index) => setState(() => _currentIndex = index);
 
@@ -33,9 +37,9 @@ class _OnlineLibBottomNavBarState extends State<OnlineLibBottomNavBar> {
     final List<Widget> innerPage = [
       HomeLibPage(onTap: () => _goToTab(1)),
       UserOnlineBooksLibPage(),
-      UserOnlineBookCartLibPage(),
-      UserOnlineBookCartLibPage(),
-      UserOnlineBookCartLibPage(),
+      SizedBox(),
+      OfflineBooksLibPage(),
+      UserOnlineBookProfileLib(),
     ];
     return Scaffold(
       body: IndexedStack(index: _currentIndex, children: innerPage),
@@ -57,8 +61,24 @@ class _OnlineLibBottomNavBarState extends State<OnlineLibBottomNavBar> {
         ),
         child: SafeArea(
           child: GNav(
+            key: _navKey,
             selectedIndex: _currentIndex,
-            onTabChange: (newIndex) => setState(() => _currentIndex = newIndex),
+            onTabChange: (newIndex) {
+              if (newIndex == 2) {
+                /// cart sheet
+                openMiniAppSheetFamily(
+                  context,
+                  isTransparent: false,
+                  showHandler: false,
+                  child: UserOnlineBookCartLibPage(),
+                );
+                setState(() {
+                  _navKey = UniqueKey();
+                });
+              } else {
+                setState(() => _currentIndex = newIndex);
+              }
+            },
             tabBorderRadius: 12,
             curve: Curves.easeInOut,
             duration: const Duration(milliseconds: 200),

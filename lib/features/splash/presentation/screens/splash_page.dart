@@ -36,7 +36,7 @@ class _SplashPageState extends State<SplashPage> {
       AppColors.splashBackgroundColor,
       isBright: true,
     );
-    TDeviceUtils.setStatusBarColor(AppColors.transparent, darkIcons: true);
+    // TDeviceUtils.setStatusBarColor(AppColors.transparent, darkIcons: true);
 
     return Scaffold(
       backgroundColor: AppColors.splashBackgroundColor,

@@ -13,10 +13,11 @@ class DetailedTaskEduChild extends StatelessWidget {
     return Column(
       children: [
         Container(
-          margin: AppPadding.hAndV20x20(),
+          margin: AppPadding.horizontal20x(),
           padding: .all(12),
           decoration: BoxDecoration(
             borderRadius: .circular(12),
+            color: AppColors.greyScale.grey50,
             border: .all(color: AppColors.greyScale.grey200),
           ),
           child: Column(
@@ -67,6 +68,7 @@ class DetailedTaskEduChild extends StatelessWidget {
             ],
           ),
         ),
+        SizedBox(height: 20),
       ],
     );
   }

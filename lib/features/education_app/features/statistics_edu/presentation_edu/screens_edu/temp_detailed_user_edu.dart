@@ -19,9 +19,10 @@ class TempDetailedUserEdu extends StatelessWidget {
       length: 3,
       child: Scaffold(
         body: Padding(
-          padding: AppPadding.hAndV20x20(),
+          padding: AppPadding.horizontal20x(),
           child: Column(
             children: [
+              SizedBox(height: 20),
               ProfileHeader(
                 background: AssetImage(AppImages.profileBackground),
                 avatar: AssetImage(AppImages.profileBackground),

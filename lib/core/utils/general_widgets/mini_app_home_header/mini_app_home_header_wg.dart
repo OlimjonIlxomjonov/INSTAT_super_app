@@ -10,7 +10,7 @@ class MiniAppHomeHeaderWg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: .only(left: appW(20), right: appW(20), top: appH(20)),
+      padding: .only(left: appW(20), right: appW(20)),
       sliver: SliverAppBar(
         leading: CircleAvatar(backgroundColor: AppColors.greyScale.grey300),
         title: Column(

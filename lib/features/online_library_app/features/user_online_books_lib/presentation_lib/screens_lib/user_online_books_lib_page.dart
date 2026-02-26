@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
+import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/core/utils/general_widgets/online_book_wg/online_book_wg.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
@@ -22,7 +23,8 @@ class UserOnlineBooksLibPage extends StatelessWidget {
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
-              pinned: true,
+              pinned: false,
+              floating: true,
               backgroundColor: AppColors.white,
               elevation: 0,
               automaticallyImplyLeading: false,
@@ -58,7 +60,7 @@ class UserOnlineBooksLibPage extends StatelessWidget {
             ),
 
             SliverPadding(
-              padding: AppPadding.hAndV20x20(),
+              padding: .only(left: 20, top: 20),
               sliver: SliverToBoxAdapter(
                 child: Text(
                   'Kitoblarim',
@@ -67,7 +69,7 @@ class UserOnlineBooksLibPage extends StatelessWidget {
               ),
             ),
             SliverPadding(
-              padding: AppPadding.horizontal20x(),
+              padding: AppPadding.hAndV20x20(),
               sliver: SliverGrid.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -78,17 +80,19 @@ class UserOnlineBooksLibPage extends StatelessWidget {
                 itemCount: 6,
                 itemBuilder: (context, index) {
                   return BookGridItem(
+                    type: BookCardType.bought,
+                    title: "Jajji shahzoda",
+                    author: "Antuan de Sent-Ekzyuperi",
+                    progress: 0.75,
+                    currentPage: 122,
+                    totalPages: 354,
                     imagePath: 'assets/images/temp_book.jpg',
-                    rating: 4.5,
-                    author: 'Antuan de Sent-Ekzyuperi',
-                    title: 'Jajji shahzoda',
                     onTap: () {
                       openMiniAppSheetFamily(
                         context,
                         child: DetailedOnlineBookComponent(isBookBought: true),
                       );
                     },
-                    isBoughtBook: true,
                   );
                 },
               ),

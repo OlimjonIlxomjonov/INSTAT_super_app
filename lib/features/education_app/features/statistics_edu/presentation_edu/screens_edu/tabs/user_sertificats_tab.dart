@@ -25,6 +25,7 @@ class UserSertificatsTab extends StatelessWidget {
             },
           ),
         ),
+        SizedBox(height: 20),
       ],
     );
   }

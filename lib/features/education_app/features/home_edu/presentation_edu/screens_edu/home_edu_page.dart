@@ -27,18 +27,6 @@ class HomeEduPage extends StatefulWidget {
 
 class _HomeEduPageState extends State<HomeEduPage> {
   @override
-  void initState() {
-    super.initState();
-    TDeviceUtils.setStatusBarColor(AppColors.black, darkIcons: false);
-  }
-
-  @override
-  void dispose() {
-    TDeviceUtils.setStatusBarColor(AppColors.transparent, darkIcons: true);
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     void goToPageActiveCourses() {
       openMiniAppSheetFamily(
@@ -132,7 +120,8 @@ class _HomeEduPageState extends State<HomeEduPage> {
                     child: ExtendSectionSeeAllWg(
                       title: AppStrings.allCourses,
                       onTap: () {
-                        openMiniAppSheet(
+                        openMiniAppSheetFamily(
+                          showHandler: false,
                           context,
                           child: ShowAllCoursesBottomSheetPage(),
                         );

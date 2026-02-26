@@ -32,10 +32,15 @@ class HomePage extends StatelessWidget {
         backgroundImage: AppVectors.onlineEduBack,
         title: "Onlayn ta’lim",
         onTap: (context) {
-          openMiniAppSheet(
-            showHandler: true,
+          // openMiniAppSheet(
+          //   showHandler: true,
+          //   context,
+          //   child: EduBottomNavBar(),
+          // );
+          openMiniAppSheetFamily(
             context,
             child: EduBottomNavBar(),
+            isTransparent: false,
           );
         },
       ),
@@ -44,8 +49,8 @@ class HomePage extends StatelessWidget {
         backgroundImage: AppVectors.bookSectioBack,
         title: "Raqamli kutubxona",
         onTap: (context) {
-          openMiniAppSheet(
-            showHandler: true,
+          openMiniAppSheetFamily(
+            isTransparent: false,
             context,
             child: OnlineLibBottomNavBar(),
           );
@@ -121,9 +126,9 @@ class HomePage extends StatelessWidget {
                   ExtendSectionSeeAllWg(
                     title: AppStrings.studyingCourses,
                     onTap: () {
-                      openMiniAppSheet(
+                      openMiniAppSheetFamily(
+                        isTransparent: false,
                         context,
-                        showHandler: true,
                         child: EduBottomNavBar(openPageByIndex: 2),
                       );
 

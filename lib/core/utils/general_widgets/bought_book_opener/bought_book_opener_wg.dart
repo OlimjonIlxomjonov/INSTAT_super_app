@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:page_curl_effect/page_curl_effect.dart';
+
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
-import 'package:page_flip/page_flip.dart';
-// import 'package:turnable_page/turnable_page.dart';
 
 class BoughtBookOpenerWg extends StatefulWidget {
   const BoughtBookOpenerWg({super.key});
@@ -12,30 +12,54 @@ class BoughtBookOpenerWg extends StatefulWidget {
 }
 
 class _BoughtBookOpenerWgState extends State<BoughtBookOpenerWg> {
-  final _controller = GlobalKey<PageFlipWidgetState>();
+  late PageCurlController _controller;
+  late Size _pageSize;
+
+  final int _pageCount = 10;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final screen = MediaQuery.of(context).size;
+
+    final width = screen.width;
+    final height = screen.height;
+
+    _pageSize = Size(width, height);
+
+    _controller = PageCurlController(
+      _pageSize,
+      pageCurlIndex: 0,
+      numberOfPage: _pageCount,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: PageFlipWidget(
-          key: _controller,
-          backgroundColor: Colors.white,
-          lastPage: Container(
-            color: Colors.white,
-            child: const Center(child: Text('Last Page!')),
-          ),
-          children: List.generate(
-            10,
-            (index) => Center(child: PlaceHolderBookInner(index: index)),
+      backgroundColor: Colors.black12,
+      body: SafeArea(
+        child: Center(
+          child: PageCurlEffect(
+            pageCurlController: _controller,
+            pageBuilder: (context, index) {
+              return SizedBox(
+                width: _pageSize.width,
+                height: _pageSize.height,
+                child: PlaceHolderBookInner(index: index, pageSize: _pageSize),
+              );
+            },
+            onForwardComplete: () {},
+            onBackwardComplete: () {},
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.navigate_next_outlined),
-        onPressed: () {
-          _controller.currentState?.nextPage();
-        },
       ),
     );
   }
@@ -43,45 +67,66 @@ class _BoughtBookOpenerWgState extends State<BoughtBookOpenerWg> {
 
 class PlaceHolderBookInner extends StatelessWidget {
   final int index;
+  final Size pageSize;
 
-  const PlaceHolderBookInner({super.key, required this.index});
+  const PlaceHolderBookInner({
+    super.key,
+    required this.index,
+    required this.pageSize,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        children: [
-          SizedBox(height: 40),
-          Text('Title $index', style: AppTextStyles.source.bold(fontSize: 20)),
-          SizedBox(height: 10),
-          Text('Sub Title', style: AppTextStyles.source.semiBold(fontSize: 18)),
-          SizedBox(height: 20),
-          Row(
-            crossAxisAlignment: .start,
+    return Material(
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: Text(
-                  'lit, sed do eiusmod tempor lat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                ),
+              const SizedBox(height: 24),
+              Text(
+                'Title $index',
+                style: AppTextStyles.source.bold(fontSize: 20),
               ),
-              Expanded(
-                child: Container(
-                  height: 200,
-                  color: AppColors.greyScale.grey600,
-                ),
+              const SizedBox(height: 10),
+              Text(
+                'Sub Title',
+                style: AppTextStyles.source.semiBold(fontSize: 18),
               ),
+              const SizedBox(height: 20),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Expanded(
+                    child: Text(
+                      'lit, sed do eiusmod tempor lat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Container(
+                      height: 200,
+                      color: AppColors.greyScale.grey600,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...',
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...',
+              ),
+
+              SizedBox(height: pageSize.height * 0.12),
             ],
           ),
-          SizedBox(height: 20),
-          Text(
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-          ),
-          SizedBox(height: 10),
-          Text(
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-          ),
-        ],
+        ),
       ),
     );
   }
