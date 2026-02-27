@@ -10,6 +10,7 @@ import 'package:my_template/core/utils/general_widgets/bought_book_opener/bought
 import 'package:my_template/core/utils/general_widgets/custom_rating_star/custom_rating_star_wg.dart';
 import 'package:my_template/core/utils/general_widgets/online_book_wg/online_book_wg.dart';
 import 'package:my_template/core/utils/general_widgets/online_lib_style_custom_bottom_sheet/online_lib_style_custom_bottom_sheet_wg.dart';
+import 'package:my_template/core/utils/general_widgets/payment_open_bottom_sheet/payment_open_bottom_sheet_wg.dart';
 import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/comment_section/user_comments_wg.dart';
 import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
@@ -46,6 +47,11 @@ class _DetailedOnlineBookComponentState
       AppRoute.go(BoughtBookOpenerWg());
     } else {
       /// show payment bottom sheet
+      onlineLibStyleCustomBottomSheetWg(
+        context,
+        headerTitle: 'To\'lov turi',
+        child: PaymentOpenBottomSheetWg(),
+      );
     }
   }
 

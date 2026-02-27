@@ -16,7 +16,9 @@ class AppColors {
   static const Color greyNewCard = Color(0xffD1D1D1);
   static const Color yellowMidTimeCard = Color(0xffF6B51E);
   static const Color greenDoneTaskCard = Color(0xff1FC16B);
+  static const Color greenBackground = Color(0xffE1F5EA);
   static const Color redFailedTaskCard = Color(0xffFB3748);
+  static const Color redBackground = Color(0xffFFEBEC);
 
   /// TICKETS STATUS BACKGROUND COLOR
   static const Color successStatus = Color(0xffE3F7EC);

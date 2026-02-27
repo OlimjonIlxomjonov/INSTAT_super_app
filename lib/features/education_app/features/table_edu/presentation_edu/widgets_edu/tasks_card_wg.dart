@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
+import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 
 class TasksCardWg extends StatelessWidget {
@@ -9,6 +10,7 @@ class TasksCardWg extends StatelessWidget {
   final Color statusBorderColor;
   final VoidCallback onTap;
   final bool? isTaskDone;
+  final bool isLessons;
 
   const TasksCardWg({
     super.key,
@@ -19,6 +21,7 @@ class TasksCardWg extends StatelessWidget {
     required this.daysLeft,
     required this.statusBorderColor,
     required this.isTaskDone,
+    this.isLessons = false,
   });
 
   @override
@@ -29,6 +32,11 @@ class TasksCardWg extends StatelessWidget {
         margin: .only(bottom: appH(12)),
         padding: .symmetric(horizontal: appW(16), vertical: appH(16)),
         decoration: BoxDecoration(
+          color: isTaskDone == null
+              ? AppColors.greyScale.grey50
+              : isTaskDone!
+              ? AppColors.greenBackground
+              : AppColors.redBackground,
           border: Border(left: BorderSide(color: statusBorderColor, width: 5)),
           borderRadius: .circular(10),
         ),
@@ -57,14 +65,26 @@ class TasksCardWg extends StatelessWidget {
             SizedBox(height: appH(8)),
 
             /// SUB TITLE
-            Text(
-              maxLines: 1,
-              overflow: .ellipsis,
-              subTitle,
-              style: AppTextStyles.source.regular(
-                fontSize: 13,
-                color: AppColors.greyScale.grey600,
-              ),
+            Row(
+              children: [
+                if (isLessons)
+                  Icon(
+                    IconlyLight.profile,
+                    size: 20,
+                    color: AppColors.greyScale.grey600,
+                  ),
+                Expanded(
+                  child: Text(
+                    maxLines: 1,
+                    overflow: .ellipsis,
+                    subTitle,
+                    style: AppTextStyles.source.regular(
+                      fontSize: 13,
+                      color: AppColors.greyScale.grey600,
+                    ),
+                  ),
+                ),
+              ],
             ),
             Divider(color: AppColors.greyScale.grey200),
 
@@ -96,26 +116,22 @@ class TasksCardWg extends StatelessWidget {
             SizedBox(height: appH(8)),
 
             /// PROGRESS BAR /// TEMP DEFAULT => CHANGE TO PACKAGE
-            Row(
-              children: [
-                Expanded(
-                  child: LinearProgressIndicator(
-                    value: .3,
-                    borderRadius: .circular(10),
-                    color: AppColors.primaryColor,
-                    minHeight: appH(6),
+            if (!isLessons)
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomLinearIndicatorWg(progressIndicator: 0.4),
                   ),
-                ),
-                SizedBox(width: 10),
-                Text(
-                  '? %',
-                  style: AppTextStyles.source.regular(
-                    fontSize: 12,
-                    color: AppColors.greyScale.grey600,
+                  SizedBox(width: 10),
+                  Text(
+                    '? %',
+                    style: AppTextStyles.source.regular(
+                      fontSize: 12,
+                      color: AppColors.greyScale.grey600,
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
           ],
         ),
       ),

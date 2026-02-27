@@ -2,6 +2,7 @@ import 'package:dashed_progress_bar/dashed_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
+import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 
 class ActiveCoursesWg extends StatelessWidget {
@@ -75,12 +76,7 @@ class ActiveCoursesWg extends StatelessWidget {
                   ),
                   SizedBox(height: 9),
                   if (!showCircularProgBar)
-                    LinearProgressIndicator(
-                      value: 0.25,
-                      color: AppColors.primaryColor,
-                      borderRadius: .circular(12),
-                      minHeight: 8,
-                    ),
+                    CustomLinearIndicatorWg(progressIndicator: 0.25),
                 ],
               ),
             ),

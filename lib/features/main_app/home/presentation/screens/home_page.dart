@@ -10,13 +10,13 @@ import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/active_courses/active_courses_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
-import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_sheet.dart';
 import 'package:my_template/core/utils/widgets/popular_courses_card/popular_courses_card_wg.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/detailed_course_info_page.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/show_all_courses_bottom_sheet_page.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
+import 'package:my_template/features/main_app/home/presentation/screens/drawer/main_app_drawer.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/mini_app_section_card.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/model/mini_app_model.dart';
 import 'package:my_template/features/online_library_app/features/online_lib_bottom_nav_bar.dart';
@@ -26,17 +26,14 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
     final List<MiniAppModel> sections = [
       MiniAppModel(
         mainImage: AppImages.onlineEdu,
         backgroundImage: AppVectors.onlineEduBack,
         title: "Onlayn ta’lim",
         onTap: (context) {
-          // openMiniAppSheet(
-          //   showHandler: true,
-          //   context,
-          //   child: EduBottomNavBar(),
-          // );
           openMiniAppSheetFamily(
             context,
             child: EduBottomNavBar(),
@@ -79,11 +76,18 @@ class HomePage extends StatelessWidget {
 
     TDeviceUtils.systemNavigationBar(AppColors.white);
     return Scaffold(
+      key: scaffoldKey,
+      drawer: MainAppDrawer(),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
-              leading: Icon(Icons.menu),
+              leading: IconButton(
+                onPressed: () {
+                  scaffoldKey.currentState?.openDrawer();
+                },
+                icon: Icon(Icons.menu),
+              ),
               title: SvgPicture.asset(AppVectors.homeInstatLogo),
               centerTitle: true,
               actions: [
@@ -115,7 +119,11 @@ class HomePage extends StatelessWidget {
 
             SliverPadding(
               padding: .only(top: appH(25), bottom: appH(20)),
-              sliver: SliverAppBar(pinned: true, title: AppSearchbarWg()),
+              sliver: SliverAppBar(
+                automaticallyImplyLeading: false,
+                pinned: true,
+                title: AppSearchbarWg(),
+              ),
             ),
 
             /// EDU ACTIVE COURSES

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
+import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
 
 class BookGridItem extends StatelessWidget {
   const BookGridItem({
@@ -186,13 +187,7 @@ class BookGridItem extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 6),
-        LinearProgressIndicator(
-          value: progress,
-          borderRadius: BorderRadius.circular(10),
-          color: AppColors.primaryColor,
-          backgroundColor: AppColors.greyScale.grey200,
-          minHeight: 6,
-        ),
+        CustomLinearIndicatorWg(progressIndicator: progress),
       ],
     );
   }

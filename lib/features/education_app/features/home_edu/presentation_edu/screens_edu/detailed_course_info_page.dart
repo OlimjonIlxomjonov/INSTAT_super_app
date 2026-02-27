@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
+import 'package:my_template/core/utils/general_widgets/online_lib_style_custom_bottom_sheet/online_lib_style_custom_bottom_sheet_wg.dart';
+import 'package:my_template/core/utils/general_widgets/payment_open_bottom_sheet/payment_open_bottom_sheet_wg.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
 import 'package:my_template/core/utils/widgets/custom_tab_bar/custom_tab_bar_wg.dart';
@@ -47,7 +49,13 @@ class DetailedCourseInfoPage extends StatelessWidget {
           ),
         ),
         bottomNavigationBar: CustomBottomNavContainerWg(
-          onTap: () {},
+          onTap: () {
+            onlineLibStyleCustomBottomSheetWg(
+              context,
+              headerTitle: 'To\'lov turi',
+              child: PaymentOpenBottomSheetWg(),
+            );
+          },
           buttonText: 'Sotib olish - 800 000 UZS',
         ),
       ),

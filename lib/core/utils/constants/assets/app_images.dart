@@ -24,4 +24,8 @@ abstract class AppImages {
   /// finished the lesson test
   static const trophy = "${basePath}Trophy-temp.png";
   static const profileBackground = "${basePath}profile_background.png";
+
+  /// payment method logos
+  static const clickPayment = "${basePath}click_logo.png";
+  static const paymePayment = "${basePath}payme_logo.png";
 }

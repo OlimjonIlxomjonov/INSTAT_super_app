@@ -3,6 +3,8 @@ import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/general_widgets/online_book_wg/short_book_details_wg.dart';
+import 'package:my_template/core/utils/general_widgets/online_lib_style_custom_bottom_sheet/online_lib_style_custom_bottom_sheet_wg.dart';
+import 'package:my_template/core/utils/general_widgets/payment_open_bottom_sheet/payment_open_bottom_sheet_wg.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
@@ -63,7 +65,13 @@ class UserOnlineBookCartLibPage extends StatelessWidget {
       ),
       floatingActionButton: CustomBottomNavContainerWg(
         buttonText: 'Sotib olish - 960 000 UZS',
-        onTap: () {},
+        onTap: () {
+          onlineLibStyleCustomBottomSheetWg(
+            context,
+            headerTitle: 'To\'lov turi',
+            child: PaymentOpenBottomSheetWg(),
+          );
+        },
       ),
     );
   }
