@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:iconly/iconly.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
@@ -34,6 +35,8 @@ class _OnlineLibBottomNavBarState extends State<OnlineLibBottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+
     final List<Widget> innerPage = [
       HomeLibPage(onTap: () => _goToTab(1)),
       UserOnlineBooksLibPage(),
@@ -90,11 +93,11 @@ class _OnlineLibBottomNavBarState extends State<OnlineLibBottomNavBar> {
             tabBackgroundColor: AppColors.primaryColor,
             padding: EdgeInsets.all(appW(12)),
             tabs: [
-              GButton(icon: IconlyLight.home, text: 'Bosh sahifa'),
-              GButton(icon: LineIcons.book, text: 'Kitoblarim'),
-              GButton(icon: IconlyLight.buy, text: 'Savatcha'),
-              GButton(icon: LineIcons.bookOpen, text: 'Kutubxona'),
-              GButton(icon: IconlyLight.profile, text: 'Profilim'),
+              GButton(icon: IconlyLight.home, text: localization.homePage),
+              GButton(icon: LineIcons.book, text: localization.myBooks),
+              GButton(icon: IconlyLight.buy, text: localization.cart),
+              GButton(icon: LineIcons.bookOpen, text: localization.library),
+              GButton(icon: IconlyLight.profile, text: localization.profile),
             ],
           ),
         ),

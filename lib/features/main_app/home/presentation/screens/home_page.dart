@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/assets/app_images.dart';
 import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
@@ -27,12 +28,14 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+    final localization = AppLocalizations.of(context)!;
+    TDeviceUtils.setStatusBarColor(AppColors.white, darkIcons: true);
 
     final List<MiniAppModel> sections = [
       MiniAppModel(
         mainImage: AppImages.onlineEdu,
         backgroundImage: AppVectors.onlineEduBack,
-        title: "Onlayn ta’lim",
+        title: localization.onlineEducation,
         onTap: (context) {
           openMiniAppSheetFamily(
             context,
@@ -44,7 +47,7 @@ class HomePage extends StatelessWidget {
       MiniAppModel(
         mainImage: AppImages.bookSection,
         backgroundImage: AppVectors.bookSectioBack,
-        title: "Raqamli kutubxona",
+        title: localization.digitalLibrary,
         onTap: (context) {
           openMiniAppSheetFamily(
             isTransparent: false,
@@ -56,13 +59,13 @@ class HomePage extends StatelessWidget {
       MiniAppModel(
         mainImage: AppImages.mikroMalumotlar,
         backgroundImage: AppVectors.mikroMalumotlarBack,
-        title: "Mikro ma’lumotlar",
+        title: localization.microContent,
         onTap: (context) {},
       ),
       MiniAppModel(
         mainImage: AppImages.elektronJurnal,
         backgroundImage: AppVectors.elektronJurnalBack,
-        title: "Elektron jurnal",
+        title: localization.electronicJournal,
         onTap: (context) {},
       ),
     ];
@@ -132,7 +135,7 @@ class HomePage extends StatelessWidget {
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   ExtendSectionSeeAllWg(
-                    title: AppStrings.studyingCourses,
+                    title: localization.studyingCourses,
                     onTap: () {
                       openMiniAppSheetFamily(
                         isTransparent: false,
@@ -146,7 +149,7 @@ class HomePage extends StatelessWidget {
                   ActiveCoursesWg(onTap: goToPageActiveCourses),
                   ActiveCoursesWg(onTap: goToPageActiveCourses),
                   ExtendSectionSeeAllWg(
-                    title: AppStrings.popularCourses,
+                    title: localization.popularCourses,
                     onTap: () {
                       openMiniAppSheetFamily(
                         context,

@@ -38,6 +38,9 @@ dependencies:
   #  turnable_page: ^1.0.1  # Book swiper effect
   page_flip: ^0.2.5+1
   page_curl_effect: ^1.0.2
+  flutter_localizations:
+    sdk: flutter
+  shared_preferences: ^2.5.4
 
 dev_dependencies:
   flutter_test:
@@ -46,6 +49,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
 flutter:
+  generate: true
 
   uses-material-design: true
 

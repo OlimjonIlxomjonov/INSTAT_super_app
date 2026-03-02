@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/constants/assets/app_images.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/strings/app_strings.dart';
+import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/features/auth/presentation/screens/log_in_options_page.dart';
@@ -34,6 +36,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
     TDeviceUtils.systemNavigationBar(AppColors.white);
+    final localization = AppLocalizations.of(context)!;
 
     return Scaffold(
       extendBody: true,
@@ -48,26 +51,26 @@ class _OnboardingPageState extends State<OnboardingPage> {
           controller: pageController,
           children: [
             OnboardingWg(
-              title: AppStrings.allFeaturesInOneApp,
-              subTitle: AppStrings.coursesMikroTalim,
+              title: localization.allFeaturesInOneApp,
+              subTitle: localization.coursesMikroTalim,
               imagePath: AppImages.firstOnboarding,
               imageWidthDivider: 1.5,
             ),
             OnboardingWg(
-              title: AppStrings.singleAccountAllFeatures,
-              subTitle: AppStrings.organishningBarchaFormatlari,
+              title: localization.singleAccountAllFeatures,
+              subTitle: localization.organishningBarchaFormatlari,
               imagePath: AppImages.secondOnboarding,
               imageWidthDivider: 1.2,
             ),
             OnboardingWg(
-              title: AppStrings.allInYourSurround,
-              subTitle: AppStrings.sizQandayOrganishniXoxlaysiz,
+              title: localization.allInYourSurround,
+              subTitle: localization.sizQandayOrganishniXoxlaysiz,
               imagePath: AppImages.thirdOnboarding,
               imageWidthDivider: 1,
             ),
             OnboardingWg(
-              title: AppStrings.learnInDifferentFormats,
-              subTitle: AppStrings.bilimniTurliYollar,
+              title: localization.learnInDifferentFormats,
+              subTitle: localization.bilimniTurliYollar,
               imagePath: AppImages.fourthOnboarding,
               imageWidthDivider: 1.1,
             ),
@@ -105,11 +108,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     onPressed: () {
                       pageController.jumpToPage(3);
                     },
-                    child: Text("O’tkazib yuborish"),
+                    child: Text(localization.skipOnboarding),
                   ),
                   ElevatedButton(
                     onPressed: moveNextPage,
-                    child: Text(isLastPage ? "Boshlash" : "Keyingisi"),
+                    child: Text(
+                      isLastPage
+                          ? localization.startOnboarding
+                          : localization.nextOnboarding,
+                    ),
                   ),
                 ],
               ),

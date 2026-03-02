@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:iconly/iconly.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/home_edu_page.dart';
@@ -32,6 +33,8 @@ class _EduBottomNavBarState extends State<EduBottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+
     final List<Widget> eduPages = [
       HomeEduPage(onTap: () => _goToTab(2)),
       TableEduPage(),
@@ -71,12 +74,15 @@ class _EduBottomNavBarState extends State<EduBottomNavBar> {
             iconSize: 24,
             tabBackgroundColor: AppColors.primaryColor,
             padding: EdgeInsets.all(appW(12)),
-            tabs: const [
-              GButton(icon: IconlyLight.home, text: 'Bosh sahifa'),
-              GButton(icon: Icons.table_chart_outlined, text: 'Jadval'),
-              GButton(icon: LineIcons.book, text: 'Kurslarim'),
-              GButton(icon: LineIcons.pieChart, text: 'Statistika'),
-              GButton(icon: IconlyLight.profile, text: 'Profilim'),
+            tabs: [
+              GButton(icon: IconlyLight.home, text: localization.homePage),
+              GButton(
+                icon: Icons.table_chart_outlined,
+                text: localization.schedule,
+              ),
+              GButton(icon: LineIcons.book, text: localization.myCourses),
+              GButton(icon: LineIcons.pieChart, text: localization.statistics),
+              GButton(icon: IconlyLight.profile, text: localization.profile),
             ],
           ),
         ),

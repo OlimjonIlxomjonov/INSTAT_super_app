@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/constants/assets/app_images.dart';
 import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
@@ -77,16 +78,19 @@ class _LogInOptionsPageState extends State<LogInOptionsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     final screenHeight = AppResponsiveness.screenHeight;
     TDeviceUtils.systemNavigationBar(AppColors.white);
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: Column(
         children: [
-          Image.asset(
-            AppImages.onboardingLogIn,
-            fit: BoxFit.cover,
-            height: screenHeight / 2.5,
+          Center(
+            child: Image.asset(
+              AppImages.onboardingLogIn,
+              fit: BoxFit.cover,
+              height: screenHeight / 2.5,
+            ),
           ),
         ],
       ),
@@ -102,12 +106,12 @@ class _LogInOptionsPageState extends State<LogInOptionsPage> {
             crossAxisAlignment: .start,
             children: [
               Text(
-                AppStrings.getStart,
+                localization.getStart,
                 style: AppTextStyles.source.bold(fontSize: 22),
               ),
               SizedBox(height: appH(8)),
               Text(
-                AppStrings.registerOrEnterTheSystem,
+                localization.registerOrEnterTheSystem,
                 style: AppTextStyles.source.regular(
                   fontSize: 13,
                   color: AppColors.greyScale.grey600,
@@ -152,21 +156,21 @@ class _LogInOptionsPageState extends State<LogInOptionsPage> {
                 onTap: () {
                   // AppRoute.go(MyBook());
                 },
-                continueWithText: 'Apple akkount orqali kirish',
+                continueWithText: localization.continueWithApple,
               ),
 
               /// Google Account
               ContinueWithOptions(
                 icon: Icons.g_mobiledata,
                 onTap: () {},
-                continueWithText: 'Google akkount orqali kirish',
+                continueWithText: localization.continueWithGoogle,
               ),
 
               /// FaceBook Account
               ContinueWithOptions(
                 icon: Icons.facebook,
                 onTap: () {},
-                continueWithText: 'Facebook akkount orqali kirish',
+                continueWithText: localization.continueWithFaceBook,
               ),
             ],
           ),

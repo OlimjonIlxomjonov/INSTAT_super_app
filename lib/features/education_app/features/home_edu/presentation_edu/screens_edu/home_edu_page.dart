@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/strings/app_strings.dart';
+import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/general_widgets/mini_app_home_header/mini_app_home_header_wg.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/active_courses/active_courses_wg.dart';
@@ -26,6 +27,8 @@ class HomeEduPage extends StatefulWidget {
 class _HomeEduPageState extends State<HomeEduPage> {
   @override
   Widget build(BuildContext context) {
+    // TDeviceUtils.setStatusBarColor(AppColors.transparent, darkIcons: false);
+
     void goToPageActiveCourses() {
       openMiniAppSheetFamily(
         context,

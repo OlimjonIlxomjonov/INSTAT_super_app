@@ -36,7 +36,7 @@ class _UserProfileEduState extends State<UserProfileEdu> {
                     style: AppTextStyles.source.medium(fontSize: 18),
                   ),
                 ),
-                SizedBox(height: appH(5)),
+                SizedBox(height: 5),
                 ProfileSettingsTileWg(
                   leadingIcon: IconlyLight.document,
                   title: 'Sertificatlar',
@@ -73,7 +73,6 @@ class _UserProfileEduState extends State<UserProfileEdu> {
                     );
                   },
                 ),
-                SizedBox(height: appH(30)),
               ],
             ),
           ),
