@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
@@ -20,10 +21,10 @@ class ExtendSectionSeeAllWg extends StatelessWidget {
       child: Row(
         mainAxisAlignment: .spaceBetween,
         children: [
-          Text(title, style: AppTextStyles.source.bold(fontSize: 16)),
+          AutoSizeText(title, style: AppTextStyles.source.bold(fontSize: 16)),
           TextButton(
             onPressed: onTap,
-            child: Text(
+            child: AutoSizeText(
               'BARCHASI',
               style: AppTextStyles.source.bold(
                 fontSize: 12,

@@ -36,8 +36,7 @@ class TDeviceUtils {
 }
 
 abstract class AppPadding {
-  static EdgeInsets horizontal20x() => .symmetric(horizontal: appW(20));
+  static EdgeInsets horizontal20x() => .symmetric(horizontal: 20);
 
-  static EdgeInsets hAndV20x20() =>
-      .symmetric(horizontal: appW(20), vertical: appH(20));
+  static EdgeInsets hAndV20x20() => .symmetric(horizontal: 20, vertical: 20);
 }

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -21,7 +22,7 @@ class AppSearchbarWg extends StatelessWidget {
         children: [
           Icon(IconlyLight.search),
           SizedBox(width: appW(8)),
-          Text(
+          AutoSizeText(
             localization.whatAreYouLookingFor,
             style: AppTextStyles.source.regular(
               fontSize: 14,

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
@@ -35,7 +36,7 @@ class ProfileSettingsTileWg extends StatelessWidget {
                 color: isLogOut ? AppColors.red : AppColors.greyScale.grey800,
               )
             : null,
-        title: Text(
+        title: AutoSizeText(
           title,
           style: AppTextStyles.source.medium(
             fontSize: 15,

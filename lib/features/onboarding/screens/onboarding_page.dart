@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
@@ -79,10 +80,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
       ),
       bottomNavigationBar: SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: appW(20)),
+          padding: EdgeInsets.symmetric(horizontal: 20),
           color: AppColors.white,
-          height: appH(100),
           child: Column(
+            mainAxisSize: .min,
             crossAxisAlignment: .start,
             children: [
               SmoothPageIndicator(
@@ -108,11 +109,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     onPressed: () {
                       pageController.jumpToPage(3);
                     },
-                    child: Text(localization.skipOnboarding),
+                    child: AutoSizeText(localization.skipOnboarding),
                   ),
                   ElevatedButton(
                     onPressed: moveNextPage,
-                    child: Text(
+                    child: AutoSizeText(
                       isLastPage
                           ? localization.startOnboarding
                           : localization.nextOnboarding,

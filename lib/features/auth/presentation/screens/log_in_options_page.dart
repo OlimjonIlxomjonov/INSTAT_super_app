@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
@@ -13,6 +15,7 @@ import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart'
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+import 'package:my_template/core/utils/responsiveness/responsive.dart';
 import 'package:my_template/features/auth/presentation/widgets/continue_with_options.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/home_page.dart';
 
@@ -81,99 +84,117 @@ class _LogInOptionsPageState extends State<LogInOptionsPage> {
     final localization = AppLocalizations.of(context)!;
     final screenHeight = AppResponsiveness.screenHeight;
     TDeviceUtils.systemNavigationBar(AppColors.white);
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      body: Column(
-        children: [
-          Center(
-            child: Image.asset(
-              AppImages.onboardingLogIn,
-              fit: BoxFit.cover,
-              height: screenHeight / 2.5,
-            ),
-          ),
-        ],
+    final bool isTablet = Responsive.isTablet(context);
+
+    return Responsive(
+      mobile: Scaffold(
+        extendBodyBehindAppBar: true,
+        body: Image.asset(
+          AppImages.onboardingLogIn,
+          fit: BoxFit.cover,
+          height: screenHeight / 2.5,
+        ),
+        bottomSheet: logInOptions(screenHeight, localization, isTablet),
       ),
-      bottomSheet: SizedBox(
-        width: double.infinity,
-        height: screenHeight / 1.6,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: appH(20),
-            horizontal: appW(20),
-          ),
-          child: Column(
-            crossAxisAlignment: .start,
-            children: [
-              Text(
-                localization.getStart,
-                style: AppTextStyles.source.bold(fontSize: 22),
+      tablet: Scaffold(
+        body: Row(
+          children: [
+            Expanded(
+              child: Image.asset(
+                AppImages.onboardingLogIn,
+                fit: BoxFit.cover,
+                height: double.infinity,
               ),
-              SizedBox(height: appH(8)),
-              Text(
-                localization.registerOrEnterTheSystem,
-                style: AppTextStyles.source.regular(
-                  fontSize: 13,
-                  color: AppColors.greyScale.grey600,
-                ),
+            ),
+            Expanded(child: logInOptions(screenHeight, localization, isTablet)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  SizedBox logInOptions(
+    double screenHeight,
+    AppLocalizations localization,
+    bool isTablet,
+  ) {
+    return SizedBox(
+      width: double.infinity,
+      height: Responsive.isMobile(context) ? screenHeight / 1.6 : null,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        child: Column(
+          crossAxisAlignment: .start,
+          children: [
+            AutoSizeText(
+              localization.getStart,
+              style: AppTextStyles.source.bold(fontSize: isTablet ? 35 : 20),
+            ),
+            SizedBox(height: appH(8)),
+            AutoSizeText(
+              maxLines: 2,
+              localization.registerOrEnterTheSystem,
+              style: AppTextStyles.source.regular(
+                fontSize: 13,
+                color: AppColors.greyScale.grey600,
               ),
-              SizedBox(height: appH(32)),
+            ),
+            SizedBox(height: appH(32)),
 
-              /// LOG IN WITH ONE ID
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _openPage,
-                  child: SvgPicture.asset(AppVectors.oneIdLogo),
-                ),
+            /// LOG IN WITH ONE ID
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _openPage,
+                child: SvgPicture.asset(AppVectors.oneIdLogo),
               ),
+            ),
 
-              SizedBox(height: appH(32)),
+            SizedBox(height: appH(32)),
 
-              /// DIVIDER -OR-
-              Row(
-                children: [
-                  Expanded(child: Divider(color: AppColors.greyScale.grey400)),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: appW(12)),
-                    child: Text(
-                      'Yoki',
-                      style: AppTextStyles.source.regular(
-                        fontSize: 13,
-                        color: AppColors.greyScale.grey600,
-                      ),
+            /// DIVIDER -OR-
+            Row(
+              children: [
+                Expanded(child: Divider(color: AppColors.greyScale.grey400)),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: appW(12)),
+                  child: AutoSizeText(
+                    'Yoki',
+                    style: AppTextStyles.source.regular(
+                      fontSize: 13,
+                      color: AppColors.greyScale.grey600,
                     ),
                   ),
-                  Expanded(child: Divider(color: AppColors.greyScale.grey400)),
-                ],
-              ),
+                ),
+                Expanded(child: Divider(color: AppColors.greyScale.grey400)),
+              ],
+            ),
 
-              SizedBox(height: appH(20)),
+            SizedBox(height: appH(20)),
 
-              /// Apple Account
-              ContinueWithOptions(
-                icon: Icons.apple,
-                onTap: () {
-                  // AppRoute.go(MyBook());
-                },
-                continueWithText: localization.continueWithApple,
-              ),
+            /// Apple Account
+            ContinueWithOptions(
+              icon: Icons.apple,
+              onTap: () {
+                // AppRoute.go(MyBook());
+              },
+              continueWithText: localization.continueWithApple,
+            ),
 
-              /// Google Account
-              ContinueWithOptions(
-                icon: Icons.g_mobiledata,
-                onTap: () {},
-                continueWithText: localization.continueWithGoogle,
-              ),
+            /// Google Account
+            ContinueWithOptions(
+              icon: Icons.g_mobiledata,
+              onTap: () {},
+              continueWithText: localization.continueWithGoogle,
+            ),
 
-              /// FaceBook Account
-              ContinueWithOptions(
-                icon: Icons.facebook,
-                onTap: () {},
-                continueWithText: localization.continueWithFaceBook,
-              ),
-            ],
-          ),
+            /// FaceBook Account
+            ContinueWithOptions(
+              icon: Icons.facebook,
+              onTap: () {},
+              continueWithText: localization.continueWithFaceBook,
+            ),
+          ],
         ),
       ),
     );

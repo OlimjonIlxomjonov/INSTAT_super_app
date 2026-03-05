@@ -1,5 +1,7 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
+import 'package:my_template/core/utils/responsiveness/responsive.dart';
 import 'package:svg_image_provider/svg_image_provider.dart';
 
 class MiniAppSectionCard extends StatefulWidget {
@@ -23,6 +25,9 @@ class MiniAppSectionCard extends StatefulWidget {
 class _MiniAppSectionCardState extends State<MiniAppSectionCard> {
   @override
   Widget build(BuildContext context) {
+    final bool isMobile = Responsive.isMobile(context);
+    final double? getSize = isMobile ? 140 : null;
+
     return GestureDetector(
       onTap: () => widget.onTap(context),
       child: Container(
@@ -30,7 +35,7 @@ class _MiniAppSectionCardState extends State<MiniAppSectionCard> {
           image: DecorationImage(
             image: SvgImageProvider(
               widget.backgroundImage,
-              // containerSize: Size(300, 300),
+              containerSize: isMobile ? null : Size(100, 100),
             ),
           ),
         ),
@@ -39,12 +44,12 @@ class _MiniAppSectionCardState extends State<MiniAppSectionCard> {
             Expanded(
               child: Image.asset(
                 widget.mainImage,
-                width: 140,
-                height: 140,
+                width: getSize,
+                height: getSize,
                 fit: BoxFit.cover,
               ),
             ),
-            Text(
+            AutoSizeText(
               widget.title,
               maxLines: 1,
               overflow: .ellipsis,

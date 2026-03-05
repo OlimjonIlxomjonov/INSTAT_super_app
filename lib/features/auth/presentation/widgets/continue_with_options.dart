@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
@@ -25,7 +26,7 @@ class ContinueWithOptions extends StatelessWidget {
           foregroundColor: AppColors.greyScale.grey500,
         ),
         onPressed: onTap,
-        label: Text(continueWithText),
+        label: AutoSizeText(continueWithText),
         icon: Icon(icon),
       ),
     );
