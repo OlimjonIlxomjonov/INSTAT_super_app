@@ -35,7 +35,7 @@ class _MiniAppSectionCardState extends State<MiniAppSectionCard> {
           image: DecorationImage(
             image: SvgImageProvider(
               widget.backgroundImage,
-              containerSize: isMobile ? null : Size(100, 100),
+              containerSize: isMobile ? null : Size(170, 170),
             ),
           ),
         ),
@@ -54,7 +54,7 @@ class _MiniAppSectionCardState extends State<MiniAppSectionCard> {
               maxLines: 1,
               overflow: .ellipsis,
               textAlign: .center,
-              style: AppTextStyles.source.medium(fontSize: 16),
+              style: AppTextStyles.source.regular(fontSize: 15),
             ),
           ],
         ),

@@ -1,0 +1,56 @@
+import 'package:flutter/material.dart';
+import 'package:my_template/core/utils/app_utils.dart';
+import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
+import 'package:my_template/core/utils/widgets/app_widgets.dart';
+import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
+import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
+import 'package:my_template/features/scientific_articles_app/dummy_data_source/articles_source.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/sliver_articles_list_wg.dart';
+
+class UserArticlesPage extends StatelessWidget {
+  const UserArticlesPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          /// header
+          SliverDefaultAppBarWg(myTitle: 'Mening maqolalarim'),
+
+          /// search bar
+          SliverAppBar(
+            toolbarHeight: 56 + 24,
+            pinned: true,
+            automaticallyImplyLeading: false,
+            titleSpacing: 20,
+            title: AppSearchbarWg(),
+          ),
+
+          /// CATEGORIES
+          SliverToBoxAdapter(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(right: 20, top: 10),
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.generate(5, (index) {
+                  return EduCategoriesWg();
+                }),
+              ),
+            ),
+          ),
+
+          SliverPadding(
+            padding: AppPadding.hAndV20x20(),
+            sliver: SliverToBoxAdapter(
+              child: Text('Maqolalar', style: CustomTextStyles.h2),
+            ),
+          ),
+
+          /// USER ARTICLES
+          SliverArticlesListWg(items: dummyArticles),
+        ],
+      ),
+    );
+  }
+}

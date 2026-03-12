@@ -20,13 +20,16 @@ class PopularCoursesCardWg extends StatelessWidget {
         children: [
           Stack(
             children: [
-              ClipRRect(
-                borderRadius: .circular(12),
-                child: Image.asset(
-                  width: 300,
-                  height: 130,
-                  'assets/home_page/temp_course_card_popular.png',
-                  fit: BoxFit.cover,
+              AspectRatio(
+                aspectRatio: 12 / 6,
+                child: ClipRRect(
+                  borderRadius: .circular(12),
+                  child: Image.asset(
+                    // width: 300,
+                    // height: 130,
+                    'assets/home_page/temp_course_card_popular.png',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               Row(

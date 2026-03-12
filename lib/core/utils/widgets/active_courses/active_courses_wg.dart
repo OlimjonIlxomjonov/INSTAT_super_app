@@ -20,14 +20,13 @@ class ActiveCoursesWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = Responsive.isTablet(context);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: .only(bottom: 12),
-        padding: .symmetric(
-          horizontal: 8,
-          vertical: Responsive.isTablet(context) ? 8 : 5,
-        ),
+        margin: .only(bottom: 12, right: isTablet ? 20 : 0),
+        padding: .symmetric(horizontal: 8, vertical: isTablet ? 8 : 5),
         decoration: BoxDecoration(
           borderRadius: .circular(12),
           border: Border.all(color: AppColors.greyScale.grey200),
@@ -90,8 +89,8 @@ class ActiveCoursesWg extends StatelessWidget {
             SizedBox(width: appW(12)),
             if (showCircularProgBar)
               SizedBox(
-                width: 56,
-                height: 56,
+                width: 66,
+                height: 66,
                 child: Padding(
                   padding: EdgeInsets.all(Responsive.isMobile(context) ? 4 : 0),
                   child: DashedCircularProgressBar(

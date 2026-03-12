@@ -13,6 +13,7 @@ class Responsive extends StatelessWidget {
       MediaQuery.of(context).size.width < 1100 &&
       MediaQuery.of(context).size.width >= 650;
 
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(

@@ -102,7 +102,11 @@ class OnboardingWg extends StatelessWidget {
               child: Stack(
                 children: [
                   // Background image
-                  SvgPicture.asset(AppVectors.firstOnboardingParticles),
+                  Center(
+                    child: SvgPicture.asset(
+                      AppVectors.firstOnboardingParticles,
+                    ),
+                  ),
                   Center(
                     child: Image.asset(
                       imagePath,
@@ -115,7 +119,7 @@ class OnboardingWg extends StatelessWidget {
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    height: 250,
+                    height: 800,
                     child: IgnorePointer(
                       child: Container(
                         decoration: BoxDecoration(
@@ -124,7 +128,7 @@ class OnboardingWg extends StatelessWidget {
                             end: Alignment.bottomCenter,
                             colors: [
                               Colors.white.withValues(alpha: 0.0),
-                              Colors.white.withValues(alpha: 1),
+                              Colors.white.withValues(alpha: 0.9),
                               Colors.white.withValues(alpha: 1.0),
                             ],
                             stops: [0.0, 0.55, 1.0],

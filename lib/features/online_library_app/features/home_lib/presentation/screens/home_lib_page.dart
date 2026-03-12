@@ -15,8 +15,13 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 
 class HomeLibPage extends StatefulWidget {
   final VoidCallback onTap;
+  final VoidCallback onProfileTap;
 
-  const HomeLibPage({super.key, required this.onTap});
+  const HomeLibPage({
+    super.key,
+    required this.onTap,
+    required this.onProfileTap,
+  });
 
   @override
   State<HomeLibPage> createState() => _HomeLibPageState();
@@ -35,7 +40,7 @@ class _HomeLibPageState extends State<HomeLibPage> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          MiniAppHomeHeaderWg(),
+          MiniAppHomeHeaderWg(onTapLeadToPage: widget.onProfileTap),
 
           /// search
           SliverAppBar(

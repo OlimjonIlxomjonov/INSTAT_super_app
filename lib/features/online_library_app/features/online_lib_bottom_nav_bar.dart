@@ -38,7 +38,7 @@ class _OnlineLibBottomNavBarState extends State<OnlineLibBottomNavBar> {
     final localization = AppLocalizations.of(context)!;
 
     final List<Widget> innerPage = [
-      HomeLibPage(onTap: () => _goToTab(1)),
+      HomeLibPage(onTap: () => _goToTab(1), onProfileTap: () => _goToTab(4)),
       UserOnlineBooksLibPage(),
       SizedBox(),
       OfflineBooksLibPage(),

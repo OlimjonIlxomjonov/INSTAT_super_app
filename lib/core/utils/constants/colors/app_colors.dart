@@ -9,8 +9,6 @@ class AppColors {
   static const Color primaryColor = Color(0xff2B75CC);
   static const Color splashBackgroundColor = Color(0xff203787);
   static const Color eduCategorySelectedBg = Color(0xffF2F8FE);
-  static const Color orange500 = Color(0xffFA7319);
-  static const Color orange50 = Color(0xffFFF3EB);
 
   /// TASKS BAR COLOR INDICATOR
   static const Color greyNewCard = Color(0xffD1D1D1);
@@ -27,6 +25,19 @@ class AppColors {
 
   /// star color
   static const Color yellow500 = Color(0xffF6B51E);
+
+  /// Brief info card icon Color & Background Color
+  // color
+  static const Color iconBlue = Color(0xff2B75CC);
+  static const Color orange500 = Color(0xffFA7319); // icon orange
+  static const Color iconRed = Color(0xffFB3748);
+  static const Color iconGreen = Color(0xff1FC16B);
+
+  // background
+  static const Color iconBlueBackground = Color(0xffF2F8FE);
+  static const Color orange50 = Color(0xffFFF3EB); // orange background
+  static const Color iconRedBackground = Color(0xffFFEBEC);
+  static const Color iconGreenBackground = Color(0xffE3F7EC);
 
   ///  DEFAULT APP COLORS
   static const Color transparent = Colors.transparent;

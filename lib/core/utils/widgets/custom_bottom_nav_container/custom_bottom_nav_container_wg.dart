@@ -7,12 +7,14 @@ class CustomBottomNavContainerWg extends StatelessWidget {
   final String buttonText;
   final Widget? anotherButton;
   final VoidCallback onTap;
+  final IconData? leadingIcon;
 
   const CustomBottomNavContainerWg({
     super.key,
     required this.buttonText,
     this.anotherButton,
     required this.onTap,
+    this.leadingIcon,
   });
 
   @override
@@ -37,9 +39,10 @@ class CustomBottomNavContainerWg extends StatelessWidget {
             if (anotherButton != null) Expanded(child: anotherButton!),
             SizedBox(width: appW(12)),
             Expanded(
-              child: ElevatedButton(
+              child: ElevatedButton.icon(
                 onPressed: onTap,
-                child: Text(
+                icon: leadingIcon != null ? Icon(leadingIcon, size: 20) : null,
+                label: Text(
                   buttonText,
                   style: AppTextStyles.source.medium(fontSize: 14),
                 ),

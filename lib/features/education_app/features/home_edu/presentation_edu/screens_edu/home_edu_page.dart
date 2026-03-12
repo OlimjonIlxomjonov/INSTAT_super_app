@@ -16,9 +16,13 @@ import 'package:my_template/features/education_app/features/home_edu/presentatio
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
 
 class HomeEduPage extends StatefulWidget {
-  final VoidCallback onTap;
+  final VoidCallback onTap, onProfileTap;
 
-  const HomeEduPage({super.key, required this.onTap});
+  const HomeEduPage({
+    super.key,
+    required this.onTap,
+    required this.onProfileTap,
+  });
 
   @override
   State<HomeEduPage> createState() => _HomeEduPageState();
@@ -40,16 +44,13 @@ class _HomeEduPageState extends State<HomeEduPage> {
       body: CustomScrollView(
         slivers: [
           /// HOME HEADER
-          MiniAppHomeHeaderWg(),
-          SliverPadding(
-            padding: .symmetric(horizontal: appW(20), vertical: appH(10)),
-            sliver: SliverAppBar(
-              toolbarHeight: appH(56) + appH(24),
-              pinned: true,
-              automaticallyImplyLeading: false,
-              titleSpacing: 0,
-              title: AppSearchbarWg(),
-            ),
+          MiniAppHomeHeaderWg(onTapLeadToPage: widget.onProfileTap),
+          SliverAppBar(
+            toolbarHeight: 56 + 24,
+            pinned: true,
+            automaticallyImplyLeading: false,
+            titleSpacing: 20,
+            title: AppSearchbarWg(),
           ),
 
           SliverToBoxAdapter(
@@ -131,7 +132,7 @@ class _HomeEduPageState extends State<HomeEduPage> {
                   ),
 
                   SizedBox(
-                    height: appH(250),
+                    height: 300,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       padding: EdgeInsets.symmetric(horizontal: appW(20)),
@@ -143,15 +144,6 @@ class _HomeEduPageState extends State<HomeEduPage> {
                             width: appW(300),
                             child: PopularCoursesCardWg(
                               onTap: () {
-                                // openMiniAppSheet(
-                                //   context,
-                                //   child: DetailedCourseInfoPage(),
-                                // );
-                                // subBottomSheetOpener(
-                                //   context,
-                                //   child: DetailedCourseInfoPage(),
-                                // );
-
                                 openMiniAppSheetFamily(
                                   context,
                                   child: DetailedCourseInfoPage(),

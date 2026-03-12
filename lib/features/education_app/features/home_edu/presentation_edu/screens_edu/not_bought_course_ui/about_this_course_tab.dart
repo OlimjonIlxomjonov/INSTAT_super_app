@@ -65,7 +65,7 @@ class AboutThisCourseTab extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: appH(250),
+          height: 300,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.symmetric(horizontal: appW(20)),
@@ -77,21 +77,6 @@ class AboutThisCourseTab extends StatelessWidget {
                   width: appW(300),
                   child: PopularCoursesCardWg(
                     onTap: () {
-                      // openMiniAppSheet(
-                      //   context,
-                      //   child: DetailedCourseInfoPage(),
-                      // );
-
-                      // subBottomSheetOpener(
-                      //   context,
-                      //   child: DetailedCourseInfoPage(),
-                      // );
-
-                      // FamilyModalSheet.of(context).pushPage(
-                      //   MiniAppSheetShell(
-                      //     child: const DetailedCourseInfoPage(),
-                      //   ),
-                      // );
                       FamilyNavigation.familyPush(
                         context,
                         DetailedCourseInfoPage(),

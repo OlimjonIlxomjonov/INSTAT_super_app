@@ -36,7 +36,7 @@ class _EduBottomNavBarState extends State<EduBottomNavBar> {
     final localization = AppLocalizations.of(context)!;
 
     final List<Widget> eduPages = [
-      HomeEduPage(onTap: () => _goToTab(2)),
+      HomeEduPage(onTap: () => _goToTab(2), onProfileTap: () => _goToTab(4)),
       TableEduPage(),
       UserCoursesEduPage(),
       StatsEduPage(),

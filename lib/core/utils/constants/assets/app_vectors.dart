@@ -33,4 +33,9 @@ abstract class AppVectors {
   static const String ukFlag = "${basePath}united_kingdom_flag.svg";
   static const String russiaFlag = "${basePath}russian_flag.svg";
   static const String pdfIcon = "${basePath}pdf_icon.svg";
+
+  /// brand logos
+  static const googleLogo = '${baseOnboardingPath}google_logo.svg';
+  static const appleLogo = '${baseOnboardingPath}apple_logo.svg';
+  static const facebookLogo = '${baseOnboardingPath}facebook_logo.svg';
 }

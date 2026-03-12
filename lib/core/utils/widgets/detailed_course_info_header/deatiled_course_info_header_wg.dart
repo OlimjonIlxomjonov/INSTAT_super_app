@@ -3,7 +3,6 @@ import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
-import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 
 class DetailedCourseInfoHeaderWg extends StatelessWidget {
   const DetailedCourseInfoHeaderWg({super.key});
@@ -14,39 +13,6 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
       child: Column(
         crossAxisAlignment: .start,
         children: [
-          /// HEADER IMAGE WITH ARROW BACK
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: .only(
-                  bottomLeft: .circular(20),
-                  bottomRight: .circular(20),
-                ),
-                child: Image.asset(
-                  height: appH(320),
-                  width: double.infinity,
-                  'assets/home_page/temp_course_dummy.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Padding(
-                padding: .only(left: appW(10), top: appH(10)),
-                child: IconButton(
-                  onPressed: () {
-                    // AppRoute.close();
-                    // FamilyModalSheet.of(context).popPage();
-                    FamilyNavigation.familyClose(context);
-                  },
-                  style: IconButton.styleFrom(
-                    backgroundColor: AppColors.white,
-                    shape: RoundedRectangleBorder(borderRadius: .circular(8)),
-                  ),
-                  icon: Icon(IconlyLight.arrow_left_2, size: 20),
-                ),
-              ),
-            ],
-          ),
-
           /// BODY STARTER CONTENT
           Padding(
             padding: .fromLTRB(appW(20), appH(16), appW(20), 0),

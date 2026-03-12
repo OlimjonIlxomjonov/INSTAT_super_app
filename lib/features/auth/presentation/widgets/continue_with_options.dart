@@ -1,17 +1,18 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 
 class ContinueWithOptions extends StatelessWidget {
   final VoidCallback onTap;
-  final IconData icon;
+  final String iconPath;
   final String continueWithText;
 
   const ContinueWithOptions({
     super.key,
     required this.onTap,
-    required this.icon,
+    required this.iconPath,
     required this.continueWithText,
   });
 
@@ -27,7 +28,7 @@ class ContinueWithOptions extends StatelessWidget {
         ),
         onPressed: onTap,
         label: AutoSizeText(continueWithText),
-        icon: Icon(icon),
+        icon: SvgPicture.asset(iconPath),
       ),
     );
   }

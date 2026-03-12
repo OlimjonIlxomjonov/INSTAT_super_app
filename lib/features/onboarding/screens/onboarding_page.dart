@@ -4,10 +4,9 @@ import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/constants/assets/app_images.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
-import 'package:my_template/core/utils/constants/strings/app_strings.dart';
-import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+import 'package:my_template/core/utils/responsiveness/responsive.dart';
 import 'package:my_template/features/auth/presentation/screens/log_in_options_page.dart';
 import 'package:my_template/features/onboarding/widgets/onboarding_wg.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -36,8 +35,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   Widget build(BuildContext context) {
+    TDeviceUtils.setStatusBarColor(AppColors.transparent, darkIcons: true);
     TDeviceUtils.systemNavigationBar(AppColors.white);
     final localization = AppLocalizations.of(context)!;
+    final isMobile = Responsive.isMobile(context);
 
     return Scaffold(
       extendBody: true,
@@ -80,11 +81,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
       ),
       bottomNavigationBar: SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           color: AppColors.white,
           child: Column(
             mainAxisSize: .min,
-            crossAxisAlignment: .start,
+            crossAxisAlignment: isMobile ? .start : .end,
             children: [
               SmoothPageIndicator(
                 controller: pageController,
@@ -99,7 +100,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
               ),
               SizedBox(height: appH(25)),
               Row(
-                mainAxisAlignment: .spaceBetween,
+                spacing: 20,
+                mainAxisAlignment: isMobile ? .spaceBetween : .end,
                 children: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(

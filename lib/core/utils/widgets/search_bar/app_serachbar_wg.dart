@@ -13,7 +13,7 @@ class AppSearchbarWg extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Container(
-      padding: EdgeInsets.symmetric(vertical: appH(14), horizontal: appW(14)),
+      padding: EdgeInsets.symmetric(vertical: 14, horizontal: 14),
       decoration: BoxDecoration(
         borderRadius: .circular(12),
         color: AppColors.greyScale.grey200,
@@ -21,7 +21,7 @@ class AppSearchbarWg extends StatelessWidget {
       child: Row(
         children: [
           Icon(IconlyLight.search),
-          SizedBox(width: appW(8)),
+          SizedBox(width: 8),
           AutoSizeText(
             localization.whatAreYouLookingFor,
             style: AppTextStyles.source.regular(
