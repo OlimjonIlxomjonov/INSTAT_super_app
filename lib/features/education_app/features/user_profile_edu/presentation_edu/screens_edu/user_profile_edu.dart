@@ -3,7 +3,6 @@ import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
-import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_sheet.dart';
 import 'package:my_template/core/utils/widgets/profile_settings_tile/profile_settings_tile_wg.dart';
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/favourite_course_settings_component.dart';
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/sertificats_settings_component.dart';
@@ -41,7 +40,7 @@ class _UserProfileEduState extends State<UserProfileEdu> {
                   leadingIcon: IconlyLight.document,
                   title: 'Sertificatlar',
                   onTap: () {
-                    openMiniAppSheet(
+                    openMiniAppSheetFamily(
                       context,
                       child: SertificatsSettingsComponent(),
                     );
@@ -51,7 +50,7 @@ class _UserProfileEduState extends State<UserProfileEdu> {
                   leadingIcon: IconlyLight.heart,
                   title: 'Saqlanganlar',
                   onTap: () {
-                    openMiniAppSheet(
+                    openMiniAppSheetFamily(
                       context,
                       child: FavouriteCourseSettingsComponent(),
                     );

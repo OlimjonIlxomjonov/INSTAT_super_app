@@ -9,42 +9,44 @@ class SertificatsSettingsComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverDefaultAppBarWg(myTitle: 'Sertifikatlar'),
-        SliverPadding(
-          padding: AppPadding.hAndV20x20(),
-          sliver: SliverToBoxAdapter(
-            child: Container(
-              padding: .all(12),
-              decoration: BoxDecoration(
-                borderRadius: .circular(16),
-                border: .all(color: AppColors.greyScale.grey200),
-                color: AppColors.greyScale.grey50,
-              ),
-              child: Column(
-                crossAxisAlignment: .start,
-                children: [
-                  Text(
-                    'Kategoriya nomi',
-                    style: AppTextStyles.source.medium(
-                      fontSize: 14,
-                      color: AppColors.greyScale.grey600,
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          SliverDefaultAppBarWg(myTitle: 'Sertifikatlar'),
+          SliverPadding(
+            padding: AppPadding.hAndV20x20(),
+            sliver: SliverToBoxAdapter(
+              child: Container(
+                padding: .all(12),
+                decoration: BoxDecoration(
+                  borderRadius: .circular(16),
+                  border: .all(color: AppColors.greyScale.grey200),
+                  color: AppColors.greyScale.grey50,
+                ),
+                child: Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    Text(
+                      'Kategoriya nomi',
+                      style: AppTextStyles.source.medium(
+                        fontSize: 14,
+                        color: AppColors.greyScale.grey600,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Statistika (Tarmoqlar va sohalar bo’yicha)',
-                    style: AppTextStyles.source.semiBold(fontSize: 17),
-                  ),
-                  SizedBox(height: 16),
-                  Image.asset('assets/images/sertificat_temp.png'),
-                ],
+                    SizedBox(height: 8),
+                    Text(
+                      'Statistika (Tarmoqlar va sohalar bo’yicha)',
+                      style: AppTextStyles.source.semiBold(fontSize: 17),
+                    ),
+                    SizedBox(height: 16),
+                    Image.asset('assets/images/sertificat_temp.png'),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

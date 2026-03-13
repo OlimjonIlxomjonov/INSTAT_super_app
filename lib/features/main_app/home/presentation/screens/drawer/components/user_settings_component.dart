@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import 'package:my_template/core/utils/responsiveness/responsive.dart';
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/app_language_settings_model_component.dart';
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/edu_tickets/edu_tickets_settings_component.dart';
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/notification_settings_edu_component.dart';
@@ -44,8 +43,9 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
           leadingIcon: IconlyLight.notification,
           title: 'Bildirishnomalar',
           onTap: () {
-            openMiniAppSheet(
+            openMiniAppSheetFamily(
               context,
+              showHandler: false,
               child: NotificationSettingsEduComponent(),
             );
           },
@@ -93,7 +93,11 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
           leadingIcon: Icons.list_alt,
           title: 'Tikketlar',
           onTap: () {
-            openMiniAppSheet(context, child: EduTicketsSettingsComponent());
+            openMiniAppSheetFamily(
+              showHandler: false,
+              context,
+              child: EduTicketsSettingsComponent(),
+            );
           },
         ),
         ProfileSettingsTileWg(

@@ -21,7 +21,7 @@ class SliverArticlesListWg extends StatelessWidget {
           final item = items[index];
           return GestureDetector(
             onTap: () {
-              openMiniAppSheet(
+              openMiniAppSheetFamily(
                 context,
                 child: DetailedArticlePage(status: item.status),
                 showHandler: false,

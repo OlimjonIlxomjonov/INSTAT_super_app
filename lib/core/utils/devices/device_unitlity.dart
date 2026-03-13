@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 
 class TDeviceUtils {
   static Future<void> systemNavigationBar(

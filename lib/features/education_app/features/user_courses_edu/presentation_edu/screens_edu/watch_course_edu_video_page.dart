@@ -7,7 +7,7 @@ import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
-import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_sheet.dart';
+import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/regular_test/regular_test_course_page.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/default_custom_tile_wg.dart';
 
@@ -161,8 +161,9 @@ class WatchCourseEduVideoPage extends StatelessWidget {
                       tileOverflow: .ellipsis,
                       tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
                       onTap: () {
-                        openMiniAppSheet(
+                        openMiniAppSheetFamily(
                           context,
+                          showHandler: false,
                           child: RegularTestCoursePage(),
                         );
                       },

@@ -29,29 +29,31 @@ class _NotificationSettingsEduComponentState
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverDefaultAppBarWg(myTitle: 'Bildirishnomalar'),
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            childCount: notificationSettings.length,
-            (context, index) {
-              return ProfileSettingsTileWg(
-                title: notificationSettings[index],
-                onTap: () {},
-                trailingIcon: DotSwitch(
-                  value: switches[index],
-                  onChanged: (bool switchState) {
-                    setState(() {
-                      switches[index] = switchState;
-                    });
-                  },
-                ),
-              );
-            },
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          SliverDefaultAppBarWg(myTitle: 'Bildirishnomalar'),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              childCount: notificationSettings.length,
+              (context, index) {
+                return ProfileSettingsTileWg(
+                  title: notificationSettings[index],
+                  onTap: () {},
+                  trailingIcon: DotSwitch(
+                    value: switches[index],
+                    onChanged: (bool switchState) {
+                      setState(() {
+                        switches[index] = switchState;
+                      });
+                    },
+                  ),
+                );
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

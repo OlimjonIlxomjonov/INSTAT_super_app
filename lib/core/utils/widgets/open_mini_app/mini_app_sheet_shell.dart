@@ -3,6 +3,10 @@ import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 
+/*
+  Design for OpenMiniAppPackageFamily, here is the all custom design happening
+ */
+
 class MiniAppSheetShell extends StatefulWidget {
   const MiniAppSheetShell({
     super.key,

@@ -38,7 +38,7 @@ class SliverDefaultAppBarWg extends StatelessWidget {
         style: IconButton.styleFrom(
           backgroundColor: AppColors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: .circular(8),
+            borderRadius: .circular(50),
             side: BorderSide(color: AppColors.greyScale.grey200),
           ),
         ),

@@ -1,4 +1,3 @@
-import 'package:my_template/features/auth/presentation/widgets/auth_text_field_wg.dart';
 
 final titles = [
   'Yangi maqola',

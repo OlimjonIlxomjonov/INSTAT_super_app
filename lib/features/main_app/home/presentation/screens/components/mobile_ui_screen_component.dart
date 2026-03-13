@@ -55,22 +55,25 @@ class MobileUiScreenComponent extends StatelessWidget {
           ),
 
           /// MINI APP SECTION
-          SliverGrid(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 0,
-              mainAxisSpacing: 0,
-              childAspectRatio: 1.3,
+          SliverPadding(
+            padding: AppPadding.horizontal20x(),
+            sliver: SliverGrid(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3, // 2
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 1, // 1.3
+              ),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                final item = sections[index];
+                return MiniAppSectionCard(
+                  mainImage: item.mainImage,
+                  backgroundImage: item.backgroundImage,
+                  title: item.title,
+                  onTap: item.onTap,
+                );
+              }, childCount: sections.length),
             ),
-            delegate: SliverChildBuilderDelegate((context, index) {
-              final item = sections[index];
-              return MiniAppSectionCard(
-                mainImage: item.mainImage,
-                backgroundImage: item.backgroundImage,
-                title: item.title,
-                onTap: item.onTap,
-              );
-            }, childCount: sections.length),
           ),
 
           /// SEARCH BAR

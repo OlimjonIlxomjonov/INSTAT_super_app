@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
-import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/mini_app_sheet_shell.dart';
+
+/*
+This bottom sheet is the main one which open mini apps,
+sections and bunch of others pages inside itself.
+
+It has a function Family.push (has a method custom one => FamilyNavigation)
+with this it allows to open the new Pages inside itself without opening a lot of bottomSheets
+it really reduces the lags that could be made
+by opening bottomSheet inside another one
+ */
 
 Future<T?> openMiniAppSheetFamily<T>(
   BuildContext context, {
@@ -14,7 +23,7 @@ Future<T?> openMiniAppSheetFamily<T>(
     context: context,
     contentBackgroundColor: AppColors.transparent,
     enableDrag: true,
-    barrierColor: AppColors.greyScale.grey100.withValues(alpha: 0.5),
+    barrierColor: AppColors.greyScale.grey100.withValues(alpha: 0.9),
     isDismissible: false,
     useSafeArea: true,
     showDragHandle: false,

@@ -60,19 +60,20 @@ class _AddArticlePageState extends State<AddArticlePage> {
     return Scaffold(
       /// HEADER APP BAR
       appBar: AppBar(
-        toolbarHeight: 80,
-        leading: IconButton(
-          style: IconButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: .circular(12),
-              side: BorderSide(color: AppColors.greyScale.grey200),
-            ),
-          ),
-          onPressed: () {
-            AppRoute.close();
-          },
-          icon: Icon(Icons.close),
-        ),
+        automaticallyImplyLeading: false,
+        // leadingWidth: 70,
+        // leading: IconButton(
+        //   style: IconButton.styleFrom(
+        //     shape: RoundedRectangleBorder(
+        //       borderRadius: .circular(50),
+        //       side: BorderSide(color: AppColors.greyScale.grey200),
+        //     ),
+        //   ),
+        //   onPressed: () {
+        //     AppRoute.close();
+        //   },
+        //   icon: Icon(Icons.close),
+        // ),
         centerTitle: true,
         title: Text(titles[currentPage], style: CustomTextStyles.h2),
       ),

@@ -5,7 +5,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
-import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_sheet.dart';
+import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/screens/articles_home_page.dart';
 import 'package:my_template/features/scientific_articles_app/features/magazines/presentation/sreens/magazines_page.dart';
 import 'package:my_template/features/scientific_articles_app/features/profile/presentation/screens/articles_profile_page.dart';
@@ -57,7 +57,11 @@ class _ArticlesBottomNavBarState extends State<ArticlesBottomNavBar> {
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    openMiniAppSheet(context, child: AddArticlePage());
+                    openMiniAppSheetFamily(
+                      showHandler: false,
+                      context,
+                      child: AddArticlePage(),
+                    );
                   },
                   icon: Icon(Icons.add),
                   label: Text('Maqola qo’shish'),

@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 
+/*
+Mainly used for opening not full screens or sometimes simple made UI
+having a height depending of its content inside
+
+Used for Tasks card, where has only one task which not requires full height
+also comments section, as it could have 1 or more
+ */
+
 Future<void> subBottomSheetOpener(
   BuildContext context, {
   required Widget child,

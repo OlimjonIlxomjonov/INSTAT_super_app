@@ -4,7 +4,6 @@ import 'package:my_template/core/utils/theme/custom_themes/app_bar_theme.dart';
 import 'package:my_template/core/utils/theme/custom_themes/app_text_theme.dart';
 import 'package:my_template/core/utils/theme/custom_themes/elevatedbutton_theme.dart';
 import 'package:my_template/core/utils/theme/custom_themes/text_field_theme.dart';
-import 'package:turn_page_transition/turn_page_transition.dart';
 
 class TAppTheme {
   TAppTheme._();

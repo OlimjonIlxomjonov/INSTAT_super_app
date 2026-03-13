@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
-import 'package:my_template/core/utils/general_widgets/bought_book_opener/curl_page.dart';
 import 'package:turn_page_transition/turn_page_transition.dart';
 
 /// WITH PACKAGE
