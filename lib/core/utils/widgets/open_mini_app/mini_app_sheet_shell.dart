@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
-import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
-import 'package:my_template/core/utils/general_widgets/mini_app_home_header/mini_app_home_header_wg.dart';
 
 class MiniAppSheetShell extends StatefulWidget {
   const MiniAppSheetShell({
@@ -23,7 +21,7 @@ class _MiniAppSheetShellState extends State<MiniAppSheetShell> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height / 1.1,
+      height: MediaQuery.of(context).size.height / 1.05,
       child: Column(
         // mainAxisSize: .min,
         children: [

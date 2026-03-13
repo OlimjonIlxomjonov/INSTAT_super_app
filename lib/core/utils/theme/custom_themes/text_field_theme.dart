@@ -16,24 +16,28 @@ class TTextFieldTheme {
     ),
     focusedBorder: OutlineInputBorder().copyWith(
       borderRadius: .circular(10),
-      borderSide: BorderSide(color: AppColors.blue, width: 1),
+      borderSide: BorderSide(color: AppColors.primaryColor, width: 1),
     ),
     labelStyle: AppTextStyles.source.regular(
       fontSize: 14,
-      color: AppColors.greyScale.grey500,
+      color: AppColors.greyScale.grey600,
+    ),
+    hintStyle: AppTextStyles.source.regular(
+      fontSize: 14,
+      color: AppColors.greyScale.grey600,
     ),
     floatingLabelStyle: AppTextStyles.source.regular(
       fontSize: 16,
-      color: AppColors.blue,
+      color: AppColors.primaryColor,
     ),
     prefixIconColor: WidgetStateColor.resolveWith(
       (state) => state.contains(WidgetState.focused)
-          ? AppColors.blue
+          ? AppColors.primaryColor
           : AppColors.greyScale.grey500,
     ),
     suffixIconColor: WidgetStateColor.resolveWith(
       (state) => state.contains(WidgetState.focused)
-          ? AppColors.blue
+          ? AppColors.primaryColor
           : AppColors.greyScale.grey500,
     ),
   );

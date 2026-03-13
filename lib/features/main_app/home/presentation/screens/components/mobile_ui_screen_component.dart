@@ -26,6 +26,7 @@ class MobileUiScreenComponent extends StatelessWidget {
     final localization = AppLocalizations.of(context)!;
     void goToPageActiveCourses() {
       openMiniAppSheetFamily(
+        showHandler: false,
         context,
         child: DetailedUserBoughtCoursesEduPage(),
       );
@@ -73,13 +74,12 @@ class MobileUiScreenComponent extends StatelessWidget {
           ),
 
           /// SEARCH BAR
-          SliverPadding(
-            padding: .only(top: 25, bottom: 20),
-            sliver: SliverAppBar(
-              automaticallyImplyLeading: false,
-              pinned: true,
-              title: AppSearchbarWg(),
-            ),
+          SliverAppBar(
+            toolbarHeight: 56 + 24,
+            pinned: true,
+            automaticallyImplyLeading: false,
+            titleSpacing: 20,
+            title: AppSearchbarWg(),
           ),
 
           /// BANNERS
@@ -140,6 +140,7 @@ class MobileUiScreenComponent extends StatelessWidget {
                       width: appW(300),
                       child: PopularCoursesCardWg(
                         onTap: () => openMiniAppSheetFamily(
+                          showHandler: false,
                           context,
                           child: DetailedCourseInfoPage(),
                         ),

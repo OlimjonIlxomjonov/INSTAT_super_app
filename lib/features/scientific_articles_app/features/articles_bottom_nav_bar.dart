@@ -37,8 +37,10 @@ class _ArticlesBottomNavBarState extends State<ArticlesBottomNavBar> {
     final localization = AppLocalizations.of(context)!;
 
     final List<Widget> eduPages = [
-      // HomeEduPage(onTap: () => _goToTab(2), onProfileTap: () => _goToTab(4)),
-      ArticlesHomePage(onProfileTap: () => _goToTab(3)),
+      ArticlesHomePage(
+        onProfileTap: () => _goToTab(3),
+        toArticlesPage: () => _goToTab(2),
+      ),
       MagazinesPage(),
       UserArticlesPage(),
       ArticlesProfilePage(),
@@ -95,8 +97,8 @@ class _ArticlesBottomNavBarState extends State<ArticlesBottomNavBar> {
                 padding: EdgeInsets.all(appW(12)),
                 tabs: [
                   GButton(icon: IconlyLight.home, text: localization.homePage),
-                  GButton(icon: Icons.table_chart_outlined, text: 'Jurnallar'),
-                  GButton(icon: LineIcons.book, text: 'Maqolalar'),
+                  GButton(icon: LineIcons.book, text: 'Jurnallar'),
+                  GButton(icon: LineIcons.edit, text: 'Maqolalar'),
                   GButton(
                     icon: IconlyLight.profile,
                     text: localization.profile,

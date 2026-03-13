@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/app_utils.dart';
+import 'package:my_template/core/utils/general_widgets/dragble_app_bar/draggble_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/features/scientific_articles_app/dummy_data_source/articles_source.dart';
 import 'package:my_template/features/scientific_articles_app/dummy_data_source/home_brief_info_card_source.dart';
@@ -9,17 +10,22 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/sliver_brief_cards_wg.dart';
 
 class ArticlesHomePage extends StatelessWidget {
-  final VoidCallback onProfileTap;
+  final VoidCallback onProfileTap, toArticlesPage;
 
-  const ArticlesHomePage({super.key, required this.onProfileTap});
+  const ArticlesHomePage({
+    super.key,
+    required this.onProfileTap,
+    required this.toArticlesPage,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: DraggableAppBarWg(onProfileTap: onProfileTap),
       body: CustomScrollView(
         slivers: [
           /// HEADER USER PROFILE (on click leads to profile page)
-          MiniAppHomeHeaderWg(onTapLeadToPage: onProfileTap),
+          // MiniAppHomeHeaderWg(onTapLeadToPage: onProfileTap),
 
           /// global search bar
           SliverAppBar(
@@ -48,7 +54,10 @@ class ArticlesHomePage extends StatelessWidget {
           SliverPadding(
             padding: AppPadding.horizontal20x(),
             sliver: SliverToBoxAdapter(
-              child: ExtendSectionSeeAllWg(title: 'Maqolalar', onTap: () {}),
+              child: ExtendSectionSeeAllWg(
+                title: 'Maqolalar',
+                onTap: toArticlesPage,
+              ),
             ),
           ),
 

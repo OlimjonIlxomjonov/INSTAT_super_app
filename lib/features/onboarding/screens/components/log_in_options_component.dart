@@ -89,80 +89,83 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
       height: Responsive.isMobile(context) ? screenHeight / 1.6 : null,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-        child: Column(
-          crossAxisAlignment: .start,
-          children: [
-            AutoSizeText(
-              localization.getStart,
-              maxFontSize: 35,
-              style: AppTextStyles.source.bold(fontSize: 22),
-            ),
-            SizedBox(height: appH(8)),
-            AutoSizeText(
-              localization.registerOrEnterTheSystem,
-              maxLines: 2,
-              maxFontSize: 22,
-              style: AppTextStyles.source.regular(
-                fontSize: 16,
-                color: AppColors.greyScale.grey600,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: .min,
+            crossAxisAlignment: .start,
+            children: [
+              AutoSizeText(
+                localization.getStart,
+                maxFontSize: 35,
+                style: AppTextStyles.source.bold(fontSize: 22),
               ),
-            ),
-            SizedBox(height: appH(32)),
-
-            /// LOG IN WITH ONE ID
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _openPage,
-                child: SvgPicture.asset(AppVectors.oneIdLogo),
+              SizedBox(height: appH(8)),
+              AutoSizeText(
+                localization.registerOrEnterTheSystem,
+                maxLines: 2,
+                maxFontSize: 22,
+                style: AppTextStyles.source.regular(
+                  fontSize: 16,
+                  color: AppColors.greyScale.grey600,
+                ),
               ),
-            ),
+              SizedBox(height: appH(32)),
 
-            SizedBox(height: 32),
+              /// LOG IN WITH ONE ID
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _openPage,
+                  child: SvgPicture.asset(AppVectors.oneIdLogo),
+                ),
+              ),
 
-            /// DIVIDER -OR-
-            Row(
-              children: [
-                Expanded(child: Divider(color: AppColors.greyScale.grey400)),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: appW(12)),
-                  child: AutoSizeText(
-                    'Yoki',
-                    style: AppTextStyles.source.regular(
-                      fontSize: 14,
-                      color: AppColors.greyScale.grey600,
+              SizedBox(height: 32),
+
+              /// DIVIDER -OR-
+              Row(
+                children: [
+                  Expanded(child: Divider(color: AppColors.greyScale.grey400)),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: appW(12)),
+                    child: AutoSizeText(
+                      'Yoki',
+                      style: AppTextStyles.source.regular(
+                        fontSize: 14,
+                        color: AppColors.greyScale.grey600,
+                      ),
                     ),
                   ),
-                ),
-                Expanded(child: Divider(color: AppColors.greyScale.grey400)),
-              ],
-            ),
+                  Expanded(child: Divider(color: AppColors.greyScale.grey400)),
+                ],
+              ),
 
-            SizedBox(height: appH(20)),
+              SizedBox(height: appH(20)),
 
-            /// Apple Account
-            ContinueWithOptions(
-              iconPath: AppVectors.appleLogo,
-              onTap: () {
-                // AppRoute.go(MyBook());
-              },
-              continueWithText: localization.continueWithApple,
-            ),
+              /// Apple Account
+              ContinueWithOptions(
+                iconPath: AppVectors.appleLogo,
+                onTap: () {
+                  // AppRoute.go(MyBook());
+                },
+                continueWithText: localization.continueWithApple,
+              ),
 
-            /// Google Account
-            ContinueWithOptions(
-              iconPath: AppVectors.googleLogo,
-              onTap: () {},
-              continueWithText: localization.continueWithGoogle,
-            ),
+              /// Google Account
+              ContinueWithOptions(
+                iconPath: AppVectors.googleLogo,
+                onTap: () {},
+                continueWithText: localization.continueWithGoogle,
+              ),
 
-            /// FaceBook Account
-            ContinueWithOptions(
-              iconPath: AppVectors.facebookLogo,
-              onTap: () {},
-              continueWithText: localization.continueWithFaceBook,
-            ),
-          ],
+              /// FaceBook Account
+              ContinueWithOptions(
+                iconPath: AppVectors.facebookLogo,
+                onTap: () {},
+                continueWithText: localization.continueWithFaceBook,
+              ),
+            ],
+          ),
         ),
       ),
     );

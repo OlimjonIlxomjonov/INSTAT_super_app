@@ -36,7 +36,7 @@ class DetailedCourseInfoHeaderImage extends StatelessWidget {
             },
             style: IconButton.styleFrom(
               backgroundColor: AppColors.white,
-              shape: RoundedRectangleBorder(borderRadius: .circular(8)),
+              shape: RoundedRectangleBorder(borderRadius: .circular(50)),
             ),
             icon: Icon(IconlyLight.arrow_left_2, size: 20),
           ),

@@ -47,7 +47,7 @@ class _LogInOptionsPageState extends State<LogInOptionsPage> {
                         alignment: .center,
                         child: Container(
                           constraints: BoxConstraints(
-                            maxHeight: MediaQuery.sizeOf(context).height / 1.5,
+                            // maxHeight: MediaQuery.sizeOf(context).height / 1.5,
                             maxWidth: MediaQuery.sizeOf(context).width / 1.1,
                           ),
                           decoration: BoxDecoration(

@@ -6,17 +6,19 @@ import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart'
 class EduCustomTextAreaWg extends StatelessWidget {
   final String hintText;
   final String? helperText;
+  final int maxLength;
 
   const EduCustomTextAreaWg({
     super.key,
     required this.hintText,
     this.helperText,
+    this.maxLength = 200,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      maxLength: 200,
+      maxLength: maxLength,
       minLines: 3,
       decoration: InputDecoration(
         hintStyle: AppTextStyles.source.regular(
@@ -28,15 +30,18 @@ class EduCustomTextAreaWg extends StatelessWidget {
             ? Row(
                 children: [
                   Icon(
-                    IconlyLight.danger,
+                    IconlyBold.danger,
                     size: 20,
                     color: AppColors.greyScale.grey600,
                   ),
-                  Text(
-                    helperText!,
-                    style: AppTextStyles.source.regular(
-                      fontSize: 12,
-                      color: AppColors.greyScale.grey600,
+                  SizedBox(width: 5),
+                  Expanded(
+                    child: Text(
+                      helperText!,
+                      style: AppTextStyles.source.regular(
+                        fontSize: 12,
+                        color: AppColors.greyScale.grey600,
+                      ),
                     ),
                   ),
                 ],

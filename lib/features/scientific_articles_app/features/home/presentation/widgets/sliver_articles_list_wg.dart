@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
-import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/features/scientific_articles_app/dummy_models/artciles_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/articles_status_check_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/detailed_article_page.dart';
@@ -20,7 +19,7 @@ class SliverArticlesListWg extends StatelessWidget {
         itemCount: items.length,
         itemBuilder: (context, index) {
           final item = items[index];
-          return InkWell(
+          return GestureDetector(
             onTap: () {
               openMiniAppSheet(
                 context,

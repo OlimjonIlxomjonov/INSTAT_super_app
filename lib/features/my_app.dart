@@ -1,3 +1,4 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -42,6 +43,7 @@ class _MyAppState extends State<MyApp> {
       stream: GeneralStream.languageStream.stream,
       builder: (context, snapshot) {
         return MaterialApp(
+          // builder: DevicePreview.appBuilder,
           debugShowCheckedModeBanner: false,
           navigatorKey: AppRoute.navigatorKey,
           theme: TAppTheme.lightTheme,

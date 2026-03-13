@@ -23,10 +23,9 @@ class DetailedUserBoughtCoursesEduPage extends StatelessWidget {
               sliver: SliverToBoxAdapter(
                 child: CourseVideoBriefTileWg(
                   onTap: () {
-                    // openMiniAppSheet(context, child: WatchCourseEduVideoPage());
                     FamilyModalSheet.of(context).pushPage(
                       MiniAppSheetShell(
-                        showHandle: true,
+                        showHandle: false,
                         child: const WatchCourseEduVideoPage(),
                       ),
                     );

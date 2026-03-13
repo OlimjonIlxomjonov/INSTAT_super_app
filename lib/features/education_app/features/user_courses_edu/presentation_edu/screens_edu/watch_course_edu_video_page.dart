@@ -19,6 +19,7 @@ class WatchCourseEduVideoPage extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
+          /// VIDEO
           SliverToBoxAdapter(
             child: Stack(
               children: [

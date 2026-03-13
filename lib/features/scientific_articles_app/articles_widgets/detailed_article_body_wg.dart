@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
+import 'package:my_template/core/utils/general_widgets/selected_file_container/selected_file_container_wg.dart';
 
 class DetailedArticleBodyWg extends StatelessWidget {
   const DetailedArticleBodyWg({super.key});
@@ -90,36 +91,7 @@ class DetailedArticleBodyWg extends StatelessWidget {
         const SizedBox(height: 24),
         Text('Hujjatlar', style: CustomTextStyles.h2),
         const SizedBox(height: 16),
-        Container(
-          padding: .all(12),
-          decoration: BoxDecoration(
-            borderRadius: .circular(12),
-            border: .all(color: AppColors.greyScale.grey200),
-          ),
-          child: Row(
-            spacing: 12,
-            children: [
-              SvgPicture.asset(AppVectors.pdfIcon),
-              Column(
-                spacing: 4,
-                crossAxisAlignment: .start,
-                children: [
-                  Text(
-                    'Tahlil, taqqoslash va prognozlash',
-                    style: AppTextStyles.source.medium(fontSize: 14),
-                  ),
-                  Text(
-                    '3.4 MB',
-                    style: AppTextStyles.source.regular(
-                      fontSize: 13,
-                      color: AppColors.greyScale.grey600,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+        SelectedFileContainerWg(),
         const SizedBox(height: 20),
       ],
     );
