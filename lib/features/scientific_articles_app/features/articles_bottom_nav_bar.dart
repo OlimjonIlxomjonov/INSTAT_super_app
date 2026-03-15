@@ -23,6 +23,7 @@ class ArticlesBottomNavBar extends StatefulWidget {
 
 class _ArticlesBottomNavBarState extends State<ArticlesBottomNavBar> {
   late int _currentIndex;
+  Key _navKey = UniqueKey();
 
   void _goToTab(int index) => setState(() => _currentIndex = index);
 
@@ -42,7 +43,7 @@ class _ArticlesBottomNavBarState extends State<ArticlesBottomNavBar> {
         toArticlesPage: () => _goToTab(2),
       ),
       MagazinesPage(),
-      UserArticlesPage(),
+      SizedBox(),
       ArticlesProfilePage(),
     ];
     return Scaffold(
@@ -50,24 +51,6 @@ class _ArticlesBottomNavBarState extends State<ArticlesBottomNavBar> {
       bottomNavigationBar: Column(
         mainAxisSize: .min,
         children: [
-          if (_currentIndex == 2)
-            Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    openMiniAppSheetFamily(
-                      showHandler: false,
-                      context,
-                      child: AddArticlePage(),
-                    );
-                  },
-                  icon: Icon(Icons.add),
-                  label: Text('Maqola qo’shish'),
-                ),
-              ),
-            ),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 20),
             decoration: BoxDecoration(
@@ -86,9 +69,22 @@ class _ArticlesBottomNavBarState extends State<ArticlesBottomNavBar> {
             ),
             child: SafeArea(
               child: GNav(
+                key: _navKey,
                 selectedIndex: _currentIndex,
-                onTabChange: (newIndex) =>
-                    setState(() => _currentIndex = newIndex),
+                onTabChange: (newIndex) {
+                  if (newIndex == 2) {
+                    openMiniAppSheetFamily(
+                      showHandler: false,
+                      context,
+                      child: UserArticlesPage(),
+                    );
+                    setState(() {
+                      _navKey = UniqueKey();
+                    });
+                  } else {
+                    setState(() => _currentIndex = newIndex);
+                  }
+                },
                 tabBorderRadius: 12,
                 curve: Curves.easeInOut,
                 duration: const Duration(milliseconds: 200),

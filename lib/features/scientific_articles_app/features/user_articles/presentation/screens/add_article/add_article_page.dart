@@ -7,6 +7,7 @@ import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/c
 import 'package:my_template/core/utils/general_widgets/online_lib_style_custom_bottom_sheet/online_lib_style_custom_bottom_sheet_wg.dart';
 import 'package:my_template/core/utils/general_widgets/payment_open_bottom_sheet/payment_open_bottom_sheet_wg.dart';
 import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
+import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/features/scientific_articles_app/dummy_data_source/dummy_data_source_export.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/add_article/page_view_screens/article_add_author_view.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/add_article/page_view_screens/article_annotation_view.dart';
@@ -58,22 +59,11 @@ class _AddArticlePageState extends State<AddArticlePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+
       /// HEADER APP BAR
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        // leadingWidth: 70,
-        // leading: IconButton(
-        //   style: IconButton.styleFrom(
-        //     shape: RoundedRectangleBorder(
-        //       borderRadius: .circular(50),
-        //       side: BorderSide(color: AppColors.greyScale.grey200),
-        //     ),
-        //   ),
-        //   onPressed: () {
-        //     AppRoute.close();
-        //   },
-        //   icon: Icon(Icons.close),
-        // ),
         centerTitle: true,
         title: Text(titles[currentPage], style: CustomTextStyles.h2),
       ),
@@ -160,27 +150,27 @@ class _AddArticlePageState extends State<AddArticlePage> {
               ],
             ),
           ),
-        ],
-      ),
 
-      /// PREV OR NEXT VIEW CONTROLLER
-      bottomNavigationBar: CustomBottomNavContainerWg(
-        buttonText: !isLastPage ? 'Keyingi qadam' : 'Maqolani yuborish',
-        onTap: moveNextPageOrFinish,
-        anotherButton: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: .circular(12),
-              side: BorderSide(color: AppColors.greyScale.grey200),
+          /// PREV OR NEXT VIEW CONTROLLER
+          CustomBottomNavContainerWg(
+            buttonText: !isLastPage ? 'Keyingi qadam' : 'Maqolani yuborish',
+            onTap: moveNextPageOrFinish,
+            anotherButton: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: .circular(12),
+                  side: BorderSide(color: AppColors.greyScale.grey200),
+                ),
+                backgroundColor: AppColors.greyScale.grey50,
+                foregroundColor: AppColors.greyScale.grey600,
+              ),
+              onPressed: () {
+                FamilyNavigation.familyClose(context);
+              },
+              child: Text('Bekor qilish'),
             ),
-            backgroundColor: AppColors.greyScale.grey50,
-            foregroundColor: AppColors.greyScale.grey600,
           ),
-          onPressed: () {
-            AppRoute.close();
-          },
-          child: Text('Bekor qilish'),
-        ),
+        ],
       ),
     );
   }

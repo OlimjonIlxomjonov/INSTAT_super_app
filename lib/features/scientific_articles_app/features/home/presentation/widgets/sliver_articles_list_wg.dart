@@ -24,7 +24,7 @@ class SliverArticlesListWg extends StatelessWidget {
               openMiniAppSheetFamily(
                 context,
                 child: DetailedArticlePage(status: item.status),
-                showHandler: false,
+                showHandler: true,
               );
             },
             child: Container(
