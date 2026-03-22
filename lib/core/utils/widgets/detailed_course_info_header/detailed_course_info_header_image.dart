@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
@@ -12,34 +10,27 @@ class DetailedCourseInfoHeaderImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       expandedHeight: 320,
-      stretch: true,
       pinned: false,
       flexibleSpace: FlexibleSpaceBar(
-        background: Image.asset(
-          'assets/home_page/temp_course_dummy.png',
-          fit: .cover,
-        ),
-        stretchModes: const [
-          StretchMode.blurBackground,
-          StretchMode.zoomBackground,
-        ],
-      ),
-      leading: Container(
-        margin: .only(left: 10, top: 10),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-          child: IconButton(
-            onPressed: () {
-              // AppRoute.close();
-              // FamilyModalSheet.of(context).popPage();
-              FamilyNavigation.familyClose(context); // main
-            },
-            style: IconButton.styleFrom(
-              backgroundColor: AppColors.white,
-              shape: RoundedRectangleBorder(borderRadius: .circular(50)),
-            ),
-            icon: Icon(IconlyLight.arrow_left_2, size: 20),
+        background: RepaintBoundary(
+          child: Image.asset(
+            filterQuality: .low,
+            'assets/home_page/temp_course_dummy.png',
+            fit: .cover,
           ),
+        ),
+      ),
+      leading: Padding(
+        padding: .only(left: 10, top: 10),
+        child: IconButton(
+          onPressed: () {
+            FamilyNavigation.familyClose(context); // main
+          },
+          style: IconButton.styleFrom(
+            backgroundColor: AppColors.white,
+            shape: RoundedRectangleBorder(borderRadius: .circular(50)),
+          ),
+          icon: const Icon(IconlyLight.arrow_left_2, size: 20),
         ),
       ),
       bottom: PreferredSize(

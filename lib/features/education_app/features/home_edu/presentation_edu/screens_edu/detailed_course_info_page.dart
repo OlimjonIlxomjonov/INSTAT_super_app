@@ -14,6 +14,14 @@ import 'package:my_template/features/education_app/features/home_edu/presentatio
 class DetailedCourseInfoPage extends StatelessWidget {
   const DetailedCourseInfoPage({super.key});
 
+  void _openPayment(BuildContext context) {
+    onlineLibStyleCustomBottomSheetWg(
+      context,
+      headerTitle: "To'lov turi",
+      child: const PaymentOpenBottomSheetWg(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -23,7 +31,6 @@ class DetailedCourseInfoPage extends StatelessWidget {
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             const DetailedCourseInfoHeaderImage(),
             const DetailedCourseInfoHeaderWg(),
-
             SliverAppBar(
               pinned: true,
               backgroundColor: AppColors.white,
@@ -32,19 +39,19 @@ class DetailedCourseInfoPage extends StatelessWidget {
               toolbarHeight: 0,
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(appH(90)),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+                child: const Padding(
+                  padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
                   child: CustomTabBarWg(
                     firstTab: "Kurs haqida",
-                    secondTab: "O’quv reja",
+                    secondTab: "O'quv reja",
                     thirdTab: "Izohlar",
                   ),
                 ),
               ),
             ),
           ],
-          body: TabBarView(
-            children: const [
+          body: const TabBarView(
+            children: [
               AboutThisCourseTab(),
               CoursePlanTab(),
               CourseCommentsTab(),
@@ -52,13 +59,7 @@ class DetailedCourseInfoPage extends StatelessWidget {
           ),
         ),
         bottomNavigationBar: CustomBottomNavContainerWg(
-          onTap: () {
-            onlineLibStyleCustomBottomSheetWg(
-              context,
-              headerTitle: 'To\'lov turi',
-              child: PaymentOpenBottomSheetWg(),
-            );
-          },
+          onTap: () => _openPayment(context),
           buttonText: 'Sotib olish - 800 000 UZS',
         ),
       ),

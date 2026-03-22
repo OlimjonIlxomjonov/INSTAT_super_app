@@ -109,7 +109,7 @@ class _AppLanguageSettingsModelComponentState
                     trailing: Checkbox(
                       value: isChecked,
                       activeColor: AppColors.primaryColor,
-                      side: BorderSide(color: AppColors.greyScale.grey300),
+                      side: BorderSide(color: AppColors.transparent),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),

@@ -3,6 +3,7 @@ import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
+import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/layout_buttons/layout_buttons_wg.dart';
@@ -34,21 +35,21 @@ class _TableEduPageState extends State<TableEduPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBarWg(
+        myTitle: 'Kalenadar',
+        customActions: [
+          LayoutButtonsWg(
+            layout: layout,
+            onChanged: (newLayout) {
+              setState(() {
+                layout = newLayout;
+              });
+            },
+          ),
+        ],
+      ),
       body: CustomScrollView(
         slivers: [
-          SliverDefaultAppBarWg(
-            myTitle: 'Kalenadar',
-            customActions: [
-              LayoutButtonsWg(
-                layout: layout,
-                onChanged: (newLayout) {
-                  setState(() {
-                    layout = newLayout;
-                  });
-                },
-              ),
-            ],
-          ),
           SliverToBoxAdapter(
             child: layout == CalendarLayout.month
                 ? const SimpleMonthCalendar()

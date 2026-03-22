@@ -18,29 +18,40 @@ class UserOnlineBooksLibPage extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(90),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
+            child: CustomTabBarWg(
+              firstTab: "Jarayonda",
+              secondTab: "Tugallangan",
+            ),
+          ),
+        ),
         body: CustomScrollView(
           slivers: [
-            SliverAppBar(
-              pinned: false,
-              floating: true,
-              backgroundColor: AppColors.white,
-              elevation: 0,
-              automaticallyImplyLeading: false,
-              toolbarHeight: 0,
-              bottom: PreferredSize(
-                preferredSize: Size.fromHeight(90),
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
-                  child: CustomTabBarWg(
-                    firstTab: "Jarayonda",
-                    secondTab: "Tugallangan",
-                  ),
-                ),
-              ),
-            ),
+            // SliverAppBar(
+            //   pinned: false,
+            //   floating: true,
+            //   backgroundColor: AppColors.white,
+            //   elevation: 0,
+            //   automaticallyImplyLeading: false,
+            //   toolbarHeight: 0,
+            //   bottom: PreferredSize(
+            //     preferredSize: Size.fromHeight(90),
+            //     child: Padding(
+            //       padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
+            //       child: CustomTabBarWg(
+            //         firstTab: "Jarayonda",
+            //         secondTab: "Tugallangan",
+            //       ),
+            //     ),
+            //   ),
+            // ),
             SliverAppBar(
               primary: false,
-              pinned: true,
+              floating: true,
+              snap: true,
               automaticallyImplyLeading: false,
               title: AppSearchbarWg(),
               toolbarHeight: 80,

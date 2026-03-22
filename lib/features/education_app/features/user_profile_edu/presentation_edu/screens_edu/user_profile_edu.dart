@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
-import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/profile_settings_tile/profile_settings_tile_wg.dart';
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/favourite_course_settings_component.dart';
@@ -16,11 +15,22 @@ class UserProfileEdu extends StatefulWidget {
 }
 
 class _UserProfileEduState extends State<UserProfileEdu> {
-  bool biometrickSwitchState = false;
+  void _openSertificatComponent() {
+    openMiniAppSheetFamily(context, child: SertificatsSettingsComponent());
+  }
+
+  void _openFavouriteComponent() {
+    openMiniAppSheetFamily(context, child: FavouriteCourseSettingsComponent());
+  }
+
+  void _openUserGroupsComponent() {
+    openMiniAppSheetFamily(context, child: UserGroupersComponent());
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBarWg(myTitle: 'Akkaunt ma’lumotlari'),
       body: CustomScrollView(
         slivers: [
           /// SETTINGS
@@ -28,33 +38,15 @@ class _UserProfileEduState extends State<UserProfileEdu> {
             child: Column(
               crossAxisAlignment: .start,
               children: [
-                Padding(
-                  padding: .only(left: appW(20), top: appH(20)),
-                  child: Text(
-                    'Akkaunt ma’lumotlari',
-                    style: AppTextStyles.source.medium(fontSize: 18),
-                  ),
-                ),
-                SizedBox(height: 5),
                 ProfileSettingsTileWg(
                   leadingIcon: IconlyLight.document,
                   title: 'Sertificatlar',
-                  onTap: () {
-                    openMiniAppSheetFamily(
-                      context,
-                      child: SertificatsSettingsComponent(),
-                    );
-                  },
+                  onTap: _openSertificatComponent,
                 ),
                 ProfileSettingsTileWg(
                   leadingIcon: IconlyLight.heart,
                   title: 'Saqlanganlar',
-                  onTap: () {
-                    openMiniAppSheetFamily(
-                      context,
-                      child: FavouriteCourseSettingsComponent(),
-                    );
-                  },
+                  onTap: _openFavouriteComponent,
                 ),
 
                 ProfileSettingsTileWg(
@@ -65,12 +57,7 @@ class _UserProfileEduState extends State<UserProfileEdu> {
                 ProfileSettingsTileWg(
                   leadingIcon: IconlyLight.user,
                   title: 'Guruhlarim',
-                  onTap: () {
-                    openMiniAppSheetFamily(
-                      context,
-                      child: UserGroupersComponent(),
-                    );
-                  },
+                  onTap: _openUserGroupsComponent,
                 ),
               ],
             ),

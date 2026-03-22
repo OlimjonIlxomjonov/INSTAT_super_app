@@ -4,70 +4,74 @@ import 'package:line_icons/line_icons.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
+import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 
-class UserOnlineBookProfileLib extends StatelessWidget {
+class UserOnlineBookProfileLib extends StatefulWidget {
   const UserOnlineBookProfileLib({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final List<IconData> leadingIcons = [
+  State<UserOnlineBookProfileLib> createState() =>
+      _UserOnlineBookProfileLibState();
+}
+
+class _UserOnlineBookProfileLibState extends State<UserOnlineBookProfileLib> {
+  late List<IconData> _leadingIcons = [];
+  late List<String> _title = [];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _leadingIcons = [
       IconlyLight.heart,
       IconlyLight.message,
       IconlyLight.location,
       LineIcons.history,
     ];
-    final List<String> title = [
+    _title = [
       'Saqlanganlar',
       'Ko’p beriladigan savollar',
       'Kutubxona manzili',
       'Xaridlar tarixi',
     ];
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBarWg(myTitle: 'Akkaunt ma’lumotlari'),
       body: CustomScrollView(
         slivers: [
-          SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: .start,
-              children: [
-                Padding(
-                  padding: AppPadding.hAndV20x20(),
-                  child: Text(
-                    'Akkaunt ma’lumotlari',
-                    style: AppTextStyles.source.medium(fontSize: 17),
+          SliverList.builder(
+            itemCount: _title.length,
+            itemBuilder: (context, index) {
+              return DecoratedBox(
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: AppColors.greyScale.grey200),
                   ),
                 ),
-                ...List.generate(4, (index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: AppColors.greyScale.grey200),
-                      ),
+                child: ListTile(
+                  onTap: () {},
+                  contentPadding: AppPadding.horizontal20x(),
+                  leading: Icon(
+                    _leadingIcons[index],
+                    color: AppColors.greyScale.grey600,
+                  ),
+                  title: Text(
+                    _title[index],
+                    style: AppTextStyles.source.medium(
+                      fontSize: 15,
+                      color: AppColors.greyScale.grey600,
                     ),
-                    child: ListTile(
-                      onTap: () {},
-                      contentPadding: AppPadding.horizontal20x(),
-                      leading: Icon(
-                        leadingIcons[index],
-                        color: AppColors.greyScale.grey600,
-                      ),
-                      title: Text(
-                        title[index],
-                        style: AppTextStyles.source.medium(
-                          fontSize: 15,
-                          color: AppColors.greyScale.grey600,
-                        ),
-                      ),
-                      trailing: Icon(
-                        IconlyLight.arrow_right_2,
-                        size: 20,
-                        color: AppColors.greyScale.grey600,
-                      ),
-                    ),
-                  );
-                }),
-              ],
-            ),
+                  ),
+                  trailing: Icon(
+                    IconlyLight.arrow_right_2,
+                    size: 20,
+                    color: AppColors.greyScale.grey600,
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),

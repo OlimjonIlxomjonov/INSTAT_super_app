@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/custom_tab_bar/custom_tab_bar_wg.dart';
@@ -29,25 +28,18 @@ class _UserCoursesEduPageState extends State<UserCoursesEduPage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(appH(90)),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+            child: CustomTabBarWg(
+              firstTab: "Jarayonda",
+              secondTab: "Tugallangan",
+            ),
+          ),
+        ),
         body: CustomScrollView(
           slivers: [
-            SliverAppBar(
-              pinned: true,
-              backgroundColor: AppColors.white,
-              elevation: 0,
-              automaticallyImplyLeading: false,
-              toolbarHeight: 0,
-              bottom: PreferredSize(
-                preferredSize: Size.fromHeight(appH(90)),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-                  child: CustomTabBarWg(
-                    firstTab: "Jarayonda",
-                    secondTab: "Tugallangan",
-                  ),
-                ),
-              ),
-            ),
             SliverToBoxAdapter(
               child: SingleChildScrollView(
                 padding: EdgeInsets.only(right: 20),

@@ -9,7 +9,7 @@ class SeeAllCourseComments extends StatelessWidget {
     return SafeArea(
       child: SingleChildScrollView(
         child: Column(
-          children: List.generate(10, (index) {
+          children: List.generate(4, (index) {
             return UserCommentsWg();
           }),
         ),

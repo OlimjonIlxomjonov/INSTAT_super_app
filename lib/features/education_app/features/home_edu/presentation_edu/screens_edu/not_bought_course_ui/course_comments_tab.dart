@@ -9,29 +9,34 @@ import 'package:my_template/features/education_app/features/home_edu/presentatio
 class CourseCommentsTab extends StatelessWidget {
   const CourseCommentsTab({super.key});
 
+  static const List<Widget> _comments = [
+    UserCommentsWg(),
+    UserCommentsWg(),
+    UserCommentsWg(),
+  ];
+
+  void _openAllComments(BuildContext context) {
+    subBottomSheetOpener(
+      context,
+      child: const SeeAllCourseComments(),
+      isExpanded: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: .only(bottom: appH(20)),
-      children: [
-        Padding(
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
           padding: AppPadding.horizontal20x(),
-          child: ExtendSectionSeeAllWg(
-            title: 'Qoldirilgan izohlar',
-            onTap: () {
-              // customBottomSheetWg(context, child: SeeAllCourseComments());
-              subBottomSheetOpener(
-                context,
-                child: SeeAllCourseComments(),
-                isExpanded: true,
-              );
-              // FamilyNavigation.familyPush(context, SeeAllCourseComments());
-            },
+          sliver: SliverToBoxAdapter(
+            child: ExtendSectionSeeAllWg(
+              title: 'Qoldirilgan izohlar',
+              onTap: () => _openAllComments(context),
+            ),
           ),
         ),
-        ...List.generate(6, (index) {
-          return UserCommentsWg();
-        }),
+        SliverList(delegate: SliverChildListDelegate.fixed(_comments)),
       ],
     );
   }

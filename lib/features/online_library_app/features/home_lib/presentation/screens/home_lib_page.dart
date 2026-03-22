@@ -41,12 +41,11 @@ class _HomeLibPageState extends State<HomeLibPage> {
       appBar: DraggableAppBarWg(onProfileTap: widget.onProfileTap),
       body: CustomScrollView(
         slivers: [
-          // MiniAppHomeHeaderWg(onTapLeadToPage: widget.onProfileTap),
-
           /// search
           SliverAppBar(
-            toolbarHeight: appH(56) + appH(24),
-            pinned: true,
+            toolbarHeight: 56 + 24,
+            floating: true,
+            snap: true,
             automaticallyImplyLeading: false,
             titleSpacing: 20,
             title: AppSearchbarWg(),

@@ -6,12 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
-import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
-import 'package:my_template/core/utils/constants/colors/app_colors.dart';
-import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
-import 'package:my_template/core/utils/logger/logger.dart';
-import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
-import 'package:my_template/core/utils/responsiveness/responsive.dart';
+import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/features/auth/presentation/widgets/continue_with_options.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/home_page.dart';
 
@@ -23,76 +18,62 @@ class LogInOptionsComponent extends StatefulWidget {
 }
 
 class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
-  bool isConnectedToInternet = false;
+  final ValueNotifier<bool> _isConnected = ValueNotifier(false);
   StreamSubscription? _internetStreamSubs;
-  final screenHeight = AppResponsiveness.screenHeight;
-
-  /// orientation check
-  final Orientation oPortrait = Orientation.portrait;
-
-  void _openPage() {
-    if (!isConnectedToInternet) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog.adaptive(
-          title: Text('Hey!'),
-          content: Text('Please check the internet connection and try again'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // Navigator.of(context).pop();
-                AppRoute.open(HomePage());
-              },
-              child: Text('OK'),
-            ),
-          ],
-        ),
-      );
-    } else {
-      AppRoute.open(HomePage());
-    }
-  }
+  late final double screenHeight;
 
   @override
   void initState() {
     super.initState();
+    screenHeight = AppResponsiveness.screenHeight;
     _internetStreamSubs = InternetConnection().onStatusChange.listen((event) {
-      logger.f(event);
-      switch (event) {
-        case InternetStatus.connected:
-          setState(() {
-            isConnectedToInternet = true;
-          });
-          break;
-        case InternetStatus.disconnected:
-          setState(() {
-            isConnectedToInternet = false;
-          });
-          break;
-      }
+      _isConnected.value = event == InternetStatus.connected;
     });
   }
 
   @override
   void dispose() {
     _internetStreamSubs?.cancel();
+    _isConnected.dispose();
     super.dispose();
+  }
+
+  void _openPage() {
+    if (!_isConnected.value) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog.adaptive(
+          title: const Text('Hey!'),
+          content: const Text('Please check your internet connection'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                AppRoute.open(const HomePage());
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      AppRoute.open(const HomePage());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
-    // final bool isTablet = Responsive.isTablet(context);
 
     return SizedBox(
       width: double.infinity,
       height: Responsive.isMobile(context) ? screenHeight / 1.6 : null,
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         child: SingleChildScrollView(
           child: Column(
-            mainAxisSize: .min,
-            crossAxisAlignment: .start,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AutoSizeText(
                 localization.getStart,
@@ -105,24 +86,24 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
                 maxLines: 2,
                 maxFontSize: 22,
                 style: AppTextStyles.source.regular(
-                  fontSize: 16,
+                  fontSize: 15,
                   color: AppColors.greyScale.grey600,
                 ),
               ),
               SizedBox(height: appH(32)),
 
-              /// LOG IN WITH ONE ID
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _openPage,
-                  child: SvgPicture.asset(AppVectors.oneIdLogo),
-                ),
+              ValueListenableBuilder<bool>(
+                valueListenable: _isConnected,
+                builder: (context, isConnected, child) {
+                  return SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(onPressed: _openPage, child: child!),
+                  );
+                },
+                child: SvgPicture.asset(AppVectors.oneIdLogo),
               ),
 
-              SizedBox(height: 32),
-
-              /// DIVIDER -OR-
+              const SizedBox(height: 32),
               Row(
                 children: [
                   Expanded(child: Divider(color: AppColors.greyScale.grey400)),
@@ -139,26 +120,18 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
                   Expanded(child: Divider(color: AppColors.greyScale.grey400)),
                 ],
               ),
-
               SizedBox(height: appH(20)),
 
-              /// Apple Account
               ContinueWithOptions(
                 iconPath: AppVectors.appleLogo,
-                onTap: () {
-                  // AppRoute.go(MyBook());
-                },
+                onTap: () {},
                 continueWithText: localization.continueWithApple,
               ),
-
-              /// Google Account
               ContinueWithOptions(
                 iconPath: AppVectors.googleLogo,
                 onTap: () {},
                 continueWithText: localization.continueWithGoogle,
               ),
-
-              /// FaceBook Account
               ContinueWithOptions(
                 iconPath: AppVectors.facebookLogo,
                 onTap: () {},

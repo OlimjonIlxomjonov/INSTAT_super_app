@@ -11,84 +11,103 @@ import 'package:my_template/features/education_app/features/home_edu/presentatio
 class AboutThisCourseTab extends StatelessWidget {
   const AboutThisCourseTab({super.key});
 
+  static const List<Widget> _studyItems = [
+    _StudyItem(),
+    _StudyItem(),
+    _StudyItem(),
+  ];
+
+  void _openSimilarCourses(BuildContext context) {
+    FamilyNavigation.familyPush(context, const SeeAllSimilarCourses());
+  }
+
+  void _openCourseDetail(BuildContext context) {
+    FamilyNavigation.familyPush(context, const DetailedCourseInfoPage());
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: .only(bottom: 20),
-      children: [
-        /// STUDIES // TITLES
-        Container(
-          margin: .only(bottom: appH(16), left: appW(20), right: appW(20)),
-          padding: .all(12),
-          decoration: BoxDecoration(
-            borderRadius: .circular(12),
-            border: .all(color: AppColors.greyScale.grey200),
-          ),
-          child: Column(
-            crossAxisAlignment: .start,
-            children: [
-              Text(
-                'Nimalarni o’rganasiz!',
-                style: AppTextStyles.source.medium(fontSize: 16),
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.only(
+              bottom: appH(16),
+              left: appW(20),
+              right: appW(20),
+            ),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.greyScale.grey200),
               ),
-              ...List.generate(
-                10,
-                (index) => ListTile(
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                  leading: Icon(
-                    Icons.check_circle,
-                    color: AppColors.primaryColor,
-                  ),
-                  title: Text(
-                    'Iqtisodiyot tarmoqlari bo‘yicha asosiy statistik ko‘rsatkichlarni tahlil qilish',
-                    style: AppTextStyles.source.regular(
-                      fontSize: 14,
-                      color: AppColors.greyScale.grey500,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Nimalarni o'rganasiz!",
+                      style: AppTextStyles.source.medium(fontSize: 16),
                     ),
-                  ),
+                    ..._studyItems,
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
         ),
 
-        /// SIMILAR COURSES
-        Padding(
-          padding: .symmetric(horizontal: appW(20)),
-          child: ExtendSectionSeeAllWg(
-            title: "O’xshash kurslar",
-            onTap: () {
-              FamilyNavigation.familyPush(context, SeeAllSimilarCourses());
-              // openMiniAppSheetFamily(context, child: SeeAllSimilarCourses());
-            },
+        SliverPadding(
+          padding: EdgeInsets.symmetric(horizontal: appW(20)),
+          sliver: SliverToBoxAdapter(
+            child: ExtendSectionSeeAllWg(
+              title: "O'xshash kurslar",
+              onTap: () => _openSimilarCourses(context),
+            ),
           ),
         ),
-        SizedBox(
-          height: 300,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(horizontal: appW(20)),
-            itemCount: 10,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: EdgeInsets.only(right: appW(12)),
-                child: SizedBox(
-                  width: appW(300),
+
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: 300,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.symmetric(horizontal: appW(20)),
+              itemCount: 3,
+              itemExtent: appW(312),
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.only(right: appW(12)),
                   child: PopularCoursesCardWg(
-                    onTap: () {
-                      FamilyNavigation.familyPush(
-                        context,
-                        DetailedCourseInfoPage(),
-                      );
-                    },
+                    onTap: () => _openCourseDetail(context),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ],
+    );
+  }
+}
+
+class _StudyItem extends StatelessWidget {
+  const _StudyItem();
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      dense: true,
+      contentPadding: EdgeInsets.zero,
+      leading: Icon(Icons.check_circle, color: AppColors.primaryColor),
+      title: Text(
+        "Iqtisodiyot tarmoqlari bo'yicha asosiy statistik ko'rsatkichlarni tahlil qilish",
+        style: AppTextStyles.source.regular(
+          fontSize: 14,
+          color: AppColors.greyScale.grey500,
+        ),
+      ),
     );
   }
 }

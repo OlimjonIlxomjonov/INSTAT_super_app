@@ -24,10 +24,9 @@ class MiniAppSheetShell extends StatefulWidget {
 class _MiniAppSheetShellState extends State<MiniAppSheetShell> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height / 1.05,
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
       child: Column(
-        // mainAxisSize: .min,
         children: [
           if (widget.showHandle)
             GestureDetector(
@@ -46,40 +45,9 @@ class _MiniAppSheetShellState extends State<MiniAppSheetShell> {
                 ),
               ),
             ),
-
-          /// HEADER
-          // if (widget.showHandle)
-          //   Padding(
-          //     padding: AppPadding.hAndV20x20(),
-          //     child: AppBar(
-          //       leading: GestureDetector(
-          //         onTap: () {},
-          //         child: CircleAvatar(
-          //           backgroundColor: AppColors.greyScale.grey300,
-          //         ),
-          //       ),
-          //       title: GestureDetector(
-          //         onTap: () {},
-          //         child: Column(
-          //           crossAxisAlignment: .start,
-          //           children: [
-          //             Text(
-          //               'Hayrli kun! ✌️',
-          //               style: AppTextStyles.source.regular(fontSize: 14),
-          //             ),
-          //             Text(
-          //               'Afzal Pulatov',
-          //               style: AppTextStyles.source.medium(fontSize: 16),
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //       actions: [Icon(IconlyLight.notification)],
-          //     ),
-          //   ),
           Expanded(
             child: ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: .circular(20)),
+              borderRadius: const BorderRadius.vertical(top: .circular(30)),
               child: widget.child,
             ),
           ),

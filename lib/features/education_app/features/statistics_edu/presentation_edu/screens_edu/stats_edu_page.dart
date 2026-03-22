@@ -3,8 +3,8 @@ import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
+import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
-import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/screens_edu/temp_detailed_user_edu.dart';
@@ -15,9 +15,10 @@ class StatsEduPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBarWg(myTitle: 'Foydalanuvchilar'),
       body: CustomScrollView(
         slivers: [
-          SliverDefaultAppBarWg(myTitle: "Foydalanuvchilar"),
+          // SliverDefaultAppBarWg(myTitle: "Foydalanuvchilar"),
           SliverPadding(
             padding: AppPadding.hAndV20x20(),
             sliver: SliverToBoxAdapter(child: AppSearchbarWg()),
@@ -29,7 +30,7 @@ class StatsEduPage extends StatelessWidget {
               onTap: () {
                 openMiniAppSheetFamily(
                   context,
-                  // child: DetailedUserStatsEduPage(),
+                  showHandler: false,
                   child: TempDetailedUserEdu(),
                 );
               },

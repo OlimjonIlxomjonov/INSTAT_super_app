@@ -49,12 +49,12 @@ class _MiniAppSectionCardState extends State<MiniAppSectionCard> {
                 fit: BoxFit.cover,
               ),
             ),
-            AutoSizeText(
+            Text(
               widget.title,
               maxLines: 1,
               overflow: .ellipsis,
               textAlign: .center,
-              style: AppTextStyles.source.regular(fontSize: 15),
+              style: AppTextStyles.source.medium(fontSize: 12),
             ),
           ],
         ),

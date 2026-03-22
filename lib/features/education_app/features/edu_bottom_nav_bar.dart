@@ -22,6 +22,7 @@ class EduBottomNavBar extends StatefulWidget {
 
 class _EduBottomNavBarState extends State<EduBottomNavBar> {
   late int _currentIndex;
+  late final List<Widget> _eduPages;
 
   void _goToTab(int index) => setState(() => _currentIndex = index);
 
@@ -29,23 +30,23 @@ class _EduBottomNavBarState extends State<EduBottomNavBar> {
   void initState() {
     super.initState();
     _currentIndex = widget.openPageByIndex ?? 0;
+
+    _eduPages = [
+      HomeEduPage(onTap: () => _goToTab(2), onProfileTap: () => _goToTab(4)),
+      const TableEduPage(),
+      const UserCoursesEduPage(),
+      const StatsEduPage(),
+      const UserProfileEdu(),
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
-
-    final List<Widget> eduPages = [
-      HomeEduPage(onTap: () => _goToTab(2), onProfileTap: () => _goToTab(4)),
-      TableEduPage(),
-      UserCoursesEduPage(),
-      StatsEduPage(),
-      UserProfileEdu(),
-    ];
     return Scaffold(
-      body: IndexedStack(index: _currentIndex, children: eduPages),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(vertical: 20),
+      // body: IndexedStack(index: _currentIndex, children: _eduPages),
+      body: _eduPages[_currentIndex],
+      bottomNavigationBar: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.only(
             topRight: Radius.circular(24),
@@ -61,29 +62,35 @@ class _EduBottomNavBarState extends State<EduBottomNavBar> {
           ],
         ),
         child: SafeArea(
-          child: GNav(
-            selectedIndex: _currentIndex,
-            onTabChange: (newIndex) => setState(() => _currentIndex = newIndex),
-            tabBorderRadius: 12,
-            curve: Curves.easeInOut,
-            duration: const Duration(milliseconds: 200),
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            gap: 8,
-            color: AppColors.greyScale.grey600,
-            activeColor: AppColors.white,
-            iconSize: 24,
-            tabBackgroundColor: AppColors.primaryColor,
-            padding: EdgeInsets.all(appW(12)),
-            tabs: [
-              GButton(icon: IconlyLight.home, text: localization.homePage),
-              GButton(
-                icon: Icons.table_chart_outlined,
-                text: localization.schedule,
-              ),
-              GButton(icon: LineIcons.book, text: localization.myCourses),
-              GButton(icon: LineIcons.pieChart, text: localization.statistics),
-              GButton(icon: IconlyLight.profile, text: localization.profile),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: GNav(
+              selectedIndex: _currentIndex,
+              onTabChange: _goToTab,
+              tabBorderRadius: 12,
+              curve: Curves.easeInOut,
+              duration: const Duration(milliseconds: 200),
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              gap: 8,
+              color: AppColors.greyScale.grey600,
+              activeColor: AppColors.white,
+              iconSize: 24,
+              tabBackgroundColor: AppColors.primaryColor,
+              padding: EdgeInsets.all(appW(12)),
+              tabs: [
+                GButton(icon: IconlyLight.home, text: localization.homePage),
+                GButton(
+                  icon: Icons.table_chart_outlined,
+                  text: localization.schedule,
+                ),
+                GButton(icon: LineIcons.book, text: localization.myCourses),
+                GButton(
+                  icon: LineIcons.pieChart,
+                  text: localization.statistics,
+                ),
+                GButton(icon: IconlyLight.profile, text: localization.profile),
+              ],
+            ),
           ),
         ),
       ),

@@ -18,44 +18,37 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  late final GridBackgroundPainter _painter;
+
   @override
   void initState() {
     super.initState();
+    _painter = GridBackgroundPainter(
+      backgroundColor: AppColors.splashBackgroundColor,
+      lineColor: Colors.white,
+      cellSize: appW(100),
+      majorEvery: 4,
+      minorOpacity: 0.06,
+      majorOpacity: 0.12,
+      strokeWidth: 1,
+    );
     _timerDirection();
   }
 
   Future<void> _timerDirection() async {
-    Future.delayed(Duration(seconds: 2), () {
-      AppRoute.open(OnboardingPage());
-    });
+    await Future.delayed(const Duration(seconds: 2));
+    if (!mounted) return;
+    AppRoute.open(const OnboardingPage());
   }
 
   @override
   Widget build(BuildContext context) {
-    TDeviceUtils.systemNavigationBar(
-      AppColors.splashBackgroundColor,
-      isBright: true,
-    );
-    // TDeviceUtils.setStatusBarColor(AppColors.transparent, darkIcons: true);
-
     return Scaffold(
       backgroundColor: AppColors.splashBackgroundColor,
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          Positioned.fill(
-            child: CustomPaint(
-              painter: GridBackgroundPainter(
-                backgroundColor: AppColors.splashBackgroundColor,
-                lineColor: Colors.white,
-                cellSize: appW(100),
-                majorEvery: 4,
-                minorOpacity: 0.06,
-                majorOpacity: 0.12,
-                strokeWidth: 1,
-              ),
-            ),
-          ),
+          Positioned.fill(child: CustomPaint(painter: _painter)),
 
           //  logo
           Center(child: SvgPicture.asset(AppVectors.mainAppLogo)),

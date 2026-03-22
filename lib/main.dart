@@ -10,6 +10,6 @@ Future<void> main() async {
 
   await Hive.initFlutter();
   await Hive.openBox('authBox');
-  // runApp(DevicePreview(builder: (context) => MyApp()));
+  //! runApp(DevicePreview(builder: (context) => MyApp()));
   runApp(MyApp());
 }

@@ -15,6 +15,12 @@ class LogInOptionsPage extends StatefulWidget {
 
 class _LogInOptionsPageState extends State<LogInOptionsPage> {
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    precacheImage(const AssetImage(AppImages.onboardingLogIn), context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final screenHeight = AppResponsiveness.screenHeight;
     TDeviceUtils.systemNavigationBar(AppColors.white);

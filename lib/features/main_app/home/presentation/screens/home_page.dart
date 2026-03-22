@@ -13,41 +13,67 @@ import 'package:my_template/features/main_app/home/presentation/screens/drawer/m
 import 'package:my_template/features/main_app/home/presentation/widgets/model/mini_app_model.dart';
 import 'package:my_template/features/online_library_app/features/online_lib_bottom_nav_bar.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-    final localization = AppLocalizations.of(context)!;
-    TDeviceUtils.setStatusBarColor(AppColors.white, darkIcons: true);
-    TDeviceUtils.systemNavigationBar(AppColors.white);
+  State<HomePage> createState() => _HomePageState();
+}
 
-    final List<MiniAppModel> sections = [
+class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  late List<MiniAppModel> _sections;
+
+  void _openEduApp(BuildContext context) {
+    openMiniAppSheetFamily(
+      context,
+      child: const EduBottomNavBar(),
+      isTransparent: false,
+      showHandler: false,
+    );
+  }
+
+  void _openOnlineLibraryApp(BuildContext context) {
+    openMiniAppSheetFamily(
+      showHandler: false,
+      isTransparent: false,
+      context,
+      child: const OnlineLibBottomNavBar(),
+    );
+  }
+
+  void _openArticlesApp(BuildContext context) {
+    openMiniAppSheetFamily(
+      isTransparent: false,
+      showHandler: false,
+      context,
+      child: const ArticlesBottomNavBar(),
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    precacheImage(const AssetImage(AppImages.onlineEdu), context);
+    precacheImage(const AssetImage(AppImages.bookSection), context);
+    precacheImage(const AssetImage(AppImages.mikroMalumotlar), context);
+    precacheImage(const AssetImage(AppImages.elektronJurnal), context);
+
+    final localization = AppLocalizations.of(context)!;
+
+    _sections = [
       MiniAppModel(
         mainImage: AppImages.onlineEdu,
         backgroundImage: AppVectors.onlineEduBack,
         title: localization.onlineEducation,
-        onTap: (context) {
-          openMiniAppSheetFamily(
-            context,
-            child: EduBottomNavBar(),
-            isTransparent: false,
-          );
-        },
+        onTap: (context) => _openEduApp(context),
       ),
       MiniAppModel(
         mainImage: AppImages.bookSection,
         backgroundImage: AppVectors.bookSectioBack,
         title: localization.digitalLibrary,
-        onTap: (context) {
-          openMiniAppSheetFamily(
-            // showHandler: false,
-            isTransparent: false,
-            context,
-            child: OnlineLibBottomNavBar(),
-          );
-        },
+        onTap: (context) => _openOnlineLibraryApp(context),
       ),
       MiniAppModel(
         mainImage: AppImages.mikroMalumotlar,
@@ -65,29 +91,26 @@ class HomePage extends StatelessWidget {
         mainImage: AppImages.bookSection,
         backgroundImage: AppVectors.elektronJurnalBack,
         title: 'Ilmiy maqolalar',
-        onTap: (context) {
-          openMiniAppSheetFamily(
-            isTransparent: false,
-            context,
-            child: ArticlesBottomNavBar(),
-          );
-        },
+        onTap: (context) => _openArticlesApp(context),
       ),
     ];
+  }
 
-    /// DEPENDING ON SCREEN SIZE
+  @override
+  Widget build(BuildContext context) {
+    /// DEPENDING ON SCREEN SIZE & Orientation
     return Responsive(
       mobile: Scaffold(
         key: scaffoldKey,
-        drawer: MainAppDrawer(),
+        drawer: const MainAppDrawer(),
         body: MobileUiScreenComponent(
-          sections: sections,
+          sections: _sections,
           scaffoldKey: scaffoldKey,
         ),
       ),
       tablet: Scaffold(
         key: scaffoldKey,
-        drawer: MainAppDrawer(),
+        drawer: const MainAppDrawer(),
 
         /// HEADER LOGO
         appBar: AppBar(
@@ -95,15 +118,18 @@ class HomePage extends StatelessWidget {
             onPressed: () {
               scaffoldKey.currentState?.openDrawer();
             },
-            icon: Icon(Icons.menu),
+            icon: const Icon(Icons.menu),
           ),
           title: SvgPicture.asset(AppVectors.homeInstatLogo),
           centerTitle: false,
           actions: [
-            IconButton(onPressed: () {}, icon: Icon(IconlyLight.notification)),
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(IconlyLight.notification),
+            ),
           ],
         ),
-        body: TabletUiScreenComponent(sections: sections),
+        body: TabletUiScreenComponent(sections: _sections),
       ),
     );
   }

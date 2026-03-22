@@ -21,16 +21,15 @@ class ArticlesHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      /// HEADER USER PROFILE (on click leads to profile page)
       appBar: DraggableAppBarWg(onProfileTap: onProfileTap),
       body: CustomScrollView(
         slivers: [
-          /// HEADER USER PROFILE (on click leads to profile page)
-          // MiniAppHomeHeaderWg(onTapLeadToPage: onProfileTap),
-
           /// global search bar
           SliverAppBar(
             toolbarHeight: 56 + 24,
-            pinned: true,
+            floating: true,
+            snap: true,
             automaticallyImplyLeading: false,
             titleSpacing: 20,
             title: AppSearchbarWg(),
