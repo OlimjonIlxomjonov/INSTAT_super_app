@@ -1,4 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:my_template/core/routes/route_generator.dart';
+import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
+import 'package:my_template/features/auth/presentation/screens/log_in_options_page.dart';
 
 import '../utils/constants/api_urls/api_urls.dart';
 
@@ -25,29 +28,42 @@ class DioClient {
     );
 
     /// {TOKEN}
-    // _dio.interceptors.add(
-    //   InterceptorsWrapper(
-    //     onRequest: (options, handler) async {
-    //       final token = await TokenStorageServiceImpl().getAccessToken();
-    //
-    //       if (token != null && token.isNotEmpty) {
-    //         options.headers['Authorization'] = 'Bearer $token';
-    //       }
-    //
-    //       return handler.next(options);
-    //     },
-    //   ),
-    // );
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          final token = TokenStorageServiceImpl().getAccessToken();
+          if (token != null && token.isNotEmpty) {
+            options.headers['Authorization'] = 'Bearer $token';
+          }
+          return handler.next(options);
+        },
+        onError: (DioException error, handler) async {
+          final token = TokenStorageServiceImpl().getAccessToken();
+          final statusCode = error.response?.statusCode;
+
+          final isUnauthorized = statusCode == 401;
+          final hasToken = token != null && token.isNotEmpty;
+
+          if (isUnauthorized && hasToken) {
+            await TokenStorageServiceImpl().deleteAccessToken();
+
+            AppRoute.open(const LogInOptionsPage());
+          }
+
+          return handler.next(error);
+        },
+      ),
+    );
   }
 
   static final DioClient _instance = DioClient._internal();
 
   factory DioClient() => _instance;
 
-  /// {OPTIONAL}
-  // void setToken(String token) {
-  //   _dio.options.headers['Authorization'] = "Bearer $token";
-  // }
+  ///
+  void setToken(String token) {
+    _dio.options.headers['Authorization'] = "Bearer $token";
+  }
 
   /// GET
   Future<Response> get(String path, {Map<String, dynamic>? queryParams}) async {

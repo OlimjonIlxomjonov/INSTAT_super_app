@@ -1,95 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
+import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
+import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
 
 class MinimalCoursesCardWg extends StatelessWidget {
   final VoidCallback onTap;
+  final CourseEntity data;
+  final String categoryName;
 
-  const MinimalCoursesCardWg({super.key, required this.onTap});
+  const MinimalCoursesCardWg({
+    super.key,
+    required this.onTap,
+    required this.data,
+    required this.categoryName,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: .only(bottom: appH(20)),
-        padding: .all(8),
+        margin: EdgeInsets.only(bottom: appH(20)),
+        padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
           border: Border.all(color: AppColors.greyScale.grey200),
-          borderRadius: .circular(16),
+          borderRadius: BorderRadius.circular(16),
         ),
-        child: Row(
-          spacing: appW(10),
-          crossAxisAlignment: .start,
-          children: [
-            ClipRRect(
-              borderRadius: .circular(12),
-              child: Image.asset(
-                width: appW(93),
-                height: appH(75),
-                'assets/home_page/temp_course_card_popular.png',
-                fit: BoxFit.cover,
+        child: IntrinsicHeight(
+          child: Row(
+            spacing: appW(10),
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(data.thumbnail, fit: BoxFit.cover),
+                ),
               ),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: .start,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          "Uy xo’jaliklarini tanlanma kuzatuvini tashkil etish va o’tkazish",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTextStyles.source.medium(fontSize: 15),
+              Expanded(
+                flex: 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            data.name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyles.source.medium(fontSize: 15),
+                          ),
                         ),
-                      ),
-                      SizedBox(width: appW(10)),
-                      Container(
-                        padding: .all(2),
-                        decoration: BoxDecoration(
-                          border: .all(color: AppColors.greyScale.grey200),
-                          borderRadius: .circular(6),
+                        const SizedBox(width: 10),
+                        Container(
+                          padding: EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: AppColors.greyScale.grey200,
+                            ),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Icon(IconlyLight.heart),
                         ),
-                        child: Icon(IconlyLight.heart),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    'Kategoriya nomi',
-                    style: AppTextStyles.source.medium(
-                      fontSize: 12,
-                      color: AppColors.greyScale.grey600,
+                      ],
                     ),
-                  ),
-                  SizedBox(height: appH(10)),
-                  Row(
-                    children: [
-                      Icon(Icons.star, color: AppColors.orange, size: 18),
-                      Flexible(
-                        child: Text(
-                          ' 4,5 (832)',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTextStyles.source.regular(fontSize: 13),
-                        ),
+                    Text(
+                      categoryName,
+                      style: AppTextStyles.source.medium(
+                        fontSize: 12,
+                        color: AppColors.primaryColor,
                       ),
-                      SizedBox(width: appW(8)),
-                      Icon(IconlyLight.document, size: 18),
-                      Text(
-                        ' 12 ta',
-                        style: AppTextStyles.source.regular(fontSize: 13),
+                    ),
+                    const SizedBox(height: 5),
+                    if (data.userOrder?.status == 'paid')
+                      Row(
+                        spacing: 10,
+                        children: [
+                          Expanded(
+                            child: CustomLinearIndicatorWg(
+                              progressIndicator: data.userOrder?.progress ?? 0,
+                            ),
+                          ),
+                          Text('0%', style: CustomTextStyles.h4),
+                        ],
                       ),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

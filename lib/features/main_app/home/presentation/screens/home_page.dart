@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/assets/app_images.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/home_event.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/articles_bottom_nav_bar.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/components/mobile_ui_screen_component.dart';
@@ -23,6 +26,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   late List<MiniAppModel> _sections;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<UserMeBloc>().add(UserMeEvent());
+  }
 
   void _openEduApp(BuildContext context) {
     openMiniAppSheetFamily(

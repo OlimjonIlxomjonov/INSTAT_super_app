@@ -4,7 +4,9 @@ import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 
 class DetailedCourseInfoHeaderImage extends StatelessWidget {
-  const DetailedCourseInfoHeaderImage({super.key});
+  final String imagePath;
+
+  const DetailedCourseInfoHeaderImage({super.key, required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +15,7 @@ class DetailedCourseInfoHeaderImage extends StatelessWidget {
       pinned: false,
       flexibleSpace: FlexibleSpaceBar(
         background: RepaintBoundary(
-          child: Image.asset(
-            filterQuality: .low,
-            'assets/home_page/temp_course_dummy.png',
-            fit: .cover,
-          ),
+          child: Image.network(imagePath, fit: .cover),
         ),
       ),
       leading: Padding(

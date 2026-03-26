@@ -29,8 +29,8 @@ class DetailedCourseInfoPage extends StatelessWidget {
       child: Scaffold(
         body: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            const DetailedCourseInfoHeaderImage(),
-            const DetailedCourseInfoHeaderWg(),
+            // const DetailedCourseInfoHeaderImage(),
+            // const DetailedCourseInfoHeaderWg(),
             SliverAppBar(
               pinned: true,
               backgroundColor: AppColors.white,

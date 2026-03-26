@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:iconly/iconly.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_template/core/routes/route_generator.dart';
+import 'package:my_template/core/utils/constants/assets/app_animations.dart';
 import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
@@ -139,7 +140,7 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
                   width: 230,
                   height: 174,
                   child: Lottie.asset(
-                    'assets/animation/Trophy.json',
+                    AppAnimations.trophyAnimation,
                     repeat: false,
                     fit: BoxFit.cover,
                   ),

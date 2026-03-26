@@ -5,12 +5,14 @@ import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart'
 class CustomTabBarWg extends StatelessWidget {
   final String firstTab, secondTab;
   final String? thirdTab;
+  final TabController? controller;
 
   const CustomTabBarWg({
     super.key,
     required this.firstTab,
     required this.secondTab,
     this.thirdTab,
+    this.controller,
   });
 
   @override
@@ -22,6 +24,7 @@ class CustomTabBarWg extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: TabBar(
+        controller: controller,
         indicatorWeight: 0,
         dividerColor: Colors.transparent,
         splashFactory: NoSplash.splashFactory,

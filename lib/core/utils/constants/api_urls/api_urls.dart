@@ -1,3 +1,16 @@
-abstract class ApiUrls {
-  static const baseUrl = 'https://example.com';
+class ApiUrls {
+  ApiUrls._();
+
+  static const baseUrl = 'https://test.avacoder.uz/api/';
+
+  /// user
+  static const me = 'me';
+
+  /// courses
+  static const courses = 'courses/';
+  static const userCourses = 'courses/items/my/?status=';
+  static const userCategoryById = 'categories/';
+
+  /// lessons topic
+  static const lessonsTopic = '/course_blocks/items/all-active/';
 }

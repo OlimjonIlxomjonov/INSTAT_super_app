@@ -22,16 +22,17 @@ class MobileUiScreenComponent extends StatelessWidget {
   });
 
   void _goToPageActiveCourses(BuildContext context) {
-    openMiniAppSheetFamily(
-      showHandler: false,
-      context,
-      child: const DetailedUserBoughtCoursesEduPage(),
-    );
+    // openMiniAppSheetFamily(
+    //   showHandler: false,
+    //   context,
+    //   child: const DetailedUserBoughtCoursesEduPage(),
+    // );
   }
 
   void _goToUserCourses(BuildContext context) {
     openMiniAppSheetFamily(
       isTransparent: false,
+      showHandler: false,
       context,
       child: const EduBottomNavBar(openPageByIndex: 2),
     );

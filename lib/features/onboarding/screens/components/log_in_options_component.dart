@@ -5,8 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
+import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/routes/route_generator.dart';
+import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
 import 'package:my_template/core/utils/app_utils.dart';
+import 'package:my_template/core/utils/logger/logger.dart';
+import 'package:my_template/features/auth/presentation/auth_service/auth_service.dart';
+import 'package:my_template/features/auth/presentation/data_source/one_id_log_in.dart';
 import 'package:my_template/features/auth/presentation/widgets/continue_with_options.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/home_page.dart';
 
@@ -38,27 +43,29 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
     super.dispose();
   }
 
-  void _openPage() {
-    if (!_isConnected.value) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog.adaptive(
-          title: const Text('Hey!'),
-          content: const Text('Please check your internet connection'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                AppRoute.open(const HomePage());
-              },
-              child: const Text('OK'),
-            ),
-          ],
+  void oneIdLogin() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => OneIdLoginPage(
+          authService: OneIdAuthServiceImpl(
+            tokenStorage: TokenStorageServiceImpl(),
+            dioClient: DioClient(),
+          ),
+          onSuccess: () {
+            final token = TokenStorageServiceImpl().getAccessToken();
+            AppRoute.open(const HomePage());
+            logger.i(token);
+          },
+          onFailure: () {
+            Navigator.of(context).pop();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Login failed. Try again.')),
+            );
+          },
         ),
-      );
-    } else {
-      AppRoute.open(const HomePage());
-    }
+      ),
+    );
   }
 
   @override
@@ -97,7 +104,7 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
                 builder: (context, isConnected, child) {
                   return SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(onPressed: _openPage, child: child!),
+                    child: ElevatedButton(onPressed: oneIdLogin, child: child!),
                   );
                 },
                 child: SvgPicture.asset(AppVectors.oneIdLogo),

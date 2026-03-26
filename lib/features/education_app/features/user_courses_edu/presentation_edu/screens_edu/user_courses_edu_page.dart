@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/ui_states/empty_state.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/custom_tab_bar/custom_tab_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/title_with_layout_selector_wg.dart';
-import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
-import 'package:my_template/core/utils/widgets/popular_courses_card/expanded_courses_card_wg.dart';
-import 'package:my_template/core/utils/widgets/popular_courses_card/minimal_courses_card_wg.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/courses_in_progress_compnent.dart';
 
 class UserCoursesEduPage extends StatefulWidget {
   const UserCoursesEduPage({super.key});
@@ -16,65 +14,85 @@ class UserCoursesEduPage extends StatefulWidget {
   State<UserCoursesEduPage> createState() => _UserCoursesEduPageState();
 }
 
-class _UserCoursesEduPageState extends State<UserCoursesEduPage> {
+class _UserCoursesEduPageState extends State<UserCoursesEduPage>
+    with SingleTickerProviderStateMixin {
   CoursesLayout layout = CoursesLayout.grid;
+  late TabController _tabController;
 
-  void sheetOpener() {
-    openMiniAppSheetFamily(context, child: DetailedUserBoughtCoursesEduPage());
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(appH(90)),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-            child: CustomTabBarWg(
-              firstTab: "Jarayonda",
-              secondTab: "Tugallangan",
-            ),
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(appH(90)),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+          child: CustomTabBarWg(
+            controller: _tabController,
+            firstTab: "Jarayonda",
+            secondTab: "Tugallangan",
           ),
         ),
-        body: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.only(right: 20),
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: List.generate(5, (index) {
-                    return EduCategoriesWg();
-                  }),
-                ),
-              ),
-            ),
+      ),
+      body: Column(
+        children: [
+          // Categories row
+          SingleChildScrollView(
+            padding: EdgeInsets.only(right: 20),
+            scrollDirection: Axis.horizontal,
+            child: Row(children: List.generate(5, (_) => EduCategoriesWg())),
+          ),
 
-            SliverPadding(
-              padding: .symmetric(horizontal: appW(20)),
-              sliver: SliverToBoxAdapter(
-                child: TitleWithLayoutSelectorWg(
-                  layout: layout,
-                  onChanged: (newLayout) {
-                    setState(() {
-                      layout = newLayout;
-                    });
-                  },
+          // Layout selector
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: TitleWithLayoutSelectorWg(
+              prefsKey: "user_courses",
+              onChanged: (newLayout) => setState(() => layout = newLayout),
+            ),
+          ),
+
+          // Tab content
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                /// Tab 1 — In Progress
+                CustomScrollView(
+                  slivers: [
+                    CoursesInProgressComponent(layout: layout, state: 'all'),
+                  ],
                 ),
-              ),
+
+                /// Tab 2 — Finished
+                // CustomScrollView(
+                //   slivers: [
+                //     CoursesInProgressComponent(
+                //       layout: layout,
+                //       state: 'finished',
+                //     ),
+                //   ],
+                // ),
+                SingleChildScrollView(
+                  child: EmptyState(
+                    message: 'Hech qanday kurs hali tugatilmagan!',
+                  ),
+                ),
+              ],
             ),
-            SliverPadding(
-              padding: .symmetric(horizontal: appW(20)),
-              sliver: SliverToBoxAdapter(
-                child: layout == CoursesLayout.grid
-                    ? ExpandedCoursesCardWg(onTap: sheetOpener)
-                    : MinimalCoursesCardWg(onTap: sheetOpener),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

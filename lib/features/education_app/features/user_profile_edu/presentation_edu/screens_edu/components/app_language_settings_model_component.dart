@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:my_template/core/common/flush_bar/success_flush_bar.dart';
+import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/language_storage/language_service_storage.dart';
 import 'package:my_template/core/streams/general_streams.dart';
 import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
@@ -20,18 +22,13 @@ class _AppLanguageSettingsModelComponentState
     extends State<AppLanguageSettingsModelComponent> {
   int isIndex = 0;
 
-  final List<String> languageTitle = ['O’zbek tili', 'Ingliz tili', 'Rus tili'];
+  final List<String> languageTitle = ['O’zbek tili', 'Rus tili'];
   final List<String> languageLeading = [
     AppVectors.uzbekistanFlag,
-    AppVectors.ukFlag,
     AppVectors.russiaFlag,
   ];
 
-  final List<Locale> languageLocale = const [
-    Locale('uz'),
-    Locale('uz'),
-    Locale('ru'),
-  ];
+  final List<Locale> languageLocale = const [Locale('uz'), Locale('ru')];
 
   @override
   void initState() {
@@ -41,9 +38,6 @@ class _AppLanguageSettingsModelComponentState
 
   Future<void> _loadSavedLanguage() async {
     final savedLocale = await LanguageServiceStorage.loadLocale();
-
-    // if (savedLocale == null) return;
-
     final index = languageLocale.indexWhere(
       (locale) => locale.languageCode == savedLocale.languageCode,
     );
@@ -61,6 +55,8 @@ class _AppLanguageSettingsModelComponentState
     final currentLocale = languageLocale[index];
     await LanguageServiceStorage.saveLocale(currentLocale);
     GeneralStream.languageStream.add(currentLocale);
+    AppRoute.close();
+    successFlushBar(context, 'Success!');
   }
 
   @override

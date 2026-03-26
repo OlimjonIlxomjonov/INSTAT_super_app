@@ -19,10 +19,10 @@ class TabletUiScreenComponent extends StatelessWidget {
     final localization = AppLocalizations.of(context)!;
 
     void goToPageActiveCourses() {
-      openMiniAppSheetFamily(
-        context,
-        child: DetailedUserBoughtCoursesEduPage(),
-      );
+      // openMiniAppSheetFamily(
+      //   context,
+      //   child: DetailedUserBoughtCoursesEduPage(),
+      // );
     }
 
     return SafeArea(

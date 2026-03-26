@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:my_template/core/routes/route_generator.dart';
+import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
 import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+import 'package:my_template/features/main_app/home/presentation/screens/home_page.dart';
 import 'package:my_template/features/onboarding/screens/onboarding_page.dart';
 import 'package:my_template/features/splash/presentation/screens/grid_background_painter.dart';
 
@@ -38,7 +40,15 @@ class _SplashPageState extends State<SplashPage> {
   Future<void> _timerDirection() async {
     await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
-    AppRoute.open(const OnboardingPage());
+
+    final token = await TokenStorageServiceImpl().getAccessToken();
+    final isLoggedIn = token != null && token.isNotEmpty;
+
+    if (isLoggedIn) {
+      AppRoute.open(const HomePage());
+    } else {
+      AppRoute.open(const OnboardingPage());
+    }
   }
 
   @override

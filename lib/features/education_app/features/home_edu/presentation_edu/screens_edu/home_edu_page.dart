@@ -23,10 +23,10 @@ class HomeEduPage extends StatelessWidget {
   });
 
   void _goToPageActiveCourses(BuildContext context) {
-    openMiniAppSheetFamily(
-      context,
-      child: const DetailedUserBoughtCoursesEduPage(),
-    );
+    // openMiniAppSheetFamily(
+    //   context,
+    //   child: const DetailedUserBoughtCoursesEduPage(),
+    // );
   }
 
   void _goToAllCourses(BuildContext context) {

@@ -67,18 +67,18 @@ class _ShowAllCoursesBottomSheetPageState
                   children: [
                     TitleWithLayoutSelectorWg(
                       onChanged: (v) => setState(() => layout = v),
-                      layout: layout,
+                      prefsKey: 'all_courses',
                     ),
-                    Column(
-                      children: List.generate(5, (index) {
-                        return Skeletonizer(
-                          enabled: false,
-                          child: layout == CoursesLayout.grid
-                              ? ExpandedCoursesCardWg(onTap: goToPage)
-                              : MinimalCoursesCardWg(onTap: goToPage),
-                        );
-                      }),
-                    ),
+                    // Column(
+                    //   children: List.generate(5, (index) {
+                    //     return Skeletonizer(
+                    //       enabled: false,
+                    //       child: layout == CoursesLayout.grid
+                    //           ? ExpandedCoursesCardWg(onTap: goToPage)
+                    //           : MinimalCoursesCardWg(onTap: goToPage),
+                    //     );
+                    //   }),
+                    // ),
                   ],
                 ),
               ),

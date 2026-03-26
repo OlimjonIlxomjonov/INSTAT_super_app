@@ -24,17 +24,17 @@ class SeeAllSimilarCourses extends StatelessWidget {
                 children: [
                   AppSearchbarWg(),
                   TitleWithLayoutSelectorWg(
-                    layout: CoursesLayout.list,
+                    prefsKey: 'expanded',
                     onChanged: (v) {},
                   ),
-                  ExpandedCoursesCardWg(
-                    onTap: () {
-                      FamilyNavigation.familyPush(
-                        context,
-                        DetailedCourseInfoPage(),
-                      );
-                    },
-                  ),
+                  // ExpandedCoursesCardWg(
+                  //   onTap: () {
+                  //     FamilyNavigation.familyPush(
+                  //       context,
+                  //       DetailedCourseInfoPage(),
+                  //     );
+                  //   },
+                  // ),
                 ],
               ),
             ),

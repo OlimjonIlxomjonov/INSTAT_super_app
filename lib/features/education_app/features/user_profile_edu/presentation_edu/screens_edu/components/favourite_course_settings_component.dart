@@ -32,33 +32,33 @@ class _FavouriteCourseSettingsComponentState
               child: Column(
                 children: [
                   TitleWithLayoutSelectorWg(
-                    layout: layout,
+                    prefsKey: 'another_screen',
                     onChanged: (newLayout) {
                       setState(() {
                         layout = newLayout;
                       });
                     },
                   ),
-
-                  layout == CoursesLayout.grid
-                      ? ExpandedCoursesCardWg(
-                          onTap: () {
-                            openMiniAppSheetFamily(
-                              context,
-                              showHandler: false,
-                              child: DetailedCourseInfoPage(),
-                            );
-                          },
-                        )
-                      : MinimalCoursesCardWg(
-                          onTap: () {
-                            openMiniAppSheetFamily(
-                              context,
-                              showHandler: false,
-                              child: DetailedCourseInfoPage(),
-                            );
-                          },
-                        ),
+                  //
+                  // layout == CoursesLayout.grid
+                  //     ? ExpandedCoursesCardWg(
+                  //         onTap: () {
+                  //           openMiniAppSheetFamily(
+                  //             context,
+                  //             showHandler: false,
+                  //             child: DetailedCourseInfoPage(),
+                  //           );
+                  //         },
+                  //       )
+                  //     : MinimalCoursesCardWg(
+                  //         onTap: () {
+                  //           openMiniAppSheetFamily(
+                  //             context,
+                  //             showHandler: false,
+                  //             child: DetailedCourseInfoPage(),
+                  //           );
+                  //         },
+                  //       ),
                 ],
               ),
             ),

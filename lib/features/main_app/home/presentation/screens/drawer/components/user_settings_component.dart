@@ -1,12 +1,17 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/routes/route_generator.dart';
+import 'package:my_template/core/services/token_storage/token_storage_service.dart';
+import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
+import 'package:my_template/features/auth/presentation/screens/log_in_options_page.dart';
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/app_language_settings_model_component.dart';
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/edu_tickets/edu_tickets_settings_component.dart';
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/notification_settings_edu_component.dart';
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/widgets_edu/dot_swtich_wg.dart';
 import "package:my_template/core/utils/app_utils.dart";
 import "package:my_template/core/utils/widgets/app_widgets.dart";
+import 'package:my_template/features/onboarding/screens/components/log_in_options_component.dart';
 
 class UserSettingsComponent extends StatefulWidget {
   const UserSettingsComponent({super.key});
@@ -60,35 +65,6 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
             );
           },
         ),
-
-        /// BOSHQALAR
-        // Padding(
-        //   padding: .only(left: appW(20), top: appH(20)),
-        //   child: Text(
-        //     'Boshqalar',
-        //     style: AppTextStyles.source.medium(fontSize: 18),
-        //   ),
-        // ),
-        // ProfileSettingsTileWg(
-        //   leadingIcon: IconlyLight.document,
-        //   title: 'Sertificatlar',
-        //   onTap: () {
-        //     openMiniAppSheet(
-        //       context,
-        //       child: SertificatsSettingsComponent(),
-        //     );
-        //   },
-        // ),
-        // ProfileSettingsTileWg(
-        //   leadingIcon: IconlyLight.heart,
-        //   title: 'Saqlanganlar',
-        //   onTap: () {
-        //     openMiniAppSheet(
-        //       context,
-        //       child: FavouriteCourseSettingsComponent(),
-        //     );
-        //   },
-        // ),
         ProfileSettingsTileWg(
           leadingIcon: Icons.list_alt,
           title: 'Tikketlar',
@@ -122,7 +98,10 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
           leadingIcon: IconlyLight.logout,
           title: 'Akkauntdan chiqish',
           trailingIcon: SizedBox.shrink(),
-          onTap: () {},
+          onTap: () async {
+            await TokenStorageServiceImpl().deleteAccessToken();
+            AppRoute.open(LogInOptionsPage());
+          },
           isLogOut: true,
         ),
 

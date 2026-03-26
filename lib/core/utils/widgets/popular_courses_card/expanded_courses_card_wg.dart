@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import 'package:my_template/core/utils/constants/colors/app_colors.dart';
-import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
-import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+import 'package:my_template/core/utils/app_utils.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
 
 class ExpandedCoursesCardWg extends StatelessWidget {
   final VoidCallback onTap;
+  final CourseEntity entity;
+  final String categoryName;
 
-  const ExpandedCoursesCardWg({super.key, required this.onTap});
+  const ExpandedCoursesCardWg({
+    super.key,
+    required this.onTap,
+    required this.entity,
+    required this.categoryName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,39 +22,36 @@ class ExpandedCoursesCardWg extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Column(
-          crossAxisAlignment: .start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: .circular(12),
-                  child: Image.asset(
-                    'assets/home_page/temp_course_card_popular.png',
-                    fit: BoxFit.cover,
-                  ),
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(entity.thumbnail, fit: BoxFit.cover),
                 ),
                 Row(
-                  mainAxisAlignment: .spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      margin: .only(left: appW(12), top: appH(12)),
+                      margin: EdgeInsets.only(left: appW(12), top: appH(12)),
                       decoration: BoxDecoration(
-                        borderRadius: .circular(12),
+                        borderRadius: BorderRadius.circular(12),
                         color: AppColors.white,
                       ),
                       child: Row(
                         children: [
                           Icon(Icons.star, color: AppColors.yellow),
-                          Text('4,5'),
+                          Text('?'),
                         ],
                       ),
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      margin: .only(right: appW(12), top: appH(12)),
+                      margin: EdgeInsets.only(right: appW(12), top: appH(12)),
                       decoration: BoxDecoration(
-                        borderRadius: .circular(12),
+                        borderRadius: BorderRadius.circular(12),
                         color: AppColors.white,
                       ),
                       child: Icon(IconlyLight.heart),
@@ -59,7 +62,7 @@ class ExpandedCoursesCardWg extends StatelessWidget {
             ),
             SizedBox(height: appH(12)),
             Text(
-              'Kategoriya nomi',
+              categoryName,
               style: AppTextStyles.source.medium(
                 fontSize: 12,
                 color: AppColors.primaryColor,
@@ -67,23 +70,24 @@ class ExpandedCoursesCardWg extends StatelessWidget {
             ),
             SizedBox(height: appH(4)),
             Text(
+              entity.name,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              "Uy xo’jaliklarini tanlanma kuzatuvini tashkil etish va o’tkazish",
               style: AppTextStyles.source.medium(fontSize: 15),
             ),
             SizedBox(height: appH(8)),
             Row(
+              spacing: 5,
               children: [
                 Icon(IconlyLight.time_circle),
                 Text(
-                  ' 5 soat 20 daqiqa',
+                  formatDuration(entity.totalDuration),
                   style: AppTextStyles.source.regular(fontSize: 13),
                 ),
                 SizedBox(width: appW(12)),
                 Icon(IconlyLight.document),
                 Text(
-                  ' 12 ta dars',
+                  '${entity.lessonsCount} ta dars',
                   style: AppTextStyles.source.regular(fontSize: 13),
                 ),
               ],

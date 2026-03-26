@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
+import 'package:my_template/core/utils/general_widgets/html_content_wg/html_content_wg.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
 
 class DetailedCourseInfoHeaderWg extends StatelessWidget {
-  const DetailedCourseInfoHeaderWg({super.key});
+  final String categoryName;
+  final CourseEntity data;
+
+  const DetailedCourseInfoHeaderWg({
+    super.key,
+    required this.data,
+    required this.categoryName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +30,7 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
               crossAxisAlignment: .start,
               children: [
                 Text(
-                  'Kotegoriya nomi',
+                  categoryName,
                   style: AppTextStyles.source.medium(
                     fontSize: 13,
                     color: AppColors.greyScale.grey600,
@@ -28,15 +38,16 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                 ),
                 SizedBox(height: appH(8)),
                 Text(
-                  'Statistika (Tarmoqlar va sohalar bo’yicha)',
+                  data.name,
                   style: AppTextStyles.source.semiBold(fontSize: 17),
                 ),
                 SizedBox(height: appH(12)),
                 Row(
+                  spacing: 5,
                   children: [
                     Icon(Icons.star, color: AppColors.orange),
                     Text(
-                      ' 5',
+                      '?',
                       style: AppTextStyles.source.medium(
                         fontSize: 13,
                         color: AppColors.greyScale.grey600,
@@ -48,7 +59,7 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                       color: AppColors.greyScale.grey600,
                     ),
                     Text(
-                      ' 12 ta',
+                      '${data.lessonsCount} ta',
                       style: AppTextStyles.source.medium(
                         fontSize: 13,
                         color: AppColors.greyScale.grey600,
@@ -60,7 +71,7 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                       color: AppColors.greyScale.grey600,
                     ),
                     Text(
-                      ' 5 soat',
+                      formatDuration(data.totalDuration),
                       style: AppTextStyles.source.medium(
                         fontSize: 13,
                         color: AppColors.greyScale.grey600,
@@ -85,12 +96,9 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                         style: AppTextStyles.source.medium(fontSize: 16),
                       ),
                       SizedBox(height: appH(8)),
-                      Text(
-                        "This course is carefully crafted to take you on a complete learning journey—from understanding the core principles of design to building real-world projects that showcase your skills. Whether you're an aspiring designer, a developer looking to understand design better, or an entrepreneur who wants to build intuitive digital products, this course will give you both the mindset and the practical tools you need.",
-                        style: AppTextStyles.source.regular(
-                          fontSize: 13,
-                          color: AppColors.greyScale.grey600,
-                        ),
+                      HtmlContentWg(
+                        collapsedLines: 10,
+                        htmlData: data.descriptionUz ?? 'No Description',
                       ),
                     ],
                   ),

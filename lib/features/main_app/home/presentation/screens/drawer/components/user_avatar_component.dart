@@ -1,12 +1,21 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/app_utils.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_state.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
-class UserAvatarComponent extends StatelessWidget {
+class UserAvatarComponent extends StatefulWidget {
   const UserAvatarComponent({super.key});
 
+  @override
+  State<UserAvatarComponent> createState() => _UserAvatarComponentState();
+}
+
+class _UserAvatarComponentState extends State<UserAvatarComponent> {
   @override
   Widget build(BuildContext context) {
     final bool isMobile = Responsive.isMobile(context);
@@ -45,36 +54,53 @@ class UserAvatarComponent extends StatelessWidget {
                   ),
                 ),
 
-                /// User Name/Surname
-                SizedBox(height: 15),
-                AutoSizeText(
-                  'Afzal Pulatov',
-                  style: AppTextStyles.source.medium(
-                    fontSize: isMobile ? 22 : 32,
-                  ),
-                ),
+                BlocBuilder<UserMeBloc, UserMeState>(
+                  builder: (context, state) {
+                    final bool isLoading = state is UserMeLoading;
 
-                /// is verified user?
-                SizedBox(height: 8),
-                Container(
-                  padding: .all(4),
-                  decoration: BoxDecoration(
-                    color: AppColors.orange50,
-                    borderRadius: .circular(6),
-                  ),
-                  child: Row(
-                    mainAxisSize: .min,
-                    children: [
-                      Icon(IconlyLight.danger, color: AppColors.orange500),
-                      AutoSizeText(
-                        'Shaxsingizni tasdiqlang',
-                        style: AppTextStyles.source.medium(
-                          fontSize: 13,
-                          color: AppColors.orange500,
-                        ),
+                    final String displayName = state is UserMeLoaded
+                        ? "${state.entity.firstName.capitalize()} ${state.entity.lastName.capitalize()}"
+                        : "Firstname Lastname";
+
+                    return Skeletonizer(
+                      enabled: isLoading,
+                      child: Column(
+                        children: [
+                          SizedBox(height: 15),
+                          AutoSizeText(
+                            displayName,
+                            style: AppTextStyles.source.medium(
+                              fontSize: isMobile ? 22 : 32,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Container(
+                            padding: EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: AppColors.orange50,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  IconlyLight.danger,
+                                  color: AppColors.orange500,
+                                ),
+                                AutoSizeText(
+                                  'Shaxsingizni tasdiqlang',
+                                  style: AppTextStyles.source.medium(
+                                    fontSize: 13,
+                                    color: AppColors.orange500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -82,5 +108,12 @@ class UserAvatarComponent extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    if (this.isEmpty) return this;
+    return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
   }
 }
