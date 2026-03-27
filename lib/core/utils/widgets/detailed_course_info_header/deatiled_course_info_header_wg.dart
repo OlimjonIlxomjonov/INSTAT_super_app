@@ -7,6 +7,9 @@ import 'package:my_template/core/utils/general_widgets/html_content_wg/html_cont
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
 
+/// Returns TWO slivers — split so Flutter can lay them out incrementally.
+/// Wrap usage with a SliverMainAxisGroup or spread them directly into
+/// the headerSliverBuilder list.
 class DetailedCourseInfoHeaderWg extends StatelessWidget {
   final String categoryName;
   final CourseEntity data;
@@ -19,15 +22,14 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Column(
-        crossAxisAlignment: .start,
-        children: [
-          /// BODY STARTER CONTENT
-          Padding(
-            padding: .fromLTRB(appW(20), appH(16), appW(20), 0),
+    return SliverMainAxisGroup(
+      slivers: [
+        /// ── Metadata row (category, title, stats) ──────────────────────
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
             child: Column(
-              crossAxisAlignment: .start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   categoryName,
@@ -45,7 +47,7 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                 Row(
                   spacing: 5,
                   children: [
-                    Icon(Icons.star, color: AppColors.orange),
+                    const Icon(Icons.star, color: AppColors.orange),
                     Text(
                       '?',
                       style: AppTextStyles.source.medium(
@@ -54,10 +56,7 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: appH(12)),
-                    Icon(
-                      IconlyLight.document,
-                      color: AppColors.greyScale.grey600,
-                    ),
+                    Icon(IconlyLight.document, color: AppColors.greyScale.grey600),
                     Text(
                       '${data.lessonsCount} ta',
                       style: AppTextStyles.source.medium(
@@ -66,10 +65,7 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: appH(12)),
-                    Icon(
-                      IconlyLight.time_circle,
-                      color: AppColors.greyScale.grey600,
-                    ),
+                    Icon(IconlyLight.time_circle, color: AppColors.greyScale.grey600),
                     Text(
                       formatDuration(data.totalDuration),
                       style: AppTextStyles.source.medium(
@@ -79,17 +75,25 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                     ),
                   ],
                 ),
+              ],
+            ),
+          ),
+        ),
 
-                /// DESCRIPTION CARD
-                Container(
-                  margin: .only(top: appH(16)),
-                  padding: .all(12),
-                  decoration: BoxDecoration(
-                    borderRadius: .circular(12),
-                    border: .all(color: AppColors.greyScale.grey200),
-                  ),
+        /// ── Description card — RepaintBoundary isolates Html repaints ──
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(20, appH(16), 20, 0),
+            child: RepaintBoundary(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColors.greyScale.grey200),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
                   child: Column(
-                    crossAxisAlignment: .start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'Izoh',
@@ -103,11 +107,12 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
+

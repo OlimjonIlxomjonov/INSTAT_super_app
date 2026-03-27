@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
-import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/comment_section/user_comments_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/sub_bottom_sheet_opener.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/see_all_course_comments/see_all_course_comments.dart';
 
-class CourseCommentsTab extends StatelessWidget {
+class CourseCommentsTab extends StatefulWidget {
   const CourseCommentsTab({super.key});
 
   static const List<Widget> _comments = [
@@ -15,6 +14,12 @@ class CourseCommentsTab extends StatelessWidget {
     UserCommentsWg(),
   ];
 
+  @override
+  State<CourseCommentsTab> createState() => _CourseCommentsTabState();
+}
+
+class _CourseCommentsTabState extends State<CourseCommentsTab>
+    with AutomaticKeepAliveClientMixin {
   void _openAllComments(BuildContext context) {
     subBottomSheetOpener(
       context,
@@ -25,6 +30,7 @@ class CourseCommentsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return CustomScrollView(
       slivers: [
         SliverPadding(
@@ -36,8 +42,13 @@ class CourseCommentsTab extends StatelessWidget {
             ),
           ),
         ),
-        SliverList(delegate: SliverChildListDelegate.fixed(_comments)),
+        SliverList(
+          delegate: SliverChildListDelegate.fixed(CourseCommentsTab._comments),
+        ),
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

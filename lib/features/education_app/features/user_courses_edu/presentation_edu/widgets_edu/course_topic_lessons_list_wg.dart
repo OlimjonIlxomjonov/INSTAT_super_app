@@ -18,11 +18,13 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 class CourseTopicLessonsListWg extends StatefulWidget {
   final int courseId;
   final int blockId;
+  final int lessonCount;
 
   const CourseTopicLessonsListWg({
     super.key,
     required this.courseId,
     required this.blockId,
+    required this.lessonCount,
   });
 
   @override
@@ -144,7 +146,10 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
                     onTap: () => FamilyModalSheet.of(context).pushPage(
                       MiniAppSheetShell(
                         showHandle: false,
-                        child: WatchCourseEduVideoPage(data: lesson),
+                        child: WatchCourseEduVideoPage(
+                          data: lesson,
+                          lessonCount: widget.lessonCount,
+                        ),
                       ),
                     ),
                     contentPadding: EdgeInsets.zero,

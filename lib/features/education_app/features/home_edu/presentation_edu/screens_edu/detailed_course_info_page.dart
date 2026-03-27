@@ -9,6 +9,7 @@ import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custo
 import 'package:my_template/core/utils/widgets/custom_tab_bar/custom_tab_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/detailed_course_info_header/deatiled_course_info_header_wg.dart';
 import 'package:my_template/core/utils/widgets/detailed_course_info_header/detailed_course_info_header_image.dart';
+import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/about_this_course_tab.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/course_comments_tab.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/course_plan_tab.dart';
@@ -16,6 +17,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dom
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/about_course_features/about_cours_features_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/about_course_features/about_course_features_state.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
 
 class DetailedCourseInfoPage extends StatefulWidget {
   final CourseEntity data;
@@ -35,21 +37,34 @@ class DetailedCourseInfoPage extends StatefulWidget {
 
 class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
   void _openPayment(BuildContext context) {
-    onlineLibStyleCustomBottomSheetWg(
-      context,
-      headerTitle: "To'lov turi",
-      child: const PaymentOpenBottomSheetWg(),
-    );
+    if (widget.data.userOrder?.status != 'paid') {
+      onlineLibStyleCustomBottomSheetWg(
+        context,
+        headerTitle: "To'lov turi",
+        child: const PaymentOpenBottomSheetWg(),
+      );
+    } else {
+      FamilyNavigation.familyPush(
+        context,
+        DetailedUserBoughtCoursesEduPage(
+          data: widget.data,
+          categoryName: widget.courseCategory,
+        ),
+      );
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    context.read<AboutCourseFeaturesBloc>().add(
-      AboutCourseFeaturesEvent(
-        params: CourseCategoryByIdParams(id: widget.data.id),
-      ),
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<AboutCourseFeaturesBloc>().add(
+        AboutCourseFeaturesEvent(
+          params: CourseCategoryByIdParams(id: widget.data.id),
+        ),
+      );
+    });
   }
 
   @override
@@ -90,14 +105,16 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
                 courseCategory: widget.courseCategory,
                 total: widget.total,
               ),
-              CoursePlanTab(),
-              CourseCommentsTab(),
+              const CoursePlanTab(),
+              const CourseCommentsTab(),
             ],
           ),
         ),
         bottomNavigationBar: CustomBottomNavContainerWg(
           onTap: () => _openPayment(context),
-          buttonText: 'Sotib olish - ${widget.data.price} UZS',
+          buttonText: widget.data.userOrder!.status == 'paid'
+              ? 'Davom etish'
+              : 'Sotib olish - ${widget.data.price} UZS',
         ),
       ),
     );

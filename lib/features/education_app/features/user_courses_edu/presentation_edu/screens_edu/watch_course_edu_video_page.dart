@@ -1,4 +1,3 @@
-import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconly/iconly.dart';
@@ -16,8 +15,13 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 
 class WatchCourseEduVideoPage extends StatelessWidget {
   final CourseLessonItemsEntity data;
+  final int lessonCount;
 
-  const WatchCourseEduVideoPage({super.key, required this.data});
+  const WatchCourseEduVideoPage({
+    super.key,
+    required this.data,
+    required this.lessonCount,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -86,9 +90,9 @@ class WatchCourseEduVideoPage extends StatelessWidget {
 
           /// available videos in the current course
           SliverList.builder(
-            itemCount: 2,
+            itemCount: lessonCount,
             itemBuilder: (context, index) {
-              return LessonItemWg();
+              return LessonItemWg(data: data);
             },
           ),
 

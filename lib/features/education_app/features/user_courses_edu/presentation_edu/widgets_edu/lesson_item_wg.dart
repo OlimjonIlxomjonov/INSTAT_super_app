@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/app_utils.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_items/course_lesson_items_entity.dart';
 
 class LessonItemWg extends StatelessWidget {
-  const LessonItemWg({super.key});
+  final CourseLessonItemsEntity data;
+
+  const LessonItemWg({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {

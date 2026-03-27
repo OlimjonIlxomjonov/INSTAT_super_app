@@ -52,6 +52,7 @@ class _CoursesInProgressComponentState extends State<CoursesInProgressComponent>
     );
   }
 
+  /// EXTENDED COURSES
   Widget _buildList(List<CourseEntity> data) {
     if (widget.layout == CoursesLayout.grid) {
       return SliverPadding(
@@ -76,6 +77,7 @@ class _CoursesInProgressComponentState extends State<CoursesInProgressComponent>
       );
     }
 
+    /// MINIMIZED COURSES
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: appW(20)),
       sliver: SliverList(
@@ -106,6 +108,7 @@ class _CoursesInProgressComponentState extends State<CoursesInProgressComponent>
         if (state is UserCoursesLoaded) {
           final data = state.response.data;
 
+          /// EMPTY STATE
           if (data.isEmpty) {
             return SliverToBoxAdapter(
               child: EmptyState(message: 'Hech qanday kurs hali tugatilmagan!'),

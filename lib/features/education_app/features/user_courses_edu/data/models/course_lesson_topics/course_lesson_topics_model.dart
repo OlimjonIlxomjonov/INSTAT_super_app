@@ -25,7 +25,7 @@ class CourseLessonTopicsModel extends CourseLessonTopicsEntity {
       textEn: json['text_en'],
       course: json['course'],
       isActive: json['is_active'],
-      totalDuration: json['total_duration'],
+      totalDuration: json['total_duration'] ?? 0,
       lessonFilesCount: json['lesson_files_count'],
       lessonsCount: json['lessons_count'],
       lessonsTestsCount: json['lessons_tests_count'],

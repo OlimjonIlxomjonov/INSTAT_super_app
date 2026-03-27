@@ -26,53 +26,67 @@ class _HtmlContentWgState extends State<HtmlContentWg> {
 
   @override
   Widget build(BuildContext context) {
+    final collapsedMaxHeight = widget.collapsedLines * 22.0;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AnimatedCrossFade(
-          duration: Duration(milliseconds: 300),
-          crossFadeState: _isExpanded
-              ? CrossFadeState.showSecond
-              : CrossFadeState.showFirst,
-
-          // Collapsed
-          firstChild: IgnorePointer(
-            child: ShaderMask(
-              shaderCallback: (bounds) => LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.black, Colors.transparent],
-                stops: [0.5, 1.0],
-              ).createShader(bounds),
-              blendMode: BlendMode.dstIn,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: widget.collapsedLines * 22.0,
+        AnimatedSize(
+          duration: const Duration(milliseconds: 280),
+          curve: Curves.easeInOut,
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: _isExpanded
+                ? const BoxConstraints()
+                : BoxConstraints(maxHeight: collapsedMaxHeight),
+            child: Stack(
+              children: [
+                // Single Html instance — parsed only once
+                _HtmlBody(
+                  htmlData: widget.htmlData,
+                  fontSize: widget.fontSize,
+                  textColor: widget.textColor,
                 ),
-                child: _buildHtml(),
-              ),
+                // Lightweight gradient fade overlay when collapsed
+                if (!_isExpanded)
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: collapsedMaxHeight * 0.45,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.white.withOpacity(0),
+                            Colors.white,
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
-
-          // Expanded
-          secondChild: _buildHtml(),
         ),
-
         GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () => setState(() => _isExpanded = !_isExpanded),
           child: Padding(
-            padding: EdgeInsets.only(top: 6),
+            padding: const EdgeInsets.only(top: 6),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  _isExpanded ? 'Kamroq ko\'rsatish' : 'Ko\'proq ko\'rsatish',
+                  _isExpanded ? "Kamroq ko'rsatish" : "Ko'proq ko'rsatish",
                   style: AppTextStyles.source.medium(
                     fontSize: 13,
                     color: AppColors.primaryColor,
                   ),
                 ),
-                SizedBox(width: 4),
+                const SizedBox(width: 4),
                 Icon(
                   _isExpanded
                       ? Icons.keyboard_arrow_up
@@ -87,16 +101,31 @@ class _HtmlContentWgState extends State<HtmlContentWg> {
       ],
     );
   }
+}
 
-  Widget _buildHtml() {
+/// Isolated stateless widget so Flutter can skip diffing it when only
+/// _isExpanded changes — the Html is never rebuilt unless htmlData changes.
+class _HtmlBody extends StatelessWidget {
+  final String htmlData;
+  final double? fontSize;
+  final Color? textColor;
+
+  const _HtmlBody({
+    required this.htmlData,
+    this.fontSize,
+    this.textColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Html(
-      data: widget.htmlData,
+      data: htmlData,
       style: {
         'body': Style(
           margin: Margins.zero,
           padding: HtmlPaddings.zero,
-          fontSize: FontSize(widget.fontSize ?? 14),
-          color: widget.textColor ?? Colors.black,
+          fontSize: FontSize(fontSize ?? 14),
+          color: textColor ?? Colors.black,
         ),
         'p': Style(margin: Margins.only(bottom: 8)),
         'strong': Style(fontWeight: FontWeight.bold),

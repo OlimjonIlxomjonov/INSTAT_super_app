@@ -33,6 +33,7 @@ class CourseVideoBriefTileWg extends StatelessWidget {
                   CourseTopicLessonsListWg(
                     courseId: item.course,
                     blockId: item.id,
+                    lessonCount: item.lessonsCount,
                   ),
                 ],
               );
