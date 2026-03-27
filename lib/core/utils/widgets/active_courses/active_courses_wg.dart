@@ -6,15 +6,18 @@ import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart'
 import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/responsiveness/responsive.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
 
 class ActiveCoursesWg extends StatelessWidget {
   final VoidCallback onTap;
   final bool showCircularProgBar;
+  final CourseEntity data;
 
   const ActiveCoursesWg({
     super.key,
     required this.onTap,
     this.showCircularProgBar = true,
+    required this.data,
   });
 
   @override
@@ -35,10 +38,7 @@ class ActiveCoursesWg extends StatelessWidget {
             Expanded(
               child: ClipRRect(
                 borderRadius: .circular(8),
-                child: Image.asset(
-                  'assets/home_page/temp_course_dummy.png',
-                  fit: BoxFit.contain,
-                ),
+                child: Image.network(data.thumbnail, fit: BoxFit.contain),
               ),
             ),
             SizedBox(width: appW(12)),
@@ -50,17 +50,17 @@ class ActiveCoursesWg extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   AutoSizeText(
-                    'Kotegoriyani nomi',
+                    "${data.category}",
                     style: AppTextStyles.source.medium(
                       fontSize: 12,
                       color: AppColors.primaryColor,
                     ),
                   ),
-                  AutoSizeText(
-                    'Statistika (Tarmoqlar va sohalar bo’yicha)',
+                  Text(
+                    data.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.source.medium(fontSize: 16),
+                    style: AppTextStyles.source.medium(fontSize: 14),
                   ),
                   Row(
                     mainAxisAlignment: .spaceBetween,
@@ -93,7 +93,7 @@ class ActiveCoursesWg extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.all(Responsive.isMobile(context) ? 4 : 0),
                   child: DashedCircularProgressBar(
-                    progress: 5,
+                    progress: data.userOrder!.progress / 10,
                     maxProgress: 10,
                     corners: StrokeCap.butt,
                     foregroundColor: AppColors.primaryColor,
@@ -105,7 +105,7 @@ class ActiveCoursesWg extends StatelessWidget {
                     height: 5,
                     child: Center(
                       child: AutoSizeText(
-                        '50%',
+                        "${(data.userOrder?.progress ?? 0).toInt()} %",
                         style: AppTextStyles.source.medium(fontSize: 12),
                       ),
                     ),

@@ -21,3 +21,10 @@ class CourseLessonTopicsEvent extends CoursesEvent {
 
   CourseLessonTopicsEvent({required this.params});
 }
+
+class CourseLessonItemsEvent extends CoursesEvent {
+  final CourseLessonItemsParams params;
+
+  CourseLessonItemsEvent({required this.params});
+}
+

@@ -88,14 +88,14 @@ class HomeEduPage extends StatelessWidget {
                       title: AppStrings.studyingCourses,
                       onTap: onTap,
                     );
-                  case 3:
-                    return ActiveCoursesWg(
-                      onTap: () => _goToPageActiveCourses(context),
-                    );
-                  case 4:
-                    return ActiveCoursesWg(
-                      onTap: () => _goToPageActiveCourses(context),
-                    );
+                  // case 3:
+                  //   return ActiveCoursesWg(
+                  //     onTap: () => _goToPageActiveCourses(context),
+                  //   );
+                  // case 4:
+                  //   return ActiveCoursesWg(
+                  //     onTap: () => _goToPageActiveCourses(context),
+                  //   );
                   default:
                     return const SizedBox.shrink();
                 }
@@ -113,43 +113,43 @@ class HomeEduPage extends StatelessWidget {
           ),
 
           /// All Courses
-          SliverSafeArea(
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                if (index == 0) {
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      left: appW(20),
-                      right: appW(20),
-                      top: appH(10),
-                    ),
-                    child: ExtendSectionSeeAllWg(
-                      title: AppStrings.allCourses,
-                      onTap: () => _goToAllCourses(context),
-                    ),
-                  );
-                }
-                return SizedBox(
-                  height: 300,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.symmetric(horizontal: appW(20)),
-                    itemCount: 10,
-                    itemExtent: appW(312),
-                    cacheExtent: appW(300),
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.only(right: appW(12)),
-                        child: PopularCoursesCardWg(
-                          onTap: () => _goToDetailedCourse(context),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              }, childCount: 2),
-            ),
-          ),
+          // SliverSafeArea(
+          //   sliver: SliverList(
+          //     delegate: SliverChildBuilderDelegate((context, index) {
+          //       if (index == 0) {
+          //         return Padding(
+          //           padding: EdgeInsets.only(
+          //             left: appW(20),
+          //             right: appW(20),
+          //             top: appH(10),
+          //           ),
+          //           child: ExtendSectionSeeAllWg(
+          //             title: AppStrings.allCourses,
+          //             onTap: () => _goToAllCourses(context),
+          //           ),
+          //         );
+          //       }
+          //       return SizedBox(
+          //         height: 300,
+          //         child: ListView.builder(
+          //           scrollDirection: Axis.horizontal,
+          //           padding: EdgeInsets.symmetric(horizontal: appW(20)),
+          //           itemCount: 10,
+          //           itemExtent: appW(312),
+          //           cacheExtent: appW(300),
+          //           itemBuilder: (context, index) {
+          //             return Padding(
+          //               padding: EdgeInsets.only(right: appW(12)),
+          //               child: PopularCoursesCardWg(
+          //                 onTap: () => _goToDetailedCourse(context),
+          //               ),
+          //             );
+          //           },
+          //         ),
+          //       );
+          //     }, childCount: 2),
+          //   ),
+          // ),
         ],
       ),
     );

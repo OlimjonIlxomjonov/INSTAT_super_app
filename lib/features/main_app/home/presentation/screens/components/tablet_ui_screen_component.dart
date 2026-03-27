@@ -125,8 +125,8 @@ class TabletUiScreenComponent extends StatelessWidget {
                               /// LEAD TO "USER COURSES" PAGE
                             },
                           ),
-                          ActiveCoursesWg(onTap: goToPageActiveCourses),
-                          ActiveCoursesWg(onTap: goToPageActiveCourses),
+                          // ActiveCoursesWg(onTap: goToPageActiveCourses),
+                          // ActiveCoursesWg(onTap: goToPageActiveCourses),
                           ExtendSectionSeeAllWg(
                             title: localization.popularCourses,
                             onTap: () {
@@ -140,28 +140,28 @@ class TabletUiScreenComponent extends StatelessWidget {
                       ),
 
                       /// EDU POPULAR COURSES
-                      SizedBox(
-                        height: !isPortrait ? 320 : 400,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          padding: AppPadding.horizontal20x(),
-                          itemCount: 10,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: EdgeInsets.only(right: 12),
-                              child: SizedBox(
-                                width: 400,
-                                child: PopularCoursesCardWg(
-                                  onTap: () => openMiniAppSheetFamily(
-                                    context,
-                                    child: DetailedCourseInfoPage(),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                      // SizedBox(
+                      //   height: !isPortrait ? 320 : 400,
+                      //   child: ListView.builder(
+                      //     scrollDirection: Axis.horizontal,
+                      //     padding: AppPadding.horizontal20x(),
+                      //     itemCount: 10,
+                      //     itemBuilder: (context, index) {
+                      //       return Padding(
+                      //         padding: EdgeInsets.only(right: 12),
+                      //         child: SizedBox(
+                      //           width: 400,
+                      //           child: PopularCoursesCardWg(
+                      //             onTap: () => openMiniAppSheetFamily(
+                      //               context,
+                      //               child: DetailedCourseInfoPage(),
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     },
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

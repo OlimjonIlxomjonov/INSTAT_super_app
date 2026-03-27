@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/detailed_course_info_page.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/show_all_courses_bottom_sheet_page.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_category_by_id/user_category_by_id_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_category_by_id/user_category_by_id_state.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_state.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_state.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/home_event.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/mini_app_section_card.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/model/mini_app_model.dart';
 
-class MobileUiScreenComponent extends StatelessWidget {
+class MobileUiScreenComponent extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
   final List<MiniAppModel> sections;
 
@@ -21,12 +32,32 @@ class MobileUiScreenComponent extends StatelessWidget {
     required this.scaffoldKey,
   });
 
-  void _goToPageActiveCourses(BuildContext context) {
-    // openMiniAppSheetFamily(
-    //   showHandler: false,
-    //   context,
-    //   child: const DetailedUserBoughtCoursesEduPage(),
-    // );
+  @override
+  State<MobileUiScreenComponent> createState() =>
+      _MobileUiScreenComponentState();
+}
+
+class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
+  final Map<int, String> _categoryCache = {};
+
+  void _fetchCategories(List<CourseEntity> courses) {
+    final uniqueIds = courses.map((c) => c.category).toSet();
+    for (final id in uniqueIds) {
+      if (!_categoryCache.containsKey(id)) {
+        context.read<UserCategoryByIdBloc>().add(
+          UserCategoryByIdEvent(params: CourseCategoryByIdParams(id: id)),
+        );
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<CoursesBloc>().add(AvailableCoursesEvent());
+    context.read<UserCoursesBloc>().add(
+      UserCoursesEvent(params: UserCoursesParams(state: 'all')),
+    );
   }
 
   void _goToUserCourses(BuildContext context) {
@@ -64,7 +95,7 @@ class MobileUiScreenComponent extends StatelessWidget {
           snap: true,
           floating: true,
           leading: IconButton(
-            onPressed: () => scaffoldKey.currentState?.openDrawer(),
+            onPressed: () => widget.scaffoldKey.currentState?.openDrawer(),
             icon: const Icon(Icons.menu),
           ),
           title: SvgPicture.asset(AppVectors.homeInstatLogo),
@@ -88,24 +119,25 @@ class MobileUiScreenComponent extends StatelessWidget {
               childAspectRatio: 1, // 1.3
             ),
             delegate: SliverChildBuilderDelegate((context, index) {
-              final item = sections[index];
+              final item = widget.sections[index];
               return MiniAppSectionCard(
                 mainImage: item.mainImage,
                 backgroundImage: item.backgroundImage,
                 title: item.title,
                 onTap: item.onTap,
               );
-            }, childCount: sections.length),
+            }, childCount: widget.sections.length),
           ),
         ),
 
         /// SEARCH BAR
-        SliverAppBar(
-          toolbarHeight: 56 + 24,
-          pinned: true,
-          automaticallyImplyLeading: false,
-          titleSpacing: 20,
-          title: const AppSearchbarWg(),
+        SliverPadding(
+          padding: .only(bottom: 20),
+          sliver: SliverAppBar(
+            pinned: true,
+            automaticallyImplyLeading: false,
+            title: const AppSearchbarWg(),
+          ),
         ),
 
         /// BANNERS
@@ -119,38 +151,69 @@ class MobileUiScreenComponent extends StatelessWidget {
           ),
         ),
 
-        /// EDU ACTIVE COURSES
         SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: appW(20)),
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              switch (index) {
-                case 0:
-                  return ExtendSectionSeeAllWg(
-                    title: localization.studyingCourses,
-                    onTap: () {
-                      _goToUserCourses(context);
-                    },
+          padding: AppPadding.horizontal20x(),
+          sliver: SliverToBoxAdapter(
+            child: ExtendSectionSeeAllWg(
+              title: localization.studyingCourses,
+              onTap: () {
+                _goToUserCourses(context);
+              },
+            ),
+          ),
+        ),
+
+        SliverPadding(
+          padding: AppPadding.horizontal20x(),
+          sliver: SliverToBoxAdapter(
+            child: BlocBuilder<UserCoursesBloc, UserCoursesState>(
+              builder: (context, state) {
+                if (state is UserCoursesLoaded) {
+                  final data = state.response.data;
+                  return Column(
+                    children: List.generate(2, (index) {
+                      final item = data[index];
+                      return BlocBuilder<
+                        UserCategoryByIdBloc,
+                        UserCategoryByIdState
+                      >(
+                        builder: (context, state) {
+                          if (state is UserCategoryByIdLoaded) {
+                            return ActiveCoursesWg(
+                              onTap: () {
+                                openMiniAppSheetFamily(
+                                  showHandler: false,
+                                  context,
+                                  child: DetailedUserBoughtCoursesEduPage(
+                                    data: item,
+                                    categoryName: state.entity.name,
+                                  ),
+                                );
+                              },
+                              data: item,
+                            );
+                          }
+                          return SizedBox.shrink();
+                        },
+                      );
+                    }),
                   );
-                case 1:
-                  return ActiveCoursesWg(
-                    onTap: () => _goToPageActiveCourses(context),
-                  );
-                case 2:
-                  return ActiveCoursesWg(
-                    onTap: () => _goToPageActiveCourses(context),
-                  );
-                case 3:
-                  return ExtendSectionSeeAllWg(
-                    title: localization.popularCourses,
-                    onTap: () {
-                      _goToAllCourses(context);
-                    },
-                  );
-                default:
-                  return const SizedBox.shrink();
-              }
-            }, childCount: 4),
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+        ),
+
+        SliverPadding(
+          padding: AppPadding.horizontal20x(),
+          sliver: SliverToBoxAdapter(
+            child: ExtendSectionSeeAllWg(
+              title: localization.popularCourses,
+              onTap: () {
+                _goToAllCourses(context);
+              },
+            ),
           ),
         ),
 
@@ -160,19 +223,29 @@ class MobileUiScreenComponent extends StatelessWidget {
           sliver: SliverToBoxAdapter(
             child: SizedBox(
               height: appH(280),
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                padding: AppPadding.horizontal20x(),
-                itemCount: 10,
-                cacheExtent: appW(300),
-                itemExtent: appW(312),
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.only(right: appW(12)),
-                    child: PopularCoursesCardWg(
-                      onTap: () => _goToDetailedCourse(context),
-                    ),
-                  );
+              child: BlocBuilder<CoursesBloc, CoursesState>(
+                builder: (context, state) {
+                  if (state is CoursesLoaded) {
+                    final data = state.response.data;
+                    return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      padding: AppPadding.horizontal20x(),
+                      itemCount: data.length,
+                      cacheExtent: appW(300),
+                      itemExtent: appW(312),
+                      itemBuilder: (context, index) {
+                        final item = data[index];
+                        return Padding(
+                          padding: EdgeInsets.only(right: appW(12)),
+                          child: PopularCoursesCardWg(
+                            onTap: () => _goToDetailedCourse(context),
+                            data: item,
+                          ),
+                        );
+                      },
+                    );
+                  }
+                  return SizedBox.shrink();
                 },
               ),
             ),

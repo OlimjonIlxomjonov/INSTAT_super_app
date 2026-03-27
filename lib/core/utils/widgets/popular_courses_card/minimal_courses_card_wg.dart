@@ -87,7 +87,10 @@ class MinimalCoursesCardWg extends StatelessWidget {
                               progressIndicator: data.userOrder?.progress ?? 0,
                             ),
                           ),
-                          Text('0%', style: CustomTextStyles.h4),
+                          Text(
+                            "${(data.userOrder?.progress ?? 0).toInt()} %",
+                            style: CustomTextStyles.h4,
+                          ),
                         ],
                       ),
                   ],

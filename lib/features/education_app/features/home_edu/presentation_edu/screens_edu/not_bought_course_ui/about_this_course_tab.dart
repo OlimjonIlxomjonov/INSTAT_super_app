@@ -68,25 +68,25 @@ class AboutThisCourseTab extends StatelessWidget {
           ),
         ),
 
-        SliverToBoxAdapter(
-          child: SizedBox(
-            height: 300,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: appW(20)),
-              itemCount: 3,
-              itemExtent: appW(312),
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.only(right: appW(12)),
-                  child: PopularCoursesCardWg(
-                    onTap: () => _openCourseDetail(context),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
+        // SliverToBoxAdapter(
+        //   child: SizedBox(
+        //     height: 300,
+        //     child: ListView.builder(
+        //       scrollDirection: Axis.horizontal,
+        //       padding: EdgeInsets.symmetric(horizontal: appW(20)),
+        //       itemCount: 3,
+        //       itemExtent: appW(312),
+        //       itemBuilder: (context, index) {
+        //         return Padding(
+        //           padding: EdgeInsets.only(right: appW(12)),
+        //           child: PopularCoursesCardWg(
+        //             onTap: () => _openCourseDetail(context),
+        //           ),
+        //         );
+        //       },
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

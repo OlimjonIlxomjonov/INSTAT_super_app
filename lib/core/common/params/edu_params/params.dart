@@ -11,3 +11,14 @@ class CourseCategoryByIdParams {
 
   CourseCategoryByIdParams({required this.id});
 }
+
+class CourseLessonItemsParams {
+  final int courseId;
+  final int blockId;
+
+  CourseLessonItemsParams({required this.courseId, required this.blockId});
+}
+
+class CoursesParam {
+  CoursesParam();
+}

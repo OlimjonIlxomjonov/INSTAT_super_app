@@ -36,7 +36,7 @@ class CourseModel extends CourseEntity {
       descriptionRu: json['description_ru'],
       descriptionEn: json['description_en'],
       price: json['price'],
-      certificateImage: json['certificate_image'],
+      certificateImage: json['certificate_image'] ?? '',
       isActive: json['is_active'],
       thumbnail: json['thumbnail'],
       isOnline: json['is_online'],
@@ -47,9 +47,11 @@ class CourseModel extends CourseEntity {
       userOrder: json['user_order'] != null
           ? UserOrderModel.fromJson(json['user_order'])
           : null,
-      certificateObjects: (json['certificate_objects'] as List)
-          .map((e) => CertificateObjModel.fromJson(e))
-          .toList(),
+      certificateObjects:
+          (json['certificate_objects'] as List?)
+              ?.map((e) => CertificateObjModel.fromJson(e))
+              .toList() ??
+          [],
     );
   }
 }

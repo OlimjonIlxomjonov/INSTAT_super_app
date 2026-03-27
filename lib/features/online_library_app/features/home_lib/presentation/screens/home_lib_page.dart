@@ -65,14 +65,14 @@ class _HomeLibPageState extends State<HomeLibPage> {
                     title: 'O’qilayotgan kitoblar',
                     onTap: widget.onTap,
                   ),
-                  ActiveCoursesWg(
-                    showCircularProgBar: false,
-                    onTap: activeCourseOpener,
-                  ),
-                  ActiveCoursesWg(
-                    showCircularProgBar: false,
-                    onTap: activeCourseOpener,
-                  ),
+                  // ActiveCoursesWg(
+                  //   showCircularProgBar: false,
+                  //   onTap: activeCourseOpener,
+                  // ),
+                  // ActiveCoursesWg(
+                  //   showCircularProgBar: false,
+                  //   onTap: activeCourseOpener,
+                  // ),
                   SizedBox(height: appH(18)),
                 ],
               ),

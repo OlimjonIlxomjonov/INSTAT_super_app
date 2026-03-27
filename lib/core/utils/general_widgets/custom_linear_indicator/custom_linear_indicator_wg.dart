@@ -9,7 +9,7 @@ class CustomLinearIndicatorWg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LinearProgressIndicator(
-      value: progressIndicator,
+      value: progressIndicator / 100,
       borderRadius: BorderRadius.circular(10),
       color: AppColors.primaryColor,
       backgroundColor: AppColors.greyScale.grey200,

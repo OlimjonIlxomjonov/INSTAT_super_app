@@ -10,7 +10,9 @@ class ApiUrls {
   static const courses = 'courses/';
   static const userCourses = 'courses/items/my/?status=';
   static const userCategoryById = 'categories/';
+  static const availableCourses = 'courses/items/active/';
 
   /// lessons topic
   static const lessonsTopic = '/course_blocks/items/all-active/';
+  static const lessonItems = '/lessons/items/all-active/';
 }

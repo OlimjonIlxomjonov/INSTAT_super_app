@@ -1,20 +1,37 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/common/params/edu_params/params.dart';
+import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_category_by_id/user_category_by_id_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_category_by_id/user_category_by_id_state.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
 
-class PopularCoursesCardWg extends StatelessWidget {
+class PopularCoursesCardWg extends StatefulWidget {
   final VoidCallback onTap;
+  final CourseEntity data;
 
-  const PopularCoursesCardWg({super.key, required this.onTap});
+  const PopularCoursesCardWg({
+    super.key,
+    required this.onTap,
+    required this.data,
+  });
 
+  @override
+  State<PopularCoursesCardWg> createState() => _PopularCoursesCardWgState();
+}
+
+class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: .opaque,
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Column(
         crossAxisAlignment: .start,
         children: [
@@ -24,10 +41,8 @@ class PopularCoursesCardWg extends StatelessWidget {
                 aspectRatio: 12 / 6,
                 child: ClipRRect(
                   borderRadius: .circular(12),
-                  child: Image.asset(
-                    // width: 300,
-                    // height: 130,
-                    'assets/home_page/temp_course_card_popular.png',
+                  child: Image.network(
+                    widget.data.thumbnail,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -45,7 +60,7 @@ class PopularCoursesCardWg extends StatelessWidget {
                     child: Row(
                       children: [
                         Icon(Icons.star, color: AppColors.yellow),
-                        Text('4,5'),
+                        Text('?'),
                       ],
                     ),
                   ),
@@ -63,32 +78,34 @@ class PopularCoursesCardWg extends StatelessWidget {
             ],
           ),
           SizedBox(height: appH(12)),
-          AutoSizeText(
-            'Kategoriya nomi',
-            style: AppTextStyles.source.medium(
-              fontSize: 12,
-              color: AppColors.primaryColor,
-            ),
-          ),
+
+          // AutoSizeText(
+          //   "categoryName",
+          //   style: AppTextStyles.source.medium(
+          //     fontSize: 12,
+          //     color: AppColors.primaryColor,
+          //   ),
+          // ),
           SizedBox(height: appH(4)),
           AutoSizeText(
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            "Uy xo’jaliklarini tanlanma kuzatuvini tashkil etish va o’tkazish",
+            widget.data.name,
             style: AppTextStyles.source.medium(fontSize: 15),
           ),
           SizedBox(height: appH(8)),
           Row(
+            spacing: 5,
             children: [
               Icon(IconlyLight.time_circle),
               AutoSizeText(
-                ' 5 soat 20 daqiqa',
+                formatDuration(widget.data.totalDuration),
                 style: AppTextStyles.source.regular(fontSize: 13),
               ),
               SizedBox(width: appW(12)),
               Icon(IconlyLight.document),
               AutoSizeText(
-                ' 12 ta dars',
+                "${widget.data.lessonsCount} ta dars",
                 style: AppTextStyles.source.regular(fontSize: 13),
               ),
             ],

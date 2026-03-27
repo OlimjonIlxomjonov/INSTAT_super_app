@@ -8,170 +8,134 @@ import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart'
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
+import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_items/course_lesson_items_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/regular_test/regular_test_course_page.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/default_custom_tile_wg.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/lesson_item_wg.dart';
 
 class WatchCourseEduVideoPage extends StatelessWidget {
-  const WatchCourseEduVideoPage({super.key});
+  final CourseLessonItemsEntity data;
+
+  const WatchCourseEduVideoPage({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          /// VIDEO
-          SliverToBoxAdapter(
-            child: Stack(
-              children: [
-                /// HERE WILL BE A VIDEO PLAYER
-                ClipRRect(
+          SliverAppBar(
+            expandedHeight: 320,
+            collapsedHeight: 320,
+            pinned: true,
+
+            /// VIDEO
+            flexibleSpace: FlexibleSpaceBar(
+              background: RepaintBoundary(
+                child: Image.network(data.thumbnail ?? '', fit: .cover),
+              ),
+            ),
+            leading: Padding(
+              padding: .only(left: 10, top: 10),
+              child: IconButton(
+                onPressed: () {
+                  FamilyNavigation.familyClose(context); // main
+                },
+                style: IconButton.styleFrom(
+                  backgroundColor: AppColors.white,
+                  shape: RoundedRectangleBorder(borderRadius: .circular(50)),
+                ),
+                icon: const Icon(IconlyLight.arrow_left_2, size: 20),
+              ),
+            ),
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(0.0),
+              child: Container(
+                height: 20,
+                decoration: BoxDecoration(
+                  color: AppColors.white,
                   borderRadius: .only(
-                    bottomRight: .circular(20),
-                    bottomLeft: .circular(20),
-                  ),
-                  child: Image.asset(
-                    height: appH(320),
-                    width: double.infinity,
-                    'assets/home_page/temp_course_dummy.png',
-                    fit: BoxFit.cover,
+                    topLeft: .circular(32),
+                    topRight: .circular(32),
                   ),
                 ),
-                Padding(
-                  padding: .only(left: appW(10), top: appH(10)),
-                  child: IconButton(
-                    onPressed: () {
-                      FamilyModalSheet.of(context).popPage();
-                      // AppRoute.close();
-                    },
-                    style: IconButton.styleFrom(
-                      backgroundColor: AppColors.white,
-                      shape: RoundedRectangleBorder(borderRadius: .circular(8)),
-                    ),
-                    icon: Icon(IconlyLight.arrow_left_2, size: 20),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
 
-          SliverSafeArea(
-            sliver: SliverPadding(
-              padding: AppPadding.hAndV20x20(),
-              sliver: SliverToBoxAdapter(
-                child: Column(
-                  crossAxisAlignment: .start,
-                  children: [
-                    Text(
-                      'Statistika (Tarmoqlar va sohalar bo’yicha)',
-                      style: AppTextStyles.source.medium(fontSize: 20),
-                    ),
+          SliverPadding(
+            padding: AppPadding.horizontal20x(),
+            sliver: SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: .start,
+                children: [
+                  Text(
+                    data.title,
+                    style: AppTextStyles.source.medium(fontSize: 20),
+                  ),
+                  SizedBox(height: appH(20)),
+                  Text(
+                    'Videolar',
+                    style: AppTextStyles.source.semiBold(fontSize: 17),
+                  ),
+                  SizedBox(height: appH(16)),
+                ],
+              ),
+            ),
+          ),
 
-                    SizedBox(height: appH(20)),
-                    Text(
-                      'Videolar',
-                      style: AppTextStyles.source.semiBold(fontSize: 17),
-                    ),
-                    SizedBox(height: appH(16)),
+          /// available videos in the current course
+          SliverList.builder(
+            itemCount: 2,
+            itemBuilder: (context, index) {
+              return LessonItemWg();
+            },
+          ),
 
-                    /// available videos in the current course
-                    ...List.generate(
-                      2,
-                      (index) => Container(
-                        padding: .symmetric(horizontal: appH(12)),
-                        margin: .only(bottom: appH(12)),
-                        decoration: BoxDecoration(
-                          color: index == 0
-                              ? AppColors.greyScale.grey200
-                              : AppColors.transparent,
-                          border: .all(color: AppColors.greyScale.grey200),
-                          borderRadius: .circular(12),
-                        ),
-                        child: Theme(
-                          data: Theme.of(context).copyWith(
-                            splashColor: AppColors.transparent,
-                            highlightColor: AppColors.transparent,
-                          ),
-                          child: ListTile(
-                            onTap: () {},
-                            contentPadding: .zero,
-                            leading: Text(
-                              '01.',
-                              style: AppTextStyles.source.medium(
-                                fontSize: 16,
-                                color: AppColors.greyScale.grey600,
-                              ),
-                            ),
-                            title: Text(
-                              'Tarmoqlar bo‘yicha statistika asoslari',
-                              style: AppTextStyles.source.medium(fontSize: 15),
-                              maxLines: 1,
-                              overflow: .ellipsis,
-                            ),
-                            subtitle: Text(
-                              '37 daqiqa 16 soniya',
-                              style: AppTextStyles.source.regular(
-                                fontSize: 13,
-                                color: AppColors.greyScale.grey600,
-                              ),
-                            ),
-                            trailing: Container(
-                              padding: .all(3),
-                              decoration: BoxDecoration(
-                                color: AppColors.white,
-                                border: .all(
-                                  color: AppColors.greyScale.grey200,
-                                ),
-                                shape: .circle,
-                              ),
-                              child: Icon(
-                                index != 0 ? Icons.play_arrow : Icons.pause,
-                                color: AppColors.primaryColor,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+          SliverPadding(
+            padding: AppPadding.horizontal20x(),
+            sliver: SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: .start,
+                children: [
+                  /// available files in the current course
+                  SizedBox(height: appH(10)),
+                  Text(
+                    'Fayllar',
+                    style: AppTextStyles.source.semiBold(fontSize: 17),
+                  ),
+                  SizedBox(height: appH(16)),
+                  DefaultCustomTileWg(
+                    tileMaxLines: 1,
+                    tileOverflow: .ellipsis,
+                    tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
+                    onTap: () {},
+                    tileTitle: 'Tahlil, taqqoslash va prognozlash',
+                    subTitle: '3.4 MB',
+                  ),
 
-                    /// available files in the current course
-                    SizedBox(height: appH(10)),
-                    Text(
-                      'Fayllar',
-                      style: AppTextStyles.source.semiBold(fontSize: 17),
-                    ),
-                    SizedBox(height: appH(16)),
-                    DefaultCustomTileWg(
-                      tileMaxLines: 1,
-                      tileOverflow: .ellipsis,
-                      tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
-                      onTap: () {},
-                      tileTitle: 'Tahlil, taqqoslash va prognozlash',
-                      subTitle: '3.4 MB',
-                    ),
-
-                    /// available tests in the current course
-                    SizedBox(height: appH(10)),
-                    Text(
-                      'Test topshiriqlar',
-                      style: AppTextStyles.source.semiBold(fontSize: 17),
-                    ),
-                    SizedBox(height: appH(16)),
-                    DefaultCustomTileWg(
-                      tileMaxLines: 1,
-                      tileOverflow: .ellipsis,
-                      tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
-                      onTap: () {
-                        openMiniAppSheetFamily(
-                          context,
-                          showHandler: false,
-                          child: RegularTestCoursePage(),
-                        );
-                      },
-                      tileTitle: 'Tahlil, taqqoslash va prognozlash',
-                      subTitle: '3.4 MB',
-                    ),
-                  ],
-                ),
+                  /// available tests in the current course
+                  SizedBox(height: appH(10)),
+                  Text(
+                    'Test topshiriqlar',
+                    style: AppTextStyles.source.semiBold(fontSize: 17),
+                  ),
+                  SizedBox(height: appH(16)),
+                  DefaultCustomTileWg(
+                    tileMaxLines: 1,
+                    tileOverflow: .ellipsis,
+                    tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
+                    onTap: () {
+                      openMiniAppSheetFamily(
+                        context,
+                        showHandler: false,
+                        child: RegularTestCoursePage(),
+                      );
+                    },
+                    tileTitle: 'Tahlil, taqqoslash va prognozlash',
+                    subTitle: '3.4 MB',
+                  ),
+                ],
               ),
             ),
           ),
