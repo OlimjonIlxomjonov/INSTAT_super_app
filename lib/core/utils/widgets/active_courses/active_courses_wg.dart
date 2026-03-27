@@ -12,12 +12,14 @@ class ActiveCoursesWg extends StatelessWidget {
   final VoidCallback onTap;
   final bool showCircularProgBar;
   final CourseEntity data;
+  final String categoryName;
 
   const ActiveCoursesWg({
     super.key,
     required this.onTap,
     this.showCircularProgBar = true,
     required this.data,
+    required this.categoryName,
   });
 
   @override
@@ -50,7 +52,7 @@ class ActiveCoursesWg extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   AutoSizeText(
-                    "${data.category}",
+                    categoryName,
                     style: AppTextStyles.source.medium(
                       fontSize: 12,
                       color: AppColors.primaryColor,

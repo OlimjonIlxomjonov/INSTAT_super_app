@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
+import 'package:my_template/core/common/skeletonizer_shimmer/courses/course_shimmer.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
@@ -21,6 +22,7 @@ import 'package:my_template/features/main_app/home/presentation/bloc/courses/cou
 import 'package:my_template/features/main_app/home/presentation/bloc/home_event.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/mini_app_section_card.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/model/mini_app_model.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/course_category_builder.dart';
 
 class MobileUiScreenComponent extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -38,19 +40,6 @@ class MobileUiScreenComponent extends StatefulWidget {
 }
 
 class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
-  final Map<int, String> _categoryCache = {};
-
-  void _fetchCategories(List<CourseEntity> courses) {
-    final uniqueIds = courses.map((c) => c.category).toSet();
-    for (final id in uniqueIds) {
-      if (!_categoryCache.containsKey(id)) {
-        context.read<UserCategoryByIdBloc>().add(
-          UserCategoryByIdEvent(params: CourseCategoryByIdParams(id: id)),
-        );
-      }
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -73,14 +62,6 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
     openMiniAppSheetFamily(
       context,
       child: const ShowAllCoursesBottomSheetPage(),
-    );
-  }
-
-  void _goToDetailedCourse(BuildContext context) {
-    openMiniAppSheetFamily(
-      showHandler: false,
-      context,
-      child: const DetailedCourseInfoPage(),
     );
   }
 
@@ -163,6 +144,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
           ),
         ),
 
+        /// ACTIVE COURSES
         SliverPadding(
           padding: AppPadding.horizontal20x(),
           sliver: SliverToBoxAdapter(
@@ -173,31 +155,30 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                   return Column(
                     children: List.generate(2, (index) {
                       final item = data[index];
-                      return BlocBuilder<
-                        UserCategoryByIdBloc,
-                        UserCategoryByIdState
-                      >(
-                        builder: (context, state) {
-                          if (state is UserCategoryByIdLoaded) {
-                            return ActiveCoursesWg(
-                              onTap: () {
-                                openMiniAppSheetFamily(
-                                  showHandler: false,
-                                  context,
-                                  child: DetailedUserBoughtCoursesEduPage(
-                                    data: item,
-                                    categoryName: state.entity.name,
-                                  ),
-                                );
-                              },
-                              data: item,
-                            );
-                          }
-                          return SizedBox.shrink();
+                      return CourseCategoryBuilder(
+                        categoryId: item.category,
+                        loadingBuilder: (context) => const SizedBox.shrink(),
+                        builder: (context, categoryName) {
+                          return ActiveCoursesWg(
+                            onTap: () {
+                              openMiniAppSheetFamily(
+                                showHandler: false,
+                                context,
+                                child: DetailedUserBoughtCoursesEduPage(
+                                  data: item,
+                                  categoryName: categoryName,
+                                ),
+                              );
+                            },
+                            data: item,
+                            categoryName: categoryName,
+                          );
                         },
                       );
                     }),
                   );
+                } else if (state is UserCoursesLoading) {
+                  return SkeletonMinimalCourseCard();
                 }
                 return const SizedBox.shrink();
               },
@@ -237,13 +218,33 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                         final item = data[index];
                         return Padding(
                           padding: EdgeInsets.only(right: appW(12)),
-                          child: PopularCoursesCardWg(
-                            onTap: () => _goToDetailedCourse(context),
-                            data: item,
+                          child: CourseCategoryBuilder(
+                            categoryId: item.category,
+                            loadingBuilder: (context) =>
+                                const SizedBox.shrink(),
+                            builder: (context, categoryName) {
+                              return PopularCoursesCardWg(
+                                onTap: () {
+                                  openMiniAppSheetFamily(
+                                    showHandler: false,
+                                    context,
+                                    child: DetailedCourseInfoPage(
+                                      total: state.response.meta.total,
+                                      data: item,
+                                      courseCategory: categoryName,
+                                    ),
+                                  );
+                                },
+                                data: item,
+                                categoryName: categoryName,
+                              );
+                            },
                           ),
                         );
                       },
                     );
+                  } else if (state is CoursesLoading) {
+                    return SkeletonExpandedCourseCard();
                   }
                   return SizedBox.shrink();
                 },

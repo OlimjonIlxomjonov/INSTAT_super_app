@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/general_widgets/online_lib_style_custom_bottom_sheet/online_lib_style_custom_bottom_sheet_wg.dart';
 import 'package:my_template/core/utils/general_widgets/payment_open_bottom_sheet/payment_open_bottom_sheet_wg.dart';
@@ -10,15 +12,43 @@ import 'package:my_template/core/utils/widgets/detailed_course_info_header/detai
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/about_this_course_tab.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/course_comments_tab.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/course_plan_tab.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/about_course_features/about_cours_features_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/about_course_features/about_course_features_state.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
 
-class DetailedCourseInfoPage extends StatelessWidget {
-  const DetailedCourseInfoPage({super.key});
+class DetailedCourseInfoPage extends StatefulWidget {
+  final CourseEntity data;
+  final String courseCategory;
+  final int total;
 
+  const DetailedCourseInfoPage({
+    super.key,
+    required this.data,
+    required this.courseCategory,
+    required this.total,
+  });
+
+  @override
+  State<DetailedCourseInfoPage> createState() => _DetailedCourseInfoPageState();
+}
+
+class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
   void _openPayment(BuildContext context) {
     onlineLibStyleCustomBottomSheetWg(
       context,
       headerTitle: "To'lov turi",
       child: const PaymentOpenBottomSheetWg(),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<AboutCourseFeaturesBloc>().add(
+      AboutCourseFeaturesEvent(
+        params: CourseCategoryByIdParams(id: widget.data.id),
+      ),
     );
   }
 
@@ -29,8 +59,11 @@ class DetailedCourseInfoPage extends StatelessWidget {
       child: Scaffold(
         body: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            // const DetailedCourseInfoHeaderImage(),
-            // const DetailedCourseInfoHeaderWg(),
+            DetailedCourseInfoHeaderImage(imagePath: widget.data.thumbnail),
+            DetailedCourseInfoHeaderWg(
+              data: widget.data,
+              categoryName: widget.courseCategory,
+            ),
             SliverAppBar(
               pinned: true,
               backgroundColor: AppColors.white,
@@ -50,9 +83,13 @@ class DetailedCourseInfoPage extends StatelessWidget {
               ),
             ),
           ],
-          body: const TabBarView(
+          body: TabBarView(
             children: [
-              AboutThisCourseTab(),
+              AboutThisCourseTab(
+                data: widget.data,
+                courseCategory: widget.courseCategory,
+                total: widget.total,
+              ),
               CoursePlanTab(),
               CourseCommentsTab(),
             ],
@@ -60,7 +97,7 @@ class DetailedCourseInfoPage extends StatelessWidget {
         ),
         bottomNavigationBar: CustomBottomNavContainerWg(
           onTap: () => _openPayment(context),
-          buttonText: 'Sotib olish - 800 000 UZS',
+          buttonText: 'Sotib olish - ${widget.data.price} UZS',
         ),
       ),
     );

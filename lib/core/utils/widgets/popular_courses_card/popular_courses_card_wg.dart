@@ -15,11 +15,13 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 class PopularCoursesCardWg extends StatefulWidget {
   final VoidCallback onTap;
   final CourseEntity data;
+  final String categoryName;
 
   const PopularCoursesCardWg({
     super.key,
     required this.onTap,
     required this.data,
+    required this.categoryName,
   });
 
   @override
@@ -79,13 +81,13 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
           ),
           SizedBox(height: appH(12)),
 
-          // AutoSizeText(
-          //   "categoryName",
-          //   style: AppTextStyles.source.medium(
-          //     fontSize: 12,
-          //     color: AppColors.primaryColor,
-          //   ),
-          // ),
+          AutoSizeText(
+            widget.categoryName,
+            style: AppTextStyles.source.medium(
+              fontSize: 12,
+              color: AppColors.primaryColor,
+            ),
+          ),
           SizedBox(height: appH(4)),
           AutoSizeText(
             maxLines: 2,

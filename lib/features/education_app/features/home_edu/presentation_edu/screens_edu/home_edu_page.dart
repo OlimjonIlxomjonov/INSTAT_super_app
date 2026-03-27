@@ -37,13 +37,13 @@ class HomeEduPage extends StatelessWidget {
     );
   }
 
-  void _goToDetailedCourse(BuildContext context) {
-    openMiniAppSheetFamily(
-      showHandler: false,
-      context,
-      child: const DetailedCourseInfoPage(),
-    );
-  }
+  // void _goToDetailedCourse(BuildContext context) {
+  //   openMiniAppSheetFamily(
+  //     showHandler: false,
+  //     context,
+  //     child: const DetailedCourseInfoPage(),
+  //   );
+  // }
 
   static const List<Widget> _categories = [
     EduCategoriesWg(),

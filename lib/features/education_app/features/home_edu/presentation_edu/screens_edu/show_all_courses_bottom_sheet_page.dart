@@ -25,7 +25,7 @@ class _ShowAllCoursesBottomSheetPageState
   CoursesLayout layout = CoursesLayout.grid;
 
   void goToPage() {
-    openMiniAppSheetFamily(context, child: DetailedCourseInfoPage());
+    // openMiniAppSheetFamily(context, child: DetailedCourseInfoPage());
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/di/service_locator.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/about_course_features/about_cours_features_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_category_by_id/user_category_by_id_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_items/course_lesson_items_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_topics/course_lesson_topics_bloc.dart';
@@ -29,6 +30,9 @@ class MyBlocProvider extends StatelessWidget {
           create: (_) => sl<CourseLessonItemsBloc>(),
         ),
         BlocProvider<CoursesBloc>(create: (_) => sl<CoursesBloc>()),
+        BlocProvider<AboutCourseFeaturesBloc>(
+          create: (_) => sl<AboutCourseFeaturesBloc>(),
+        ),
       ],
       child: child,
     );

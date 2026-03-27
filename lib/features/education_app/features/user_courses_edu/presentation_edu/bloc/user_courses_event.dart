@@ -28,3 +28,8 @@ class CourseLessonItemsEvent extends CoursesEvent {
   CourseLessonItemsEvent({required this.params});
 }
 
+class AboutCourseFeaturesEvent extends CoursesEvent {
+  final CourseCategoryByIdParams params;
+
+  AboutCourseFeaturesEvent({required this.params});
+}
