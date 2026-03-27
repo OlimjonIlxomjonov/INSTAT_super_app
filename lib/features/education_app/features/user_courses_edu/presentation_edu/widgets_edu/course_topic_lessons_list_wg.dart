@@ -147,8 +147,7 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
                       MiniAppSheetShell(
                         showHandle: false,
                         child: WatchCourseEduVideoPage(
-                          data: lesson,
-                          lessonCount: widget.lessonCount,
+                          imagePath: lesson.thumbnail,
                         ),
                       ),
                     ),

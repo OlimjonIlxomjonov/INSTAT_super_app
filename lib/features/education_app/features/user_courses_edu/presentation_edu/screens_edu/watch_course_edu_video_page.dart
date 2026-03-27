@@ -11,17 +11,11 @@ import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/fa
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_items/course_lesson_items_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/regular_test/regular_test_course_page.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/default_custom_tile_wg.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/lesson_item_wg.dart';
 
 class WatchCourseEduVideoPage extends StatelessWidget {
-  final CourseLessonItemsEntity data;
-  final int lessonCount;
+  final String? imagePath;
 
-  const WatchCourseEduVideoPage({
-    super.key,
-    required this.data,
-    required this.lessonCount,
-  });
+  const WatchCourseEduVideoPage({super.key, required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +30,25 @@ class WatchCourseEduVideoPage extends StatelessWidget {
             /// VIDEO
             flexibleSpace: FlexibleSpaceBar(
               background: RepaintBoundary(
-                child: Image.network(data.thumbnail ?? '', fit: .cover),
+                child: Image.network(
+                  imagePath ?? '',
+                  fit: .cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primaryColor,
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, exception, stackTrace) {
+                    return Icon(Icons.broken_image);
+                  },
+                ),
               ),
             ),
             leading: Padding(
@@ -67,35 +79,34 @@ class WatchCourseEduVideoPage extends StatelessWidget {
             ),
           ),
 
-          SliverPadding(
-            padding: AppPadding.horizontal20x(),
-            sliver: SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: .start,
-                children: [
-                  Text(
-                    data.title,
-                    style: AppTextStyles.source.medium(fontSize: 20),
-                  ),
-                  SizedBox(height: appH(20)),
-                  Text(
-                    'Videolar',
-                    style: AppTextStyles.source.semiBold(fontSize: 17),
-                  ),
-                  SizedBox(height: appH(16)),
-                ],
-              ),
-            ),
-          ),
-
-          /// available videos in the current course
-          SliverList.builder(
-            itemCount: lessonCount,
-            itemBuilder: (context, index) {
-              return LessonItemWg(data: data);
-            },
-          ),
-
+          // SliverPadding(
+          //   padding: AppPadding.horizontal20x(),
+          //   sliver: SliverToBoxAdapter(
+          //     child: Column(
+          //       crossAxisAlignment: .start,
+          //       children: [
+          //         Text(
+          //           data.title,
+          //           style: AppTextStyles.source.medium(fontSize: 20),
+          //         ),
+          //         SizedBox(height: appH(20)),
+          //         Text(
+          //           'Videolar',
+          //           style: AppTextStyles.source.semiBold(fontSize: 17),
+          //         ),
+          //         SizedBox(height: appH(16)),
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          //
+          // /// available videos in the current course
+          // SliverList.builder(
+          //   itemCount: lessonCount,
+          //   itemBuilder: (context, index) {
+          //     return LessonItemWg(data: data, index: index);
+          //   },
+          // ),
           SliverPadding(
             padding: AppPadding.horizontal20x(),
             sliver: SliverToBoxAdapter(
