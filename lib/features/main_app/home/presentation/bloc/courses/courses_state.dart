@@ -14,4 +14,9 @@ class CoursesLoaded extends CoursesState {
   CoursesLoaded({required this.response});
 }
 
-class CoursesError extends CoursesState {}
+class CoursesError extends CoursesState {
+  final bool isConnectionError;
+  final String message;
+
+  CoursesError({required this.isConnectionError, required this.message});
+}

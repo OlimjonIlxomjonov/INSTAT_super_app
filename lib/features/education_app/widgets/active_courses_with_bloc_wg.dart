@@ -1,0 +1,58 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/common/skeletonizer_shimmer/courses/course_shimmer.dart';
+import 'package:my_template/core/utils/devices/device_unitlity.dart';
+import 'package:my_template/core/utils/widgets/active_courses/active_courses_wg.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_state.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/course_category_builder.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
+
+class ActiveCoursesWithBlocWg extends StatelessWidget {
+  const ActiveCoursesWithBlocWg({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPadding(
+      padding: AppPadding.horizontal20x(),
+      sliver: SliverToBoxAdapter(
+        child: BlocBuilder<UserCoursesBloc, UserCoursesState>(
+          builder: (context, state) {
+            if (state is UserCoursesLoaded) {
+              final data = state.response.data;
+              return Column(
+                children: List.generate(2, (index) {
+                  final item = data[index];
+                  return CourseCategoryBuilder(
+                    categoryId: item.category,
+                    loadingBuilder: (context) => const SizedBox.shrink(),
+                    builder: (context, categoryName) {
+                      return ActiveCoursesWg(
+                        onTap: () {
+                          openMiniAppSheetFamily(
+                            showHandler: false,
+                            context,
+                            child: DetailedUserBoughtCoursesEduPage(
+                              data: item,
+                              categoryName: categoryName,
+                            ),
+                          );
+                        },
+                        data: item,
+                        categoryName: categoryName,
+                      );
+                    },
+                  );
+                }),
+              );
+            } else if (state is UserCoursesLoading) {
+              return SkeletonMinimalCourseCard();
+            }
+            return const SizedBox.shrink();
+          },
+        ),
+      ),
+    );
+  }
+}

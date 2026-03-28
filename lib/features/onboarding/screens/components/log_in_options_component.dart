@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/routes/route_generator.dart';
@@ -23,24 +20,12 @@ class LogInOptionsComponent extends StatefulWidget {
 }
 
 class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
-  final ValueNotifier<bool> _isConnected = ValueNotifier(false);
-  StreamSubscription? _internetStreamSubs;
   late final double screenHeight;
 
   @override
   void initState() {
     super.initState();
     screenHeight = AppResponsiveness.screenHeight;
-    _internetStreamSubs = InternetConnection().onStatusChange.listen((event) {
-      _isConnected.value = event == InternetStatus.connected;
-    });
-  }
-
-  @override
-  void dispose() {
-    _internetStreamSubs?.cancel();
-    _isConnected.dispose();
-    super.dispose();
   }
 
   void oneIdLogin() {
@@ -99,15 +84,12 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
               ),
               SizedBox(height: appH(32)),
 
-              ValueListenableBuilder<bool>(
-                valueListenable: _isConnected,
-                builder: (context, isConnected, child) {
-                  return SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(onPressed: oneIdLogin, child: child!),
-                  );
-                },
-                child: SvgPicture.asset(AppVectors.oneIdLogo),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: oneIdLogin,
+                  child: SvgPicture.asset(AppVectors.oneIdLogo),
+                ),
               ),
 
               const SizedBox(height: 32),

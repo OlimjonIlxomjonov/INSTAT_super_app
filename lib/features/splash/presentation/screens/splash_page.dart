@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
 import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
@@ -8,6 +9,7 @@ import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/home_page.dart';
 import 'package:my_template/features/onboarding/screens/onboarding_page.dart';
 import 'package:my_template/features/splash/presentation/screens/grid_background_painter.dart';
+import 'package:my_template/features/splash/presentation/screens/no_internet_page.dart';
 
 import '../../../../core/utils/constants/colors/app_colors.dart';
 import '../../../../core/utils/devices/device_unitlity.dart';
@@ -44,10 +46,20 @@ class _SplashPageState extends State<SplashPage> {
     final token = await TokenStorageServiceImpl().getAccessToken();
     final isLoggedIn = token != null && token.isNotEmpty;
 
-    if (isLoggedIn) {
-      AppRoute.open(const HomePage());
+    // Determine where the user should ultimately go.
+    final destination =
+        isLoggedIn ? const HomePage() : const OnboardingPage();
+
+    // Check REAL internet access (pings actual URLs, catches WiFi-but-no-internet).
+    final hasInternet = await InternetConnection().hasInternetAccess;
+    if (!mounted) return;
+
+    if (hasInternet) {
+      AppRoute.open(destination);
     } else {
-      AppRoute.open(const OnboardingPage());
+      // Show the no-internet gate; it auto-navigates to [destination] when
+      // connectivity is restored.
+      AppRoute.open(NoInternetPage(destination: destination));
     }
   }
 

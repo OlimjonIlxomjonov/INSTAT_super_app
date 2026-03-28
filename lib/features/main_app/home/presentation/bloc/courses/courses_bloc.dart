@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/courses/courses_use_case.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_state.dart';
@@ -12,8 +15,25 @@ class CoursesBloc extends Bloc<HomeEvent, CoursesState> {
       try {
         final response = await useCase.call();
         emit(CoursesLoaded(response: response));
+      } on DioException catch (e) {
+        final isNoInternet =
+            e.type == DioExceptionType.connectionTimeout ||
+            e.type == DioExceptionType.connectionError ||
+            e.type == DioExceptionType.receiveTimeout ||
+            e.type == DioExceptionType.sendTimeout ||
+            e.type == DioExceptionType.unknown ||
+            e.error is SocketException;
+
+        emit(CoursesError(
+          isConnectionError: isNoInternet,
+          message: e.message ?? 'Unknown error',
+        ));
       } catch (e) {
-        emit(CoursesError());
+        final isSocketError = e is SocketException;
+        emit(CoursesError(
+          isConnectionError: isSocketError,
+          message: e.toString(),
+        ));
       }
     });
   }
