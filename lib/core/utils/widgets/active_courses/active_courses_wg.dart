@@ -29,6 +29,7 @@ class ActiveCoursesWg extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        height: 80,
         margin: .only(bottom: 12, right: isTablet ? 20 : 0),
         padding: .symmetric(horizontal: 8, vertical: isTablet ? 8 : 5),
         decoration: BoxDecoration(
@@ -37,10 +38,20 @@ class ActiveCoursesWg extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: .circular(8),
-                child: Image.network(data.thumbnail, fit: BoxFit.contain),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Image.network(
+                  data.thumbnail,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, progress) => progress == null
+                      ? child
+                      : const Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        ),
+                  errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
+                ),
               ),
             ),
             SizedBox(width: appW(12)),

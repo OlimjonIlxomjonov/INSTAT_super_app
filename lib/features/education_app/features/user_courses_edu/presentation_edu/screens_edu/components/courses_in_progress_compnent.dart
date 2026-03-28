@@ -1,8 +1,12 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/skeletonizer_shimmer/courses/course_shimmer.dart';
 import 'package:my_template/core/common/ui_states/empty_state.dart';
+import 'package:my_template/core/common/ui_states/lost_internet_connection_state.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/popular_courses_card/expanded_courses_card_wg.dart';
@@ -34,6 +38,9 @@ class _CoursesInProgressComponentState extends State<CoursesInProgressComponent>
   @override
   bool get wantKeepAlive => true;
 
+  StreamSubscription<List<ConnectivityResult>>? _connectivitySub;
+  bool _wasDisconnected = false;
+
   void sheetOpener({required CourseEntity data, required String categoryName}) {
     openMiniAppSheetFamily(
       context,
@@ -47,9 +54,45 @@ class _CoursesInProgressComponentState extends State<CoursesInProgressComponent>
   @override
   void initState() {
     super.initState();
+    _loadData();
+    _checkInitialConnectivity();
+    _listenToConnectivity();
+  }
+
+  /// Check connectivity once at startup so that _wasDisconnected is correct
+  /// if the app launches with no internet — reconnect retry will then fire.
+  Future<void> _checkInitialConnectivity() async {
+    final results = await Connectivity().checkConnectivity();
+    final hasInternet = results.any((r) => r != ConnectivityResult.none);
+    if (!hasInternet) {
+      _wasDisconnected = true;
+    }
+  }
+
+  void _loadData() {
     context.read<UserCoursesBloc>().add(
       UserCoursesEvent(params: UserCoursesParams(state: widget.state)),
     );
+  }
+
+  void _listenToConnectivity() {
+    _connectivitySub = Connectivity().onConnectivityChanged.listen((results) {
+      final hasInternet = results.any((r) => r != ConnectivityResult.none);
+
+      if (hasInternet && _wasDisconnected) {
+        // Internet came back — reload
+        _wasDisconnected = false;
+        _loadData();
+      } else if (!hasInternet) {
+        _wasDisconnected = true;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _connectivitySub?.cancel();
+    super.dispose();
   }
 
   /// EXTENDED COURSES
@@ -129,6 +172,15 @@ class _CoursesInProgressComponentState extends State<CoursesInProgressComponent>
                 childCount: 5,
               ),
             ),
+          );
+        }
+
+        if (state is UserCoursesError) {
+          return SliverFillRemaining(
+            hasScrollBody: false,
+            child: state.isConnectionError
+                ? LostInternetConnectionState(onRetry: _loadData)
+                : Center(child: Text('error: ${state.message}')),
           );
         }
 

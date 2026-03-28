@@ -16,6 +16,7 @@ import 'package:my_template/features/education_app/features/home_edu/presentatio
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/about_course_features/about_cours_features_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/about_course_features/about_course_features_state.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_topics/course_lesson_topics_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
 
@@ -36,6 +37,8 @@ class DetailedCourseInfoPage extends StatefulWidget {
 }
 
 class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
+  late final List<Widget> _headerSlivers;
+
   void _openPayment(BuildContext context) {
     if (widget.data.userOrder?.status != 'paid') {
       onlineLibStyleCustomBottomSheetWg(
@@ -57,10 +60,43 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
   @override
   void initState() {
     super.initState();
+
+    // Build ONCE, never remeasured on scroll
+    _headerSlivers = [
+      DetailedCourseInfoHeaderImage(imagePath: widget.data.thumbnail),
+      DetailedCourseInfoHeaderWg(
+        data: widget.data,
+        categoryName: widget.courseCategory,
+      ),
+      SliverAppBar(
+        pinned: true,
+        backgroundColor: AppColors.white,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        toolbarHeight: 0,
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(appH(90)),
+          child: const Padding(
+            padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
+            child: CustomTabBarWg(
+              firstTab: "Kurs haqida",
+              secondTab: "O'quv reja",
+              thirdTab: "Izohlar",
+            ),
+          ),
+        ),
+      ),
+    ];
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       context.read<AboutCourseFeaturesBloc>().add(
         AboutCourseFeaturesEvent(
+          params: CourseCategoryByIdParams(id: widget.data.id),
+        ),
+      );
+      context.read<CourseLessonTopicsBloc>().add(
+        CourseLessonTopicsEvent(
           params: CourseCategoryByIdParams(id: widget.data.id),
         ),
       );
@@ -73,31 +109,8 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
       length: 3,
       child: Scaffold(
         body: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            DetailedCourseInfoHeaderImage(imagePath: widget.data.thumbnail),
-            DetailedCourseInfoHeaderWg(
-              data: widget.data,
-              categoryName: widget.courseCategory,
-            ),
-            SliverAppBar(
-              pinned: true,
-              backgroundColor: AppColors.white,
-              elevation: 0,
-              automaticallyImplyLeading: false,
-              toolbarHeight: 0,
-              bottom: PreferredSize(
-                preferredSize: Size.fromHeight(appH(90)),
-                child: const Padding(
-                  padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
-                  child: CustomTabBarWg(
-                    firstTab: "Kurs haqida",
-                    secondTab: "O'quv reja",
-                    thirdTab: "Izohlar",
-                  ),
-                ),
-              ),
-            ),
-          ],
+          headerSliverBuilder: (context, _) => _headerSlivers,
+          // 👈 just a pointer
           body: TabBarView(
             children: [
               AboutThisCourseTab(

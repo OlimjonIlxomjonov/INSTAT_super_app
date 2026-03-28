@@ -148,6 +148,7 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
                         showHandle: false,
                         child: WatchCourseEduVideoPage(
                           imagePath: lesson.thumbnail,
+                          title: lesson.title,
                         ),
                       ),
                     ),

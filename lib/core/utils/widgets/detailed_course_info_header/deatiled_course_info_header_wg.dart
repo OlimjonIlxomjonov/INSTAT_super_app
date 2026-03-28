@@ -7,9 +7,6 @@ import 'package:my_template/core/utils/general_widgets/html_content_wg/html_cont
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
 
-/// Returns TWO slivers — split so Flutter can lay them out incrementally.
-/// Wrap usage with a SliverMainAxisGroup or spread them directly into
-/// the headerSliverBuilder list.
 class DetailedCourseInfoHeaderWg extends StatelessWidget {
   final String categoryName;
   final CourseEntity data;
@@ -24,7 +21,7 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverMainAxisGroup(
       slivers: [
-        /// ── Metadata row (category, title, stats) ──────────────────────
+        /// Metadata row
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -80,7 +77,7 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
           ),
         ),
 
-        /// ── Description card — RepaintBoundary isolates Html repaints ──
+        /// Description card
         SliverToBoxAdapter(
           child: Padding(
             padding: EdgeInsets.fromLTRB(20, appH(16), 20, 0),

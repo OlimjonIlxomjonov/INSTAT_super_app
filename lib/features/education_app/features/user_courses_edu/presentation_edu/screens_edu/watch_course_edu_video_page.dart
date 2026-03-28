@@ -13,9 +13,14 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/default_custom_tile_wg.dart';
 
 class WatchCourseEduVideoPage extends StatelessWidget {
+  final String title;
   final String? imagePath;
 
-  const WatchCourseEduVideoPage({super.key, required this.imagePath});
+  const WatchCourseEduVideoPage({
+    super.key,
+    required this.imagePath,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +118,9 @@ class WatchCourseEduVideoPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: .start,
                 children: [
+                  Text(title, style: AppTextStyles.source.medium(fontSize: 20)),
+                  Divider(color: AppColors.greyScale.grey200),
+
                   /// available files in the current course
                   SizedBox(height: appH(10)),
                   Text(

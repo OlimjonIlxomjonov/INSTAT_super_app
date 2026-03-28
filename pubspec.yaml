@@ -48,6 +48,7 @@ dependencies:
   webview_flutter: ^4.13.1
   another_flushbar: ^1.12.32
   flutter_html: ^3.0.0
+  connectivity_plus: ^7.0.0
 
 
 dev_dependencies:

@@ -75,7 +75,7 @@ class SkeletonExpandedCourseCard extends StatelessWidget {
     return Skeletonizer(
       enabled: true,
       child: Padding(
-        padding: EdgeInsets.only(bottom: appH(16), left: 20, right: 20),
+        padding: EdgeInsets.only(bottom: appH(16)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

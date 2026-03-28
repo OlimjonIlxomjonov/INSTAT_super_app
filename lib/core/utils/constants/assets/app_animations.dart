@@ -8,4 +8,5 @@ class AppAnimations {
 
   /// states
   static const emptyState = '${_path}empty_state.json';
+  static const lostInternetConnectionState = '${_path}no_internet.json';
 }
