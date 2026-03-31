@@ -29,6 +29,7 @@ import 'package:my_template/features/main_app/home/presentation/bloc/user/user_m
 import 'package:my_template/features/main_app/home/presentation/widgets/mini_app_section_card.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/model/mini_app_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/course_category_builder.dart';
+import 'package:my_template/features/main_app/home/presentation/widgets/popular_course_with_bloc/popular_with_bloc_wg.dart';
 
 class MobileUiScreenComponent extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -48,6 +49,7 @@ class MobileUiScreenComponent extends StatefulWidget {
 class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
   StreamSubscription<List<ConnectivityResult>>? _connectivitySub;
   bool _wasDisconnected = false;
+  bool isCollapsed = false;
 
   @override
   void initState() {
@@ -155,58 +157,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
       /// EDU POPULAR COURSES
       SliverSafeArea(
         top: false,
-        sliver: SliverToBoxAdapter(
-          child: SizedBox(
-            height: appH(280),
-            child: BlocBuilder<CoursesBloc, CoursesState>(
-              builder: (context, state) {
-                if (state is CoursesLoaded) {
-                  final data = state.response.data;
-                  return ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    padding: AppPadding.horizontal20x(),
-                    itemCount: data.length,
-                    cacheExtent: appW(300),
-                    itemExtent: appW(312),
-                    itemBuilder: (context, index) {
-                      final item = data[index];
-                      return Padding(
-                        padding: EdgeInsets.only(right: appW(12)),
-                        child: CourseCategoryBuilder(
-                          categoryId: item.category,
-                          loadingBuilder: (context) => const SizedBox.shrink(),
-                          builder: (context, categoryName) {
-                            return PopularCoursesCardWg(
-                              onTap: () {
-                                openMiniAppSheetFamily(
-                                  showHandler: false,
-                                  context,
-                                  child: DetailedCourseInfoPage(
-                                    total: state.response.meta.total,
-                                    data: item,
-                                    courseCategory: categoryName,
-                                  ),
-                                );
-                              },
-                              data: item,
-                              categoryName: categoryName,
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  );
-                } else if (state is CoursesLoading) {
-                  return Padding(
-                    padding: AppPadding.horizontal20x(),
-                    child: SkeletonExpandedCourseCard(),
-                  );
-                }
-                return SizedBox.shrink();
-              },
-            ),
-          ),
-        ),
+        sliver: SliverToBoxAdapter(child: PopularWithBlocWg()),
       ),
     ];
   }
@@ -243,11 +194,11 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
           SliverPadding(
             padding: AppPadding.horizontal20x(),
             sliver: SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: isCollapsed ? 3 : 2,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
-                childAspectRatio: 1,
+                childAspectRatio: isCollapsed ? 1 : 1.4,
               ),
               delegate: SliverChildBuilderDelegate((context, index) {
                 final item = widget.sections[index];
@@ -256,6 +207,12 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                   backgroundImage: item.backgroundImage,
                   title: item.title,
                   onTap: item.onTap,
+                  onLongPress: () {
+                    setState(() {
+                      isCollapsed = !isCollapsed;
+                    });
+                  },
+                  isCollapsed: isCollapsed,
                 );
               }, childCount: widget.sections.length),
             ),

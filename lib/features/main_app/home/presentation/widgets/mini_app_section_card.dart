@@ -9,6 +9,8 @@ class MiniAppSectionCard extends StatefulWidget {
   final String backgroundImage;
   final String title;
   final void Function(BuildContext context) onTap;
+  final VoidCallback onLongPress;
+  final bool isCollapsed;
 
   const MiniAppSectionCard({
     super.key,
@@ -16,6 +18,8 @@ class MiniAppSectionCard extends StatefulWidget {
     required this.backgroundImage,
     required this.title,
     required this.onTap,
+    required this.onLongPress,
+    required this.isCollapsed,
   });
 
   @override
@@ -30,6 +34,7 @@ class _MiniAppSectionCardState extends State<MiniAppSectionCard> {
 
     return GestureDetector(
       onTap: () => widget.onTap(context),
+      onLongPress: widget.onLongPress,
       child: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -54,7 +59,9 @@ class _MiniAppSectionCardState extends State<MiniAppSectionCard> {
               maxLines: 1,
               overflow: .ellipsis,
               textAlign: .center,
-              style: AppTextStyles.source.medium(fontSize: 12),
+              style: AppTextStyles.source.medium(
+                fontSize: widget.isCollapsed ? 12 : 14,
+              ),
             ),
           ],
         ),

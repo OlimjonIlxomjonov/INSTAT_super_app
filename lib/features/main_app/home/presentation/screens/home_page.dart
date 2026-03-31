@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
       MiniAppModel(
         mainImage: AppImages.bookSection,
         backgroundImage: AppVectors.elektronJurnalBack,
-        title: 'Ilmiy maqolalar',
+        title: localization.scientificArticles,
         onTap: (context) => _openArticlesApp(context),
       ),
     ];

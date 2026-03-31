@@ -7,6 +7,7 @@ import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
+import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/mini_app_sheet_shell.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/watch_course_edu_video_page.dart';
@@ -47,6 +48,7 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
           ),
         ),
       );
+      logger.f("courseId ${widget.courseId}, blockId: ${widget.blockId}");
     }
   }
 
@@ -149,6 +151,9 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
                         child: WatchCourseEduVideoPage(
                           imagePath: lesson.thumbnail,
                           title: lesson.title,
+                          courseId: widget.courseId,
+                          topicId: widget.blockId,
+                          lessonId: lesson.id,
                         ),
                       ),
                     ),

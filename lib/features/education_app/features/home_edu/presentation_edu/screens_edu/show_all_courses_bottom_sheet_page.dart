@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/strings/app_strings.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
@@ -31,11 +32,12 @@ class _ShowAllCoursesBottomSheetPageState
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           /// HEADER OF THE COURSES
-          SliverDefaultAppBarWg(myTitle: AppStrings.coursesTitle),
+          SliverDefaultAppBarWg(myTitle: localization.coursesTitle),
 
           /// SEARCH BAR
           SliverAppBar(

@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
@@ -26,6 +27,7 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
   @override
   Widget build(BuildContext context) {
     final bool isMobile = Responsive.isMobile(context);
+    final localization = AppLocalizations.of(context)!;
 
     return Column(
       crossAxisAlignment: .start,
@@ -34,19 +36,19 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
         Padding(
           padding: .only(left: 20, top: 20),
           child: AutoSizeText(
-            'Akkaunt ma’lumotlari',
+            localization.accountInfo,
             style: AppTextStyles.source.medium(fontSize: isMobile ? 16 : 24),
           ),
         ),
         SizedBox(height: appH(5)),
         ProfileSettingsTileWg(
           leadingIcon: IconlyLight.profile,
-          title: 'Shaxsiy ma’lumotlar',
+          title: localization.personalInfo,
           onTap: () {},
         ),
         ProfileSettingsTileWg(
           leadingIcon: IconlyLight.notification,
-          title: 'Bildirishnomalar',
+          title: localization.notifications,
           onTap: () {
             openMiniAppSheetFamily(
               context,
@@ -57,7 +59,7 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
         ),
         ProfileSettingsTileWg(
           leadingIcon: Icons.language,
-          title: 'Ilova tili',
+          title: localization.appLanguage,
           onTap: () {
             showModalBottomSheet(
               context: context,
@@ -67,7 +69,7 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
         ),
         ProfileSettingsTileWg(
           leadingIcon: Icons.list_alt,
-          title: 'Tikketlar',
+          title: localization.tickets,
           onTap: () {
             openMiniAppSheetFamily(
               showHandler: false,
@@ -78,12 +80,12 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
         ),
         ProfileSettingsTileWg(
           leadingIcon: Icons.message_outlined,
-          title: 'Ko’p beriladigan savollar',
+          title: localization.frQuestions,
           onTap: () {},
         ),
         ProfileSettingsTileWg(
           leadingIcon: Icons.fingerprint,
-          title: 'Biometrik autentifikatsiyalar',
+          title: localization.bioAuth,
           trailingIcon: DotSwitch(
             value: biometrickSwitchState,
             onChanged: (bool newSwitchState) {
@@ -96,7 +98,7 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
         ),
         ProfileSettingsTileWg(
           leadingIcon: IconlyLight.logout,
-          title: 'Akkauntdan chiqish',
+          title: localization.leaveAccount,
           trailingIcon: SizedBox.shrink(),
           onTap: () async {
             await TokenStorageServiceImpl().deleteAccessToken();

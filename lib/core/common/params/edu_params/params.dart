@@ -22,3 +22,13 @@ class CourseLessonItemsParams {
 class CoursesParam {
   CoursesParam();
 }
+
+class CourseFilesParams {
+  final int courseId, topicId, lessonId;
+
+  CourseFilesParams({
+    required this.courseId,
+    required this.topicId,
+    required this.lessonId,
+  });
+}

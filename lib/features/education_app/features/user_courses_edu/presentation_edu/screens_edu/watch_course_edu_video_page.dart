@@ -1,26 +1,95 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconly/iconly.dart';
-import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
-import 'package:my_template/core/utils/constants/colors/app_colors.dart';
-import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
-import 'package:my_template/core/utils/devices/device_unitlity.dart';
-import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+import 'package:my_template/core/common/params/edu_params/params.dart';
+import 'package:my_template/core/utils/app_utils.dart';
+import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_items/course_lesson_items_entity.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_files/course_files_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_files/course_files_state.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/regular_test/regular_test_course_page.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/default_custom_tile_wg.dart';
+import 'package:video_player/video_player.dart';
 
-class WatchCourseEduVideoPage extends StatelessWidget {
+class WatchCourseEduVideoPage extends StatefulWidget {
   final String title;
   final String? imagePath;
+  final int courseId, topicId, lessonId;
 
   const WatchCourseEduVideoPage({
     super.key,
     required this.imagePath,
     required this.title,
+    required this.courseId,
+    required this.topicId,
+    required this.lessonId,
   });
+
+  @override
+  State<WatchCourseEduVideoPage> createState() =>
+      _WatchCourseEduVideoPageState();
+}
+
+class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
+  late VideoPlayerController controller;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _initVideo();
+  // }
+  //
+  //
+  //
+  // Future<void> _initVideo() async {
+  //   final token = TokenStorageServiceImpl().getAccessToken();
+  //
+  //   if (token == null) {
+  //     logger.e("No token found");
+  //     return;
+  //   }
+  //
+  //   logger.f(token);
+  //   final url = 'https://test.avacoder.uz/api/stream/2/240p.m3u8';
+  //
+  //   controller =
+  //       VideoPlayerController.networkUrl(
+  //           Uri.parse(url),
+  //           httpHeaders: {"Authorization": "Bearer $token"},
+  //           formatHint: .hls,
+  //         )
+  //         ..addListener(() => setState(() {}))
+  //         ..setLooping(false);
+  //
+  //   await controller.initialize();
+  //
+  //   controller.play();
+  //
+  //   setState(() {});
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   controller.dispose();
+  //   super.dispose();
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<CourseFilesBloc>().add(
+      CourseFilesEvent(
+        params: CourseFilesParams(
+          courseId: widget.courseId,
+          topicId: widget.topicId,
+          lessonId: widget.lessonId,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +101,11 @@ class WatchCourseEduVideoPage extends StatelessWidget {
             collapsedHeight: 320,
             pinned: true,
 
-            /// VIDEO
+            /// video placeholder
             flexibleSpace: FlexibleSpaceBar(
               background: RepaintBoundary(
                 child: Image.network(
-                  imagePath ?? '',
+                  widget.imagePath ?? '',
                   fit: .cover,
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) return child;
@@ -56,6 +125,9 @@ class WatchCourseEduVideoPage extends StatelessWidget {
                 ),
               ),
             ),
+
+            /// VIDEO
+            // flexibleSpace: TestVideoPage(),
             leading: Padding(
               padding: .only(left: 10, top: 10),
               child: IconButton(
@@ -83,42 +155,16 @@ class WatchCourseEduVideoPage extends StatelessWidget {
               ),
             ),
           ),
-
-          // SliverPadding(
-          //   padding: AppPadding.horizontal20x(),
-          //   sliver: SliverToBoxAdapter(
-          //     child: Column(
-          //       crossAxisAlignment: .start,
-          //       children: [
-          //         Text(
-          //           data.title,
-          //           style: AppTextStyles.source.medium(fontSize: 20),
-          //         ),
-          //         SizedBox(height: appH(20)),
-          //         Text(
-          //           'Videolar',
-          //           style: AppTextStyles.source.semiBold(fontSize: 17),
-          //         ),
-          //         SizedBox(height: appH(16)),
-          //       ],
-          //     ),
-          //   ),
-          // ),
-          //
-          // /// available videos in the current course
-          // SliverList.builder(
-          //   itemCount: lessonCount,
-          //   itemBuilder: (context, index) {
-          //     return LessonItemWg(data: data, index: index);
-          //   },
-          // ),
           SliverPadding(
             padding: AppPadding.horizontal20x(),
             sliver: SliverToBoxAdapter(
               child: Column(
                 crossAxisAlignment: .start,
                 children: [
-                  Text(title, style: AppTextStyles.source.medium(fontSize: 20)),
+                  Text(
+                    widget.title,
+                    style: AppTextStyles.source.medium(fontSize: 20),
+                  ),
                   Divider(color: AppColors.greyScale.grey200),
 
                   /// available files in the current course
@@ -128,13 +174,34 @@ class WatchCourseEduVideoPage extends StatelessWidget {
                     style: AppTextStyles.source.semiBold(fontSize: 17),
                   ),
                   SizedBox(height: appH(16)),
-                  DefaultCustomTileWg(
-                    tileMaxLines: 1,
-                    tileOverflow: .ellipsis,
-                    tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
-                    onTap: () {},
-                    tileTitle: 'Tahlil, taqqoslash va prognozlash',
-                    subTitle: '3.4 MB',
+                  BlocBuilder<CourseFilesBloc, CourseFilesState>(
+                    builder: (context, state) {
+                      if (state is CourseFilesLoaded) {
+                        final data = state.entity;
+
+                        if (data.isEmpty) {
+                          return Text(
+                            'Hozirda kursga tegishli hech qanday fayylar mavjud emas!',
+                            style: CustomTextStyles.h4,
+                          );
+                        }
+
+                        return Column(
+                          crossAxisAlignment: .start,
+                          children: [
+                            DefaultCustomTileWg(
+                              tileMaxLines: 1,
+                              tileOverflow: .ellipsis,
+                              tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
+                              onTap: () {},
+                              tileTitle: 'Tahlil, taqqoslash va prognozlash',
+                              subTitle: '3.4 MB',
+                            ),
+                          ],
+                        );
+                      }
+                      return SizedBox.shrink();
+                    },
                   ),
 
                   /// available tests in the current course

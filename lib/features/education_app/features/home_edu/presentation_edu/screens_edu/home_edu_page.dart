@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/strings/app_strings.dart';
 import 'package:my_template/core/utils/general_widgets/dragble_app_bar/draggble_app_bar_wg.dart';
@@ -13,6 +14,7 @@ import 'package:my_template/features/education_app/features/home_edu/presentatio
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/widgets_edu/home_achivements_wg.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
 import 'package:my_template/features/education_app/widgets/active_courses_with_bloc_wg.dart';
+import 'package:my_template/features/main_app/home/presentation/widgets/popular_course_with_bloc/popular_with_bloc_wg.dart';
 
 class HomeEduPage extends StatelessWidget {
   final VoidCallback onTap, onProfileTap;
@@ -38,13 +40,7 @@ class HomeEduPage extends StatelessWidget {
     );
   }
 
-  // void _goToDetailedCourse(BuildContext context) {
-  //   openMiniAppSheetFamily(
-  //     showHandler: false,
-  //     context,
-  //     child: const DetailedCourseInfoPage(),
-  //   );
-  // }
+  // void _goToDetailedCourse(BuildContext context) {}
 
   static const List<Widget> _categories = [
     EduCategoriesWg(),
@@ -56,6 +52,7 @@ class HomeEduPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: DraggableAppBarWg(onProfileTap: onProfileTap),
       body: CustomScrollView(
@@ -86,7 +83,7 @@ class HomeEduPage extends StatelessWidget {
                     return HomeAchievementsWg();
                   case 2:
                     return ExtendSectionSeeAllWg(
-                      title: AppStrings.studyingCourses,
+                      title: localization.studyingCourses,
                       onTap: onTap,
                     );
                   default:
@@ -120,29 +117,12 @@ class HomeEduPage extends StatelessWidget {
                       top: appH(10),
                     ),
                     child: ExtendSectionSeeAllWg(
-                      title: AppStrings.allCourses,
+                      title: localization.allCourses,
                       onTap: () => _goToAllCourses(context),
                     ),
                   );
                 }
-                // return SizedBox(
-                //   height: 300,
-                //   child: ListView.builder(
-                //     scrollDirection: Axis.horizontal,
-                //     padding: EdgeInsets.symmetric(horizontal: appW(20)),
-                //     itemCount: 10,
-                //     itemExtent: appW(312),
-                //     cacheExtent: appW(300),
-                //     itemBuilder: (context, index) {
-                //       return Padding(
-                //         padding: EdgeInsets.only(right: appW(12)),
-                //         child: PopularCoursesCardWg(
-                //           onTap: () => _goToDetailedCourse(context),
-                //         ),
-                //       );
-                //     },
-                //   ),
-                // );
+                return PopularWithBlocWg();
               }, childCount: 2),
             ),
           ),

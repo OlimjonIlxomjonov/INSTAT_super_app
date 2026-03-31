@@ -56,6 +56,7 @@ class TabletUiScreenComponent extends StatelessWidget {
                             backgroundImage: item.backgroundImage,
                             title: item.title,
                             onTap: item.onTap,
+                            onLongPress: () {}, isCollapsed: false,
                           );
                         },
                       ),

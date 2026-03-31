@@ -33,3 +33,9 @@ class AboutCourseFeaturesEvent extends CoursesEvent {
 
   AboutCourseFeaturesEvent({required this.params});
 }
+
+class CourseFilesEvent extends CoursesEvent {
+  final CourseFilesParams params;
+
+  CourseFilesEvent({required this.params});
+}

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/responsiveness/responsive.dart';
-import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/drawer/components/user_avatar_component.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/drawer/components/user_settings_component.dart';
 

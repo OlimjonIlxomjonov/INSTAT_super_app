@@ -4,6 +4,7 @@ import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/about_course_features/about_course_response_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_category_by_id/course_category_by_id_model.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_files/course_files_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_lesson_items/course_lesson_items_response_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_lesson_topics/course_lesson_topics_response_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/courses/course_list_response_model.dart';
@@ -109,6 +110,27 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
         final data = response.data;
         logger.i(data);
         return AboutCourseResponseModel.fromJson(data);
+      } else {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<CourseFilesModel>> fetchCourseFiles({
+    required CourseFilesParams params,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        "${ApiUrls.courses}${params.courseId}/course_blocks/${params.topicId}/lessons/${params.lessonId}/lesson_files/",
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data as List;
+        logger.i(data);
+        return data.map((e) => CourseFilesModel.fromJson(e)).toList();
       } else {
         throw Exception('ERROR ${response.statusCode}');
       }

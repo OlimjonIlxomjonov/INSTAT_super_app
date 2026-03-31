@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_state.dart';
+import 'package:my_template/features/main_app/home/presentation/screens/drawer/components/user_avatar_component.dart';
 
 class DraggableAppBarWg extends StatelessWidget implements PreferredSize {
   final VoidCallback onProfileTap;
@@ -9,6 +14,14 @@ class DraggableAppBarWg extends StatelessWidget implements PreferredSize {
 
   @override
   Widget build(BuildContext context) {
+    final userName = context.select<UserMeBloc, String>((bloc) {
+      final state = bloc.state;
+      return state is UserMeLoaded
+          ? '${state.entity.firstName.capitalize()} ${state.entity.lastName.capitalize()}'
+          : 'Loading...';
+    });
+
+    final localization = AppLocalizations.of(context)!;
     return AppBar(
       actionsPadding: .only(right: 5),
       automaticallyImplyLeading: false,
@@ -25,11 +38,11 @@ class DraggableAppBarWg extends StatelessWidget implements PreferredSize {
               crossAxisAlignment: .start,
               children: [
                 Text(
-                  'Hayrli kun! ✌️',
+                  '${localization.goodDay} ✌️',
                   style: AppTextStyles.source.regular(fontSize: 14),
                 ),
                 Text(
-                  'Afzal Pulatov',
+                  userName,
                   style: AppTextStyles.source.medium(fontSize: 16),
                 ),
               ],

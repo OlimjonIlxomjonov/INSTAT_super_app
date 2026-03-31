@@ -33,5 +33,16 @@
   "profile": "Мой профиль",
   "myBooks": "Мои книги",
   "cart": "Корзина",
-  "library": "Библиотека"
+  "library": "Библиотека",
+  "accountInfo": "Информация об аккаунте",
+  "personalInfo": "Персональная информация",
+  "notifications": "Уведомления",
+  "appLanguage": "Язык",
+  "tickets": "Билеты",
+  "frQuestions": "Часто задаваемые вопросы",
+  "bioAuth": "Биометрическая аутентификация",
+  "leaveAccount": "Выйти",
+  "accountConfirm": "Подтвердите свою личность",
+  "scientificArticles": "Научные статьи",
+  "goodDay": "Добрый день!"
 }

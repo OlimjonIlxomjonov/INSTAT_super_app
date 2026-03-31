@@ -33,5 +33,16 @@
   "profile": "Profilim",
   "myBooks": "Kitoblarim",
   "cart": "Savatcha",
-  "library": "Kutubxona"
+  "library": "Kutubxona",
+  "accountInfo": "Akkaunt ma’lumotlari",
+  "personalInfo": "Shaxsiy ma’lumotlar",
+  "notifications": "Bildirishnomalar",
+  "appLanguage": "Ilova tili",
+  "tickets": "Tikketlar",
+  "frQuestions": "Ko’p beriladigan savollar",
+  "bioAuth": "Biometrik autentifikatsiyalar",
+  "leaveAccount": "Akkauntdan chiqish",
+  "accountConfirm": "Shaxsingizni tasdiqlang",
+  "scientificArticles": "Ilmiy maqolalar",
+  "goodDay": "Hayrli kun!"
 }

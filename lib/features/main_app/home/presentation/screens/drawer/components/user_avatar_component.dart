@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
@@ -82,13 +83,14 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
+                              spacing: 5,
                               children: [
                                 Icon(
                                   IconlyLight.danger,
                                   color: AppColors.orange500,
                                 ),
                                 AutoSizeText(
-                                  'Shaxsingizni tasdiqlang',
+                                  AppLocalizations.of(context)!.accountConfirm,
                                   style: AppTextStyles.source.medium(
                                     fontSize: 13,
                                     color: AppColors.orange500,
