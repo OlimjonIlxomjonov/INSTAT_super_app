@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dashed_progress_bar/dashed_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
+import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
@@ -50,7 +51,7 @@ class ActiveCoursesWg extends StatelessWidget {
                       : const Center(
                           child: CircularProgressIndicator.adaptive(),
                         ),
-                  errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
+                  errorBuilder: (_, obj, t) => const Icon(Icons.broken_image),
                 ),
               ),
             ),
@@ -62,6 +63,7 @@ class ActiveCoursesWg extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  /// category name
                   AutoSizeText(
                     categoryName,
                     style: AppTextStyles.source.medium(
@@ -69,19 +71,20 @@ class ActiveCoursesWg extends StatelessWidget {
                       color: AppColors.primaryColor,
                     ),
                   ),
+
+                  /// course name
                   Text(
                     data.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: AppTextStyles.source.medium(fontSize: 14),
                   ),
+
+                  /// desc
                   Row(
                     mainAxisAlignment: .spaceBetween,
                     children: [
-                      AutoSizeText(
-                        '7/24 Mavzu',
-                        style: AppTextStyles.source.regular(fontSize: 13),
-                      ),
+                      Text('7/24 Mavzu', style: CustomTextStyles.h4),
                       if (!showCircularProgBar)
                         AutoSizeText(
                           '25%',
@@ -92,7 +95,6 @@ class ActiveCoursesWg extends StatelessWidget {
                         ),
                     ],
                   ),
-                  SizedBox(height: 9),
                   if (!showCircularProgBar)
                     CustomLinearIndicatorWg(progressIndicator: 0.25),
                 ],

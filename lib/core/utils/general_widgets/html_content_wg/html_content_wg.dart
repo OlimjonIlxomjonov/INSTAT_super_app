@@ -60,7 +60,7 @@ class _HtmlContentWgState extends State<HtmlContentWg> {
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                            Colors.white.withOpacity(0),
+                            Colors.white.withValues(alpha: 0),
                             Colors.white,
                           ],
                         ),
@@ -110,11 +110,7 @@ class _HtmlBody extends StatelessWidget {
   final double? fontSize;
   final Color? textColor;
 
-  const _HtmlBody({
-    required this.htmlData,
-    this.fontSize,
-    this.textColor,
-  });
+  const _HtmlBody({required this.htmlData, this.fontSize, this.textColor});
 
   @override
   Widget build(BuildContext context) {

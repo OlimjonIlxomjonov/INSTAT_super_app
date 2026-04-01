@@ -2,6 +2,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dom
 
 class UserCategoryByIdState {
   final Map<int, CourseCategoryByIdEntity> categories;
+
   UserCategoryByIdState({this.categories = const {}});
 }
 
@@ -10,15 +11,15 @@ class UserCategoryByIdInitial extends UserCategoryByIdState {
 }
 
 class UserCategoryByIdLoading extends UserCategoryByIdState {
-  UserCategoryByIdLoading({required Map<int, CourseCategoryByIdEntity> categories}) : super(categories: categories);
+  UserCategoryByIdLoading({required super.categories});
 }
 
 class UserCategoryByIdLoaded extends UserCategoryByIdState {
   final CourseCategoryByIdEntity entity;
 
-  UserCategoryByIdLoaded({required this.entity, required Map<int, CourseCategoryByIdEntity> categories}) : super(categories: categories);
+  UserCategoryByIdLoaded({required this.entity, required super.categories});
 }
 
 class UserCategoryByIdError extends UserCategoryByIdState {
-  UserCategoryByIdError({required Map<int, CourseCategoryByIdEntity> categories}) : super(categories: categories);
+  UserCategoryByIdError({required super.categories});
 }

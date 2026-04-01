@@ -18,7 +18,7 @@ class DayCellComponent extends StatelessWidget {
     return Expanded(
       child: ValueListenableBuilder<DateTime>(
         valueListenable: selectedDate,
-        builder: (_, selected, __) {
+        builder: (_, selected, w) {
           final isSelected =
               selected.year == date.year &&
               selected.month == date.month &&

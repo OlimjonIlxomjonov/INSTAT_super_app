@@ -11,15 +11,18 @@ class AboutCourseFeaturesInitial extends AboutCourseFeaturesState {
 }
 
 class AboutCourseFeaturesLoading extends AboutCourseFeaturesState {
-  AboutCourseFeaturesLoading({required Map<int, AboutCourseResponse> cachedResponses}) : super(cachedResponses: cachedResponses);
+  AboutCourseFeaturesLoading({required super.cachedResponses});
 }
 
 class AboutCourseFeaturesLoaded extends AboutCourseFeaturesState {
   final AboutCourseResponse response;
 
-  AboutCourseFeaturesLoaded({required this.response, required Map<int, AboutCourseResponse> cachedResponses}) : super(cachedResponses: cachedResponses);
+  AboutCourseFeaturesLoaded({
+    required this.response,
+    required super.cachedResponses,
+  });
 }
 
 class AboutCourseFeaturesError extends AboutCourseFeaturesState {
-  AboutCourseFeaturesError({required Map<int, AboutCourseResponse> cachedResponses}) : super(cachedResponses: cachedResponses);
+  AboutCourseFeaturesError({required super.cachedResponses});
 }

@@ -9,7 +9,6 @@ import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/screens/articles_home_page.dart';
 import 'package:my_template/features/scientific_articles_app/features/magazines/presentation/sreens/magazines_page.dart';
 import 'package:my_template/features/scientific_articles_app/features/profile/presentation/screens/articles_profile_page.dart';
-import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/add_article/add_article_page.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/user_articles_page.dart';
 
 class ArticlesBottomNavBar extends StatefulWidget {

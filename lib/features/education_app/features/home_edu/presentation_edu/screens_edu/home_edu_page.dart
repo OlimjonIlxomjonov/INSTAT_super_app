@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
-import 'package:my_template/core/utils/constants/strings/app_strings.dart';
 import 'package:my_template/core/utils/general_widgets/dragble_app_bar/draggble_app_bar_wg.dart';
-import 'package:my_template/core/utils/widgets/active_courses/active_courses_wg.dart';
 import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
-import 'package:my_template/core/utils/widgets/popular_courses_card/popular_courses_card_wg.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
-import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/detailed_course_info_page.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/show_all_courses_bottom_sheet_page.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/widgets_edu/home_achivements_wg.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
 import 'package:my_template/features/education_app/widgets/active_courses_with_bloc_wg.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/popular_course_with_bloc/popular_with_bloc_wg.dart';
 
@@ -25,12 +20,6 @@ class HomeEduPage extends StatelessWidget {
     required this.onProfileTap,
   });
 
-  void _goToPageActiveCourses(BuildContext context) {
-    // openMiniAppSheetFamily(
-    //   context,
-    //   child: const DetailedUserBoughtCoursesEduPage(),
-    // );
-  }
 
   void _goToAllCourses(BuildContext context) {
     openMiniAppSheetFamily(
@@ -40,7 +29,6 @@ class HomeEduPage extends StatelessWidget {
     );
   }
 
-  // void _goToDetailedCourse(BuildContext context) {}
 
   static const List<Widget> _categories = [
     EduCategoriesWg(),

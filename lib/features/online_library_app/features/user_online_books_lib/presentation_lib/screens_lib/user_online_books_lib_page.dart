@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';

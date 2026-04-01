@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/app_utils.dart';
-import 'package:my_template/core/utils/constants/colors/app_colors.dart';
-import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/general_widgets/html_content_wg/html_content_wg.dart';
-import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
 
 class DetailedCourseInfoHeaderWg extends StatelessWidget {

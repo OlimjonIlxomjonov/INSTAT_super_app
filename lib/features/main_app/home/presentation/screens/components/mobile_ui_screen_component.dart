@@ -6,21 +6,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
-import 'package:my_template/core/common/skeletonizer_shimmer/courses/course_shimmer.dart';
 import 'package:my_template/core/common/ui_states/lost_internet_connection_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
-import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/detailed_course_info_page.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/show_all_courses_bottom_sheet_page.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_category_by_id/user_category_by_id_bloc.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_category_by_id/user_category_by_id_state.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_state.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
 import 'package:my_template/features/education_app/widgets/active_courses_with_bloc_wg.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_state.dart';
@@ -28,7 +22,6 @@ import 'package:my_template/features/main_app/home/presentation/bloc/home_event.
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/mini_app_section_card.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/model/mini_app_model.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/course_category_builder.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/popular_course_with_bloc/popular_with_bloc_wg.dart';
 
 class MobileUiScreenComponent extends StatefulWidget {

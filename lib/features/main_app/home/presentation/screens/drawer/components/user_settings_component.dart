@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
-import 'package:my_template/core/services/token_storage/token_storage_service.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
 import 'package:my_template/features/auth/presentation/screens/log_in_options_page.dart';
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/app_language_settings_model_component.dart';
@@ -12,7 +11,6 @@ import 'package:my_template/features/education_app/features/user_profile_edu/pre
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/widgets_edu/dot_swtich_wg.dart';
 import "package:my_template/core/utils/app_utils.dart";
 import "package:my_template/core/utils/widgets/app_widgets.dart";
-import 'package:my_template/features/onboarding/screens/components/log_in_options_component.dart';
 
 class UserSettingsComponent extends StatefulWidget {
   const UserSettingsComponent({super.key});

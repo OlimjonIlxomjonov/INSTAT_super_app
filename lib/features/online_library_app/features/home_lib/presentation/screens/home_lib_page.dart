@@ -5,7 +5,6 @@ import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/core/utils/general_widgets/dragble_app_bar/draggble_app_bar_wg.dart';
 import 'package:my_template/core/utils/general_widgets/online_book_wg/online_book_wg.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
-import 'package:my_template/core/utils/widgets/active_courses/active_courses_wg.dart';
 import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';

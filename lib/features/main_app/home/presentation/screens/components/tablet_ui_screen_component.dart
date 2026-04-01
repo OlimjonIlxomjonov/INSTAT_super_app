@@ -3,9 +3,7 @@ import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
-import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/detailed_course_info_page.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/show_all_courses_bottom_sheet_page.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/mini_app_section_card.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/model/mini_app_model.dart';
 

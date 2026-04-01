@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';

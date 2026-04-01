@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
-import 'package:my_template/core/utils/constants/strings/app_strings.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';

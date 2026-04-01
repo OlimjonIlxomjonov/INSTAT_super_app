@@ -1,16 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
-import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/utils/app_utils.dart';
-import 'package:my_template/core/utils/constants/colors/app_colors.dart';
-import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
-import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_category_by_id/user_category_by_id_bloc.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_category_by_id/user_category_by_id_state.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
 
 class PopularCoursesCardWg extends StatefulWidget {
   final VoidCallback onTap;

@@ -12,7 +12,6 @@ import 'package:my_template/features/splash/presentation/screens/grid_background
 import 'package:my_template/features/splash/presentation/screens/no_internet_page.dart';
 
 import '../../../../core/utils/constants/colors/app_colors.dart';
-import '../../../../core/utils/devices/device_unitlity.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -46,19 +45,14 @@ class _SplashPageState extends State<SplashPage> {
     final token = await TokenStorageServiceImpl().getAccessToken();
     final isLoggedIn = token != null && token.isNotEmpty;
 
-    // Determine where the user should ultimately go.
-    final destination =
-        isLoggedIn ? const HomePage() : const OnboardingPage();
+    final destination = isLoggedIn ? const HomePage() : const OnboardingPage();
 
-    // Check REAL internet access (pings actual URLs, catches WiFi-but-no-internet).
     final hasInternet = await InternetConnection().hasInternetAccess;
     if (!mounted) return;
 
     if (hasInternet) {
       AppRoute.open(destination);
     } else {
-      // Show the no-internet gate; it auto-navigates to [destination] when
-      // connectivity is restored.
       AppRoute.open(NoInternetPage(destination: destination));
     }
   }

@@ -1,16 +1,13 @@
-import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/widgets/detailed_course_info_header/deatiled_course_info_header_wg.dart';
 import 'package:my_template/core/utils/widgets/detailed_course_info_header/detailed_course_info_header_image.dart';
-import 'package:my_template/core/utils/widgets/open_mini_app/mini_app_sheet_shell.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_topics/course_lesson_topics_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_topics/course_lesson_topics_state.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/watch_course_edu_video_page.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/course_video_brif_tile_wg.dart';
 
 class DetailedUserBoughtCoursesEduPage extends StatefulWidget {

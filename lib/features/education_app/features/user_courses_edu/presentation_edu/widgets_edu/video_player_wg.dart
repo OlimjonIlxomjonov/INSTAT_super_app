@@ -8,8 +8,7 @@ class VideoPlayerWidget extends StatelessWidget {
   const VideoPlayerWidget({super.key, required this.controller});
 
   @override
-  Widget build(BuildContext context) =>
-      controller != null && controller.value.isInitialized
+  Widget build(BuildContext context) => controller.value.isInitialized
       ? Container(alignment: Alignment.topCenter, child: buildVideo())
       : SizedBox(
           height: 200,
@@ -24,7 +23,7 @@ class VideoPlayerWidget extends StatelessWidget {
   );
 
   Widget buildVideoPlayer() => AspectRatio(
-    aspectRatio: controller.value.aspectRatio,
+    aspectRatio: controller.value.aspectRatio, // 16 / 12
     child: VideoPlayer(controller),
   );
 }
