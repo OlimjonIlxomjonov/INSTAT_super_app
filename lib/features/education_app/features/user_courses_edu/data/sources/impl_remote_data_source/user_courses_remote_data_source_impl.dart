@@ -61,7 +61,7 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
   }) async {
     try {
       final response = await _dioClient.get(
-        "${ApiUrls.courses}${params.id}/course_blocks/items/all/", //${ApiUrls.lessonsTopic}
+        "${ApiUrls.courses}${params.id}${ApiUrls.lessonsTopic}", //  course_blocks/items/all/ # right after params.id
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;

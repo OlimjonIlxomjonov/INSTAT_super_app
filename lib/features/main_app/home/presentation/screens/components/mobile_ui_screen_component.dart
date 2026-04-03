@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
+import 'package:my_template/core/common/placeholder/banner_placeholder.dart';
 import 'package:my_template/core/common/ui_states/lost_internet_connection_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -110,14 +111,9 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
   ) {
     return [
       /// BANNERS
-      SliverToBoxAdapter(
-        child: Container(
-          margin: AppPadding.horizontal20x(),
-          width: double.infinity,
-          height: 200,
-          color: AppColors.greyScale.grey400,
-          child: Center(child: Text('PLACEHOLDER')),
-        ),
+      SliverPadding(
+        padding: AppPadding.horizontal20x(),
+        sliver: SliverToBoxAdapter(child: BannerPlaceholder()),
       ),
 
       SliverPadding(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/placeholder/banner_placeholder.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/dragble_app_bar/draggble_app_bar_wg.dart';
@@ -20,7 +21,6 @@ class HomeEduPage extends StatelessWidget {
     required this.onProfileTap,
   });
 
-
   void _goToAllCourses(BuildContext context) {
     openMiniAppSheetFamily(
       showHandler: false,
@@ -28,7 +28,6 @@ class HomeEduPage extends StatelessWidget {
       child: const ShowAllCoursesBottomSheetPage(),
     );
   }
-
 
   static const List<Widget> _categories = [
     EduCategoriesWg(),
@@ -61,12 +60,7 @@ class HomeEduPage extends StatelessWidget {
               delegate: SliverChildBuilderDelegate((context, index) {
                 switch (index) {
                   case 0:
-                    return Container(
-                      width: double.infinity,
-                      height: appH(184),
-                      color: AppColors.greyScale.grey400,
-                      child: Center(child: Text('plaseholder')),
-                    );
+                    return BannerPlaceholder();
                   case 1:
                     return HomeAchievementsWg();
                   case 2:

@@ -68,6 +68,7 @@ flutter:
     - assets/images/
     - assets/home_page/
     - assets/animation/
+    - assets/temp_images/
 
 
   # fonts:

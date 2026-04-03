@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:my_template/core/common/ui_states/empty_state.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/custom_tab_bar/custom_tab_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/title_with_layout_selector_wg.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/courses_in_progress_compnent.dart';
 
 class UserCoursesEduPage extends StatefulWidget {
@@ -69,28 +72,44 @@ class _UserCoursesEduPageState extends State<UserCoursesEduPage>
               controller: _tabController,
               children: [
                 /// Tab 1 — In Progress
-                CustomScrollView(
-                  slivers: [
-                    CoursesInProgressComponent(layout: layout, state: 'all'),
-                  ],
-                ),
+                _UserCoursesTabContent(state: 'all', layout: layout),
 
                 /// Tab 2 — Finished
-                // CustomScrollView(
-                //   slivers: [
-                //     CoursesInProgressComponent(
-                //       layout: layout,
-                //       state: 'finished',
-                //     ),
-                //   ],
-                // ),
-                SingleChildScrollView(
-                  child: EmptyState(
-                    message: 'Hech qanday kurs hali tugatilmagan!',
-                  ),
-                ),
+                _UserCoursesTabContent(state: 'finished', layout: layout),
               ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _UserCoursesTabContent extends StatefulWidget {
+  final String state;
+  final CoursesLayout layout;
+
+  const _UserCoursesTabContent({required this.state, required this.layout});
+
+  @override
+  State<_UserCoursesTabContent> createState() => _UserCoursesTabContentState();
+}
+
+class _UserCoursesTabContentState extends State<_UserCoursesTabContent>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return BlocProvider(
+      create: (_) => GetIt.instance<UserCoursesBloc>(),
+      child: CustomScrollView(
+        slivers: [
+          CoursesInProgressComponent(
+            layout: widget.layout,
+            state: widget.state,
           ),
         ],
       ),

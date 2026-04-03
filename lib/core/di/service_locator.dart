@@ -58,7 +58,7 @@ Future<void> setup() async {
 
   /// {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
-  sl.registerLazySingleton(() => UserCoursesBloc(sl()));
+  sl.registerFactory(() => UserCoursesBloc(sl()));
   sl.registerLazySingleton(() => UserCategoryByIdBloc(sl()));
   sl.registerLazySingleton(() => CourseLessonTopicsBloc(sl()));
   sl.registerLazySingleton(() => CourseLessonItemsBloc(sl()));

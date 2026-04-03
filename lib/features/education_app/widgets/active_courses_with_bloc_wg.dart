@@ -21,8 +21,13 @@ class ActiveCoursesWithBlocWg extends StatelessWidget {
           builder: (context, state) {
             if (state is UserCoursesLoaded) {
               final data = state.response.data;
+
+              if (data.isEmpty) {
+                return const SizedBox.shrink();
+              }
+
               return Column(
-                children: List.generate(2, (index) {
+                children: List.generate(data.length.clamp(0, 2), (index) {
                   final item = data[index];
                   return CourseCategoryBuilder(
                     categoryId: item.category,

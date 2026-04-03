@@ -33,10 +33,7 @@ class CoursesInProgressComponent extends StatefulWidget {
       _CoursesInProgressComponentState();
 }
 
-class _CoursesInProgressComponentState extends State<CoursesInProgressComponent>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
+class _CoursesInProgressComponentState extends State<CoursesInProgressComponent> {
 
   StreamSubscription<List<ConnectivityResult>>? _connectivitySub;
   bool _wasDisconnected = false;
@@ -145,7 +142,6 @@ class _CoursesInProgressComponentState extends State<CoursesInProgressComponent>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return BlocBuilder<UserCoursesBloc, UserCoursesState>(
       builder: (context, state) {
         if (state is UserCoursesLoaded) {

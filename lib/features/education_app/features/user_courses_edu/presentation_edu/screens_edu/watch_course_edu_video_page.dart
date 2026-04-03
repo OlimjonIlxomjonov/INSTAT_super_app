@@ -15,6 +15,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/regular_test/regular_test_course_page.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/default_custom_tile_wg.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/video_player_wg.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:video_player/video_player.dart';
 
 class WatchCourseEduVideoPage extends StatefulWidget {
@@ -156,8 +157,9 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
               PopupMenuButton<String>(
                 color: AppColors.white,
                 icon: const Icon(
-                  Icons.more_vert,
+                  Icons.settings,
                   color: AppColors.primaryColor,
+                  size: 28,
                 ),
                 onSelected: changeResolution,
                 itemBuilder: (context) => ['1080', '720', '480', '240']
@@ -165,7 +167,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                       (res) => PopupMenuItem(
                         value: res,
                         child: Text(
-                          '${res}p${currentResolution == res ? ' (*)' : ''}',
+                          '${res}p${currentResolution == res ? '*' : ''}',
                         ),
                       ),
                     )
@@ -191,16 +193,29 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                     'Fayllar',
                     style: AppTextStyles.source.semiBold(fontSize: 17),
                   ),
-                  SizedBox(height: appH(16)),
+                  SizedBox(height: appH(14)),
                   BlocBuilder<CourseFilesBloc, CourseFilesState>(
                     builder: (context, state) {
+                      final isLoading = state is CourseFilesLoading;
                       if (state is CourseFilesLoaded) {
                         final data = state.entity;
 
                         if (data.isEmpty) {
-                          return Text(
-                            'Hozirda kursga tegishli hech qanday fayylar mavjud emas!',
-                            style: CustomTextStyles.h4,
+                          return DecoratedBox(
+                            decoration: BoxDecoration(
+                              border: .all(color: AppColors.greyScale.grey200),
+                              borderRadius: .circular(12),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text(
+                                'Hozirda kursga tegishli hech qanday fayylar mavjud emas!',
+                                style: CustomTextStyles.h3half.copyWith(
+                                  color: AppColors.greyScale.grey500,
+                                  fontWeight: .w400,
+                                ),
+                              ),
+                            ),
                           );
                         }
 
@@ -220,7 +235,19 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                           ],
                         );
                       }
-                      return SizedBox.shrink();
+                      return Skeletonizer(
+                        enabled: isLoading,
+                        child: DefaultCustomTileWg(
+                          tileMaxLines: 1,
+                          tileOverflow: .ellipsis,
+                          tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
+                          onTap: () {
+                            controller.pause();
+                          },
+                          tileTitle: 'Tahlil, taqqoslash va prognozlash',
+                          subTitle: '3.4 MB',
+                        ),
+                      );
                     },
                   ),
 
@@ -236,7 +263,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                     tileOverflow: .ellipsis,
                     tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
                     onTap: () async {
-                      controller.pause();
+                      // controller.pause();
                       await openMiniAppSheetFamily(
                         context,
                         showHandler: false,
