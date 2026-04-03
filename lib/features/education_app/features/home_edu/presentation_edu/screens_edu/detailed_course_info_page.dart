@@ -43,10 +43,11 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
       onlineLibStyleCustomBottomSheetWg(
         context,
         headerTitle: "To'lov turi",
-        child: const PaymentOpenBottomSheetWg(),
+        child: PaymentOpenBottomSheetWg(courseId: widget.data.id),
       );
     } else {
       FamilyNavigation.familyPush(
+        showHandle: false,
         context,
         DetailedUserBoughtCoursesEduPage(
           data: widget.data,
@@ -109,7 +110,6 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
       child: Scaffold(
         body: NestedScrollView(
           headerSliverBuilder: (context, _) => _headerSlivers,
-          // 👈 just a pointer
           body: TabBarView(
             children: [
               AboutThisCourseTab(
@@ -124,7 +124,7 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
         ),
         bottomNavigationBar: CustomBottomNavContainerWg(
           onTap: () => _openPayment(context),
-          buttonText: widget.data.userOrder!.status == 'paid'
+          buttonText: widget.data.userOrder?.status == 'paid'
               ? 'Davom etish'
               : 'Sotib olish - ${widget.data.price} UZS',
         ),

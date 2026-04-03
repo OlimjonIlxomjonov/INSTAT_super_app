@@ -4,8 +4,13 @@ import 'package:video_player/video_player.dart';
 
 class VideoPlayerWidget extends StatelessWidget {
   final VideoPlayerController controller;
+  final bool isFullscreen;
 
-  const VideoPlayerWidget({super.key, required this.controller});
+  const VideoPlayerWidget({
+    super.key,
+    required this.controller,
+    this.isFullscreen = false,
+  });
 
   @override
   Widget build(BuildContext context) => controller.value.isInitialized
@@ -18,7 +23,7 @@ class VideoPlayerWidget extends StatelessWidget {
   Widget buildVideo() => Stack(
     children: <Widget>[
       buildVideoPlayer(),
-      Positioned.fill(child: BasicOverlayWidget(controller: controller)),
+      Positioned.fill(child: BasicOverlayWidget(controller: controller, isFullscreen: isFullscreen)),
     ],
   );
 

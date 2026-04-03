@@ -18,8 +18,10 @@ Future<void> finishLessonTestDialogScreen(
     barrierDismissible: false,
     context: context,
     builder: (_) {
-      return Stack(
-        children: [
+      return SizedBox.expand(
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
           AlertDialog.adaptive(
             backgroundColor: AppColors.white,
             title: Column(
@@ -42,17 +44,27 @@ Future<void> finishLessonTestDialogScreen(
             actions: actions,
           ),
           Align(
-            alignment: .topCenter,
+            alignment: Alignment.topCenter,
             child: ConfettiWidget(
               emissionFrequency: 0.05,
-              blastDirectionality: .explosive,
-              numberOfParticles: 50,
+              blastDirectionality: BlastDirectionality.explosive,
+              numberOfParticles: 20, // Reduced from 50 for optimal performance
+              maxBlastForce: 20,
+              minBlastForce: 8,
+              gravity: 0.1,
               confettiController: confettiController,
               shouldLoop: false,
-              colors: [AppColors.primaryColor, AppColors.yellowMidTimeCard],
+              colors: const [
+                AppColors.primaryColor,
+                AppColors.yellowMidTimeCard,
+                Colors.blue,
+                Colors.green,
+                Colors.pink,
+              ],
             ),
           ),
         ],
+        ),
       );
     },
   );

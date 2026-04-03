@@ -144,6 +144,7 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
                   ),
                   child: ListTile(
                     onTap: () => FamilyNavigation.familyPush(
+                      showHandle: false,
                       context,
                       WatchCourseEduVideoPage(
                         imagePath: lesson.thumbnail,

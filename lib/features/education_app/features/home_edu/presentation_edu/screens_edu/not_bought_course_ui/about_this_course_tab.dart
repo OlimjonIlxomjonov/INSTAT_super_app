@@ -29,7 +29,11 @@ class AboutThisCourseTab extends StatefulWidget {
 class _AboutThisCourseTabState extends State<AboutThisCourseTab>
     with AutomaticKeepAliveClientMixin {
   void _openSimilarCourses(BuildContext context) {
-    FamilyNavigation.familyPush(context, const SeeAllSimilarCourses());
+    FamilyNavigation.familyPush(
+      showHandle: false,
+      context,
+      const SeeAllSimilarCourses(),
+    );
   }
 
   void _openCourseDetail(BuildContext context) {

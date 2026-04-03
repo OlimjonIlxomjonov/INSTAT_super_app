@@ -32,3 +32,9 @@ class CourseFilesParams {
     required this.lessonId,
   });
 }
+
+class BuyCourseParams {
+  final int courseId;
+
+  BuyCourseParams({required this.courseId});
+}

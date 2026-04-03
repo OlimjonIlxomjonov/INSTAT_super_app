@@ -1,7 +1,7 @@
 import 'package:my_template/core/common/params/edu_params/params.dart';
 
 class CoursesEvent {
-  CoursesEvent();
+  const CoursesEvent();
 }
 
 class UserCoursesEvent extends CoursesEvent {
@@ -38,4 +38,10 @@ class CourseFilesEvent extends CoursesEvent {
   final CourseFilesParams params;
 
   CourseFilesEvent({required this.params});
+}
+
+class BuyCourseEvent extends CoursesEvent {
+  final BuyCourseParams params;
+
+  BuyCourseEvent({required this.params});
 }

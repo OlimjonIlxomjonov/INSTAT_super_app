@@ -54,3 +54,14 @@ String formatDuration(int totalSeconds) {
     return '$minutes daqiqa';
   }
 }
+
+String formatFileSize(int bytes) {
+  double kb = bytes / 1024;
+  double mb = kb / 1024;
+
+  if (mb >= 1) {
+    return '${mb.toStringAsFixed(2)} MB';
+  } else {
+    return '${kb.toStringAsFixed(2)} KB';
+  }
+}

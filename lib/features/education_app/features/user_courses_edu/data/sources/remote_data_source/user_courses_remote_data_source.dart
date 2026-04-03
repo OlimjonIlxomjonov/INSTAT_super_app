@@ -30,4 +30,6 @@ abstract class UserCoursesRemoteDataSource {
   Future<List<CourseFilesModel>> fetchCourseFiles({
     required CourseFilesParams params,
   });
+
+  Future<void> postBoughtCourses({required BuyCourseParams params});
 }

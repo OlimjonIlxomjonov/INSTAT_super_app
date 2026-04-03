@@ -6,8 +6,13 @@ import 'fullscreen_video_page.dart';
 
 class BasicOverlayWidget extends StatefulWidget {
   final VideoPlayerController controller;
+  final bool isFullscreen;
 
-  const BasicOverlayWidget({super.key, required this.controller});
+  const BasicOverlayWidget({
+    super.key,
+    required this.controller,
+    this.isFullscreen = false,
+  });
 
   @override
   State<BasicOverlayWidget> createState() => _BasicOverlayWidgetState();
@@ -63,8 +68,7 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
   }
   
   void _toggleFullscreen() {
-    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
-    if (isPortrait) {
+    if (!widget.isFullscreen) {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => FullscreenVideoPage(controller: widget.controller),
@@ -111,7 +115,6 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
     final position = widget.controller.value.position;
     final duration = widget.controller.value.duration;
     final remaining = duration - position;
-    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
 
     return Padding(
       padding: const EdgeInsets.all(5),
@@ -157,7 +160,7 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
               GestureDetector(
                 onTap: _toggleFullscreen,
                 child: Icon(
-                  isPortrait ? Icons.fullscreen : Icons.fullscreen_exit,
+                  widget.isFullscreen ? Icons.fullscreen_exit : Icons.fullscreen,
                   color: AppColors.white,
                 ),
               ),
@@ -174,20 +177,22 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
     return '$minutes:$seconds';
   }
 
-  Widget buildPlay() => widget.controller.value.isPlaying
-      ? Container()
-      : Container(
-          alignment: Alignment.center,
-          color: Colors.black26,
-          child: GestureDetector(
-            onTap: _togglePlayPause,
-            child: DecoratedBox(
-              decoration: BoxDecoration(color: AppColors.white, shape: BoxShape.circle),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(Icons.play_arrow, color: AppColors.primaryColor, size: 40),
+  Widget buildPlay() => Container(
+        alignment: Alignment.center,
+        color: Colors.black26,
+        child: GestureDetector(
+          onTap: _togglePlayPause,
+          child: DecoratedBox(
+            decoration: BoxDecoration(color: AppColors.white, shape: BoxShape.circle),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(
+                widget.controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                color: AppColors.primaryColor,
+                size: 40,
               ),
             ),
           ),
-        );
+        ),
+      );
 }

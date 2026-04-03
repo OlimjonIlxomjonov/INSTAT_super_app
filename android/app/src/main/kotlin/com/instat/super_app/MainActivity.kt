@@ -1,4 +1,4 @@
-package com.example.my_template
+package com.instat.super_app
 
 import io.flutter.embedding.android.FlutterActivity
 

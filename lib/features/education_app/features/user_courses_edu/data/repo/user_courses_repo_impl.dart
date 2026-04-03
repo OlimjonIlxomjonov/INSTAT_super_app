@@ -55,4 +55,9 @@ class UserCoursesRepoImpl implements UserCoursesRepository {
   }) {
     return _remoteDataSource.fetchCourseFiles(params: params);
   }
+
+  @override
+  Future<void> postBuyCourse({required BuyCourseParams params}) {
+    return _remoteDataSource.postBoughtCourses(params: params);
+  }
 }

@@ -66,11 +66,11 @@ class UserOnlineBookCartLibPage extends StatelessWidget {
       bottomNavigationBar: CustomBottomNavContainerWg(
         buttonText: 'Sotib olish - 960 000 UZS',
         onTap: () {
-          onlineLibStyleCustomBottomSheetWg(
-            context,
-            headerTitle: 'To\'lov turi',
-            child: PaymentOpenBottomSheetWg(),
-          );
+          // onlineLibStyleCustomBottomSheetWg(
+          //   context,
+          //   headerTitle: 'To\'lov turi',
+          //   child: PaymentOpenBottomSheetWg(),
+          // );
         },
       ),
     );

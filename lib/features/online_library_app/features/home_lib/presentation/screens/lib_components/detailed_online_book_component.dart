@@ -45,14 +45,15 @@ class _DetailedOnlineBookComponentState
     if (widget.isBookBought) {
       /// open book
       AppRoute.go(BoughtBookOpenerWg());
-    } else {
-      /// show payment bottom sheet
-      onlineLibStyleCustomBottomSheetWg(
-        context,
-        headerTitle: 'To\'lov turi',
-        child: PaymentOpenBottomSheetWg(),
-      );
     }
+    // else {
+    //   /// show payment bottom sheet
+    //   onlineLibStyleCustomBottomSheetWg(
+    //     context,
+    //     headerTitle: 'To\'lov turi',
+    //     child: PaymentOpenBottomSheetWg(courseId: null,),
+    //   );
+    // }
   }
 
   @override

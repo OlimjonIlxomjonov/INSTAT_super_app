@@ -30,4 +30,6 @@ abstract class UserCoursesRepository {
   Future<List<CourseFileEntity>> getCourseFiles({
     required CourseFilesParams params,
   });
+
+  Future<void> postBuyCourse({required BuyCourseParams params});
 }

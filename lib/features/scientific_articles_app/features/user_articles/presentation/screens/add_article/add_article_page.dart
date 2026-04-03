@@ -34,14 +34,15 @@ class _AddArticlePageState extends State<AddArticlePage> {
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
-    } else {
-      /// OPEN PAYMENT OPTION
-      onlineLibStyleCustomBottomSheetWg(
-        context,
-        headerTitle: 'To\'lov turi',
-        child: PaymentOpenBottomSheetWg(),
-      );
     }
+    // else {
+    //   /// OPEN PAYMENT OPTION
+    //   onlineLibStyleCustomBottomSheetWg(
+    //     context,
+    //     headerTitle: 'To\'lov turi',
+    //     child: PaymentOpenBottomSheetWg(),
+    //   );
+    // }
   }
 
   @override

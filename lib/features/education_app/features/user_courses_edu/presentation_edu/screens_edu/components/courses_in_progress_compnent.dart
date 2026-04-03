@@ -33,13 +33,14 @@ class CoursesInProgressComponent extends StatefulWidget {
       _CoursesInProgressComponentState();
 }
 
-class _CoursesInProgressComponentState extends State<CoursesInProgressComponent> {
-
+class _CoursesInProgressComponentState
+    extends State<CoursesInProgressComponent> {
   StreamSubscription<List<ConnectivityResult>>? _connectivitySub;
   bool _wasDisconnected = false;
 
   void sheetOpener({required CourseEntity data, required String categoryName}) {
     openMiniAppSheetFamily(
+      showHandler: false,
       context,
       child: DetailedUserBoughtCoursesEduPage(
         data: data,
@@ -149,8 +150,13 @@ class _CoursesInProgressComponentState extends State<CoursesInProgressComponent>
 
           /// EMPTY STATE
           if (data.isEmpty) {
-            return SliverToBoxAdapter(
-              child: EmptyState(message: 'Hech qanday kurs hali tugatilmagan!'),
+            return SliverFillRemaining(
+              hasScrollBody: false,
+              child: EmptyState(
+                message: widget.state == 'finished'
+                    ? 'Hech qanday kurs hali tugatilmagan!'
+                    : 'Hali boshlangan kurslar yo\'q!',
+              ),
             );
           }
 

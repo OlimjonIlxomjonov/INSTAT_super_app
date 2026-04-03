@@ -66,8 +66,24 @@ class _SplashPageState extends State<SplashPage> {
         children: [
           Positioned.fill(child: CustomPaint(painter: _painter)),
 
-          //  logo
-          Center(child: SvgPicture.asset(AppVectors.mainAppLogo)),
+          //  logo with smooth fade and zoom
+          Center(
+            child: TweenAnimationBuilder<double>(
+              tween: Tween<double>(begin: 0.0, end: 1.0),
+              duration: const Duration(seconds: 2),
+              curve: Curves.easeOutCubic,
+              builder: (context, value, child) {
+                return Transform.scale(
+                  scale: 0.8 + (0.2 * value), // Smoothly zooms from 0.8 to 1.0
+                  child: Opacity(
+                    opacity: value, // Smoothly fades from 0.0 to 1.0
+                    child: child,
+                  ),
+                );
+              },
+              child: SvgPicture.asset(AppVectors.mainAppLogo),
+            ),
+          ),
 
           //  bottom text
           SafeArea(

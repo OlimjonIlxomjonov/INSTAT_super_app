@@ -16,29 +16,38 @@ class _FullscreenVideoPageState extends State<FullscreenVideoPage> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-    ]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
   @override
   void dispose() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final orientation = MediaQuery.of(context).orientation;
+    final isLandscapeVideo = widget.controller.value.aspectRatio >= 1.0;
+
+    // Force rotation ONLY if the video is wide but the phone is held in portrait
+    final needsArtificialRotation = isLandscapeVideo && orientation == Orientation.portrait;
+
     return Scaffold(
       backgroundColor: Colors.black,
-      body: SafeArea(
-        child: Center(
-          child: VideoPlayerWidget(controller: widget.controller),
-        ),
+      body: Center(
+        child: needsArtificialRotation
+            ? RotatedBox(
+                quarterTurns: 1,
+                child: VideoPlayerWidget(
+                  controller: widget.controller,
+                  isFullscreen: true,
+                ),
+              )
+            : VideoPlayerWidget(
+                controller: widget.controller,
+                isFullscreen: true,
+              ),
       ),
     );
   }

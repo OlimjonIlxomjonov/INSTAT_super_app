@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iconly/iconly.dart';
@@ -88,15 +89,6 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
     super.dispose();
   }
 
-  void _goToUserCourses(BuildContext context) {
-    openMiniAppSheetFamily(
-      isTransparent: false,
-      showHandler: false,
-      context,
-      child: const EduBottomNavBar(openPageByIndex: 2),
-    );
-  }
-
   void _goToAllCourses(BuildContext context) {
     openMiniAppSheetFamily(
       context,
@@ -114,18 +106,6 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
       SliverPadding(
         padding: AppPadding.horizontal20x(),
         sliver: SliverToBoxAdapter(child: BannerPlaceholder()),
-      ),
-
-      SliverPadding(
-        padding: AppPadding.horizontal20x(),
-        sliver: SliverToBoxAdapter(
-          child: ExtendSectionSeeAllWg(
-            title: localization.studyingCourses,
-            onTap: () {
-              _goToUserCourses(context);
-            },
-          ),
-        ),
       ),
 
       /// ACTIVE COURSES
@@ -197,6 +177,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                   title: item.title,
                   onTap: item.onTap,
                   onLongPress: () {
+                    HapticFeedback.heavyImpact();
                     setState(() {
                       isCollapsed = !isCollapsed;
                     });

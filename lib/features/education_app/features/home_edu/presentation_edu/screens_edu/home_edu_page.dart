@@ -63,15 +63,10 @@ class HomeEduPage extends StatelessWidget {
                     return BannerPlaceholder();
                   case 1:
                     return HomeAchievementsWg();
-                  case 2:
-                    return ExtendSectionSeeAllWg(
-                      title: localization.studyingCourses,
-                      onTap: onTap,
-                    );
                   default:
                     return const SizedBox.shrink();
                 }
-              }, childCount: 3),
+              }, childCount: 2),
             ),
           ),
 

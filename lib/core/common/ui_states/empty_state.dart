@@ -10,19 +10,22 @@ class EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          width: 200,
-          height: 170,
-          child: Lottie.asset(
-            AppAnimations.emptyState,
-            repeat: false,
-            fit: BoxFit.contain,
+    return Center(
+      child: Column(
+        mainAxisSize: .min,
+        children: [
+          SizedBox(
+            width: 200,
+            height: 170,
+            child: Lottie.asset(
+              AppAnimations.emptyState,
+              repeat: false,
+              fit: BoxFit.contain,
+            ),
           ),
-        ),
-        Text(message, style: CustomTextStyles.h3),
-      ],
+          Text(message, style: CustomTextStyles.h3),
+        ],
+      ),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -17,6 +18,10 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/video_player_wg.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:video_player/video_player.dart';
+import 'package:dio/dio.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/video_thumbnail_wg.dart';
 
 class WatchCourseEduVideoPage extends StatefulWidget {
   final String title;
@@ -38,8 +43,50 @@ class WatchCourseEduVideoPage extends StatefulWidget {
 }
 
 class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
-  late VideoPlayerController controller;
+  VideoPlayerController? controller;
   String currentResolution = '1080';
+  bool _isDownloading = false;
+  bool _showVideo = false;
+
+  Future<void> _openFile(String? url, String? fileName) async {
+    if (url == null || url.isEmpty || fileName == null || fileName.isEmpty) {
+      errorFlushBar(context, 'Fayl manzili topilmadi');
+      return;
+    }
+
+    if (_isDownloading) return;
+
+    setState(() {
+      _isDownloading = true;
+    });
+
+    try {
+      final tempDir = await getTemporaryDirectory();
+      final savePath = '${tempDir.path}/$fileName';
+
+      final dio = Dio();
+      await dio.download(url, savePath);
+
+      final result = await OpenFilex.open(savePath);
+      if (result.type != ResultType.done && mounted) {
+        errorFlushBar(
+          context,
+          'Faylni ochishda xatolik yuz berdi. ${result.message}',
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        errorFlushBar(context, 'Faylni yuklab olishda xatolik yuz berdi.');
+      }
+      logger.e(e.toString());
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isDownloading = false;
+        });
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -53,16 +100,16 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
         ),
       ),
     );
-    _initVideo();
+    // _initVideo(); // Do NOT initialize here to save resources and prevent emulator crashes on load. We load lazily on tap!
   }
 
   Future<void> changeResolution(String newRes) async {
-    if (newRes == currentResolution) return;
+    if (newRes == currentResolution || controller == null) return;
 
-    final currentPos = controller.value.position;
-    final wasPlaying = controller.value.isPlaying;
+    final currentPos = controller!.value.position;
+    final wasPlaying = controller!.value.isPlaying;
 
-    await controller.pause();
+    await controller!.pause();
     setState(() {
       currentResolution = newRes;
     });
@@ -92,7 +139,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
       newController.play();
     }
 
-    oldController.dispose();
+    oldController?.dispose();
   }
 
   Future<void> _initVideo() async {
@@ -107,6 +154,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
     final url =
         'https://test.avacoder.uz/api/stream/${widget.lessonId}/${currentResolution}p.m3u8';
 
+    controller?.dispose();
     controller =
         VideoPlayerController.networkUrl(
             Uri.parse(url),
@@ -116,16 +164,17 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
           ..addListener(() => setState(() {}))
           ..setLooping(false);
 
-    await controller.initialize();
+    await controller!.initialize();
 
-    controller.play();
+    controller!.play();
 
     setState(() {});
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    controller?.pause();
+    controller?.dispose();
     super.dispose();
   }
 
@@ -136,29 +185,45 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
         slivers: [
           SliverAppBar(
             expandedHeight: 250,
+            collapsedHeight: 250,
             pinned: true,
 
             /// VIDEO
-            flexibleSpace: VideoPlayerWidget(controller: controller),
+            flexibleSpace: FlexibleSpaceBar(
+              background: _showVideo
+                  ? (controller != null
+                        ? VideoPlayerWidget(controller: controller!)
+                        : const Center(child: CircularProgressIndicator()))
+                  : VideoThumbnailWidget(
+                      imagePath: widget.imagePath,
+                      onTap: () {
+                        setState(() {
+                          _showVideo = true;
+                        });
+                        _initVideo();
+                      },
+                    ),
+            ),
             leading: Padding(
               padding: .only(left: 10, top: 10),
               child: IconButton(
                 onPressed: () {
+                  controller?.pause();
                   FamilyNavigation.familyClose(context); // main
                 },
                 style: IconButton.styleFrom(
-                  backgroundColor: AppColors.white,
+                  backgroundColor: AppColors.white.withValues(alpha: 0.6),
                   shape: RoundedRectangleBorder(borderRadius: .circular(50)),
                 ),
-                icon: const Icon(IconlyLight.arrow_left_2, size: 20),
+                icon: Icon(IconlyLight.arrow_left_2, size: 20),
               ),
             ),
             actions: [
               PopupMenuButton<String>(
                 color: AppColors.white,
-                icon: const Icon(
+                icon: Icon(
                   Icons.settings,
-                  color: AppColors.primaryColor,
+                  color: AppColors.greyScale.grey600,
                   size: 28,
                 ),
                 onSelected: changeResolution,
@@ -181,6 +246,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
               child: Column(
                 crossAxisAlignment: .start,
                 children: [
+                  SizedBox(height: 20),
                   Text(
                     widget.title,
                     style: AppTextStyles.source.medium(fontSize: 20),
@@ -221,18 +287,20 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
 
                         return Column(
                           crossAxisAlignment: .start,
-                          children: [
-                            DefaultCustomTileWg(
+                          children: List.generate(data.length, (index) {
+                            final item = data[index];
+                            return DefaultCustomTileWg(
                               tileMaxLines: 1,
                               tileOverflow: .ellipsis,
                               tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
                               onTap: () {
-                                controller.pause();
+                                controller?.pause();
+                                _openFile(item.file, item.fileName);
                               },
-                              tileTitle: 'Tahlil, taqqoslash va prognozlash',
-                              subTitle: '3.4 MB',
-                            ),
-                          ],
+                              tileTitle: item.fileName ?? 'File ',
+                              subTitle: formatFileSize(item.fileSize ?? 0),
+                            );
+                          }),
                         );
                       }
                       return Skeletonizer(
@@ -242,7 +310,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                           tileOverflow: .ellipsis,
                           tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
                           onTap: () {
-                            controller.pause();
+                            controller?.pause();
                           },
                           tileTitle: 'Tahlil, taqqoslash va prognozlash',
                           subTitle: '3.4 MB',
@@ -263,7 +331,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                     tileOverflow: .ellipsis,
                     tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
                     onTap: () async {
-                      // controller.pause();
+                      controller?.pause();
                       await openMiniAppSheetFamily(
                         context,
                         showHandler: false,

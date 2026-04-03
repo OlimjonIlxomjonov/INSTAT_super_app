@@ -139,4 +139,22 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
       rethrow;
     }
   }
+
+  @override
+  Future<void> postBoughtCourses({required BuyCourseParams params}) async {
+    try {
+      final response = await _dioClient.post(
+        "${ApiUrls.courses}/${params.courseId}/order/",
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data;
+        logger.i(data);
+      } else {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
 }
