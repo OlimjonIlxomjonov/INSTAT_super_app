@@ -50,7 +50,10 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: appH(12)),
-                    Icon(IconlyLight.document, color: AppColors.greyScale.grey600),
+                    Icon(
+                      IconlyLight.document,
+                      color: AppColors.greyScale.grey600,
+                    ),
                     Text(
                       '${data.lessonsCount} ta',
                       style: AppTextStyles.source.medium(
@@ -59,7 +62,10 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: appH(12)),
-                    Icon(IconlyLight.time_circle, color: AppColors.greyScale.grey600),
+                    Icon(
+                      IconlyLight.time_circle,
+                      color: AppColors.greyScale.grey600,
+                    ),
                     Text(
                       formatDuration(data.totalDuration),
                       style: AppTextStyles.source.medium(
@@ -109,4 +115,3 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
     );
   }
 }
-

@@ -42,9 +42,13 @@ class CustomBottomNavContainerWg extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: onTap,
                 icon: leadingIcon != null ? Icon(leadingIcon, size: 20) : null,
-                label: Text(
-                  buttonText,
-                  style: AppTextStyles.source.medium(fontSize: 14),
+                label: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: Text(
+                    buttonText,
+                    key: ValueKey<String>(buttonText),
+                    style: AppTextStyles.source.medium(fontSize: 14),
+                  ),
                 ),
               ),
             ),

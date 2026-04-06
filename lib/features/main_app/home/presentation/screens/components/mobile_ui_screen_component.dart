@@ -91,17 +91,17 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
 
   void _goToAllCourses(BuildContext context) {
     openMiniAppSheetFamily(
+      showHandler: false,
       context,
       child: const ShowAllCoursesBottomSheetPage(),
     );
   }
 
   /// Builds all content slivers shown below the search bar when online.
-  List<Widget> _buildContentSlivers(
-    BuildContext context,
-    AppLocalizations localization,
-  ) {
+  List<Widget> _buildContentSlivers(BuildContext context,
+      AppLocalizations localization,) {
     return [
+
       /// BANNERS
       SliverPadding(
         padding: AppPadding.horizontal20x(),
@@ -141,6 +141,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
       },
       child: CustomScrollView(
         slivers: [
+
           /// HEADER LOGO
           SliverAppBar(
             snap: true,
@@ -202,21 +203,21 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
           /// Uses nested BlocBuilders to watch both blocs simultaneously.
           BlocBuilder<CoursesBloc, CoursesState>(
             buildWhen: (prev, curr) =>
-                curr is CoursesError ||
+            curr is CoursesError ||
                 curr is CoursesLoading ||
                 curr is CoursesLoaded,
             builder: (context, coursesState) {
               return BlocBuilder<UserCoursesBloc, UserCoursesState>(
                 buildWhen: (prev, curr) =>
-                    curr is UserCoursesError ||
+                curr is UserCoursesError ||
                     curr is UserCoursesLoading ||
                     curr is UserCoursesLoaded,
                 builder: (context, userCoursesState) {
                   final isConnectionError =
                       (coursesState is CoursesError &&
                           coursesState.isConnectionError) ||
-                      (userCoursesState is UserCoursesError &&
-                          userCoursesState.isConnectionError);
+                          (userCoursesState is UserCoursesError &&
+                              userCoursesState.isConnectionError);
 
                   if (isConnectionError) {
                     return SliverFillRemaining(

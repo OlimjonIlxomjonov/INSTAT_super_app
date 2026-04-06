@@ -17,6 +17,8 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dom
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/about_course_features/about_cours_features_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_topics/course_lesson_topics_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/buy_course/buy_course_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/buy_course/buy_course_state.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
 
 class DetailedCourseInfoPage extends StatefulWidget {
@@ -37,9 +39,10 @@ class DetailedCourseInfoPage extends StatefulWidget {
 
 class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
   late final List<Widget> _headerSlivers;
+  late bool _isBought;
 
   void _openPayment(BuildContext context) {
-    if (widget.data.userOrder?.status != 'paid') {
+    if (!_isBought) {
       onlineLibStyleCustomBottomSheetWg(
         context,
         headerTitle: "To'lov turi",
@@ -60,6 +63,7 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
   @override
   void initState() {
     super.initState();
+    _isBought = widget.data.userOrder?.status == 'paid';
 
     // Build ONCE, never remeasured on scroll
     _headerSlivers = [
@@ -107,8 +111,16 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
-      child: Scaffold(
-        body: NestedScrollView(
+      child: BlocListener<BuyCourseBloc, BuyCourseState>(
+        listener: (context, state) {
+          if (state is BuyCourseLoaded) {
+            setState(() {
+              _isBought = true;
+            });
+          }
+        },
+        child: Scaffold(
+          body: NestedScrollView(
           headerSliverBuilder: (context, _) => _headerSlivers,
           body: TabBarView(
             children: [
@@ -124,10 +136,11 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
         ),
         bottomNavigationBar: CustomBottomNavContainerWg(
           onTap: () => _openPayment(context),
-          buttonText: widget.data.userOrder?.status == 'paid'
+          buttonText: _isBought
               ? 'Davom etish'
               : 'Sotib olish - ${widget.data.price} UZS',
         ),
+      ),
       ),
     );
   }

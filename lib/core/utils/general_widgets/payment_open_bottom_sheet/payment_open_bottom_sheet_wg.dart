@@ -22,47 +22,68 @@ class PaymentOpenBottomSheetWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: _buildPaymentMethod(AppImages.clickPayment, context),
-              ),
-              SizedBox(width: 12),
-              Expanded(
-                child: _buildPaymentMethod(AppImages.paymePayment, context),
-              ),
-            ],
-          ),
-          SizedBox(height: 50),
-        ],
+    return BlocListener<BuyCourseBloc, BuyCourseState>(
+      listener: (context, state) {
+        if (state is BuyCourseLoaded) {
+          AppRoute.close();
+          successFlushBar(context, 'Kurs sotip olindi!');
+        }
+      },
+      child: SafeArea(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: _buildPaymentMethod(AppImages.clickPayment, context),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildPaymentMethod(AppImages.paymePayment, context),
+                ),
+              ],
+            ),
+            const SizedBox(height: 50),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildPaymentMethod(String imagePath, BuildContext context) =>
-      BlocConsumer<BuyCourseBloc, BuyCourseState>(
+      BlocBuilder<BuyCourseBloc, BuyCourseState>(
         builder: (context, state) {
+          final isLoading = state is BuyCourseLoading;
           return GestureDetector(
-            onTap: () => _buyCourse(context),
+            onTap: isLoading ? null : () => _buyCourse(context),
             child: Container(
-              padding: .symmetric(vertical: 15, horizontal: 40),
+              height: 64,
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 40),
               decoration: BoxDecoration(
                 color: AppColors.greyScale.grey50,
-                borderRadius: .circular(16),
-                border: .all(color: AppColors.greyScale.grey200),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.greyScale.grey200),
               ),
-              child: Image.asset(imagePath, fit: .cover, height: 32),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: isLoading
+                    ? const SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppColors.primaryColor,
+                        ),
+                      )
+                    : Image.asset(
+                        imagePath,
+                        key: ValueKey(imagePath),
+                        fit: BoxFit.cover,
+                        height: 32,
+                      ),
+              ),
             ),
           );
-        },
-        listener: (context, state) {
-          if (state is BuyCourseLoaded) {
-            AppRoute.close();
-            successFlushBar(context, 'Kurs sotip olindi!');
-          }
         },
       );
 }
