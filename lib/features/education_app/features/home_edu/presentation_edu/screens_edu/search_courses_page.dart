@@ -62,6 +62,7 @@ class _SearchCoursesPageState extends State<SearchCoursesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.white,
       body: SafeArea(
         child: Column(
