@@ -38,3 +38,10 @@ class BuyCourseParams {
 
   BuyCourseParams({required this.courseId});
 }
+
+class SearchCoursesParams {
+  final String search;
+  final int page;
+
+  SearchCoursesParams({required this.search, this.page = 1});
+}

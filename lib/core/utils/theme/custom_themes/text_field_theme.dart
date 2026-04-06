@@ -10,14 +10,14 @@ class TTextFieldTheme {
       borderRadius: .circular(10),
       borderSide: BorderSide(color: AppColors.greyScale.grey300, width: 1),
     ),
-    enabledBorder: OutlineInputBorder().copyWith(
-      borderRadius: .circular(10),
-      borderSide: BorderSide(color: AppColors.greyScale.grey300, width: 1),
-    ),
-    focusedBorder: OutlineInputBorder().copyWith(
-      borderRadius: .circular(10),
-      borderSide: BorderSide(color: AppColors.primaryColor, width: 1),
-    ),
+    // enabledBorder: OutlineInputBorder().copyWith(
+    //   borderRadius: .circular(10),
+    //   borderSide: BorderSide(color: AppColors.greyScale.grey300, width: 1),
+    // ),
+    // focusedBorder: OutlineInputBorder().copyWith(
+    //   borderRadius: .circular(10),
+    //   borderSide: BorderSide(color: AppColors.primaryColor, width: 1),
+    // ),
     labelStyle: AppTextStyles.source.regular(
       fontSize: 14,
       color: AppColors.greyScale.grey600,

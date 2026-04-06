@@ -6,21 +6,33 @@ import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 
 class AppSearchbarWg extends StatelessWidget {
-  const AppSearchbarWg({super.key});
+  /// When provided the bar becomes tappable (e.g. to open the search page).
+  final VoidCallback? onTap;
+
+  /// Hero tag — use the same tag on the destination page's field for a
+  /// smooth shared-element transition. Defaults to 'home_search_bar'.
+  final String heroTag;
+
+  const AppSearchbarWg({
+    super.key,
+    this.onTap,
+    this.heroTag = 'home_search_bar',
+  });
 
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 14, horizontal: 14),
+
+    Widget bar = Container(
+      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 14),
       decoration: BoxDecoration(
-        borderRadius: .circular(12),
+        borderRadius: BorderRadius.circular(12),
         color: AppColors.greyScale.grey200,
       ),
       child: Row(
         children: [
           Icon(IconlyLight.search),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           AutoSizeText(
             localization.whatAreYouLookingFor,
             style: AppTextStyles.source.regular(
@@ -30,6 +42,15 @@ class AppSearchbarWg extends StatelessWidget {
           ),
         ],
       ),
+    );
+
+    if (onTap != null) {
+      bar = GestureDetector(onTap: onTap, child: bar);
+    }
+
+    return Hero(
+      tag: heroTag,
+      child: Material(color: Colors.transparent, child: bar),
     );
   }
 }

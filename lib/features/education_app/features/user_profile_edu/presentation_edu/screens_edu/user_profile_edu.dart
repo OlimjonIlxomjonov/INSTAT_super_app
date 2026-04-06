@@ -54,11 +54,11 @@ class _UserProfileEduState extends State<UserProfileEdu> {
                   title: 'Ko’p beriladigan savollar',
                   onTap: () {},
                 ),
-                ProfileSettingsTileWg(
-                  leadingIcon: IconlyLight.user,
-                  title: 'Guruhlarim',
-                  onTap: _openUserGroupsComponent,
-                ),
+                // ProfileSettingsTileWg(
+                //   leadingIcon: IconlyLight.user,
+                //   title: 'Guruhlarim',
+                //   onTap: _openUserGroupsComponent,
+                // ),
               ],
             ),
           ),

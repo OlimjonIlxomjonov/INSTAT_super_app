@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/placeholder/banner_placeholder.dart';
+import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/dragble_app_bar/draggble_app_bar_wg.dart';
@@ -7,8 +9,11 @@ import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
+import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/search_courses_page.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/show_all_courses_bottom_sheet_page.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/widgets_edu/home_achivements_wg.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/search_courses/search_courses_bloc.dart';
 import 'package:my_template/features/education_app/widgets/active_courses_with_bloc_wg.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/popular_course_with_bloc/popular_with_bloc_wg.dart';
 
@@ -26,6 +31,17 @@ class HomeEduPage extends StatelessWidget {
       showHandler: false,
       context,
       child: const ShowAllCoursesBottomSheetPage(),
+    );
+  }
+
+  void _openSearch(BuildContext context) {
+    FamilyNavigation.familyPush(
+      showHandle: false,
+      context,
+      BlocProvider(
+        create: (_) => sl<SearchCoursesBloc>(),
+        child: const SearchCoursesPage(),
+      ),
     );
   }
 
@@ -51,7 +67,7 @@ class HomeEduPage extends StatelessWidget {
             snap: true,
             automaticallyImplyLeading: false,
             titleSpacing: 20,
-            title: AppSearchbarWg(),
+            title: AppSearchbarWg(onTap: () => _openSearch(context)),
           ),
 
           SliverPadding(

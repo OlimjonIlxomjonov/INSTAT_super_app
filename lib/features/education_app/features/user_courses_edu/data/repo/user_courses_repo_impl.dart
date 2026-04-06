@@ -60,4 +60,11 @@ class UserCoursesRepoImpl implements UserCoursesRepository {
   Future<void> postBuyCourse({required BuyCourseParams params}) {
     return _remoteDataSource.postBoughtCourses(params: params);
   }
+
+  @override
+  Future<CourseListResponse> searchCourses({
+    required SearchCoursesParams params,
+  }) {
+    return _remoteDataSource.fetchSearchCourses(params: params);
+  }
 }

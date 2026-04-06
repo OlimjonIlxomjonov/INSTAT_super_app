@@ -32,4 +32,6 @@ abstract class UserCoursesRepository {
   });
 
   Future<void> postBuyCourse({required BuyCourseParams params});
+
+  Future<CourseListResponse> searchCourses({required SearchCoursesParams params});
 }

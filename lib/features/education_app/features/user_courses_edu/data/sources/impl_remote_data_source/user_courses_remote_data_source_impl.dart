@@ -157,4 +157,29 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
       rethrow;
     }
   }
+
+  @override
+  Future<CourseListResponseModel> fetchSearchCourses({
+    required SearchCoursesParams params,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        ApiUrls.availableCourses,
+        queryParams: {
+          'search': params.search,
+          'page': params.page,
+        },
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data;
+        logger.i(data);
+        return CourseListResponseModel.fromJson(data);
+      } else {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
 }

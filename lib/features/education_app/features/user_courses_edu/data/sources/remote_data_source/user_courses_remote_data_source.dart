@@ -32,4 +32,8 @@ abstract class UserCoursesRemoteDataSource {
   });
 
   Future<void> postBoughtCourses({required BuyCourseParams params});
+
+  Future<CourseListResponseModel> fetchSearchCourses({
+    required SearchCoursesParams params,
+  });
 }
