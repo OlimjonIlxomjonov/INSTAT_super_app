@@ -14,16 +14,14 @@ class EmptyState extends StatelessWidget {
       child: Column(
         mainAxisSize: .min,
         children: [
-          SizedBox(
-            width: 200,
-            height: 170,
+          Flexible(
             child: Lottie.asset(
               AppAnimations.emptyState,
               repeat: false,
-              fit: BoxFit.contain,
+              fit: BoxFit.cover,
             ),
           ),
-          Text(message, style: CustomTextStyles.h3),
+          // Text(message, style: CustomTextStyles.h3),
         ],
       ),
     );

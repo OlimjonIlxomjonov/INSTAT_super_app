@@ -1,8 +1,8 @@
 import 'dart:async';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/skeletonizer_shimmer/courses/course_shimmer.dart';
 import 'package:my_template/core/common/ui_states/empty_state.dart';
@@ -143,7 +143,21 @@ class _CoursesInProgressComponentState
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserCoursesBloc, UserCoursesState>(
+    return BlocConsumer<UserCoursesBloc, UserCoursesState>(
+      listener: (context, state) {
+        if (state is UserCoursesLoaded) {
+          final isEmpty = state.response.data.isEmpty;
+
+          if (isEmpty) {
+            errorFlushBar(
+              context,
+              widget.state == 'all'
+                  ? 'Hali boshlangan kurslar yo\'q!'
+                  : 'Hech qanday kurs hali tugatilmagan!',
+            );
+          }
+        }
+      },
       builder: (context, state) {
         if (state is UserCoursesLoaded) {
           final data = state.response.data;

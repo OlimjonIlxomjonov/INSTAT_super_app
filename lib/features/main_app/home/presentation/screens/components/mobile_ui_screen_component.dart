@@ -8,11 +8,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/placeholder/banner_placeholder.dart';
+import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/common/ui_states/lost_internet_connection_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
-import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/show_all_courses_bottom_sheet_page.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_state.dart';
@@ -98,10 +98,11 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
   }
 
   /// Builds all content slivers shown below the search bar when online.
-  List<Widget> _buildContentSlivers(BuildContext context,
-      AppLocalizations localization,) {
+  List<Widget> _buildContentSlivers(
+    BuildContext context,
+    AppLocalizations localization,
+  ) {
     return [
-
       /// BANNERS
       SliverPadding(
         padding: AppPadding.horizontal20x(),
@@ -135,13 +136,13 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
 
-    return RefreshIndicator(
+    return CustomRefreshIndicator(
       onRefresh: () async {
         _reloadAll();
       },
+
       child: CustomScrollView(
         slivers: [
-
           /// HEADER LOGO
           SliverAppBar(
             snap: true,
@@ -203,21 +204,21 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
           /// Uses nested BlocBuilders to watch both blocs simultaneously.
           BlocBuilder<CoursesBloc, CoursesState>(
             buildWhen: (prev, curr) =>
-            curr is CoursesError ||
+                curr is CoursesError ||
                 curr is CoursesLoading ||
                 curr is CoursesLoaded,
             builder: (context, coursesState) {
               return BlocBuilder<UserCoursesBloc, UserCoursesState>(
                 buildWhen: (prev, curr) =>
-                curr is UserCoursesError ||
+                    curr is UserCoursesError ||
                     curr is UserCoursesLoading ||
                     curr is UserCoursesLoaded,
                 builder: (context, userCoursesState) {
                   final isConnectionError =
                       (coursesState is CoursesError &&
                           coursesState.isConnectionError) ||
-                          (userCoursesState is UserCoursesError &&
-                              userCoursesState.isConnectionError);
+                      (userCoursesState is UserCoursesError &&
+                          userCoursesState.isConnectionError);
 
                   if (isConnectionError) {
                     return SliverFillRemaining(

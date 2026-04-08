@@ -7,7 +7,7 @@ class AppAnimations {
   static const successCheck = '${_path}success_check.json';
 
   /// states
-  static const emptyState = '${_path}empty_state.json';
+  static const emptyState = '${_path}empty_ghost.json'; // _state
   static const lostInternetConnectionState = '${_path}no_internet.json';
   static const errorState = '${_path}explanation_alert_error.json';
 }
