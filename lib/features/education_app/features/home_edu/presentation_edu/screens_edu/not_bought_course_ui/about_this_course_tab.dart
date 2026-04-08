@@ -39,6 +39,7 @@ class _AboutThisCourseTabState extends State<AboutThisCourseTab>
   void _openCourseDetail(BuildContext context) {
     FamilyNavigation.familyPush(
       context,
+      showHandle: false,
       DetailedCourseInfoPage(
         data: widget.data,
         courseCategory: widget.courseCategory,

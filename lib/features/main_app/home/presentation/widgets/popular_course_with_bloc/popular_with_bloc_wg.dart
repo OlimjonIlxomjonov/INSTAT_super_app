@@ -37,27 +37,15 @@ class PopularWithBlocWg extends StatelessWidget {
                     builder: (context, categoryName) {
                       return PopularCoursesCardWg(
                         onTap: () {
-                          /// open new a family
-                          openMiniAppSheetFamily(
-                            showHandler: false,
+                          FamilyNavigation.familyPush(
                             context,
-                            child: DetailedCourseInfoPage(
+                            DetailedCourseInfoPage(
                               total: state.response.meta.total,
                               data: item,
                               courseCategory: categoryName,
                             ),
+                            showHandle: false,
                           );
-
-                          /// within the family
-                          // FamilyNavigation.familyPush(
-                          //   context,
-                          //   showHandle: false,
-                          //   DetailedCourseInfoPage(
-                          //     total: state.response.meta.total,
-                          //     data: item,
-                          //     courseCategory: categoryName,
-                          //   ),
-                          // );
                         },
                         data: item,
                         categoryName: categoryName,
