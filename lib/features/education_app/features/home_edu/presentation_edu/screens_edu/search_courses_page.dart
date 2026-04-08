@@ -73,59 +73,56 @@ class _SearchCoursesPageState extends State<SearchCoursesPage> {
                 horizontal: appW(16),
                 vertical: appH(12),
               ),
-              child: Hero(
-                tag: 'home_search_bar',
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: appW(14),
-                      vertical: appH(4),
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: AppColors.greyScale.grey200,
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          IconlyLight.search,
-                          color: AppColors.greyScale.grey600,
-                        ),
-                        SizedBox(width: appW(8)),
-                        Expanded(
-                          child: TextField(
-                            controller: _controller,
-                            focusNode: _focusNode,
-                            onChanged: _search,
-                            style: AppTextStyles.source.regular(fontSize: 14),
-                            decoration: InputDecoration(
-                              hintText: 'Kurs qidiring...',
-                              hintStyle: AppTextStyles.source.regular(
-                                fontSize: 14,
-                                color: AppColors.greyScale.grey500,
-                              ),
-                              border: InputBorder.none,
-                              isDense: true,
-                              contentPadding: EdgeInsets.symmetric(
-                                vertical: appH(10),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: appW(4)),
-                        GestureDetector(
-                          onTap: () => FamilyNavigation.familyClose(context),
-                          child: Text(
-                            'Bekor',
-                            style: AppTextStyles.source.medium(
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: appW(14),
+                    vertical: appH(4),
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: AppColors.greyScale.grey200,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        IconlyLight.search,
+                        color: AppColors.greyScale.grey600,
+                      ),
+                      SizedBox(width: appW(8)),
+                      Expanded(
+                        child: TextField(
+                          controller: _controller,
+                          focusNode: _focusNode,
+                          onChanged: _search,
+                          style: AppTextStyles.source.regular(fontSize: 14),
+                          decoration: InputDecoration(
+                            hintText: 'Kurs qidiring...',
+                            hintStyle: AppTextStyles.source.regular(
                               fontSize: 14,
-                              color: AppColors.primaryColor,
+                              color: AppColors.greyScale.grey500,
+                            ),
+                            border: InputBorder.none,
+                            isDense: true,
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: appH(10),
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(width: appW(4)),
+                      GestureDetector(
+                        onTap: () => FamilyNavigation.familyClose(context),
+                        child: Text(
+                          'Bekor',
+                          style: AppTextStyles.source.medium(
+                            fontSize: 14,
+                            color: AppColors.primaryColor,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),

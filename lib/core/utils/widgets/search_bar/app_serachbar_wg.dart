@@ -6,18 +6,9 @@ import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 
 class AppSearchbarWg extends StatelessWidget {
-  /// When provided the bar becomes tappable (e.g. to open the search page).
   final VoidCallback? onTap;
 
-  /// Hero tag — use the same tag on the destination page's field for a
-  /// smooth shared-element transition. Defaults to 'home_search_bar'.
-  final String heroTag;
-
-  const AppSearchbarWg({
-    super.key,
-    this.onTap,
-    this.heroTag = 'home_search_bar',
-  });
+  const AppSearchbarWg({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +39,6 @@ class AppSearchbarWg extends StatelessWidget {
       bar = GestureDetector(onTap: onTap, child: bar);
     }
 
-    return Hero(
-      tag: heroTag,
-      child: Material(color: Colors.transparent, child: bar),
-    );
+    return Material(color: Colors.transparent, child: bar);
   }
 }

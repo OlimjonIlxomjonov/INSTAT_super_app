@@ -104,12 +104,15 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
           mainAxisSize: .min,
           mainAxisAlignment: .spaceEvenly,
           children: [
-            _buildColumn(title: '$percentage%', subTitle: '${state.totalQuestions - state.correctAnswers} ta'),
+            _buildColumn(
+              title: '$percentage%',
+              subTitle: '${state.totalQuestions - state.correctAnswers} ta',
+            ),
             _buildColumn(
               title: '${state.correctAnswers} ⭐',
               subTitle: '${state.correctAnswers} ta',
-              titleDesc: 'Berilgan ball',
-              subTitleDesc: 'To’g’ri javoblar',
+              titleDesc: 'To’g’ri javoblar',
+              subTitleDesc: 'Berilgan ball',
             ),
           ],
         ),
@@ -141,7 +144,7 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
       children: [
         Text(title, style: AppTextStyles.source.medium(fontSize: 20)),
         Text(
-          titleDesc,
+          subTitleDesc,
           style: AppTextStyles.source.regular(
             fontSize: 12,
             color: AppColors.greyScale.grey600,
@@ -150,7 +153,7 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
         SizedBox(height: appH(12)),
         Text(subTitle, style: AppTextStyles.source.medium(fontSize: 20)),
         Text(
-          subTitleDesc,
+          titleDesc,
           style: AppTextStyles.source.regular(
             fontSize: 12,
             color: AppColors.greyScale.grey600,
@@ -198,7 +201,8 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
               optionList = RegularTestOptionListWg(
                 options: state.currentOptions,
                 selectedOptionId: state.selectedOptionId,
-                onSelectOption: (id) => _bloc.add(SelectLessonTestOptionEvent(optionId: id)),
+                onSelectOption: (id) =>
+                    _bloc.add(SelectLessonTestOptionEvent(optionId: id)),
               );
             } else if (state is CourseLessonTestAnswerResult) {
               progress = state.tests.isNotEmpty
@@ -245,54 +249,77 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
             );
           },
         ),
-        bottomNavigationBar: BlocBuilder<CourseLessonTestBloc, CourseLessonTestState>(
-          builder: (context, state) {
-            String buttonText = "Tasdiqlash";
-            VoidCallback? onTap;
-            Widget? banner;
+        bottomNavigationBar:
+            BlocBuilder<CourseLessonTestBloc, CourseLessonTestState>(
+              builder: (context, state) {
+                String buttonText = "Tasdiqlash";
+                VoidCallback? onTap;
+                Widget? banner;
 
-            if (state is CourseLessonTestLoaded && state.selectedOptionId != null && !state.isSubmitting) {
-              onTap = () => context.read<CourseLessonTestBloc>().add(SubmitLessonTestAnswerEvent());
-            } else if (state is CourseLessonTestAnswerResult) {
-              buttonText = "Keyingi savol";
-              onTap = () => context.read<CourseLessonTestBloc>().add(NextLessonTestQuestionEvent());
-              
-              banner = Container(
-                margin: const EdgeInsets.only(bottom: 12, left: 20, right: 20),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                decoration: BoxDecoration(
-                  color: state.answerResponse.isCorrect ? AppColors.green : AppColors.red,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      state.answerResponse.isCorrect ? Icons.check_circle : Icons.cancel, 
-                      color: Colors.white,
+                if (state is CourseLessonTestLoaded &&
+                    state.selectedOptionId != null &&
+                    !state.isSubmitting) {
+                  onTap = () => context.read<CourseLessonTestBloc>().add(
+                    SubmitLessonTestAnswerEvent(),
+                  );
+                } else if (state is CourseLessonTestAnswerResult) {
+                  buttonText = "Keyingi savol";
+                  onTap = () => context.read<CourseLessonTestBloc>().add(
+                    NextLessonTestQuestionEvent(),
+                  );
+
+                  banner = Container(
+                    margin: const EdgeInsets.only(
+                      bottom: 12,
+                      left: 20,
+                      right: 20,
                     ),
-                    const SizedBox(width: 8),
-                    Text(
-                      state.answerResponse.isCorrect ? "To'g'ri javob" : "Noto'g'ri javob", 
-                      style: AppTextStyles.source.medium(fontSize: 16, color: Colors.white),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: state.answerResponse.isCorrect
+                          ? AppColors.green
+                          : AppColors.red,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          state.answerResponse.isCorrect
+                              ? Icons.check_circle
+                              : Icons.cancel,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          state.answerResponse.isCorrect
+                              ? "To'g'ri javob"
+                              : "Noto'g'ri javob",
+                          style: AppTextStyles.source.medium(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (banner != null) banner,
+                    CustomBottomNavContainerWg(
+                      buttonText: buttonText,
+                      onTap: onTap ?? () {},
                     ),
                   ],
-                ),
-              );
-            }
-
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (banner != null) banner,
-                CustomBottomNavContainerWg(
-                  buttonText: buttonText,
-                  onTap: onTap ?? () {},
-                ),
-              ],
-            );
-          },
-        ),
+                );
+              },
+            ),
       ),
     );
   }

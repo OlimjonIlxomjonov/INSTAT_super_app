@@ -95,6 +95,27 @@ class MinimalCoursesCardWg extends StatelessWidget {
                             style: CustomTextStyles.h4,
                           ),
                         ],
+                      )
+                    else
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.star,
+                            color: AppColors.yellow500,
+                            size: 20,
+                          ),
+                          Text(' 4,5(832)', style: CustomTextStyles.h4),
+                          const SizedBox(width: 10),
+                          Icon(
+                            IconlyLight.document,
+                            size: 20,
+                            color: AppColors.greyScale.grey400,
+                          ),
+                          Text(
+                            ' ${data.lessonsCount} ta',
+                            style: CustomTextStyles.h4,
+                          ),
+                        ],
                       ),
                   ],
                 ),
