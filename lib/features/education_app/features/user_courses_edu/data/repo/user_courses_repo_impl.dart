@@ -4,6 +4,9 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dom
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_category_by_id/course_category_by_id_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_files_entity/course_file_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_items/course_lesson_items_response_entity.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_answer_response_entity.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_entity.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_option_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_topics/course_lesson_topics_response.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/course_list_response.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/repository/user_courses_repository.dart';
@@ -66,5 +69,26 @@ class UserCoursesRepoImpl implements UserCoursesRepository {
     required SearchCoursesParams params,
   }) {
     return _remoteDataSource.fetchSearchCourses(params: params);
+  }
+
+  @override
+  Future<List<LessonTestEntity>> getLessonTests({
+    required CourseLessonTestParams params,
+  }) {
+    return _remoteDataSource.fetchLessonTests(params: params);
+  }
+
+  @override
+  Future<List<LessonTestOptionEntity>> getLessonTestOptions({
+    required CourseLessonTestOptionsParams params,
+  }) {
+    return _remoteDataSource.fetchLessonTestOptions(params: params);
+  }
+
+  @override
+  Future<LessonTestAnswerResponseEntity> submitLessonTestAnswer({
+    required SubmitLessonTestAnswerParams params,
+  }) {
+    return _remoteDataSource.postSubmitLessonTestAnswer(params: params);
   }
 }

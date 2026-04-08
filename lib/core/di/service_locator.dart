@@ -29,6 +29,11 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/course_lesson_test/get_lesson_tests_usecase.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/course_lesson_test/get_lesson_test_options_usecase.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/course_lesson_test/submit_lesson_test_answer_usecase.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_test/course_lesson_test_bloc.dart';
+
 final sl = GetIt.instance;
 
 Future<void> setup() async {
@@ -61,6 +66,9 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => CourseFilesUseCase(repository: sl()));
   sl.registerLazySingleton(() => BuyCourseUseCase(repository: sl()));
   sl.registerLazySingleton(() => SearchCoursesUseCase(repository: sl()));
+  sl.registerLazySingleton(() => GetLessonTestsUseCase(repository: sl()));
+  sl.registerLazySingleton(() => GetLessonTestOptionsUseCase(repository: sl()));
+  sl.registerLazySingleton(() => SubmitLessonTestAnswerUseCase(repository: sl()));
 
   /// {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -73,4 +81,9 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => CourseFilesBloc(sl()));
   sl.registerLazySingleton(() => BuyCourseBloc(useCase: sl()));
   sl.registerFactory(() => SearchCoursesBloc(useCase: sl()));
+  sl.registerFactory(() => CourseLessonTestBloc(
+        getLessonTestsUseCase: sl(),
+        getLessonTestOptionsUseCase: sl(),
+        submitLessonTestAnswerUseCase: sl(),
+      ));
 }

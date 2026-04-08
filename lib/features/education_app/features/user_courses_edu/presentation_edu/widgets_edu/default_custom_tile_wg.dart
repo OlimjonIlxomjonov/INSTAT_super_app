@@ -11,6 +11,8 @@ class DefaultCustomTileWg extends StatelessWidget {
   final VoidCallback onTap;
   final int? tileMaxLines;
   final TextOverflow? tileOverflow;
+  final Color? backgroundColor;
+  final Color? borderColor;
 
   const DefaultCustomTileWg({
     super.key,
@@ -21,6 +23,8 @@ class DefaultCustomTileWg extends StatelessWidget {
     required this.tileTitle,
     this.tileMaxLines,
     this.tileOverflow,
+    this.backgroundColor,
+    this.borderColor,
   });
 
   @override
@@ -31,7 +35,8 @@ class DefaultCustomTileWg extends StatelessWidget {
         padding: .symmetric(horizontal: appH(12)),
         margin: .only(bottom: appH(12)),
         decoration: BoxDecoration(
-          border: .all(color: AppColors.greyScale.grey200),
+          color: backgroundColor,
+          border: .all(color: borderColor ?? AppColors.greyScale.grey200),
           borderRadius: .circular(12),
         ),
         child: ListTile(

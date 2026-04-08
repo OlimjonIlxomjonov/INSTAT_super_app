@@ -326,7 +326,11 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                         await openMiniAppSheetFamily(
                           context,
                           showHandler: false,
-                          child: RegularTestCoursePage(),
+                          child: RegularTestCoursePage(
+                            courseId: widget.courseId,
+                            blockId: widget.topicId,
+                            lessonId: widget.lessonId,
+                          ),
                         );
                       },
                       tileTitle: 'Test topshirig’i',
@@ -341,6 +345,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                       text:
                           'Hozirda kursga tegishli hech qanday testlar mavjud emas!',
                     ),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),

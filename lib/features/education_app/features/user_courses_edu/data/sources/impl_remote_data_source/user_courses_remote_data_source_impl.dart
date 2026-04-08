@@ -6,6 +6,9 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dat
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_category_by_id/course_category_by_id_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_files/course_files_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_lesson_items/course_lesson_items_response_model.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_lesson_test/lesson_test_answer_response_model.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_lesson_test/lesson_test_model.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_lesson_test/lesson_test_option_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_lesson_topics/course_lesson_topics_response_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/courses/course_list_response_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/sources/remote_data_source/user_courses_remote_data_source.dart';
@@ -174,6 +177,72 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
         final data = response.data;
         logger.i(data);
         return CourseListResponseModel.fromJson(data);
+      } else {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<LessonTestModel>> fetchLessonTests({
+    required CourseLessonTestParams params,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        "${ApiUrls.courses}${params.courseId}/course_blocks/${params.blockId}/lessons/${params.lessonId}/lesson_tests/",
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data as List;
+        logger.i(data);
+        return data.map((e) => LessonTestModel.fromJson(e)).toList();
+      } else {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<LessonTestOptionModel>> fetchLessonTestOptions({
+    required CourseLessonTestOptionsParams params,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        "${ApiUrls.courses}${params.courseId}/course_blocks/${params.blockId}/lessons/${params.lessonId}/lesson_tests/${params.testId}/lesson_test_options/",
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data as List;
+        logger.i(data);
+        return data.map((e) => LessonTestOptionModel.fromJson(e)).toList();
+      } else {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<LessonTestAnswerResponseModel> postSubmitLessonTestAnswer({
+    required SubmitLessonTestAnswerParams params,
+  }) async {
+    try {
+      final response = await _dioClient.post(
+        "${ApiUrls.courses}${params.courseId}/course_blocks/${params.blockId}/lessons/${params.lessonId}/lesson_tests/${params.testId}/answer/",
+        data: {
+          "lesson_test_option": params.optionId,
+        },
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data;
+        logger.i(data);
+        return LessonTestAnswerResponseModel.fromJson(data);
       } else {
         throw Exception('ERROR ${response.statusCode}');
       }

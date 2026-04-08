@@ -5,6 +5,9 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dom
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_items/course_lesson_items_response_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_topics/course_lesson_topics_response.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/course_list_response.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_entity.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_option_entity.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_answer_response_entity.dart';
 
 abstract class UserCoursesRepository {
   Future<CourseListResponse> getUserCourses({
@@ -34,4 +37,16 @@ abstract class UserCoursesRepository {
   Future<void> postBuyCourse({required BuyCourseParams params});
 
   Future<CourseListResponse> searchCourses({required SearchCoursesParams params});
+
+  Future<List<LessonTestEntity>> getLessonTests({
+    required CourseLessonTestParams params,
+  });
+
+  Future<List<LessonTestOptionEntity>> getLessonTestOptions({
+    required CourseLessonTestOptionsParams params,
+  });
+
+  Future<LessonTestAnswerResponseEntity> submitLessonTestAnswer({
+    required SubmitLessonTestAnswerParams params,
+  });
 }

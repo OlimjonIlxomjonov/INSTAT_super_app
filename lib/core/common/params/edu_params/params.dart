@@ -45,3 +45,45 @@ class SearchCoursesParams {
 
   SearchCoursesParams({required this.search, this.page = 1});
 }
+
+class CourseLessonTestParams {
+  final int courseId;
+  final int blockId;
+  final int lessonId;
+
+  CourseLessonTestParams({
+    required this.courseId,
+    required this.blockId,
+    required this.lessonId,
+  });
+}
+
+class CourseLessonTestOptionsParams {
+  final int courseId;
+  final int blockId;
+  final int lessonId;
+  final int testId;
+
+  CourseLessonTestOptionsParams({
+    required this.courseId,
+    required this.blockId,
+    required this.lessonId,
+    required this.testId,
+  });
+}
+
+class SubmitLessonTestAnswerParams {
+  final int courseId;
+  final int blockId;
+  final int lessonId;
+  final int testId;
+  final int optionId; // Sent as "lesson_test_option" in body
+
+  SubmitLessonTestAnswerParams({
+    required this.courseId,
+    required this.blockId,
+    required this.lessonId,
+    required this.testId,
+    required this.optionId,
+  });
+}

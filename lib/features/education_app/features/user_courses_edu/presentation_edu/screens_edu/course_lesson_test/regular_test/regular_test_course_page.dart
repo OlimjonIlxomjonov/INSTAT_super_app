@@ -1,8 +1,12 @@
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:iconly/iconly.dart';
 import 'package:lottie/lottie.dart';
+import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
+import 'package:my_template/core/common/flush_bar/success_flush_bar.dart';
+import 'package:my_template/core/common/params/edu_params/params.dart';
+import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/constants/assets/app_animations.dart';
 import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
@@ -11,11 +15,26 @@ import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart'
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_test/course_lesson_test_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_test/course_lesson_test_event.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_test/course_lesson_test_state.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/finish_lesson_test_dialog/finish_lesson_test_dialog_screen.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/default_custom_tile_wg.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/regular_test/widgets/regular_test_header_wg.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/regular_test/widgets/regular_test_option_list_wg.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/regular_test/widgets/regular_test_question_wg.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class RegularTestCoursePage extends StatefulWidget {
-  const RegularTestCoursePage({super.key});
+  final int courseId;
+  final int blockId;
+  final int lessonId;
+
+  const RegularTestCoursePage({
+    super.key,
+    required this.courseId,
+    required this.blockId,
+    required this.lessonId,
+  });
 
   @override
   State<RegularTestCoursePage> createState() => _RegularTestCoursePageState();
@@ -23,23 +42,38 @@ class RegularTestCoursePage extends StatefulWidget {
 
 class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
   late ConfettiController _confettiController;
+  late CourseLessonTestBloc _bloc;
 
   @override
   void initState() {
     super.initState();
     _confettiController = ConfettiController(duration: Duration(seconds: 2));
+    _bloc = sl<CourseLessonTestBloc>();
+    _bloc.add(
+      LoadCourseLessonTestsEvent(
+        params: CourseLessonTestParams(
+          courseId: widget.courseId,
+          blockId: widget.blockId,
+          lessonId: widget.lessonId,
+        ),
+      ),
+    );
   }
 
   @override
   void dispose() {
     _confettiController.dispose();
+    _bloc.close();
     super.dispose();
   }
 
-  void _onConfirm() {
+  void _showFinishDialog(CourseLessonTestFinished state) {
     _confettiController.play();
 
-    /// FINISH THE ONE LESSON TEST DIALOG
+    final percentage = state.totalQuestions > 0
+        ? ((state.correctAnswers / state.totalQuestions) * 100).toInt()
+        : 0;
+
     finishLessonTestDialogScreen(
       context,
       header: Stack(
@@ -70,10 +104,10 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
           mainAxisSize: .min,
           mainAxisAlignment: .spaceEvenly,
           children: [
-            _buildColumn(title: '80%', subTitle: '2 ta'),
+            _buildColumn(title: '$percentage%', subTitle: '${state.totalQuestions - state.correctAnswers} ta'),
             _buildColumn(
-              title: '4 ⭐',
-              subTitle: '8 ta',
+              title: '${state.correctAnswers} ⭐',
+              subTitle: '${state.correctAnswers} ta',
               titleDesc: 'Berilgan ball',
               subTitleDesc: 'To’g’ri javoblar',
             ),
@@ -86,161 +120,13 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
           child: ElevatedButton(
             onPressed: () {
               AppRoute.close();
+              AppRoute.close(); // Close the test page context as well
             },
             child: Text('Davom etish'),
           ),
         ),
       ],
       confettiController: _confettiController,
-    );
-
-    /// FINISH FULL COURSE TEST DIALOG (TEMP LOCATION)
-    // finishLessonTestDialogScreen(
-    //   context,
-    //   header: SvgPicture.asset(AppVectors.finishFullCourseTestDialogImg),
-    //   title: 'Kurs yakunlandi',
-    //   subTitle: "Kurs haqida o’zingizni izohingizni qoldiring!",
-    //   body: SingleChildScrollView(
-    //     child: Column(
-    //       mainAxisSize: .min,
-    //       children: [
-    //         StarRating(
-    //           starCount: 5,
-    //           rating: 4,
-    //           color: AppColors.orange,
-    //           size: 28,
-    //           borderColor: AppColors.greyScale.grey200,
-    //         ),
-    //         SizedBox(height: appH(15)),
-    //         TextField(
-    //           maxLength: 200,
-    //           minLines: 3,
-    //           decoration: InputDecoration(hintText: 'Mavzuni yozing...'),
-    //           maxLines: null,
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    //   actions: [
-    //     Padding(
-    //       padding: .only(bottom: appH(16)),
-    //       child: SizedBox(
-    //         width: double.infinity,
-    //         child: ElevatedButton(
-    //           onPressed: () {},
-    //           child: Text('Davom etish'),
-    //         ),
-    //       ),
-    //     ),
-    //     SizedBox(
-    //       width: double.infinity,
-    //       child: ElevatedButton(
-    //         style: ElevatedButton.styleFrom(
-    //           backgroundColor: AppColors.greyScale.grey50,
-    //           foregroundColor: AppColors.greyScale.grey600,
-    //         ),
-    //         onPressed: () {},
-    //         child: Text('Davom etish'),
-    //       ),
-    //     ),
-    //   ],
-    //   confettiController: _confettiController,
-    // );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          /// TEST HEADER
-          SliverPadding(
-            padding: .only(top: appH(20), left: appW(20), right: appW(20)),
-            sliver: SliverAppBar(
-              floating: true,
-              leading: IconButton(
-                style: IconButton.styleFrom(
-                  backgroundColor: AppColors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: .circular(8),
-                    side: BorderSide(color: AppColors.greyScale.grey200),
-                  ),
-                ),
-                onPressed: () {
-                  AppRoute.close();
-                },
-                icon: Icon(IconlyLight.arrow_left_2, size: 20),
-              ),
-              centerTitle: true,
-              title: LinearProgressIndicator(
-                value: 0.3,
-                minHeight: 16,
-                borderRadius: .circular(35),
-                color: AppColors.primaryColor,
-              ),
-              actions: [
-                IconButton(
-                  style: IconButton.styleFrom(
-                    backgroundColor: AppColors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: .circular(8),
-                      side: BorderSide(color: AppColors.greyScale.grey200),
-                    ),
-                  ),
-                  onPressed: () {
-                    AppRoute.close();
-                  },
-                  icon: Icon(Icons.close, size: 20),
-                ),
-              ],
-            ),
-          ),
-
-          /// QUESTION
-          SliverPadding(
-            padding: AppPadding.hAndV20x20(),
-            sliver: SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: .start,
-                children: [
-                  Text(
-                    '1-Savol',
-                    style: AppTextStyles.source.medium(fontSize: 22),
-                  ),
-                  SizedBox(height: appH(16)),
-                  Container(
-                    padding: .all(24),
-                    decoration: BoxDecoration(
-                      borderRadius: .circular(16),
-                      color: AppColors.greyScale.grey50,
-                      border: .all(color: AppColors.greyScale.grey200),
-                    ),
-                    child: Text(
-                      textAlign: .center,
-                      'Iqtisodiyot tarmoqlari statistikasi asosan nimani o‘rganadi?',
-                      style: AppTextStyles.source.medium(fontSize: 17),
-                    ),
-                  ),
-                  SizedBox(height: appH(20)),
-                  ...List.generate(
-                    4,
-                    (index) => DefaultCustomTileWg(
-                      onTap: () {},
-                      tileAction: Checkbox(value: false, onChanged: (temp) {}),
-                      tileTitle:
-                          'Tarmoqlar bo‘yicha ishlab chiqarish hajmi, o‘sish sur’atlari va samaradorlik ko‘rsatkichlarini',
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: CustomBottomNavContainerWg(
-        buttonText: 'Tasdiqlash',
-        onTap: _onConfirm,
-      ),
     );
   }
 
@@ -271,6 +157,143 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
           ),
         ),
       ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider.value(
+      value: _bloc,
+      child: Scaffold(
+        body: BlocConsumer<CourseLessonTestBloc, CourseLessonTestState>(
+          listener: (context, state) {
+            if (state is CourseLessonTestAnswerResult) {
+              if (state.answerResponse.isCorrect) {
+                successFlushBar(context, "To'g'ri javob berdingiz!");
+              } else {
+                errorFlushBar(context, "Noto'g'ri javob berdingiz.");
+              }
+            } else if (state is CourseLessonTestFinished) {
+              _showFinishDialog(state);
+            } else if (state is CourseLessonTestError) {
+              errorFlushBar(context, state.message);
+            }
+          },
+          builder: (context, state) {
+            double progress = 0.0;
+            String questionTitle = "";
+            String questionText = "";
+            bool isLoading = state is CourseLessonTestLoading;
+            Widget optionList = const SizedBox.shrink();
+            Widget? banner;
+
+            if (state is CourseLessonTestLoaded) {
+              progress = state.tests.isNotEmpty
+                  ? ((state.currentTestIndex) / state.tests.length)
+                  : 0.0;
+              final currentTest = state.tests[state.currentTestIndex];
+              questionTitle = '${state.currentTestIndex + 1}-Savol';
+              questionText = currentTest.question;
+
+              optionList = RegularTestOptionListWg(
+                options: state.currentOptions,
+                selectedOptionId: state.selectedOptionId,
+                onSelectOption: (id) => _bloc.add(SelectLessonTestOptionEvent(optionId: id)),
+              );
+            } else if (state is CourseLessonTestAnswerResult) {
+              progress = state.tests.isNotEmpty
+                  ? ((state.currentTestIndex + 1) / state.tests.length)
+                  : 0.0;
+              final currentTest = state.tests[state.currentTestIndex];
+              questionTitle = '${state.currentTestIndex + 1}-Savol';
+              questionText = currentTest.question;
+
+              optionList = RegularTestOptionListWg(
+                options: state.currentOptions,
+                selectedOptionId: state.selectedOptionId,
+                isAnswered: true,
+                isCorrect: state.answerResponse.isCorrect,
+              );
+            } else if (isLoading) {
+              questionTitle = 'Yuklanmoqda...';
+              questionText = '';
+            }
+
+            return CustomScrollView(
+              slivers: [
+                RegularTestHeaderWg(progress: progress),
+                SliverPadding(
+                  padding: AppPadding.hAndV20x20(),
+                  sliver: SliverToBoxAdapter(
+                    child: Skeletonizer(
+                      enabled: isLoading,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RegularTestQuestionWg(
+                            questionTitle: questionTitle,
+                            questionText: questionText,
+                          ),
+                          SizedBox(height: appH(20)),
+                          optionList,
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+        bottomNavigationBar: BlocBuilder<CourseLessonTestBloc, CourseLessonTestState>(
+          builder: (context, state) {
+            String buttonText = "Tasdiqlash";
+            VoidCallback? onTap;
+            Widget? banner;
+
+            if (state is CourseLessonTestLoaded && state.selectedOptionId != null && !state.isSubmitting) {
+              onTap = () => context.read<CourseLessonTestBloc>().add(SubmitLessonTestAnswerEvent());
+            } else if (state is CourseLessonTestAnswerResult) {
+              buttonText = "Keyingi savol";
+              onTap = () => context.read<CourseLessonTestBloc>().add(NextLessonTestQuestionEvent());
+              
+              banner = Container(
+                margin: const EdgeInsets.only(bottom: 12, left: 20, right: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  color: state.answerResponse.isCorrect ? AppColors.green : AppColors.red,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      state.answerResponse.isCorrect ? Icons.check_circle : Icons.cancel, 
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      state.answerResponse.isCorrect ? "To'g'ri javob" : "Noto'g'ri javob", 
+                      style: AppTextStyles.source.medium(fontSize: 16, color: Colors.white),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (banner != null) banner,
+                CustomBottomNavContainerWg(
+                  buttonText: buttonText,
+                  onTap: onTap ?? () {},
+                ),
+              ],
+            );
+          },
+        ),
+      ),
     );
   }
 }
