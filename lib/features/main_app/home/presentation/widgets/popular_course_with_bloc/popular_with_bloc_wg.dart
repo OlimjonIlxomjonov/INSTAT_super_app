@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/skeletonizer_shimmer/courses/course_shimmer.dart';
 import 'package:my_template/core/utils/app_utils.dart';
+import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/popular_courses_card/popular_courses_card_wg.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/detailed_course_info_page.dart';
@@ -36,6 +37,7 @@ class PopularWithBlocWg extends StatelessWidget {
                     builder: (context, categoryName) {
                       return PopularCoursesCardWg(
                         onTap: () {
+                          /// open new a family
                           openMiniAppSheetFamily(
                             showHandler: false,
                             context,
@@ -45,6 +47,17 @@ class PopularWithBlocWg extends StatelessWidget {
                               courseCategory: categoryName,
                             ),
                           );
+
+                          /// within the family
+                          // FamilyNavigation.familyPush(
+                          //   context,
+                          //   showHandle: false,
+                          //   DetailedCourseInfoPage(
+                          //     total: state.response.meta.total,
+                          //     data: item,
+                          //     courseCategory: categoryName,
+                          //   ),
+                          // );
                         },
                         data: item,
                         categoryName: categoryName,

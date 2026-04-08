@@ -29,7 +29,7 @@ class MiniAppSectionCard extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           image: DecorationImage(
-            fit: BoxFit.contain,
+            fit: BoxFit.none,
             alignment: .centerRight,
             image: SvgImageProvider(backgroundImage),
           ),
@@ -37,21 +37,35 @@ class MiniAppSectionCard extends StatelessWidget {
           gradient: LinearGradient(colors: colors),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.only(left: 10),
           child: Row(
+            crossAxisAlignment: .start,
+            mainAxisAlignment: .spaceBetween,
             children: [
-              Expanded(
-                child: Text(
-                  maxLines: 2,
-                  title,
-                  overflow: .ellipsis,
-                  style: AppTextStyles.source.semiBold(
-                    fontSize: 16,
-                    color: AppColors.white,
+              SizedBox(
+                width: 100,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    maxLines: 2,
+                    title,
+                    overflow: .ellipsis,
+                    style: AppTextStyles.source.semiBold(
+                      fontSize: 16,
+                      color: AppColors.white,
+                    ),
                   ),
                 ),
               ),
-              Expanded(child: Container()),
+              Align(
+                alignment: .bottomRight,
+                child: Image.asset(
+                  mainImage,
+                  fit: BoxFit.cover,
+                  width: 75,
+                  height: 75,
+                ),
+              ),
             ],
           ),
         ),

@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
       MiniAppModel(
         mainImage: AppImages.mikroMalumotlar,
         backgroundImage: AppVectors.mikroMalumotlarBack,
-        title: localization.microContent,
+        title: localization.scientificArticles,
         onTap: (context) {},
         colors: [Color(0xff51D7D4), Color(0xff2EC4B6)],
       ),
@@ -101,9 +101,9 @@ class _HomePageState extends State<HomePage> {
         colors: [Color(0xffFFB50F), Color(0xffFF8A00)],
       ),
       MiniAppModel(
-        mainImage: AppImages.bookSection,
+        mainImage: AppImages.ilmiyMaqola,
         backgroundImage: AppVectors.imliyMaqolaBack,
-        title: localization.scientificArticles,
+        title: localization.microContent,
         onTap: (context) => _openArticlesApp(context),
         colors: [Color(0xff3EE089), Color(0xff22C55E)],
       ),

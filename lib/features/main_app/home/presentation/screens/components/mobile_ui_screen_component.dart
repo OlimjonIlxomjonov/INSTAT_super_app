@@ -222,8 +222,6 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
           ),
 
           /// MINI APP SECTION
-          /// Uses a SliverList of Row-based pairs so the final item can
-          /// conditionally span full width when the total count is odd.
           _buildMiniAppGrid(context),
 
           /// SEARCH BAR
@@ -236,8 +234,6 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
             ),
           ),
 
-          /// CONTENT — replaced with LostInternetConnectionState when offline.
-          /// Uses nested BlocBuilders to watch both blocs simultaneously.
           BlocBuilder<CoursesBloc, CoursesState>(
             buildWhen: (prev, curr) =>
                 curr is CoursesError ||

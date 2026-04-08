@@ -16,10 +16,13 @@ abstract class AppImages {
   static const onboardingLogIn = '${baseOnboardingPath}c_onbaordin_log_in.jpg';
 
   /// HOME PAGE
-  static const onlineEdu = "${baseHomePath}online_edu.png";
-  static const bookSection = "${baseHomePath}c_book_section.png";
-  static const mikroMalumotlar = "${baseHomePath}c_minkro_info_section.png";
-  static const elektronJurnal = "${baseHomePath}c_elektron_jurnal_section.png";
+
+  // mini app section surface images
+  static const onlineEdu = "${baseHomePath}online_talim_section.png";
+  static const bookSection = "${baseHomePath}online_lib_section.png";
+  static const mikroMalumotlar = "${baseHomePath}hr_section.png";
+  static const elektronJurnal = "${baseHomePath}electron_jurnal_section.png";
+  static const ilmiyMaqola = '${baseHomePath}maqolalar_section.png';
 
   /// finished the lesson test
   static const trophy = "${basePath}Trophy-temp.png";

@@ -8,7 +8,7 @@ class SkeletonMinimalCourseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: appH(20)),
+      margin: EdgeInsets.only(bottom: appH(20), top: 10),
       padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.greyScale.grey200),
