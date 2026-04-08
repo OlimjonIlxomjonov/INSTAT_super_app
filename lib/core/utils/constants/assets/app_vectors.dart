@@ -19,12 +19,15 @@ abstract class AppVectors {
 
   /// home_edu
   static const String homeInstatLogo = 'assets/images/c_home_instat_logo.svg';
-  static const String onlineEduBack = '${baseHomePath}online_edu_back.svg';
-  static const String bookSectioBack = '${baseHomePath}book_section_back.svg';
+  static const String onlineEduBack = '${baseHomePath}online_edu_pattern.svg';
+  static const String bookSectioBack = '${baseHomePath}bg_pattern.svg';
   static const String mikroMalumotlarBack =
-      '${baseHomePath}mikro_info_section_back.svg';
+      '${baseHomePath}hr_back_pattern.svg';
   static const String elektronJurnalBack =
-      '${baseHomePath}elektron_jurnal_section_back.svg';
+      '${baseHomePath}electron_back_pattern.svg';
+  static const String imliyMaqolaBack =
+      '${baseHomePath}mikro_info_back_pattern.svg';
+
   static const String trophyBackground = "${basePath}temp_Icon.svg";
   static const String finishFullCourseTestDialogImg =
       "${basePath}finish_full_course_test_dialog_img.svg";

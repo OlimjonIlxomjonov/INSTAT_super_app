@@ -152,6 +152,7 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
                         courseId: widget.courseId,
                         topicId: widget.blockId,
                         lessonId: lesson.id,
+                        testCount: lesson.testsCount,
                       ),
                     ),
                     contentPadding: EdgeInsets.zero,

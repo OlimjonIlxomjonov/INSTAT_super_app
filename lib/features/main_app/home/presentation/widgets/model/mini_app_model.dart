@@ -4,6 +4,7 @@ class MiniAppModel {
   final String mainImage;
   final String backgroundImage;
   final String title;
+  final List<Color> colors;
   final void Function(BuildContext context) onTap;
 
   const MiniAppModel({
@@ -11,5 +12,6 @@ class MiniAppModel {
     required this.backgroundImage,
     required this.title,
     required this.onTap,
+    required this.colors,
   });
 }

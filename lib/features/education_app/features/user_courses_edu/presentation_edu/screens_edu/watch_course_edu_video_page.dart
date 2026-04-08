@@ -27,6 +27,7 @@ class WatchCourseEduVideoPage extends StatefulWidget {
   final String title;
   final String? imagePath;
   final int courseId, topicId, lessonId;
+  final int? testCount;
 
   const WatchCourseEduVideoPage({
     super.key,
@@ -35,6 +36,7 @@ class WatchCourseEduVideoPage extends StatefulWidget {
     required this.courseId,
     required this.topicId,
     required this.lessonId,
+    required this.testCount,
   });
 
   @override
@@ -267,21 +269,9 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                         final data = state.entity;
 
                         if (data.isEmpty) {
-                          return DecoratedBox(
-                            decoration: BoxDecoration(
-                              border: .all(color: AppColors.greyScale.grey200),
-                              borderRadius: .circular(12),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text(
+                          return _emptyFileAndTest(
+                            text:
                                 'Hozirda kursga tegishli hech qanday fayylar mavjud emas!',
-                                style: CustomTextStyles.h3half.copyWith(
-                                  color: AppColors.greyScale.grey500,
-                                  fontWeight: .w400,
-                                ),
-                              ),
-                            ),
                           );
                         }
 
@@ -326,26 +316,55 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                     style: AppTextStyles.source.semiBold(fontSize: 17),
                   ),
                   SizedBox(height: appH(16)),
-                  DefaultCustomTileWg(
-                    tileMaxLines: 1,
-                    tileOverflow: .ellipsis,
-                    tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
-                    onTap: () async {
-                      controller?.pause();
-                      await openMiniAppSheetFamily(
-                        context,
-                        showHandler: false,
-                        child: RegularTestCoursePage(),
-                      );
-                    },
-                    tileTitle: 'Tahlil, taqqoslash va prognozlash',
-                    subTitle: '3.4 MB',
-                  ),
+                  if (widget.testCount != 0)
+                    DefaultCustomTileWg(
+                      tileMaxLines: 1,
+                      tileOverflow: .ellipsis,
+                      tileLeading: null,
+                      onTap: () async {
+                        controller?.pause();
+                        await openMiniAppSheetFamily(
+                          context,
+                          showHandler: false,
+                          child: RegularTestCoursePage(),
+                        );
+                      },
+                      tileTitle: 'Test topshirig’i',
+                      subTitle: 'Mavzulashtirilgan test savollari',
+                      tileAction: Icon(
+                        IconlyLight.arrow_right_2,
+                        color: AppColors.greyScale.grey400,
+                      ),
+                    )
+                  else
+                    _emptyFileAndTest(
+                      text:
+                          'Hozirda kursga tegishli hech qanday testlar mavjud emas!',
+                    ),
                 ],
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  DecoratedBox _emptyFileAndTest({required String text}) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: .all(color: AppColors.greyScale.grey200),
+        borderRadius: .circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Text(
+          text,
+          style: CustomTextStyles.h3half.copyWith(
+            color: AppColors.greyScale.grey500,
+            fontWeight: .w400,
+          ),
+        ),
       ),
     );
   }

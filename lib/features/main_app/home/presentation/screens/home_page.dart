@@ -77,30 +77,35 @@ class _HomePageState extends State<HomePage> {
         backgroundImage: AppVectors.onlineEduBack,
         title: localization.onlineEducation,
         onTap: (context) => _openEduApp(context),
+        colors: [Color(0xff5F9CFE), Color(0xff3A7BFD)],
       ),
       MiniAppModel(
         mainImage: AppImages.bookSection,
         backgroundImage: AppVectors.bookSectioBack,
         title: localization.digitalLibrary,
         onTap: (context) => _openOnlineLibraryApp(context),
+        colors: [Color(0xffFF879E), Color(0xffFF5F7A)],
       ),
       MiniAppModel(
         mainImage: AppImages.mikroMalumotlar,
         backgroundImage: AppVectors.mikroMalumotlarBack,
         title: localization.microContent,
         onTap: (context) {},
+        colors: [Color(0xff51D7D4), Color(0xff2EC4B6)],
       ),
       MiniAppModel(
         mainImage: AppImages.elektronJurnal,
         backgroundImage: AppVectors.elektronJurnalBack,
         title: localization.electronicJournal,
         onTap: (context) {},
+        colors: [Color(0xffFFB50F), Color(0xffFF8A00)],
       ),
       MiniAppModel(
         mainImage: AppImages.bookSection,
-        backgroundImage: AppVectors.elektronJurnalBack,
+        backgroundImage: AppVectors.imliyMaqolaBack,
         title: localization.scientificArticles,
         onTap: (context) => _openArticlesApp(context),
+        colors: [Color(0xff3EE089), Color(0xff22C55E)],
       ),
     ];
   }

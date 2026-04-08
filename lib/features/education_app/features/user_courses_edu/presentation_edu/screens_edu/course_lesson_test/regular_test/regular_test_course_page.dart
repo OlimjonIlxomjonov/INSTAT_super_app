@@ -36,6 +36,118 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
     super.dispose();
   }
 
+  void _onConfirm() {
+    _confettiController.play();
+
+    /// FINISH THE ONE LESSON TEST DIALOG
+    finishLessonTestDialogScreen(
+      context,
+      header: Stack(
+        children: [
+          SvgPicture.asset(AppVectors.trophyBackground),
+          SizedBox(
+            width: 230,
+            height: 174,
+            child: Lottie.asset(
+              AppAnimations.trophyAnimation,
+              repeat: false,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ],
+      ),
+      title: 'Ajoyib natija',
+      subTitle:
+          "Keyingi safar ko'proq o'rganing va barcha to'g'ri javoblarni oling.",
+      body: Container(
+        padding: .all(12),
+        decoration: BoxDecoration(
+          color: AppColors.greyScale.grey50,
+          border: .all(color: AppColors.greyScale.grey200),
+          borderRadius: .circular(12),
+        ),
+        child: Row(
+          mainAxisSize: .min,
+          mainAxisAlignment: .spaceEvenly,
+          children: [
+            _buildColumn(title: '80%', subTitle: '2 ta'),
+            _buildColumn(
+              title: '4 ⭐',
+              subTitle: '8 ta',
+              titleDesc: 'Berilgan ball',
+              subTitleDesc: 'To’g’ri javoblar',
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {
+              AppRoute.close();
+            },
+            child: Text('Davom etish'),
+          ),
+        ),
+      ],
+      confettiController: _confettiController,
+    );
+
+    /// FINISH FULL COURSE TEST DIALOG (TEMP LOCATION)
+    // finishLessonTestDialogScreen(
+    //   context,
+    //   header: SvgPicture.asset(AppVectors.finishFullCourseTestDialogImg),
+    //   title: 'Kurs yakunlandi',
+    //   subTitle: "Kurs haqida o’zingizni izohingizni qoldiring!",
+    //   body: SingleChildScrollView(
+    //     child: Column(
+    //       mainAxisSize: .min,
+    //       children: [
+    //         StarRating(
+    //           starCount: 5,
+    //           rating: 4,
+    //           color: AppColors.orange,
+    //           size: 28,
+    //           borderColor: AppColors.greyScale.grey200,
+    //         ),
+    //         SizedBox(height: appH(15)),
+    //         TextField(
+    //           maxLength: 200,
+    //           minLines: 3,
+    //           decoration: InputDecoration(hintText: 'Mavzuni yozing...'),
+    //           maxLines: null,
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    //   actions: [
+    //     Padding(
+    //       padding: .only(bottom: appH(16)),
+    //       child: SizedBox(
+    //         width: double.infinity,
+    //         child: ElevatedButton(
+    //           onPressed: () {},
+    //           child: Text('Davom etish'),
+    //         ),
+    //       ),
+    //     ),
+    //     SizedBox(
+    //       width: double.infinity,
+    //       child: ElevatedButton(
+    //         style: ElevatedButton.styleFrom(
+    //           backgroundColor: AppColors.greyScale.grey50,
+    //           foregroundColor: AppColors.greyScale.grey600,
+    //         ),
+    //         onPressed: () {},
+    //         child: Text('Davom etish'),
+    //       ),
+    //     ),
+    //   ],
+    //   confettiController: _confettiController,
+    // );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,122 +239,12 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
       ),
       bottomNavigationBar: CustomBottomNavContainerWg(
         buttonText: 'Tasdiqlash',
-        onTap: () {
-          _confettiController.play();
-
-          /// FINISH THE ONE LESSON TEST DIALOG
-          finishLessonTestDialogScreen(
-            context,
-            header: Stack(
-              children: [
-                SvgPicture.asset(AppVectors.trophyBackground),
-                SizedBox(
-                  width: 230,
-                  height: 174,
-                  child: Lottie.asset(
-                    AppAnimations.trophyAnimation,
-                    repeat: false,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ],
-            ),
-            title: 'Ajoyib natija',
-            subTitle:
-                "Keyingi safar ko'proq o'rganing va barcha to'g'ri javoblarni oling.",
-            body: Container(
-              padding: .all(12),
-              decoration: BoxDecoration(
-                color: AppColors.greyScale.grey50,
-                border: .all(color: AppColors.greyScale.grey200),
-                borderRadius: .circular(12),
-              ),
-              child: Row(
-                mainAxisSize: .min,
-                mainAxisAlignment: .spaceEvenly,
-                children: [
-                  buildColumn(title: '80%', subTitle: '2 ta'),
-                  buildColumn(
-                    title: '4 ⭐',
-                    subTitle: '8 ta',
-                    titleDesc: 'Berilgan ball',
-                    subTitleDesc: 'To’g’ri javoblar',
-                  ),
-                ],
-              ),
-            ),
-            actions: [
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    AppRoute.close();
-                  },
-                  child: Text('Davom etish'),
-                ),
-              ),
-            ],
-            confettiController: _confettiController,
-          );
-
-          /// FINISH FULL COURSE TEST DIALOG (TEMP LOCATION)
-          // finishLessonTestDialogScreen(
-          //   context,
-          //   header: SvgPicture.asset(AppVectors.finishFullCourseTestDialogImg),
-          //   title: 'Kurs yakunlandi',
-          //   subTitle: "Kurs haqida o’zingizni izohingizni qoldiring!",
-          //   body: SingleChildScrollView(
-          //     child: Column(
-          //       mainAxisSize: .min,
-          //       children: [
-          //         StarRating(
-          //           starCount: 5,
-          //           rating: 4,
-          //           color: AppColors.orange,
-          //           size: 28,
-          //           borderColor: AppColors.greyScale.grey200,
-          //         ),
-          //         SizedBox(height: appH(15)),
-          //         TextField(
-          //           maxLength: 200,
-          //           minLines: 3,
-          //           decoration: InputDecoration(hintText: 'Mavzuni yozing...'),
-          //           maxLines: null,
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          //   actions: [
-          //     Padding(
-          //       padding: .only(bottom: appH(16)),
-          //       child: SizedBox(
-          //         width: double.infinity,
-          //         child: ElevatedButton(
-          //           onPressed: () {},
-          //           child: Text('Davom etish'),
-          //         ),
-          //       ),
-          //     ),
-          //     SizedBox(
-          //       width: double.infinity,
-          //       child: ElevatedButton(
-          //         style: ElevatedButton.styleFrom(
-          //           backgroundColor: AppColors.greyScale.grey50,
-          //           foregroundColor: AppColors.greyScale.grey600,
-          //         ),
-          //         onPressed: () {},
-          //         child: Text('Davom etish'),
-          //       ),
-          //     ),
-          //   ],
-          //   confettiController: _confettiController,
-          // );
-        },
+        onTap: _onConfirm,
       ),
     );
   }
 
-  Column buildColumn({
+  Column _buildColumn({
     required String title,
     required String subTitle,
     titleDesc = 'Noto’g’ri javob',

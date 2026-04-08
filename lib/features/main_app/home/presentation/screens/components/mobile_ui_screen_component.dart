@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iconly/iconly.dart';
@@ -97,6 +96,67 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
     );
   }
 
+  Widget _buildMiniAppGrid(BuildContext context) {
+    final items = widget.sections;
+    final int total = items.length;
+    if (total == 0) return const SliverToBoxAdapter(child: SizedBox.shrink());
+
+    final bool isOdd = total.isOdd;
+    final int rowCount = (total / 2).ceil();
+
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      sliver: SliverList.builder(
+        itemCount: rowCount,
+        itemBuilder: (context, rowIndex) {
+          final int leftIndex = rowIndex * 2;
+          final int rightIndex = leftIndex + 1;
+
+          final bool isLastRow = rowIndex == rowCount - 1;
+          final bool isFullWidth = isLastRow && isOdd;
+
+          Widget buildCard(int index) => AspectRatio(
+            aspectRatio: 2.1,
+            child: MiniAppSectionCard(
+              mainImage: items[index].mainImage,
+              backgroundImage: items[index].backgroundImage,
+              title: items[index].title,
+              onTap: items[index].onTap,
+              colors: items[index].colors,
+            ),
+          );
+
+          Widget buildFullWidthCard(int index) => AspectRatio(
+            aspectRatio: 4.2,
+            child: MiniAppSectionCard(
+              mainImage: items[index].mainImage,
+              backgroundImage: items[index].backgroundImage,
+              title: items[index].title,
+              onTap: items[index].onTap,
+              colors: items[index].colors,
+            ),
+          );
+
+          return Padding(
+            padding: EdgeInsets.only(top: rowIndex == 0 ? 0 : 10),
+            child: isFullWidth
+                ? buildFullWidthCard(leftIndex)
+                : IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(child: buildCard(leftIndex)),
+                        const SizedBox(width: 10),
+                        Expanded(child: buildCard(rightIndex)),
+                      ],
+                    ),
+                  ),
+          );
+        },
+      ),
+    );
+  }
+
   /// Builds all content slivers shown below the search bar when online.
   List<Widget> _buildContentSlivers(
     BuildContext context,
@@ -162,33 +222,9 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
           ),
 
           /// MINI APP SECTION
-          SliverPadding(
-            padding: AppPadding.horizontal20x(),
-            sliver: SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: isCollapsed ? 3 : 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: isCollapsed ? 1 : 1.4,
-              ),
-              delegate: SliverChildBuilderDelegate((context, index) {
-                final item = widget.sections[index];
-                return MiniAppSectionCard(
-                  mainImage: item.mainImage,
-                  backgroundImage: item.backgroundImage,
-                  title: item.title,
-                  onTap: item.onTap,
-                  onLongPress: () {
-                    HapticFeedback.heavyImpact();
-                    setState(() {
-                      isCollapsed = !isCollapsed;
-                    });
-                  },
-                  isCollapsed: isCollapsed,
-                );
-              }, childCount: widget.sections.length),
-            ),
-          ),
+          /// Uses a SliverList of Row-based pairs so the final item can
+          /// conditionally span full width when the total count is odd.
+          _buildMiniAppGrid(context),
 
           /// SEARCH BAR
           SliverPadding(

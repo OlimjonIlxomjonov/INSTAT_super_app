@@ -65,7 +65,6 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
     super.initState();
     _isBought = widget.data.userOrder?.status == 'paid';
 
-    // Build ONCE, never remeasured on scroll
     _headerSlivers = [
       DetailedCourseInfoHeaderImage(imagePath: widget.data.thumbnail),
       DetailedCourseInfoHeaderWg(
@@ -121,26 +120,26 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
         },
         child: Scaffold(
           body: NestedScrollView(
-          headerSliverBuilder: (context, _) => _headerSlivers,
-          body: TabBarView(
-            children: [
-              AboutThisCourseTab(
-                data: widget.data,
-                courseCategory: widget.courseCategory,
-                total: widget.total,
-              ),
-              const CoursePlanTab(),
-              const CourseCommentsTab(),
-            ],
+            headerSliverBuilder: (context, _) => _headerSlivers,
+            body: TabBarView(
+              children: [
+                AboutThisCourseTab(
+                  data: widget.data,
+                  courseCategory: widget.courseCategory,
+                  total: widget.total,
+                ),
+                const CoursePlanTab(),
+                const CourseCommentsTab(),
+              ],
+            ),
+          ),
+          bottomNavigationBar: CustomBottomNavContainerWg(
+            onTap: () => _openPayment(context),
+            buttonText: _isBought
+                ? 'Davom etish'
+                : 'Sotib olish - ${widget.data.price} UZS',
           ),
         ),
-        bottomNavigationBar: CustomBottomNavContainerWg(
-          onTap: () => _openPayment(context),
-          buttonText: _isBought
-              ? 'Davom etish'
-              : 'Sotib olish - ${widget.data.price} UZS',
-        ),
-      ),
       ),
     );
   }
