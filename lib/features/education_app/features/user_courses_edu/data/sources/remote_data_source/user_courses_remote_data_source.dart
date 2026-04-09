@@ -1,5 +1,6 @@
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/about_course_features/about_course_response_model.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/data/models/check_final_test_access/check_final_test_access_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_category_by_id/course_category_by_id_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_files/course_files_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_lesson_topics/course_lesson_topics_response_model.dart';
@@ -50,5 +51,9 @@ abstract class UserCoursesRemoteDataSource {
 
   Future<LessonTestAnswerResponseModel> postSubmitLessonTestAnswer({
     required SubmitLessonTestAnswerParams params,
+  });
+
+  Future<CheckFinalTestAccessModel> postCheckFinalTestAccess({
+    required CheckFinalTestAccessParams params,
   });
 }

@@ -3,6 +3,7 @@ import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/about_course_features/about_course_response_model.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/data/models/check_final_test_access/check_final_test_access_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_category_by_id/course_category_by_id_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_files/course_files_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_lesson_items/course_lesson_items_response_model.dart';
@@ -168,10 +169,7 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
     try {
       final response = await _dioClient.get(
         ApiUrls.availableCourses,
-        queryParams: {
-          'search': params.search,
-          'page': params.page,
-        },
+        queryParams: {'search': params.search, 'page': params.page},
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;
@@ -235,14 +233,33 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
     try {
       final response = await _dioClient.post(
         "${ApiUrls.courses}${params.courseId}/course_blocks/${params.blockId}/lessons/${params.lessonId}/lesson_tests/${params.testId}/answer/",
-        data: {
-          "lesson_test_option": params.optionId,
-        },
+        data: {"lesson_test_option": params.optionId},
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;
         logger.i(data);
         return LessonTestAnswerResponseModel.fromJson(data);
+      } else {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<CheckFinalTestAccessModel> postCheckFinalTestAccess({
+    required CheckFinalTestAccessParams params,
+  }) async {
+    try {
+      final response = await _dioClient.post(
+        "${ApiUrls.courses}${params.courseId}${ApiUrls.finalTestAccess}",
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data;
+        logger.i(data);
+        return CheckFinalTestAccessModel.fromJson(data);
       } else {
         throw Exception('ERROR ${response.statusCode}');
       }

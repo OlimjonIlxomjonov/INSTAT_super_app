@@ -1,14 +1,10 @@
-import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
-import 'package:my_template/core/utils/constants/colors/app_colors.dart';
-import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
-import 'package:my_template/core/utils/devices/device_unitlity.dart';
-import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
-import 'package:my_template/core/utils/widgets/open_mini_app/mini_app_sheet_shell.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/watch_course_edu_video_page.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_items/course_lesson_items_bloc.dart';
@@ -143,18 +139,27 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
                     highlightColor: AppColors.transparent,
                   ),
                   child: ListTile(
-                    onTap: () => FamilyNavigation.familyPush(
-                      showHandle: false,
-                      context,
-                      WatchCourseEduVideoPage(
-                        imagePath: lesson.thumbnail,
-                        title: lesson.title,
-                        courseId: widget.courseId,
-                        topicId: widget.blockId,
-                        lessonId: lesson.id,
-                        testCount: lesson.testsCount,
-                      ),
-                    ),
+                    onTap: () {
+                      if (lesson.userLessons == 0) {
+                        errorFlushBar(
+                          context,
+                          'Ushbu darslik uchun hozircha ruxsat yoq',
+                        );
+                      } else {
+                        FamilyNavigation.familyPush(
+                          showHandle: false,
+                          context,
+                          WatchCourseEduVideoPage(
+                            imagePath: lesson.thumbnail,
+                            title: lesson.title,
+                            courseId: widget.courseId,
+                            topicId: widget.blockId,
+                            lessonId: lesson.id,
+                            testCount: lesson.testsCount,
+                          ),
+                        );
+                      }
+                    },
                     contentPadding: EdgeInsets.zero,
                     title: Text(
                       lesson.title,
@@ -185,7 +190,7 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
-                        lesson.status == 'ready' && lesson.isActive
+                        lesson.userLessons != 0
                             ? Icons.play_arrow
                             : Icons.lock_outline,
                         color: AppColors.primaryColor,

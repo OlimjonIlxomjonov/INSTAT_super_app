@@ -18,4 +18,7 @@ class ApiUrls {
   /// lessons topic
   static const lessonsTopic = '/course_blocks/items/all-active/';
   static const lessonItems = '/lessons/items/all-active/';
+
+  /// lesson test
+  static const finalTestAccess = '/test-accessible/';
 }
