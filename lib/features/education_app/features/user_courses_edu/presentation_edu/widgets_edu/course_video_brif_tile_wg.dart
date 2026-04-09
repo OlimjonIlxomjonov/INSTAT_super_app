@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
+import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -35,6 +36,27 @@ class CourseVideoBriefTileWg extends StatelessWidget {
                     blockId: item.id,
                     lessonCount: item.lessonsCount,
                   ),
+                  if (index == data.length - 1)
+                    Container(
+                      padding: const .symmetric(horizontal: 20, vertical: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: .circular(12),
+                        border: .all(color: AppColors.greyScale.grey200),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: .spaceBetween,
+                        children: [
+                          Text(
+                            'Umumiy test savollari',
+                            style: CustomTextStyles.h3,
+                          ),
+                          Icon(
+                            IconlyLight.arrow_right_2,
+                            color: AppColors.greyScale.grey400,
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               );
             }),

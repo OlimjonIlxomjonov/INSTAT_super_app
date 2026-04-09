@@ -36,14 +36,19 @@ class BottomNavBarCustomMiniApp extends StatefulWidget {
 
 class _BottomNavBarCustomMiniAppState extends State<BottomNavBarCustomMiniApp> {
   late int _currentIndex;
+  late List<bool> _loadedPages;
   Key _navKey = UniqueKey();
 
-  void _goToTab(int index) => setState(() => _currentIndex = index);
+  void _goToTab(int index) => setState(() {
+        _currentIndex = index;
+        _loadedPages[index] = true;
+      });
 
   @override
   void initState() {
     super.initState();
     _currentIndex = widget.openPageByIndex ?? 0;
+    _loadedPages = List.generate(widget.tabs.length, (index) => index == _currentIndex);
   }
 
   @override
@@ -51,7 +56,13 @@ class _BottomNavBarCustomMiniAppState extends State<BottomNavBarCustomMiniApp> {
     final List<Widget> innerPages = widget.innerPageBuilder(_goToTab);
 
     return Scaffold(
-      body: IndexedStack(index: _currentIndex, children: innerPages),
+      body: IndexedStack(
+        index: _currentIndex,
+        children: List.generate(innerPages.length, (index) {
+          if (!_loadedPages[index]) return const SizedBox.shrink();
+          return innerPages[index];
+        }),
+      ),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
@@ -80,7 +91,10 @@ class _BottomNavBarCustomMiniAppState extends State<BottomNavBarCustomMiniApp> {
                 });
                 return;
               }
-              setState(() => _currentIndex = newIndex);
+              setState(() {
+                _currentIndex = newIndex;
+                _loadedPages[newIndex] = true;
+              });
             },
             tabBorderRadius: 12,
             curve: Curves.easeInOut,

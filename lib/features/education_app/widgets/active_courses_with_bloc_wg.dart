@@ -5,7 +5,6 @@ import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/widgets/active_courses/active_courses_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
-import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
@@ -17,10 +16,11 @@ class ActiveCoursesWithBlocWg extends StatelessWidget {
   const ActiveCoursesWithBlocWg({super.key});
 
   void _goToUserCourses(BuildContext context) {
-    FamilyNavigation.familyPush(
+    openMiniAppSheetFamily(
+      isTransparent: false,
+      showHandler: false,
       context,
-      const EduBottomNavBar(openPageByIndex: 2),
-      showHandle: false,
+      child: const EduBottomNavBar(openPageByIndex: 2),
     );
   }
 
@@ -58,13 +58,13 @@ class ActiveCoursesWithBlocWg extends StatelessWidget {
                         builder: (context, categoryName) {
                           return ActiveCoursesWg(
                             onTap: () {
-                              FamilyNavigation.familyPush(
+                              openMiniAppSheetFamily(
+                                showHandler: false,
                                 context,
-                                DetailedUserBoughtCoursesEduPage(
+                                child: DetailedUserBoughtCoursesEduPage(
                                   data: item,
                                   categoryName: categoryName,
                                 ),
-                                showHandle: false,
                               );
                             },
                             data: item,

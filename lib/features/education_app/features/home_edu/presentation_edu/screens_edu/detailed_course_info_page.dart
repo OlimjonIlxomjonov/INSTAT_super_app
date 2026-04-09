@@ -122,6 +122,7 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
           body: NestedScrollView(
             headerSliverBuilder: (context, _) => _headerSlivers,
             body: TabBarView(
+              physics: const NeverScrollableScrollPhysics(),
               children: [
                 AboutThisCourseTab(
                   data: widget.data,
