@@ -13,14 +13,14 @@ class RegularTestHeaderWg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: .only(top: appH(20), left: appW(20), right: appW(20)),
+      padding: const .only(left: 10, right: 10),
       sliver: SliverAppBar(
         floating: true,
         leading: IconButton(
           style: IconButton.styleFrom(
             backgroundColor: AppColors.white,
             shape: RoundedRectangleBorder(
-              borderRadius: .circular(8),
+              borderRadius: .circular(50),
               side: BorderSide(color: AppColors.greyScale.grey200),
             ),
           ),
@@ -41,7 +41,7 @@ class RegularTestHeaderWg extends StatelessWidget {
             style: IconButton.styleFrom(
               backgroundColor: AppColors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: .circular(8),
+                borderRadius: .circular(50),
                 side: BorderSide(color: AppColors.greyScale.grey200),
               ),
             ),

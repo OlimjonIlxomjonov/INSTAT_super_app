@@ -170,13 +170,7 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
       child: Scaffold(
         body: BlocConsumer<CourseLessonTestBloc, CourseLessonTestState>(
           listener: (context, state) {
-            if (state is CourseLessonTestAnswerResult) {
-              if (state.answerResponse.isCorrect) {
-                successFlushBar(context, "To'g'ri javob berdingiz!");
-              } else {
-                errorFlushBar(context, "Noto'g'ri javob berdingiz.");
-              }
-            } else if (state is CourseLessonTestFinished) {
+            if (state is CourseLessonTestFinished) {
               _showFinishDialog(state);
             } else if (state is CourseLessonTestError) {
               errorFlushBar(context, state.message);

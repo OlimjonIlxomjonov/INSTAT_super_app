@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
+import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/constants/assets/app_images.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
@@ -40,6 +41,9 @@ class _HomePageState extends State<HomePage> {
       isTransparent: false,
       showHandler: false,
     );
+
+
+    // AppRoute.open(EduBottomNavBar());
   }
 
   void _openOnlineLibraryApp(BuildContext context) {
