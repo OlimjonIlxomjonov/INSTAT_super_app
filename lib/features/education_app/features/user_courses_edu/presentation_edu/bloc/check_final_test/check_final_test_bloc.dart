@@ -7,7 +7,7 @@ class CheckFinalTestBloc extends Bloc<CoursesEvent, CheckFinalTestState> {
   final CheckFinalTestAccessUseCase useCase;
 
   CheckFinalTestBloc({required this.useCase}) : super(CheckFinalTestInitial()) {
-    on<CheckFinalTestEvent>((event, emit) async {
+    on<CheckFinalTestAccessEvent>((event, emit) async {
       emit(CheckFinalTestLoading());
       try {
         final entity = await useCase.call(params: event.params);

@@ -7,9 +7,11 @@ import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
+import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/check_final_test_access/check_final_test_access_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/check_final_test_access/check_final_test_access_state.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/course_final_test/course_final_test_page.dart';
 
 class FinalCourseTestWg extends StatelessWidget {
   final int courseId;
@@ -52,7 +54,14 @@ class FinalCourseTestWg extends StatelessWidget {
       },
       listener: (context, state) {
         if (state is CheckFinalTestAccessLoaded && state.entity.ok == true) {
-          successFlushBar(context, 'Success');
+          successFlushBar(context, 'Good luck!');
+
+          /// if success navigate to the final course test page with family
+          FamilyNavigation.familyPush(
+            showHandle: false,
+            context,
+            CourseFinalTestPage(),
+          );
         } else if (state is CheckFinalTestAccessLoaded &&
             state.entity.ok == false) {
           errorFlushBar(context, 'Yakuniy test ga hali ruxsat yo\'q!');
