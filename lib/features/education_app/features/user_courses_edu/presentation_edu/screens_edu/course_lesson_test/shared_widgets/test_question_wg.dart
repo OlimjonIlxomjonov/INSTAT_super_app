@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
-import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 
-class RegularTestQuestionWg extends StatelessWidget {
+class TestQuestionWg extends StatelessWidget {
   final String questionTitle;
   final String questionText;
 
-  const RegularTestQuestionWg({
+  const TestQuestionWg({
     super.key,
     required this.questionTitle,
     required this.questionText,
@@ -26,11 +25,11 @@ class RegularTestQuestionWg extends StatelessWidget {
         SizedBox(height: appH(16)),
         Container(
           width: double.infinity,
-          padding: .all(24),
+          padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            borderRadius: .circular(16),
+            borderRadius: BorderRadius.circular(16),
             color: AppColors.greyScale.grey50,
-            border: .all(color: AppColors.greyScale.grey200),
+            border: Border.all(color: AppColors.greyScale.grey200),
           ),
           child: Text(
             questionText,

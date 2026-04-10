@@ -60,7 +60,7 @@ class FinalCourseTestWg extends StatelessWidget {
           FamilyNavigation.familyPush(
             showHandle: false,
             context,
-            CourseFinalTestPage(),
+            CourseFinalTestPage(courseId: courseId),
           );
         } else if (state is CheckFinalTestAccessLoaded &&
             state.entity.ok == false) {

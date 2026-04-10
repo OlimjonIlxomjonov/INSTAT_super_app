@@ -3,14 +3,14 @@ import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_option_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/default_custom_tile_wg.dart';
 
-class RegularTestOptionListWg extends StatelessWidget {
+class TestOptionListWg extends StatelessWidget {
   final List<LessonTestOptionEntity> options;
   final int? selectedOptionId;
   final bool isAnswered;
   final bool? isCorrect;
   final Function(int optionId)? onSelectOption;
 
-  const RegularTestOptionListWg({
+  const TestOptionListWg({
     super.key,
     required this.options,
     required this.selectedOptionId,
