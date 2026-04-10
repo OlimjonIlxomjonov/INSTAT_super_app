@@ -26,6 +26,7 @@ class DraggableAppBarWg extends StatelessWidget implements PreferredSize {
       actionsPadding: .only(right: 5),
       automaticallyImplyLeading: false,
       title: GestureDetector(
+        behavior: .opaque,
         onTap: onProfileTap,
         child: Row(
           children: [

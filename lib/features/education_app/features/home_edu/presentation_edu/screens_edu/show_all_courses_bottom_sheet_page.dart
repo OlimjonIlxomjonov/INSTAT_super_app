@@ -35,7 +35,10 @@ class _ShowAllCoursesBottomSheetPageState
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
       /// HEADER OF THE COURSES
-      appBar: CustomAppBarWg(myTitle: localization.coursesTitle),
+      appBar: CustomAppBarWg(
+        isFamily: true,
+        myTitle: localization.coursesTitle,
+      ),
       body: CustomScrollView(
         slivers: [
           /// SEARCH BAR

@@ -17,7 +17,7 @@ Future<void> subBottomSheetOpener(
   return showModalBottomSheet(
     context: context,
     enableDrag: true,
-    isDismissible: false,
+    isDismissible: true,
     useSafeArea: true,
     isScrollControlled: true,
     showDragHandle: false,

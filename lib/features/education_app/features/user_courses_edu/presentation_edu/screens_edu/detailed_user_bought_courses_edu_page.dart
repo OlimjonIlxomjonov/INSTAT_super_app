@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/common/flush_bar/success_flush_bar.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
+import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/core/utils/widgets/detailed_course_info_header/deatiled_course_info_header_wg.dart';
 import 'package:my_template/core/utils/widgets/detailed_course_info_header/detailed_course_info_header_image.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
@@ -64,7 +66,9 @@ class _DetailedUserBoughtCoursesEduPageState
           SliverSafeArea(
             sliver: SliverPadding(
               padding: AppPadding.hAndV20x20(),
-              sliver: SliverToBoxAdapter(child: const CourseVideoBriefTileWg()),
+              sliver: SliverToBoxAdapter(
+                child: CourseVideoBriefTileWg(courseId: widget.data.id),
+              ),
             ),
           ),
         ],

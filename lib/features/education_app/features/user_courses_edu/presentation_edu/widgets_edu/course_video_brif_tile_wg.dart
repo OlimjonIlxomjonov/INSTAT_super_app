@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/common/flush_bar/success_flush_bar.dart';
+import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/check_final_test_access/check_final_test_access_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/check_final_test_access/check_final_test_access_state.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/other/final_course_test_wg.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_topics/course_lesson_topics_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_topics/course_lesson_topics_state.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/course_topic_lessons_list_wg.dart';
 
 class CourseVideoBriefTileWg extends StatelessWidget {
-  const CourseVideoBriefTileWg({super.key});
+  final int courseId;
+
+  const CourseVideoBriefTileWg({super.key, required this.courseId});
 
   @override
   Widget build(BuildContext context) {
@@ -37,26 +45,7 @@ class CourseVideoBriefTileWg extends StatelessWidget {
                     lessonCount: item.lessonsCount,
                   ),
                   if (index == data.length - 1)
-                    Container(
-                      padding: const .symmetric(horizontal: 20, vertical: 10),
-                      decoration: BoxDecoration(
-                        borderRadius: .circular(12),
-                        border: .all(color: AppColors.greyScale.grey200),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: .spaceBetween,
-                        children: [
-                          Text(
-                            'Umumiy test savollari',
-                            style: CustomTextStyles.h3,
-                          ),
-                          Icon(
-                            IconlyLight.arrow_right_2,
-                            color: AppColors.greyScale.grey400,
-                          ),
-                        ],
-                      ),
-                    ),
+                    FinalCourseTestWg(courseId: courseId),
                 ],
               );
             }),

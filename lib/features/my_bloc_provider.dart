@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/about_course_features/about_cours_features_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/buy_course/buy_course_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/check_final_test_access/check_final_test_access_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_category_by_id/user_category_by_id_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_files/course_files_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_items/course_lesson_items_bloc.dart';
@@ -37,6 +38,9 @@ class MyBlocProvider extends StatelessWidget {
         ),
         BlocProvider<CourseFilesBloc>(create: (_) => sl<CourseFilesBloc>()),
         BlocProvider<BuyCourseBloc>(create: (_) => sl<BuyCourseBloc>()),
+        BlocProvider<CheckFinalTestAccessBloc>(
+          create: (_) => sl<CheckFinalTestAccessBloc>(),
+        ),
       ],
       child: child,
     );

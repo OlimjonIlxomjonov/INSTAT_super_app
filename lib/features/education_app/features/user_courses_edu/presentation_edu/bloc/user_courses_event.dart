@@ -45,3 +45,9 @@ class BuyCourseEvent extends CoursesEvent {
 
   BuyCourseEvent({required this.params});
 }
+
+class CheckFinalTestAccessEvent extends CoursesEvent {
+  final CheckFinalTestAccessParams params;
+
+  CheckFinalTestAccessEvent({required this.params});
+}

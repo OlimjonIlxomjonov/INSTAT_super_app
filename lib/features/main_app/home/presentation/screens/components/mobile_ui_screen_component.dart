@@ -12,6 +12,7 @@ import 'package:my_template/core/common/ui_states/lost_internet_connection_state
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
+import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/show_all_courses_bottom_sheet_page.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_state.dart';
@@ -170,7 +171,14 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
       ),
 
       /// ACTIVE COURSES
-      ActiveCoursesWithBlocWg(),
+      ActiveCoursesWithBlocWg(
+        onSeeAll: () => openMiniAppSheetFamily(
+          isTransparent: false,
+          showHandler: false,
+          context,
+          child: const EduBottomNavBar(openPageByIndex: 2),
+        ),
+      ),
 
       SliverPadding(
         padding: AppPadding.horizontal20x(),

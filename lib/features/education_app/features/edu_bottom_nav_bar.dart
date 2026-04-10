@@ -16,7 +16,7 @@ class EduBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
-    
+
     return BottomNavBarCustomMiniApp(
       openPageByIndex: openPageByIndex,
       innerPageBuilder: (goToTab) => [

@@ -5,6 +5,7 @@ import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/widgets/active_courses/active_courses_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
+import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
@@ -13,16 +14,9 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
 
 class ActiveCoursesWithBlocWg extends StatelessWidget {
-  const ActiveCoursesWithBlocWg({super.key});
+  final VoidCallback onSeeAll;
 
-  void _goToUserCourses(BuildContext context) {
-    openMiniAppSheetFamily(
-      isTransparent: false,
-      showHandler: false,
-      context,
-      child: const EduBottomNavBar(openPageByIndex: 2),
-    );
-  }
+  const ActiveCoursesWithBlocWg({super.key, required this.onSeeAll});
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +39,7 @@ class ActiveCoursesWithBlocWg extends StatelessWidget {
                   if (isNotEmpty)
                     ExtendSectionSeeAllWg(
                       title: localization.studyingCourses,
-                      onTap: () {
-                        _goToUserCourses(context);
-                      },
+                      onTap: () => onSeeAll(),
                     ),
                   Column(
                     children: List.generate(data.length.clamp(0, 2), (index) {

@@ -37,30 +37,33 @@ class BottomNavBarCustomMiniApp extends StatefulWidget {
 class _BottomNavBarCustomMiniAppState extends State<BottomNavBarCustomMiniApp> {
   late int _currentIndex;
   late List<bool> _loadedPages;
+  late List<Widget> _innerPages;
   Key _navKey = UniqueKey();
 
   void _goToTab(int index) => setState(() {
-        _currentIndex = index;
-        _loadedPages[index] = true;
-      });
+    _currentIndex = index;
+    _loadedPages[index] = true;
+  });
 
   @override
   void initState() {
     super.initState();
     _currentIndex = widget.openPageByIndex ?? 0;
-    _loadedPages = List.generate(widget.tabs.length, (index) => index == _currentIndex);
+    _loadedPages = List.generate(
+      widget.tabs.length,
+      (index) => index == _currentIndex,
+    );
+    _innerPages = widget.innerPageBuilder(_goToTab);
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> innerPages = widget.innerPageBuilder(_goToTab);
-
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
-        children: List.generate(innerPages.length, (index) {
+        children: List.generate(_innerPages.length, (index) {
           if (!_loadedPages[index]) return const SizedBox.shrink();
-          return innerPages[index];
+          return _innerPages[index];
         }),
       ),
       bottomNavigationBar: Container(
@@ -106,16 +109,13 @@ class _BottomNavBarCustomMiniAppState extends State<BottomNavBarCustomMiniApp> {
             iconSize: 24,
             tabBackgroundColor: AppColors.primaryColor,
             padding: EdgeInsets.all(appW(12)),
-            tabs: List.generate(
-              widget.tabs.length,
-              (index) {
-                final tab = widget.tabs[index];
-                return GButton(
-                  icon: _currentIndex == index ? tab.activeIcon : tab.icon,
-                  text: tab.label,
-                );
-              },
-            ),
+            tabs: List.generate(widget.tabs.length, (index) {
+              final tab = widget.tabs[index];
+              return GButton(
+                icon: _currentIndex == index ? tab.activeIcon : tab.icon,
+                text: tab.label,
+              );
+            }),
           ),
         ),
       ),

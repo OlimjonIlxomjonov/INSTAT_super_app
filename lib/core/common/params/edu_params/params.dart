@@ -87,3 +87,9 @@ class SubmitLessonTestAnswerParams {
     required this.optionId,
   });
 }
+
+class CheckFinalTestAccessParams {
+  final int courseId;
+
+  CheckFinalTestAccessParams({required this.courseId});
+}

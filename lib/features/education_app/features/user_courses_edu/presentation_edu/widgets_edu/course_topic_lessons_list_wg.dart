@@ -2,6 +2,7 @@ import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
@@ -143,18 +144,27 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
                     highlightColor: AppColors.transparent,
                   ),
                   child: ListTile(
-                    onTap: () => FamilyNavigation.familyPush(
-                      showHandle: false,
-                      context,
-                      WatchCourseEduVideoPage(
-                        imagePath: lesson.thumbnail,
-                        title: lesson.title,
-                        courseId: widget.courseId,
-                        topicId: widget.blockId,
-                        lessonId: lesson.id,
-                        testCount: lesson.testsCount,
-                      ),
-                    ),
+                    onTap: () {
+                      if (lesson.userLessons != 0) {
+                        FamilyNavigation.familyPush(
+                          showHandle: false,
+                          context,
+                          WatchCourseEduVideoPage(
+                            imagePath: lesson.thumbnail,
+                            title: lesson.title,
+                            courseId: widget.courseId,
+                            topicId: widget.blockId,
+                            lessonId: lesson.id,
+                            testCount: lesson.testsCount,
+                          ),
+                        );
+                      } else {
+                        errorFlushBar(
+                          context,
+                          'Ushbu darslik uchun hozircha ruxsat yo\'q',
+                        );
+                      }
+                    },
                     contentPadding: EdgeInsets.zero,
                     title: Text(
                       lesson.title,
@@ -185,7 +195,7 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
-                        lesson.status == 'ready' && lesson.isActive
+                        lesson.userLessons != 0
                             ? Icons.play_arrow
                             : Icons.lock_outline,
                         color: AppColors.primaryColor,

@@ -10,6 +10,7 @@ import 'package:my_template/core/utils/widgets/extend_section/extend_section_see
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
+import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/search_courses_page.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/show_all_courses_bottom_sheet_page.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/widgets_edu/home_achivements_wg.dart';
@@ -87,7 +88,7 @@ class HomeEduPage extends StatelessWidget {
           ),
 
           /// Active User Courses
-          ActiveCoursesWithBlocWg(),
+          ActiveCoursesWithBlocWg(onSeeAll: onTap),
 
           /// SELECT CATEGORIES
           SliverToBoxAdapter(
