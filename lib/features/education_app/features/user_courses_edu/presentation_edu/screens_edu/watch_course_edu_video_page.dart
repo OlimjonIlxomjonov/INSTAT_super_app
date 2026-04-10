@@ -93,6 +93,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
   @override
   void initState() {
     super.initState();
+    logger.f('watch video page check');
     context.read<CourseFilesBloc>().add(
       CourseFilesEvent(
         params: CourseFilesParams(

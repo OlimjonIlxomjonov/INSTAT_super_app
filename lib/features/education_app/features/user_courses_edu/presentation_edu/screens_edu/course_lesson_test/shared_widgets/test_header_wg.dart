@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
+import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 
 class TestHeaderWg extends StatelessWidget {
   final double progress;
@@ -23,7 +24,8 @@ class TestHeaderWg extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            AppRoute.close();
+            // AppRoute.close();
+            FamilyNavigation.familyClose(context);
           },
           icon: const Icon(IconlyLight.arrow_left_2, size: 20),
         ),

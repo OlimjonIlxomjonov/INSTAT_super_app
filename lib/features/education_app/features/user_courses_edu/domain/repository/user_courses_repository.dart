@@ -42,6 +42,7 @@ abstract class UserCoursesRepository {
     required SearchCoursesParams params,
   });
 
+  /// regular lesson tests
   Future<List<LessonTestEntity>> getLessonTests({
     required CourseLessonTestParams params,
   });
@@ -54,7 +55,21 @@ abstract class UserCoursesRepository {
     required SubmitLessonTestAnswerParams params,
   });
 
+  /// check of final test access
   Future<CheckFinalTestAccessEntity> checkFinalTestAccess({
     required CheckFinalTestAccessParams params,
+  });
+
+  /// course final tests as an entity can be used RegularTestEntities
+  Future<List<LessonTestEntity>> getCourseTests({
+    required CourseLessonTestParams params,
+  });
+
+  Future<List<LessonTestOptionEntity>> getCourseTestOptions({
+    required CourseLessonTestOptionsParams params,
+  });
+
+  Future<LessonTestAnswerResponseEntity> submitCourseTestAnswer({
+    required SubmitLessonTestAnswerParams params,
   });
 }

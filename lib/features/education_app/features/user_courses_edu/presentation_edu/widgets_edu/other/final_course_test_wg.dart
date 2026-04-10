@@ -7,7 +7,9 @@ import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
+import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/sub_bottom_sheet_opener.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/check_final_test_access/check_final_test_access_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/check_final_test_access/check_final_test_access_state.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
@@ -57,10 +59,19 @@ class FinalCourseTestWg extends StatelessWidget {
           successFlushBar(context, 'Good luck!');
 
           /// if success navigate to the final course test page with family
-          FamilyNavigation.familyPush(
-            showHandle: false,
+          // FamilyNavigation.familyPush(
+          //   showHandle: false,
+          //   context,
+          //   CourseFinalTestPage(courseId: courseId),
+          // );
+          // openMiniAppSheetFamily(
+          //   context,
+          //   child: CourseFinalTestPage(courseId: courseId),
+          // );
+          subBottomSheetOpener(
             context,
-            CourseFinalTestPage(courseId: courseId),
+            child: CourseFinalTestPage(courseId: courseId),
+            isExpanded: true,
           );
         } else if (state is CheckFinalTestAccessLoaded &&
             state.entity.ok == false) {

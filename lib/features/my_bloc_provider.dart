@@ -9,6 +9,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_items/course_lesson_items_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_topics/course_lesson_topics_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_final_test/course_final_test_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 
@@ -40,6 +41,9 @@ class MyBlocProvider extends StatelessWidget {
         BlocProvider<BuyCourseBloc>(create: (_) => sl<BuyCourseBloc>()),
         BlocProvider<CheckFinalTestAccessBloc>(
           create: (_) => sl<CheckFinalTestAccessBloc>(),
+        ),
+        BlocProvider<CourseFinalTestBloc>(
+          create: (_) => sl<CourseFinalTestBloc>(),
         ),
       ],
       child: child,

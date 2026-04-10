@@ -72,6 +72,7 @@ class UserCoursesRepoImpl implements UserCoursesRepository {
     return _remoteDataSource.fetchSearchCourses(params: params);
   }
 
+  /// regular lesson tests
   @override
   Future<List<LessonTestEntity>> getLessonTests({
     required CourseLessonTestParams params,
@@ -93,10 +94,33 @@ class UserCoursesRepoImpl implements UserCoursesRepository {
     return _remoteDataSource.postSubmitLessonTestAnswer(params: params);
   }
 
+  /// check of final test access
   @override
   Future<CheckFinalTestAccessEntity> checkFinalTestAccess({
     required CheckFinalTestAccessParams params,
   }) {
     return _remoteDataSource.postCheckFinalTestAccess(params: params);
+  }
+
+  /// final course test
+  @override
+  Future<List<LessonTestOptionEntity>> getCourseTestOptions({
+    required CourseLessonTestOptionsParams params,
+  }) {
+    return _remoteDataSource.fetchFinalCourseTestOptions(params: params);
+  }
+
+  @override
+  Future<List<LessonTestEntity>> getCourseTests({
+    required CourseLessonTestParams params,
+  }) {
+    return _remoteDataSource.fetchFinalCourseTest(params: params);
+  }
+
+  @override
+  Future<LessonTestAnswerResponseEntity> submitCourseTestAnswer({
+    required SubmitLessonTestAnswerParams params,
+  }) {
+    return _remoteDataSource.postSubmitFinalTestAnswer(params: params);
   }
 }

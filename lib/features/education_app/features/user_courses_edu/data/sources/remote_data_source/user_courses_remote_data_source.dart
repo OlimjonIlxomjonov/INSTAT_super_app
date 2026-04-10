@@ -41,6 +41,7 @@ abstract class UserCoursesRemoteDataSource {
     required SearchCoursesParams params,
   });
 
+  /// Regular lesson tests
   Future<List<LessonTestModel>> fetchLessonTests({
     required CourseLessonTestParams params,
   });
@@ -53,7 +54,21 @@ abstract class UserCoursesRemoteDataSource {
     required SubmitLessonTestAnswerParams params,
   });
 
+  /// check access to the final course test
   Future<CheckFinalTestAccessModel> postCheckFinalTestAccess({
     required CheckFinalTestAccessParams params,
+  });
+
+  /// Course Final test's (can be used Regular lesson tests stuff)
+  Future<List<LessonTestModel>> fetchFinalCourseTest({
+    required CourseLessonTestParams params,
+  });
+
+  Future<List<LessonTestOptionModel>> fetchFinalCourseTestOptions({
+    required CourseLessonTestOptionsParams params,
+  });
+
+  Future<LessonTestAnswerResponseModel> postSubmitFinalTestAnswer({
+    required SubmitLessonTestAnswerParams params,
   });
 }

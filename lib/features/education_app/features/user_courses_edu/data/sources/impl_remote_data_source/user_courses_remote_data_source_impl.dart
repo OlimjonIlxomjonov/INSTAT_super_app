@@ -184,6 +184,8 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
     }
   }
 
+  /// Regular lesson tests
+  // 1
   @override
   Future<List<LessonTestModel>> fetchLessonTests({
     required CourseLessonTestParams params,
@@ -205,6 +207,7 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
     }
   }
 
+  // 2
   @override
   Future<List<LessonTestOptionModel>> fetchLessonTestOptions({
     required CourseLessonTestOptionsParams params,
@@ -226,6 +229,7 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
     }
   }
 
+  // 3
   @override
   Future<LessonTestAnswerResponseModel> postSubmitLessonTestAnswer({
     required SubmitLessonTestAnswerParams params,
@@ -248,6 +252,7 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
     }
   }
 
+  /// check is user has access to the course final test
   @override
   Future<CheckFinalTestAccessModel> postCheckFinalTestAccess({
     required CheckFinalTestAccessParams params,
@@ -260,6 +265,71 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
         final data = response.data;
         logger.i(data);
         return CheckFinalTestAccessModel.fromJson(data);
+      } else {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  /// final course tests
+  @override
+  Future<List<LessonTestModel>> fetchFinalCourseTest({
+    required CourseLessonTestParams params,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        "${ApiUrls.courses}${params.courseId}/course_tests/",
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data as List;
+        logger.i(data);
+        return data.map((e) => LessonTestModel.fromJson(e)).toList();
+      } else {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<LessonTestOptionModel>> fetchFinalCourseTestOptions({
+    required CourseLessonTestOptionsParams params,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        "${ApiUrls.courses}${params.courseId}/course_tests/${params.testId}/course_test_options/",
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data as List;
+        logger.i(data);
+        return data.map((e) => LessonTestOptionModel.fromJson(e)).toList();
+      } else {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<LessonTestAnswerResponseModel> postSubmitFinalTestAnswer({
+    required SubmitLessonTestAnswerParams params,
+  }) async {
+    try {
+      final response = await _dioClient.post(
+        "${ApiUrls.courses}${params.courseId}/course_tests/${params.testId}/answer/",
+        data: {"lesson_test_option": params.optionId},
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data;
+        logger.i(data);
+        return LessonTestAnswerResponseModel.fromJson(data);
       } else {
         throw Exception('ERROR ${response.statusCode}');
       }

@@ -36,6 +36,11 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dom
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/course_lesson_test/submit_lesson_test_answer_usecase.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_test/course_lesson_test_bloc.dart';
 
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/course_final_test/get_course_final_test_options_use_case.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/course_final_test/get_course_final_test_use_case.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/course_final_test/submit_final_course_answer_use_case.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_final_test/course_final_test_bloc.dart';
+
 final sl = GetIt.instance;
 
 Future<void> setup() async {
@@ -74,6 +79,13 @@ Future<void> setup() async {
     () => SubmitLessonTestAnswerUseCase(repository: sl()),
   );
   sl.registerLazySingleton(() => CheckFinalTestAccessUseCase(repository: sl()));
+  sl.registerLazySingleton(() => GetCourseFinalTestUseCase(repository: sl()));
+  sl.registerLazySingleton(
+    () => GetCourseFinalTestOptionsUseCase(repository: sl()),
+  );
+  sl.registerLazySingleton(
+    () => SubmitFinalCourseAnswerUseCase(repository: sl()),
+  );
 
   /// {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -94,4 +106,11 @@ Future<void> setup() async {
     ),
   );
   sl.registerLazySingleton(() => CheckFinalTestAccessBloc(useCase: sl()));
+  sl.registerFactory(
+    () => CourseFinalTestBloc(
+      getCourseFinalTestUseCase: sl(),
+      getCourseFinalTestOptionsUseCase: sl(),
+      submitFinalCourseAnswerUseCase: sl(),
+    ),
+  );
 }
