@@ -54,6 +54,9 @@ class FinalCourseTestWg extends StatelessWidget {
           ),
         );
       },
+      listenWhen: (previous, current) =>
+          current is CheckFinalTestAccessLoaded &&
+          previous is! CheckFinalTestAccessLoaded,
       listener: (context, state) {
         if (state is CheckFinalTestAccessLoaded && state.entity.ok == true) {
           successFlushBar(context, 'Good luck!');
@@ -64,15 +67,15 @@ class FinalCourseTestWg extends StatelessWidget {
           //   context,
           //   CourseFinalTestPage(courseId: courseId),
           // );
-          // openMiniAppSheetFamily(
-          //   context,
-          //   child: CourseFinalTestPage(courseId: courseId),
-          // );
-          subBottomSheetOpener(
+          openMiniAppSheetFamily(
             context,
             child: CourseFinalTestPage(courseId: courseId),
-            isExpanded: true,
           );
+          // subBottomSheetOpener(
+          //   context,
+          //   child: CourseFinalTestPage(courseId: courseId),
+          //   isExpanded: true,
+          // );
         } else if (state is CheckFinalTestAccessLoaded &&
             state.entity.ok == false) {
           errorFlushBar(context, 'Yakuniy test ga hali ruxsat yo\'q!');

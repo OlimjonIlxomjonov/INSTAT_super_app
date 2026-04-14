@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/common/skeletonizer_shimmer/courses/course_tile_videos_shimmer.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
@@ -12,106 +13,59 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/course_topic_lessons_list_wg.dart';
 
 class CourseVideoBriefTileWg extends StatelessWidget {
-  const CourseVideoBriefTileWg({super.key});
+  final int courseId;
+
+  const CourseVideoBriefTileWg({super.key, required this.courseId});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CourseLessonTopicsBloc, CourseLessonTopicsState>(
-      builder: (context, state) {
-        if (state is CourseLessonTopicsLoaded) {
-          final data = state.response.data;
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: List.generate(data.length, (index) {
-              final item = data[index];
+    return Column(
+      children: [
+        /// Course Tile Videos (course lessons)
+        BlocBuilder<CourseLessonTopicsBloc, CourseLessonTopicsState>(
+          builder: (context, state) {
+            if (state is CourseLessonTopicsLoaded) {
+              final data = state.response.data;
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '0${item.text}',
-                    style: AppTextStyles.source.semiBold(fontSize: 17),
-                  ),
-                  SizedBox(height: appH(16)),
-                  CourseTopicLessonsListWg(
-                    courseId: item.course,
-                    blockId: item.id,
-                    lessonCount: item.lessonsCount,
-                  ),
-                  if (index == data.length - 1)
-                    FinalCourseTestWg(courseId: item.course),
-                ],
-              );
-            }),
-          );
-        }
-        if (state is CourseLessonTopicsLoading ||
-            state is CourseLessonTopicsInitial) {
-          return Skeletonizer(
-            enabled: true,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: List.generate(3, (index) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '01. Loading Topic Title...',
-                      style: AppTextStyles.source.semiBold(fontSize: 17),
-                    ),
-                    SizedBox(height: appH(16)),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: appH(12)),
-                      margin: EdgeInsets.only(bottom: appH(12)),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.greyScale.grey200),
-                        borderRadius: BorderRadius.circular(12),
+                children: List.generate(data.length, (index) {
+                  final item = data[index];
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '0${item.text}',
+                        style: AppTextStyles.source.semiBold(fontSize: 17),
                       ),
-                      child: ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(
-                          'Loading Lesson Title...',
-                          style: AppTextStyles.source.medium(fontSize: 15),
-                        ),
-                        subtitle: Row(
-                          children: [
-                            Icon(
-                              IconlyLight.time_circle,
-                              size: 20,
-                              color: AppColors.greyScale.grey600,
-                            ),
-                            Text(
-                              ' 10 daqiqa',
-                              style: AppTextStyles.source.medium(
-                                fontSize: 13,
-                                color: AppColors.greyScale.grey600,
-                              ),
-                            ),
-                          ],
-                        ),
-                        trailing: Container(
-                          padding: const EdgeInsets.all(3),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: AppColors.greyScale.grey200,
-                            ),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.lock_outline,
-                            color: AppColors.primaryColor,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }),
-            ),
-          );
-        }
+                      SizedBox(height: appH(16)),
 
-        return const SizedBox.shrink();
-      },
+                      /// course lessons
+                      CourseTopicLessonsListWg(
+                        courseId: item.course,
+                        blockId: item.id,
+                        lessonCount: item.lessonsCount,
+                      ),
+
+                      /// final test page
+                      // if (index == data.length - 1)
+                      //   FinalCourseTestWg(courseId: item.course),
+                    ],
+                  );
+                }),
+              );
+            }
+            if (state is CourseLessonTopicsLoading ||
+                state is CourseLessonTopicsInitial) {
+              return CourseTileVideosShimmer();
+            }
+
+            return const SizedBox.shrink();
+          },
+        ),
+
+        /// Course final test
+        FinalCourseTestWg(courseId: courseId),
+      ],
     );
   }
 }

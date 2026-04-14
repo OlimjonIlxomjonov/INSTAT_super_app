@@ -66,7 +66,9 @@ class _DetailedUserBoughtCoursesEduPageState
           SliverSafeArea(
             sliver: SliverPadding(
               padding: AppPadding.hAndV20x20(),
-              sliver: SliverToBoxAdapter(child: CourseVideoBriefTileWg()),
+              sliver: SliverToBoxAdapter(
+                child: CourseVideoBriefTileWg(courseId: widget.data.id),
+              ),
             ),
           ),
         ],

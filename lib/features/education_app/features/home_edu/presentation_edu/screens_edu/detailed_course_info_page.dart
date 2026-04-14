@@ -100,11 +100,11 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
           params: CourseCategoryByIdParams(id: widget.data.id),
         ),
       );
-      // context.read<CourseLessonTopicsBloc>().add(
-      //   CourseLessonTopicsEvent(
-      //     params: CourseCategoryByIdParams(id: widget.data.id),
-      //   ),
-      // );
+      context.read<CourseLessonTopicsBloc>().add(
+        CourseLessonTopicsEvent(
+          params: CourseCategoryByIdParams(id: widget.data.id),
+        ),
+      );
     });
   }
 
