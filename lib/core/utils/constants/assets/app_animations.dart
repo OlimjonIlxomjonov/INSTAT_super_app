@@ -10,4 +10,5 @@ class AppAnimations {
   static const emptyState = '${_path}empty_ghost.json'; // _state
   static const lostInternetConnectionState = '${_path}no_internet.json';
   static const errorState = '${_path}explanation_alert_error.json';
+  static const workFuv = '${_path}work_fuv.json';
 }

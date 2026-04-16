@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
 import 'package:my_template/core/common/flush_bar/success_flush_bar.dart';
+import 'package:my_template/core/common/flush_bar/technical_work_flash_bar.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
@@ -59,7 +60,7 @@ class FinalCourseTestWg extends StatelessWidget {
           previous is! CheckFinalTestAccessLoaded,
       listener: (context, state) {
         if (state is CheckFinalTestAccessLoaded && state.entity.ok == true) {
-          successFlushBar(context, 'Good luck!');
+          // successFlushBar(context, 'Good luck!');
 
           /// if success navigate to the final course test page with family
           // FamilyNavigation.familyPush(
@@ -67,15 +68,17 @@ class FinalCourseTestWg extends StatelessWidget {
           //   context,
           //   CourseFinalTestPage(courseId: courseId),
           // );
-          openMiniAppSheetFamily(
-            context,
-            child: CourseFinalTestPage(courseId: courseId),
-          );
+          // openMiniAppSheetFamily(
+          //   context,
+          //   child: CourseFinalTestPage(courseId: courseId),
+          // );
           // subBottomSheetOpener(
           //   context,
           //   child: CourseFinalTestPage(courseId: courseId),
           //   isExpanded: true,
           // );
+
+          technicalWorkFlushBar(context, 'Texnik ishlar olib borilmoqda!');
         } else if (state is CheckFinalTestAccessLoaded &&
             state.entity.ok == false) {
           errorFlushBar(context, 'Yakuniy test ga hali ruxsat yo\'q!');

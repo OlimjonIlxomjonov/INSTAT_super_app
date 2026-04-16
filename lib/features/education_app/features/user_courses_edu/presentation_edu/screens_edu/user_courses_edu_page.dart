@@ -72,7 +72,7 @@ class _UserCoursesEduPageState extends State<UserCoursesEduPage>
               controller: _tabController,
               children: [
                 /// Tab 1 — In Progress
-                _UserCoursesTabContent(state: 'all', layout: layout),
+                _UserCoursesTabContent(state: 'in_progress', layout: layout),
 
                 /// Tab 2 — Finished
                 _UserCoursesTabContent(state: 'finished', layout: layout),
