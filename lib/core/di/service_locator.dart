@@ -105,7 +105,7 @@ Future<void> setup() async {
       submitLessonTestAnswerUseCase: sl(),
     ),
   );
-  sl.registerLazySingleton(() => CheckFinalTestAccessBloc(useCase: sl()));
+  sl.registerFactory(() => CheckFinalTestAccessBloc(useCase: sl()));
   sl.registerFactory(
     () => CourseFinalTestBloc(
       getCourseFinalTestUseCase: sl(),

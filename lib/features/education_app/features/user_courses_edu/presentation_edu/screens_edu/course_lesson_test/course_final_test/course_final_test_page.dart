@@ -156,7 +156,7 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
         if (state is CourseFinalTestFinished) {
           _showFinishDialog(state);
         } else if (state is CourseFinalTestError) {
-          errorFlushBar(context, state.message);
+          errorFlushBar(context, 'Unexpected error!');
         }
       },
       builder: (context, state) {

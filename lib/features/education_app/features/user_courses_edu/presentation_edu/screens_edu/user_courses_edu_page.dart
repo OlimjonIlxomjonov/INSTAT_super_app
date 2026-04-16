@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:my_template/core/common/ui_states/empty_state.dart';
-import 'package:my_template/core/utils/enums/app_enums.dart';
-import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+import 'package:my_template/core/utils/app_utils.dart';
+import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/widgets/custom_tab_bar/custom_tab_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/title_with_layout_selector_wg.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/courses_in_progress_compnent.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/user_course_tab_content.dart';
 
 class UserCoursesEduPage extends StatefulWidget {
   const UserCoursesEduPage({super.key});
@@ -21,6 +21,7 @@ class _UserCoursesEduPageState extends State<UserCoursesEduPage>
     with SingleTickerProviderStateMixin {
   CoursesLayout layout = CoursesLayout.grid;
   late TabController _tabController;
+  bool isOffline = false;
 
   @override
   void initState() {
@@ -54,7 +55,47 @@ class _UserCoursesEduPageState extends State<UserCoursesEduPage>
           SingleChildScrollView(
             padding: EdgeInsets.only(right: 20),
             scrollDirection: Axis.horizontal,
-            child: Row(children: List.generate(5, (_) => EduCategoriesWg())),
+            child: Row(
+              children: [
+                SizedBox(width: 10),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isOffline = !isOffline;
+                    });
+                  },
+                  child: Container(
+                    margin: .only(right: 12),
+                    padding: const .symmetric(vertical: 6, horizontal: 10),
+                    decoration: BoxDecoration(
+                      border: .all(
+                        color: isOffline
+                            ? AppColors.primaryColor
+                            : AppColors.greyScale.grey200,
+                      ),
+                      borderRadius: .circular(10),
+                    ),
+                    child: Text(
+                      'Offline courses',
+                      style: AppTextStyles.source.medium(
+                        fontSize: 14,
+                        color: isOffline
+                            ? AppColors.primaryColor
+                            : AppColors.greyScale.grey600,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                  child: VerticalDivider(
+                    thickness: 2,
+                    color: AppColors.greyScale.grey200,
+                  ),
+                ),
+                ...List.generate(5, (_) => EduCategoriesWg()),
+              ],
+            ),
           ),
 
           // Layout selector
@@ -67,50 +108,23 @@ class _UserCoursesEduPageState extends State<UserCoursesEduPage>
           ),
 
           // Tab content
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                /// Tab 1 — In Progress
-                _UserCoursesTabContent(state: 'in_progress', layout: layout),
+          !isOffline
+              ? Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      /// Tab 1 — In Progress
+                      UserCoursesTabContent(
+                        state: 'in_progress',
+                        layout: layout,
+                      ),
 
-                /// Tab 2 — Finished
-                _UserCoursesTabContent(state: 'finished', layout: layout),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _UserCoursesTabContent extends StatefulWidget {
-  final String state;
-  final CoursesLayout layout;
-
-  const _UserCoursesTabContent({required this.state, required this.layout});
-
-  @override
-  State<_UserCoursesTabContent> createState() => _UserCoursesTabContentState();
-}
-
-class _UserCoursesTabContentState extends State<_UserCoursesTabContent>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return BlocProvider(
-      create: (_) => GetIt.instance<UserCoursesBloc>(),
-      child: CustomScrollView(
-        slivers: [
-          CoursesInProgressComponent(
-            layout: widget.layout,
-            state: widget.state,
-          ),
+                      /// Tab 2 — Finished
+                      UserCoursesTabContent(state: 'finished', layout: layout),
+                    ],
+                  ),
+                )
+              : Text('OffileCourses'),
         ],
       ),
     );

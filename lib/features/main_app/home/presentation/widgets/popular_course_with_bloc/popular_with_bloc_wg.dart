@@ -16,7 +16,7 @@ class PopularWithBlocWg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: appH(280),
+      height: 270,
       child: BlocBuilder<CoursesBloc, CoursesState>(
         builder: (context, state) {
           if (state is CoursesLoaded) {

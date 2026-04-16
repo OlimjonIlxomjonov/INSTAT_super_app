@@ -2,15 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
-import 'package:my_template/core/common/flush_bar/success_flush_bar.dart';
-import 'package:my_template/core/common/flush_bar/technical_work_flash_bar.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
-import 'package:my_template/core/utils/app_utils.dart';
+import 'package:my_template/core/di/service_locator.dart';
+import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
-import 'package:my_template/core/utils/widgets/app_widgets.dart';
-import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
-import 'package:my_template/core/utils/widgets/open_mini_app/sub_bottom_sheet_opener.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/check_final_test_access/check_final_test_access_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/check_final_test_access/check_final_test_access_state.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
@@ -22,6 +18,10 @@ class FinalCourseTestWg extends StatelessWidget {
   const FinalCourseTestWg({super.key, required this.courseId});
 
   void _checkFinalTestAccess(BuildContext context) {
+    if (context.read<CheckFinalTestAccessBloc>().state
+        is CheckFinalTestAccessLoading) {
+      return; // prevent rapid double tap from firing twice
+    }
     logger.f(courseId);
     context.read<CheckFinalTestAccessBloc>().add(
       CheckFinalTestAccessEvent(
@@ -32,58 +32,66 @@ class FinalCourseTestWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CheckFinalTestAccessBloc, CheckFinalTestAccessState>(
-      builder: (context, state) {
-        return GestureDetector(
-          onTap: () => _checkFinalTestAccess(context),
-          child: Container(
-            padding: const .symmetric(horizontal: 20, vertical: 10),
-            decoration: BoxDecoration(
-              borderRadius: .circular(12),
-              border: .all(color: AppColors.greyScale.grey200),
+    return BlocProvider<CheckFinalTestAccessBloc>(
+      create: (_) => sl<CheckFinalTestAccessBloc>(),
+      child: BlocConsumer<CheckFinalTestAccessBloc, CheckFinalTestAccessState>(
+        builder: (context, state) {
+          return GestureDetector(
+            onTap: () => _checkFinalTestAccess(context),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.greyScale.grey200),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Umumiy test savollari', style: CustomTextStyles.h3),
+                  Icon(
+                    IconlyLight.arrow_right_2,
+                    color: AppColors.greyScale.grey400,
+                  ),
+                ],
+              ),
             ),
-            child: Row(
-              mainAxisAlignment: .spaceBetween,
-              children: [
-                Text('Umumiy test savollari', style: CustomTextStyles.h3),
-                Icon(
-                  IconlyLight.arrow_right_2,
-                  color: AppColors.greyScale.grey400,
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-      listenWhen: (previous, current) =>
-          current is CheckFinalTestAccessLoaded &&
-          previous is! CheckFinalTestAccessLoaded,
-      listener: (context, state) {
-        if (state is CheckFinalTestAccessLoaded && state.entity.ok == true) {
-          // successFlushBar(context, 'Good luck!');
+          );
+        },
+        listenWhen: (previous, current) =>
+            current is CheckFinalTestAccessLoaded &&
+            previous is! CheckFinalTestAccessLoaded,
+        listener: (context, state) {
+          if (state is CheckFinalTestAccessLoaded && state.entity.ok == true) {
+            // Navigate using a full page route, but animate it from bottom to top like a bottom sheet
+            Navigator.of(context, rootNavigator: true).push(
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    CourseFinalTestPage(courseId: courseId),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(0.0, 1.0);
+                      const end = Offset.zero;
+                      const curve = Curves.easeOutCubic;
 
-          /// if success navigate to the final course test page with family
-          // FamilyNavigation.familyPush(
-          //   showHandle: false,
-          //   context,
-          //   CourseFinalTestPage(courseId: courseId),
-          // );
-          // openMiniAppSheetFamily(
-          //   context,
-          //   child: CourseFinalTestPage(courseId: courseId),
-          // );
-          // subBottomSheetOpener(
-          //   context,
-          //   child: CourseFinalTestPage(courseId: courseId),
-          //   isExpanded: true,
-          // );
+                      var tween = Tween(
+                        begin: begin,
+                        end: end,
+                      ).chain(CurveTween(curve: curve));
 
-          technicalWorkFlushBar(context, 'Texnik ishlar olib borilmoqda!');
-        } else if (state is CheckFinalTestAccessLoaded &&
-            state.entity.ok == false) {
-          errorFlushBar(context, 'Yakuniy test ga hali ruxsat yo\'q!');
-        }
-      },
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                transitionDuration: const Duration(milliseconds: 350),
+              ),
+            );
+          } else if (state is CheckFinalTestAccessLoaded &&
+              state.entity.ok == false) {
+            errorFlushBar(context, 'Yakuniy test ga hali ruxsat yo\'q!');
+          }
+        },
+      ),
     );
   }
 }

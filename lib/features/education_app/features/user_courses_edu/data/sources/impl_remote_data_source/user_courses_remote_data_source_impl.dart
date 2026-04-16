@@ -324,7 +324,7 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
     try {
       final response = await _dioClient.post(
         "${ApiUrls.courses}${params.courseId}/course_tests/${params.testId}/answer/",
-        data: {"lesson_test_option": params.optionId},
+        data: {"course_test_option": params.optionId},
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;

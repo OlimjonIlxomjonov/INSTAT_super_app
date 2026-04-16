@@ -60,10 +60,10 @@ class _HomeLibPageState extends State<HomeLibPage> {
                     child: Center(child: Text('Placeholder')),
                   ),
                   SizedBox(height: appH(15)),
-                  ExtendSectionSeeAllWg(
-                    title: 'O’qilayotgan kitoblar',
-                    onTap: widget.onTap,
-                  ),
+                  // ExtendSectionSeeAllWg(
+                  //   title: 'O’qilayotgan kitoblar',
+                  //   onTap: widget.onTap,
+                  // ),
                   // ActiveCoursesWg(
                   //   showCircularProgBar: false,
                   //   onTap: activeCourseOpener,

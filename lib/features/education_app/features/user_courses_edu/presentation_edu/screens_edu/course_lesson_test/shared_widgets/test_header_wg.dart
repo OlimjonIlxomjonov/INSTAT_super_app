@@ -15,20 +15,21 @@ class TestHeaderWg extends StatelessWidget {
       padding: const EdgeInsets.only(left: 10, right: 10),
       sliver: SliverAppBar(
         floating: true,
-        leading: IconButton(
-          style: IconButton.styleFrom(
-            backgroundColor: AppColors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(50),
-              side: BorderSide(color: AppColors.greyScale.grey200),
-            ),
-          ),
-          onPressed: () {
-            // AppRoute.close();
-            FamilyNavigation.familyClose(context);
-          },
-          icon: const Icon(IconlyLight.arrow_left_2, size: 20),
-        ),
+        automaticallyImplyLeading: false,
+        // leading: IconButton(
+        //   style: IconButton.styleFrom(
+        //     backgroundColor: AppColors.white,
+        //     shape: RoundedRectangleBorder(
+        //       borderRadius: BorderRadius.circular(50),
+        //       side: BorderSide(color: AppColors.greyScale.grey200),
+        //     ),
+        //   ),
+        //   onPressed: () {
+        //     // AppRoute.close();
+        //     FamilyNavigation.familyClose(context);
+        //   },
+        //   icon: const Icon(IconlyLight.arrow_left_2, size: 20),
+        // ),
         centerTitle: true,
         title: LinearProgressIndicator(
           value: progress,
