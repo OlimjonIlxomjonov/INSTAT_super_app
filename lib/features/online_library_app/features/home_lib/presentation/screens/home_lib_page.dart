@@ -28,10 +28,10 @@ class HomeLibPage extends StatefulWidget {
 
 class _HomeLibPageState extends State<HomeLibPage> {
   void activeCourseOpener() {
-    openMiniAppSheetFamily(
-      context,
-      child: DetailedOnlineBookComponent(isBookBought: true),
-    );
+    // openMiniAppSheetFamily(
+    //   context,
+    //   child: DetailedOnlineBookComponent(isBookBought: true),
+    // );
   }
 
   @override
@@ -128,10 +128,10 @@ class _HomeLibPageState extends State<HomeLibPage> {
                   oldPrice: index.isOdd ? "330 000 UZS" : null,
                   imagePath: 'assets/images/temp_book.jpg',
                   onTap: () {
-                    openMiniAppSheetFamily(
-                      context,
-                      child: DetailedOnlineBookComponent(),
-                    );
+                    // openMiniAppSheetFamily(
+                    //   context,
+                    //   child: DetailedOnlineBookComponent(),
+                    // );
                   },
                 );
               },

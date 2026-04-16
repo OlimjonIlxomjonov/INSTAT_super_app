@@ -1,0 +1,15 @@
+import 'package:my_template/features/online_library_app/features/home_lib/data/sources/remote_data_source/home_lib_remote_data_source.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_list_response.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/repository/home_lib_repository.dart';
+
+class HomeLibRepoImpl implements HomeLibRepository {
+  final HomeLibRemoteDataSource _remoteDataSource;
+
+  HomeLibRepoImpl({required HomeLibRemoteDataSource remoteDataSource})
+    : _remoteDataSource = remoteDataSource;
+
+  @override
+  Future<BookListResponse> getPopularBooks() {
+    return _remoteDataSource.fetchPopularBooks();
+  }
+}

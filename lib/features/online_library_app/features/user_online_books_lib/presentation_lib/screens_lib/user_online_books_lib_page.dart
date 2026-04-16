@@ -96,10 +96,10 @@ class UserOnlineBooksLibPage extends StatelessWidget {
                     totalPages: 354,
                     imagePath: 'assets/images/temp_book.jpg',
                     onTap: () {
-                      openMiniAppSheetFamily(
-                        context,
-                        child: DetailedOnlineBookComponent(isBookBought: true),
-                      );
+                      // openMiniAppSheetFamily(
+                      //   context,
+                      //   child: DetailedOnlineBookComponent(isBookBought: true),
+                      // );
                     },
                   );
                 },

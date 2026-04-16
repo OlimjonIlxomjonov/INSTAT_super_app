@@ -83,7 +83,7 @@ class SkeletonExpandedCourseCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Container(
-                height: appH(180),
+                height: appH(160),
                 width: double.infinity,
                 color: Colors.grey,
               ),

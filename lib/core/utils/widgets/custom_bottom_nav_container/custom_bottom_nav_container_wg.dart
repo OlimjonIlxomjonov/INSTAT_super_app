@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
@@ -7,7 +8,9 @@ class CustomBottomNavContainerWg extends StatelessWidget {
   final String buttonText;
   final Widget? anotherButton;
   final VoidCallback onTap;
+  final VoidCallback? onCartTap;
   final IconData? leadingIcon;
+  final bool showCartIcon;
 
   const CustomBottomNavContainerWg({
     super.key,
@@ -15,6 +18,8 @@ class CustomBottomNavContainerWg extends StatelessWidget {
     this.anotherButton,
     required this.onTap,
     this.leadingIcon,
+    this.showCartIcon = false,
+    this.onCartTap,
   });
 
   @override
@@ -34,25 +39,43 @@ class CustomBottomNavContainerWg extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
-          children: [
-            if (anotherButton != null) Expanded(child: anotherButton!),
-            SizedBox(width: appW(12)),
-            Expanded(
-              child: ElevatedButton.icon(
-                onPressed: onTap,
-                icon: leadingIcon != null ? Icon(leadingIcon, size: 20) : null,
-                label: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: Text(
-                    buttonText,
-                    key: ValueKey<String>(buttonText),
-                    style: AppTextStyles.source.medium(fontSize: 14),
+        child: IntrinsicHeight(
+          child: Row(
+            spacing: showCartIcon ? 10 : 0,
+            crossAxisAlignment: .stretch,
+            children: [
+              if (anotherButton != null) Expanded(child: anotherButton!),
+              SizedBox(width: appW(12)),
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: onTap,
+                  icon: leadingIcon != null
+                      ? Icon(leadingIcon, size: 20)
+                      : null,
+                  label: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: Text(
+                      buttonText,
+                      key: ValueKey<String>(buttonText),
+                      style: AppTextStyles.source.medium(fontSize: 14),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+              if (showCartIcon)
+                IconButton(
+                  style: IconButton.styleFrom(
+                    padding: .symmetric(horizontal: 15),
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(color: AppColors.greyScale.grey200),
+                      borderRadius: .circular(12),
+                    ),
+                  ),
+                  onPressed: onCartTap,
+                  icon: Icon(IconlyLight.buy),
+                ),
+            ],
+          ),
         ),
       ),
     );

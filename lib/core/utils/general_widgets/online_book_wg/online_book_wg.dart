@@ -71,12 +71,22 @@ class BookGridItem extends StatelessWidget {
           // Background Image
           ClipRRect(
             borderRadius: BorderRadius.circular(14),
-            child: Image.asset(
-              imagePath,
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.cover,
-            ),
+            child: imagePath.startsWith('http')
+                ? Image.network(
+                    imagePath,
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Center(child: Icon(Icons.image_not_supported, size: 26));
+                    },
+                  )
+                : Image.asset(
+                    imagePath,
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
           ),
 
           // Rating Badge (Market only)

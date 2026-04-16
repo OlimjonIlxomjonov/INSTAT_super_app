@@ -55,10 +55,10 @@ class SimilarOnlineBooksComponent extends StatelessWidget {
                   oldPrice: "330 000 UZS",
                   imagePath: 'assets/images/temp_book.jpg',
                   onTap: () {
-                    FamilyNavigation.familyPush(
-                      context,
-                      DetailedOnlineBookComponent(),
-                    );
+                    // FamilyNavigation.familyPush(
+                    //   context,
+                    //   DetailedOnlineBookComponent(),
+                    // );
                   },
                 );
               },

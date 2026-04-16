@@ -75,10 +75,10 @@ class SeeAllOnlineBooksComponent extends StatelessWidget {
                     // oldPrice: "330 000 UZS",
                     imagePath: 'assets/book.png',
                     onTap: () {
-                      openMiniAppSheetFamily(
-                        context,
-                        child: DetailedOnlineBookComponent(),
-                      );
+                      // openMiniAppSheetFamily(
+                      //   context,
+                      //   child: DetailedOnlineBookComponent(),
+                      // );
                     },
                   );
                 },

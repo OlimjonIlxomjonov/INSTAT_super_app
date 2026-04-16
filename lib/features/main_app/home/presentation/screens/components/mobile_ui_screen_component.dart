@@ -11,8 +11,10 @@ import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidca
 import 'package:my_template/core/common/ui_states/lost_internet_connection_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
+import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/core/utils/general_widgets/online_book_wg/online_book_wg.dart';
+import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/show_all_courses_bottom_sheet_page.dart';
@@ -27,6 +29,9 @@ import 'package:my_template/features/main_app/home/presentation/bloc/user/user_m
 import 'package:my_template/features/main_app/home/presentation/widgets/mini_app_section_card.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/model/mini_app_model.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/popular_course_with_bloc/popular_with_bloc_wg.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_event.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_state.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/detailed_online_book_component.dart';
 
 class MobileUiScreenComponent extends StatefulWidget {
@@ -84,6 +89,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
       UserCoursesEvent(params: UserCoursesParams(state: 'all')),
     );
     context.read<UserMeBloc>().add(UserMeEvent());
+    context.read<PopularBooksBloc>().add(FetchPopularBooksEvent());
   }
 
   @override
@@ -214,55 +220,79 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
       // ),
 
       /// LIBRARY POPULAR BOOKS
-      SliverSafeArea(
-        top: false,
-        sliver: SliverToBoxAdapter(
-          child: Column(
-            children: [
-              Padding(
-                padding: AppPadding.horizontal20x(),
-                child: ExtendSectionSeeAllWg(
-                  title: 'Eng ommabop kitoblar',
-                  onTap: () {},
-                ),
-              ),
-              SizedBox(
-                height: 330,
-                child: Padding(
-                  padding: .only(right: 10),
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 6,
-                    padding: EdgeInsets.zero,
-                    itemBuilder: (context, index) {
-                      return SizedBox(
-                        width: 190,
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 12),
-                          child: BookGridItem(
-                            type: BookCardType.market,
-                            title: "Jajji shahzoda",
-                            author: "Antuan de Sent-Ekzyuperi",
-                            rating: 4.5,
-                            price: "300 000 UZS",
-                            oldPrice: index.isOdd ? "330 000 UZS" : null,
-                            imagePath: 'assets/images/temp_book.jpg',
-                            onTap: () {
-                              openMiniAppSheetFamily(
-                                context,
-                                child: DetailedOnlineBookComponent(),
-                              );
-                            },
-                          ),
+      BlocBuilder<PopularBooksBloc, PopularBooksState>(
+        builder: (context, state) {
+          if (state is PopularBooksLoaded && state.response.data.isNotEmpty) {
+            final books = state.response.data;
+            return SliverSafeArea(
+              top: false,
+              sliver: SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: AppPadding.horizontal20x(),
+                      child: ExtendSectionSeeAllWg(
+                        title: 'Eng ommabop kitoblar',
+                        onTap: () {},
+                      ),
+                    ),
+                    SizedBox(
+                      height: 330,
+                      child: Padding(
+                        padding: .only(right: 10),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: books.length,
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) {
+                            final book = books[index];
+                            final thumbnail = book.bookThumbnails.isNotEmpty
+                                ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${book.bookThumbnails.first.file}'
+                                : '';
+                            logger.f(thumbnail);
+                            return SizedBox(
+                              width: 190,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 12),
+                                child: BookGridItem(
+                                  type: BookCardType.market,
+                                  title: book.name,
+                                  author: book.author.name,
+                                  price: "\u{00A0}${book.price} UZS",
+                                  imagePath: thumbnail.isNotEmpty
+                                      ? thumbnail
+                                      : 'assets/images/temp_book.jpg',
+                                  onTap: () {
+                                    openMiniAppSheetFamily(
+                                      context,
+                                      showHandler: false,
+                                      child: DetailedOnlineBookComponent(
+                                        data: book,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
+            );
+          } else if (state is PopularBooksError) {
+            if (state.isConnectionError) {
+              return const SliverToBoxAdapter(
+                child: SizedBox.shrink(),
+              ); // Handled at page level mostly, but prevent crash
+            }
+            return const SliverToBoxAdapter(child: SizedBox.shrink());
+          }
+          // Loading or initial state
+          return const SliverToBoxAdapter(child: SizedBox.shrink());
+        },
       ),
     ];
   }

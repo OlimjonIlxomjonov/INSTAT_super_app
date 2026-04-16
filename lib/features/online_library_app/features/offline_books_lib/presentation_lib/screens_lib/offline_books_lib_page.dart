@@ -73,13 +73,13 @@ class OfflineBooksLibPage extends StatelessWidget {
                     rowNumber: 12,
                     imagePath: 'assets/images/temp_book.jpg',
                     onTap: () {
-                      openMiniAppSheetFamily(
-                        context,
-                        child: DetailedOnlineBookComponent(
-                          isBookBought: true,
-                          isOffline: true,
-                        ),
-                      );
+                      // openMiniAppSheetFamily(
+                      //   context,
+                      //   child: DetailedOnlineBookComponent(
+                      //     isBookBought: true,
+                      //     isOffline: true,
+                      //   ),
+                      // );
                     },
                   );
                 },

@@ -12,6 +12,10 @@ class ApiUrls {
   static const userCategoryById = 'categories/';
   static const availableCourses = 'courses/items/active/';
 
+  /// books
+  static const activeBooks = 'books/items/active/';
+  static const bookThumbnail = 'https://test.avacoder.uz/media/';
+
   /// tabs
   static const aboutCourseFeatures = '/course_features/';
 

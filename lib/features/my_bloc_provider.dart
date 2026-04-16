@@ -11,6 +11,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_final_test/course_final_test_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
 
 class MyBlocProvider extends StatelessWidget {
   final Widget child;
@@ -41,6 +42,7 @@ class MyBlocProvider extends StatelessWidget {
         BlocProvider<CourseFinalTestBloc>(
           create: (_) => sl<CourseFinalTestBloc>(),
         ),
+        BlocProvider<PopularBooksBloc>(create: (_) => sl<PopularBooksBloc>()),
       ],
       child: child,
     );
