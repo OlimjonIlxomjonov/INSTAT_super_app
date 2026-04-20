@@ -17,6 +17,7 @@ class BookEntity {
   final int inCartCount;
   final List<BookThumbnailEntity> bookThumbnails;
   final bool isSaved;
+  final bool isInCart;
 
   BookEntity({
     required this.id,
@@ -33,6 +34,7 @@ class BookEntity {
     required this.inCartCount,
     required this.bookThumbnails,
     this.isSaved = false,
+    this.isInCart = false,
   });
 
   BookEntity copyWith({
@@ -50,6 +52,7 @@ class BookEntity {
     int? inCartCount,
     List<BookThumbnailEntity>? bookThumbnails,
     bool? isSaved,
+    bool? isInCart,
   }) {
     return BookEntity(
       id: id ?? this.id,
@@ -66,6 +69,7 @@ class BookEntity {
       inCartCount: inCartCount ?? this.inCartCount,
       bookThumbnails: bookThumbnails ?? this.bookThumbnails,
       isSaved: isSaved ?? this.isSaved,
+      isInCart: isInCart ?? this.isInCart,
     );
   }
 }

@@ -48,6 +48,7 @@ import 'package:my_template/features/online_library_app/features/home_lib/data/s
 import 'package:my_template/features/online_library_app/features/home_lib/domain/repository/home_lib_repository.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/get_popular_books_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/save_delete_book_use_case.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/add_to_cart_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
 
@@ -105,6 +106,7 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => GetPopularBooksUseCase(repository: sl()));
   sl.registerLazySingleton(() => BookWebSocketService());
   sl.registerLazySingleton(() => SaveDeleteBookUseCase(repository: sl()));
+  sl.registerLazySingleton(() => AddToCartUseCase(repository: sl()));
 
   /// {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -134,6 +136,6 @@ Future<void> setup() async {
   );
   sl.registerLazySingleton(() => PopularBooksBloc(useCase: sl()));
   sl.registerLazySingleton(
-    () => BookActionsBloc(saveDeleteBookUseCase: sl(), webSocketService: sl()),
+    () => BookActionsBloc(saveDeleteBookUseCase: sl(), addToCartUseCase: sl(), webSocketService: sl()),
   );
 }

@@ -32,7 +32,6 @@ class MinimalCoursesCardWg extends StatelessWidget {
         ),
         child: IntrinsicHeight(
           child: Row(
-            spacing: appW(10),
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
@@ -44,6 +43,7 @@ class MinimalCoursesCardWg extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(width: appW(10)),
               Expanded(
                 flex: 2,
                 child: Column(
@@ -83,13 +83,13 @@ class MinimalCoursesCardWg extends StatelessWidget {
                     const SizedBox(height: 5),
                     if (data.userOrder?.status == 'paid')
                       Row(
-                        spacing: 10,
                         children: [
                           Expanded(
                             child: CustomLinearIndicatorWg(
                               progressIndicator: data.userOrder?.progress ?? 0,
                             ),
                           ),
+                          const SizedBox(width: 10),
                           Text(
                             "${(data.userOrder?.progress ?? 0).toInt()} %",
                             style: CustomTextStyles.h4,

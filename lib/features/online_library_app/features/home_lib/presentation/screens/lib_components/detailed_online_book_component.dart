@@ -45,25 +45,6 @@ class DetailedOnlineBookComponent extends StatefulWidget {
 class _DetailedOnlineBookComponentState
     extends State<DetailedOnlineBookComponent> {
   bool isTextFullShown = false;
-  bool showCart = false;
-
-  void onButtonPressed() {
-    if (widget.isBookBought) {
-      /// open book
-      AppRoute.go(BoughtBookOpenerWg());
-    }
-    setState(() {
-      showCart = true;
-    });
-    // else {
-    //   /// show payment bottom sheet
-    //   onlineLibStyleCustomBottomSheetWg(
-    //     context,
-    //     headerTitle: 'To\'lov turi',
-    //     child: PaymentOpenBottomSheetWg(courseId: null,),
-    //   );
-    // }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -212,7 +193,6 @@ class _DetailedOnlineBookComponentState
                 height: 220,
                 viewportFraction: 0.85,
                 enableInfiniteScroll: true,
-                padEnds: false,
                 autoPlay: true,
               ),
               items: [
@@ -281,33 +261,66 @@ class _DetailedOnlineBookComponentState
         ],
       ),
       bottomNavigationBar: !widget.isOffline
-          ? CustomBottomNavContainerWg(
-              anotherButton: showCart
-                  ? ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: .circular(10),
-                          side: BorderSide(color: AppColors.greyScale.grey200),
+          ? BlocBuilder<
+              my_template_book.BookActionsBloc,
+              my_template_book.BookActionsState
+            >(
+              builder: (context, state) {
+                final bool inCart = state.isBookInCart(
+                  widget.data.id,
+                  defaultValue: widget.data.isInCart,
+                );
+                return CustomBottomNavContainerWg(
+                  anotherButton: inCart
+                      ? ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: .circular(10),
+                              side: BorderSide(
+                                color: AppColors.greyScale.grey200,
+                              ),
+                            ),
+                          ),
+                          onPressed: () {
+                            context
+                                .read<my_template_book.BookActionsBloc>()
+                                .add(
+                                  my_template_book.ToggleCartBookEvent(
+                                    bookId: widget.data.id,
+                                    isInCart: !inCart,
+                                  ),
+                                );
+                          },
+                          child: Icon(
+                            IconlyLight.buy,
+                            color: AppColors.greyScale.grey600,
+                            size: 22,
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                  onCartTap: () {},
+                  buttonText: widget.isBookBought
+                      ? 'O’qishni davom ettirish'
+                      : inCart
+                      ? 'Savatga o\'tish'
+                      : 'Sotib olish - ${widget.data.price} UZS',
+                  onTap: () {
+                    if (widget.isBookBought) {
+                      AppRoute.go(const BoughtBookOpenerWg());
+                    } else {
+                      context.read<my_template_book.BookActionsBloc>().add(
+                        my_template_book.ToggleCartBookEvent(
+                          bookId: widget.data.id,
+                          isInCart: !inCart,
                         ),
-                      ),
-                      onPressed: () {},
-                      child: Icon(
-                        IconlyLight.buy,
-                        color: AppColors.greyScale.grey600,
-                        size: 22,
-                      ),
-                    )
-                  : SizedBox.shrink(),
-              onCartTap: () {},
-              buttonText: widget.isBookBought
-                  ? 'O’qishni davom ettirish'
-                  : showCart
-                  ? 'Savatga otish'
-                  : 'Sotib olish - ${widget.data.price} UZS',
-              onTap: onButtonPressed,
+                      );
+                    }
+                  },
+                );
+              },
             )
-          : SizedBox.shrink(),
+          : const SizedBox.shrink(),
     );
   }
 }

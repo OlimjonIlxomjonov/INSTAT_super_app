@@ -17,4 +17,9 @@ class HomeLibRepoImpl implements HomeLibRepository {
   Future<void> saveDeleteBook(int id) {
     return _remoteDataSource.saveDeleteBook(id);
   }
+
+  @override
+  Future<void> addToCart(int id) {
+    return _remoteDataSource.addToCart(id);
+  }
 }

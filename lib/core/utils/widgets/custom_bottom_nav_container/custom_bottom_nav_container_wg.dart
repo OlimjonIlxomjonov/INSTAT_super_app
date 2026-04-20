@@ -57,9 +57,11 @@ class CustomBottomNavContainerWg extends StatelessWidget {
               ),
               SizedBox(width: appW(12)),
               if (anotherButton != null)
-                Padding(
-                  padding: .only(right: 12),
-                  child: Expanded(child: anotherButton!),
+                Expanded(
+                  child: Padding(
+                    padding: .only(right: 12),
+                    child: anotherButton!,
+                  ),
                 ),
             ],
           ),

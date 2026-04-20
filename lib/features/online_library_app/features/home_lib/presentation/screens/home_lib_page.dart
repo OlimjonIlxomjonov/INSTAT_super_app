@@ -133,6 +133,8 @@ class _HomeLibPageState extends State<HomeLibPage> {
                           ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${book.bookThumbnails.first.file}'
                           : '';
                       return BookGridItem(
+                        id: book.id,
+                        isSaved: book.isSaved,
                         type: BookCardType.market,
                         title: book.name,
                         author: book.author.name,
