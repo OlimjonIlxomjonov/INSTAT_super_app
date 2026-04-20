@@ -3,6 +3,10 @@ class ApiUrls {
 
   static const baseUrl = 'https://test.avacoder.uz/api/';
 
+  /// websocket
+  // library
+  static const webSocket = 'wss://test.avacoder.uz/ws/books/?token=';
+
   /// user
   static const me = 'me';
 

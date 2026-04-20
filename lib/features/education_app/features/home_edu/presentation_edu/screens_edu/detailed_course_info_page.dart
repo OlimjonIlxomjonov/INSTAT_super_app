@@ -66,13 +66,16 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
     super.initState();
     _isBought = widget.data.userOrder?.status == 'paid';
 
-
     _headerSlivers = [
+      // image header
       DetailedCourseInfoHeaderImage(imagePath: widget.data.thumbnail),
+      // course title and brief info till "Izoh"
       DetailedCourseInfoHeaderWg(
         data: widget.data,
         categoryName: widget.courseCategory,
       ),
+
+      /// course tabs
       SliverAppBar(
         pinned: true,
         backgroundColor: AppColors.white,

@@ -9,6 +9,7 @@ import 'package:my_template/core/utils/general_widgets/custom_rating_star/custom
 import 'package:my_template/core/utils/general_widgets/html_content_wg/html_content_wg.dart';
 import 'package:my_template/core/utils/general_widgets/online_book_wg/online_book_wg.dart';
 import 'package:my_template/core/utils/general_widgets/online_lib_style_custom_bottom_sheet/online_lib_style_custom_bottom_sheet_wg.dart';
+import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/core/utils/widgets/comment_section/user_comments_wg.dart';
 import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
@@ -20,16 +21,19 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/similar_onilne_books_component.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/widgets/detailed_online_book_header_wg.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/widgets/vertical_divider_wg.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class DetailedOnlineBookComponent extends StatefulWidget {
   final bool isBookBought, isOffline;
   final BookEntity data;
+  final WebSocketChannel channel;
 
   const DetailedOnlineBookComponent({
     super.key,
     this.isBookBought = false,
     this.isOffline = false,
     required this.data,
+    required this.channel,
   });
 
   @override
@@ -77,11 +81,8 @@ class _DetailedOnlineBookComponentState
       ),
       body: CustomScrollView(
         slivers: [
-          SliverPadding(
-            padding: AppPadding.horizontal20x(),
-            sliver: SliverToBoxAdapter(
-              child: DetailedOnlineBookHeaderWg(data: widget.data),
-            ),
+          SliverToBoxAdapter(
+            child: DetailedOnlineBookHeaderWg(data: widget.data),
           ),
 
           /// BOOK INFO & RATING

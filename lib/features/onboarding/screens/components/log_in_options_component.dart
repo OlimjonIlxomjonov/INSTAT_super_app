@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/routes/route_generator.dart';
@@ -44,9 +45,7 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
           },
           onFailure: () {
             Navigator.of(context).pop();
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Login failed. Try again.')),
-            );
+            errorFlushBar(context, 'Login failed. Try again.');
           },
         ),
       ),

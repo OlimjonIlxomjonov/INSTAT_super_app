@@ -78,7 +78,9 @@ class BookGridItem extends StatelessWidget {
                     height: double.infinity,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
-                      return Center(child: Icon(Icons.image_not_supported, size: 26));
+                      return Center(
+                        child: Icon(Icons.image_not_supported, size: 26),
+                      );
                     },
                   )
                 : Image.asset(

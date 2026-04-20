@@ -16,7 +16,6 @@ class DetailedOnlineBookHeaderWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    logger.f("${ApiUrls.bookThumbnail}${data.bookThumbnails.first.file}");
     return Container(
       padding: .symmetric(vertical: 20),
       decoration: BoxDecoration(

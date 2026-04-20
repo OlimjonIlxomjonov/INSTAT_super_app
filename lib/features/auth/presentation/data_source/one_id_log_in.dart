@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
+import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/features/auth/presentation/auth_service/auth_service.dart';
 import 'package:my_template/features/auth/presentation/data_source/auth_constatns.dart';
@@ -41,8 +43,15 @@ class _OneIdLoginPageState extends State<OneIdLoginPage> {
           onPageStarted: (_) => _setAuthState(_AuthState.loading),
           onPageFinished: (_) => _setAuthState(_AuthState.idle),
           onWebResourceError: (error) {
-            logger.e('WebView error: ${error.description}');
-            _setAuthState(_AuthState.error);
+            // logger.e('WebView error: ${error.description}');
+            // _setAuthState(_AuthState.error);
+            if (error.description.contains('ERR_CONNECTION_TIMED_OUT')) {
+              AppRoute.close();
+              errorFlushBar(
+                context,
+                'Check the internet connection and try again!',
+              );
+            }
           },
         ),
       )

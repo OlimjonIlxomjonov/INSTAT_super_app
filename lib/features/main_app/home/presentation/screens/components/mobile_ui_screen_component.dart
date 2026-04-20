@@ -10,9 +10,10 @@ import 'package:my_template/core/common/placeholder/banner_placeholder.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/common/ui_states/lost_internet_connection_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
+import 'package:my_template/core/services/token_storage/token_storage_service.dart';
+import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
-import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/core/utils/general_widgets/online_book_wg/online_book_wg.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
@@ -33,6 +34,7 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_event.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_state.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/detailed_online_book_component.dart';
+import 'package:web_socket_channel/io.dart';
 
 class MobileUiScreenComponent extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -249,7 +251,6 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                             final thumbnail = book.bookThumbnails.isNotEmpty
                                 ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${book.bookThumbnails.first.file}'
                                 : '';
-                            logger.f(thumbnail);
                             return SizedBox(
                               width: 190,
                               child: Padding(
@@ -268,6 +269,9 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                                       showHandler: false,
                                       child: DetailedOnlineBookComponent(
                                         data: book,
+                                        channel: IOWebSocketChannel.connect(
+                                          "${ApiUrls.webSocket}${TokenStorageServiceImpl().getAccessToken()}",
+                                        ),
                                       ),
                                     );
                                   },
