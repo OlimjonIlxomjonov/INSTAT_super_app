@@ -22,6 +22,9 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/widgets/detailed_online_book_header_wg.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/widgets/vertical_divider_wg.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart'
+    as my_template_book;
 
 class DetailedOnlineBookComponent extends StatefulWidget {
   final bool isBookBought, isOffline;
@@ -69,15 +72,36 @@ class _DetailedOnlineBookComponentState
       appBar: CustomAppBarWg(
         myTitle: 'Kitob haqida',
         customActions: [
-          IconButton(
-            style: IconButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: .circular(20),
-                side: BorderSide(color: AppColors.greyScale.grey200),
-              ),
-            ),
-            onPressed: () {},
-            icon: Icon(IconlyLight.heart),
+          BlocBuilder<
+            my_template_book.BookActionsBloc,
+            my_template_book.BookActionsState
+          >(
+            builder: (context, state) {
+              final bool isSaved = state.isBookSaved(
+                widget.data.id,
+                defaultValue: widget.data.isSaved,
+              );
+              return IconButton(
+                style: IconButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: .circular(20),
+                    side: BorderSide(color: AppColors.greyScale.grey200),
+                  ),
+                ),
+                onPressed: () {
+                  context.read<my_template_book.BookActionsBloc>().add(
+                    my_template_book.ToggleSaveBookEvent(
+                      bookId: widget.data.id,
+                      isSaved: !isSaved,
+                    ),
+                  );
+                },
+                icon: Icon(
+                  isSaved ? Icons.favorite_rounded : IconlyLight.heart,
+                  color: isSaved ? AppColors.red : null,
+                ),
+              );
+            },
           ),
         ],
       ),

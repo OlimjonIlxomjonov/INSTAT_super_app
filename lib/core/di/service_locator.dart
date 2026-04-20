@@ -43,9 +43,12 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 
 import 'package:my_template/features/online_library_app/features/home_lib/data/repo/home_lib_repo_impl.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/data/sources/impl_remote_data_source/home_lib_remote_data_source_impl.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/data/sources/remote_data_source/book_websocket_service.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/data/sources/remote_data_source/home_lib_remote_data_source.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/repository/home_lib_repository.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/get_popular_books_use_case.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/save_delete_book_use_case.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
 
 final sl = GetIt.instance;
@@ -100,6 +103,8 @@ Future<void> setup() async {
     () => SubmitFinalCourseAnswerUseCase(repository: sl()),
   );
   sl.registerLazySingleton(() => GetPopularBooksUseCase(repository: sl()));
+  sl.registerLazySingleton(() => BookWebSocketService());
+  sl.registerLazySingleton(() => SaveDeleteBookUseCase(repository: sl()));
 
   /// {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -128,4 +133,7 @@ Future<void> setup() async {
     ),
   );
   sl.registerLazySingleton(() => PopularBooksBloc(useCase: sl()));
+  sl.registerLazySingleton(
+    () => BookActionsBloc(saveDeleteBookUseCase: sl(), webSocketService: sl()),
+  );
 }

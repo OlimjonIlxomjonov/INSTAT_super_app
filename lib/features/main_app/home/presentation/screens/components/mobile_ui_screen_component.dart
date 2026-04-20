@@ -258,6 +258,8 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                               child: Padding(
                                 padding: EdgeInsets.only(left: 12),
                                 child: BookGridItem(
+                                  id: book.id,
+                                  isSaved: book.isSaved,
                                   type: BookCardType.market,
                                   title: book.name,
                                   author: book.author.name,
@@ -271,7 +273,6 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                                       showHandler: false,
                                       child: DetailedOnlineBookComponent(
                                         data: book,
-
                                       ),
                                     );
                                   },

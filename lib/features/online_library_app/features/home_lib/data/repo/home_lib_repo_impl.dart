@@ -12,4 +12,9 @@ class HomeLibRepoImpl implements HomeLibRepository {
   Future<BookListResponse> getPopularBooks() {
     return _remoteDataSource.fetchPopularBooks();
   }
+
+  @override
+  Future<void> saveDeleteBook(int id) {
+    return _remoteDataSource.saveDeleteBook(id);
+  }
 }

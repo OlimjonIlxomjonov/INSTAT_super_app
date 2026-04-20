@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart'
+    as my_template_book;
 
 class BookGridItem extends StatelessWidget {
   const BookGridItem({
     super.key,
+    this.id,
+    this.isSaved = false,
     required this.type,
     required this.imagePath,
     required this.author,
@@ -23,6 +29,8 @@ class BookGridItem extends StatelessWidget {
     this.onTap,
   });
 
+  final int? id;
+  final bool isSaved;
   final BookCardType type;
   final String imagePath;
   final String author;
@@ -120,10 +128,39 @@ class BookGridItem extends StatelessWidget {
               right: 10,
               child: _buildGlassBadge(
                 isCircle: true,
-                child: InkWell(
-                  onTap: onFavTap,
-                  child: const Icon(Icons.favorite_border_rounded, size: 20),
-                ),
+                child:
+                    BlocBuilder<
+                      my_template_book.BookActionsBloc,
+                      my_template_book.BookActionsState
+                    >(
+                      builder: (context, state) {
+                        final bool currentSavedState =
+                            id != null &&
+                            state.isBookSaved(id!, defaultValue: isSaved);
+                        return InkWell(
+                          onTap: () {
+                            if (id != null) {
+                              context
+                                  .read<my_template_book.BookActionsBloc>()
+                                  .add(
+                                    my_template_book.ToggleSaveBookEvent(
+                                      bookId: id!,
+                                      isSaved: !currentSavedState,
+                                    ),
+                                  );
+                            }
+                            if (onFavTap != null) onFavTap!();
+                          },
+                          child: Icon(
+                            currentSavedState
+                                ? IconlyBold.heart
+                                : IconlyLight.heart,
+                            size: 20,
+                            color: currentSavedState ? AppColors.orange : null,
+                          ),
+                        );
+                      },
+                    ),
               ),
             ),
 

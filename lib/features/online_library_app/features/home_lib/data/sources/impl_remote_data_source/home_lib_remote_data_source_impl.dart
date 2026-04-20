@@ -23,4 +23,19 @@ class HomeLibRemoteDataSourceImpl implements HomeLibRemoteDataSource {
       rethrow;
     }
   }
+
+  @override
+  Future<void> saveDeleteBook(int id) async {
+    try {
+      final response = await _dioClient.post('books/$id/save-delete-book/');
+      if (response.statusCode != 204 &&
+          response.statusCode != 200 &&
+          response.statusCode != 201) {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
 }

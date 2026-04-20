@@ -2,4 +2,5 @@ import 'package:my_template/features/online_library_app/features/home_lib/data/m
 
 abstract class HomeLibRemoteDataSource {
   Future<BookListResponseModel> fetchPopularBooks();
+  Future<void> saveDeleteBook(int id);
 }

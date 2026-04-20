@@ -18,6 +18,7 @@ class BookModel extends BookEntity {
     required super.userBookCount,
     required super.inCartCount,
     required super.bookThumbnails,
+    required super.isSaved,
   });
 
   factory BookModel.fromJson(Map<String, dynamic> json) {
@@ -34,6 +35,7 @@ class BookModel extends BookEntity {
       createdAt: json['created_at'] ?? '',
       userBookCount: json['user_book_count'] ?? 0,
       inCartCount: json['in_cart_count'] ?? 0,
+      isSaved: (json['user_book_count'] ?? 0) >= 1,
       bookThumbnails:
           (json['book_thumbnails'] as List?)
               ?.map((e) => BookThumbnailModel.fromJson(e))
