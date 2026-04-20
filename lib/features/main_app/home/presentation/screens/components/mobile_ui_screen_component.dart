@@ -238,6 +238,8 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                         onTap: () {},
                       ),
                     ),
+
+                    /// books
                     SizedBox(
                       height: 330,
                       child: Padding(
@@ -269,9 +271,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                                       showHandler: false,
                                       child: DetailedOnlineBookComponent(
                                         data: book,
-                                        channel: IOWebSocketChannel.connect(
-                                          "${ApiUrls.webSocket}${TokenStorageServiceImpl().getAccessToken()}",
-                                        ),
+
                                       ),
                                     );
                                   },

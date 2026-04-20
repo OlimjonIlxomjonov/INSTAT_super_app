@@ -18,49 +18,39 @@ class _CoursePlanTabState extends State<CoursePlanTab>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return CustomScrollView(
-      slivers: [
-        SliverPadding(
-          padding: EdgeInsets.only(
-            left: appW(20),
-            right: appW(20),
-            bottom: appH(20),
-          ),
-          sliver: SliverToBoxAdapter(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                border: Border.all(color: AppColors.greyScale.grey200),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child:
-                    BlocBuilder<
-                      CourseLessonTopicsBloc,
-                      CourseLessonTopicsState
-                    >(
-                      builder: (context, state) {
-                        if (state is CourseLessonTopicsLoaded) {
-                          final data = state.response.data;
-                          return Column(
-                            children: List.generate(data.length, (index) {
-                              final item = data[index];
-                              return SectionTile(
-                                index: index,
-                                isLast: index == data.length - 1,
-                                entity: item,
-                              );
-                            }),
-                          );
-                        }
-                        return SizedBox.shrink();
-                      },
-                    ),
-              ),
-            ),
+    return Padding(
+      padding: EdgeInsets.only(
+        left: appW(20),
+        right: appW(20),
+        bottom: appH(20),
+      ),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.greyScale.grey200),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: BlocBuilder<CourseLessonTopicsBloc, CourseLessonTopicsState>(
+            builder: (context, state) {
+              if (state is CourseLessonTopicsLoaded) {
+                final data = state.response.data;
+                return Column(
+                  children: List.generate(data.length, (index) {
+                    final item = data[index];
+                    return SectionTile(
+                      index: index,
+                      isLast: index == data.length - 1,
+                      entity: item,
+                    );
+                  }),
+                );
+              }
+              return const SizedBox.shrink();
+            },
           ),
         ),
-      ],
+      ),
     );
   }
 

@@ -26,14 +26,12 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 class DetailedOnlineBookComponent extends StatefulWidget {
   final bool isBookBought, isOffline;
   final BookEntity data;
-  final WebSocketChannel channel;
 
   const DetailedOnlineBookComponent({
     super.key,
     this.isBookBought = false,
     this.isOffline = false,
     required this.data,
-    required this.channel,
   });
 
   @override
@@ -44,12 +42,16 @@ class DetailedOnlineBookComponent extends StatefulWidget {
 class _DetailedOnlineBookComponentState
     extends State<DetailedOnlineBookComponent> {
   bool isTextFullShown = false;
+  bool showCart = false;
 
   void onButtonPressed() {
     if (widget.isBookBought) {
       /// open book
       AppRoute.go(BoughtBookOpenerWg());
     }
+    setState(() {
+      showCart = true;
+    });
     // else {
     //   /// show payment bottom sheet
     //   onlineLibStyleCustomBottomSheetWg(
@@ -256,10 +258,28 @@ class _DetailedOnlineBookComponentState
       ),
       bottomNavigationBar: !widget.isOffline
           ? CustomBottomNavContainerWg(
-              showCartIcon: true,
+              anotherButton: showCart
+                  ? ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: .circular(10),
+                          side: BorderSide(color: AppColors.greyScale.grey200),
+                        ),
+                      ),
+                      onPressed: () {},
+                      child: Icon(
+                        IconlyLight.buy,
+                        color: AppColors.greyScale.grey600,
+                        size: 22,
+                      ),
+                    )
+                  : SizedBox.shrink(),
               onCartTap: () {},
               buttonText: widget.isBookBought
                   ? 'O’qishni davom ettirish'
+                  : showCart
+                  ? 'Savatga otish'
                   : 'Sotib olish - ${widget.data.price} UZS',
               onTap: onButtonPressed,
             )

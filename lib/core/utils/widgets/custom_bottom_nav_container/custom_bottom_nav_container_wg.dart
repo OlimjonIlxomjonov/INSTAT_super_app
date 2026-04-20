@@ -10,7 +10,6 @@ class CustomBottomNavContainerWg extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback? onCartTap;
   final IconData? leadingIcon;
-  final bool showCartIcon;
 
   const CustomBottomNavContainerWg({
     super.key,
@@ -18,7 +17,6 @@ class CustomBottomNavContainerWg extends StatelessWidget {
     this.anotherButton,
     required this.onTap,
     this.leadingIcon,
-    this.showCartIcon = false,
     this.onCartTap,
   });
 
@@ -26,7 +24,7 @@ class CustomBottomNavContainerWg extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        padding: .symmetric(vertical: appH(20), horizontal: appW(20)),
+        padding: .symmetric(vertical: appH(20)),
         decoration: BoxDecoration(
           borderRadius: .only(topRight: .circular(24), topLeft: .circular(24)),
           color: AppColors.white,
@@ -41,10 +39,8 @@ class CustomBottomNavContainerWg extends StatelessWidget {
         ),
         child: IntrinsicHeight(
           child: Row(
-            spacing: showCartIcon ? 10 : 0,
             crossAxisAlignment: .stretch,
             children: [
-              if (anotherButton != null) Expanded(child: anotherButton!),
               SizedBox(width: appW(12)),
               Expanded(
                 child: ElevatedButton.icon(
@@ -52,27 +48,18 @@ class CustomBottomNavContainerWg extends StatelessWidget {
                   icon: leadingIcon != null
                       ? Icon(leadingIcon, size: 20)
                       : null,
-                  label: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    child: Text(
-                      buttonText,
-                      key: ValueKey<String>(buttonText),
-                      style: AppTextStyles.source.medium(fontSize: 14),
-                    ),
+                  label: Text(
+                    buttonText,
+                    key: ValueKey<String>(buttonText),
+                    style: AppTextStyles.source.medium(fontSize: 14),
                   ),
                 ),
               ),
-              if (showCartIcon)
-                IconButton(
-                  style: IconButton.styleFrom(
-                    padding: .symmetric(horizontal: 15),
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(color: AppColors.greyScale.grey200),
-                      borderRadius: .circular(12),
-                    ),
-                  ),
-                  onPressed: onCartTap,
-                  icon: Icon(IconlyLight.buy),
+              SizedBox(width: appW(12)),
+              if (anotherButton != null)
+                Padding(
+                  padding: .only(right: 12),
+                  child: Expanded(child: anotherButton!),
                 ),
             ],
           ),

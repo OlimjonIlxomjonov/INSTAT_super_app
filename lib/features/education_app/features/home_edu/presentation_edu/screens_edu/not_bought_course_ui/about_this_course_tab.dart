@@ -51,72 +51,55 @@ class _AboutThisCourseTabState extends State<AboutThisCourseTab>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return CustomScrollView(
-      slivers: [
-        // SliverToBoxAdapter(
-        //   child: Padding(
-        //     padding: EdgeInsets.only(
-        //       bottom: appH(16),
-        //       left: appW(20),
-        //       right: appW(20),
-        //     ),
-        //     child: ,
-        //   ),
-        // ),
-        SliverPadding(
-          padding: const .only(bottom: 16, left: 20, right: 20),
-          sliver: SliverToBoxAdapter(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.greyScale.grey200),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Nimalarni o'rganasiz!",
-                      style: AppTextStyles.source.medium(fontSize: 16),
-                    ),
-                    CourseFeaturesList(courseId: widget.data.id),
-                  ],
-                ),
-              ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16, left: 20, right: 20),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.greyScale.grey200),
             ),
-          ),
-        ),
-
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: appW(20)),
-          sliver: SliverToBoxAdapter(
-            child: ExtendSectionSeeAllWg(
-              title: "O'xshash kurslar",
-              onTap: () => _openSimilarCourses(context),
-            ),
-          ),
-        ),
-
-        SliverToBoxAdapter(
-          child: SizedBox(
-            height: 300,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: appW(20)),
-              itemCount: widget.total,
-              itemExtent: appW(312),
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.only(right: appW(12)),
-                  child: PopularCoursesCardWg(
-                    onTap: () => _openCourseDetail(context),
-                    data: widget.data,
-                    categoryName: widget.courseCategory,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Nimalarni o'rganasiz!",
+                    style: AppTextStyles.source.medium(fontSize: 16),
                   ),
-                );
-              },
+                  CourseFeaturesList(courseId: widget.data.id),
+                ],
+              ),
             ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: appW(20)),
+          child: ExtendSectionSeeAllWg(
+            title: "O'xshash kurslar",
+            onTap: () => _openSimilarCourses(context),
+          ),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 300,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.symmetric(horizontal: appW(20)),
+            itemCount: widget.total,
+            itemExtent: appW(312),
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: EdgeInsets.only(right: appW(12)),
+                child: PopularCoursesCardWg(
+                  onTap: () => _openCourseDetail(context),
+                  data: widget.data,
+                  categoryName: widget.courseCategory,
+                ),
+              );
+            },
           ),
         ),
       ],

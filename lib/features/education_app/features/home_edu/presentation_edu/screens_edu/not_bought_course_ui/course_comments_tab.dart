@@ -12,6 +12,10 @@ class CourseCommentsTab extends StatefulWidget {
     UserCommentsWg(),
     UserCommentsWg(),
     UserCommentsWg(),
+    UserCommentsWg(),
+    UserCommentsWg(),
+    UserCommentsWg(),
+    UserCommentsWg(),
   ];
 
   @override
@@ -31,20 +35,17 @@ class _CourseCommentsTabState extends State<CourseCommentsTab>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return CustomScrollView(
-      slivers: [
-        SliverPadding(
+    return Column(
+      children: [
+        Padding(
           padding: AppPadding.horizontal20x(),
-          sliver: SliverToBoxAdapter(
-            child: ExtendSectionSeeAllWg(
-              title: 'Qoldirilgan izohlar',
-              onTap: () => _openAllComments(context),
-            ),
+          child: ExtendSectionSeeAllWg(
+            title: 'Qoldirilgan izohlar',
+            onTap: () => _openAllComments(context),
           ),
         ),
-        SliverList(
-          delegate: SliverChildListDelegate.fixed(CourseCommentsTab._comments),
-        ),
+        const SizedBox(height: 16),
+        ...CourseCommentsTab._comments,
       ],
     );
   }

@@ -38,9 +38,11 @@ class DetailedCourseInfoPage extends StatefulWidget {
   State<DetailedCourseInfoPage> createState() => _DetailedCourseInfoPageState();
 }
 
-class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
+class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
+    with SingleTickerProviderStateMixin {
   late final List<Widget> _headerSlivers;
   late bool _isBought;
+  late TabController _tabController;
 
   void _openPayment(BuildContext context) {
     if (!_isBought) {
@@ -65,6 +67,11 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
   void initState() {
     super.initState();
     _isBought = widget.data.userOrder?.status == 'paid';
+    _tabController = TabController(length: 3, vsync: this);
+    _tabController.addListener(() {
+      if (!mounted) return;
+      setState(() {});
+    });
 
     _headerSlivers = [
       // image header
@@ -84,9 +91,10 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
         toolbarHeight: 0,
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(appH(90)),
-          child: const Padding(
-            padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
             child: CustomTabBarWg(
+              controller: _tabController,
               firstTab: "Kurs haqida",
               secondTab: "O'quv reja",
               thirdTab: "Izohlar",
@@ -112,39 +120,44 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage> {
   }
 
   @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: BlocListener<BuyCourseBloc, BuyCourseState>(
-        listener: (context, state) {
-          if (state is BuyCourseLoaded) {
-            setState(() {
-              _isBought = true;
-            });
-          }
-        },
-        child: Scaffold(
-          body: NestedScrollView(
-            headerSliverBuilder: (context, _) => _headerSlivers,
-            body: TabBarView(
-              // physics: const NeverScrollableScrollPhysics(),
-              children: [
-                AboutThisCourseTab(
-                  data: widget.data,
-                  courseCategory: widget.courseCategory,
-                  total: widget.total,
-                ),
-                const CoursePlanTab(),
-                const CourseCommentsTab(),
-              ],
+    return BlocListener<BuyCourseBloc, BuyCourseState>(
+      listener: (context, state) {
+        if (state is BuyCourseLoaded) {
+          setState(() {
+            _isBought = true;
+          });
+        }
+      },
+      child: Scaffold(
+        body: CustomScrollView(
+          slivers: [
+            ..._headerSlivers,
+            SliverToBoxAdapter(
+              child: _tabController.index == 0
+                  ? AboutThisCourseTab(
+                      data: widget.data,
+                      courseCategory: widget.courseCategory,
+                      total: widget.total,
+                    )
+                  : _tabController.index == 1
+                  ? const CoursePlanTab()
+                  : const CourseCommentsTab(),
             ),
-          ),
-          bottomNavigationBar: CustomBottomNavContainerWg(
-            onTap: () => _openPayment(context),
-            buttonText: _isBought
-                ? 'Davom etish'
-                : 'Sotib olish - ${widget.data.price} UZS',
-          ),
+            const SliverToBoxAdapter(child: SizedBox(height: 32)),
+          ],
+        ),
+        bottomNavigationBar: CustomBottomNavContainerWg(
+          onTap: () => _openPayment(context),
+          buttonText: _isBought
+              ? 'Davom etish'
+              : 'Sotib olish - ${widget.data.price} UZS',
         ),
       ),
     );
