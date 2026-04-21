@@ -27,7 +27,7 @@ class LessonVideoProgressBloc extends Bloc<LessonVideoProgressEvent, LessonVideo
           progress: event.progress,
         ),
       );
-      emit(LessonVideoProgressSuccess());
+      emit(LessonVideoProgressSuccess(progress: event.progress));
     } catch (e) {
       emit(LessonVideoProgressFailure(e.toString()));
     }

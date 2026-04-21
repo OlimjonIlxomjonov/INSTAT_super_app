@@ -14,6 +14,7 @@ import 'package:my_template/features/main_app/home/presentation/bloc/courses/cou
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
+import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/presentation_lib/bloc/cart/cart_bloc.dart';
 
 class MyBlocProvider extends StatelessWidget {
   final Widget child;
@@ -49,6 +50,7 @@ class MyBlocProvider extends StatelessWidget {
         ),
         BlocProvider<PopularBooksBloc>(create: (_) => sl<PopularBooksBloc>()),
         BlocProvider<BookActionsBloc>(create: (_) => sl<BookActionsBloc>()),
+        BlocProvider<CartBloc>(create: (_) => sl<CartBloc>()),
       ],
       child: child,
     );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_template/core/utils/app_utils.dart';
 
 class BannerPlaceholder extends StatelessWidget {
   const BannerPlaceholder({super.key});

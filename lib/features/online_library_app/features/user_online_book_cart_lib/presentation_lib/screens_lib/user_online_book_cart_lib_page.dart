@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/common/flush_bar/technical_work_flash_bar.dart';
+import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
@@ -8,12 +11,35 @@ import 'package:my_template/core/utils/general_widgets/payment_open_bottom_sheet
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
+import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/presentation_lib/bloc/cart/cart_bloc.dart';
+import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/presentation_lib/bloc/cart/cart_state.dart';
+import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/presentation_lib/bloc/user_cart_event.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
-class UserOnlineBookCartLibPage extends StatelessWidget {
+class UserOnlineBookCartLibPage extends StatefulWidget {
   const UserOnlineBookCartLibPage({super.key});
 
   @override
+  State<UserOnlineBookCartLibPage> createState() =>
+      _UserOnlineBookCartLibPageState();
+}
+
+class _UserOnlineBookCartLibPageState extends State<UserOnlineBookCartLibPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<CartBloc>().add(CartEvent());
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final cartState = context.watch<CartBloc>().state;
+    final isLoading = cartState is CartLoading;
+    final items = cartState is CartLoaded ? cartState.response.data : null;
+    final itemCount = items?.length ?? 2;
+    final totalPrice =
+        items?.fold<num>(0, (sum, item) => sum + item.price) ?? 0;
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -23,25 +49,29 @@ class UserOnlineBookCartLibPage extends StatelessWidget {
             sliver: SliverToBoxAdapter(
               child: Column(
                 children: [
-                  ShortBookDetailsWg(
-                    bookName: 'Motivatsiya formulasi',
-                    bookAuthor: 'Brendon Burchard',
-                    newPrice: '469 000 UZS',
-                    oldPrice: '510 000 UZS',
+                  Skeletonizer(
+                    enabled: isLoading,
+                    child: Column(
+                      children: List.generate(itemCount, (index) {
+                        final item = items?[index];
+                        final thumbnail =
+                            item != null && item.bookThumbnails.isNotEmpty
+                            ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${item.bookThumbnails.first.file}'
+                            : '';
+                        return ShortBookDetailsWg(
+                          imagePath: thumbnail,
+                          bookName: item?.name ?? 'Placeholder Book Title',
+                          bookAuthor: item?.author.name ?? 'Author Name',
+                          newPrice: item != null
+                              ? '${item.price} UZS'
+                              : '000 000 UZS',
+                        );
+                      }),
+                    ),
                   ),
-                  SizedBox(height: appH(20)),
-                  ShortBookDetailsWg(
-                    bookName: 'Motivatsiya formulasi',
-                    bookAuthor: 'Brendon Burchard',
-                    newPrice: '469 000 UZS',
-                    oldPrice: '510 000 UZS',
-                  ),
-
                   SizedBox(height: appH(30)),
-                  _buildSimpleRow('Umumiy mahsulotlar', '2 ta'),
+                  _buildSimpleRow('Umumiy mahsulotlar', '$itemCount ta'),
                   SizedBox(height: 12),
-                  _buildSimpleRow('Chegirma', '90 00 000 UZS'),
-                  SizedBox(height: 16),
                   Divider(color: AppColors.greyScale.grey200),
                   SizedBox(height: 16),
                   Row(
@@ -52,7 +82,7 @@ class UserOnlineBookCartLibPage extends StatelessWidget {
                         style: AppTextStyles.source.medium(fontSize: 17),
                       ),
                       Text(
-                        '960 000 UZS',
+                        '$totalPrice UZS',
                         style: AppTextStyles.source.medium(fontSize: 17),
                       ),
                     ],
@@ -64,13 +94,14 @@ class UserOnlineBookCartLibPage extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: CustomBottomNavContainerWg(
-        buttonText: 'Sotib olish - 960 000 UZS',
+        buttonText: 'Sotib olish - $totalPrice UZS',
         onTap: () {
           // onlineLibStyleCustomBottomSheetWg(
           //   context,
           //   headerTitle: 'To\'lov turi',
           //   child: PaymentOpenBottomSheetWg(),
           // );
+          technicalWorkFlushBar(context, 'Tez orada!');
         },
       ),
     );

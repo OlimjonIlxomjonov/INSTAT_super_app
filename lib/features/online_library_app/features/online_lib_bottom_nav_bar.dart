@@ -17,7 +17,7 @@ class OnlineLibBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
-    
+
     return BottomNavBarCustomMiniApp(
       openPageByIndex: openPageByIndex,
       onTabChangeOverride: (ctx, newIndex) {
@@ -28,7 +28,7 @@ class OnlineLibBottomNavBar extends StatelessWidget {
             showHandler: false,
             child: const UserOnlineBookCartLibPage(),
           );
-          return true; // Ignore tab change
+          return true;
         }
         return false;
       },

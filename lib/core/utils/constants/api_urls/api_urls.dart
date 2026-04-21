@@ -20,6 +20,9 @@ class ApiUrls {
   static const activeBooks = 'books/items/active/';
   static const bookThumbnail = 'https://test.avacoder.uz/media/';
 
+  // cart
+  static const cart = 'books/items/cart/';
+
   /// tabs
   static const aboutCourseFeatures = '/course_features/';
 

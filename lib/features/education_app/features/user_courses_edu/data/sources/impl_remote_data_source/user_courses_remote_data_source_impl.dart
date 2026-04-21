@@ -350,15 +350,12 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
-        logger.f(params.lessonId);
         logger.f(params.progress);
       } else {
         throw Exception('ERROR ${response.statusCode}');
       }
     } catch (e) {
       logger.e(e);
-      logger.f(params.lessonId);
-      logger.f(params.progress);
       rethrow;
     }
   }

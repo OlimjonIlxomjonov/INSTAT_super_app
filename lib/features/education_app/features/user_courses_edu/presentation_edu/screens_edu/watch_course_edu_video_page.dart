@@ -12,7 +12,10 @@ import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_files/course_files_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_files/course_files_state.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_topics/course_lesson_topics_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/lesson_video_progress/lesson_video_progress_state.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_items/course_lesson_items_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/regular_test/regular_test_course_page.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/default_custom_tile_wg.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/video_player_wg.dart';
@@ -51,6 +54,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
   String currentResolution = '1080';
   bool _isDownloading = false;
   bool _showVideo = false;
+  bool _hasVideoError = false;
   int _lastSentProgress = -1;
 
   Future<void> _openFile(String? url, String? fileName) async {
@@ -165,7 +169,15 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
           })
           ..setLooping(false);
 
-    await newController.initialize();
+    try {
+      await newController.initialize();
+    } catch (e) {
+      logger.e('Video init error: $e');
+      newController.dispose();
+      if (mounted) setState(() => _hasVideoError = true);
+      return;
+    }
+
     await newController.seekTo(currentPos);
 
     final oldController = controller;
@@ -193,22 +205,31 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
         'https://test.avacoder.uz/api/stream/${widget.lessonId}/${currentResolution}p.m3u8';
 
     controller?.dispose();
-    controller =
-        VideoPlayerController.networkUrl(
-            Uri.parse(url),
-            httpHeaders: {"Authorization": "Bearer $token"},
-            formatHint: VideoFormat.hls,
-          )
-          ..addListener(() {
-            _onVideoProgressChanged();
-            setState(() {});
-          })
-          ..setLooping(false);
+    controller = null;
+    setState(() => _hasVideoError = false);
 
-    await controller!.initialize();
+    final newController = VideoPlayerController.networkUrl(
+      Uri.parse(url),
+      httpHeaders: {"Authorization": "Bearer $token"},
+      formatHint: VideoFormat.hls,
+    )
+      ..addListener(() {
+        _onVideoProgressChanged();
+        setState(() {});
+      })
+      ..setLooping(false);
 
+    try {
+      await newController.initialize();
+    } catch (e) {
+      logger.e('Video init error: $e');
+      newController.dispose();
+      if (mounted) setState(() => _hasVideoError = true);
+      return;
+    }
+
+    controller = newController;
     controller!.play();
-
     setState(() {});
   }
 
@@ -221,8 +242,30 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
+    return BlocListener<LessonVideoProgressBloc, LessonVideoProgressState>(
+      listener: (context, state) {
+        if (state is LessonVideoProgressSuccess && state.progress == 100) {
+          Future.delayed(const Duration(milliseconds: 300), () {
+            if (context.mounted) {
+              context.read<CourseLessonTopicsBloc>().add(
+                CourseLessonTopicsEvent(
+                  params: CourseCategoryByIdParams(id: widget.courseId),
+                ),
+              );
+              context.read<CourseLessonItemsBloc>().add(
+                CourseLessonItemsEvent(
+                  params: CourseLessonItemsParams(
+                    courseId: widget.courseId,
+                    blockId: widget.topicId,
+                  ),
+                ),
+              );
+            }
+          });
+        }
+      },
+      child: Scaffold(
+        body: CustomScrollView(
         slivers: [
           SliverAppBar(
             expandedHeight: 250,
@@ -231,19 +274,19 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
 
             /// VIDEO
             flexibleSpace: FlexibleSpaceBar(
-              background: _showVideo
-                  ? (controller != null
-                        ? VideoPlayerWidget(controller: controller!)
-                        : const Center(child: CircularProgressIndicator()))
-                  : VideoThumbnailWidget(
-                      imagePath: widget.imagePath,
-                      onTap: () {
-                        setState(() {
-                          _showVideo = true;
-                        });
-                        _initVideo();
-                      },
-                    ),
+              background: _hasVideoError
+                  ? _buildNoVideoWidget()
+                  : _showVideo
+                      ? (controller != null
+                          ? VideoPlayerWidget(controller: controller!)
+                          : const Center(child: CircularProgressIndicator()))
+                      : VideoThumbnailWidget(
+                          imagePath: widget.imagePath,
+                          onTap: () {
+                            setState(() => _showVideo = true);
+                            _initVideo();
+                          },
+                        ),
             ),
             leading: Padding(
               padding: .only(left: 10, top: 10),
@@ -391,14 +434,14 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
           ),
         ],
       ),
-    );
+    ));
   }
 
   DecoratedBox _emptyFileAndTest({required String text}) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: .all(color: AppColors.greyScale.grey200),
-        borderRadius: .circular(12),
+        border: Border.all(color: AppColors.greyScale.grey200),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -406,9 +449,41 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
           text,
           style: CustomTextStyles.h3half.copyWith(
             color: AppColors.greyScale.grey500,
-            fontWeight: .w400,
+            fontWeight: FontWeight.w400,
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildNoVideoWidget() {
+    return Container(
+      color: AppColors.greyScale.grey100,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.videocam_off_outlined,
+            size: 52,
+            color: AppColors.greyScale.grey400,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Video hali yuklanmagan',
+            style: AppTextStyles.source.semiBold(
+              fontSize: 15,
+              color: AppColors.greyScale.grey600,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Ushbu dars uchun video mavjud emas',
+            style: AppTextStyles.source.regular(
+              fontSize: 13,
+              color: AppColors.greyScale.grey400,
+            ),
+          ),
+        ],
       ),
     );
   }

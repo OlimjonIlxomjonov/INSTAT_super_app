@@ -6,7 +6,7 @@ import 'package:my_template/core/utils/constants/assets/app_animations.dart';
 
 Flushbar? _currentFlushBar;
 
-void errorFlushBar(BuildContext context, String message) {
+void addedToCartFlushBar(BuildContext context, String message) {
   _currentFlushBar?.dismiss();
 
   _currentFlushBar = Flushbar(
@@ -17,10 +17,13 @@ void errorFlushBar(BuildContext context, String message) {
         fontSize: 16,
       ),
     ),
-    backgroundColor: AppColors.redFailedTaskCard.withValues(alpha: 0.7),
+    backgroundColor: AppColors.primaryColor.withValues(alpha: 0.7),
     duration: const Duration(seconds: 2),
     flushbarPosition: FlushbarPosition.TOP,
-    icon: Lottie.asset(AppAnimations.errorState, repeat: false),
+    icon: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Lottie.asset(AppAnimations.addToCart, repeat: false),
+    ),
     margin: const EdgeInsets.all(8),
     padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20),
     borderRadius: BorderRadius.circular(8),
