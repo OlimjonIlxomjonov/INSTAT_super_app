@@ -338,4 +338,28 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
       rethrow;
     }
   }
+
+  @override
+  Future<void> putLessonVideoProgress({
+    required LessonVideoProgressParams params,
+  }) async {
+    try {
+      final response = await _dioClient.put(
+        "lessons/${params.lessonId}/progress",
+        data: {"progress": params.progress},
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        logger.f(params.lessonId);
+        logger.f(params.progress);
+      } else {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      logger.f(params.lessonId);
+      logger.f(params.progress);
+      rethrow;
+    }
+  }
 }

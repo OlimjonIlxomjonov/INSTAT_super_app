@@ -93,3 +93,10 @@ class CheckFinalTestAccessParams {
 
   CheckFinalTestAccessParams({required this.courseId});
 }
+
+class LessonVideoProgressParams {
+  final String lessonId; // or int
+  final int progress;
+
+  LessonVideoProgressParams({required this.lessonId, required this.progress});
+}

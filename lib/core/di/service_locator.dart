@@ -40,6 +40,8 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dom
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/course_final_test/get_course_final_test_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/course_final_test/submit_final_course_answer_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_final_test/course_final_test_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/lesson_video_progress/put_lesson_video_progress_use_case.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/lesson_video_progress/lesson_video_progress_bloc.dart';
 
 import 'package:my_template/features/online_library_app/features/home_lib/data/repo/home_lib_repo_impl.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/data/sources/impl_remote_data_source/home_lib_remote_data_source_impl.dart';
@@ -103,6 +105,9 @@ Future<void> setup() async {
   sl.registerLazySingleton(
     () => SubmitFinalCourseAnswerUseCase(repository: sl()),
   );
+  sl.registerLazySingleton(
+    () => PutLessonVideoProgressUseCase(repository: sl()),
+  );
   sl.registerLazySingleton(() => GetPopularBooksUseCase(repository: sl()));
   sl.registerLazySingleton(() => BookWebSocketService());
   sl.registerLazySingleton(() => SaveDeleteBookUseCase(repository: sl()));
@@ -133,6 +138,9 @@ Future<void> setup() async {
       getCourseFinalTestOptionsUseCase: sl(),
       submitFinalCourseAnswerUseCase: sl(),
     ),
+  );
+  sl.registerFactory(
+    () => LessonVideoProgressBloc(putLessonVideoProgressUseCase: sl()),
   );
   sl.registerLazySingleton(() => PopularBooksBloc(useCase: sl()));
   sl.registerLazySingleton(

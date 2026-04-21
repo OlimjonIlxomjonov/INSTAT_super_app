@@ -123,4 +123,11 @@ class UserCoursesRepoImpl implements UserCoursesRepository {
   }) {
     return _remoteDataSource.postSubmitFinalTestAnswer(params: params);
   }
+
+  @override
+  Future<void> putLessonVideoProgress({
+    required LessonVideoProgressParams params,
+  }) {
+    return _remoteDataSource.putLessonVideoProgress(params: params);
+  }
 }

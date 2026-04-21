@@ -22,6 +22,8 @@ import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/video_thumbnail_wg.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/lesson_video_progress/lesson_video_progress_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/lesson_video_progress/lesson_video_progress_event.dart';
 
 class WatchCourseEduVideoPage extends StatefulWidget {
   final String title;
@@ -49,6 +51,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
   String currentResolution = '1080';
   bool _isDownloading = false;
   bool _showVideo = false;
+  int _lastSentProgress = -1;
 
   Future<void> _openFile(String? url, String? fileName) async {
     if (url == null || url.isEmpty || fileName == null || fileName.isEmpty) {
@@ -90,6 +93,35 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
     }
   }
 
+  void _onVideoProgressChanged() {
+    if (controller == null || !controller!.value.isInitialized) return;
+
+    final position = controller!.value.position.inSeconds;
+    final duration = controller!.value.duration.inSeconds;
+
+    if (duration > 0) {
+      int currentProgress = ((position / duration) * 100).toInt();
+      if (currentProgress > 100) currentProgress = 100;
+
+      if (_lastSentProgress < 0 && currentProgress >= 0) {
+        _sendVideoProgress(0);
+      } else if (currentProgress >= _lastSentProgress + 5 || currentProgress == 100) {
+        if (_lastSentProgress == 100) return;
+        _sendVideoProgress(currentProgress);
+      }
+    }
+  }
+
+  void _sendVideoProgress(int progress) {
+    _lastSentProgress = progress;
+    context.read<LessonVideoProgressBloc>().add(
+      PutLessonVideoProgressEvent(
+        lessonId: widget.lessonId.toString(),
+        progress: progress,
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -127,7 +159,10 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
             httpHeaders: {"Authorization": "Bearer $token"},
             formatHint: VideoFormat.hls,
           )
-          ..addListener(() => setState(() {}))
+          ..addListener(() {
+            _onVideoProgressChanged();
+            setState(() {});
+          })
           ..setLooping(false);
 
     await newController.initialize();
@@ -164,7 +199,10 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
             httpHeaders: {"Authorization": "Bearer $token"},
             formatHint: VideoFormat.hls,
           )
-          ..addListener(() => setState(() {}))
+          ..addListener(() {
+            _onVideoProgressChanged();
+            setState(() {});
+          })
           ..setLooping(false);
 
     await controller!.initialize();

@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/common/flush_bar/success_flush_bar.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/general_widgets/bought_book_opener/bought_book_opener_wg.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -288,9 +289,13 @@ class _DetailedOnlineBookComponentState
                                 .add(
                                   my_template_book.ToggleCartBookEvent(
                                     bookId: widget.data.id,
-                                    isInCart: !inCart,
+                                    isInCart: false,
                                   ),
                                 );
+                            successFlushBar(
+                              context,
+                              'Muvaffaqiyatli olib tashlandi',
+                            );
                           },
                           child: Icon(
                             IconlyLight.buy,
@@ -308,13 +313,16 @@ class _DetailedOnlineBookComponentState
                   onTap: () {
                     if (widget.isBookBought) {
                       AppRoute.go(const BoughtBookOpenerWg());
-                    } else {
+                    } else if (!inCart) {
                       context.read<my_template_book.BookActionsBloc>().add(
                         my_template_book.ToggleCartBookEvent(
                           bookId: widget.data.id,
-                          isInCart: !inCart,
+                          isInCart: true,
                         ),
                       );
+                      successFlushBar(context, 'Muvaffaqiyatli saqlandi');
+                    } else {
+                      // User will add "Go to cart" logic here later
                     }
                   },
                 );

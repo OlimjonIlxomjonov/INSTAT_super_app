@@ -71,4 +71,8 @@ abstract class UserCoursesRemoteDataSource {
   Future<LessonTestAnswerResponseModel> postSubmitFinalTestAnswer({
     required SubmitLessonTestAnswerParams params,
   });
+
+  Future<void> putLessonVideoProgress({
+    required LessonVideoProgressParams params,
+  });
 }

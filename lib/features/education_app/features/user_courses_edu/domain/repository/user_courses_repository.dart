@@ -72,4 +72,8 @@ abstract class UserCoursesRepository {
   Future<LessonTestAnswerResponseEntity> submitCourseTestAnswer({
     required SubmitLessonTestAnswerParams params,
   });
+
+  Future<void> putLessonVideoProgress({
+    required LessonVideoProgressParams params,
+  });
 }

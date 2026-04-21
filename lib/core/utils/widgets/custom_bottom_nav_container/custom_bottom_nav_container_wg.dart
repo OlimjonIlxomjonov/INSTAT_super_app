@@ -43,6 +43,7 @@ class CustomBottomNavContainerWg extends StatelessWidget {
             children: [
               SizedBox(width: appW(12)),
               Expanded(
+                flex: anotherButton != null && anotherButton is! SizedBox ? 3 : 1,
                 child: ElevatedButton.icon(
                   onPressed: onTap,
                   icon: leadingIcon != null
@@ -56,8 +57,9 @@ class CustomBottomNavContainerWg extends StatelessWidget {
                 ),
               ),
               SizedBox(width: appW(12)),
-              if (anotherButton != null)
+              if (anotherButton != null && anotherButton is! SizedBox)
                 Expanded(
+                  flex: 1,
                   child: Padding(
                     padding: .only(right: 12),
                     child: anotherButton!,
