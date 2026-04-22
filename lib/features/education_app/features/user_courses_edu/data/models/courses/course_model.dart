@@ -7,15 +7,17 @@ class CourseModel extends CourseEntity {
     required super.id,
     required super.name,
     required super.price,
-    required super.certificateImage,
     required super.isActive,
     required super.thumbnail,
     required super.isOnline,
     required super.category,
     required super.lessonsCount,
     required super.totalDuration,
-    required super.testsCount,
-    required super.certificateObjects,
+    super.certificateImage,
+    super.testsCount,
+    super.ratingsCount,
+    super.ratingSum,
+    super.score,
     super.nameRu,
     super.descriptionEn,
     super.descriptionRu,
@@ -23,9 +25,15 @@ class CourseModel extends CourseEntity {
     super.nameEn,
     super.nameUz,
     super.userOrder,
+    super.certificateObjects,
   });
 
   factory CourseModel.fromJson(Map<String, dynamic> json) {
+    // category can be an int (detail endpoint) or a Map (list endpoint)
+    final categoryRaw = json['category'];
+    final int categoryId =
+        categoryRaw is Map ? (categoryRaw['id'] as int) : (categoryRaw as int);
+
     return CourseModel(
       id: json['id'],
       name: json['name'],
@@ -36,14 +44,17 @@ class CourseModel extends CourseEntity {
       descriptionRu: json['description_ru'],
       descriptionEn: json['description_en'],
       price: json['price'],
-      certificateImage: json['certificate_image'] ?? '',
+      certificateImage: json['certificate_image'],
       isActive: json['is_active'],
       thumbnail: json['thumbnail'],
       isOnline: json['is_online'],
-      category: json['category'],
+      category: categoryId,
       lessonsCount: json['lessons_count'],
       totalDuration: json['total_duration'],
       testsCount: json['tests_count'],
+      ratingsCount: json['ratings_count'],
+      ratingSum: json['rating_sum'],
+      score: json['score'],
       userOrder: json['user_order'] != null
           ? UserOrderModel.fromJson(json['user_order'])
           : null,

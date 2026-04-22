@@ -11,14 +11,17 @@ class CourseEntity {
   final String? descriptionRu;
   final String? descriptionEn;
   final String price;
-  final String certificateImage;
+  final String? certificateImage;
   final bool isActive;
   final String thumbnail;
   final bool isOnline;
   final int category;
   final int lessonsCount;
   final int totalDuration;
-  final int testsCount;
+  final int? testsCount;
+  final int? ratingsCount;
+  final int? ratingSum;
+  final int? score;
   final UserOrder? userOrder;
   final List<CertificateObject> certificateObjects;
 
@@ -32,15 +35,18 @@ class CourseEntity {
     this.descriptionRu,
     this.descriptionEn,
     required this.price,
-    required this.certificateImage,
+    this.certificateImage,
     required this.isActive,
     required this.thumbnail,
     required this.isOnline,
     required this.category,
     required this.lessonsCount,
     required this.totalDuration,
-    required this.testsCount,
+    this.testsCount,
+    this.ratingsCount,
+    this.ratingSum,
+    this.score,
     this.userOrder,
-    required this.certificateObjects,
+    this.certificateObjects = const [],
   });
 }
