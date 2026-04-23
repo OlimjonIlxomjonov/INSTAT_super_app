@@ -11,7 +11,14 @@ import 'package:my_template/features/education_app/features/statistics_edu/prese
 import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/widgets_edu/custom_profile_back.dart';
 
 class TempDetailedUserEdu extends StatelessWidget {
-  const TempDetailedUserEdu({super.key});
+  final String? imagePath;
+  final String name;
+
+  const TempDetailedUserEdu({
+    super.key,
+    required this.imagePath,
+    required this.name,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +31,15 @@ class TempDetailedUserEdu extends StatelessWidget {
             children: [
               SizedBox(height: 20),
               ProfileHeader(
-                background: AssetImage(AppImages.profileBackground),
-                avatar: AssetImage(AppImages.profileBackground),
+                background: imagePath != null
+                    ? NetworkImage(imagePath!)
+                    : AssetImage(AppImages.profileBackground),
+                avatar: imagePath != null
+                    ? NetworkImage(imagePath!)
+                    : AssetImage(AppImages.profileBackground),
               ),
               SizedBox(height: appH(12)),
-              Text(
-                'Afzal Pulatov',
-                style: AppTextStyles.source.semiBold(fontSize: 22),
-              ),
+              Text(name, style: AppTextStyles.source.semiBold(fontSize: 22)),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

@@ -52,6 +52,7 @@ class _AboutThisCourseTabState extends State<AboutThisCourseTab>
   Widget build(BuildContext context) {
     super.build(context);
     return Column(
+      crossAxisAlignment: .start,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16, left: 20, right: 20),

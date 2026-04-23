@@ -13,7 +13,7 @@ abstract class AppImages {
   static const secondOnboarding = '${baseOnboardingPath}c_onboarding_2$format';
   static const thirdOnboarding = '${baseOnboardingPath}c_onboarding_3$format';
   static const fourthOnboarding = '${baseOnboardingPath}c_onboarding_4$format';
-  static const onboardingLogIn = '${baseOnboardingPath}c_onbaordin_log_in.jpg';
+  static const onboardingLogIn = '${baseOnboardingPath}onboarding_bg_image.svg';
 
   /// HOME PAGE
 

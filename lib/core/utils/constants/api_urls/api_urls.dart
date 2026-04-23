@@ -32,4 +32,7 @@ class ApiUrls {
 
   /// course test
   static const checkCourseTestAccess = '/test-accessible/';
+
+  /// Leader board
+  static const leaderBoard = 'courses/students/';
 }
