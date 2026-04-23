@@ -30,10 +30,12 @@ import 'package:my_template/features/main_app/home/data/repo/home_repo_impl.dart
 import 'package:my_template/features/main_app/home/data/source/impl_remote_data_source/home_remote_data_source_impl.dart';
 import 'package:my_template/features/main_app/home/data/source/remote_data_source/home_remote_data_source.dart';
 import 'package:my_template/features/main_app/home/domain/repository/home_repository.dart';
+import 'package:my_template/features/main_app/home/domain/usecase/avatar/avatar_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/courses/courses_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/user_me/user_me_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/search_courses/search_courses_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/search_courses/search_courses_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/avatar/avatar_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 
@@ -138,6 +140,7 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => AddToCartUseCase(repository: sl()));
   sl.registerLazySingleton(() => CartUseCase(repository: sl()));
   sl.registerLazySingleton(() => LeaderBoardUseCase(repository: sl()));
+  sl.registerLazySingleton(() => AvatarUseCase(repository: sl()));
 
   /// {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -178,4 +181,5 @@ Future<void> setup() async {
   );
   sl.registerLazySingleton(() => CartBloc(useCase: sl()));
   sl.registerLazySingleton(() => LeaderBoardBloc(sl()));
+  sl.registerLazySingleton(() => AvatarBloc(useCase: sl()));
 }

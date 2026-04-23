@@ -100,3 +100,9 @@ class LessonVideoProgressParams {
 
   LessonVideoProgressParams({required this.lessonId, required this.progress});
 }
+
+class AvatarParams {
+  final String imagePath;
+
+  AvatarParams({required this.imagePath});
+}

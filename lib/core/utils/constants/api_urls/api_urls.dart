@@ -35,4 +35,7 @@ class ApiUrls {
 
   /// Leader board
   static const leaderBoard = 'courses/students/';
+
+  /// uploadAvatar
+  static const uploadAvatar = 'upload-avatar';
 }

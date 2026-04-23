@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
@@ -33,6 +35,32 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         final data = response.data;
         logger.i(data);
         return CourseListResponseModel.fromJson(data);
+      } else {
+        throw Exception('Error Occurred: ${response.data}');
+      }
+    } catch (e, t) {
+      logger.e(e);
+      logger.e(t);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> postModelAvatar({required AvatarParams params}) async {
+    try {
+      final formData = FormData.fromMap({
+        'image': await MultipartFile.fromFile(
+          params.imagePath,
+          filename: params.imagePath.split('/').last,
+        ),
+      });
+      final response = await _dioClient.post(
+        ApiUrls.uploadAvatar,
+        data: formData,
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data;
+        logger.i(data);
       } else {
         throw Exception('Error Occurred: ${response.data}');
       }

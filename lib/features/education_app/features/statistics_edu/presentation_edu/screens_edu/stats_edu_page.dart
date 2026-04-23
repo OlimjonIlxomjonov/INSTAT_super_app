@@ -56,7 +56,8 @@ class _StatsEduPageState extends State<StatsEduPage> {
                     final String? thumbnail = item.avatar != null
                         ? 'https://test.avacoder.uz${item.avatar}'
                         : null;
-                    final fullName = '${item.firstName} ${item.lastName}';
+                    final fullName =
+                        '${item.firstName.capitalize()} ${item.lastName.capitalize()}';
                     return GestureDetector(
                       onTap: () {
                         openMiniAppSheetFamily(
@@ -158,5 +159,12 @@ class _StatsEduPageState extends State<StatsEduPage> {
         ],
       ),
     );
+  }
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    if (this.isEmpty) return this;
+    return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
   }
 }

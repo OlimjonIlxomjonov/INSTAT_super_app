@@ -21,6 +21,13 @@ class DraggableAppBarWg extends StatelessWidget implements PreferredSize {
           : 'Loading...';
     });
 
+    final String? thumbnail = context.select<UserMeBloc, String?>((bloc) {
+      final state = bloc.state;
+      return state is UserMeLoaded && state.entity.avatar != null
+          ? state.entity.avatar
+          : null;
+    });
+
     final localization = AppLocalizations.of(context)!;
     return AppBar(
       actionsPadding: .only(right: 5),
@@ -33,6 +40,16 @@ class DraggableAppBarWg extends StatelessWidget implements PreferredSize {
             CircleAvatar(
               radius: 25,
               backgroundColor: AppColors.greyScale.grey300,
+              foregroundImage: thumbnail != null
+                  ? NetworkImage(thumbnail)
+                  : null,
+              child: thumbnail == null
+                  ? Icon(
+                      Icons.person,
+                      color: AppColors.greyScale.grey600,
+                      size: 22,
+                    )
+                  : null,
             ),
             SizedBox(width: 15),
             Column(

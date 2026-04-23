@@ -11,6 +11,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_final_test/course_final_test_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/lesson_video_progress/lesson_video_progress_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/avatar/avatar_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart';
@@ -53,6 +54,7 @@ class MyBlocProvider extends StatelessWidget {
         BlocProvider<BookActionsBloc>(create: (_) => sl<BookActionsBloc>()),
         BlocProvider<CartBloc>(create: (_) => sl<CartBloc>()),
         BlocProvider<LeaderBoardBloc>(create: (_) => sl<LeaderBoardBloc>()),
+        BlocProvider<AvatarBloc>(create: (_) => sl<AvatarBloc>()),
       ],
       child: child,
     );
