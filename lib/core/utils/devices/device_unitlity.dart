@@ -65,3 +65,28 @@ String formatFileSize(int bytes) {
     return '${kb.toStringAsFixed(2)} KB';
   }
 }
+
+extension DateTimeFormatting on String {
+  String toReadableDate() {
+    DateTime dateTime = DateTime.parse(this);
+    return "${dateTime.day} ${_getMonth(dateTime.month)} ${dateTime.year}";
+  }
+}
+
+String _getMonth(int month) {
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+  return months[month - 1];
+}

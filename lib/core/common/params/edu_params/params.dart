@@ -106,3 +106,9 @@ class AvatarParams {
 
   AvatarParams({required this.imagePath});
 }
+
+class CommentsParams {
+  final int courseId;
+
+  CommentsParams({required this.courseId});
+}

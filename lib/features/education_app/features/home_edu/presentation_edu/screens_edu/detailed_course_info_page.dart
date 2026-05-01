@@ -4,12 +4,15 @@ import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/general_widgets/online_lib_style_custom_bottom_sheet/online_lib_style_custom_bottom_sheet_wg.dart';
 import 'package:my_template/core/utils/general_widgets/payment_open_bottom_sheet/payment_open_bottom_sheet_wg.dart';
+import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
 import 'package:my_template/core/utils/widgets/custom_tab_bar/custom_tab_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/detailed_course_info_header/deatiled_course_info_header_wg.dart';
 import 'package:my_template/core/utils/widgets/detailed_course_info_header/detailed_course_info_header_image.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/comments/comments_bloc.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/home_edu_event.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/about_this_course_tab.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/course_comments_tab.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/course_plan_tab.dart';
@@ -73,6 +76,9 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
       setState(() {});
     });
 
+    logger.f("rating count: ${widget.data.ratingsCount}");
+    logger.f("desc: ${widget.data.descriptionUz}");
+
     _headerSlivers = [
       // image header
       DetailedCourseInfoHeaderImage(imagePath: widget.data.thumbnail),
@@ -116,6 +122,9 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
           params: CourseCategoryByIdParams(id: widget.data.id),
         ),
       );
+      context.read<CommentsBloc>().add(
+        CommentsEvent(params: CommentsParams(courseId: widget.data.id)),
+      );
     });
   }
 
@@ -148,7 +157,7 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
                     )
                   : _tabController.index == 1
                   ? const CoursePlanTab()
-                  : const CourseCommentsTab(),
+                  : CourseCommentsTab(),
             ),
             const SliverToBoxAdapter(child: SizedBox(height: 32)),
           ],

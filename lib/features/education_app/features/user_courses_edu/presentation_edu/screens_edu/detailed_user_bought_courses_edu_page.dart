@@ -43,6 +43,8 @@ class _DetailedUserBoughtCoursesEduPageState
         }
       }
     }
+    logger.f("rating count: ${widget.data.ratingsCount}");
+    logger.f("desc: ${widget.data.descriptionUz}");
 
     if (shouldFetch) {
       bloc.add(

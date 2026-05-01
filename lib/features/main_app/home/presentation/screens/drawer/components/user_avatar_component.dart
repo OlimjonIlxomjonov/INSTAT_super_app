@@ -34,30 +34,79 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
     // Show bottom sheet with options
     showModalBottomSheet(
       context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Select Profile Photo',
+                style: AppTextStyles.source.bold(fontSize: 18),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildOption(
+                    context: ctx,
+                    icon: IconlyLight.image,
+                    label: 'Gallery',
+                    color: AppColors.primaryColor,
+                    onTap: () {
+                      Navigator.pop(ctx);
+                      _pickImage(ImageSource.gallery);
+                    },
+                  ),
+                  _buildOption(
+                    context: ctx,
+                    icon: IconlyLight.camera,
+                    label: 'Camera',
+                    color: AppColors.primaryColor,
+                    onTap: () {
+                      Navigator.pop(ctx);
+                      _pickImage(ImageSource.camera);
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOption({
+    required BuildContext context,
+    required IconData icon,
+    required String label,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        width: 100,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: color.withValues(alpha: 0.2)),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ListTile(
-              leading: Icon(Icons.photo_library_outlined),
-              title: Text('Gallery'),
-              onTap: () {
-                Navigator.pop(ctx);
-                _pickImage(ImageSource.gallery);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.camera_alt_outlined),
-              title: Text('Camera'),
-              onTap: () {
-                Navigator.pop(ctx);
-                _pickImage(ImageSource.camera);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.close, color: AppColors.greyScale.grey600),
-              title: Text('Cancel'),
-              onTap: () => Navigator.pop(ctx),
+            Icon(icon, size: 32, color: color),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: AppTextStyles.source.medium(fontSize: 14, color: color),
             ),
           ],
         ),
@@ -87,7 +136,9 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
     final img.Image? decoded = img.decodeImage(bytes);
     if (decoded == null) return file;
 
-    final Uint8List fixed = img.encodeJpg(decoded, quality: 90);
+    final img.Image orientedImage = img.bakeOrientation(decoded);
+
+    final Uint8List fixed = img.encodeJpg(orientedImage, quality: 90);
 
     final dir = await getTemporaryDirectory();
     final fixedFile = File(
@@ -153,18 +204,47 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                             Stack(
                               children: [
                                 /// user avatar
-                                CircleAvatar(
-                                  radius: 75,
-                                  foregroundImage: thumbnail != null
-                                      ? NetworkImage(thumbnail)
-                                      : null,
-                                  child: thumbnail == null
-                                      ? Icon(
-                                          Icons.person,
-                                          color: AppColors.greyScale.grey600,
-                                          size: 90,
-                                        )
-                                      : null,
+                                BlocBuilder<AvatarBloc, AvatarState>(
+                                  builder: (context, avatarState) {
+                                    final bool isAvatarLoading =
+                                        avatarState is AvatarLoading;
+                                    return Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 75,
+                                          foregroundImage: thumbnail != null
+                                              ? NetworkImage(thumbnail)
+                                              : null,
+                                          child: thumbnail == null
+                                              ? Icon(
+                                                  Icons.person,
+                                                  color: AppColors
+                                                      .greyScale
+                                                      .grey600,
+                                                  size: 90,
+                                                )
+                                              : null,
+                                        ),
+                                        if (isAvatarLoading)
+                                          Container(
+                                            height: 150,
+                                            width: 150,
+                                            decoration: BoxDecoration(
+                                              color: AppColors.black.withValues(
+                                                alpha: 0.4,
+                                              ),
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: Center(
+                                              child: CircularProgressIndicator(
+                                                color: AppColors.white,
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    );
+                                  },
                                 ),
 
                                 /// add avatar button

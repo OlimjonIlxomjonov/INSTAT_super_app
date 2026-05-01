@@ -1,5 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:my_template/features/education_app/features/home_edu/data/repo/home_edu_repo_impl.dart';
+import 'package:my_template/features/education_app/features/home_edu/data/source/impl_remote_data_source/home_edu_remote_data_source_impl.dart';
+import 'package:my_template/features/education_app/features/home_edu/data/source/remote_data_source/home_edu_remote_data_source.dart';
+import 'package:my_template/features/education_app/features/home_edu/domain/repository/home_edu_repository.dart';
+import 'package:my_template/features/education_app/features/home_edu/domain/usecase/comments/comments_use_case.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/comments/comments_bloc.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/data/repo/leader_board_repo_impl.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/data/source/impl_remote_data_source/leader_board_remote_data_source_impl.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/data/source/remote_data_source/leader_board_remote_data_source.dart';
@@ -89,6 +95,9 @@ Future<void> setup() async {
   sl.registerLazySingleton<LeaderBoardRemoteDataSource>(
     () => LeaderBoardRemoteDataSourceImpl(),
   );
+  sl.registerLazySingleton<HomeEduRemoteDataSource>(
+    () => HomeEduRemoteDataSourceImpl(),
+  );
 
   /// {REPO}
   sl.registerLazySingleton<HomeRepository>(
@@ -105,6 +114,9 @@ Future<void> setup() async {
   );
   sl.registerLazySingleton<LeaderBoardRepository>(
     () => LeaderBoardRepoImpl(remote: sl()),
+  );
+  sl.registerLazySingleton<HomeEduRepository>(
+    () => HomeEduRepoImpl(remoteDataSource: sl()),
   );
 
   /// {USE CASE}
@@ -141,6 +153,7 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => CartUseCase(repository: sl()));
   sl.registerLazySingleton(() => LeaderBoardUseCase(repository: sl()));
   sl.registerLazySingleton(() => AvatarUseCase(repository: sl()));
+  sl.registerLazySingleton(() => CommentsUseCase(repository: sl()));
 
   /// {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -182,4 +195,5 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => CartBloc(useCase: sl()));
   sl.registerLazySingleton(() => LeaderBoardBloc(sl()));
   sl.registerLazySingleton(() => AvatarBloc(useCase: sl()));
+  sl.registerLazySingleton(() => CommentsBloc(useCase: sl()));
 }

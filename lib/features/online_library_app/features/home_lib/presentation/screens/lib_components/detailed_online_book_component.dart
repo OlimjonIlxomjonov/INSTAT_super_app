@@ -177,15 +177,11 @@ class _DetailedOnlineBookComponentState
                   ExtendSectionSeeAllWg(
                     title: 'Izohlar',
                     onTap: () {
-                      // customBottomSheetWg(
+                      // subBottomSheetOpener(
                       //   context,
                       //   child: SeeAllCourseComments(),
+                      //   isExpanded: true,
                       // );
-                      subBottomSheetOpener(
-                        context,
-                        child: SeeAllCourseComments(),
-                        isExpanded: true,
-                      );
                     },
                   ),
                 ],
@@ -208,7 +204,7 @@ class _DetailedOnlineBookComponentState
                 3,
                 4,
                 5,
-              ].map((i) => const UserCommentsWg()).toList(),
+              ].map((i) => const Text('data')).toList(), // UserCommentsWg()
             ),
           ),
 

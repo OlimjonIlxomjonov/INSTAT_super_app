@@ -38,4 +38,8 @@ class ApiUrls {
 
   /// uploadAvatar
   static const uploadAvatar = 'upload-avatar';
+
+  /// comments
+  static const userComments = '/comments/active';
+
 }
