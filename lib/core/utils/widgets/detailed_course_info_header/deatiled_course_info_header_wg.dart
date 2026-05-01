@@ -43,7 +43,7 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                   children: [
                     const Icon(Icons.star, color: AppColors.orange),
                     Text(
-                      '?',
+                      data.ratingsCount.toString(),
                       style: AppTextStyles.source.medium(
                         fontSize: 13,
                         color: AppColors.greyScale.grey600,

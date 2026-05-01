@@ -19,7 +19,7 @@ class _LogInOptionsPageState extends State<LogInOptionsPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    precacheImage(const AssetImage(AppImages.onboardingLogIn), context);
+    // precacheImage(const AssetImage(AppImages.onboardingLogIn), context);
   }
 
   @override

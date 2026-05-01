@@ -5,6 +5,7 @@ import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
 import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
+import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/home_page.dart';
 import 'package:my_template/features/onboarding/screens/onboarding_page.dart';
@@ -55,6 +56,7 @@ class _SplashPageState extends State<SplashPage> {
     } else {
       AppRoute.open(NoInternetPage(destination: destination));
     }
+    logger.f("Is internet connected: $hasInternet");
   }
 
   @override

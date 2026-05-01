@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +17,8 @@ import 'package:my_template/features/main_app/home/presentation/bloc/home_event.
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_state.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:image/image.dart' as img;
+import 'package:path_provider/path_provider.dart';
 
 class UserAvatarComponent extends StatefulWidget {
   const UserAvatarComponent({super.key});
@@ -67,10 +72,30 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
     );
 
     if (pickedFile != null && mounted) {
+      final fixedFile = await _fixImageRotation(pickedFile);
+
       context.read<AvatarBloc>().add(
-        AvatarEvent(params: AvatarParams(imagePath: pickedFile.path)),
+        AvatarEvent(params: AvatarParams(imagePath: fixedFile.path)),
       );
     }
+  }
+
+  /// fix image rotation
+  Future<XFile> _fixImageRotation(XFile file) async {
+    final Uint8List bytes = await file.readAsBytes();
+
+    final img.Image? decoded = img.decodeImage(bytes);
+    if (decoded == null) return file;
+
+    final Uint8List fixed = img.encodeJpg(decoded, quality: 90);
+
+    final dir = await getTemporaryDirectory();
+    final fixedFile = File(
+      '${dir.path}/fixed_${DateTime.now().millisecondsSinceEpoch}.jpg',
+    );
+    await fixedFile.writeAsBytes(fixed);
+
+    return XFile(fixedFile.path);
   }
 
   @override

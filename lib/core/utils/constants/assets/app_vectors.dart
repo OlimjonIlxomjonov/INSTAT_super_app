@@ -9,7 +9,7 @@ abstract class AppVectors {
 
   /// ONBOARDING
   static const String firstOnboardingParticles =
-      '${baseOnboardingPath}first_onboarding_particles$format';
+      '${baseOnboardingPath}onboarding_bg$format';
 
   /// main app logo
   static const String mainAppLogo = '${basePath}main_app_logo$format';

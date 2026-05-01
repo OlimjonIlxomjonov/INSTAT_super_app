@@ -154,7 +154,7 @@ class _HomeLibPageState extends State<HomeLibPage> {
                   ),
                 );
               }
-              return SizedBox.shrink();
+              return SliverToBoxAdapter(child: SizedBox.shrink());
             },
           ),
         ],

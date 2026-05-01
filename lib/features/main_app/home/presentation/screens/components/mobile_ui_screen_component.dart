@@ -34,7 +34,6 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_event.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_state.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/detailed_online_book_component.dart';
-import 'package:web_socket_channel/io.dart';
 
 class MobileUiScreenComponent extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;

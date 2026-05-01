@@ -54,19 +54,19 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
                     child: Row(
                       children: [
                         Icon(Icons.star, color: AppColors.yellow),
-                        Text('?'),
+                        Text(widget.data.ratingsCount.toString()),
                       ],
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    margin: .only(right: 20, top: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: .circular(12),
-                      color: AppColors.white,
-                    ),
-                    child: Icon(IconlyLight.heart),
-                  ),
+                  // Container(
+                  //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  //   margin: .only(right: 20, top: 8),
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: .circular(12),
+                  //     color: AppColors.white,
+                  //   ),
+                  //   child: Icon(IconlyLight.heart),
+                  // ),
                 ],
               ),
             ],

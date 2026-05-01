@@ -20,13 +20,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
   final ValueNotifier<bool> _isLastPage = ValueNotifier(false);
   late final PageController pageController = PageController();
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   TDeviceUtils.setStatusBarColor(AppColors.transparent, darkIcons: true);
-  //   TDeviceUtils.systemNavigationBar(AppColors.white);
-  // }
-
   @override
   void dispose() {
     pageController.dispose();

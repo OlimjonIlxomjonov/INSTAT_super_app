@@ -35,6 +35,7 @@ class _UserOnlineBookCartLibPageState extends State<UserOnlineBookCartLibPage> {
   Widget build(BuildContext context) {
     final cartState = context.watch<CartBloc>().state;
     final isLoading = cartState is CartLoading;
+    final isError = cartState is CartError;
     final items = cartState is CartLoaded ? cartState.response.data : null;
     final itemCount = items?.length ?? 2;
     final totalPrice =

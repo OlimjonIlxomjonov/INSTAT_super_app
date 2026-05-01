@@ -9,8 +9,7 @@ import 'package:my_template/core/utils/constants/assets/app_animations.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 
 /// Shown after the splash screen when there is no internet connection.
-///
-/// Automatically navigates to [destination] once internet is detected.
+/// Automatically navigates to destination once internet is detected.
 /// Also provides a manual retry button that re-checks immediately.
 class NoInternetPage extends StatefulWidget {
   /// The page to open once connectivity is confirmed (HomePage or OnboardingPage).

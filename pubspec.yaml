@@ -2,7 +2,7 @@ name: my_template
 description: "A new Flutter project."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.2+6
+version: 1.0.2+7
 
 environment:
   sdk: ^3.10.3
@@ -58,6 +58,7 @@ dependencies:
   web_socket_channel: ^3.0.3
   scroll_to_hide: ^2.2.1
   image_picker: ^1.2.1
+  image: ^4.8.0
 
 
 dev_dependencies:
