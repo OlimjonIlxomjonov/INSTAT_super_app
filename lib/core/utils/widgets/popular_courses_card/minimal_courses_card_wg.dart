@@ -104,7 +104,10 @@ class MinimalCoursesCardWg extends StatelessWidget {
                             color: AppColors.yellow500,
                             size: 20,
                           ),
-                          Text(' 4,5(832)', style: CustomTextStyles.h4),
+                          Text(
+                            ' ${data.ratingsCount} (${data.ratingSum ?? 0})',
+                            style: CustomTextStyles.h4,
+                          ),
                           const SizedBox(width: 10),
                           Icon(
                             IconlyLight.document,

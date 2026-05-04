@@ -166,7 +166,7 @@ class _DetailedOnlineBookComponentState
                           onlineLibStyleCustomBottomSheetWg(
                             context,
                             headerTitle: 'Izoh qoldirish',
-                            child: LeaveCommentSection(),
+                            child: LeaveCommentSection(data: widget.data),
                           );
                         },
                         child: Text('Izoh qoldirish'),
@@ -198,13 +198,9 @@ class _DetailedOnlineBookComponentState
                 enableInfiniteScroll: true,
                 autoPlay: true,
               ),
-              items: [
-                1,
-                2,
-                3,
-                4,
-                5,
-              ].map((i) => const Text('data')).toList(), // UserCommentsWg()
+              items: [1, 2, 3, 4, 5]
+                  .map((i) => Center(child: const Text('Soon!')))
+                  .toList(), // UserCommentsWg()
             ),
           ),
 

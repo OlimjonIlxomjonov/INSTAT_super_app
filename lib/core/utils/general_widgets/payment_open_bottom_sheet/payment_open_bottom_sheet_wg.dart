@@ -57,7 +57,7 @@ class PaymentOpenBottomSheetWg extends StatelessWidget {
           return GestureDetector(
             onTap: isLoading ? null : () => _buyCourse(context),
             child: Container(
-              // height: 64,
+              height: 64,
               padding: const EdgeInsets.symmetric(horizontal: 40),
               decoration: BoxDecoration(
                 color: AppColors.greyScale.grey50,
@@ -75,12 +75,10 @@ class PaymentOpenBottomSheetWg extends StatelessWidget {
                           color: AppColors.primaryColor,
                         ),
                       )
-                    : Expanded(
-                        child: Image.asset(
-                          imagePath,
-                          key: ValueKey(imagePath),
-                          fit: BoxFit.fill,
-                        ),
+                    : Image.asset(
+                        imagePath,
+                        key: ValueKey(imagePath),
+                        fit: BoxFit.contain,
                       ),
               ),
             ),

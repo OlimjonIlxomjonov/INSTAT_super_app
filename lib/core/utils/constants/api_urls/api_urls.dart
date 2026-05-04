@@ -17,7 +17,7 @@ class ApiUrls {
   static const availableCourses = 'courses/items/active/';
 
   /// books
-  static const activeBooks = 'books/items/active/';
+  static const activeBooks = 'books/items/active';
   static const bookThumbnail = 'https://test.avacoder.uz/media/';
 
   // cart
@@ -41,5 +41,4 @@ class ApiUrls {
 
   /// comments
   static const userComments = '/comments/active';
-
 }

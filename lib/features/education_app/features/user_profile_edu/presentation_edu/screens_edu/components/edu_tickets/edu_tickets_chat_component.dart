@@ -30,12 +30,7 @@ class EduTicketsChatComponent extends StatelessWidget {
 
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 10,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 10,
-          ),
+          padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
           child: Row(
             children: [
               Expanded(

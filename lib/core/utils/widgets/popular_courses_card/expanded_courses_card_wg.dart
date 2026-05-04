@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/app_utils.dart';
+import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
+import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
 
 class ExpandedCoursesCardWg extends StatelessWidget {
@@ -46,7 +48,7 @@ class ExpandedCoursesCardWg extends StatelessWidget {
                       child: Row(
                         children: [
                           Icon(Icons.star, color: AppColors.yellow),
-                          Text('?'),
+                          Text(" ${entity.ratingsCount ?? 0}"),
                         ],
                       ),
                     ),
@@ -79,22 +81,38 @@ class ExpandedCoursesCardWg extends StatelessWidget {
               style: AppTextStyles.source.medium(fontSize: 15),
             ),
             SizedBox(height: appH(8)),
-            Row(
-              spacing: 5,
-              children: [
-                Icon(IconlyLight.time_circle),
-                Text(
-                  formatDuration(entity.totalDuration),
-                  style: AppTextStyles.source.regular(fontSize: 13),
-                ),
-                SizedBox(width: appW(12)),
-                Icon(IconlyLight.document),
-                Text(
-                  '${entity.lessonsCount} ta dars',
-                  style: AppTextStyles.source.regular(fontSize: 13),
-                ),
-              ],
-            ),
+            if (entity.userOrder?.status == 'paid')
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomLinearIndicatorWg(
+                      progressIndicator: entity.userOrder?.progress ?? 0,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    "${(entity.userOrder?.progress ?? 0).toInt()} %",
+                    style: CustomTextStyles.h4,
+                  ),
+                ],
+              )
+            else
+              Row(
+                spacing: 5,
+                children: [
+                  Icon(IconlyLight.time_circle),
+                  Text(
+                    formatDuration(entity.totalDuration),
+                    style: AppTextStyles.source.regular(fontSize: 13),
+                  ),
+                  SizedBox(width: appW(12)),
+                  Icon(IconlyLight.document),
+                  Text(
+                    '${entity.lessonsCount} ta dars',
+                    style: AppTextStyles.source.regular(fontSize: 13),
+                  ),
+                ],
+              ),
           ],
         ),
       ),
