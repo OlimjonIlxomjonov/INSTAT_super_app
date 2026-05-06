@@ -4,4 +4,5 @@ abstract class HomeLibRepository {
   Future<BookListResponse> getPopularBooks();
   Future<void> saveDeleteBook(int id);
   Future<void> addToCart(int id);
+  Future<BookListResponse> searchBooks(String search, int page);
 }

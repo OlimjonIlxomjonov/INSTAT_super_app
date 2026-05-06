@@ -22,4 +22,9 @@ class HomeLibRepoImpl implements HomeLibRepository {
   Future<void> addToCart(int id) {
     return _remoteDataSource.addToCart(id);
   }
+
+  @override
+  Future<BookListResponse> searchBooks(String search, int page) {
+    return _remoteDataSource.searchBooks(search, page);
+  }
 }

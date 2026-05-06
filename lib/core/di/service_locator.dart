@@ -24,6 +24,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dom
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/course_files/course_files_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/lesson_items/lessons_items_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/lessons_topics/lessons_topics_use_case.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/offline_course/offline_course_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/about_course_features/about_cours_features_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/buy_course/buy_course_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/check_final_test_access/check_final_test_access_bloc.dart';
@@ -31,6 +32,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_files/course_files_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_items/course_lesson_items_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_topics/course_lesson_topics_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/offline_course/offline_course_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
 import 'package:my_template/features/main_app/home/data/repo/home_repo_impl.dart';
 import 'package:my_template/features/main_app/home/data/source/impl_remote_data_source/home_remote_data_source_impl.dart';
@@ -65,8 +67,10 @@ import 'package:my_template/features/online_library_app/features/home_lib/domain
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/get_popular_books_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/save_delete_book_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/add_to_cart_use_case.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/get_search_books_usecase.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/search_books/search_books_bloc.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/data/repo/user_cart_repo_impl.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/data/source/impl_remote_data_source/cart_remote_data_source_impl.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/data/source/remote_data_source/cart_remote_data_srouce.dart';
@@ -147,6 +151,9 @@ Future<void> setup() async {
     () => PutLessonVideoProgressUseCase(repository: sl()),
   );
   sl.registerLazySingleton(() => GetPopularBooksUseCase(repository: sl()));
+  sl.registerLazySingleton(
+    () => GetSearchBooksUseCase(homeLibRepository: sl()),
+  );
   sl.registerLazySingleton(() => BookWebSocketService());
   sl.registerLazySingleton(() => SaveDeleteBookUseCase(repository: sl()));
   sl.registerLazySingleton(() => AddToCartUseCase(repository: sl()));
@@ -154,6 +161,7 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => LeaderBoardUseCase(repository: sl()));
   sl.registerLazySingleton(() => AvatarUseCase(repository: sl()));
   sl.registerLazySingleton(() => CommentsUseCase(repository: sl()));
+  sl.registerLazySingleton(() => OfflineCourseUseCase(repository: sl()));
 
   /// {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -185,6 +193,7 @@ Future<void> setup() async {
     () => LessonVideoProgressBloc(putLessonVideoProgressUseCase: sl()),
   );
   sl.registerLazySingleton(() => PopularBooksBloc(useCase: sl()));
+  sl.registerFactory(() => SearchBooksBloc(useCase: sl()));
   sl.registerLazySingleton(
     () => BookActionsBloc(
       saveDeleteBookUseCase: sl(),
@@ -196,4 +205,5 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => LeaderBoardBloc(sl()));
   sl.registerLazySingleton(() => AvatarBloc(useCase: sl()));
   sl.registerLazySingleton(() => CommentsBloc(useCase: sl()));
+  sl.registerLazySingleton(() => OfflineCourseBloc(useCase: sl()));
 }

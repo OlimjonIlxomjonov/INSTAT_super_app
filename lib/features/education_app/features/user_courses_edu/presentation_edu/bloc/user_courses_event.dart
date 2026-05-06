@@ -52,4 +52,4 @@ class CheckFinalTestAccessEvent extends CoursesEvent {
   CheckFinalTestAccessEvent({required this.params});
 }
 
-
+class OfflineCourseEvent extends CoursesEvent {}

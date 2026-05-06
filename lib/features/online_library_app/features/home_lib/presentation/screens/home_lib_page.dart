@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/common/placeholder/banner_placeholder.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
@@ -11,10 +12,14 @@ import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
+import 'package:my_template/core/di/service_locator.dart';
+import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_state.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/search_books/search_books_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/detailed_online_book_component.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/see_all_online_books_component.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/search_books_page.dart';
 
 class HomeLibPage extends StatefulWidget {
   final VoidCallback onTap;
@@ -38,6 +43,17 @@ class _HomeLibPageState extends State<HomeLibPage> {
     // );
   }
 
+  void _openSearch(BuildContext context) {
+    FamilyNavigation.familyPush(
+      showHandle: false,
+      context,
+      BlocProvider(
+        create: (_) => sl<SearchBooksBloc>(),
+        child: const SearchBooksPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,18 +67,17 @@ class _HomeLibPageState extends State<HomeLibPage> {
             snap: true,
             automaticallyImplyLeading: false,
             titleSpacing: 20,
-            title: AppSearchbarWg(),
+            title: AppSearchbarWg(onTap: () => _openSearch(context)),
+          ),
+          SliverPadding(
+            padding: AppPadding.horizontal20x(),
+            sliver: SliverToBoxAdapter(child: BannerPlaceholder()),
           ),
           SliverPadding(
             padding: AppPadding.horizontal20x(),
             sliver: SliverToBoxAdapter(
               child: Column(
                 children: [
-                  Container(
-                    height: 184,
-                    color: AppColors.greyScale.grey400,
-                    child: Center(child: Text('Placeholder')),
-                  ),
                   SizedBox(height: appH(15)),
                   // ExtendSectionSeeAllWg(
                   //   title: 'O’qilayotgan kitoblar',

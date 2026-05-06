@@ -10,6 +10,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dom
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_option_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_topics/course_lesson_topics_response.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/course_list_response.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/offline_course/offline_course_response.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/repository/user_courses_repository.dart';
 
 class UserCoursesRepoImpl implements UserCoursesRepository {
@@ -129,5 +130,10 @@ class UserCoursesRepoImpl implements UserCoursesRepository {
     required LessonVideoProgressParams params,
   }) {
     return _remoteDataSource.putLessonVideoProgress(params: params);
+  }
+
+  @override
+  Future<OfflineCourseResponse> getOfflineCourse() {
+    return _remoteDataSource.fetchOfflineCourse();
   }
 }

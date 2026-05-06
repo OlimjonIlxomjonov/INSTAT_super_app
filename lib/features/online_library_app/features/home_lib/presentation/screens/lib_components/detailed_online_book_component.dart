@@ -298,7 +298,7 @@ class _DetailedOnlineBookComponentState
                           ),
                         )
                       : const SizedBox.shrink(),
-                  onCartTap: () {},
+                  // onCartTap: () {},
                   buttonText: widget.isBookBought
                       ? 'O’qishni davom ettirish'
                       : inCart
@@ -314,7 +314,6 @@ class _DetailedOnlineBookComponentState
                           isInCart: true,
                         ),
                       );
-                      // successFlushBar(context, 'Muvaffaqiyatli saqlandi');
                       addedToCartFlushBar(context, 'Muvaffaqiyatli saqlandi');
                     } else {
                       openMiniAppSheetFamily(

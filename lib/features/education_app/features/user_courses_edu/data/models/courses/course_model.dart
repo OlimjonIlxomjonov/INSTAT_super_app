@@ -31,11 +31,12 @@ class CourseModel extends CourseEntity {
   factory CourseModel.fromJson(Map<String, dynamic> json) {
     // category can be an int (detail endpoint) or a Map (list endpoint)
     final categoryRaw = json['category'];
-    final int categoryId =
-        categoryRaw is Map ? (categoryRaw['id'] as int) : (categoryRaw as int);
+    final int categoryId = categoryRaw is Map
+        ? (categoryRaw['id'] as int)
+        : (categoryRaw as int);
 
     return CourseModel(
-      id: json['id'],
+      id: json['id'] ?? 0,
       name: json['name'],
       nameUz: json['name_uz'],
       nameRu: json['name_ru'],
@@ -49,8 +50,8 @@ class CourseModel extends CourseEntity {
       thumbnail: json['thumbnail'],
       isOnline: json['is_online'],
       category: categoryId,
-      lessonsCount: json['lessons_count'],
-      totalDuration: json['total_duration'],
+      lessonsCount: json['lessons_count'] ?? 0,
+      totalDuration: json['total_duration'] ?? 0,
       testsCount: json['tests_count'],
       ratingsCount: json['ratings_count'],
       ratingSum: json['rating_sum'],

@@ -46,6 +46,13 @@ class SearchCoursesParams {
   SearchCoursesParams({required this.search, this.page = 1});
 }
 
+class SearchBooksParams {
+  final String search;
+  final int page;
+
+  SearchBooksParams({required this.search, this.page = 1});
+}
+
 class CourseLessonTestParams {
   final int courseId;
   final int blockId;

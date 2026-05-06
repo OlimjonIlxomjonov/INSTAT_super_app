@@ -4,4 +4,5 @@ abstract class HomeLibRemoteDataSource {
   Future<BookListResponseModel> fetchPopularBooks();
   Future<void> saveDeleteBook(int id);
   Future<void> addToCart(int id);
+  Future<BookListResponseModel> searchBooks(String search, int page);
 }

@@ -9,6 +9,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dat
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_lesson_test/lesson_test_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_lesson_test/lesson_test_option_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_lesson_test/lesson_test_answer_response_model.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/data/models/offline_course/offline_course_response_model.dart';
 
 abstract class UserCoursesRemoteDataSource {
   Future<CourseListResponseModel> fetchUserCourses({
@@ -75,4 +76,7 @@ abstract class UserCoursesRemoteDataSource {
   Future<void> putLessonVideoProgress({
     required LessonVideoProgressParams params,
   });
+
+  /// offline course
+  Future<OfflineCourseResponseModel> fetchOfflineCourse();
 }

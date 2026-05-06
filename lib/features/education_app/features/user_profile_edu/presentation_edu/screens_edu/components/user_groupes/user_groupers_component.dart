@@ -28,10 +28,10 @@ class UserGroupersComponent extends StatelessWidget {
             (index) => GestureDetector(
               behavior: .opaque,
               onTap: () {
-                FamilyNavigation.familyPush(
-                  context,
-                  DetailedUserGroupComponent(),
-                );
+                // FamilyNavigation.familyPush(
+                //   context,
+                //   DetailedUserGroupComponent(),
+                // );
               },
               child: Container(
                 margin: .fromLTRB(20, 0, 20, 12),

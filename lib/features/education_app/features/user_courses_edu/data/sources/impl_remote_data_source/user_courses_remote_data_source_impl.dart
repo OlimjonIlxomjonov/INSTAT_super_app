@@ -12,6 +12,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dat
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_lesson_test/lesson_test_option_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_lesson_topics/course_lesson_topics_response_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/courses/course_list_response_model.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/data/models/offline_course/offline_course_response_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/sources/remote_data_source/user_courses_remote_data_source.dart';
 
 class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
@@ -351,6 +352,23 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
         logger.f(params.progress);
+      } else {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  /// offline course
+  @override
+  Future<OfflineCourseResponseModel> fetchOfflineCourse() async {
+    try {
+      final response = await _dioClient.get(ApiUrls.offlineCourse);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return OfflineCourseResponseModel.fromJson(response.data);
       } else {
         throw Exception('ERROR ${response.statusCode}');
       }

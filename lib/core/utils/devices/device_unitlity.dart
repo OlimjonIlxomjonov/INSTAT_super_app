@@ -75,18 +75,25 @@ extension DateTimeFormatting on String {
 
 String _getMonth(int month) {
   const months = [
-    'January',
-    'February',
-    'March',
-    'April',
+    'Yanvar',
+    'Fevral',
+    'Mart',
+    'Aprel',
     'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    'Iyun',
+    'Iyul',
+    'Avgust',
+    'Sentabr',
+    'Oktabr',
+    'Noyabr',
+    'Dekabr',
   ];
   return months[month - 1];
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    if (this.isEmpty) return this;
+    return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
+  }
 }

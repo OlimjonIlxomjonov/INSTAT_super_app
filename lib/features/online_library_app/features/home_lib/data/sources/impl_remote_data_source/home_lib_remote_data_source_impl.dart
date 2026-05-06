@@ -53,4 +53,23 @@ class HomeLibRemoteDataSourceImpl implements HomeLibRemoteDataSource {
       rethrow;
     }
   }
+
+  @override
+  Future<BookListResponseModel> searchBooks(String search, int page) async {
+    try {
+      final response = await _dioClient.get(
+        ApiUrls.activeBooks,
+        queryParams: {'search': search, 'page': page},
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data;
+        return BookListResponseModel.fromJson(data);
+      } else {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
 }

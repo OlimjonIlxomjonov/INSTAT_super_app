@@ -12,7 +12,9 @@ import 'package:my_template/features/education_app/features/table_edu/presentati
 import 'package:my_template/features/education_app/features/table_edu/presentation_edu/widgets_edu/tasks_card_wg.dart';
 
 class DetailedUserGroupComponent extends StatefulWidget {
-  const DetailedUserGroupComponent({super.key});
+  final String courseName;
+
+  const DetailedUserGroupComponent({super.key, required this.courseName});
 
   @override
   State<DetailedUserGroupComponent> createState() =>
@@ -39,7 +41,7 @@ class _DetailedUserGroupComponentState
         slivers: [
           SliverDefaultAppBarWg(
             isFamily: true,
-            myTitle: 'Milliy hisoblarhisoblar tizimi',
+            myTitle: widget.courseName,
             customActions: [
               LayoutButtonsWg(
                 layout: layout,

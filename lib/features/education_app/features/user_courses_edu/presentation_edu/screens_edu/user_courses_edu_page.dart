@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:my_template/core/utils/app_utils.dart';
-import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/widgets/custom_tab_bar/custom_tab_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/title_with_layout_selector_wg.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/courses_in_progress_compnent.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/offline_course/offline_course_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/offline_courses_component.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/user_course_tab_content.dart';
+import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/user_groupes/user_groupers_component.dart';
 
 class UserCoursesEduPage extends StatefulWidget {
   const UserCoursesEduPage({super.key});
@@ -27,6 +27,7 @@ class _UserCoursesEduPageState extends State<UserCoursesEduPage>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    context.read<OfflineCourseBloc>().add(OfflineCourseEvent());
   }
 
   @override
@@ -75,14 +76,24 @@ class _UserCoursesEduPageState extends State<UserCoursesEduPage>
                       ),
                       borderRadius: .circular(10),
                     ),
-                    child: Text(
-                      'Offline courses',
-                      style: AppTextStyles.source.medium(
-                        fontSize: 14,
-                        color: isOffline
-                            ? AppColors.primaryColor
-                            : AppColors.greyScale.grey600,
-                      ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.grid_3x3,
+                          color: isOffline
+                              ? AppColors.primaryColor
+                              : AppColors.greyScale.grey600,
+                        ),
+                        Text(
+                          ' Oflayn kurslar',
+                          style: AppTextStyles.source.medium(
+                            fontSize: 13,
+                            color: isOffline
+                                ? AppColors.primaryColor
+                                : AppColors.greyScale.grey600,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -124,7 +135,7 @@ class _UserCoursesEduPageState extends State<UserCoursesEduPage>
                     ],
                   ),
                 )
-              : Text('OffileCourses'),
+              : OfflineCoursesComponent(),
         ],
       ),
     );

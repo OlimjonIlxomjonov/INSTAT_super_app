@@ -41,4 +41,7 @@ class ApiUrls {
 
   /// comments
   static const userComments = '/comments/active';
+
+  /// offline course
+  static const offlineCourse = 'course-groups/list/my/';
 }
