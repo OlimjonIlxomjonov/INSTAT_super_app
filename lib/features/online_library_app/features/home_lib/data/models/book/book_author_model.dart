@@ -12,7 +12,7 @@ class BookAuthorModel extends BookAuthorEntity {
     return BookAuthorModel(
       id: json['id'],
       name: json['name'] ?? '',
-      image: json['image'],
+      image: json['image'] ?? '',
       createdAt: json['created_at'] ?? '',
     );
   }

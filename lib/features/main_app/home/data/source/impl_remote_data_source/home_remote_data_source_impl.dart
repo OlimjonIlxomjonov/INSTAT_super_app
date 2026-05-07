@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
+import 'package:my_template/core/error/exceptions.dart';
 import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
@@ -19,8 +20,17 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         logger.i(data);
         return UserModel.fromJson(data);
       } else {
-        throw Exception('Error Occurred: ${response.data}');
+        throw ServerException(
+          statusCode: response.statusCode,
+          message: response.statusMessage,
+        );
       }
+    } on DioException catch (e) {
+      logger.e(e);
+      throw ServerException(
+        statusCode: e.response?.statusCode,
+        message: e.response?.statusMessage ?? e.message,
+      );
     } catch (e) {
       logger.e(e);
       rethrow;
@@ -36,8 +46,17 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         logger.i(data);
         return CourseListResponseModel.fromJson(data);
       } else {
-        throw Exception('Error Occurred: ${response.data}');
+        throw ServerException(
+          statusCode: response.statusCode,
+          message: response.statusMessage,
+        );
       }
+    } on DioException catch (e) {
+      logger.e(e);
+      throw ServerException(
+        statusCode: e.response?.statusCode,
+        message: e.response?.statusMessage ?? e.message,
+      );
     } catch (e, t) {
       logger.e(e);
       logger.e(t);
@@ -62,8 +81,17 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         final data = response.data;
         logger.i(data);
       } else {
-        throw Exception('Error Occurred: ${response.data}');
+        throw ServerException(
+          statusCode: response.statusCode,
+          message: response.statusMessage,
+        );
       }
+    } on DioException catch (e) {
+      logger.e(e);
+      throw ServerException(
+        statusCode: e.response?.statusCode,
+        message: e.response?.statusMessage ?? e.message,
+      );
     } catch (e, t) {
       logger.e(e);
       logger.e(t);

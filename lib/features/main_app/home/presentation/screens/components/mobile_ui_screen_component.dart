@@ -9,9 +9,8 @@ import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/placeholder/banner_placeholder.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/common/ui_states/lost_internet_connection_state.dart';
+import 'package:my_template/core/common/ui_states/server_error_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
-import 'package:my_template/core/services/token_storage/token_storage_service.dart';
-import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/general_widgets/online_book_wg/online_book_wg.dart';
@@ -27,6 +26,7 @@ import 'package:my_template/features/main_app/home/presentation/bloc/courses/cou
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_state.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/home_event.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_state.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/mini_app_section_card.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/model/mini_app_model.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/popular_course_with_bloc/popular_with_bloc_wg.dart';
@@ -205,21 +205,6 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
       /// EDU POPULAR COURSES
       SliverToBoxAdapter(child: PopularWithBlocWg()),
 
-      /// user read 2 only books
-      // SliverPadding(
-      //   padding: AppPadding.horizontal20x(),
-      //   sliver: SliverToBoxAdapter(
-      //     child: Column(
-      //       children: [
-      //         ExtendSectionSeeAllWg(
-      //           title: 'O’qilayotgan kitoblar',
-      //           onTap: () {},
-      //         ),
-      //       ],
-      //     ),
-      //   ),
-      // ),
-
       /// LIBRARY POPULAR BOOKS
       BlocBuilder<PopularBooksBloc, PopularBooksState>(
         builder: (context, state) {
@@ -355,21 +340,43 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                     curr is UserCoursesLoading ||
                     curr is UserCoursesLoaded,
                 builder: (context, userCoursesState) {
-                  final isConnectionError =
-                      (coursesState is CoursesError &&
-                          coursesState.isConnectionError) ||
-                      (userCoursesState is UserCoursesError &&
-                          userCoursesState.isConnectionError);
+                  return BlocBuilder<UserMeBloc, UserMeState>(
+                    buildWhen: (prev, curr) =>
+                        curr is UserMeError ||
+                        curr is UserMeLoading ||
+                        curr is UserMeLoaded,
+                    builder: (context, userMeState) {
+                      final isConnectionError =
+                          (coursesState is CoursesError &&
+                              coursesState.isConnectionError) ||
+                          (userCoursesState is UserCoursesError &&
+                              userCoursesState.isConnectionError);
 
-                  if (isConnectionError) {
-                    return SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: LostInternetConnectionState(onRetry: _reloadAll),
-                    );
-                  }
+                      if (isConnectionError) {
+                        return SliverFillRemaining(
+                          hasScrollBody: false,
+                          child:
+                              LostInternetConnectionState(onRetry: _reloadAll),
+                        );
+                      }
 
-                  return SliverMainAxisGroup(
-                    slivers: _buildContentSlivers(context, localization),
+                      if (userMeState is UserMeError &&
+                          (userMeState.statusCode == 502 ||
+                              userMeState.statusCode == 503)) {
+                        return SliverFillRemaining(
+                          hasScrollBody: false,
+                          child: ServerErrorState(
+                            onRetry: _reloadAll,
+                            statusCode: userMeState.statusCode,
+                            message: userMeState.message,
+                          ),
+                        );
+                      }
+
+                      return SliverMainAxisGroup(
+                        slivers: _buildContentSlivers(context, localization),
+                      );
+                    },
                   );
                 },
               );

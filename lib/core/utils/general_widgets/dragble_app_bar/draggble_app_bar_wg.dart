@@ -56,7 +56,7 @@ class DraggableAppBarWg extends StatelessWidget implements PreferredSize {
               crossAxisAlignment: .start,
               children: [
                 Text(
-                  '${localization.goodDay} ✌️',
+                  localization.goodDay,
                   style: AppTextStyles.source.regular(fontSize: 14),
                 ),
                 Text(

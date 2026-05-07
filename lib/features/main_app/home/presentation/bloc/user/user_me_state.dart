@@ -14,4 +14,9 @@ class UserMeLoaded extends UserMeState {
   UserMeLoaded({required this.entity});
 }
 
-class UserMeError extends UserMeState {}
+class UserMeError extends UserMeState {
+  final String? message;
+  final int? statusCode;
+
+  UserMeError({this.message, this.statusCode});
+}

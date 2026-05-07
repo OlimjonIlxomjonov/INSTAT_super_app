@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/error/exceptions.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/user_me/user_me_use_case.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/home_event.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_state.dart';
@@ -12,8 +13,10 @@ class UserMeBloc extends Bloc<HomeEvent, UserMeState> {
       try {
         final entity = await useCase.call();
         emit(UserMeLoaded(entity: entity));
+      } on ServerException catch (e) {
+        emit(UserMeError(message: e.message, statusCode: e.statusCode));
       } catch (e) {
-        emit(UserMeError());
+        emit(UserMeError(message: e.toString()));
       }
     });
   }

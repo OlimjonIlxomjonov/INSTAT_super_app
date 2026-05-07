@@ -13,6 +13,15 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
       final response = await _dioClient.get(ApiUrls.cart);
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
+
+        if (response.data is List) {
+          return BookListResponseModel.fromJson({
+            'data': response.data,
+            'links': <String, dynamic>{},
+            'meta': <String, dynamic>{},
+          });
+        }
+
         return BookListResponseModel.fromJson(response.data);
       } else {
         throw Exception('Else ERROR OCCURED: ${response.statusCode}');
