@@ -5,7 +5,9 @@ import 'package:my_template/features/education_app/features/home_edu/data/source
 import 'package:my_template/features/education_app/features/home_edu/data/source/remote_data_source/home_edu_remote_data_source.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/repository/home_edu_repository.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/comments/comments_use_case.dart';
+import 'package:my_template/features/education_app/features/home_edu/domain/usecase/per_course/per_course_use_case.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/comments/comments_bloc.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/per_course/per_course_bloc.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/data/repo/leader_board_repo_impl.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/data/source/impl_remote_data_source/leader_board_remote_data_source_impl.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/data/source/remote_data_source/leader_board_remote_data_source.dart';
@@ -188,6 +190,7 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => OfflineCourseUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetCourseGroupDatesUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetOfflineBooksUseCase(repository: sl()));
+  sl.registerLazySingleton(() => PerCourseUseCase(repository: sl()));
 
   /// {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -234,4 +237,5 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => OfflineCourseBloc(useCase: sl()));
   sl.registerFactory(() => CourseGroupDatesBloc(useCase: sl()));
   sl.registerFactory(() => OfflineBooksBloc(getOfflineBooksUseCase: sl()));
+  sl.registerFactory(() => PerCourseBloc(useCase: sl()));
 }

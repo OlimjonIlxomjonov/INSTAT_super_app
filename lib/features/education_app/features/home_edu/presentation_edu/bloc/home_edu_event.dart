@@ -9,3 +9,9 @@ class CommentsEvent extends HomeEduEvent {
 
   CommentsEvent({required this.params});
 }
+
+class PerCourseEvent extends HomeEduEvent {
+  final PerCourseParams params;
+
+  PerCourseEvent({required this.params});
+}

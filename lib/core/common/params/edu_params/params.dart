@@ -125,3 +125,9 @@ class CourseGroupDateParams {
 
   CourseGroupDateParams({required this.courseGroupId});
 }
+
+class PerCourseParams {
+  final int courseId;
+
+  PerCourseParams({required this.courseId});
+}

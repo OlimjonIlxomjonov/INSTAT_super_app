@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/html_content_wg/html_content_wg.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/per_course/per_course_bloc.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/per_course/per_course_state.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
 
 class DetailedCourseInfoHeaderWg extends StatelessWidget {
@@ -17,8 +20,6 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // logger.f(data.descriptionUz);
-    // logger.f(data.ratingsCount);
     return SliverMainAxisGroup(
       slivers: [
         /// Metadata row

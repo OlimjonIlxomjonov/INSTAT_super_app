@@ -13,6 +13,8 @@ import 'package:my_template/core/utils/widgets/detailed_course_info_header/detai
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/comments/comments_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/home_edu_event.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/per_course/per_course_bloc.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/per_course/per_course_state.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/about_this_course_tab.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/course_comments_tab.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/course_plan_tab.dart';
@@ -24,6 +26,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/buy_course/buy_course_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/buy_course/buy_course_state.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class DetailedCourseInfoPage extends StatefulWidget {
   final CourseEntity data;
@@ -125,6 +128,9 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
       context.read<CommentsBloc>().add(
         CommentsEvent(params: CommentsParams(courseId: widget.data.id)),
       );
+      context.read<PerCourseBloc>().add(
+        PerCourseEvent(params: PerCourseParams(courseId: widget.data.id)),
+      );
     });
   }
 
@@ -136,6 +142,11 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
 
   @override
   Widget build(BuildContext context) {
+    final perCourse = context.watch<PerCourseBloc>().state;
+    final item = perCourse is PerCourseLoaded ? perCourse.entity : null;
+    final isPaid = item?.userOrder?.status == 'paid';
+    final isLoading = perCourse is PerCourseLoading;
+
     return BlocListener<BuyCourseBloc, BuyCourseState>(
       listener: (context, state) {
         if (state is BuyCourseLoaded) {
@@ -162,11 +173,27 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
             const SliverToBoxAdapter(child: SizedBox(height: 32)),
           ],
         ),
-        bottomNavigationBar: CustomBottomNavContainerWg(
-          onTap: () => _openPayment(context),
-          buttonText: _isBought
-              ? 'Davom etish'
-              : 'Sotib olish - ${widget.data.price} UZS',
+        bottomNavigationBar: Skeletonizer(
+          enabled: isLoading,
+          child: CustomBottomNavContainerWg(
+            onTap: () => isPaid
+                ? FamilyNavigation.familyPush(
+                    showHandle: false,
+                    context,
+                    DetailedUserBoughtCoursesEduPage(
+                      data: widget.data,
+                      categoryName: widget.courseCategory,
+                    ),
+                  )
+                : onlineLibStyleCustomBottomSheetWg(
+                    context,
+                    headerTitle: "To'lov turi",
+                    child: PaymentOpenBottomSheetWg(courseId: widget.data.id),
+                  ),
+            buttonText: isPaid
+                ? 'Davom etish'
+                : 'Sotib olish - ${widget.data.price} UZS',
+          ),
         ),
       ),
     );
