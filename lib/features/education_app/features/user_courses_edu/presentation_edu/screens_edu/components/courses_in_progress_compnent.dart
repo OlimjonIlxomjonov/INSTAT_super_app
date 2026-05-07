@@ -6,6 +6,7 @@ import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/skeletonizer_shimmer/courses/course_shimmer.dart';
 import 'package:my_template/core/common/ui_states/empty_state.dart';
+import 'package:my_template/core/common/ui_states/error_page.dart';
 import 'package:my_template/core/common/ui_states/lost_internet_connection_state.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
@@ -196,7 +197,7 @@ class _CoursesInProgressComponentState
             hasScrollBody: false,
             child: state.isConnectionError
                 ? LostInternetConnectionState(onRetry: _loadData)
-                : Center(child: Text('error: ${state.message}')),
+                : Center(child: ErrorPage()),
           );
         }
 

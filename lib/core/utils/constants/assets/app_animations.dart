@@ -12,4 +12,5 @@ class AppAnimations {
   static const lostInternetConnectionState = '${_path}no_internet.json';
   static const errorState = '${_path}explanation_alert_error.json';
   static const workFuv = '${_path}work_fuv_v2.json';
+  static const errorPage = '${_path}error_page.json';
 }

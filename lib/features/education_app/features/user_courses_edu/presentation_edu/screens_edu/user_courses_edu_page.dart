@@ -121,20 +121,21 @@ class _UserCoursesEduPageState extends State<UserCoursesEduPage>
           // Tab content
           !isOffline
               ? Expanded(
-                  child: TabBarView(
-                    controller: _tabController,
-                    children: [
-                      /// Tab 1 — In Progress
-                      UserCoursesTabContent(
-                        state: 'in_progress',
-                        layout: layout,
-                      ),
+            child: TabBarView(
+              controller: _tabController,
+              children: [
 
-                      /// Tab 2 — Finished
-                      UserCoursesTabContent(state: 'finished', layout: layout),
-                    ],
-                  ),
-                )
+                /// Tab 1 — In Progress
+                UserCoursesTabContent(
+                  state: 'in_progress',
+                  layout: layout,
+                ),
+
+                /// Tab 2 — Finished
+                UserCoursesTabContent(state: 'finished', layout: layout),
+              ],
+            ),
+          )
               : OfflineCoursesComponent(),
         ],
       ),
