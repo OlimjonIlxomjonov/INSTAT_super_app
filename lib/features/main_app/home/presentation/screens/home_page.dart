@@ -42,7 +42,6 @@ class _HomePageState extends State<HomePage> {
       showHandler: false,
     );
 
-
     // AppRoute.open(EduBottomNavBar());
   }
 

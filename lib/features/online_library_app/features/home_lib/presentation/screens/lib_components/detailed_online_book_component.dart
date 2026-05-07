@@ -124,7 +124,7 @@ class _DetailedOnlineBookComponentState
                             ),
                             const SizedBox(height: 8),
                             HtmlContentWg(
-                              collapsedLines: 10,
+                              collapsedLines: 7,
                               htmlData: widget.data.description.isNotEmpty
                                   ? widget.data.description
                                   : 'Izoh topilmadi',
@@ -267,75 +267,82 @@ class _DetailedOnlineBookComponentState
           SliverPadding(padding: .only(bottom: 20)),
         ],
       ),
-      bottomNavigationBar: !widget.isOffline
-          ? BlocBuilder<
-              my_template_book.BookActionsBloc,
-              my_template_book.BookActionsState
-            >(
-              builder: (context, state) {
-                final bool inCart = state.isBookInCart(
-                  widget.data.id,
-                  defaultValue: widget.data.isInCart,
-                );
-                return CustomBottomNavContainerWg(
-                  anotherButton: inCart
-                      ? ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: .circular(10),
-                              side: BorderSide(
-                                color: AppColors.redFailedTaskCard,
-                              ),
-                            ),
-                          ),
-                          onPressed: () {
+      bottomNavigationBar: widget.data.type == 'online'
+          ? !widget.isOffline
+                ? BlocBuilder<
+                    my_template_book.BookActionsBloc,
+                    my_template_book.BookActionsState
+                  >(
+                    builder: (context, state) {
+                      final bool inCart = state.isBookInCart(
+                        widget.data.id,
+                        defaultValue: widget.data.isInCart,
+                      );
+                      return CustomBottomNavContainerWg(
+                        anotherButton: inCart
+                            ? ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: .circular(10),
+                                    side: BorderSide(
+                                      color: AppColors.redFailedTaskCard,
+                                    ),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  context
+                                      .read<my_template_book.BookActionsBloc>()
+                                      .add(
+                                        my_template_book.ToggleCartBookEvent(
+                                          bookId: widget.data.id,
+                                          isInCart: false,
+                                        ),
+                                      );
+                                },
+                                child: Icon(
+                                  IconlyLight.delete,
+                                  color: AppColors.red,
+                                  size: 24,
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                        // onCartTap: () {},
+                        buttonText: widget.isBookBought
+                            ? 'O’qishni davom ettirish'
+                            : inCart
+                            ? 'Savatga o\'tish'
+                            : 'Sotib olish - ${widget.data.price} UZS',
+                        onTap: () {
+                          if (widget.isBookBought) {
+                            AppRoute.go(const BoughtBookOpenerWg());
+                          } else if (!inCart) {
                             context
                                 .read<my_template_book.BookActionsBloc>()
                                 .add(
                                   my_template_book.ToggleCartBookEvent(
                                     bookId: widget.data.id,
-                                    isInCart: false,
+                                    isInCart: true,
                                   ),
                                 );
-                          },
-                          child: Icon(
-                            IconlyLight.delete,
-                            color: AppColors.red,
-                            size: 24,
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                  // onCartTap: () {},
-                  buttonText: widget.isBookBought
-                      ? 'O’qishni davom ettirish'
-                      : inCart
-                      ? 'Savatga o\'tish'
-                      : 'Sotib olish - ${widget.data.price} UZS',
-                  onTap: () {
-                    if (widget.isBookBought) {
-                      AppRoute.go(const BoughtBookOpenerWg());
-                    } else if (!inCart) {
-                      context.read<my_template_book.BookActionsBloc>().add(
-                        my_template_book.ToggleCartBookEvent(
-                          bookId: widget.data.id,
-                          isInCart: true,
-                        ),
+                            addedToCartFlushBar(
+                              context,
+                              'Muvaffaqiyatli saqlandi',
+                            );
+                          } else {
+                            openMiniAppSheetFamily(
+                              context,
+                              isTransparent: false,
+                              showHandler: false,
+                              child: const UserOnlineBookCartLibPage(),
+                            );
+                          }
+                        },
                       );
-                      addedToCartFlushBar(context, 'Muvaffaqiyatli saqlandi');
-                    } else {
-                      openMiniAppSheetFamily(
-                        context,
-                        isTransparent: false,
-                        showHandler: false,
-                        child: const UserOnlineBookCartLibPage(),
-                      );
-                    }
-                  },
-                );
-              },
-            )
-          : const SizedBox.shrink(),
+                    },
+                  )
+                : const SizedBox.shrink()
+          : SizedBox.shrink(),
     );
   }
 }

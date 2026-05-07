@@ -18,6 +18,7 @@ class ApiUrls {
 
   /// books
   static const activeBooks = 'books/items/active';
+  static const offlineBooks = 'books/items/offline/';
   static const bookThumbnail = 'https://test.avacoder.uz/media/';
 
   // cart

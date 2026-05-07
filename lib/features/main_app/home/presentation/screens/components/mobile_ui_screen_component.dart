@@ -355,8 +355,9 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                       if (isConnectionError) {
                         return SliverFillRemaining(
                           hasScrollBody: false,
-                          child:
-                              LostInternetConnectionState(onRetry: _reloadAll),
+                          child: LostInternetConnectionState(
+                            onRetry: _reloadAll,
+                          ),
                         );
                       }
 

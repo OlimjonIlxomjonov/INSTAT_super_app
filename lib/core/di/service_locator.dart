@@ -58,6 +58,12 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dom
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_final_test/course_final_test_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/lesson_video_progress/put_lesson_video_progress_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/lesson_video_progress/lesson_video_progress_bloc.dart';
+import 'package:my_template/features/online_library_app/features/offline_books_lib/data/repo/offline_books_repo_impl.dart';
+import 'package:my_template/features/online_library_app/features/offline_books_lib/data/source/impl_remote_data_source/offline_books_remote_data_source_impl.dart';
+import 'package:my_template/features/online_library_app/features/offline_books_lib/data/source/remote_data_source/offline_books_remote_data_source.dart';
+import 'package:my_template/features/online_library_app/features/offline_books_lib/domain/repository/offline_books_repository.dart';
+import 'package:my_template/features/online_library_app/features/offline_books_lib/domain/usecase/get_offline_books_use_case.dart';
+import 'package:my_template/features/online_library_app/features/offline_books_lib/presentation_lib/bloc/offline_books_bloc.dart';
 
 import 'package:my_template/features/education_app/features/table_edu/data/repo/course_group_dates_repo_impl.dart';
 import 'package:my_template/features/education_app/features/table_edu/data/source/impl_remote_data_source/course_group_dates_remote_data_source_impl.dart';
@@ -111,6 +117,9 @@ Future<void> setup() async {
   sl.registerLazySingleton<CourseGroupDatesRemoteDataSource>(
     () => CourseGroupDatesRemoteDataSourceImpl(),
   );
+  sl.registerLazySingleton<OfflineBooksRemoteDataSource>(
+    () => OfflineBooksRemoteDataSourceImpl(),
+  );
 
   /// {REPO}
   sl.registerLazySingleton<HomeRepository>(
@@ -133,6 +142,9 @@ Future<void> setup() async {
   );
   sl.registerLazySingleton<CourseGroupDatesRepository>(
     () => CourseGroupDatesRepoImpl(remoteDataSource: sl()),
+  );
+  sl.registerLazySingleton<OfflineBooksRepository>(
+    () => OfflineBooksRepoImpl(remoteDataSource: sl()),
   );
 
   /// {USE CASE}
@@ -175,6 +187,7 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => CommentsUseCase(repository: sl()));
   sl.registerLazySingleton(() => OfflineCourseUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetCourseGroupDatesUseCase(repository: sl()));
+  sl.registerLazySingleton(() => GetOfflineBooksUseCase(repository: sl()));
 
   /// {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -220,4 +233,5 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => CommentsBloc(useCase: sl()));
   sl.registerLazySingleton(() => OfflineCourseBloc(useCase: sl()));
   sl.registerFactory(() => CourseGroupDatesBloc(useCase: sl()));
+  sl.registerFactory(() => OfflineBooksBloc(getOfflineBooksUseCase: sl()));
 }
