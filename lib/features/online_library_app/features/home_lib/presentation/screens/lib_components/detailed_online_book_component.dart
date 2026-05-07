@@ -174,35 +174,43 @@ class _DetailedOnlineBookComponentState
                     ],
                   ),
                   const SizedBox(height: 24),
-                  ExtendSectionSeeAllWg(
-                    title: 'Izohlar',
-                    onTap: () {
-                      // subBottomSheetOpener(
-                      //   context,
-                      //   child: SeeAllCourseComments(),
-                      //   isExpanded: true,
-                      // );
-                    },
-                  ),
+                  // ExtendSectionSeeAllWg(
+                  //   title: 'Izohlar',
+                  //   onTap: () {
+                  //     // subBottomSheetOpener(
+                  //     //   context,
+                  //     //   child: SeeAllCourseComments(),
+                  //     //   isExpanded: true,
+                  //     // );
+                  //   },
+                  // ),
                 ],
               ),
             ),
           ),
 
           /// COMMENTS
-          SliverToBoxAdapter(
-            child: CarouselSlider(
-              options: CarouselOptions(
-                height: 220,
-                viewportFraction: 0.85,
-                enableInfiniteScroll: true,
-                autoPlay: true,
-              ),
-              items: [1, 2, 3, 4, 5]
-                  .map((i) => Center(child: const Text('Soon!')))
-                  .toList(), // UserCommentsWg()
-            ),
-          ),
+          // SliverToBoxAdapter(
+          //   child: CarouselSlider(
+          //     options: CarouselOptions(
+          //       height: 220,
+          //       viewportFraction: 0.85,
+          //       enableInfiniteScroll: true,
+          //       autoPlay: true,
+          //     ),
+          //     items: [1]
+          //         .map(
+          //           (i) => Center(
+          //             child: Lottie.asset(
+          //               width: 100,
+          //               AppAnimations.workFuv,
+          //               repeat: false,
+          //             ),
+          //           ),
+          //         )
+          //         .toList(), // UserCommentsWg()
+          //   ),
+          // ),
 
           /// BOOKS
           if (!widget.isBookBought)

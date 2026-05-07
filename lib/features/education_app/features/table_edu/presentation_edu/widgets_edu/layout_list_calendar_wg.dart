@@ -5,7 +5,8 @@ import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart'
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 
 class SimpleWeekCalendar extends StatefulWidget {
-  const SimpleWeekCalendar({super.key});
+  final Set<DateTime>? markedDates;
+  const SimpleWeekCalendar({super.key, this.markedDates});
 
   @override
   State<SimpleWeekCalendar> createState() => _SimpleWeekCalendarState();
@@ -116,15 +117,26 @@ class _SimpleWeekCalendarState extends State<SimpleWeekCalendar> {
                                   : AppColors.greyScale.grey400,
                             ),
                           ),
-                          Text(
-                            "${date.day}",
-                            style: AppTextStyles.source.semiBold(
-                              fontSize: 24,
-                              color: isSelected
-                                  ? Colors.white
-                                  : AppColors.greyScale.grey600,
+                            Text(
+                              "${date.day}",
+                              style: AppTextStyles.source.semiBold(
+                                fontSize: 24,
+                                color: isSelected
+                                    ? Colors.white
+                                    : AppColors.greyScale.grey600,
+                              ),
                             ),
-                          ),
+                            if (widget.markedDates?.contains(DateTime(date.year, date.month, date.day)) ?? false)
+                              Container(
+                                width: 4,
+                                height: 4,
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? Colors.white
+                                      : AppColors.primaryColor,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
                         ],
                       ),
                     ),

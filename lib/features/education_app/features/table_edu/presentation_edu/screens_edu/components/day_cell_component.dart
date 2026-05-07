@@ -5,12 +5,14 @@ class DayCellComponent extends StatelessWidget {
   final DateTime date;
   final bool isCurrentMonth;
   final ValueNotifier<DateTime> selectedDate;
+  final bool hasEvent;
 
   const DayCellComponent({
     super.key,
     required this.date,
     required this.isCurrentMonth,
     required this.selectedDate,
+    this.hasEvent = false,
   });
 
   @override
@@ -36,17 +38,33 @@ class DayCellComponent extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Center(
-                  child: Text(
-                    '${date.day}',
-                    style: TextStyle(
-                      color: isSelected
-                          ? AppColors.white
-                          : isCurrentMonth
-                          ? AppColors.black
-                          : AppColors.greyScale.grey400,
-                      fontWeight: FontWeight.w600,
-                    ),
-
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${date.day}',
+                        style: TextStyle(
+                          color: isSelected
+                              ? AppColors.white
+                              : isCurrentMonth
+                              ? AppColors.black
+                              : AppColors.greyScale.grey400,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      if (hasEvent)
+                        Container(
+                          margin: const EdgeInsets.only(top: 2),
+                          width: 4,
+                          height: 4,
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? AppColors.white
+                                : AppColors.primaryColor,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ),

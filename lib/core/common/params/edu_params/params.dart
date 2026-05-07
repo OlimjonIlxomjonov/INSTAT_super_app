@@ -119,3 +119,9 @@ class CommentsParams {
 
   CommentsParams({required this.courseId});
 }
+
+class CourseGroupDateParams {
+  final int courseGroupId;
+
+  CourseGroupDateParams({required this.courseGroupId});
+}

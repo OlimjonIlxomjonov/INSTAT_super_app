@@ -8,6 +8,7 @@ import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_b
 import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/wb_blocs/popular_books_with_bloc_wg.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/detailed_online_book_component.dart';
 
 class SeeAllOnlineBooksComponent extends StatelessWidget {
@@ -20,9 +21,9 @@ class SeeAllOnlineBooksComponent extends StatelessWidget {
         slivers: [
           SliverDefaultAppBarWg(myTitle: 'Kitoblar'),
           SliverPadding(
-            padding: .symmetric(horizontal: appW(20), vertical: appH(10)),
+            padding: .symmetric(horizontal: appW(20)),
             sliver: SliverAppBar(
-              toolbarHeight: appH(56) + appH(24),
+              toolbarHeight: 56 + 24,
               pinned: true,
               automaticallyImplyLeading: false,
               titleSpacing: 0,
@@ -54,37 +55,7 @@ class SeeAllOnlineBooksComponent extends StatelessWidget {
           ),
 
           /// BODY
-          SliverSafeArea(
-            sliver: SliverPadding(
-              padding: AppPadding.horizontal20x(),
-              sliver: SliverGrid.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 16,
-                  childAspectRatio: 0.56,
-                ),
-                itemCount: 6,
-                itemBuilder: (context, index) {
-                  return BookGridItem(
-                    type: BookCardType.market,
-                    title: "Jajji shahzoda",
-                    author: "Antuan de Sent-Ekzyuperi",
-                    rating: 4.5,
-                    price: "300 000 UZS",
-                    // oldPrice: "330 000 UZS",
-                    imagePath: 'assets/book.png',
-                    onTap: () {
-                      // openMiniAppSheetFamily(
-                      //   context,
-                      //   child: DetailedOnlineBookComponent(),
-                      // );
-                    },
-                  );
-                },
-              ),
-            ),
-          ),
+          PopularBooksWithBlocWg(),
         ],
       ),
     );

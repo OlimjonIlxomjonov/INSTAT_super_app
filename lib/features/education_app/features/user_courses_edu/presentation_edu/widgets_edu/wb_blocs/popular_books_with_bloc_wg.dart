@@ -1,0 +1,61 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/utils/app_utils.dart';
+import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
+import 'package:my_template/core/utils/general_widgets/online_book_wg/online_book_wg.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_state.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/detailed_online_book_component.dart';
+
+class PopularBooksWithBlocWg extends StatelessWidget {
+  const PopularBooksWithBlocWg({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<PopularBooksBloc, PopularBooksState>(
+      builder: (context, state) {
+        if (state is PopularBooksLoaded) {
+          final data = state.response.data;
+          return SliverPadding(
+            padding: AppPadding.horizontal20x(),
+            sliver: SliverGrid.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
+                childAspectRatio: 0.52,
+              ),
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                final book = data[index];
+                final thumbnail = book.bookThumbnails.isNotEmpty
+                    ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${book.bookThumbnails.first.file}'
+                    : '';
+                return BookGridItem(
+                  id: book.id,
+                  isSaved: book.isSaved,
+                  type: BookCardType.market,
+                  title: book.name,
+                  author: book.author.name,
+                  price: "\u{00A0}${book.price} UZS",
+                  imagePath: thumbnail.isNotEmpty
+                      ? thumbnail
+                      : 'assets/images/temp_book.jpg',
+                  onTap: () {
+                    openMiniAppSheetFamily(
+                      context,
+                      showHandler: false,
+                      child: DetailedOnlineBookComponent(data: book),
+                    );
+                  },
+                );
+              },
+            ),
+          );
+        }
+        return SliverToBoxAdapter(child: SizedBox.shrink());
+      },
+    );
+  }
+}

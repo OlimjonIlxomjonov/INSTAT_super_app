@@ -7,7 +7,8 @@ import 'package:my_template/features/education_app/features/table_edu/presentati
 import 'package:my_template/features/education_app/features/table_edu/presentation_edu/screens_edu/components/week_label_component.dart';
 
 class SimpleMonthCalendar extends StatefulWidget {
-  const SimpleMonthCalendar({super.key});
+  final Set<DateTime>? markedDates;
+  const SimpleMonthCalendar({super.key, this.markedDates});
 
   @override
   State<SimpleMonthCalendar> createState() => _SimpleMonthCalendarState();
@@ -113,10 +114,14 @@ class _SimpleMonthCalendarState extends State<SimpleMonthCalendar> {
                 return Row(
                   children: List.generate(7, (colIndex) {
                     final date = _days[rowIndex * 7 + colIndex];
+                    final hasEvent = widget.markedDates?.contains(
+                      DateTime(date.year, date.month, date.day),
+                    ) ?? false;
                     return DayCellComponent(
                       date: date,
                       isCurrentMonth: date.month == focusedMonth.month,
                       selectedDate: selectedDateNotifier,
+                      hasEvent: hasEvent,
                     );
                   }),
                 );

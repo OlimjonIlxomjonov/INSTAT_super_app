@@ -17,4 +17,18 @@ class LayoutPrefsService {
       layout == CoursesLayout.list ? 'list' : 'grid',
     );
   }
+
+  static Future<CalendarLayout> loadCalendarLayout(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    final saved = prefs.getString('$_prefix$key');
+    return saved == 'week' ? CalendarLayout.week : CalendarLayout.month;
+  }
+
+  static Future<void> saveCalendarLayout(String key, CalendarLayout layout) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+      '$_prefix$key',
+      layout == CalendarLayout.week ? 'week' : 'month',
+    );
+  }
 }

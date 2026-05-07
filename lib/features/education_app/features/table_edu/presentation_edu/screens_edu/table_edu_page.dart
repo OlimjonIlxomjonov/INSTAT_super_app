@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/services/layout/layout_prefs_service.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
@@ -28,8 +29,30 @@ class _TableEduPageState extends State<TableEduPage> {
   ];
 
   final List statusCircularChekBox = [null, false, null, true];
-
   CalendarLayout layout = CalendarLayout.month;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLayout();
+  }
+
+  Future<void> _loadLayout() async {
+    final saved = await LayoutPrefsService.loadCalendarLayout(
+      'table_edu_calendar',
+    );
+    if (mounted) {
+      setState(() => layout = saved);
+    }
+  }
+
+  Future<void> _onLayoutChanged(CalendarLayout newLayout) async {
+    setState(() => layout = newLayout);
+    await LayoutPrefsService.saveCalendarLayout(
+      'table_edu_calendar',
+      newLayout,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +60,7 @@ class _TableEduPageState extends State<TableEduPage> {
       appBar: CustomAppBarWg(
         myTitle: 'Kalenadar',
         customActions: [
-          LayoutButtonsWg(
-            layout: layout,
-            onChanged: (newLayout) {
-              setState(() {
-                layout = newLayout;
-              });
-            },
-          ),
+          LayoutButtonsWg(layout: layout, onChanged: _onLayoutChanged),
         ],
       ),
       body: CustomScrollView(

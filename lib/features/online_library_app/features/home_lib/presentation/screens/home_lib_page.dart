@@ -14,6 +14,7 @@ import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_packa
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/wb_blocs/popular_books_with_bloc_wg.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_state.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/search_books/search_books_bloc.dart';
@@ -127,51 +128,7 @@ class _HomeLibPageState extends State<HomeLibPage> {
           ),
 
           /// BODY
-          BlocBuilder<PopularBooksBloc, PopularBooksState>(
-            builder: (context, state) {
-              if (state is PopularBooksLoaded) {
-                final data = state.response.data;
-                return SliverPadding(
-                  padding: AppPadding.horizontal20x(),
-                  sliver: SliverGrid.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 16,
-                          crossAxisSpacing: 16,
-                          childAspectRatio: 0.52,
-                        ),
-                    itemCount: data.length,
-                    itemBuilder: (context, index) {
-                      final book = data[index];
-                      final thumbnail = book.bookThumbnails.isNotEmpty
-                          ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${book.bookThumbnails.first.file}'
-                          : '';
-                      return BookGridItem(
-                        id: book.id,
-                        isSaved: book.isSaved,
-                        type: BookCardType.market,
-                        title: book.name,
-                        author: book.author.name,
-                        price: "\u{00A0}${book.price} UZS",
-                        imagePath: thumbnail.isNotEmpty
-                            ? thumbnail
-                            : 'assets/images/temp_book.jpg',
-                        onTap: () {
-                          openMiniAppSheetFamily(
-                            context,
-                            showHandler: false,
-                            child: DetailedOnlineBookComponent(data: book),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                );
-              }
-              return SliverToBoxAdapter(child: SizedBox.shrink());
-            },
-          ),
+          PopularBooksWithBlocWg(),
         ],
       ),
     );

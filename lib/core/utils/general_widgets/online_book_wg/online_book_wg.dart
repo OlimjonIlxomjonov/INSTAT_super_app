@@ -156,7 +156,9 @@ class BookGridItem extends StatelessWidget {
                                 ? IconlyBold.heart
                                 : IconlyLight.heart,
                             size: 20,
-                            color: currentSavedState ? AppColors.orange : null,
+                            color: currentSavedState
+                                ? AppColors.redFailedTaskCard
+                                : null,
                           ),
                         );
                       },

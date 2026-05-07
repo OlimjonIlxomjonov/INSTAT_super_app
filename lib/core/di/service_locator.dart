@@ -59,6 +59,12 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/lesson_video_progress/put_lesson_video_progress_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/lesson_video_progress/lesson_video_progress_bloc.dart';
 
+import 'package:my_template/features/education_app/features/table_edu/data/repo/course_group_dates_repo_impl.dart';
+import 'package:my_template/features/education_app/features/table_edu/data/source/impl_remote_data_source/course_group_dates_remote_data_source_impl.dart';
+import 'package:my_template/features/education_app/features/table_edu/data/source/remote_data_source/course_group_dates_remote_data_source.dart';
+import 'package:my_template/features/education_app/features/table_edu/domain/repository/course_group_dates_repository.dart';
+import 'package:my_template/features/education_app/features/table_edu/domain/usecase/get_course_group_dates_use_case.dart';
+import 'package:my_template/features/education_app/features/table_edu/presentation_edu/bloc/course_group_dates_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/data/repo/home_lib_repo_impl.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/data/sources/impl_remote_data_source/home_lib_remote_data_source_impl.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/data/sources/remote_data_source/book_websocket_service.dart';
@@ -102,6 +108,9 @@ Future<void> setup() async {
   sl.registerLazySingleton<HomeEduRemoteDataSource>(
     () => HomeEduRemoteDataSourceImpl(),
   );
+  sl.registerLazySingleton<CourseGroupDatesRemoteDataSource>(
+    () => CourseGroupDatesRemoteDataSourceImpl(),
+  );
 
   /// {REPO}
   sl.registerLazySingleton<HomeRepository>(
@@ -121,6 +130,9 @@ Future<void> setup() async {
   );
   sl.registerLazySingleton<HomeEduRepository>(
     () => HomeEduRepoImpl(remoteDataSource: sl()),
+  );
+  sl.registerLazySingleton<CourseGroupDatesRepository>(
+    () => CourseGroupDatesRepoImpl(remoteDataSource: sl()),
   );
 
   /// {USE CASE}
@@ -162,6 +174,7 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => AvatarUseCase(repository: sl()));
   sl.registerLazySingleton(() => CommentsUseCase(repository: sl()));
   sl.registerLazySingleton(() => OfflineCourseUseCase(repository: sl()));
+  sl.registerLazySingleton(() => GetCourseGroupDatesUseCase(repository: sl()));
 
   /// {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -206,4 +219,5 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => AvatarBloc(useCase: sl()));
   sl.registerLazySingleton(() => CommentsBloc(useCase: sl()));
   sl.registerLazySingleton(() => OfflineCourseBloc(useCase: sl()));
+  sl.registerFactory(() => CourseGroupDatesBloc(useCase: sl()));
 }

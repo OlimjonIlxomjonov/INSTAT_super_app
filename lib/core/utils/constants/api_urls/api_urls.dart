@@ -44,4 +44,8 @@ class ApiUrls {
 
   /// offline course
   static const offlineCourse = 'course-groups/list/my/';
+
+  /// course group dates
+  static const courseGroups = 'course-groups/';
+  static const courseGroupDates = '/course_group_dates/';
 }
