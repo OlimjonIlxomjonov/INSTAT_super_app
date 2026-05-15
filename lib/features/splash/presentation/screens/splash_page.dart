@@ -43,12 +43,21 @@ class _SplashPageState extends State<SplashPage> {
     await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
 
-    final token = await TokenStorageServiceImpl().getAccessToken();
+    final token = TokenStorageServiceImpl().getAccessToken();
     final isLoggedIn = token != null && token.isNotEmpty;
 
     final destination = isLoggedIn ? const HomePage() : const OnboardingPage();
 
-    final hasInternet = await InternetConnection().hasInternetAccess;
+    bool hasInternet = true;
+    try {
+      hasInternet = await InternetConnection().hasInternetAccess.timeout(
+        const Duration(seconds: 3),
+        onTimeout: () => true, // Proceed to destination instead of freezing or blocking
+      );
+    } catch (e) {
+      hasInternet = true;
+    }
+    
     if (!mounted) return;
 
     if (hasInternet) {

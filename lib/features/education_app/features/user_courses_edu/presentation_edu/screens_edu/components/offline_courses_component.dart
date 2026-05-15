@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/common/ui_states/empty_state.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
@@ -17,6 +18,11 @@ class OfflineCoursesComponent extends StatelessWidget {
       builder: (context, state) {
         if (state is OfflineCourseLoaded) {
           final data = state.response.data;
+
+          if (data.isEmpty) {
+            return EmptyState(message: 'message');
+          }
+
           return Expanded(
             child: ListView.builder(
               itemCount: data.length,

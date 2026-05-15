@@ -37,6 +37,8 @@ class GridBackgroundPainter extends CustomPainter {
       ..color = lineColor.withValues(alpha: majorOpacity)
       ..strokeWidth = strokeWidth;
 
+    final actualCellSize = cellSize > 0 ? cellSize : 44.0;
+
     // Draw vertical lines
     double x = 0;
     int col = 0;
@@ -45,7 +47,7 @@ class GridBackgroundPainter extends CustomPainter {
           ? majorPaint
           : minorPaint;
       canvas.drawLine(Offset(x, 0), Offset(x, size.height), p);
-      x += cellSize;
+      x += actualCellSize;
       col++;
     }
 
@@ -57,7 +59,7 @@ class GridBackgroundPainter extends CustomPainter {
           ? majorPaint
           : minorPaint;
       canvas.drawLine(Offset(0, y), Offset(size.width, y), p);
-      y += cellSize;
+      y += actualCellSize;
       row++;
     }
 

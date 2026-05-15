@@ -90,6 +90,26 @@ class BookGridItem extends StatelessWidget {
                         child: Icon(Icons.image_not_supported, size: 26),
                       );
                     },
+                    loadingBuilder:
+                        (
+                          BuildContext context,
+                          Widget child,
+                          ImageChunkEvent? loadingProgress,
+                        ) {
+                          if (loadingProgress == null) {
+                            return child; // Image has finished loading
+                          }
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.primaryColor,
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                        (loadingProgress.expectedTotalBytes ??
+                                            1)
+                                  : null,
+                            ),
+                          );
+                        },
                   )
                 : Image.asset(
                     imagePath,
