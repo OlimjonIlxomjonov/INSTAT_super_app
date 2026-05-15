@@ -76,9 +76,9 @@ class _SplashPageState extends State<SplashPage> {
               curve: Curves.easeOutCubic,
               builder: (context, value, child) {
                 return Transform.scale(
-                  scale: 0.8 + (0.2 * value), // Smoothly zooms from 0.8 to 1.0
+                  scale: 0.8 + (0.2 * value),
                   child: Opacity(
-                    opacity: value, // Smoothly fades from 0.0 to 1.0
+                    opacity: value,
                     child: child,
                   ),
                 );

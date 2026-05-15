@@ -44,12 +44,12 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Select Profile Photo',
+                'Profile rasimni tanlang!',
                 style: AppTextStyles.source.bold(fontSize: 18),
               ),
               const SizedBox(height: 24),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: .center,
                 children: [
                   _buildOption(
                     context: ctx,
@@ -59,16 +59,6 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                     onTap: () {
                       Navigator.pop(ctx);
                       _pickImage(ImageSource.gallery);
-                    },
-                  ),
-                  _buildOption(
-                    context: ctx,
-                    icon: IconlyLight.camera,
-                    label: 'Camera',
-                    color: AppColors.primaryColor,
-                    onTap: () {
-                      Navigator.pop(ctx);
-                      _pickImage(ImageSource.camera);
                     },
                   ),
                 ],
@@ -322,5 +312,3 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
     );
   }
 }
-
-
