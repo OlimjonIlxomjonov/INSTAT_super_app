@@ -42,8 +42,7 @@ class MiniAppSectionCard extends StatelessWidget {
             crossAxisAlignment: .start,
             mainAxisAlignment: .spaceBetween,
             children: [
-              SizedBox(
-                width: 100,
+              Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Text(

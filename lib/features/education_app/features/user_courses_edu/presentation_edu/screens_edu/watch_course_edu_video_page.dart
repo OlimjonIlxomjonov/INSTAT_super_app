@@ -50,12 +50,186 @@ class WatchCourseEduVideoPage extends StatefulWidget {
 }
 
 class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
-  VideoPlayerController? controller;
-  String currentResolution = '1080';
-  bool _isDownloading = false;
-  bool _showVideo = false;
-  bool _hasVideoError = false;
+  final ValueNotifier<VideoPlayerController?> _controllerNotifier =
+      ValueNotifier(null);
+
+  final ValueNotifier<bool> _showVideoNotifier = ValueNotifier(false);
+  final ValueNotifier<bool> _hasVideoErrorNotifier = ValueNotifier(false);
+  final ValueNotifier<bool> _isDownloadingNotifier = ValueNotifier(false);
+  final ValueNotifier<String> _currentResolutionNotifier =
+      ValueNotifier('1080');
+
   int _lastSentProgress = -1;
+  DateTime? _lastProgressCheck;
+  static const _progressCheckInterval = Duration(seconds: 2);
+
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<CourseFilesBloc>().add(
+      CourseFilesEvent(
+        params: CourseFilesParams(
+          courseId: widget.courseId,
+          topicId: widget.topicId,
+          lessonId: widget.lessonId,
+        ),
+      ),
+    );
+    // Video is intentionally NOT initialized here — lazy load on user tap.
+  }
+
+  @override
+  void dispose() {
+    // Dispose the active controller cleanly before the page is destroyed.
+    _disposeController(_controllerNotifier.value);
+
+    _controllerNotifier.dispose();
+    _showVideoNotifier.dispose();
+    _hasVideoErrorNotifier.dispose();
+    _isDownloadingNotifier.dispose();
+    _currentResolutionNotifier.dispose();
+    super.dispose();
+  }
+
+  Future<void> _disposeController(VideoPlayerController? controller) async {
+    if (controller == null) return;
+    controller.removeListener(_videoListener);
+    await controller.pause();
+    await controller.dispose();
+  }
+
+  void _videoListener() {
+    _onVideoProgressChanged();
+  }
+
+  void _onVideoProgressChanged() {
+    final controller = _controllerNotifier.value;
+    if (controller == null || !controller.value.isInitialized) return;
+
+    // Throttle: only check every 2 seconds.
+    final now = DateTime.now();
+    if (_lastProgressCheck != null &&
+        now.difference(_lastProgressCheck!) < _progressCheckInterval) {
+      return;
+    }
+    _lastProgressCheck = now;
+
+    final position = controller.value.position.inSeconds;
+    final duration = controller.value.duration.inSeconds;
+
+    if (duration <= 0) return;
+
+    int currentProgress = ((position / duration) * 100).toInt();
+    if (currentProgress > 100) currentProgress = 100;
+
+    // First send: initialise with 0.
+    if (_lastSentProgress < 0 && currentProgress >= 0) {
+      _sendVideoProgress(0);
+      return;
+    }
+
+    // Don't re-send after 100% has already been sent.
+    if (_lastSentProgress == 100) return;
+
+    if (currentProgress >= _lastSentProgress + 5 || currentProgress == 100) {
+      _sendVideoProgress(currentProgress);
+    }
+  }
+
+  void _sendVideoProgress(int progress) {
+    _lastSentProgress = progress;
+    context.read<LessonVideoProgressBloc>().add(
+      PutLessonVideoProgressEvent(
+        lessonId: widget.lessonId.toString(),
+        progress: progress,
+      ),
+    );
+  }
+
+  Future<void> _initVideo() async {
+    final token = TokenStorageServiceImpl().getAccessToken();
+    if (token == null) {
+      logger.e('No token found');
+      return;
+    }
+
+    _hasVideoErrorNotifier.value = false;
+
+    final resolution = _currentResolutionNotifier.value;
+    final url =
+        'https://test.avacoder.uz/api/stream/${widget.lessonId}/${resolution}p.m3u8';
+
+    final newController = VideoPlayerController.networkUrl(
+      Uri.parse(url),
+      httpHeaders: {'Authorization': 'Bearer $token'},
+      formatHint: VideoFormat.hls,
+    )..setLooping(false);
+
+    try {
+      await newController.initialize();
+    } catch (e) {
+      logger.e('Video init error: $e');
+      await newController.dispose();
+      if (mounted) _hasVideoErrorNotifier.value = true;
+      return;
+    }
+
+    newController.addListener(_videoListener);
+    final oldController = _controllerNotifier.value;
+    _controllerNotifier.value = newController;
+    await _disposeController(oldController);
+
+    newController.play();
+  }
+
+  Future<void> changeResolution(String newRes) async {
+    final currentController = _controllerNotifier.value;
+    if (newRes == _currentResolutionNotifier.value || currentController == null) {
+      return;
+    }
+
+    final currentPos = currentController.value.position;
+    final wasPlaying = currentController.value.isPlaying;
+
+    await currentController.pause();
+
+    final token = TokenStorageServiceImpl().getAccessToken();
+    if (token == null) {
+      logger.e('No token found');
+      return;
+    }
+
+    final url =
+        'https://test.avacoder.uz/api/stream/${widget.lessonId}/${newRes}p.m3u8';
+
+    final newController = VideoPlayerController.networkUrl(
+      Uri.parse(url),
+      httpHeaders: {'Authorization': 'Bearer $token'},
+      formatHint: VideoFormat.hls,
+    )..setLooping(false);
+
+    try {
+      await newController.initialize();
+    } catch (e) {
+      logger.e('Video resolution switch error: $e');
+      await newController.dispose();
+      if (mounted) _hasVideoErrorNotifier.value = true;
+      return;
+    }
+
+    await newController.seekTo(currentPos);
+    newController.addListener(_videoListener);
+
+    _currentResolutionNotifier.value = newRes;
+
+    _controllerNotifier.value = newController;
+    await _disposeController(currentController);
+
+    if (wasPlaying) {
+      newController.play();
+    }
+  }
 
   Future<void> _openFile(String? url, String? fileName) async {
     if (url == null || url.isEmpty || fileName == null || fileName.isEmpty) {
@@ -63,11 +237,8 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
       return;
     }
 
-    if (_isDownloading) return;
-
-    setState(() {
-      _isDownloading = true;
-    });
+    if (_isDownloadingNotifier.value) return;
+    _isDownloadingNotifier.value = true;
 
     try {
       final tempDir = await getTemporaryDirectory();
@@ -89,156 +260,10 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
       }
       logger.e(e.toString());
     } finally {
-      if (mounted) {
-        setState(() {
-          _isDownloading = false;
-        });
-      }
+      if (mounted) _isDownloadingNotifier.value = false;
     }
   }
 
-  void _onVideoProgressChanged() {
-    if (controller == null || !controller!.value.isInitialized) return;
-
-    final position = controller!.value.position.inSeconds;
-    final duration = controller!.value.duration.inSeconds;
-
-    if (duration > 0) {
-      int currentProgress = ((position / duration) * 100).toInt();
-      if (currentProgress > 100) currentProgress = 100;
-
-      if (_lastSentProgress < 0 && currentProgress >= 0) {
-        _sendVideoProgress(0);
-      } else if (currentProgress >= _lastSentProgress + 5 || currentProgress == 100) {
-        if (_lastSentProgress == 100) return;
-        _sendVideoProgress(currentProgress);
-      }
-    }
-  }
-
-  void _sendVideoProgress(int progress) {
-    _lastSentProgress = progress;
-    context.read<LessonVideoProgressBloc>().add(
-      PutLessonVideoProgressEvent(
-        lessonId: widget.lessonId.toString(),
-        progress: progress,
-      ),
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    logger.f('watch video page check');
-    context.read<CourseFilesBloc>().add(
-      CourseFilesEvent(
-        params: CourseFilesParams(
-          courseId: widget.courseId,
-          topicId: widget.topicId,
-          lessonId: widget.lessonId,
-        ),
-      ),
-    );
-    // _initVideo(); // Do NOT initialize here to save resources and prevent emulator crashes on load. We load lazily on tap!
-  }
-
-  Future<void> changeResolution(String newRes) async {
-    if (newRes == currentResolution || controller == null) return;
-
-    final currentPos = controller!.value.position;
-    final wasPlaying = controller!.value.isPlaying;
-
-    await controller!.pause();
-    setState(() {
-      currentResolution = newRes;
-    });
-
-    final token = TokenStorageServiceImpl().getAccessToken();
-    final url =
-        'https://test.avacoder.uz/api/stream/${widget.lessonId}/${currentResolution}p.m3u8';
-
-    final newController =
-        VideoPlayerController.networkUrl(
-            Uri.parse(url),
-            httpHeaders: {"Authorization": "Bearer $token"},
-            formatHint: VideoFormat.hls,
-          )
-          ..addListener(() {
-            _onVideoProgressChanged();
-            setState(() {});
-          })
-          ..setLooping(false);
-
-    try {
-      await newController.initialize();
-    } catch (e) {
-      logger.e('Video init error: $e');
-      newController.dispose();
-      if (mounted) setState(() => _hasVideoError = true);
-      return;
-    }
-
-    await newController.seekTo(currentPos);
-
-    final oldController = controller;
-    controller = newController;
-
-    setState(() {});
-
-    if (wasPlaying) {
-      newController.play();
-    }
-
-    oldController?.dispose();
-  }
-
-  Future<void> _initVideo() async {
-    final token = TokenStorageServiceImpl().getAccessToken();
-
-    if (token == null) {
-      logger.e("No token found");
-      return;
-    }
-
-    logger.f(token);
-    final url =
-        'https://test.avacoder.uz/api/stream/${widget.lessonId}/${currentResolution}p.m3u8';
-
-    controller?.dispose();
-    controller = null;
-    setState(() => _hasVideoError = false);
-
-    final newController = VideoPlayerController.networkUrl(
-      Uri.parse(url),
-      httpHeaders: {"Authorization": "Bearer $token"},
-      formatHint: VideoFormat.hls,
-    )
-      ..addListener(() {
-        _onVideoProgressChanged();
-        setState(() {});
-      })
-      ..setLooping(false);
-
-    try {
-      await newController.initialize();
-    } catch (e) {
-      logger.e('Video init error: $e');
-      newController.dispose();
-      if (mounted) setState(() => _hasVideoError = true);
-      return;
-    }
-
-    controller = newController;
-    controller!.play();
-    setState(() {});
-  }
-
-  @override
-  void dispose() {
-    controller?.pause();
-    controller?.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -266,176 +291,184 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
       },
       child: Scaffold(
         body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            expandedHeight: 250,
-            collapsedHeight: 250,
-            pinned: true,
-
-            /// VIDEO
-            flexibleSpace: FlexibleSpaceBar(
-              background: _hasVideoError
-                  ? _buildNoVideoWidget()
-                  : _showVideo
-                      ? (controller != null
-                          ? VideoPlayerWidget(controller: controller!)
-                          : const Center(child: CircularProgressIndicator()))
-                      : VideoThumbnailWidget(
-                          imagePath: widget.imagePath,
-                          onTap: () {
-                            setState(() => _showVideo = true);
-                            _initVideo();
-                          },
-                        ),
-            ),
-            leading: Padding(
-              padding: .only(left: 10, top: 10),
-              child: IconButton(
-                onPressed: () {
-                  controller?.pause();
-                  FamilyNavigation.familyClose(context); // main
-                },
-                style: IconButton.styleFrom(
-                  backgroundColor: AppColors.white.withValues(alpha: 0.6),
-                  shape: RoundedRectangleBorder(borderRadius: .circular(50)),
+          slivers: [
+            SliverAppBar(
+              expandedHeight: 250,
+              collapsedHeight: 250,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                background: _VideoAreaWidget(
+                  controllerNotifier: _controllerNotifier,
+                  showVideoNotifier: _showVideoNotifier,
+                  hasVideoErrorNotifier: _hasVideoErrorNotifier,
+                  imagePath: widget.imagePath,
+                  onThumbnailTap: () {
+                    _showVideoNotifier.value = true;
+                    _initVideo();
+                  },
                 ),
-                icon: Icon(IconlyLight.arrow_left_2, size: 20),
               ),
-            ),
-            actions: [
-              PopupMenuButton<String>(
-                color: AppColors.white,
-                icon: Icon(
-                  Icons.settings,
-                  color: AppColors.greyScale.grey600,
-                  size: 28,
+              leading: Padding(
+                padding: .only(left: 10, top: 10),
+                child: IconButton(
+                  onPressed: () {
+                    _controllerNotifier.value?.pause();
+                    FamilyNavigation.familyClose(context);
+                  },
+                  style: IconButton.styleFrom(
+                    backgroundColor: AppColors.white.withValues(alpha: 0.6),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: .circular(50),
+                    ),
+                  ),
+                  icon: Icon(IconlyLight.arrow_left_2, size: 20),
                 ),
-                onSelected: changeResolution,
-                itemBuilder: (context) => ['1080', '720', '480', '240']
-                    .map(
-                      (res) => PopupMenuItem(
-                        value: res,
-                        child: Text(
-                          '${res}p${currentResolution == res ? '*' : ''}',
-                        ),
+              ),
+              actions: [
+                ValueListenableBuilder<String>(
+                  valueListenable: _currentResolutionNotifier,
+                  builder: (context, resolution, _) {
+                    return PopupMenuButton<String>(
+                      color: AppColors.white,
+                      icon: Icon(
+                        Icons.settings,
+                        color: AppColors.greyScale.grey600,
+                        size: 28,
                       ),
-                    )
-                    .toList(),
-              ),
-            ],
-          ),
-          SliverPadding(
-            padding: AppPadding.horizontal20x(),
-            sliver: SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: .start,
-                children: [
-                  SizedBox(height: 20),
-                  Text(
-                    widget.title,
-                    style: AppTextStyles.source.medium(fontSize: 20),
-                  ),
-                  Divider(color: AppColors.greyScale.grey200),
+                      onSelected: changeResolution,
+                      itemBuilder: (context) =>
+                          ['1080', '720', '480', '240']
+                              .map(
+                                (res) => PopupMenuItem(
+                                  value: res,
+                                  child: Text(
+                                    '${res}p${resolution == res ? '*' : ''}',
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                    );
+                  },
+                ),
+              ],
+            ),
 
-                  /// available files in the current course
-                  SizedBox(height: appH(10)),
-                  Text(
-                    'Fayllar',
-                    style: AppTextStyles.source.semiBold(fontSize: 17),
-                  ),
-                  SizedBox(height: appH(14)),
-                  BlocBuilder<CourseFilesBloc, CourseFilesState>(
-                    builder: (context, state) {
-                      final isLoading = state is CourseFilesLoading;
-                      if (state is CourseFilesLoaded) {
-                        final data = state.entity;
+            SliverPadding(
+              padding: AppPadding.horizontal20x(),
+              sliver: SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    SizedBox(height: 20),
+                    Text(
+                      widget.title,
+                      style: AppTextStyles.source.medium(fontSize: 20),
+                    ),
+                    Divider(color: AppColors.greyScale.grey200),
 
-                        if (data.isEmpty) {
-                          return _emptyFileAndTest(
-                            text:
-                                'Hozirda kursga tegishli hech qanday fayylar mavjud emas!',
+                    /// Files section
+                    SizedBox(height: appH(10)),
+                    Text(
+                      'Fayllar',
+                      style: AppTextStyles.source.semiBold(fontSize: 17),
+                    ),
+                    SizedBox(height: appH(14)),
+                    BlocBuilder<CourseFilesBloc, CourseFilesState>(
+                      // Only rebuild when the loading/loaded/error state changes.
+                      buildWhen: (prev, curr) =>
+                          prev.runtimeType != curr.runtimeType,
+                      builder: (context, state) {
+                        final isLoading = state is CourseFilesLoading;
+                        if (state is CourseFilesLoaded) {
+                          final data = state.entity;
+                          if (data.isEmpty) {
+                            return _emptyFileAndTest(
+                              text:
+                                  'Hozirda kursga tegishli hech qanday fayylar mavjud emas!',
+                            );
+                          }
+                          return Column(
+                            crossAxisAlignment: .start,
+                            children: List.generate(data.length, (index) {
+                              final item = data[index];
+                              return DefaultCustomTileWg(
+                                tileMaxLines: 1,
+                                tileOverflow: .ellipsis,
+                                tileLeading:
+                                    SvgPicture.asset(AppVectors.pdfIcon),
+                                onTap: () {
+                                  _controllerNotifier.value?.pause();
+                                  _openFile(item.file, item.fileName);
+                                },
+                                tileTitle: item.fileName ?? 'File ',
+                                subTitle: formatFileSize(item.fileSize ?? 0),
+                              );
+                            }),
                           );
                         }
-
-                        return Column(
-                          crossAxisAlignment: .start,
-                          children: List.generate(data.length, (index) {
-                            final item = data[index];
-                            return DefaultCustomTileWg(
-                              tileMaxLines: 1,
-                              tileOverflow: .ellipsis,
-                              tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
-                              onTap: () {
-                                controller?.pause();
-                                _openFile(item.file, item.fileName);
-                              },
-                              tileTitle: item.fileName ?? 'File ',
-                              subTitle: formatFileSize(item.fileSize ?? 0),
-                            );
-                          }),
-                        );
-                      }
-                      return Skeletonizer(
-                        enabled: isLoading,
-                        child: DefaultCustomTileWg(
-                          tileMaxLines: 1,
-                          tileOverflow: .ellipsis,
-                          tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
-                          onTap: () {
-                            controller?.pause();
-                          },
-                          tileTitle: 'Tahlil, taqqoslash va prognozlash',
-                          subTitle: '3.4 MB',
-                        ),
-                      );
-                    },
-                  ),
-
-                  /// available tests in the current course
-                  SizedBox(height: appH(10)),
-                  Text(
-                    'Test topshiriqlar',
-                    style: AppTextStyles.source.semiBold(fontSize: 17),
-                  ),
-                  SizedBox(height: appH(16)),
-                  if (widget.testCount != 0)
-                    DefaultCustomTileWg(
-                      tileMaxLines: 1,
-                      tileOverflow: .ellipsis,
-                      tileLeading: null,
-                      onTap: () async {
-                        controller?.pause();
-                        await openMiniAppSheetFamily(
-                          context,
-                          showHandler: false,
-                          child: RegularTestCoursePage(
-                            courseId: widget.courseId,
-                            blockId: widget.topicId,
-                            lessonId: widget.lessonId,
+                        return Skeletonizer(
+                          enabled: isLoading,
+                          child: DefaultCustomTileWg(
+                            tileMaxLines: 1,
+                            tileOverflow: .ellipsis,
+                            tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
+                            onTap: () {
+                              _controllerNotifier.value?.pause();
+                            },
+                            tileTitle: 'Tahlil, taqqoslash va prognozlash',
+                            subTitle: '3.4 MB',
                           ),
                         );
                       },
-                      tileTitle: 'Test topshirig’i',
-                      subTitle: 'Mavzulashtirilgan test savollari',
-                      tileAction: Icon(
-                        IconlyLight.arrow_right_2,
-                        color: AppColors.greyScale.grey400,
-                      ),
-                    )
-                  else
-                    _emptyFileAndTest(
-                      text:
-                          'Hozirda kursga tegishli hech qanday testlar mavjud emas!',
                     ),
-                  const SizedBox(height: 20),
-                ],
+
+                    /// Tests section
+                    SizedBox(height: appH(10)),
+                    Text(
+                      'Test topshiriqlar',
+                      style: AppTextStyles.source.semiBold(fontSize: 17),
+                    ),
+                    SizedBox(height: appH(16)),
+                    if (widget.testCount != 0)
+                      DefaultCustomTileWg(
+                        tileMaxLines: 1,
+                        tileOverflow: .ellipsis,
+                        tileLeading: null,
+                        onTap: () async {
+                          _controllerNotifier.value?.pause();
+                          await openMiniAppSheetFamily(
+                            context,
+                            showHandler: false,
+                            child: RegularTestCoursePage(
+                              courseId: widget.courseId,
+                              blockId: widget.topicId,
+                              lessonId: widget.lessonId,
+                            ),
+                          );
+                        },
+                        tileTitle: 'Test topshirig\'i',
+                        subTitle: 'Mavzulashtirilgan test savollari',
+                        tileAction: Icon(
+                          IconlyLight.arrow_right_2,
+                          color: AppColors.greyScale.grey400,
+                        ),
+                      )
+                    else
+                      _emptyFileAndTest(
+                        text:
+                            'Hozirda kursga tegishli hech qanday testlar mavjud emas!',
+                      ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ));
+    );
   }
+
 
   DecoratedBox _emptyFileAndTest({required String text}) {
     return DecoratedBox(
@@ -456,7 +489,59 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
     );
   }
 
-  Widget _buildNoVideoWidget() {
+}
+
+
+class _VideoAreaWidget extends StatelessWidget {
+  final ValueNotifier<VideoPlayerController?> controllerNotifier;
+  final ValueNotifier<bool> showVideoNotifier;
+  final ValueNotifier<bool> hasVideoErrorNotifier;
+  final String? imagePath;
+  final VoidCallback onThumbnailTap;
+
+  const _VideoAreaWidget({
+    required this.controllerNotifier,
+    required this.showVideoNotifier,
+    required this.hasVideoErrorNotifier,
+    required this.imagePath,
+    required this.onThumbnailTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: hasVideoErrorNotifier,
+      builder: (context, hasError, _) {
+        if (hasError) return _buildNoVideoWidget(context);
+
+        return ValueListenableBuilder<bool>(
+          valueListenable: showVideoNotifier,
+          builder: (context, showVideo, _) {
+            if (!showVideo) {
+              return VideoThumbnailWidget(
+                imagePath: imagePath,
+                onTap: onThumbnailTap,
+              );
+            }
+
+            return ValueListenableBuilder<VideoPlayerController?>(
+              valueListenable: controllerNotifier,
+              builder: (context, controller, _) {
+                if (controller == null) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                // VideoPlayerWidget is a StatefulWidget that subscribes to
+                // the controller itself — no further rebuilds from here.
+                return VideoPlayerWidget(controller: controller);
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildNoVideoWidget(BuildContext context) {
     return Container(
       color: AppColors.greyScale.grey100,
       child: Column(

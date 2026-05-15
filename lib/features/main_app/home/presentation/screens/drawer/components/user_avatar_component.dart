@@ -29,94 +29,35 @@ class UserAvatarComponent extends StatefulWidget {
 
 class _UserAvatarComponentState extends State<UserAvatarComponent> {
   final ImagePicker _picker = ImagePicker();
+  static const int _maxImageSizeBytes = 4 * 1024 * 1024; // 4MB
 
   Future<void> _pickAndUploadImage() async {
-    // Show bottom sheet with options
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (ctx) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Profile rasimni tanlang!',
-                style: AppTextStyles.source.bold(fontSize: 18),
-              ),
-              const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: .center,
-                children: [
-                  _buildOption(
-                    context: ctx,
-                    icon: IconlyLight.image,
-                    label: 'Gallery',
-                    color: AppColors.primaryColor,
-                    onTap: () {
-                      Navigator.pop(ctx);
-                      _pickImage(ImageSource.gallery);
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildOption({
-    required BuildContext context,
-    required IconData icon,
-    required String label,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        width: 100,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withValues(alpha: 0.2)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 32, color: color),
-            const SizedBox(height: 8),
-            Text(
-              label,
-              style: AppTextStyles.source.medium(fontSize: 14, color: color),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Future<void> _pickImage(ImageSource source) async {
     final XFile? pickedFile = await _picker.pickImage(
-      source: source,
+      source: ImageSource.gallery,
       imageQuality: 80,
     );
 
-    if (pickedFile != null && mounted) {
-      final fixedFile = await _fixImageRotation(pickedFile);
+    if (pickedFile == null || !mounted) return;
 
-      context.read<AvatarBloc>().add(
-        AvatarEvent(params: AvatarParams(imagePath: fixedFile.path)),
+    final fixedFile = await _fixImageRotation(pickedFile);
+
+    final int fixedFileSize = await fixedFile.length();
+
+    if (fixedFileSize > _maxImageSizeBytes) {
+      errorFlushBar(
+        context,
+        'Image size must be less than 4 MB',
       );
+      return;
     }
+
+    context.read<AvatarBloc>().add(
+      AvatarEvent(
+        params: AvatarParams(
+          imagePath: fixedFile.path,
+        ),
+      ),
+    );
   }
 
   /// fix image rotation
@@ -128,16 +69,72 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
 
     final img.Image orientedImage = img.bakeOrientation(decoded);
 
-    final Uint8List fixed = img.encodeJpg(orientedImage, quality: 90);
+    final Uint8List fixed = img.encodeJpg(
+      orientedImage,
+      quality: 80,
+    );
 
     final dir = await getTemporaryDirectory();
+
     final fixedFile = File(
       '${dir.path}/fixed_${DateTime.now().millisecondsSinceEpoch}.jpg',
     );
+
     await fixedFile.writeAsBytes(fixed);
 
     return XFile(fixedFile.path);
   }
+
+  // Widget _buildOption({
+  //   required BuildContext context,
+  //   required IconData icon,
+  //   required String label,
+  //   required Color color,
+  //   required VoidCallback onTap,
+  // }) {
+  //   return InkWell(
+  //     onTap: onTap,
+  //     borderRadius: BorderRadius.circular(16),
+  //     child: Container(
+  //       width: 100,
+  //       padding: const EdgeInsets.symmetric(vertical: 16),
+  //       decoration: BoxDecoration(
+  //         color: color.withValues(alpha: 0.1),
+  //         borderRadius: BorderRadius.circular(16),
+  //         border: Border.all(color: color.withValues(alpha: 0.2)),
+  //       ),
+  //       child: Column(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: [
+  //           Icon(icon, size: 32, color: color),
+  //           const SizedBox(height: 8),
+  //           Text(
+  //             label,
+  //             style: AppTextStyles.source.medium(fontSize: 14, color: color),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+  //
+  // Future<void> _pickImage(ImageSource source) async {
+  //   final XFile? pickedFile = await _picker.pickImage(
+  //     source: source,
+  //     imageQuality: 80,
+  //   );
+  //
+  //   if (pickedFile != null && mounted) {
+  //     final fixedFile = await _fixImageRotation(pickedFile);
+  //
+  //     context.read<AvatarBloc>().add(
+  //       AvatarEvent(params: AvatarParams(imagePath: fixedFile.path)),
+  //     );
+  //   }
+  // }
+
+
+
 
   @override
   Widget build(BuildContext context) {

@@ -22,7 +22,7 @@ Future<void> finishLessonTestDialogScreen(
         child: Stack(
           alignment: Alignment.center,
           children: [
-          AlertDialog.adaptive(
+          AlertDialog(
             backgroundColor: AppColors.white,
             title: Column(
               children: [

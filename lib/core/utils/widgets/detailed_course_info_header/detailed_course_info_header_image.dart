@@ -13,7 +13,9 @@ class DetailedCourseInfoHeaderImage extends StatelessWidget {
     return SliverAppBar(
       expandedHeight: 320,
       pinned: false,
+      stretch: true,
       flexibleSpace: FlexibleSpaceBar(
+        stretchModes: [.zoomBackground],
         background: RepaintBoundary(
           child: Image.network(imagePath, fit: .cover),
         ),

@@ -8,28 +8,15 @@ import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/responsiveness/responsive.dart';
 import 'package:my_template/features/onboarding/screens/components/log_in_options_component.dart';
 
-class LogInOptionsPage extends StatefulWidget {
+class LogInOptionsPage extends StatelessWidget {
   const LogInOptionsPage({super.key});
 
   @override
-  State<LogInOptionsPage> createState() => _LogInOptionsPageState();
-}
-
-class _LogInOptionsPageState extends State<LogInOptionsPage> {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // precacheImage(const AssetImage(AppImages.onboardingLogIn), context);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final screenHeight = AppResponsiveness.screenHeight;
-    TDeviceUtils.systemNavigationBar(AppColors.white);
 
     return Scaffold(
-      backgroundColor: AppColors.primaryColor.withValues(alpha: 0.8),
-      extendBodyBehindAppBar: true,
+      backgroundColor: AppColors.primaryColor.withValues(alpha: 1),
+      // extendBodyBehindAppBar: true,
       // body: SvgPicture.asset(AppVectors.mainAppLogo),
       // body: Stack(
       // children: [
