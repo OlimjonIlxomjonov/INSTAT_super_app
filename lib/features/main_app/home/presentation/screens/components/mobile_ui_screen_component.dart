@@ -87,7 +87,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
   void _reloadAll() {
     context.read<CoursesBloc>().add(AvailableCoursesEvent());
     context.read<UserCoursesBloc>().add(
-      UserCoursesEvent(params: UserCoursesParams(state: 'all')),
+      UserCoursesEvent(params: UserCoursesParams(state: 'in_progress')),
     );
     context.read<UserMeBloc>().add(UserMeEvent());
     context.read<PopularBooksBloc>().add(FetchPopularBooksEvent());

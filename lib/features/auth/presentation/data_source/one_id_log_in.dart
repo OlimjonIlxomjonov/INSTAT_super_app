@@ -49,7 +49,7 @@ class _OneIdLoginPageState extends State<OneIdLoginPage> {
               AppRoute.close();
               errorFlushBar(
                 context,
-                'Check the internet connection and try again!',
+                'Something went wrong please try again later!',
               );
             }
           },

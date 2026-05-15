@@ -47,32 +47,11 @@ class DetailedCourseInfoPage extends StatefulWidget {
 class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
     with SingleTickerProviderStateMixin {
   late final List<Widget> _headerSlivers;
-  late bool _isBought;
   late TabController _tabController;
-
-  void _openPayment(BuildContext context) {
-    if (!_isBought) {
-      onlineLibStyleCustomBottomSheetWg(
-        context,
-        headerTitle: "To'lov turi",
-        child: PaymentOpenBottomSheetWg(courseId: widget.data.id),
-      );
-    } else {
-      FamilyNavigation.familyPush(
-        showHandle: false,
-        context,
-        DetailedUserBoughtCoursesEduPage(
-          data: widget.data,
-          categoryName: widget.courseCategory,
-        ),
-      );
-    }
-  }
 
   @override
   void initState() {
     super.initState();
-    _isBought = widget.data.userOrder?.status == 'paid';
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
       if (!mounted) return;
@@ -150,9 +129,9 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
     return BlocListener<BuyCourseBloc, BuyCourseState>(
       listener: (context, state) {
         if (state is BuyCourseLoaded) {
-          setState(() {
-            _isBought = true;
-          });
+          context.read<PerCourseBloc>().add(
+            PerCourseEvent(params: PerCourseParams(courseId: widget.data.id)),
+          );
         }
       },
       child: Scaffold(

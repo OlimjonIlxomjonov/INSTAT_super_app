@@ -40,19 +40,24 @@ class _CourseCommentsTabState extends State<CourseCommentsTab>
     super.build(context);
     return Column(
       children: [
-        Padding(
-          padding: AppPadding.horizontal20x(),
-          child: ExtendSectionSeeAllWg(
-            title: 'Qoldirilgan izohlar',
-            onTap: () => _openAllComments(context, items!),
-          ),
-        ),
+        items!.isNotEmpty
+            ? Padding(
+                padding: AppPadding.horizontal20x(),
+                child: ExtendSectionSeeAllWg(
+                  title: 'Qoldirilgan izohlar',
+                  onTap: () => _openAllComments(context, items),
+                ),
+              )
+            : SizedBox.shrink(),
         BlocBuilder<CommentsBloc, CommentsState>(
           builder: (context, state) {
             if (state is CommentsLoaded) {
               final data = state.response.reviews;
               if (data.isEmpty) {
-                return EmptyState(message: 'No Comments Yet');
+                return SizedBox(
+                  width: 200,
+                  child: EmptyState(message: 'Bosh!'),
+                );
               }
 
               return Column(
