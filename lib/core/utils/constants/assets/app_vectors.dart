@@ -41,4 +41,10 @@ abstract class AppVectors {
   static const googleLogo = '${baseOnboardingPath}google_logo.svg';
   static const appleLogo = '${baseOnboardingPath}apple_logo.svg';
   static const facebookLogo = '${baseOnboardingPath}facebook_logo.svg';
+
+  /// books brief info card icons
+  static const cartBrief = '${basePath}cart_brief.svg';
+  static const bookOpenBrief = '${basePath}book_open_brief.svg';
+  static const bookShvBrief = '${basePath}book_shv_brief.svg';
+  static const trophyBrief = '${basePath}trophy_brief.svg';
 }

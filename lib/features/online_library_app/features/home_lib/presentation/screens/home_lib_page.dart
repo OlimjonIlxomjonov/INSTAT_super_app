@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:my_template/core/common/placeholder/banner_placeholder.dart';
+import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
@@ -21,6 +23,7 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/detailed_online_book_component.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/see_all_online_books_component.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/search_books_page.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/widgets/user_lib_info_wg.dart';
 
 class HomeLibPage extends StatefulWidget {
   final VoidCallback onTap;
@@ -70,16 +73,23 @@ class _HomeLibPageState extends State<HomeLibPage> {
             titleSpacing: 20,
             title: AppSearchbarWg(onTap: () => _openSearch(context)),
           ),
+
+          /// news banner
           SliverPadding(
             padding: AppPadding.horizontal20x(),
-            sliver: SliverToBoxAdapter(child: BannerPlaceholder()),
+            sliver: const SliverToBoxAdapter(child: BannerPlaceholder()),
           ),
+
+          const SliverToBoxAdapter(child: SizedBox(height: 15)),
+
+          /// user book model info
+          UserLibInfoWg(),
+
           SliverPadding(
             padding: AppPadding.horizontal20x(),
             sliver: SliverToBoxAdapter(
               child: Column(
                 children: [
-                  SizedBox(height: appH(15)),
                   // ExtendSectionSeeAllWg(
                   //   title: 'O’qilayotgan kitoblar',
                   //   onTap: widget.onTap,

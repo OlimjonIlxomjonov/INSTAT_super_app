@@ -5,6 +5,23 @@ class AppColors {
 
   static const greyScale = _GreyScale();
 
+  /// Online Books brief background colors
+  // green
+  static const Color linearLightGreen = Color(0xFF64D68E);
+  static const Color linearDarkGreen = Color(0xFF34704A);
+
+  // blue
+  static const Color linearLightBlue = Color(0xFF76A8F9);
+  static const Color linearDarkBlue = Color(0xFF466393);
+
+  //orange
+  static const Color linearLightOrange = Color(0xFFF8BB54);
+  static const Color linearDarkOrange = Color(0xFF926E31);
+
+  // purple
+  static const Color linearLightPurple = Color(0xFFAE8DF9);
+  static const Color linearDarkPurple = Color(0xFF675393);
+
   /// DESIGN COLORS
   static const Color primaryColor = Color(0xff2B75CC);
   static const Color splashBackgroundColor = Color(0xff203787);
