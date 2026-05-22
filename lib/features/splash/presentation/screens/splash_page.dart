@@ -52,12 +52,13 @@ class _SplashPageState extends State<SplashPage> {
     try {
       hasInternet = await InternetConnection().hasInternetAccess.timeout(
         const Duration(seconds: 3),
-        onTimeout: () => true, // Proceed to destination instead of freezing or blocking
+        onTimeout: () =>
+            true, // Proceed to destination instead of freezing or blocking
       );
     } catch (e) {
       hasInternet = true;
     }
-    
+
     if (!mounted) return;
 
     if (hasInternet) {
@@ -76,7 +77,6 @@ class _SplashPageState extends State<SplashPage> {
       body: Stack(
         children: [
           Positioned.fill(child: CustomPaint(painter: _painter)),
-
           //  logo with smooth fade and zoom
           Center(
             child: TweenAnimationBuilder<double>(
@@ -86,10 +86,7 @@ class _SplashPageState extends State<SplashPage> {
               builder: (context, value, child) {
                 return Transform.scale(
                   scale: 0.8 + (0.2 * value),
-                  child: Opacity(
-                    opacity: value,
-                    child: child,
-                  ),
+                  child: Opacity(opacity: value, child: child),
                 );
               },
               child: SvgPicture.asset(AppVectors.mainAppLogo),

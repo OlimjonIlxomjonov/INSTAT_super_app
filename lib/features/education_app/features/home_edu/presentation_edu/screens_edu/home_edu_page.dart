@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/placeholder/banner_placeholder.dart';
+import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -67,7 +68,7 @@ class HomeEduPage extends StatelessWidget {
       appBar: DraggableAppBarWg(onProfileTap: onProfileTap),
       body: CustomScrollView(
         slivers: [
-          /// HOME HEADER
+          /// SEARCH BAR
           SliverAppBar(
             toolbarHeight: 56 + 24,
             floating: true,

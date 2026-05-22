@@ -29,24 +29,6 @@ class UserOnlineBooksLibPage extends StatelessWidget {
         ),
         body: CustomScrollView(
           slivers: [
-            // SliverAppBar(
-            //   pinned: false,
-            //   floating: true,
-            //   backgroundColor: AppColors.white,
-            //   elevation: 0,
-            //   automaticallyImplyLeading: false,
-            //   toolbarHeight: 0,
-            //   bottom: PreferredSize(
-            //     preferredSize: Size.fromHeight(90),
-            //     child: Padding(
-            //       padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
-            //       child: CustomTabBarWg(
-            //         firstTab: "Jarayonda",
-            //         secondTab: "Tugallangan",
-            //       ),
-            //     ),
-            //   ),
-            // ),
             SliverAppBar(
               primary: false,
               floating: true,

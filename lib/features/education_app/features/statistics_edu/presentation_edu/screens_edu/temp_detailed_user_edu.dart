@@ -10,6 +10,8 @@ import 'package:my_template/features/education_app/features/statistics_edu/prese
 import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/screens_edu/tabs/user_sertificats_tab.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/widgets_edu/custom_profile_back.dart';
 
+import '../widgets_edu/avatar_view_wg.dart';
+
 class TempDetailedUserEdu extends StatelessWidget {
   final String? imagePath;
   final String name;
@@ -19,6 +21,26 @@ class TempDetailedUserEdu extends StatelessWidget {
     required this.imagePath,
     required this.name,
   });
+
+  void _openAvatarViewer(BuildContext context) {
+    final ImageProvider image = imagePath != null
+        ? NetworkImage(imagePath!)
+        : AssetImage(AppImages.profileBackground) as ImageProvider;
+
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        opaque: false,
+        barrierDismissible: true,
+        barrierColor: Colors.black87,
+        pageBuilder: (_, animation, __) => FadeTransition(
+          opacity: animation,
+          child: AvatarViewerPage(image: image, heroTag: 'user_avatar'),
+        ),
+        transitionDuration: const Duration(milliseconds: 280),
+        reverseTransitionDuration: const Duration(milliseconds: 220),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +59,9 @@ class TempDetailedUserEdu extends StatelessWidget {
                 avatar: imagePath != null
                     ? NetworkImage(imagePath!)
                     : AssetImage(AppImages.profileBackground),
+                heroTag: 'user_avatar', // 👈 pass hero tag
+                onAvatarTap: () =>
+                    _openAvatarViewer(context), // 👈 tap callback
               ),
               SizedBox(height: appH(12)),
               Text(name, style: AppTextStyles.source.semiBold(fontSize: 22)),
@@ -54,15 +79,12 @@ class TempDetailedUserEdu extends StatelessWidget {
                 ],
               ),
               SizedBox(height: appH(20)),
-
               CustomTabBarWg(
-                firstTab: 'Ma’lumotlar',
+                firstTab: "Ma'lumotlar",
                 secondTab: "Medallar",
                 thirdTab: "Sertifikatlar",
               ),
-
               SizedBox(height: appH(12)),
-
               Expanded(
                 child: TabBarView(
                   children: [

@@ -11,8 +11,12 @@ class ProfileHeader extends StatelessWidget {
     this.avatarRadius = 48,
     this.cornerRadius = 18,
     this.ring = 4,
+    this.heroTag,
+    this.onAvatarTap,
   });
 
+  final String? heroTag;
+  final VoidCallback? onAvatarTap;
   final ImageProvider background;
   final ImageProvider avatar;
 
@@ -57,9 +61,15 @@ class ProfileHeader extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: EdgeInsets.all(ring),
-                  child: CircleAvatar(
-                    radius: avatarRadius,
-                    backgroundImage: avatar,
+                  child: GestureDetector(
+                    onTap: onAvatarTap,
+                    child: Hero(
+                      tag: heroTag ?? 'avatar_fallback',
+                      child: CircleAvatar(
+                        radius: avatarRadius,
+                        backgroundImage: avatar,
+                      ),
+                    ),
                   ),
                 ),
               ),

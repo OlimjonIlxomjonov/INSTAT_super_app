@@ -20,6 +20,8 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
 
+import '../../../../../../education_app/features/statistics_edu/presentation_edu/widgets_edu/avatar_view_wg.dart';
+
 class UserAvatarComponent extends StatefulWidget {
   const UserAvatarComponent({super.key});
 
@@ -44,19 +46,12 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
     final int fixedFileSize = await fixedFile.length();
 
     if (fixedFileSize > _maxImageSizeBytes) {
-      errorFlushBar(
-        context,
-        'Image size must be less than 4 MB',
-      );
+      errorFlushBar(context, 'Image size must be less than 4 MB');
       return;
     }
 
     context.read<AvatarBloc>().add(
-      AvatarEvent(
-        params: AvatarParams(
-          imagePath: fixedFile.path,
-        ),
-      ),
+      AvatarEvent(params: AvatarParams(imagePath: fixedFile.path)),
     );
   }
 
@@ -69,10 +64,7 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
 
     final img.Image orientedImage = img.bakeOrientation(decoded);
 
-    final Uint8List fixed = img.encodeJpg(
-      orientedImage,
-      quality: 80,
-    );
+    final Uint8List fixed = img.encodeJpg(orientedImage, quality: 80);
 
     final dir = await getTemporaryDirectory();
 
@@ -85,56 +77,26 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
     return XFile(fixedFile.path);
   }
 
-  // Widget _buildOption({
-  //   required BuildContext context,
-  //   required IconData icon,
-  //   required String label,
-  //   required Color color,
-  //   required VoidCallback onTap,
-  // }) {
-  //   return InkWell(
-  //     onTap: onTap,
-  //     borderRadius: BorderRadius.circular(16),
-  //     child: Container(
-  //       width: 100,
-  //       padding: const EdgeInsets.symmetric(vertical: 16),
-  //       decoration: BoxDecoration(
-  //         color: color.withValues(alpha: 0.1),
-  //         borderRadius: BorderRadius.circular(16),
-  //         border: Border.all(color: color.withValues(alpha: 0.2)),
-  //       ),
-  //       child: Column(
-  //         mainAxisSize: MainAxisSize.min,
-  //         children: [
-  //           Icon(icon, size: 32, color: color),
-  //           const SizedBox(height: 8),
-  //           Text(
-  //             label,
-  //             style: AppTextStyles.source.medium(fontSize: 14, color: color),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-  //
-  // Future<void> _pickImage(ImageSource source) async {
-  //   final XFile? pickedFile = await _picker.pickImage(
-  //     source: source,
-  //     imageQuality: 80,
-  //   );
-  //
-  //   if (pickedFile != null && mounted) {
-  //     final fixedFile = await _fixImageRotation(pickedFile);
-  //
-  //     context.read<AvatarBloc>().add(
-  //       AvatarEvent(params: AvatarParams(imagePath: fixedFile.path)),
-  //     );
-  //   }
-  // }
+  /// see full avatar iamge
+  void _openAvatarViewer(String? thumbnail) {
+    if (thumbnail == null) return; // no photo to view
 
+    final ImageProvider image = NetworkImage(thumbnail);
 
-
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        opaque: false,
+        barrierDismissible: true,
+        barrierColor: Colors.black87,
+        pageBuilder: (_, animation, __) => FadeTransition(
+          opacity: animation,
+          child: AvatarViewerPage(image: image, heroTag: 'profile_avatar'),
+        ),
+        transitionDuration: const Duration(milliseconds: 280),
+        reverseTransitionDuration: const Duration(milliseconds: 220),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +140,7 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
 
                       final String displayName = state is UserMeLoaded
                           ? "${state.entity.firstName.capitalize()} ${state.entity.lastName.capitalize()}"
-                          : "Firstname Lastname";
+                          : "Loading...";
                       final String? thumbnail =
                           state is UserMeLoaded && state.entity.avatar != null
                           ? state.entity.avatar
@@ -198,20 +160,27 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                                     return Stack(
                                       alignment: Alignment.center,
                                       children: [
-                                        CircleAvatar(
-                                          radius: 75,
-                                          foregroundImage: thumbnail != null
-                                              ? NetworkImage(thumbnail)
-                                              : null,
-                                          child: thumbnail == null
-                                              ? Icon(
-                                                  Icons.person,
-                                                  color: AppColors
-                                                      .greyScale
-                                                      .grey600,
-                                                  size: 90,
-                                                )
-                                              : null,
+                                        GestureDetector(
+                                          onTap: () =>
+                                              _openAvatarViewer(thumbnail),
+                                          child: Hero(
+                                            tag: 'profile_avatar',
+                                            child: CircleAvatar(
+                                              radius: 75,
+                                              foregroundImage: thumbnail != null
+                                                  ? NetworkImage(thumbnail)
+                                                  : null,
+                                              child: thumbnail == null
+                                                  ? Icon(
+                                                      Icons.person,
+                                                      color: AppColors
+                                                          .greyScale
+                                                          .grey600,
+                                                      size: 90,
+                                                    )
+                                                  : null,
+                                            ),
+                                          ),
                                         ),
                                         if (isAvatarLoading)
                                           Container(

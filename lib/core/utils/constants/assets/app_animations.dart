@@ -6,6 +6,7 @@ class AppAnimations {
   static const trophyAnimation = '${_path}Trophy.json';
   static const successCheck = '${_path}success_check.json';
   static const addToCart = '${_path}add_to_cart_v2.json';
+  static const confetti = '${_path}confetti.json';
 
   /// states
   static const emptyState = '${_path}empty_ghost.json'; // _state

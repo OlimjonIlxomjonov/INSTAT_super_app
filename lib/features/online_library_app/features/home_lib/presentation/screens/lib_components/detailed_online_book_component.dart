@@ -222,10 +222,10 @@ class _DetailedOnlineBookComponentState
                     ExtendSectionSeeAllWg(
                       title: 'O’xshash kitoblar',
                       onTap: () {
-                        FamilyNavigation.familyPush(
-                          context,
-                          SimilarOnlineBooksComponent(),
-                        );
+                        // FamilyNavigation.familyPush(
+                        //   context,
+                        //   SimilarOnlineBooksComponent(),
+                        // );
                       },
                     ),
                   ],

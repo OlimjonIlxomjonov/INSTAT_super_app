@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -56,13 +58,15 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
   final ValueNotifier<bool> _showVideoNotifier = ValueNotifier(false);
   final ValueNotifier<bool> _hasVideoErrorNotifier = ValueNotifier(false);
   final ValueNotifier<bool> _isDownloadingNotifier = ValueNotifier(false);
-  final ValueNotifier<String> _currentResolutionNotifier =
-      ValueNotifier('1080');
+  final ValueNotifier<String> _currentResolutionNotifier = ValueNotifier(
+    '1080',
+  );
 
   int _lastSentProgress = -1;
   DateTime? _lastProgressCheck;
   static const _progressCheckInterval = Duration(seconds: 2);
 
+  HlsProxyServer? _proxyServer;
 
   @override
   void initState() {
@@ -83,6 +87,8 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
   void dispose() {
     // Dispose the active controller cleanly before the page is destroyed.
     _disposeController(_controllerNotifier.value);
+
+    _proxyServer?.stop();
 
     _controllerNotifier.dispose();
     _showVideoNotifier.dispose();
@@ -153,16 +159,22 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
       logger.e('No token found');
       return;
     }
-
+    logger.f(token);
     _hasVideoErrorNotifier.value = false;
 
+    // Start HLS Local Proxy Server
+    if (_proxyServer != null) {
+      await _proxyServer!.stop();
+    }
+    _proxyServer = HlsProxyServer(token: token);
+    final port = await _proxyServer!.start();
+
     final resolution = _currentResolutionNotifier.value;
-    final url =
-        'https://test.avacoder.uz/api/stream/${widget.lessonId}/${resolution}p.m3u8';
+    final localUrl =
+        'http://127.0.0.1:$port/api/stream/${widget.lessonId}/${resolution}p.m3u8';
 
     final newController = VideoPlayerController.networkUrl(
-      Uri.parse(url),
-      httpHeaders: {'Authorization': 'Bearer $token'},
+      Uri.parse(localUrl),
       formatHint: VideoFormat.hls,
     )..setLooping(false);
 
@@ -185,7 +197,8 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
 
   Future<void> changeResolution(String newRes) async {
     final currentController = _controllerNotifier.value;
-    if (newRes == _currentResolutionNotifier.value || currentController == null) {
+    if (newRes == _currentResolutionNotifier.value ||
+        currentController == null) {
       return;
     }
 
@@ -200,12 +213,20 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
       return;
     }
 
-    final url =
-        'https://test.avacoder.uz/api/stream/${widget.lessonId}/${newRes}p.m3u8';
+    // Reuse HLS Local Proxy Server
+    int port;
+    if (_proxyServer == null) {
+      _proxyServer = HlsProxyServer(token: token);
+      port = await _proxyServer!.start();
+    } else {
+      port = _proxyServer!.port;
+    }
+
+    final localUrl =
+        'http://127.0.0.1:$port/api/stream/${widget.lessonId}/${newRes}p.m3u8';
 
     final newController = VideoPlayerController.networkUrl(
-      Uri.parse(url),
-      httpHeaders: {'Authorization': 'Bearer $token'},
+      Uri.parse(localUrl),
       formatHint: VideoFormat.hls,
     )..setLooping(false);
 
@@ -264,7 +285,6 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return BlocListener<LessonVideoProgressBloc, LessonVideoProgressState>(
@@ -290,185 +310,234 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
         }
       },
       child: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              expandedHeight: 250,
-              collapsedHeight: 250,
-              pinned: true,
-              flexibleSpace: FlexibleSpaceBar(
-                background: _VideoAreaWidget(
-                  controllerNotifier: _controllerNotifier,
-                  showVideoNotifier: _showVideoNotifier,
-                  hasVideoErrorNotifier: _hasVideoErrorNotifier,
-                  imagePath: widget.imagePath,
-                  onThumbnailTap: () {
-                    _showVideoNotifier.value = true;
-                    _initVideo();
-                  },
-                ),
-              ),
-              leading: Padding(
-                padding: .only(left: 10, top: 10),
-                child: IconButton(
-                  onPressed: () {
-                    _controllerNotifier.value?.pause();
-                    FamilyNavigation.familyClose(context);
-                  },
-                  style: IconButton.styleFrom(
-                    backgroundColor: AppColors.white.withValues(alpha: 0.6),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: .circular(50),
+        body: Stack(
+          children: [
+            CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  expandedHeight: 250,
+                  collapsedHeight: 250,
+                  pinned: true,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: _VideoAreaWidget(
+                      controllerNotifier: _controllerNotifier,
+                      showVideoNotifier: _showVideoNotifier,
+                      hasVideoErrorNotifier: _hasVideoErrorNotifier,
+                      imagePath: widget.imagePath,
+                      onThumbnailTap: () {
+                        _showVideoNotifier.value = true;
+                        _initVideo();
+                      },
                     ),
                   ),
-                  icon: Icon(IconlyLight.arrow_left_2, size: 20),
-                ),
-              ),
-              actions: [
-                ValueListenableBuilder<String>(
-                  valueListenable: _currentResolutionNotifier,
-                  builder: (context, resolution, _) {
-                    return PopupMenuButton<String>(
-                      color: AppColors.white,
-                      icon: Icon(
-                        Icons.settings,
-                        color: AppColors.greyScale.grey600,
-                        size: 28,
+                  leading: Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 10),
+                    child: IconButton(
+                      onPressed: () {
+                        _controllerNotifier.value?.pause();
+                        FamilyNavigation.familyClose(context);
+                      },
+                      style: IconButton.styleFrom(
+                        backgroundColor: AppColors.white.withValues(alpha: 0.6),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
                       ),
-                      onSelected: changeResolution,
-                      itemBuilder: (context) =>
-                          ['1080', '720', '480', '240']
-                              .map(
-                                (res) => PopupMenuItem(
-                                  value: res,
-                                  child: Text(
-                                    '${res}p${resolution == res ? '*' : ''}',
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                    );
-                  },
-                ),
-              ],
-            ),
-
-            SliverPadding(
-              padding: AppPadding.horizontal20x(),
-              sliver: SliverToBoxAdapter(
-                child: Column(
-                  crossAxisAlignment: .start,
-                  children: [
-                    SizedBox(height: 20),
-                    Text(
-                      widget.title,
-                      style: AppTextStyles.source.medium(fontSize: 20),
+                      icon: const Icon(IconlyLight.arrow_left_2, size: 20),
                     ),
-                    Divider(color: AppColors.greyScale.grey200),
-
-                    /// Files section
-                    SizedBox(height: appH(10)),
-                    Text(
-                      'Fayllar',
-                      style: AppTextStyles.source.semiBold(fontSize: 17),
-                    ),
-                    SizedBox(height: appH(14)),
-                    BlocBuilder<CourseFilesBloc, CourseFilesState>(
-                      // Only rebuild when the loading/loaded/error state changes.
-                      buildWhen: (prev, curr) =>
-                          prev.runtimeType != curr.runtimeType,
-                      builder: (context, state) {
-                        final isLoading = state is CourseFilesLoading;
-                        if (state is CourseFilesLoaded) {
-                          final data = state.entity;
-                          if (data.isEmpty) {
-                            return _emptyFileAndTest(
-                              text:
-                                  'Hozirda kursga tegishli hech qanday fayylar mavjud emas!',
-                            );
-                          }
-                          return Column(
-                            crossAxisAlignment: .start,
-                            children: List.generate(data.length, (index) {
-                              final item = data[index];
-                              return DefaultCustomTileWg(
-                                tileMaxLines: 1,
-                                tileOverflow: .ellipsis,
-                                tileLeading:
-                                    SvgPicture.asset(AppVectors.pdfIcon),
-                                onTap: () {
-                                  _controllerNotifier.value?.pause();
-                                  _openFile(item.file, item.fileName);
-                                },
-                                tileTitle: item.fileName ?? 'File ',
-                                subTitle: formatFileSize(item.fileSize ?? 0),
-                              );
-                            }),
-                          );
-                        }
-                        return Skeletonizer(
-                          enabled: isLoading,
-                          child: DefaultCustomTileWg(
-                            tileMaxLines: 1,
-                            tileOverflow: .ellipsis,
-                            tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
-                            onTap: () {
-                              _controllerNotifier.value?.pause();
-                            },
-                            tileTitle: 'Tahlil, taqqoslash va prognozlash',
-                            subTitle: '3.4 MB',
+                  ),
+                  actions: [
+                    ValueListenableBuilder<String>(
+                      valueListenable: _currentResolutionNotifier,
+                      builder: (context, resolution, _) {
+                        return PopupMenuButton<String>(
+                          color: AppColors.white,
+                          icon: Icon(
+                            Icons.settings,
+                            color: AppColors.greyScale.grey600,
+                            size: 28,
                           ),
+                          onSelected: changeResolution,
+                          itemBuilder: (context) =>
+                              ['1080', '720', '480', '240']
+                                  .map(
+                                    (res) => PopupMenuItem(
+                                      value: res,
+                                      child: Text(
+                                        '${res}p${resolution == res ? '*' : ''}',
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
                         );
                       },
                     ),
-
-                    /// Tests section
-                    SizedBox(height: appH(10)),
-                    Text(
-                      'Test topshiriqlar',
-                      style: AppTextStyles.source.semiBold(fontSize: 17),
-                    ),
-                    SizedBox(height: appH(16)),
-                    if (widget.testCount != 0)
-                      DefaultCustomTileWg(
-                        tileMaxLines: 1,
-                        tileOverflow: .ellipsis,
-                        tileLeading: null,
-                        onTap: () async {
-                          _controllerNotifier.value?.pause();
-                          await openMiniAppSheetFamily(
-                            context,
-                            showHandler: false,
-                            child: RegularTestCoursePage(
-                              courseId: widget.courseId,
-                              blockId: widget.topicId,
-                              lessonId: widget.lessonId,
-                            ),
-                          );
-                        },
-                        tileTitle: 'Test topshirig\'i',
-                        subTitle: 'Mavzulashtirilgan test savollari',
-                        tileAction: Icon(
-                          IconlyLight.arrow_right_2,
-                          color: AppColors.greyScale.grey400,
-                        ),
-                      )
-                    else
-                      _emptyFileAndTest(
-                        text:
-                            'Hozirda kursga tegishli hech qanday testlar mavjud emas!',
-                      ),
-                    const SizedBox(height: 20),
                   ],
                 ),
-              ),
+
+                SliverPadding(
+                  padding: AppPadding.horizontal20x(),
+                  sliver: SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 20),
+                        Text(
+                          widget.title,
+                          style: AppTextStyles.source.medium(fontSize: 20),
+                        ),
+                        Divider(color: AppColors.greyScale.grey200),
+
+                        /// Files section
+                        const SizedBox(height: 10),
+                        Text(
+                          'Fayllar',
+                          style: AppTextStyles.source.semiBold(fontSize: 17),
+                        ),
+                        const SizedBox(height: 14),
+                        BlocBuilder<CourseFilesBloc, CourseFilesState>(
+                          // Only rebuild when the loading/loaded/error state changes.
+                          buildWhen: (prev, curr) =>
+                              prev.runtimeType != curr.runtimeType,
+                          builder: (context, state) {
+                            final isLoading = state is CourseFilesLoading;
+                            if (state is CourseFilesLoaded) {
+                              final data = state.entity;
+                              if (data.isEmpty) {
+                                return _emptyFileAndTest(
+                                  text:
+                                      'Hozirda kursga tegishli hech qanday fayylar mavjud emas!',
+                                );
+                              }
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: List.generate(data.length, (index) {
+                                  final item = data[index];
+                                  return DefaultCustomTileWg(
+                                    tileMaxLines: 1,
+                                    tileOverflow: TextOverflow.ellipsis,
+                                    tileLeading:
+                                        SvgPicture.asset(AppVectors.pdfIcon),
+                                    onTap: () {
+                                      _controllerNotifier.value?.pause();
+                                      _openFile(item.file, item.fileName);
+                                    },
+                                    tileTitle: item.fileName ?? 'File ',
+                                    subTitle: formatFileSize(item.fileSize ?? 0),
+                                  );
+                                }),
+                              );
+                            }
+                            return Skeletonizer(
+                              enabled: isLoading,
+                              child: DefaultCustomTileWg(
+                                tileMaxLines: 1,
+                                tileOverflow: TextOverflow.ellipsis,
+                                tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
+                                onTap: () {
+                                  _controllerNotifier.value?.pause();
+                                },
+                                tileTitle: 'Tahlil, taqqoslash va prognozlash',
+                                subTitle: '3.4 MB',
+                              ),
+                            );
+                          },
+                        ),
+
+                        /// Tests section
+                        const SizedBox(height: 10),
+                        Text(
+                          'Test topshiriqlar',
+                          style: AppTextStyles.source.semiBold(fontSize: 17),
+                        ),
+                        const SizedBox(height: 16),
+                        if (widget.testCount != 0)
+                          DefaultCustomTileWg(
+                            tileMaxLines: 1,
+                            tileOverflow: TextOverflow.ellipsis,
+                            tileLeading: null,
+                            onTap: () async {
+                              _controllerNotifier.value?.pause();
+                              await openMiniAppSheetFamily(
+                                context,
+                                showHandler: false,
+                                child: RegularTestCoursePage(
+                                  courseId: widget.courseId,
+                                  blockId: widget.topicId,
+                                  lessonId: widget.lessonId,
+                                ),
+                              );
+                            },
+                            tileTitle: 'Test topshirig\'i',
+                            subTitle: 'Mavzulashtirilgan test savollari',
+                            tileAction: Icon(
+                              IconlyLight.arrow_right_2,
+                              color: AppColors.greyScale.grey400,
+                            ),
+                          )
+                        else
+                          _emptyFileAndTest(
+                            text:
+                                'Hozirda kursga tegishli hech qanday testlar mavjud emas!',
+                          ),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            ValueListenableBuilder<bool>(
+              valueListenable: _isDownloadingNotifier,
+              builder: (context, isDownloading, _) {
+                if (!isDownloading) return const SizedBox.shrink();
+                return Container(
+                  color: Colors.black.withValues(alpha: 0.4),
+                  child: Center(
+                    child: Card(
+                      color: AppColors.white,
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 28,
+                          vertical: 24,
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const CircularProgressIndicator(),
+                            const SizedBox(height: 18),
+                            Text(
+                              'Fayl yuklab olinmoqda...',
+                              style: AppTextStyles.source.medium(
+                                fontSize: 16,
+                                color: AppColors.greyScale.grey800,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Iltimos, kuting',
+                              style: AppTextStyles.source.regular(
+                                fontSize: 13,
+                                color: AppColors.greyScale.grey500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),
       ),
     );
   }
-
 
   DecoratedBox _emptyFileAndTest({required String text}) {
     return DecoratedBox(
@@ -488,9 +557,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
       ),
     );
   }
-
 }
-
 
 class _VideoAreaWidget extends StatelessWidget {
   final ValueNotifier<VideoPlayerController?> controllerNotifier;
@@ -573,3 +640,96 @@ class _VideoAreaWidget extends StatelessWidget {
     );
   }
 }
+
+class HlsProxyServer {
+  HttpServer? _server;
+  final String remoteBaseUrl = 'https://test.avacoder.uz';
+  final String token;
+
+  HlsProxyServer({required this.token});
+
+  int get port => _server?.port ?? 0;
+
+  Future<int> start() async {
+    _server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    _server!.listen(_handleRequest, onError: (error) {
+      // Handle server error if needed
+    });
+    return _server!.port;
+  }
+
+  Future<void> stop() async {
+    await _server?.close(force: true);
+    _server = null;
+  }
+
+  void _handleRequest(HttpRequest request) async {
+    final client = HttpClient();
+    try {
+      final remoteUri = Uri.parse(remoteBaseUrl).replace(
+        path: request.uri.path,
+        queryParameters: request.uri.queryParameters.isNotEmpty 
+            ? request.uri.queryParameters 
+            : null,
+      );
+
+      final remoteRequest = await client.openUrl(request.method, remoteUri);
+
+      // Copy incoming request headers to remote request
+      request.headers.forEach((name, values) {
+        if (name != 'host' && name != 'connection' && name != 'accept-encoding') {
+          for (var value in values) {
+            remoteRequest.headers.add(name, value);
+          }
+        }
+      });
+
+      // Inject the Authorization token!
+      remoteRequest.headers.set('Authorization', 'Bearer $token');
+
+      // Forward request body if any
+      if (request.contentLength > 0) {
+        await remoteRequest.addStream(request);
+      }
+
+      final remoteResponse = await remoteRequest.close();
+
+      // Set status code
+      request.response.statusCode = remoteResponse.statusCode;
+
+      // Copy response headers
+      remoteResponse.headers.forEach((name, values) {
+        if (name != 'content-length') {
+          for (var value in values) {
+            request.response.headers.add(name, value);
+          }
+        }
+      });
+
+      bool isM3u8 = request.uri.path.endsWith('.m3u8') ||
+          remoteResponse.headers.value('content-type')?.contains('mpegurl') == true;
+
+      if (isM3u8) {
+        final bodyBytes = await remoteResponse.expand((chunk) => chunk).toList();
+        final bodyString = utf8.decode(bodyBytes);
+
+        // Rewrite remote URL to local proxy address
+        final localAddress = 'http://127.0.0.1:$port';
+        final rewrittenBody = bodyString.replaceAll(remoteBaseUrl, localAddress);
+
+        final responseBytes = utf8.encode(rewrittenBody);
+        request.response.headers.set('content-length', responseBytes.length.toString());
+        request.response.add(responseBytes);
+      } else {
+        // Stream segments/content directly
+        await request.response.addStream(remoteResponse);
+      }
+    } catch (e) {
+      request.response.statusCode = HttpStatus.internalServerError;
+    } finally {
+      await request.response.close();
+      client.close();
+    }
+  }
+}
+

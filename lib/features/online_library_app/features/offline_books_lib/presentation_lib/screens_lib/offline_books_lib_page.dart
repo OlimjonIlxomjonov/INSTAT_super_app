@@ -135,12 +135,6 @@ class _OfflineBooksLibPageState extends State<OfflineBooksLibPage> {
                   );
                 }
 
-                if (state is OfflineBooksError) {
-                  return SliverFillRemaining(
-                    child: Center(child: Text(state.message)),
-                  );
-                }
-
                 if (state is OfflineBooksLoaded) {
                   final data = state.response.data;
                   if (data.isEmpty) {

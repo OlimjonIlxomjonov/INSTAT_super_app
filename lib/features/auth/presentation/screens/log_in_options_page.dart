@@ -13,27 +13,9 @@ class LogInOptionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      backgroundColor: AppColors.primaryColor.withValues(alpha: 1),
-      // extendBodyBehindAppBar: true,
-      // body: SvgPicture.asset(AppVectors.mainAppLogo),
-      // body: Stack(
-      // children: [
-      // ConstrainedBox(
-      //   constraints: BoxConstraints(minWidth: double.infinity),
-      //   child: SvgPicture.asset(AppImages.onboardingLogIn, fit: .cover),
-      // ),
-      // Positioned(
-      //   left: 0,
-      //   right: 0,
-      //   top: screenHeight / 7,
-      //   child: SvgPicture.asset(AppVectors.mainAppLogo),
-      // ),
-      // ],
-      // ),
+      backgroundColor: AppColors.splashBackgroundColor,
       body: LogInOptionsComponent(),
-      // bottomSheet: LogInOptionsComponent(),
     );
   }
 }

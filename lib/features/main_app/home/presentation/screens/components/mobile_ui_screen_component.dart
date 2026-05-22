@@ -34,6 +34,7 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_event.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_state.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/detailed_online_book_component.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/similar_onilne_books_component.dart';
 
 class MobileUiScreenComponent extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -219,7 +220,13 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                       padding: AppPadding.horizontal20x(),
                       child: ExtendSectionSeeAllWg(
                         title: 'Eng ommabop kitoblar',
-                        onTap: () {},
+                        onTap: () {
+                          openMiniAppSheetFamily(
+                            context,
+                            showHandler: false,
+                            child: SimilarOnlineBooksComponent(data: books),
+                          );
+                        },
                       ),
                     ),
 
@@ -290,100 +297,103 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
 
-    return CustomRefreshIndicator(
-      onRefresh: () async {
-        _reloadAll();
-      },
+    return SafeArea(
+      bottom: false,
+      child: CustomRefreshIndicator(
+        onRefresh: () async {
+          _reloadAll();
+        },
 
-      child: CustomScrollView(
-        slivers: [
-          /// HEADER LOGO
-          SliverAppBar(
-            snap: true,
-            floating: true,
-            leading: IconButton(
-              onPressed: () => widget.scaffoldKey.currentState?.openDrawer(),
-              icon: const Icon(Icons.menu),
-            ),
-            title: SvgPicture.asset(AppVectors.homeInstatLogo),
-            centerTitle: true,
-            actions: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(IconlyLight.notification),
+        child: CustomScrollView(
+          slivers: [
+            /// HEADER LOGO
+            SliverAppBar(
+              snap: true,
+              floating: true,
+              leading: IconButton(
+                onPressed: () => widget.scaffoldKey.currentState?.openDrawer(),
+                icon: const Icon(Icons.menu),
               ),
-            ],
-          ),
-
-          /// MINI APP SECTION
-          _buildMiniAppGrid(context),
-
-          /// SEARCH BAR
-          SliverPadding(
-            padding: .only(bottom: 20),
-            sliver: SliverAppBar(
-              pinned: false,
-              automaticallyImplyLeading: false,
-              title: const AppSearchbarWg(),
+              title: SvgPicture.asset(AppVectors.homeInstatLogo),
+              centerTitle: true,
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(IconlyLight.notification),
+                ),
+              ],
             ),
-          ),
 
-          BlocBuilder<CoursesBloc, CoursesState>(
-            buildWhen: (prev, curr) =>
-                curr is CoursesError ||
-                curr is CoursesLoading ||
-                curr is CoursesLoaded,
-            builder: (context, coursesState) {
-              return BlocBuilder<UserCoursesBloc, UserCoursesState>(
-                buildWhen: (prev, curr) =>
-                    curr is UserCoursesError ||
-                    curr is UserCoursesLoading ||
-                    curr is UserCoursesLoaded,
-                builder: (context, userCoursesState) {
-                  return BlocBuilder<UserMeBloc, UserMeState>(
-                    buildWhen: (prev, curr) =>
-                        curr is UserMeError ||
-                        curr is UserMeLoading ||
-                        curr is UserMeLoaded,
-                    builder: (context, userMeState) {
-                      final isConnectionError =
-                          (coursesState is CoursesError &&
-                              coursesState.isConnectionError) ||
-                          (userCoursesState is UserCoursesError &&
-                              userCoursesState.isConnectionError);
+            /// MINI APP SECTION
+            _buildMiniAppGrid(context),
 
-                      if (isConnectionError) {
-                        return SliverFillRemaining(
-                          hasScrollBody: false,
-                          child: LostInternetConnectionState(
-                            onRetry: _reloadAll,
-                          ),
+            /// SEARCH BAR
+            SliverPadding(
+              padding: .only(bottom: 20, top: 20),
+              sliver: SliverAppBar(
+                pinned: false,
+                automaticallyImplyLeading: false,
+                title: const AppSearchbarWg(),
+              ),
+            ),
+
+            BlocBuilder<CoursesBloc, CoursesState>(
+              buildWhen: (prev, curr) =>
+                  curr is CoursesError ||
+                  curr is CoursesLoading ||
+                  curr is CoursesLoaded,
+              builder: (context, coursesState) {
+                return BlocBuilder<UserCoursesBloc, UserCoursesState>(
+                  buildWhen: (prev, curr) =>
+                      curr is UserCoursesError ||
+                      curr is UserCoursesLoading ||
+                      curr is UserCoursesLoaded,
+                  builder: (context, userCoursesState) {
+                    return BlocBuilder<UserMeBloc, UserMeState>(
+                      buildWhen: (prev, curr) =>
+                          curr is UserMeError ||
+                          curr is UserMeLoading ||
+                          curr is UserMeLoaded,
+                      builder: (context, userMeState) {
+                        final isConnectionError =
+                            (coursesState is CoursesError &&
+                                coursesState.isConnectionError) ||
+                            (userCoursesState is UserCoursesError &&
+                                userCoursesState.isConnectionError);
+
+                        if (isConnectionError) {
+                          return SliverFillRemaining(
+                            hasScrollBody: false,
+                            child: LostInternetConnectionState(
+                              onRetry: _reloadAll,
+                            ),
+                          );
+                        }
+
+                        if (userMeState is UserMeError &&
+                            (userMeState.statusCode == 502 ||
+                                userMeState.statusCode == 503)) {
+                          return SliverFillRemaining(
+                            hasScrollBody: false,
+                            child: ServerErrorState(
+                              onRetry: _reloadAll,
+                              statusCode: userMeState.statusCode,
+                              message: userMeState.message,
+                            ),
+                          );
+                        }
+
+                        return SliverMainAxisGroup(
+                          slivers: _buildContentSlivers(context, localization),
                         );
-                      }
-
-                      if (userMeState is UserMeError &&
-                          (userMeState.statusCode == 502 ||
-                              userMeState.statusCode == 503)) {
-                        return SliverFillRemaining(
-                          hasScrollBody: false,
-                          child: ServerErrorState(
-                            onRetry: _reloadAll,
-                            statusCode: userMeState.statusCode,
-                            message: userMeState.message,
-                          ),
-                        );
-                      }
-
-                      return SliverMainAxisGroup(
-                        slivers: _buildContentSlivers(context, localization),
-                      );
-                    },
-                  );
-                },
-              );
-            },
-          ),
-        ],
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
