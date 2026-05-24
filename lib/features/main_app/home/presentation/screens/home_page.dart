@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/common/flush_bar/technical_work_flash_bar.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/constants/assets/app_images.dart';
@@ -41,8 +42,6 @@ class _HomePageState extends State<HomePage> {
       isTransparent: false,
       showHandler: false,
     );
-
-    // AppRoute.open(EduBottomNavBar());
   }
 
   void _openOnlineLibraryApp(BuildContext context) {
@@ -93,21 +92,25 @@ class _HomePageState extends State<HomePage> {
         mainImage: AppImages.mikroMalumotlar,
         backgroundImage: AppVectors.mikroMalumotlarBack,
         title: localization.scientificArticles,
-        onTap: (context) {},
+        onTap: (context) {
+          technicalWorkFlushBar(context, 'Tez orada!');
+        },
         colors: [Color(0xff51D7D4), Color(0xff2EC4B6)],
       ),
       MiniAppModel(
         mainImage: AppImages.elektronJurnal,
         backgroundImage: AppVectors.elektronJurnalBack,
         title: localization.electronicJournal,
-        onTap: (context) {},
+        onTap: (context) => _openArticlesApp(context),
         colors: [Color(0xffFFB50F), Color(0xffFF8A00)],
       ),
       MiniAppModel(
         mainImage: AppImages.ilmiyMaqola,
         backgroundImage: AppVectors.imliyMaqolaBack,
         title: localization.microContent,
-        onTap: (context) => _openArticlesApp(context),
+        onTap: (context) {
+          technicalWorkFlushBar(context, 'Tez orada!');
+        },
         colors: [Color(0xff3EE089), Color(0xff22C55E)],
       ),
     ];

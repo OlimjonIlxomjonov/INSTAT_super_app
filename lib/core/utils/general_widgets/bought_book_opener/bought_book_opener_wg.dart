@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:turn_page_transition/turn_page_transition.dart';
 
+import '../../../common/flush_bar/technical_work_flash_bar.dart';
+
 /// WITH PACKAGE
 class BoughtBookOpenerWg extends StatefulWidget {
   const BoughtBookOpenerWg({super.key});
@@ -20,20 +22,23 @@ class _BoughtBookOpenerWgState extends State<BoughtBookOpenerWg> {
           colors: [Color(0xFFFFFBF0), Color(0xFFF3EFE3)],
         ),
       ),
-      child: const Center(
-        child: Text("Page 1", style: TextStyle(fontSize: 40)),
+      // child: const Center(
+      //   child: Text("Page 1", style: TextStyle(fontSize: 40)),
+      // ),
+      child: Image.asset('assets/temp_images/book-1.png'),
+    ),
+    Container(
+      color: Colors.white,
+      child: Center(
+        // child: Text("Page 2", style: TextStyle(fontSize: 40)),
+        child: Image.asset('assets/temp_images/book-2.png'),
       ),
     ),
     Container(
       color: Colors.white,
-      child: const Center(
-        child: Text("Page 2", style: TextStyle(fontSize: 40)),
-      ),
-    ),
-    Container(
-      color: Colors.white,
-      child: const Center(
-        child: Text("Page 3", style: TextStyle(fontSize: 40)),
+      child: Center(
+        // child: Text("Page 3", style: TextStyle(fontSize: 40)),
+        child: Image.asset('assets/temp_images/book-3.png'),
       ),
     ),
   ];

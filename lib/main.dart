@@ -10,17 +10,14 @@ import 'features/my_app.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Hive.initFlutter();
+  await Hive.openBox('authBox');
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
   await setup();
-
-  await Hive.initFlutter();
-  await Hive.openBox('authBox');
-  //! runApp(DevicePreview(builder: (context) => MyApp()));
   runApp(MyBlocProvider(child: MyApp()));
 
   // logger.f(TokenStorageServiceImpl().getAccessToken());

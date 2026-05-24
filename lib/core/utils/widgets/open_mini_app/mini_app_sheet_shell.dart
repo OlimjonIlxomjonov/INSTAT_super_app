@@ -24,45 +24,34 @@ class MiniAppSheetShell extends StatefulWidget {
 class _MiniAppSheetShellState extends State<MiniAppSheetShell> {
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        boxShadow: [
-          // BoxShadow(
-          //   color: AppColors.greyScale.grey200,
-          //   spreadRadius: 1,
-          //   blurRadius: 1,
-          // ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: Column(
-          children: [
-            if (widget.showHandle)
-              GestureDetector(
-                onVerticalDragEnd: (details) {
-                  if ((details.primaryVelocity ?? 0) > 600) {
-                    FamilyModalSheet.of(context).popPage();
-                  }
-                },
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  margin: .only(top: 10, bottom: 20),
-                  decoration: BoxDecoration(
-                    color: AppColors.greyScale.grey300,
-                    borderRadius: BorderRadius.circular(30),
-                  ),
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Column(
+        children: [
+          if (widget.showHandle)
+            GestureDetector(
+              onVerticalDragEnd: (details) {
+                if ((details.primaryVelocity ?? 0) > 600) {
+                  FamilyModalSheet.of(context).popPage();
+                }
+              },
+              child: Container(
+                width: 40,
+                height: 4,
+                margin: const .only(top: 10, bottom: 20),
+                decoration: BoxDecoration(
+                  color: AppColors.greyScale.grey300,
+                  borderRadius: BorderRadius.circular(30),
                 ),
               ),
-            Expanded(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: .circular(30)),
-                child: widget.child,
-              ),
             ),
-          ],
-        ),
+          Expanded(
+            child: ClipRRect(
+              borderRadius: const BorderRadius.vertical(top: .circular(30)),
+              child: widget.child,
+            ),
+          ),
+        ],
       ),
     );
   }

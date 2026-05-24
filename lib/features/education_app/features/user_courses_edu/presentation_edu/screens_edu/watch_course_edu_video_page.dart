@@ -641,9 +641,10 @@ class _VideoAreaWidget extends StatelessWidget {
   }
 }
 
+// HLS Proxy Server to inject Authorization header and rewrite URLs
 class HlsProxyServer {
   HttpServer? _server;
-  final String remoteBaseUrl = 'https://test.avacoder.uz';
+  final String remoteBaseUrl = 'https://test.avacoder.uz'; // Updated to actual backend URL
   final String token;
 
   HlsProxyServer({required this.token});
@@ -668,8 +669,8 @@ class HlsProxyServer {
     try {
       final remoteUri = Uri.parse(remoteBaseUrl).replace(
         path: request.uri.path,
-        queryParameters: request.uri.queryParameters.isNotEmpty 
-            ? request.uri.queryParameters 
+        queryParameters: request.uri.queryParameters.isNotEmpty
+            ? request.uri.queryParameters
             : null,
       );
 
@@ -684,7 +685,7 @@ class HlsProxyServer {
         }
       });
 
-      // Inject the Authorization token!
+      // Inject the Authorization token
       remoteRequest.headers.set('Authorization', 'Bearer $token');
 
       // Forward request body if any

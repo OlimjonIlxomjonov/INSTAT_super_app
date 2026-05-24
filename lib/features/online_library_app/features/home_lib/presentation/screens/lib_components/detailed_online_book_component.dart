@@ -5,6 +5,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_template/core/common/flush_bar/added_to_cart_flush_bar.dart';
 import 'package:my_template/core/common/flush_bar/success_flush_bar.dart';
+import 'package:my_template/core/common/flush_bar/technical_work_flash_bar.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/constants/assets/app_animations.dart';
 import 'package:my_template/core/utils/general_widgets/bought_book_opener/bought_book_opener_wg.dart';
@@ -290,6 +291,13 @@ class _DetailedOnlineBookComponentState
                                     ),
                                   ),
                                 ),
+                                onLongPress: () {
+                                  AppRoute.go(BoughtBookOpenerWg());
+                                  technicalWorkFlushBar(
+                                    context,
+                                    'Devloper Mode!',
+                                  );
+                                },
                                 onPressed: () {
                                   context
                                       .read<my_template_book.BookActionsBloc>()
