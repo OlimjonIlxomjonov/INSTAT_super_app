@@ -29,6 +29,7 @@ import 'package:open_filex/open_filex.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/video_thumbnail_wg.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/lesson_video_progress/lesson_video_progress_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/lesson_video_progress/lesson_video_progress_event.dart';
+import 'package:my_template/core/utils/general_widgets/file_opening_overlay/file_opening_overlay_wg.dart';
 
 class WatchCourseEduVideoPage extends StatefulWidget {
   final String title;
@@ -358,17 +359,16 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                             size: 28,
                           ),
                           onSelected: changeResolution,
-                          itemBuilder: (context) =>
-                              ['1080', '720', '480', '240']
-                                  .map(
-                                    (res) => PopupMenuItem(
-                                      value: res,
-                                      child: Text(
-                                        '${res}p${resolution == res ? '*' : ''}',
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
+                          itemBuilder: (context) => ['1080', '720', '480', '240']
+                              .map(
+                                (res) => PopupMenuItem(
+                                  value: res,
+                                  child: Text(
+                                    '${res}p${resolution == res ? '*' : ''}',
+                                  ),
+                                ),
+                              )
+                              .toList(),
                         );
                       },
                     ),
@@ -416,14 +416,17 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                                   return DefaultCustomTileWg(
                                     tileMaxLines: 1,
                                     tileOverflow: TextOverflow.ellipsis,
-                                    tileLeading:
-                                        SvgPicture.asset(AppVectors.pdfIcon),
+                                    tileLeading: SvgPicture.asset(
+                                      AppVectors.pdfIcon,
+                                    ),
                                     onTap: () {
                                       _controllerNotifier.value?.pause();
                                       _openFile(item.file, item.fileName);
                                     },
                                     tileTitle: item.fileName ?? 'File ',
-                                    subTitle: formatFileSize(item.fileSize ?? 0),
+                                    subTitle: formatFileSize(
+                                      item.fileSize ?? 0,
+                                    ),
                                   );
                                 }),
                               );
@@ -433,7 +436,9 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                               child: DefaultCustomTileWg(
                                 tileMaxLines: 1,
                                 tileOverflow: TextOverflow.ellipsis,
-                                tileLeading: SvgPicture.asset(AppVectors.pdfIcon),
+                                tileLeading: SvgPicture.asset(
+                                  AppVectors.pdfIcon,
+                                ),
                                 onTap: () {
                                   _controllerNotifier.value?.pause();
                                 },
@@ -491,46 +496,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
               valueListenable: _isDownloadingNotifier,
               builder: (context, isDownloading, _) {
                 if (!isDownloading) return const SizedBox.shrink();
-                return Container(
-                  color: Colors.black.withValues(alpha: 0.4),
-                  child: Center(
-                    child: Card(
-                      color: AppColors.white,
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 28,
-                          vertical: 24,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const CircularProgressIndicator(),
-                            const SizedBox(height: 18),
-                            Text(
-                              'Fayl yuklab olinmoqda...',
-                              style: AppTextStyles.source.medium(
-                                fontSize: 16,
-                                color: AppColors.greyScale.grey800,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Iltimos, kuting',
-                              style: AppTextStyles.source.regular(
-                                fontSize: 13,
-                                color: AppColors.greyScale.grey500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                );
+                return const FileOpeningOverlayWg();
               },
             ),
           ],
@@ -644,7 +610,8 @@ class _VideoAreaWidget extends StatelessWidget {
 // HLS Proxy Server to inject Authorization header and rewrite URLs
 class HlsProxyServer {
   HttpServer? _server;
-  final String remoteBaseUrl = 'https://test.avacoder.uz'; // Updated to actual backend URL
+  final String remoteBaseUrl =
+      'https://test.avacoder.uz'; // Updated to actual backend URL
   final String token;
 
   HlsProxyServer({required this.token});
@@ -653,9 +620,12 @@ class HlsProxyServer {
 
   Future<int> start() async {
     _server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
-    _server!.listen(_handleRequest, onError: (error) {
-      // Handle server error if needed
-    });
+    _server!.listen(
+      _handleRequest,
+      onError: (error) {
+        // Handle server error if needed
+      },
+    );
     return _server!.port;
   }
 
@@ -678,7 +648,9 @@ class HlsProxyServer {
 
       // Copy incoming request headers to remote request
       request.headers.forEach((name, values) {
-        if (name != 'host' && name != 'connection' && name != 'accept-encoding') {
+        if (name != 'host' &&
+            name != 'connection' &&
+            name != 'accept-encoding') {
           for (var value in values) {
             remoteRequest.headers.add(name, value);
           }
@@ -698,7 +670,7 @@ class HlsProxyServer {
       // Set status code
       request.response.statusCode = remoteResponse.statusCode;
 
-      // Copy response headers
+      // Copy repository headers
       remoteResponse.headers.forEach((name, values) {
         if (name != 'content-length') {
           for (var value in values) {
@@ -707,19 +679,29 @@ class HlsProxyServer {
         }
       });
 
-      bool isM3u8 = request.uri.path.endsWith('.m3u8') ||
-          remoteResponse.headers.value('content-type')?.contains('mpegurl') == true;
+      bool isM3u8 =
+          request.uri.path.endsWith('.m3u8') ||
+          remoteResponse.headers.value('content-type')?.contains('mpegurl') ==
+              true;
 
       if (isM3u8) {
-        final bodyBytes = await remoteResponse.expand((chunk) => chunk).toList();
+        final bodyBytes = await remoteResponse
+            .expand((chunk) => chunk)
+            .toList();
         final bodyString = utf8.decode(bodyBytes);
 
         // Rewrite remote URL to local proxy address
         final localAddress = 'http://127.0.0.1:$port';
-        final rewrittenBody = bodyString.replaceAll(remoteBaseUrl, localAddress);
+        final rewrittenBody = bodyString.replaceAll(
+          remoteBaseUrl,
+          localAddress,
+        );
 
         final responseBytes = utf8.encode(rewrittenBody);
-        request.response.headers.set('content-length', responseBytes.length.toString());
+        request.response.headers.set(
+          'content-length',
+          responseBytes.length.toString(),
+        );
         request.response.add(responseBytes);
       } else {
         // Stream segments/content directly
@@ -733,4 +715,3 @@ class HlsProxyServer {
     }
   }
 }
-

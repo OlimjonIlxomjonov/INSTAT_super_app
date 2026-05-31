@@ -49,4 +49,9 @@ class ApiUrls {
   /// course group dates
   static const courseGroups = 'course-groups/';
   static const courseGroupDates = '/course_group_dates/';
+
+  /// ARTICLES
+  // user articles
+  static const userArticles = 'reviews/';
+  static const reviewAuthors = 'review-authors/';
 }

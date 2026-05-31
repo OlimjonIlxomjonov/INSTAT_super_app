@@ -4,8 +4,14 @@ import 'package:my_template/core/utils/app_utils.dart';
 class EduCategoriesWg extends StatelessWidget {
   final bool isSelected;
   final VoidCallback? onTap;
+  final String? categoryName;
 
-  const EduCategoriesWg({super.key, this.isSelected = false, this.onTap});
+  const EduCategoriesWg({
+    super.key,
+    this.isSelected = false,
+    this.onTap,
+    this.categoryName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +42,7 @@ class EduCategoriesWg extends StatelessWidget {
                   : AppColors.greyScale.grey600,
             ),
             Text(
-              'Kotegoriya nomi',
+              categoryName ?? 'Kategoriya nomi',
               style: AppTextStyles.source.medium(
                 fontSize: 13,
                 color: isSelected

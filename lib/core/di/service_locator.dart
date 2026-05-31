@@ -91,6 +91,16 @@ import 'package:my_template/features/online_library_app/features/user_online_boo
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/domain/repository/user_online_book_cart_repository.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/domain/usercase/cart/cart_use_case.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/presentation_lib/bloc/cart/cart_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/data/repo/articles_home_repo_impl.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/data/source/impl_remote_data_source/user_articles_remote_data_source_impl.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/data/source/remote_data_source/user_articles_remote_data_source.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/repository/articles_home_repository.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/user_articles/user_articles_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_authors/review_authors_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_detail/review_detail_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_authors/review_authors_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_detail/review_detail_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -123,6 +133,11 @@ Future<void> setup() async {
     () => OfflineBooksRemoteDataSourceImpl(),
   );
 
+  /// ARTICLES
+  sl.registerLazySingleton<UserArticlesRemoteDataSource>(
+    () => UserArticlesRemoteDataSourceImpl(),
+  );
+
   /// {REPO}
   sl.registerLazySingleton<HomeRepository>(
     () => HomeRepoImpl(remoteDataSource: sl()),
@@ -147,6 +162,11 @@ Future<void> setup() async {
   );
   sl.registerLazySingleton<OfflineBooksRepository>(
     () => OfflineBooksRepoImpl(remoteDataSource: sl()),
+  );
+
+  /// articles
+  sl.registerLazySingleton<ArticlesHomeRepository>(
+    () => ArticlesHomeRepoImpl(remoteDataSource: sl()),
   );
 
   /// {USE CASE}
@@ -191,6 +211,9 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => GetCourseGroupDatesUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetOfflineBooksUseCase(repository: sl()));
   sl.registerLazySingleton(() => PerCourseUseCase(repository: sl()));
+  sl.registerLazySingleton(() => UserArticlesUseCase(repository: sl()));
+  sl.registerLazySingleton(() => ReviewAuthorsUseCase(repository: sl()));
+  sl.registerLazySingleton(() => ReviewDetailUseCase(repository: sl()));
 
   /// {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -238,4 +261,7 @@ Future<void> setup() async {
   sl.registerFactory(() => CourseGroupDatesBloc(useCase: sl()));
   sl.registerFactory(() => OfflineBooksBloc(getOfflineBooksUseCase: sl()));
   sl.registerFactory(() => PerCourseBloc(useCase: sl()));
+  sl.registerFactory(() => UserArticlesBloc(useCase: sl()));
+  sl.registerFactory(() => ReviewAuthorsBloc(useCase: sl()));
+  sl.registerFactory(() => ReviewDetailBloc(useCase: sl()));
 }

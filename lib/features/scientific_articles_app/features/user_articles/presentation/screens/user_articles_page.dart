@@ -50,7 +50,7 @@ class UserArticlesPage extends StatelessWidget {
           ),
 
           /// USER ARTICLES
-          SliverArticlesListWg(items: dummyArticles),
+          // SliverArticlesListWg(items: dummyArticles),
         ],
       ),
       bottomNavigationBar: Padding(

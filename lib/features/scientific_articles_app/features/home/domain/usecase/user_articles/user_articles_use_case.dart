@@ -1,0 +1,12 @@
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/user_articles/user_articles_response.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/repository/articles_home_repository.dart';
+
+class UserArticlesUseCase {
+  final ArticlesHomeRepository repository;
+
+  UserArticlesUseCase({required this.repository});
+
+  Future<UserArticlesResponse> call() {
+    return repository.getUserArticles();
+  }
+}

@@ -20,6 +20,9 @@ import 'package:my_template/features/main_app/home/presentation/bloc/user/user_m
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/presentation_lib/bloc/cart/cart_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_authors/review_authors_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_detail/review_detail_bloc.dart';
 
 class MyBlocProvider extends StatelessWidget {
   final Widget child;
@@ -61,6 +64,9 @@ class MyBlocProvider extends StatelessWidget {
         BlocProvider<CommentsBloc>(create: (_) => sl<CommentsBloc>()),
         BlocProvider<OfflineCourseBloc>(create: (_) => sl<OfflineCourseBloc>()),
         BlocProvider<PerCourseBloc>(create: (_) => sl<PerCourseBloc>()),
+        BlocProvider<UserArticlesBloc>(create: (_) => sl<UserArticlesBloc>()),
+        BlocProvider<ReviewAuthorsBloc>(create: (_) => sl<ReviewAuthorsBloc>()),
+        BlocProvider<ReviewDetailBloc>(create: (_) => sl<ReviewDetailBloc>()),
       ],
       child: child,
     );

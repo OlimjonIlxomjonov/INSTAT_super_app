@@ -36,6 +36,9 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/detailed_online_book_component.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/similar_onilne_books_component.dart';
 
+import '../../../../../scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
+import '../../../../../scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
+
 class MobileUiScreenComponent extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
   final List<MiniAppModel> sections;

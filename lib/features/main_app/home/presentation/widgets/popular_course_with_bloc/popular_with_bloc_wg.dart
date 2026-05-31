@@ -53,7 +53,7 @@ class PopularWithBlocWg extends StatelessWidget {
                           //   context,
                           //   showHandle: false,
                           //   DetailedCourseInfoPage(
-                          //     total: state.response.meta.total,
+                          //     total: state.repository.meta.total,
                           //     data: item,
                           //     courseCategory: categoryName,
                           //   ),

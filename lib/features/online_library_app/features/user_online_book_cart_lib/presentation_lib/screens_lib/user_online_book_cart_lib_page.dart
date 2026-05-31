@@ -37,7 +37,7 @@ class _UserOnlineBookCartLibPageState extends State<UserOnlineBookCartLibPage> {
     final isLoading = cartState is CartLoading;
     final isError = cartState is CartError;
     final items = cartState is CartLoaded ? cartState.response.data : null;
-    final itemCount = items?.length ?? 2;
+    final itemCount = items?.length ?? 5;
     final totalPrice =
         items?.fold<num>(0, (sum, item) => sum + item.price) ?? 0;
 

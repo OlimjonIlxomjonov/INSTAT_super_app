@@ -23,7 +23,7 @@ class OneIdAuthServiceImpl implements OneIdAuthService {
     );
 
     final token = response.data['data']['access'] as String?;
-    if (token == null) throw Exception('No token in response');
+    if (token == null) throw Exception('No token in repository');
 
     await _tokenStorage.saveAccessToken(token);
     _dioClient.setToken(token);

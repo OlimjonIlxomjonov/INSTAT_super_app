@@ -1,0 +1,26 @@
+import 'package:my_template/features/scientific_articles_app/features/home/data/source/remote_data_source/user_articles_remote_data_source.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/user_articles/user_articles_response.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/review_authors/review_author_entity.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/review_detail/review_detail_entity.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/repository/articles_home_repository.dart';
+
+class ArticlesHomeRepoImpl implements ArticlesHomeRepository {
+  final UserArticlesRemoteDataSource remoteDataSource;
+
+  ArticlesHomeRepoImpl({required this.remoteDataSource});
+
+  @override
+  Future<UserArticlesResponse> getUserArticles() {
+    return remoteDataSource.fetchUserArticles();
+  }
+
+  @override
+  Future<List<ReviewAuthorEntity>> getReviewAuthors(int reviewId) {
+    return remoteDataSource.fetchReviewAuthors(reviewId);
+  }
+
+  @override
+  Future<ReviewDetailEntity> getReviewDetail(int reviewId) {
+    return remoteDataSource.fetchReviewDetail(reviewId);
+  }
+}

@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/common/placeholder/banner_placeholder.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/dragble_app_bar/draggble_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
-import 'package:my_template/features/scientific_articles_app/dummy_data_source/articles_source.dart';
 import 'package:my_template/features/scientific_articles_app/dummy_data_source/home_brief_info_card_source.dart';
 import 'package:my_template/features/scientific_articles_app/dummy_data_source/last_actions_source.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_detail/review_detail_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_state.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/last_actions/sliver_last_actions_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/sliver_articles_list_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/sliver_brief_cards_wg.dart';
+import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/user_articles_page.dart';
 
-class ArticlesHomePage extends StatelessWidget {
+class ArticlesHomePage extends StatefulWidget {
   final VoidCallback onProfileTap, toArticlesPage;
 
   const ArticlesHomePage({
@@ -19,10 +25,30 @@ class ArticlesHomePage extends StatelessWidget {
   });
 
   @override
+  State<ArticlesHomePage> createState() => _ArticlesHomePageState();
+}
+
+class _ArticlesHomePageState extends State<ArticlesHomePage> {
+  @override
+  void initState() {
+    super.initState();
+    // Dispatch the correct event subclass UserArticlesEvent to trigger the BLoC fetch
+    context.read<UserArticlesBloc>().add(const UserArticlesEvent());
+  }
+
+  void _openUserArticlesPage(BuildContext context) {
+    openMiniAppSheetFamily(
+      showHandler: false,
+      context,
+      child: const UserArticlesPage(),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       /// HEADER USER PROFILE (on click leads to profile page)
-      appBar: DraggableAppBarWg(onProfileTap: onProfileTap),
+      appBar: DraggableAppBarWg(onProfileTap: widget.onProfileTap),
       body: CustomScrollView(
         slivers: [
           /// global search bar
@@ -32,18 +58,13 @@ class ArticlesHomePage extends StatelessWidget {
             snap: true,
             automaticallyImplyLeading: false,
             titleSpacing: 20,
-            title: AppSearchbarWg(),
+            title: const AppSearchbarWg(),
           ),
 
           /// AD BANNERS
-          SliverToBoxAdapter(
-            child: Container(
-              margin: AppPadding.hAndV20x20(),
-              width: double.infinity,
-              height: 200,
-              color: AppColors.greyScale.grey400,
-              child: Center(child: Text('BANNER')),
-            ),
+          SliverPadding(
+            padding: AppPadding.horizontal20x(),
+            sliver: const SliverToBoxAdapter(child: BannerPlaceholder()),
           ),
 
           /// BRIEF CARD SECTIONS
@@ -55,13 +76,40 @@ class ArticlesHomePage extends StatelessWidget {
             sliver: SliverToBoxAdapter(
               child: ExtendSectionSeeAllWg(
                 title: 'Maqolalar',
-                onTap: toArticlesPage,
+                onTap: () => _openUserArticlesPage(context),
               ),
             ),
           ),
 
-          /// ARTICLES
-          SliverArticlesListWg(items: dummyArticles),
+          /// ARTICLES - Placed directly as a sliver widget
+          BlocBuilder<UserArticlesBloc, UserArticlesState>(
+            builder: (context, state) {
+              if (state is UserArticlesLoaded) {
+                final data = state.response.data;
+                return SliverArticlesListWg(items: data);
+              } else if (state is UserArticlesLoading) {
+                return const SliverToBoxAdapter(
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 24),
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                );
+              } else if (state is UserArticlesError) {
+                return const SliverToBoxAdapter(
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 24),
+                      child: Text('Maqolalarni yuklashda xatolik yuz berdi'),
+                    ),
+                  ),
+                );
+              }
+              // Initial or any fallback state
+              return const SliverToBoxAdapter(child: SizedBox.shrink());
+            },
+          ),
 
           /// SEE ALL LAST ACTIONS
           SliverPadding(
