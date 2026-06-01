@@ -20,6 +20,7 @@ import 'package:my_template/features/main_app/home/presentation/bloc/user/user_m
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/presentation_lib/bloc/cart/cart_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_editions/article_editions_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_process/article_process_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_files/review_files_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
@@ -73,6 +74,9 @@ class MyBlocProvider extends StatelessWidget {
           create: (_) => sl<ArticleProcessBloc>(),
         ),
         BlocProvider<ReviewFilesBloc>(create: (_) => sl<ReviewFilesBloc>()),
+        BlocProvider<ArticleEditionsBloc>(
+          create: (_) => sl<ArticleEditionsBloc>(),
+        ),
       ],
       child: child,
     );

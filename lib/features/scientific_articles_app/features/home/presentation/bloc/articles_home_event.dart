@@ -38,3 +38,10 @@ class ReviewFilesEvent extends ArticlesHomeEvent {
 
   ReviewFilesEvent({required this.params});
 }
+
+/// editions / magazines
+class ArticlesEditionsEvent extends ArticlesHomeEvent {
+  final ArticleEditionsParams params;
+
+  ArticlesEditionsEvent({required this.params});
+}

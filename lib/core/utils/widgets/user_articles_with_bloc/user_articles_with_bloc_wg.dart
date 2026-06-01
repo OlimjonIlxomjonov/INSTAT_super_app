@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/common/skeletonizer_shimmer/user_articles/user_articles_skeletonizer.dart';
 import 'package:my_template/core/common/ui_states/empty_state.dart';
 
 import '../../../../features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
@@ -36,14 +37,7 @@ class UserArticlesWithBlocWg extends StatelessWidget {
             /// actual data
             return SliverArticlesListWg(items: displayedData);
           } else if (state is UserArticlesLoading) {
-            return const SliverToBoxAdapter(
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 24),
-                  child: CircularProgressIndicator(),
-                ),
-              ),
-            );
+            return UserArticlesSkeletonizer();
           } else if (state is UserArticlesError) {
             return const SliverToBoxAdapter(
               child: Center(

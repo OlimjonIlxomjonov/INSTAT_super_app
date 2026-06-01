@@ -2,6 +2,7 @@ import 'package:my_template/core/common/params/article_params/article_params.dar
 import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_editions/article_editions_response_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_process/article_process_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/review_files/review_files_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/user_articles/user_articles_response_model.dart';
@@ -104,6 +105,26 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
         logger.i(response.data);
         final data = (response.data as List);
         return data.map((e) => ReviewFilesModel.fromJson(e)).toList();
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ArticleEditionsResponseModel> fetchArticleEditions({
+    required ArticleEditionsParams params,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        '${ApiUrls.editions}?status=${params.status}',
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return ArticleEditionsResponseModel.fromJson(response.data);
       } else {
         throw Exception('THROW EXCEPTION! ${response.statusCode}');
       }

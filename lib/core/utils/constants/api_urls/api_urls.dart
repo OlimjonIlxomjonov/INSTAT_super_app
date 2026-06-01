@@ -54,4 +54,5 @@ class ApiUrls {
   // user articles
   static const userArticles = 'reviews/';
   static const reviewAuthors = 'review-authors/';
+  static const editions = 'editions/';
 }

@@ -19,6 +19,12 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/widgets/active_courses_with_bloc_wg.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/popular_course_with_bloc/popular_with_bloc_wg.dart';
 
+import '../../../../../../core/common/params/edu_params/params.dart';
+import '../../../../../main_app/home/presentation/bloc/courses/courses_bloc.dart';
+import '../../../../../main_app/home/presentation/bloc/home_event.dart';
+import '../../../user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
+import '../../../user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
+
 class HomeEduPage extends StatelessWidget {
   final VoidCallback onTap, onProfileTap;
 
@@ -66,68 +72,76 @@ class HomeEduPage extends StatelessWidget {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: DraggableAppBarWg(onProfileTap: onProfileTap),
-      body: CustomScrollView(
-        slivers: [
-          /// SEARCH BAR
-          SliverAppBar(
-            toolbarHeight: 56 + 24,
-            floating: true,
-            snap: true,
-            automaticallyImplyLeading: false,
-            titleSpacing: 20,
-            title: AppSearchbarWg(onTap: () => _openSearch(context)),
-          ),
-
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                switch (index) {
-                  case 0:
-                    return BannerPlaceholder();
-                  case 1:
-                    return HomeAchievementsWg();
-                  default:
-                    return const SizedBox.shrink();
-                }
-              }, childCount: 2),
+      body: CustomRefreshIndicator(
+        onRefresh: () async {
+          context.read<CoursesBloc>().add(AvailableCoursesEvent());
+          context.read<UserCoursesBloc>().add(
+            UserCoursesEvent(params: UserCoursesParams(state: 'in_progress')),
+          );
+        },
+        child: CustomScrollView(
+          slivers: [
+            /// SEARCH BAR
+            SliverAppBar(
+              toolbarHeight: 56 + 24,
+              floating: true,
+              snap: true,
+              automaticallyImplyLeading: false,
+              titleSpacing: 20,
+              title: AppSearchbarWg(onTap: () => _openSearch(context)),
             ),
-          ),
 
-          /// Active User Courses
-          ActiveCoursesWithBlocWg(onSeeAll: onTap),
-
-          /// SELECT CATEGORIES
-          SliverToBoxAdapter(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.only(right: 20),
-              scrollDirection: Axis.horizontal,
-              child: Row(children: _categories),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  switch (index) {
+                    case 0:
+                      return BannerPlaceholder();
+                    case 1:
+                      return HomeAchievementsWg();
+                    default:
+                      return const SizedBox.shrink();
+                  }
+                }, childCount: 2),
+              ),
             ),
-          ),
 
-          /// All Courses
-          SliverSafeArea(
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                if (index == 0) {
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      left: appW(20),
-                      right: appW(20),
-                      top: appH(10),
-                    ),
-                    child: ExtendSectionSeeAllWg(
-                      title: localization.allCourses,
-                      onTap: () => _goToAllCourses(context),
-                    ),
-                  );
-                }
-                return PopularWithBlocWg();
-              }, childCount: 2),
+            /// Active User Courses
+            ActiveCoursesWithBlocWg(onSeeAll: onTap),
+
+            /// SELECT CATEGORIES
+            SliverToBoxAdapter(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(right: 20),
+                scrollDirection: Axis.horizontal,
+                child: Row(children: _categories),
+              ),
             ),
-          ),
-        ],
+
+            /// All Courses
+            SliverSafeArea(
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  if (index == 0) {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        left: appW(20),
+                        right: appW(20),
+                        top: appH(10),
+                      ),
+                      child: ExtendSectionSeeAllWg(
+                        title: localization.allCourses,
+                        onTap: () => _goToAllCourses(context),
+                      ),
+                    );
+                  }
+                  return PopularWithBlocWg();
+                }, childCount: 2),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

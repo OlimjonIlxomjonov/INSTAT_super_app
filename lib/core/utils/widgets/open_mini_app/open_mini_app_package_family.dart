@@ -19,11 +19,12 @@ Future<T?> openMiniAppSheetFamily<T>(
   required Widget child,
   bool showHandler = true,
   isTransparent = true,
+  bool enableDrag = true,
 }) {
   return FamilyModalSheet.showMaterialDefault<T>(
     context: context,
     contentBackgroundColor: AppColors.transparent,
-    enableDrag: true,
+    enableDrag: enableDrag,
     barrierColor: AppColors.greyScale.grey100.withValues(alpha: 0.9),
     // barrierColor: AppColors.greyScale.grey50,
     isDismissible: false,

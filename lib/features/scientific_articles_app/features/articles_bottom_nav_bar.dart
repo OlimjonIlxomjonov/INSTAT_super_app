@@ -22,6 +22,7 @@ class ArticlesBottomNavBar extends StatelessWidget {
       onTabChangeOverride: (ctx, newIndex) {
         if (newIndex == 2) {
           openMiniAppSheetFamily(
+            enableDrag: false,
             showHandler: false,
             ctx,
             child: const UserArticlesPage(),
