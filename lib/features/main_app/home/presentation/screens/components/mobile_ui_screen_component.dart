@@ -16,6 +16,7 @@ import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/general_widgets/online_book_wg/online_book_wg.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
+import 'package:my_template/core/utils/widgets/user_articles_with_bloc/user_articles_with_bloc_wg.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/show_all_courses_bottom_sheet_page.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
@@ -36,8 +37,12 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/detailed_online_book_component.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/similar_onilne_books_component.dart';
 
+import '../../../../../../core/common/ui_states/error_page.dart';
 import '../../../../../scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
 import '../../../../../scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
+import '../../../../../scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_state.dart';
+import '../../../../../scientific_articles_app/features/home/presentation/widgets/sliver_articles_list_wg.dart';
+import '../../../../../scientific_articles_app/features/user_articles/presentation/screens/user_articles_page.dart';
 
 class MobileUiScreenComponent extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -95,6 +100,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
     );
     context.read<UserMeBloc>().add(UserMeEvent());
     context.read<PopularBooksBloc>().add(FetchPopularBooksEvent());
+    context.read<UserArticlesBloc>().add(UserArticlesEvent(status: 'all'));
   }
 
   @override
@@ -293,6 +299,25 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
           return const SliverToBoxAdapter(child: SizedBox.shrink());
         },
       ),
+
+      SliverPadding(
+        padding: AppPadding.horizontal20x(),
+        sliver: SliverToBoxAdapter(
+          child: ExtendSectionSeeAllWg(
+            title: 'Maqolalaringiz',
+            onTap: () {
+              openMiniAppSheetFamily(
+                showHandler: false,
+                context,
+                child: const UserArticlesPage(),
+              );
+            },
+          ),
+        ),
+      ),
+
+      /// ARTICLES
+      UserArticlesWithBlocWg(limit: 2),
     ];
   }
 

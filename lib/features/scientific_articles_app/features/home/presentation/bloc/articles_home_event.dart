@@ -1,3 +1,5 @@
+import 'package:my_template/core/common/params/article_params/article_params.dart';
+
 /// MAIN EVENT
 class ArticlesHomeEvent {
   const ArticlesHomeEvent();
@@ -5,17 +7,34 @@ class ArticlesHomeEvent {
 
 /// user articles
 class UserArticlesEvent extends ArticlesHomeEvent {
-  const UserArticlesEvent();
+  final String status;
+
+  const UserArticlesEvent({required this.status});
 }
 
 /// review authors
 class ReviewAuthorsEvent extends ArticlesHomeEvent {
   final int reviewId;
+
   const ReviewAuthorsEvent({required this.reviewId});
 }
 
 /// review detail
 class ReviewDetailEvent extends ArticlesHomeEvent {
   final int reviewId;
+
   const ReviewDetailEvent({required this.reviewId});
+}
+
+/// articles process
+class ArticleProcessEvent extends ArticlesHomeEvent {
+  final int articleId;
+
+  ArticleProcessEvent({required this.articleId});
+}
+
+class ReviewFilesEvent extends ArticlesHomeEvent {
+  final ArticleProcessParams params;
+
+  ReviewFilesEvent({required this.params});
 }

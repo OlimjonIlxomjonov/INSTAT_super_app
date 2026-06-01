@@ -1,18 +1,26 @@
+import 'package:my_template/core/common/params/article_params/article_params.dart';
 import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_process/article_process_model.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/data/model/review_files/review_files_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/user_articles/user_articles_response_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/review_authors/review_author_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/review_detail/review_detail_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/source/remote_data_source/user_articles_remote_data_source.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_process/article_process_entity.dart';
 
 class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
   final _dioClient = DioClient();
 
   @override
-  Future<UserArticlesResponseModel> fetchUserArticles() async {
+  Future<UserArticlesResponseModel> fetchUserArticles({
+    required String status,
+  }) async {
     try {
-      final response = await _dioClient.get(ApiUrls.userArticles);
+      final response = await _dioClient.get(
+        "${ApiUrls.userArticles}/?status=$status",
+      );
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
         return UserArticlesResponseModel.fromJson(response.data);
@@ -48,10 +56,54 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
   @override
   Future<ReviewDetailModel> fetchReviewDetail(int reviewId) async {
     try {
-      final response = await _dioClient.get('${ApiUrls.userArticles}$reviewId/');
+      final response = await _dioClient.get(
+        '${ApiUrls.userArticles}$reviewId/',
+      );
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
         return ReviewDetailModel.fromJson(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<ArticleProcessModel>> fetchArticleProcess({
+    required ArticleProcessParams params,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        '${ApiUrls.userArticles}${params.articleId}/processes/',
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        final data = (response.data as List);
+        return data.map((e) => ArticleProcessModel.fromJson(e)).toList();
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<ReviewFilesModel>> fetchReviewFiles({
+    required ArticleProcessParams params,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        '${ApiUrls.userArticles}${params.articleId}/review-files/',
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        final data = (response.data as List);
+        return data.map((e) => ReviewFilesModel.fromJson(e)).toList();
       } else {
         throw Exception('THROW EXCEPTION! ${response.statusCode}');
       }

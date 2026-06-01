@@ -12,7 +12,7 @@ class DetailedArticlesActionsPage extends StatelessWidget {
       crossAxisAlignment: .start,
       children: [
         Text('2-tsikl', style: CustomTextStyles.h2),
-        SliverLastActionsWg(items: lastActions),
+        // SliverLastActionsWg(items: lastActions),
       ],
     );
   }

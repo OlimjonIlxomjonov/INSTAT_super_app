@@ -34,13 +34,13 @@ class SelectedFileContainerWg extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    fileName ?? 'Tahlil, taqqoslash va prognozlash',
+                    fileName ?? 'No Title!',
                     style: AppTextStyles.source.medium(fontSize: 14),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    fileSize ?? '3.4 MB',
+                    fileSize ?? '0.0 MB',
                     style: AppTextStyles.source.regular(
                       fontSize: 13,
                       color: AppColors.greyScale.grey600,

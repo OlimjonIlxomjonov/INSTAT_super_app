@@ -2,6 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/common/flush_bar/technical_work_flash_bar.dart';
+import 'package:my_template/core/common/params/article_params/article_params.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_process/article_process_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_process/article_process_state.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_files/review_files_bloc.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -25,6 +30,8 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/articles_status_check_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/last_actions/sliver_last_actions_wg.dart';
 
+import '../../../home/presentation/widgets/last_actions/last_actions_item_wg.dart';
+
 class DetailedArticlePage extends StatefulWidget {
   final int reviewId;
   final ArticleStatus status;
@@ -47,12 +54,20 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
   @override
   void initState() {
     super.initState();
-    context
-        .read<ReviewDetailBloc>()
-        .add(ReviewDetailEvent(reviewId: widget.reviewId));
-    context
-        .read<ReviewAuthorsBloc>()
-        .add(ReviewAuthorsEvent(reviewId: widget.reviewId));
+    context.read<ReviewDetailBloc>().add(
+      ReviewDetailEvent(reviewId: widget.reviewId),
+    );
+    context.read<ReviewAuthorsBloc>().add(
+      ReviewAuthorsEvent(reviewId: widget.reviewId),
+    );
+    context.read<ArticleProcessBloc>().add(
+      ArticleProcessEvent(articleId: widget.reviewId),
+    );
+    context.read<ReviewFilesBloc>().add(
+      ReviewFilesEvent(
+        params: ArticleProcessParams(articleId: widget.reviewId),
+      ),
+    );
   }
 
   @override
@@ -95,6 +110,8 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
     }
   }
 
+  final _categoryName = ["Maqola ma'lumotlari", "Jarayon"];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,6 +129,7 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
                   child: Row(
                     children: List.generate(2, (index) {
                       return EduCategoriesWg(
+                        categoryName: _categoryName[index],
                         isSelected: selectedCategory == index,
                         onTap: () {
                           setState(() => selectedCategory = index);
@@ -122,6 +140,7 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
                 ),
               ),
 
+              /// Maqola ma'lumotlari
               if (selectedCategory == 0)
                 BlocBuilder<ReviewDetailBloc, ReviewDetailState>(
                   builder: (context, detailState) {
@@ -129,11 +148,12 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
                       builder: (context, authorsState) {
                         final isLoading =
                             detailState is ReviewDetailLoading ||
-                                authorsState is ReviewAuthorsLoading ||
-                                detailState is ReviewDetailInitial ||
-                                authorsState is ReviewAuthorsInitial;
+                            authorsState is ReviewAuthorsLoading ||
+                            detailState is ReviewDetailInitial ||
+                            authorsState is ReviewAuthorsInitial;
 
-                        final isError = detailState is ReviewDetailError ||
+                        final isError =
+                            detailState is ReviewDetailError ||
                             authorsState is ReviewAuthorsError;
 
                         if (isError) {
@@ -152,13 +172,13 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
                         // Use real data when loaded, skeleton data when loading
                         final ReviewDetailEntity? detail =
                             detailState is ReviewDetailLoaded
-                                ? detailState.response
-                                : null;
+                            ? detailState.response
+                            : null;
 
                         final List<ReviewAuthorEntity> authors =
                             authorsState is ReviewAuthorsLoaded
-                                ? authorsState.response
-                                : _skeletonAuthors;
+                            ? authorsState.response
+                            : _skeletonAuthors;
 
                         return Skeletonizer.sliver(
                           enabled: isLoading,
@@ -180,8 +200,8 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
                                         detail != null &&
                                                 detail.createdAt != null
                                             ? '${detail.createdAt!.day.toString().padLeft(2, '0')}.'
-                                                '${detail.createdAt!.month.toString().padLeft(2, '0')}.'
-                                                '${detail.createdAt!.year}'
+                                                  '${detail.createdAt!.month.toString().padLeft(2, '0')}.'
+                                                  '${detail.createdAt!.year}'
                                             : '01.01.2025',
                                         style: AppTextStyles.source.regular(
                                           fontSize: 12,
@@ -190,7 +210,8 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
                                       ),
                                       const Spacer(),
                                       ArticlesStatusCheckWg(
-                                        status: detail?.articleStatus ??
+                                        status:
+                                            detail?.articleStatus ??
                                             widget.status,
                                       ),
                                     ],
@@ -213,21 +234,53 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
                     );
                   },
                 )
+              /// Jarayon
               else ...[
-                SliverPadding(
-                  padding: const EdgeInsets.only(left: 20, bottom: 20),
-                  sliver: SliverToBoxAdapter(
-                    child: Text('2-tsikl', style: CustomTextStyles.h2),
-                  ),
+                BlocBuilder<ArticleProcessBloc, ArticleProcessState>(
+                  builder: (context, state) {
+                    if (state is ArticleProcessLoaded) {
+                      return SliverMainAxisGroup(
+                        slivers: [
+                          SliverPadding(
+                            padding: const EdgeInsets.only(
+                              left: 20,
+                              bottom: 20,
+                            ),
+                            sliver: SliverToBoxAdapter(
+                              child: Text(
+                                '2-tsikl',
+                                style: CustomTextStyles.h2,
+                              ),
+                            ),
+                          ),
+                          SliverToBoxAdapter(
+                            child: Container(
+                              margin: AppPadding.horizontal20x(),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: AppColors.greyScale.grey200,
+                                ),
+                              ),
+                              child: Column(
+                                children: List.generate(state.entity.length, (
+                                  index,
+                                ) {
+                                  final items = state.entity[index];
+                                  return LastActionItem(
+                                    item: items,
+                                    isLast: index == state.entity.length - 1,
+                                  );
+                                }),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                    return SliverToBoxAdapter(child: SizedBox.shrink());
+                  },
                 ),
-                SliverLastActionsWg(items: lastActions),
-                SliverPadding(
-                  padding: AppPadding.hAndV20x20(),
-                  sliver: SliverToBoxAdapter(
-                    child: Text('1-tsikl', style: CustomTextStyles.h2),
-                  ),
-                ),
-                SliverLastActionsWg(items: lastActions),
               ],
             ],
           ),
@@ -245,7 +298,9 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
       bottomNavigationBar: CustomBottomNavContainerWg(
         leadingIcon: IconlyLight.edit,
         buttonText: 'Tahrirlash',
-        onTap: () {},
+        onTap: () {
+          technicalWorkFlushBar(context, 'Soon!');
+        },
       ),
     );
   }

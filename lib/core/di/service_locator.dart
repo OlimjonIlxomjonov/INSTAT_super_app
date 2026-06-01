@@ -95,9 +95,13 @@ import 'package:my_template/features/scientific_articles_app/features/home/data/
 import 'package:my_template/features/scientific_articles_app/features/home/data/source/impl_remote_data_source/user_articles_remote_data_source_impl.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/source/remote_data_source/user_articles_remote_data_source.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/repository/articles_home_repository.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/article_process/article_process_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_file/review_file_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/user_articles/user_articles_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_authors/review_authors_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_detail/review_detail_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_process/article_process_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_files/review_files_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_authors/review_authors_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_detail/review_detail_bloc.dart';
@@ -214,6 +218,8 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => UserArticlesUseCase(repository: sl()));
   sl.registerLazySingleton(() => ReviewAuthorsUseCase(repository: sl()));
   sl.registerLazySingleton(() => ReviewDetailUseCase(repository: sl()));
+  sl.registerLazySingleton(() => ArticleProcessUseCase(repository: sl()));
+  sl.registerLazySingleton(() => ReviewFileUseCase(repository: sl()));
 
   /// {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -264,4 +270,6 @@ Future<void> setup() async {
   sl.registerFactory(() => UserArticlesBloc(useCase: sl()));
   sl.registerFactory(() => ReviewAuthorsBloc(useCase: sl()));
   sl.registerFactory(() => ReviewDetailBloc(useCase: sl()));
+  sl.registerFactory(() => ArticleProcessBloc(useCase: sl()));
+  sl.registerFactory(() => ReviewFilesBloc(useCase: sl()));
 }

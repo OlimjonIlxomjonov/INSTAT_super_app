@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/features/scientific_articles_app/dummy_models/last_actions_model.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_process/article_process_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/last_actions/last_actions_status_icon_wg.dart';
 
 class LastActionItem extends StatelessWidget {
-  final LastActionModel item;
+  final ArticleProcessEntity item;
   final bool isLast;
 
   const LastActionItem({super.key, required this.item, required this.isLast});
@@ -27,7 +28,9 @@ class LastActionItem extends StatelessWidget {
           /// TIMELINE COLUMN
           Column(
             children: [
-              LastActionsStatusIconWg(status: item.status),
+              LastActionsStatusIconWg(
+                status: LastActionsStatusX.fromString(item.status),
+              ),
               Container(
                 margin: const .only(top: 5),
                 width: 1,
@@ -43,14 +46,14 @@ class LastActionItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  item.title,
+                  'Maqola uchun tolov amalga oshirildi',
                   style: AppTextStyles.source.medium(fontSize: 16),
                 ),
 
                 const SizedBox(height: 4),
 
                 Text(
-                  item.description,
+                  item.comment,
                   style: AppTextStyles.source.regular(
                     fontSize: 13,
                     color: AppColors.greyScale.grey600,
@@ -60,7 +63,7 @@ class LastActionItem extends StatelessWidget {
                 const SizedBox(height: 6),
 
                 Text(
-                  item.date,
+                  item.createdAt.toString().toReadableDate(),
                   style: AppTextStyles.source.regular(
                     fontSize: 14,
                     color: AppColors.greyScale.grey600,

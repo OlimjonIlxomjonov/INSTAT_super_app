@@ -9,7 +9,6 @@ class DetailedArticlesInfo extends StatelessWidget {
   final ArticleStatus status;
   final String createdAt;
 
-
   const DetailedArticlesInfo({
     super.key,
     required this.status,

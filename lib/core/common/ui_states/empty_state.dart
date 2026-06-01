@@ -4,9 +4,9 @@ import 'package:my_template/core/utils/constants/assets/app_animations.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 
 class EmptyState extends StatelessWidget {
-  final String message;
+  final String? message;
 
-  const EmptyState({super.key, required this.message});
+  const EmptyState({super.key, this.message});
 
   @override
   Widget build(BuildContext context) {

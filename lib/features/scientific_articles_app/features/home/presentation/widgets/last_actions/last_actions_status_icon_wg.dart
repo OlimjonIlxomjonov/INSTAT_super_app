@@ -15,6 +15,10 @@ class LastActionsStatusIconWg extends StatelessWidget {
 
       case LastActionsStatus.pending:
         return Icon(IconlyBold.edit, color: AppColors.orange500);
+      case LastActionsStatus.inReview:
+        return Icon(Icons.check_circle, color: AppColors.greenDoneTaskCard);
+      default:
+        return Icon(Icons.check_circle, color: AppColors.greenDoneTaskCard);
     }
   }
 }
