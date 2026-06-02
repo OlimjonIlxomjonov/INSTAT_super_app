@@ -55,4 +55,11 @@ class ApiUrls {
   static const userArticles = 'reviews/';
   static const reviewAuthors = 'review-authors/';
   static const editions = 'editions/';
+
+  // add article
+  static const udk = 'udk-codes/items/find/?code=';
+
+  //! drop downs
+  static const articleType = 'article-types/items/all';
+  static const journalSection = 'journal-sections/items/all';
 }

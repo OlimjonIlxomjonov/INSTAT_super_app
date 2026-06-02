@@ -9,3 +9,9 @@ class ArticleEditionsParams {
 
   ArticleEditionsParams({required this.status});
 }
+
+class UdkParams {
+  final String udkCode;
+
+  UdkParams({required this.udkCode});
+}

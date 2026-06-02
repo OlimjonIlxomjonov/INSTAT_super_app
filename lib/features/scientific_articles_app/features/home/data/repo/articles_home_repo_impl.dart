@@ -1,5 +1,7 @@
 import 'package:my_template/core/common/params/article_params/article_params.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/source/remote_data_source/user_articles_remote_data_source.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/add_article/drop_down/drop_down_entity.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/add_article/udk/udk_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_editions/article_editions_response.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_process/article_process_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/review_files/review_files_entity.dart';
@@ -47,5 +49,21 @@ class ArticlesHomeRepoImpl implements ArticlesHomeRepository {
     required ArticleEditionsParams params,
   }) {
     return remoteDataSource.fetchArticleEditions(params: params);
+  }
+
+  @override
+  Future<UdkEntity> getUdk({required UdkParams params}) {
+    return remoteDataSource.fetchUdk(params: params);
+  }
+
+  //! drop down
+  @override
+  Future<List<DropDownEntity>> getArticleType() {
+    return remoteDataSource.fetchArticleType();
+  }
+
+  @override
+  Future<List<DropDownEntity>> getJournalSection() {
+    return remoteDataSource.fetchJournalSection();
   }
 }

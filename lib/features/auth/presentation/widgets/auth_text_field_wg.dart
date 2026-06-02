@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 
+import '../../../../core/utils/app_utils.dart';
+
 class AuthTextFieldWg extends StatefulWidget {
   final String label;
   final bool? isPassword;
   final IconData? leadingIcon;
   final TextEditingController controller;
   final String? title;
+  final Function(String)? onChanged;
+  final bool isTypeNum;
+  final Function()? onEditingComplete;
 
   const AuthTextFieldWg({
     super.key,
@@ -16,6 +21,9 @@ class AuthTextFieldWg extends StatefulWidget {
     required this.controller,
     this.leadingIcon,
     this.title,
+    this.onChanged,
+    this.isTypeNum = false,
+    this.onEditingComplete,
   });
 
   @override
@@ -34,9 +42,23 @@ class _AuthTextFieldWgState extends State<AuthTextFieldWg> {
           Text(widget.title!, style: CustomTextStyles.h3half),
         SizedBox(height: 8),
         TextField(
+          keyboardType: widget.isTypeNum ? TextInputType.number : null,
+          onChanged: widget.onChanged,
+          onEditingComplete: widget.onEditingComplete,
           controller: widget.controller,
           obscureText: widget.isPassword ?? false ? obscureVisibility : false,
           decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder().copyWith(
+              borderRadius: .circular(10),
+              borderSide: BorderSide(
+                color: AppColors.greyScale.grey300,
+                width: 1,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder().copyWith(
+              borderRadius: .circular(10),
+              borderSide: BorderSide(color: AppColors.primaryColor, width: 1),
+            ),
             prefixIcon: widget.leadingIcon != null
                 ? Icon(widget.leadingIcon)
                 : null,

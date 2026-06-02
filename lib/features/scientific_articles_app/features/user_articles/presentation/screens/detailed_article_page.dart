@@ -30,6 +30,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/articles_status_check_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/last_actions/sliver_last_actions_wg.dart';
 
+import '../../../home/domain/entity/article_process/article_process_entity.dart';
 import '../../../home/presentation/widgets/last_actions/last_actions_item_wg.dart';
 
 class DetailedArticlePage extends StatefulWidget {
@@ -202,7 +203,7 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
                                             ? '${detail.createdAt!.day.toString().padLeft(2, '0')}.'
                                                   '${detail.createdAt!.month.toString().padLeft(2, '0')}.'
                                                   '${detail.createdAt!.year}'
-                                            : '01.01.2025',
+                                            : '00.00.0000',
                                         style: AppTextStyles.source.regular(
                                           fontSize: 12,
                                           color: AppColors.greyScale.grey600,
@@ -210,9 +211,7 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
                                       ),
                                       const Spacer(),
                                       ArticlesStatusCheckWg(
-                                        status:
-                                            detail?.articleStatus ??
-                                            widget.status,
+                                        status: widget.status,
                                       ),
                                     ],
                                   ),
@@ -239,43 +238,57 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
                 BlocBuilder<ArticleProcessBloc, ArticleProcessState>(
                   builder: (context, state) {
                     if (state is ArticleProcessLoaded) {
+                      final grouped = <int, List<ArticleProcessEntity>>{};
+
+                      for (final item in state.entity) {
+                        grouped.putIfAbsent(item.cycle, () => []).add(item);
+                      }
+
+                      final cycles = grouped.entries.toList()
+                        ..sort((a, b) => a.key.compareTo(b.key));
+
                       return SliverMainAxisGroup(
-                        slivers: [
-                          SliverPadding(
-                            padding: const EdgeInsets.only(
-                              left: 20,
-                              bottom: 20,
-                            ),
-                            sliver: SliverToBoxAdapter(
-                              child: Text(
-                                '2-tsikl',
-                                style: CustomTextStyles.h2,
+                        slivers: cycles.expand((entry) {
+                          final cycle = entry.key;
+                          final items = entry.value;
+
+                          return [
+                            SliverPadding(
+                              padding: const EdgeInsets.only(
+                                left: 20,
+                                bottom: 20,
+                                top: 20,
                               ),
-                            ),
-                          ),
-                          SliverToBoxAdapter(
-                            child: Container(
-                              margin: AppPadding.horizontal20x(),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(
-                                  color: AppColors.greyScale.grey200,
+                              sliver: SliverToBoxAdapter(
+                                child: Text(
+                                  '$cycle-tsikl',
+                                  style: CustomTextStyles.h2,
                                 ),
                               ),
-                              child: Column(
-                                children: List.generate(state.entity.length, (
-                                  index,
-                                ) {
-                                  final items = state.entity[index];
-                                  return LastActionItem(
-                                    item: items,
-                                    isLast: index == state.entity.length - 1,
-                                  );
-                                }),
+                            ),
+
+                            SliverToBoxAdapter(
+                              child: Container(
+                                margin: AppPadding.horizontal20x(),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(
+                                    color: AppColors.greyScale.grey200,
+                                  ),
+                                ),
+                                child: Column(
+                                  children: List.generate(
+                                    items.length,
+                                    (index) => LastActionItem(
+                                      item: items[index],
+                                      isLast: index == items.length - 1,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ];
+                        }).toList(),
                       );
                     }
                     return SliverToBoxAdapter(child: SizedBox.shrink());

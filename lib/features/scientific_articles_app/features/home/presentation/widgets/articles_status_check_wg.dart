@@ -11,6 +11,13 @@ class ArticlesStatusCheckWg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (status) {
+      case ArticleStatus.draft:
+        return StatusContainerWg(
+          icon: Icons.drafts,
+          statusTitle: ' Qoralama',
+          iconColor: AppColors.greyScale.grey600,
+          backgroundColor: AppColors.greyNewCard,
+        );
       case ArticleStatus.confirmed:
         return StatusContainerWg(
           icon: Icons.check_circle,
@@ -20,7 +27,7 @@ class ArticlesStatusCheckWg extends StatelessWidget {
         );
       case ArticleStatus.pending:
         return StatusContainerWg(
-          icon: IconlyLight.upload,
+          icon: Icons.warning_amber,
           statusTitle: ' Tekshirilmoqda',
           iconColor: AppColors.orange500,
           backgroundColor: AppColors.orange50,

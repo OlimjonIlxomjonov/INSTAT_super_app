@@ -21,17 +21,17 @@ class UserArticlesEntity {
 
   ArticleStatus get articleStatus {
     switch (status) {
-      case 'confirmed':
-      case 'approved':
-      case 'published':
-        return ArticleStatus.confirmed;
+      case 'in_review':
+        return ArticleStatus.pending;
       case 'rejected':
       case 'failed':
         return ArticleStatus.rejected;
-      case 'in_review':
-      case 'pending':
+      case 'draft':
+        return ArticleStatus.draft;
+      case 'accepted':
+        return ArticleStatus.confirmed;
       default:
-        return ArticleStatus.pending;
+        return ArticleStatus.draft;
     }
   }
 }

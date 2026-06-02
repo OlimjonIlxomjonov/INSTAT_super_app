@@ -1,4 +1,6 @@
 import 'package:my_template/core/common/params/article_params/article_params.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/data/model/add_article/drop_down/drop_down_model.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/data/model/add_article/udk/udk_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_editions/article_editions_response_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_process/article_process_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/review_files/review_files_model.dart';
@@ -25,4 +27,11 @@ abstract class UserArticlesRemoteDataSource {
   Future<ArticleEditionsResponseModel> fetchArticleEditions({
     required ArticleEditionsParams params,
   });
+
+  Future<UdkModel> fetchUdk({required UdkParams params});
+
+  //! drop downs
+  Future<List<DropDownModel>> fetchArticleType();
+
+  Future<List<DropDownModel>> fetchJournalSection();
 }

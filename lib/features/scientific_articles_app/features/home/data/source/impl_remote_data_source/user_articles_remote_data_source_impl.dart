@@ -2,6 +2,8 @@ import 'package:my_template/core/common/params/article_params/article_params.dar
 import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/data/model/add_article/drop_down/drop_down_model.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/data/model/add_article/udk/udk_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_editions/article_editions_response_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_process/article_process_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/review_files/review_files_model.dart';
@@ -125,6 +127,56 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
         return ArticleEditionsResponseModel.fromJson(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<UdkModel> fetchUdk({required UdkParams params}) async {
+    try {
+      final response = await _dioClient.get('${ApiUrls.udk}${params.udkCode}');
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return UdkModel.fromJson(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<DropDownModel>> fetchArticleType() async {
+    try {
+      final response = await _dioClient.get(ApiUrls.articleType);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        final data = response.data as List;
+        return data.map((e) => DropDownModel.fromJson(e)).toList();
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<DropDownModel>> fetchJournalSection() async {
+    try {
+      final response = await _dioClient.get(ApiUrls.journalSection);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        final data = response.data as List;
+        return data.map((e) => DropDownModel.fromJson(e)).toList();
       } else {
         throw Exception('THROW EXCEPTION! ${response.statusCode}');
       }

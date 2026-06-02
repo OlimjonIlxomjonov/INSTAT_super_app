@@ -6,13 +6,13 @@ import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart'
 class EduCustomTextAreaWg extends StatelessWidget {
   final String hintText;
   final String? helperText;
-  final int maxLength;
+  final int? maxLength;
 
   const EduCustomTextAreaWg({
     super.key,
     required this.hintText,
     this.helperText,
-    this.maxLength = 200,
+    this.maxLength,
   });
 
   @override
@@ -21,6 +21,14 @@ class EduCustomTextAreaWg extends StatelessWidget {
       maxLength: maxLength,
       minLines: 3,
       decoration: InputDecoration(
+        enabledBorder: OutlineInputBorder().copyWith(
+          borderRadius: .circular(10),
+          borderSide: BorderSide(color: AppColors.greyScale.grey300, width: 1),
+        ),
+        focusedBorder: OutlineInputBorder().copyWith(
+          borderRadius: .circular(10),
+          borderSide: BorderSide(color: AppColors.primaryColor, width: 1),
+        ),
         hintStyle: AppTextStyles.source.regular(
           fontSize: 14,
           color: AppColors.greyScale.grey400,

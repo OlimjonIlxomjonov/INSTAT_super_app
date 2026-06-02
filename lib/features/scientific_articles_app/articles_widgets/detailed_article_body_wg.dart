@@ -133,7 +133,7 @@ class _DetailedArticleBodyWgState extends State<DetailedArticleBodyWg> {
         const SizedBox(height: 16),
 
         if (widget.authors == null || widget.authors!.isEmpty)
-          _AuthorCardWg(name: 'Author Name', phone: '+99899 889 90 90')
+          _AuthorCardWg(name: 'Muallif tanlanmagan!', phone: '---')
         else
           Column(
             children: widget.authors!.map((author) {

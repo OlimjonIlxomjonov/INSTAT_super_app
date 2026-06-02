@@ -45,3 +45,15 @@ class ArticlesEditionsEvent extends ArticlesHomeEvent {
 
   ArticlesEditionsEvent({required this.params});
 }
+
+/// add article
+class UdkEvent extends ArticlesHomeEvent {
+  final UdkParams params;
+
+  UdkEvent({required this.params});
+}
+
+//! drop downs
+class ArticleTypeEvent extends ArticlesHomeEvent {}
+
+class JournalSectionsEvent extends ArticlesHomeEvent {}

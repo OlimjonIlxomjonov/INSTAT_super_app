@@ -6,7 +6,7 @@ enum TicketStatus { approved, rejected, pending }
 
 enum BookCardType { bought, market, library }
 
-enum ArticleStatus { confirmed, pending, rejected }
+enum ArticleStatus { confirmed, pending, rejected, draft }
 
 enum LastActionsStatus { inReview, sent, pending }
 

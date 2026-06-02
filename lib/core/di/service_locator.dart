@@ -95,12 +95,18 @@ import 'package:my_template/features/scientific_articles_app/features/home/data/
 import 'package:my_template/features/scientific_articles_app/features/home/data/source/impl_remote_data_source/user_articles_remote_data_source_impl.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/source/remote_data_source/user_articles_remote_data_source.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/repository/articles_home_repository.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/drop_down/article_type_dd_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/drop_down/journal_section_dd_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/udk/udk_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/article_editions/article_editions_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/article_process/article_process_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_file/review_file_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/user_articles/user_articles_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_authors/review_authors_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_detail/review_detail_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/article_type/article_type_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/journal_sections/journal_section_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/udk/udk_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_editions/article_editions_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_process/article_process_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_files/review_files_bloc.dart';
@@ -223,6 +229,11 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => ArticleProcessUseCase(repository: sl()));
   sl.registerLazySingleton(() => ReviewFileUseCase(repository: sl()));
   sl.registerLazySingleton(() => ArticleEditionsUseCase(repository: sl()));
+  // add artticle
+  sl.registerLazySingleton(() => UdkUseCase(repository: sl()));
+  //! drop downs
+  sl.registerLazySingleton(() => ArticleTypeDdUseCase(repository: sl()));
+  sl.registerLazySingleton(() => JournalSectionDdUseCase(repository: sl()));
 
   /// {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -276,4 +287,9 @@ Future<void> setup() async {
   sl.registerFactory(() => ArticleProcessBloc(useCase: sl()));
   sl.registerFactory(() => ReviewFilesBloc(useCase: sl()));
   sl.registerFactory(() => ArticleEditionsBloc(useCase: sl()));
+  // add article
+  sl.registerLazySingleton(() => UdkBloc(useCase: sl()));
+  //!
+  sl.registerLazySingleton(() => ArticleTypeBloc(useCase: sl()));
+  sl.registerLazySingleton(() => JournalSectionBloc(useCase: sl()));
 }

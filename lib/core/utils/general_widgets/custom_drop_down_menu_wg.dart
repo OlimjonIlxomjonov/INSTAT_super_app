@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/add_article/drop_down/drop_down_entity.dart';
 
 class CustomDropDownMenuWg extends StatelessWidget {
   final String title, hintText;
   final IconData? leadingIcon;
+  final List<DropDownEntity>? options;
 
   const CustomDropDownMenuWg({
     super.key,
     required this.title,
     required this.hintText,
     this.leadingIcon,
+    this.options,
   });
 
   @override
@@ -30,6 +33,17 @@ class CustomDropDownMenuWg extends StatelessWidget {
             borderRadius: .circular(12),
             isExpanded: true,
             decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder().copyWith(
+                borderRadius: .circular(10),
+                borderSide: BorderSide(
+                  color: AppColors.greyScale.grey300,
+                  width: 0.5,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder().copyWith(
+                borderRadius: .circular(10),
+                borderSide: BorderSide(color: AppColors.primaryColor, width: 1),
+              ),
               prefixIcon: leadingIcon != null ? Icon(leadingIcon) : null,
               hintText: hintText,
             ),
@@ -51,8 +65,9 @@ class CustomDropDownMenuWg extends StatelessWidget {
                   ),
                 ),
               ),
-              DropdownMenuItem(value: '1', child: Text('1')),
-              DropdownMenuItem(value: '2', child: Text('2')),
+              ...?options?.map(
+                (e) => DropdownMenuItem<int?>(value: e.id, child: Text(e.name)),
+              ),
             ],
             onChanged: (n) {},
           ),
