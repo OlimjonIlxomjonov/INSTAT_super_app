@@ -62,4 +62,5 @@ class ApiUrls {
   //! drop downs
   static const articleType = 'article-types/items/all';
   static const journalSection = 'journal-sections/items/all';
+  static const academicDegree = 'academic-degrees/items/all/';
 }

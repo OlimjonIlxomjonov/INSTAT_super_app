@@ -56,6 +56,26 @@ class ArticlesHomeRepoImpl implements ArticlesHomeRepository {
     return remoteDataSource.fetchUdk(params: params);
   }
 
+  @override
+  Future<ReviewDetailEntity> createReview(ReviewParams params) {
+    return remoteDataSource.createReview(params);
+  }
+
+  @override
+  Future<ReviewDetailEntity> updateReview(ReviewParams params) {
+    return remoteDataSource.updateReview(params);
+  }
+
+  @override
+  Future<ReviewAuthorEntity> createReviewAuthor(ReviewAuthorParams params) {
+    return remoteDataSource.createReviewAuthor(params);
+  }
+
+  @override
+  Future<ReviewAuthorEntity> updateReviewAuthor(ReviewAuthorParams params) {
+    return remoteDataSource.updateReviewAuthor(params);
+  }
+
   //! drop down
   @override
   Future<List<DropDownEntity>> getArticleType() {
@@ -65,5 +85,10 @@ class ArticlesHomeRepoImpl implements ArticlesHomeRepository {
   @override
   Future<List<DropDownEntity>> getJournalSection() {
     return remoteDataSource.fetchJournalSection();
+  }
+
+  @override
+  Future<List<DropDownEntity>> getDegree() {
+    return remoteDataSource.fetchDegree();
   }
 }

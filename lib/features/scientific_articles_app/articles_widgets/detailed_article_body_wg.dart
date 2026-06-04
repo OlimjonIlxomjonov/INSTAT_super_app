@@ -150,11 +150,14 @@ class _DetailedArticleBodyWgState extends State<DetailedArticleBodyWg> {
           mainAxisAlignment: .spaceBetween,
           children: [
             Text('Annotatsiya', style: CustomTextStyles.h2),
-            AnnotationLanguageWg(
-              isSelected: isSelected,
-              onChanged: (index) => setState(() {
-                _selectedLang = AnnotationLanguageEnum.values[index];
-              }),
+            SizedBox(
+              height: 45,
+              child: AnnotationLanguageWg(
+                isSelected: isSelected,
+                onChanged: (index) => setState(() {
+                  _selectedLang = AnnotationLanguageEnum.values[index];
+                }),
+              ),
             ),
           ],
         ),
@@ -310,16 +313,17 @@ class _DetailedArticleBodyWgState extends State<DetailedArticleBodyWg> {
                 Text('Rasmlar', style: CustomTextStyles.h2),
                 const SizedBox(height: 15),
                 SelectedFileContainerWg(
-                  fileName: 'Yuklanmoqda...',
+                  fileName: 'Rasm tanlanmagan!',
                   fileSize: '',
                 ),
                 const SizedBox(height: 24),
                 Text('Jadvallar', style: CustomTextStyles.h2),
                 const SizedBox(height: 15),
                 SelectedFileContainerWg(
-                  fileName: 'Yuklanmoqda...',
+                  fileName: 'Jadval tanlanmagan!',
                   fileSize: '',
                 ),
+                const SizedBox(height: 15),
               ],
             );
           },

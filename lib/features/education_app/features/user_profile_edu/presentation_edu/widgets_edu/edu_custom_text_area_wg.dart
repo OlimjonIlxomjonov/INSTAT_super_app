@@ -7,17 +7,23 @@ class EduCustomTextAreaWg extends StatelessWidget {
   final String hintText;
   final String? helperText;
   final int? maxLength;
+  final TextEditingController? controller;
+  final void Function(String)? onChanged;
 
   const EduCustomTextAreaWg({
     super.key,
     required this.hintText,
     this.helperText,
     this.maxLength,
+    this.controller,
+    this.onChanged,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
+      onChanged: onChanged,
       maxLength: maxLength,
       minLines: 3,
       decoration: InputDecoration(

@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import '../../app_utils.dart';
 
 class SimpleBtnContainerWg extends StatelessWidget {
-  final VoidCallback onFirstTap, onSecondTap;
+  final VoidCallback onFirstTap;
+  final VoidCallback? onSecondTap;
   final String onSecondText;
 
   const SimpleBtnContainerWg({
     super.key,
     required this.onFirstTap,
-    required this.onSecondTap,
+    this.onSecondTap,
     required this.onSecondText,
   });
 

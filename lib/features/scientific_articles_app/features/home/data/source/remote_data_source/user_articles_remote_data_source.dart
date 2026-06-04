@@ -30,8 +30,18 @@ abstract class UserArticlesRemoteDataSource {
 
   Future<UdkModel> fetchUdk({required UdkParams params});
 
+  Future<ReviewDetailModel> createReview(ReviewParams params);
+
+  Future<ReviewDetailModel> updateReview(ReviewParams params);
+
+  Future<ReviewAuthorModel> createReviewAuthor(ReviewAuthorParams params);
+
+  Future<ReviewAuthorModel> updateReviewAuthor(ReviewAuthorParams params);
+
   //! drop downs
   Future<List<DropDownModel>> fetchArticleType();
 
   Future<List<DropDownModel>> fetchJournalSection();
+
+  Future<List<DropDownModel>> fetchDegree();
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class ArticleProcessParams {
   final int articleId;
 
@@ -15,3 +17,89 @@ class UdkParams {
 
   UdkParams({required this.udkCode});
 }
+
+class ReviewParams {
+  final int? id;
+  final String title;
+  final int articleType;
+  final int journalSection;
+  final String? annotationUz;
+  final String? annotationRu;
+  final String? annotationEn;
+  final String udkCode;
+  final String status;
+  final String language;
+  final List<String>? keywords;
+
+  ReviewParams({
+    this.id,
+    required this.title,
+    required this.articleType,
+    required this.journalSection,
+    this.annotationUz,
+    this.annotationRu,
+    this.annotationEn,
+    required this.udkCode,
+    required this.status,
+    required this.language,
+    this.keywords,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      if (id != null) 'id': id,
+      'title': title,
+      'article_type': articleType,
+      'journal_section': journalSection,
+      'annotation_uz': annotationUz,
+      'annotation_ru': annotationRu,
+      'annotation_en': annotationEn,
+      'udk_code': udkCode,
+      'status': status,
+      'language': language,
+      'keywords': keywords != null ? jsonEncode(keywords) : null,
+    };
+  }
+}
+
+class ReviewAuthorParams {
+  final int? id;
+  final String firstName;
+  final String lastName;
+  final int review;
+  final int academicDegree;
+  final String address;
+  final String organization;
+  final String email;
+  final String phoneNumber;
+  final String? orcidCode;
+
+  ReviewAuthorParams({
+    this.id,
+    required this.firstName,
+    required this.lastName,
+    required this.review,
+    required this.academicDegree,
+    required this.address,
+    required this.organization,
+    required this.email,
+    required this.phoneNumber,
+    this.orcidCode,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      if (id != null) 'id': id,
+      'first_name': firstName,
+      'last_name': lastName,
+      'review': review,
+      'academic_degree': academicDegree,
+      'address': address,
+      'organization': organization,
+      'email': email,
+      'phone_number': phoneNumber,
+      'orcid_code': orcidCode,
+    };
+  }
+}
+

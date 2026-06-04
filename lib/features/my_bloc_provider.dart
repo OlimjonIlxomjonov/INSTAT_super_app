@@ -20,6 +20,7 @@ import 'package:my_template/features/main_app/home/presentation/bloc/user/user_m
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/presentation_lib/bloc/cart/cart_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/academic_degree/academic_degree_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/article_type/article_type_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/journal_sections/journal_section_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/udk/udk_bloc.dart';
@@ -82,10 +83,15 @@ class MyBlocProvider extends StatelessWidget {
         ),
         // add article
         BlocProvider<UdkBloc>(create: (_) => sl<UdkBloc>()),
-        //!
+        // AddArticleBloc is provided locally in AddArticlePage (not globally)
+        // so that it resets on every new article creation session.
+        //! Drop downs
         BlocProvider<ArticleTypeBloc>(create: (_) => sl<ArticleTypeBloc>()),
         BlocProvider<JournalSectionBloc>(
           create: (_) => sl<JournalSectionBloc>(),
+        ),
+        BlocProvider<AcademicDegreeBloc>(
+          create: (_) => sl<AcademicDegreeBloc>(),
         ),
       ],
       child: child,

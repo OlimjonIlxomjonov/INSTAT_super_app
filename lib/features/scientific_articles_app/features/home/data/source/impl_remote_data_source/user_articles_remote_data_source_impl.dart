@@ -153,6 +153,82 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
   }
 
   @override
+  Future<ReviewDetailModel> createReview(ReviewParams params) async {
+    try {
+      final response = await _dioClient.post(
+        ApiUrls.userArticles,
+        data: params.toJson(),
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return ReviewDetailModel.fromJson(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ReviewDetailModel> updateReview(ReviewParams params) async {
+    try {
+      final response = await _dioClient.put(
+        '${ApiUrls.userArticles}${params.id}/',
+        data: params.toJson(),
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return ReviewDetailModel.fromJson(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ReviewAuthorModel> createReviewAuthor(ReviewAuthorParams params) async {
+    try {
+      final response = await _dioClient.post(
+        ApiUrls.reviewAuthors,
+        data: params.toJson(),
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return ReviewAuthorModel.fromJson(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ReviewAuthorModel> updateReviewAuthor(ReviewAuthorParams params) async {
+    try {
+      final response = await _dioClient.put(
+        '${ApiUrls.reviewAuthors}${params.id}/',
+        data: params.toJson(),
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return ReviewAuthorModel.fromJson(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
   Future<List<DropDownModel>> fetchArticleType() async {
     try {
       final response = await _dioClient.get(ApiUrls.articleType);
@@ -173,6 +249,23 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
   Future<List<DropDownModel>> fetchJournalSection() async {
     try {
       final response = await _dioClient.get(ApiUrls.journalSection);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        final data = response.data as List;
+        return data.map((e) => DropDownModel.fromJson(e)).toList();
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<DropDownModel>> fetchDegree() async {
+    try {
+      final response = await _dioClient.get(ApiUrls.academicDegree);
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
         final data = response.data as List;

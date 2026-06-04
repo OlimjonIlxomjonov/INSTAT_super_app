@@ -8,6 +8,8 @@ class CustomDropDownMenuWg extends StatelessWidget {
   final String title, hintText;
   final IconData? leadingIcon;
   final List<DropDownEntity>? options;
+  final int? value;
+  final void Function(int?)? onChanged;
 
   const CustomDropDownMenuWg({
     super.key,
@@ -15,37 +17,45 @@ class CustomDropDownMenuWg extends StatelessWidget {
     required this.hintText,
     this.leadingIcon,
     this.options,
+    this.value,
+    this.onChanged,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: .start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(title, style: CustomTextStyles.h3half),
         SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(
-            border: .all(color: AppColors.greyScale.grey200),
-            borderRadius: .circular(12),
+            border: Border.all(color: AppColors.greyScale.grey200),
+            borderRadius: BorderRadius.circular(12),
           ),
-          child: DropdownButtonFormField(
-            borderRadius: .circular(12),
+          child: DropdownButtonFormField<int>(
+            borderRadius: BorderRadius.circular(12),
             isExpanded: true,
+            value: value,
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder().copyWith(
-                borderRadius: .circular(10),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
                   color: AppColors.greyScale.grey300,
                   width: 0.5,
                 ),
               ),
               focusedBorder: OutlineInputBorder().copyWith(
-                borderRadius: .circular(10),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(color: AppColors.primaryColor, width: 1),
               ),
               prefixIcon: leadingIcon != null ? Icon(leadingIcon) : null,
-              hintText: hintText,
+            ),
+            hint: Text(
+              hintText,
+              style: CustomTextStyles.h3half.copyWith(
+                color: AppColors.greyScale.grey400,
+              ),
             ),
             icon: Icon(
               IconlyLight.arrow_down_2,
@@ -54,22 +64,13 @@ class CustomDropDownMenuWg extends StatelessWidget {
             ),
             dropdownColor: AppColors.greyScale.grey50,
             elevation: 3,
-            items: [
-              DropdownMenuItem(
-                enabled: false,
-                value: hintText,
-                child: Text(
-                  hintText,
-                  style: CustomTextStyles.h3half.copyWith(
-                    color: AppColors.greyScale.grey400,
-                  ),
-                ),
+            items: options?.map(
+              (e) => DropdownMenuItem<int>(
+                value: e.id,
+                child: Text(e.name),
               ),
-              ...?options?.map(
-                (e) => DropdownMenuItem<int?>(value: e.id, child: Text(e.name)),
-              ),
-            ],
-            onChanged: (n) {},
+            ).toList(),
+            onChanged: onChanged ?? (val) {},
           ),
         ),
       ],

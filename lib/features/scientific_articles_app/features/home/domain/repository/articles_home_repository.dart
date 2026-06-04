@@ -30,9 +30,18 @@ abstract class ArticlesHomeRepository {
 
   Future<UdkEntity> getUdk({required UdkParams params});
 
+  Future<ReviewDetailEntity> createReview(ReviewParams params);
 
-  // drop down
+  Future<ReviewDetailEntity> updateReview(ReviewParams params);
+
+  Future<ReviewAuthorEntity> createReviewAuthor(ReviewAuthorParams params);
+
+  Future<ReviewAuthorEntity> updateReviewAuthor(ReviewAuthorParams params);
+
+  //! drop down
   Future<List<DropDownEntity>> getArticleType();
 
   Future<List<DropDownEntity>> getJournalSection();
+
+  Future<List<DropDownEntity>> getDegree();
 }

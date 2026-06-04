@@ -4,9 +4,10 @@ import 'package:my_template/core/common/params/article_params/article_params.dar
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/general_widgets/custom_drop_down_menu_wg.dart';
-import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/features/auth/presentation/widgets/auth_text_field_wg.dart';
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/widgets_edu/edu_custom_text_area_wg.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/add_article/drop_down/drop_down_entity.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/academic_degree/academic_degree_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/article_type/article_type_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/article_type/article_type_state.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/journal_sections/journal_section_bloc.dart';
@@ -14,6 +15,8 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/udk/udk_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/udk/udk_state.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/add_article_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/add_article_state.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ArticleInfoView extends StatefulWidget {
@@ -24,18 +27,60 @@ class ArticleInfoView extends StatefulWidget {
 }
 
 class _ArticleInfoViewState extends State<ArticleInfoView> {
+  final titleController = TextEditingController();
   final udkController = TextEditingController();
+
+  final List<DropDownEntity> languageOptions = [
+    DropDownEntity(
+      id: 1,
+      name: "O'zbek tili",
+      isActive: true,
+      createdAt: DateTime.now(),
+    ),
+    DropDownEntity(
+      id: 2,
+      name: "Rus tili",
+      isActive: true,
+      createdAt: DateTime.now(),
+    ),
+    DropDownEntity(
+      id: 3,
+      name: "Ingliz tili",
+      isActive: true,
+      createdAt: DateTime.now(),
+    ),
+  ];
+
+  int? _mapLanguageToId(String lang) {
+    if (lang == 'uz') return 1;
+    if (lang == 'ru') return 2;
+    if (lang == 'en') return 3;
+    return null;
+  }
+
+  String _mapIdToLanguage(int? id) {
+    if (id == 1) return 'uz';
+    if (id == 2) return 'ru';
+    if (id == 3) return 'en';
+    return 'uz';
+  }
 
   @override
   void initState() {
     super.initState();
     context.read<ArticleTypeBloc>().add(ArticleTypeEvent());
     context.read<JournalSectionBloc>().add(JournalSectionsEvent());
+    context.read<AcademicDegreeBloc>().add(AcademicDegreeEvent());
+
+    final state = context.read<AddArticleBloc>().state;
+    titleController.text = state.title;
+    udkController.text = state.udkCode;
   }
 
   @override
   void dispose() {
-    udkController.clear();
+    titleController.dispose();
+    udkController.dispose();
     super.dispose();
   }
 
@@ -45,12 +90,20 @@ class _ArticleInfoViewState extends State<ArticleInfoView> {
       padding: AppPadding.horizontal20x(),
       child: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: .start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             /// TEXT AREA
             Text('Sarlavha', style: CustomTextStyles.h3half),
             SizedBox(height: 8),
-            EduCustomTextAreaWg(hintText: 'Maqola sarlavhasini kiriting...'),
+            EduCustomTextAreaWg(
+              hintText: 'Maqola sarlavhasini kiriting...',
+              controller: titleController,
+              onChanged: (val) {
+                context.read<AddArticleBloc>().add(
+                  UpdateAddArticleFieldEvent(title: val),
+                );
+              },
+            ),
 
             SizedBox(height: 14),
 
@@ -60,12 +113,17 @@ class _ArticleInfoViewState extends State<ArticleInfoView> {
             BlocBuilder<UdkBloc, UdkState>(
               builder: (context, state) {
                 return Column(
-                  crossAxisAlignment: .start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AuthTextFieldWg(
                       label: 'UDK raqamini kiriting',
                       controller: udkController,
                       isTypeNum: true,
+                      onChanged: (val) {
+                        context.read<AddArticleBloc>().add(
+                          UpdateAddArticleFieldEvent(udkCode: val),
+                        );
+                      },
                       onEditingComplete: () {
                         final text = udkController.text.trim();
 
@@ -77,7 +135,7 @@ class _ArticleInfoViewState extends State<ArticleInfoView> {
                       },
                     ),
                     if (state is UdkLoading)
-                      Skeletonizer(
+                      const Skeletonizer(
                         enabled: true,
                         child: Text(
                           'This field is trying to find valid UDK,\nplease wait!...',
@@ -86,7 +144,7 @@ class _ArticleInfoViewState extends State<ArticleInfoView> {
                     if (state is UdkLoaded &&
                         udkController.text.trim().isNotEmpty)
                       Text(state.entity.title, style: CustomTextStyles.h4),
-                    if (state is UdkError) Text('Invalid UDK!'),
+                    if (state is UdkError) const Text('Invalid UDK!'),
                   ],
                 );
               },
@@ -99,19 +157,42 @@ class _ArticleInfoViewState extends State<ArticleInfoView> {
             BlocBuilder<ArticleTypeBloc, ArticleTypeState>(
               builder: (context, state) {
                 final loaded = state is ArticleTypeLoaded ? state.entity : null;
-                return CustomDropDownMenuWg(
-                  title: 'Maqola turi',
-                  hintText: 'Turini tanlang',
-                  options: loaded,
+                return BlocBuilder<AddArticleBloc, AddArticleState>(
+                  builder: (context, addState) {
+                    return CustomDropDownMenuWg(
+                      title: 'Maqola turi',
+                      hintText: 'Turini tanlang',
+                      options: loaded,
+                      value: addState.articleType,
+                      onChanged: (val) {
+                        context.read<AddArticleBloc>().add(
+                          UpdateAddArticleFieldEvent(articleType: val),
+                        );
+                      },
+                    );
+                  },
                 );
               },
             ),
             SizedBox(height: 14),
 
             // Maqola tili
-            CustomDropDownMenuWg(
-              title: 'Maqolani tili',
-              hintText: 'O\'zbek tili',
+            BlocBuilder<AddArticleBloc, AddArticleState>(
+              builder: (context, addState) {
+                return CustomDropDownMenuWg(
+                  title: 'Maqolani tili',
+                  hintText: 'O\'zbek tili',
+                  options: languageOptions,
+                  value: _mapLanguageToId(addState.language),
+                  onChanged: (val) {
+                    context.read<AddArticleBloc>().add(
+                      UpdateAddArticleFieldEvent(
+                        language: _mapIdToLanguage(val),
+                      ),
+                    );
+                  },
+                );
+              },
             ),
             SizedBox(height: 14),
 
@@ -122,10 +203,20 @@ class _ArticleInfoViewState extends State<ArticleInfoView> {
                     ? state.entity
                     : null;
 
-                return CustomDropDownMenuWg(
-                  title: 'Jurnal bo’limi',
-                  hintText: 'Bo\'limni tanlang',
-                  options: loaded,
+                return BlocBuilder<AddArticleBloc, AddArticleState>(
+                  builder: (context, addState) {
+                    return CustomDropDownMenuWg(
+                      title: 'Jurnal bo’limi',
+                      hintText: 'Bo\'limni tanlang',
+                      options: loaded,
+                      value: addState.journalSection,
+                      onChanged: (val) {
+                        context.read<AddArticleBloc>().add(
+                          UpdateAddArticleFieldEvent(journalSection: val),
+                        );
+                      },
+                    );
+                  },
                 );
               },
             ),

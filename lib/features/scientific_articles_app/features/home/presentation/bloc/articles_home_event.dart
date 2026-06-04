@@ -57,3 +57,65 @@ class UdkEvent extends ArticlesHomeEvent {
 class ArticleTypeEvent extends ArticlesHomeEvent {}
 
 class JournalSectionsEvent extends ArticlesHomeEvent {}
+
+class AcademicDegreeEvent extends ArticlesHomeEvent {}
+
+class ResetAddArticleEvent extends ArticlesHomeEvent {}
+
+class UpdateAddArticleFieldEvent extends ArticlesHomeEvent {
+  final String? title;
+  final int? articleType;
+  final String? language;
+  final int? journalSection;
+  final String? annotationUz;
+  final String? annotationRu;
+  final String? annotationEn;
+  final String? udkCode;
+  final List<String>? keywords;
+
+  UpdateAddArticleFieldEvent({
+    this.title,
+    this.articleType,
+    this.language,
+    this.journalSection,
+    this.annotationUz,
+    this.annotationRu,
+    this.annotationEn,
+    this.udkCode,
+    this.keywords,
+  });
+}
+
+class AddLocalAuthorEvent extends ArticlesHomeEvent {
+  final ReviewAuthorParams author;
+  AddLocalAuthorEvent({required this.author});
+}
+
+class RemoveLocalAuthorEvent extends ArticlesHomeEvent {
+  final int index;
+  RemoveLocalAuthorEvent({required this.index});
+}
+
+class SaveArticleDraftEvent extends ArticlesHomeEvent {
+  final String status;
+  final Function()? onSuccess;
+  final Function(String)? onError;
+
+  SaveArticleDraftEvent({
+    required this.status,
+    this.onSuccess,
+    this.onError,
+  });
+}
+
+class CreateReviewAuthorEvent extends ArticlesHomeEvent {
+  final ReviewAuthorParams author;
+  final Function()? onSuccess;
+  final Function(String)? onError;
+
+  CreateReviewAuthorEvent({
+    required this.author,
+    this.onSuccess,
+    this.onError,
+  });
+}

@@ -21,9 +21,7 @@ class ReviewAuthorModel extends ReviewAuthorEntity {
       firstName: json['first_name'] ?? '',
       lastName: json['last_name'] ?? '',
       review: json['review'] ?? 0,
-      academicDegree: json['academic_degree'] != null
-          ? AcademicDegreeModel.fromJson(json['academic_degree'])
-          : null,
+      academicDegree: _parseAcademicDegree(json['academic_degree']),
       address: json['address'] ?? '',
       organization: json['organization'] ?? '',
       email: json['email'] ?? '',
@@ -32,6 +30,21 @@ class ReviewAuthorModel extends ReviewAuthorEntity {
       createdAt: DateTime.tryParse(json['created_at']?.toString() ?? ''),
     );
   }
+}
+
+/// Handles both API shapes:
+/// - POST response: `"academic_degree": 1`  (just an int ID)
+/// - GET  response: `"academic_degree": {"id": 1, "name": "Professor", ...}`
+AcademicDegreeModel? _parseAcademicDegree(dynamic value) {
+  if (value == null) return null;
+  if (value is Map<String, dynamic>) {
+    return AcademicDegreeModel.fromJson(value);
+  }
+  if (value is int) {
+    // POST only returns the ID — create a minimal entity with just the id.
+    return AcademicDegreeModel(id: value, name: '', isActive: true);
+  }
+  return null;
 }
 
 class AcademicDegreeModel extends AcademicDegreeEntity {

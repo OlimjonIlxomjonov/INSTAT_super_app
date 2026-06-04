@@ -95,6 +95,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/data/
 import 'package:my_template/features/scientific_articles_app/features/home/data/source/impl_remote_data_source/user_articles_remote_data_source_impl.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/source/remote_data_source/user_articles_remote_data_source.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/repository/articles_home_repository.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/drop_down/academic_degree_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/drop_down/article_type_dd_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/drop_down/journal_section_dd_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/udk/udk_use_case.dart';
@@ -104,6 +105,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/domai
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/user_articles/user_articles_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_authors/review_authors_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_detail/review_detail_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/academic_degree/academic_degree_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/article_type/article_type_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/journal_sections/journal_section_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/udk/udk_bloc.dart';
@@ -113,6 +115,11 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_authors/review_authors_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_detail/review_detail_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/create_review_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/update_review_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_authors/create_review_author_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_authors/update_review_author_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/add_article_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -231,9 +238,14 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => ArticleEditionsUseCase(repository: sl()));
   // add artticle
   sl.registerLazySingleton(() => UdkUseCase(repository: sl()));
+  sl.registerLazySingleton(() => CreateReviewUseCase(repository: sl()));
+  sl.registerLazySingleton(() => UpdateReviewUseCase(repository: sl()));
+  sl.registerLazySingleton(() => CreateReviewAuthorUseCase(repository: sl()));
+  sl.registerLazySingleton(() => UpdateReviewAuthorUseCase(repository: sl()));
   //! drop downs
   sl.registerLazySingleton(() => ArticleTypeDdUseCase(repository: sl()));
   sl.registerLazySingleton(() => JournalSectionDdUseCase(repository: sl()));
+  sl.registerLazySingleton(() => AcademicDegreeUseCase(repository: sl()));
 
   /// {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -289,7 +301,16 @@ Future<void> setup() async {
   sl.registerFactory(() => ArticleEditionsBloc(useCase: sl()));
   // add article
   sl.registerLazySingleton(() => UdkBloc(useCase: sl()));
-  //!
+  sl.registerFactory(
+    () => AddArticleBloc(
+      createReviewUseCase: sl(),
+      updateReviewUseCase: sl(),
+      createReviewAuthorUseCase: sl(),
+      getReviewAuthorsUseCase: sl(),
+    ),
+  );
+  //! Drop Downs
   sl.registerLazySingleton(() => ArticleTypeBloc(useCase: sl()));
   sl.registerLazySingleton(() => JournalSectionBloc(useCase: sl()));
+  sl.registerLazySingleton(() => AcademicDegreeBloc(useCase: sl()));
 }
