@@ -24,8 +24,18 @@ class _ArticleAnnotationViewState extends State<ArticleAnnotationView> {
   @override
   void initState() {
     super.initState();
+    _syncAnnotationFromState();
+  }
+
+  void _syncAnnotationFromState() {
     final state = context.read<AddArticleBloc>().state;
-    annotationController.text = state.annotationUz ?? '';
+    if (_selectedLang == AnnotationLanguageEnum.uz) {
+      annotationController.text = state.annotationUz ?? '';
+    } else if (_selectedLang == AnnotationLanguageEnum.en) {
+      annotationController.text = state.annotationEn ?? '';
+    } else {
+      annotationController.text = state.annotationRu ?? '';
+    }
   }
 
   @override

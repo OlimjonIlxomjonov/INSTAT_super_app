@@ -44,4 +44,7 @@ abstract class UserArticlesRemoteDataSource {
   Future<List<DropDownModel>> fetchJournalSection();
 
   Future<List<DropDownModel>> fetchDegree();
+
+  //! Articles main file
+  Future<void> postMainArticlesFile({required AddMainFileParams params});
 }

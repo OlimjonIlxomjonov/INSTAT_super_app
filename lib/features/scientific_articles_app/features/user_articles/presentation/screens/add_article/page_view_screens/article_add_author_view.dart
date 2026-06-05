@@ -7,6 +7,7 @@ import 'package:my_template/core/utils/general_widgets/custom_drop_down_menu_wg.
 import 'package:my_template/features/auth/presentation/widgets/auth_text_field_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/academic_degree/academic_degree_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/academic_degree/academic_degree_state.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/review_authors/review_author_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/add_article_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/add_article_state.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
@@ -29,6 +30,7 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
   final _phoneNumberController = TextEditingController();
   final _orcidController = TextEditingController();
   int? _selectedDegreeId;
+  int? _editingAuthorId;
 
   @override
   void dispose() {
@@ -85,10 +87,13 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
       return;
     }
 
+    final reviewId = context.read<AddArticleBloc>().state.reviewId ?? 0;
+
     final authorParams = ReviewAuthorParams(
+      id: _editingAuthorId,
       firstName: firstName,
       lastName: lastName,
-      review: context.read<AddArticleBloc>().state.reviewId ?? 0,
+      review: reviewId,
       academicDegree: _selectedDegreeId!,
       address: address,
       organization: organization,
@@ -97,8 +102,27 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
       orcidCode: orcid.isNotEmpty ? orcid : null,
     );
 
-    final reviewId = context.read<AddArticleBloc>().state.reviewId;
-    if (reviewId == null || reviewId == 0) {
+    if (_editingAuthorId != null) {
+      context.read<AddArticleBloc>().add(
+        UpdateReviewAuthorEvent(
+          author: authorParams,
+          onSuccess: () {
+            _clearFields();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Muallif muvaffaqiyatli yangilandi'),
+              ),
+            );
+          },
+          onError: (err) {
+            _showError('Muallifni yangilashda xatolik: $err');
+          },
+        ),
+      );
+      return;
+    }
+
+    if (reviewId == 0) {
       // Review is not created on server yet, save locally
       context.read<AddArticleBloc>().add(
         AddLocalAuthorEvent(author: authorParams),
@@ -142,6 +166,21 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
     _orcidController.clear();
     setState(() {
       _selectedDegreeId = null;
+      _editingAuthorId = null;
+    });
+  }
+
+  void _startEditingAuthor(ReviewAuthorEntity author) {
+    setState(() {
+      _editingAuthorId = author.id;
+      _firstNameController.text = author.firstName;
+      _lastNameController.text = author.lastName;
+      _organizationController.text = author.organization;
+      _emailController.text = author.email;
+      _addressController.text = author.address;
+      _phoneNumberController.text = author.phoneNumber;
+      _orcidController.text = author.orcidCode;
+      _selectedDegreeId = author.academicDegree?.id;
     });
   }
 
@@ -246,7 +285,9 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
               onPressed: _saveAuthor,
               child: Center(
                 child: Text(
-                  "Muallifni saqlash",
+                  _editingAuthorId != null
+                      ? 'Muallifni yangilash'
+                      : 'Muallifni saqlash',
                   style: AppTextStyles.source.medium(
                     fontSize: 16,
                     color: Colors.white,
@@ -254,6 +295,12 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
                 ),
               ),
             ),
+            if (_editingAuthorId != null) ...[
+              TextButton(
+                onPressed: _clearFields,
+                child: const Text('Tahrirlashni bekor qilish'),
+              ),
+            ],
 
             //? AUTHORS LIST SECTION
             BlocBuilder<AddArticleBloc, AddArticleState>(
@@ -292,6 +339,8 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
                         name: "${author.firstName} ${author.lastName}",
                         email: author.email,
                         isLocal: false,
+                        isEditing: _editingAuthorId == author.id,
+                        onEdit: () => _startEditingAuthor(author),
                       );
                     }),
                   ],
@@ -311,13 +360,17 @@ class _AuthorListCard extends StatelessWidget {
   final String name;
   final String email;
   final bool isLocal;
+  final bool isEditing;
   final VoidCallback? onDelete;
+  final VoidCallback? onEdit;
 
   const _AuthorListCard({
     required this.name,
     required this.email,
     required this.isLocal,
+    this.isEditing = false,
     this.onDelete,
+    this.onEdit,
   });
 
   @override
@@ -326,8 +379,14 @@ class _AuthorListCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: AppColors.greyScale.grey50,
-        border: Border.all(color: AppColors.greyScale.grey200),
+        color: isEditing
+            ? AppColors.primaryColor.withValues(alpha: 0.06)
+            : AppColors.greyScale.grey50,
+        border: Border.all(
+          color: isEditing
+              ? AppColors.primaryColor
+              : AppColors.greyScale.grey200,
+        ),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -367,13 +426,12 @@ class _AuthorListCard extends StatelessWidget {
               onPressed: onDelete,
             ),
           ],
-          IconButton(
-            icon: const Icon(Icons.edit_outlined, size: 20),
-            color: AppColors.primaryColor,
-            onPressed: () {
-              // edit function is later, just make UI for now
-            },
-          ),
+          if (!isLocal && onEdit != null)
+            IconButton(
+              icon: const Icon(Icons.edit_outlined, size: 20),
+              color: AppColors.primaryColor,
+              onPressed: onEdit,
+            ),
         ],
       ),
     );

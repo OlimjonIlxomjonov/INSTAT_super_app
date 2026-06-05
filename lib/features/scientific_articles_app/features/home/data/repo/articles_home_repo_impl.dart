@@ -91,4 +91,10 @@ class ArticlesHomeRepoImpl implements ArticlesHomeRepository {
   Future<List<DropDownEntity>> getDegree() {
     return remoteDataSource.fetchDegree();
   }
+
+  //! main file articles
+  @override
+  Future<void> postArticleMainFile({required AddMainFileParams params}) {
+    return remoteDataSource.postMainArticlesFile(params: params);
+  }
 }

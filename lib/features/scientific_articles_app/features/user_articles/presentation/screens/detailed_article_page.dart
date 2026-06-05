@@ -2,8 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
-import 'package:my_template/core/common/flush_bar/technical_work_flash_bar.dart';
 import 'package:my_template/core/common/params/article_params/article_params.dart';
+import 'package:my_template/core/utils/enums/app_enums.dart';
+import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_process/article_process_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_process/article_process_state.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_files/review_files_bloc.dart';
@@ -29,6 +30,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_detail/review_detail_state.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/articles_status_check_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/last_actions/sliver_last_actions_wg.dart';
+import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/add_article/add_article_page.dart';
 
 import '../../../home/domain/entity/article_process/article_process_entity.dart';
 import '../../../home/presentation/widgets/last_actions/last_actions_item_wg.dart';
@@ -75,6 +77,14 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
   void dispose() {
     _isOpeningFile.dispose();
     super.dispose();
+  }
+
+  void _openEditDraft(BuildContext context) {
+    FamilyNavigation.familyPush(
+      context,
+      AddArticlePage(editReviewId: widget.reviewId),
+      showHandle: false,
+    );
   }
 
   Future<void> _openFile(String? url) async {
@@ -308,13 +318,13 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
           ),
         ],
       ),
-      bottomNavigationBar: CustomBottomNavContainerWg(
-        leadingIcon: IconlyLight.edit,
-        buttonText: 'Tahrirlash',
-        onTap: () {
-          technicalWorkFlushBar(context, 'Soon!');
-        },
-      ),
+      bottomNavigationBar: widget.status == ArticleStatus.draft
+          ? CustomBottomNavContainerWg(
+              leadingIcon: IconlyLight.edit,
+              buttonText: 'Tahrirlash',
+              onTap: () => _openEditDraft(context),
+            )
+          : null,
     );
   }
 }

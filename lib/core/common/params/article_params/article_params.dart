@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 class ArticleProcessParams {
   final int articleId;
@@ -103,3 +104,9 @@ class ReviewAuthorParams {
   }
 }
 
+class AddMainFileParams {
+  final int reviewId;
+  final File mainFile;
+
+  AddMainFileParams({required this.mainFile, required this.reviewId});
+}

@@ -88,11 +88,13 @@ class UpdateAddArticleFieldEvent extends ArticlesHomeEvent {
 
 class AddLocalAuthorEvent extends ArticlesHomeEvent {
   final ReviewAuthorParams author;
+
   AddLocalAuthorEvent({required this.author});
 }
 
 class RemoveLocalAuthorEvent extends ArticlesHomeEvent {
   final int index;
+
   RemoveLocalAuthorEvent({required this.index});
 }
 
@@ -101,11 +103,7 @@ class SaveArticleDraftEvent extends ArticlesHomeEvent {
   final Function()? onSuccess;
   final Function(String)? onError;
 
-  SaveArticleDraftEvent({
-    required this.status,
-    this.onSuccess,
-    this.onError,
-  });
+  SaveArticleDraftEvent({required this.status, this.onSuccess, this.onError});
 }
 
 class CreateReviewAuthorEvent extends ArticlesHomeEvent {
@@ -113,7 +111,27 @@ class CreateReviewAuthorEvent extends ArticlesHomeEvent {
   final Function()? onSuccess;
   final Function(String)? onError;
 
-  CreateReviewAuthorEvent({
+  CreateReviewAuthorEvent({required this.author, this.onSuccess, this.onError});
+}
+
+class MainFileArticleEvent extends ArticlesHomeEvent {
+  final AddMainFileParams params;
+
+  MainFileArticleEvent({required this.params});
+}
+
+class LoadArticleForEditEvent extends ArticlesHomeEvent {
+  final int reviewId;
+
+  LoadArticleForEditEvent({required this.reviewId});
+}
+
+class UpdateReviewAuthorEvent extends ArticlesHomeEvent {
+  final ReviewAuthorParams author;
+  final Function()? onSuccess;
+  final Function(String)? onError;
+
+  UpdateReviewAuthorEvent({
     required this.author,
     this.onSuccess,
     this.onError,

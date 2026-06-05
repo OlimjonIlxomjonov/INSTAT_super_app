@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:my_template/core/common/params/article_params/article_params.dart';
 import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
@@ -191,7 +192,9 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
   }
 
   @override
-  Future<ReviewAuthorModel> createReviewAuthor(ReviewAuthorParams params) async {
+  Future<ReviewAuthorModel> createReviewAuthor(
+    ReviewAuthorParams params,
+  ) async {
     try {
       final response = await _dioClient.post(
         ApiUrls.reviewAuthors,
@@ -210,7 +213,9 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
   }
 
   @override
-  Future<ReviewAuthorModel> updateReviewAuthor(ReviewAuthorParams params) async {
+  Future<ReviewAuthorModel> updateReviewAuthor(
+    ReviewAuthorParams params,
+  ) async {
     try {
       final response = await _dioClient.put(
         '${ApiUrls.reviewAuthors}${params.id}/',
@@ -270,6 +275,31 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
         logger.i(response.data);
         final data = response.data as List;
         return data.map((e) => DropDownModel.fromJson(e)).toList();
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> postMainArticlesFile({required AddMainFileParams params}) async {
+    try {
+      final formData = FormData.fromMap({
+        'review_id': params.reviewId,
+        'file': await MultipartFile.fromFile(
+          params.mainFile.path,
+          filename: params.mainFile.path.split('/').last,
+        ),
+      });
+      final response = await _dioClient.post(
+        '${ApiUrls.userArticles}${params.reviewId}/${ApiUrls.mainFileArticle}',
+        data: formData,
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
       } else {
         throw Exception('THROW EXCEPTION! ${response.statusCode}');
       }

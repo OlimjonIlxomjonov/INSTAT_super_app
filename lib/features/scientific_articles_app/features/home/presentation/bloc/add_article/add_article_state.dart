@@ -14,6 +14,12 @@ class AddArticleState extends Equatable {
   final String? annotationEn;
   final String udkCode;
   final List<String> keywords;
+  final String? existingMainFileUrl;
+  final int? existingMainFileSize;
+
+  final bool isEditMode;
+  final bool isLoadingInitialData;
+  final String? initialLoadError;
 
   // Local authors that haven't been saved on the server yet (used when reviewId is null)
   final List<ReviewAuthorParams> localAuthors;
@@ -37,6 +43,11 @@ class AddArticleState extends Equatable {
     this.annotationEn,
     this.udkCode = '',
     this.keywords = const [],
+    this.existingMainFileUrl,
+    this.existingMainFileSize,
+    this.isEditMode = false,
+    this.isLoadingInitialData = false,
+    this.initialLoadError,
     this.localAuthors = const [],
     this.savedAuthors = const [],
     this.isSaving = false,
@@ -55,11 +66,18 @@ class AddArticleState extends Equatable {
     String? annotationEn,
     String? udkCode,
     List<String>? keywords,
+    String? existingMainFileUrl,
+    int? existingMainFileSize,
+    bool? isEditMode,
+    bool? isLoadingInitialData,
+    String? initialLoadError,
     List<ReviewAuthorParams>? localAuthors,
     List<ReviewAuthorEntity>? savedAuthors,
     bool? isSaving,
     bool? isSuccess,
     String? errorMessage,
+    bool clearInitialLoadError = false,
+    bool clearExistingMainFile = false,
   }) {
     return AddArticleState(
       reviewId: reviewId ?? this.reviewId,
@@ -72,6 +90,17 @@ class AddArticleState extends Equatable {
       annotationEn: annotationEn ?? this.annotationEn,
       udkCode: udkCode ?? this.udkCode,
       keywords: keywords ?? this.keywords,
+      existingMainFileUrl: clearExistingMainFile
+          ? null
+          : (existingMainFileUrl ?? this.existingMainFileUrl),
+      existingMainFileSize: clearExistingMainFile
+          ? null
+          : (existingMainFileSize ?? this.existingMainFileSize),
+      isEditMode: isEditMode ?? this.isEditMode,
+      isLoadingInitialData: isLoadingInitialData ?? this.isLoadingInitialData,
+      initialLoadError: clearInitialLoadError
+          ? null
+          : (initialLoadError ?? this.initialLoadError),
       localAuthors: localAuthors ?? this.localAuthors,
       savedAuthors: savedAuthors ?? this.savedAuthors,
       isSaving: isSaving ?? this.isSaving,
@@ -82,20 +111,25 @@ class AddArticleState extends Equatable {
 
   @override
   List<Object?> get props => [
-        reviewId,
-        title,
-        articleType,
-        language,
-        journalSection,
-        annotationUz,
-        annotationRu,
-        annotationEn,
-        udkCode,
-        keywords,
-        localAuthors,
-        savedAuthors,
-        isSaving,
-        isSuccess,
-        errorMessage,
-      ];
+    reviewId,
+    title,
+    articleType,
+    language,
+    journalSection,
+    annotationUz,
+    annotationRu,
+    annotationEn,
+    udkCode,
+    keywords,
+    existingMainFileUrl,
+    existingMainFileSize,
+    isEditMode,
+    isLoadingInitialData,
+    initialLoadError,
+    localAuthors,
+    savedAuthors,
+    isSaving,
+    isSuccess,
+    errorMessage,
+  ];
 }

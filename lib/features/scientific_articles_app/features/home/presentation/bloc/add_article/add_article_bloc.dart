@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/article_params/article_params.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/create_review_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/update_review_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_authors/create_review_author_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_authors/review_authors_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_authors/update_review_author_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_detail/review_detail_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/add_article_state.dart';
 
@@ -11,16 +15,73 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
   final CreateReviewUseCase createReviewUseCase;
   final UpdateReviewUseCase updateReviewUseCase;
   final CreateReviewAuthorUseCase createReviewAuthorUseCase;
+  final UpdateReviewAuthorUseCase updateReviewAuthorUseCase;
   final ReviewAuthorsUseCase getReviewAuthorsUseCase;
+  final ReviewDetailUseCase reviewDetailUseCase;
 
   AddArticleBloc({
     required this.createReviewUseCase,
     required this.updateReviewUseCase,
     required this.createReviewAuthorUseCase,
+    required this.updateReviewAuthorUseCase,
     required this.getReviewAuthorsUseCase,
+    required this.reviewDetailUseCase,
   }) : super(const AddArticleState()) {
     on<ResetAddArticleEvent>((event, emit) {
       emit(const AddArticleState());
+    });
+
+    on<LoadArticleForEditEvent>((event, emit) async {
+      emit(
+        state.copyWith(
+          isLoadingInitialData: true,
+          initialLoadError: null,
+          clearInitialLoadError: true,
+        ),
+      );
+      try {
+        final detail = await reviewDetailUseCase(event.reviewId);
+
+        if (detail.status != 'draft') {
+          emit(
+            state.copyWith(
+              isLoadingInitialData: false,
+              initialLoadError:
+                  'Faqat qoralama (draft) holatidagi maqolalar tahrirlanadi',
+            ),
+          );
+          return;
+        }
+
+        final authors = await getReviewAuthorsUseCase(event.reviewId);
+
+        emit(
+          AddArticleState(
+            reviewId: detail.id,
+            title: detail.title,
+            articleType: detail.articleType,
+            journalSection: detail.journalSection,
+            annotationUz: detail.annotationUz,
+            annotationRu: detail.annotationRu,
+            annotationEn: detail.annotationEn,
+            udkCode: detail.udkCode,
+            language: detail.language,
+            keywords: _parseKeywords(detail.keywords),
+            existingMainFileUrl: detail.mainFile,
+            existingMainFileSize: detail.mainFileSize,
+            savedAuthors: authors,
+            isEditMode: true,
+            isLoadingInitialData: false,
+          ),
+        );
+      } catch (e) {
+        emit(
+          state.copyWith(
+            isLoadingInitialData: false,
+            initialLoadError: 'Maqola ma\'lumotlarini yuklashda xatolik',
+          ),
+        );
+      }
     });
 
     on<UpdateAddArticleFieldEvent>((event, emit) {
@@ -38,12 +99,14 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
     });
 
     on<AddLocalAuthorEvent>((event, emit) {
-      final updatedLocal = List<ReviewAuthorParams>.from(state.localAuthors)..add(event.author);
+      final updatedLocal = List<ReviewAuthorParams>.from(state.localAuthors)
+        ..add(event.author);
       emit(state.copyWith(localAuthors: updatedLocal));
     });
 
     on<RemoveLocalAuthorEvent>((event, emit) {
-      final updatedLocal = List<ReviewAuthorParams>.from(state.localAuthors)..removeAt(event.index);
+      final updatedLocal = List<ReviewAuthorParams>.from(state.localAuthors)
+        ..removeAt(event.index);
       emit(state.copyWith(localAuthors: updatedLocal));
     });
 
@@ -51,10 +114,28 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
       emit(state.copyWith(isSaving: true, isSuccess: false, errorMessage: null));
       try {
         await createReviewAuthorUseCase(event.author);
-        
-        // Refresh the list of saved authors
+
         final saved = await getReviewAuthorsUseCase(event.author.review);
-        
+
+        emit(state.copyWith(
+          savedAuthors: saved,
+          isSaving: false,
+          isSuccess: true,
+        ));
+        event.onSuccess?.call();
+      } catch (e) {
+        emit(state.copyWith(isSaving: false, errorMessage: e.toString()));
+        event.onError?.call(e.toString());
+      }
+    });
+
+    on<UpdateReviewAuthorEvent>((event, emit) async {
+      emit(state.copyWith(isSaving: true, isSuccess: false, errorMessage: null));
+      try {
+        await updateReviewAuthorUseCase(event.author);
+
+        final saved = await getReviewAuthorsUseCase(event.author.review);
+
         emit(state.copyWith(
           savedAuthors: saved,
           isSaving: false,
@@ -71,9 +152,8 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
       emit(state.copyWith(isSaving: true, isSuccess: false, errorMessage: null));
       try {
         int finalReviewId = state.reviewId ?? 0;
-        
+
         if (finalReviewId == 0) {
-          // 1. Create review on the backend
           final reviewParams = ReviewParams(
             title: state.title,
             articleType: state.articleType ?? 1,
@@ -89,7 +169,6 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
           final response = await createReviewUseCase(reviewParams);
           finalReviewId = response.id;
         } else {
-          // 2. Update existing review
           final reviewParams = ReviewParams(
             id: finalReviewId,
             title: state.title,
@@ -106,7 +185,6 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
           await updateReviewUseCase(reviewParams);
         }
 
-        // 3. Upload all local authors
         for (var author in state.localAuthors) {
           final authorParams = ReviewAuthorParams(
             firstName: author.firstName,
@@ -122,7 +200,6 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
           await createReviewAuthorUseCase(authorParams);
         }
 
-        // 4. Refresh saved authors list
         final saved = await getReviewAuthorsUseCase(finalReviewId);
 
         emit(state.copyWith(
@@ -131,6 +208,7 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
           savedAuthors: saved,
           isSaving: false,
           isSuccess: true,
+          isEditMode: state.isEditMode || finalReviewId > 0,
         ));
         event.onSuccess?.call();
       } catch (e) {
@@ -138,5 +216,19 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
         event.onError?.call(e.toString());
       }
     });
+  }
+
+  static List<String> _parseKeywords(String raw) {
+    if (raw.isEmpty) return [];
+    try {
+      final decoded = jsonDecode(raw);
+      if (decoded is List) {
+        return decoded
+            .map((e) => e.toString().trim())
+            .where((s) => s.isNotEmpty)
+            .toList();
+      }
+    } catch (_) {}
+    return [];
   }
 }

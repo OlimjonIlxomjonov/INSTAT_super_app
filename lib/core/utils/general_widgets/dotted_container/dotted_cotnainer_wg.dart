@@ -4,7 +4,9 @@ import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 
 class DottedContainerWg extends StatelessWidget {
-  const DottedContainerWg({super.key});
+  final VoidCallback? onTap;
+
+  const DottedContainerWg({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +29,13 @@ class DottedContainerWg extends StatelessWidget {
             Icon(IconlyLight.upload),
             SizedBox(height: 20),
             Text(
-              'Choose a file or drag & drop it here.',
+              'Faylni tanlang',
               style: AppTextStyles.source.medium(fontSize: 14),
             ),
             SizedBox(height: 6),
             Text(
-              'JPEG, PNG, PDF, and MP4 formats, up to 50 MB.',
+              textAlign: .center,
+              'JPEG, PNG, .DOC, .DOCX, .XLS, .XLSX, .PDF, .PPT, .PPTX up to 50 MB.',
               style: AppTextStyles.source.regular(
                 fontSize: 12,
                 color: AppColors.greyScale.grey600,
@@ -41,7 +44,7 @@ class DottedContainerWg extends StatelessWidget {
             SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: AppColors.white),
-              onPressed: () {},
+              onPressed: onTap,
               child: Text(
                 'Tanlash',
                 style: AppTextStyles.source.medium(

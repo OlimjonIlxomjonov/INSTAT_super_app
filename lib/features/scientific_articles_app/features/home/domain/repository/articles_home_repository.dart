@@ -44,4 +44,7 @@ abstract class ArticlesHomeRepository {
   Future<List<DropDownEntity>> getJournalSection();
 
   Future<List<DropDownEntity>> getDegree();
+
+  //! Add main file to the articles
+  Future<void> postArticleMainFile({required AddMainFileParams params});
 }
