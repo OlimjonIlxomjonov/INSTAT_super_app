@@ -355,12 +355,12 @@ void _showExitDialog(BuildContext context, {required bool isEditMode}) {
     context: context,
     builder: (ctx) => AlertDialog.adaptive(
       title: Text('Chiqishni xohlaysizmi?', style: CustomTextStyles.h2),
-      content: Text(
-        isEditMode
-            ? "Saqlanmagan o'zgarishlar yo'qolishi mumkin."
-            : "Kiritilgan ma'lumotlar saqlanmasligi mumkin.",
-        style: CustomTextStyles.h4,
-      ),
+      // content: Text(
+      //   isEditMode
+      //       ? "Saqlanmagan o'zgarishlar yo'qolishi mumkin."
+      //       : "Kiritilgan ma'lumotlar saqlanmasligi mumkin.",
+      //   style: CustomTextStyles.h4,
+      // ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(ctx),

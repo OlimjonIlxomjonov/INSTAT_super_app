@@ -10,7 +10,10 @@ import '../entity/review_authors/review_author_entity.dart';
 import '../entity/review_detail/review_detail_entity.dart';
 
 abstract class ArticlesHomeRepository {
-  Future<UserArticlesResponse> getUserArticles({required String status});
+  Future<UserArticlesResponse> getUserArticles({
+    required String status,
+    required String search,
+  });
 
   Future<List<ReviewAuthorEntity>> getReviewAuthors(int reviewId);
 
@@ -47,4 +50,6 @@ abstract class ArticlesHomeRepository {
 
   //! Add main file to the articles
   Future<void> postArticleMainFile({required AddMainFileParams params});
+
+  //! search articles
 }

@@ -44,7 +44,7 @@ class ArticlesHomePage extends StatelessWidget {
       body: CustomRefreshIndicator(
         onRefresh: () async {
           context.read<UserArticlesBloc>().add(
-            UserArticlesEvent(status: 'all'),
+            UserArticlesEvent(status: 'all', search: ''),
           );
         },
         child: CustomScrollView(

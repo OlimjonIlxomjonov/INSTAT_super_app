@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 
@@ -13,6 +14,7 @@ class AuthTextFieldWg extends StatefulWidget {
   final Function(String)? onChanged;
   final bool isTypeNum;
   final Function()? onEditingComplete;
+  final List<TextInputFormatter>? inputFormatter;
 
   const AuthTextFieldWg({
     super.key,
@@ -24,6 +26,7 @@ class AuthTextFieldWg extends StatefulWidget {
     this.onChanged,
     this.isTypeNum = false,
     this.onEditingComplete,
+    this.inputFormatter,
   });
 
   @override
@@ -46,6 +49,7 @@ class _AuthTextFieldWgState extends State<AuthTextFieldWg> {
           onChanged: widget.onChanged,
           onEditingComplete: widget.onEditingComplete,
           controller: widget.controller,
+          inputFormatters: widget.inputFormatter,
           obscureText: widget.isPassword ?? false ? obscureVisibility : false,
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder().copyWith(

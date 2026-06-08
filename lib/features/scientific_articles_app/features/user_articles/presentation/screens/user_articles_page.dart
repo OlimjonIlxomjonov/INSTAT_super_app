@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
@@ -6,18 +8,13 @@ import 'package:my_template/core/common/ui_states/empty_state.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
-import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
-import 'package:my_template/features/scientific_articles_app/dummy_data_source/articles_source.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/sliver_articles_list_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/add_article/add_article_page.dart';
-import 'package:skeletonizer/skeletonizer.dart';
-
 import '../../../../../../core/common/ui_states/error_page.dart';
 import '../../../../dummy_models/articles_category.dart';
-import '../../../home/domain/entity/user_articles/user_articles_entity.dart';
 import '../../../home/presentation/bloc/user_articles/user_articles_bloc.dart';
 import '../../../home/presentation/bloc/user_articles/user_articles_state.dart';
 
@@ -31,6 +28,17 @@ class UserArticlesPage extends StatefulWidget {
 class _UserArticlesPageState extends State<UserArticlesPage> {
   int _selectedIndex = 0;
   late UserArticlesBloc _bloc;
+  Timer? _debounce;
+  final _searchController = TextEditingController();
+
+  void _onSearchChanged(String query) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      _bloc.add(
+        UserArticlesEvent(status: articleStatus[_selectedIndex], search: query),
+      );
+    });
+  }
 
   @override
   void didChangeDependencies() {
@@ -42,8 +50,10 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
   void dispose() {
     // only reset if user changed the filter away from 'all'
     if (_selectedIndex != 0) {
-      _bloc.add(UserArticlesEvent(status: 'all'));
+      _bloc.add(UserArticlesEvent(status: 'all', search: ''));
     }
+    _searchController.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
@@ -51,7 +61,7 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
   void initState() {
     super.initState();
     context.read<UserArticlesBloc>().add(
-      UserArticlesEvent(status: articleStatus[_selectedIndex]),
+      UserArticlesEvent(status: articleStatus[_selectedIndex], search: ''),
     );
   }
 
@@ -63,19 +73,52 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
       body: CustomRefreshIndicator(
         onRefresh: () async {
           context.read<UserArticlesBloc>().add(
-            UserArticlesEvent(status: articleStatus[_selectedIndex]),
+            UserArticlesEvent(
+              status: articleStatus[_selectedIndex],
+              search: '',
+            ),
           );
         },
         child: CustomScrollView(
           slivers: [
             /// search bar
             SliverAppBar(
-              toolbarHeight: 56 + 24,
               floating: true,
               snap: true,
               automaticallyImplyLeading: false,
               titleSpacing: 20,
-              title: const AppSearchbarWg(),
+              title: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: AppColors.greyScale.grey200,
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.search, color: AppColors.greyScale.grey600),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextField(
+                        controller: _searchController,
+                        onChanged: _onSearchChanged,
+                        style: AppTextStyles.source.regular(fontSize: 14),
+                        decoration: InputDecoration(
+                          hintText: 'Maqola qidiring...',
+                          hintStyle: AppTextStyles.source.regular(
+                            fontSize: 14,
+                            color: AppColors.greyScale.grey500,
+                          ),
+                          border: InputBorder.none,
+                          isDense: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
 
             /// CATEGORIES
@@ -92,7 +135,10 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
                         if (_selectedIndex == index) return;
                         setState(() => _selectedIndex = index);
                         context.read<UserArticlesBloc>().add(
-                          UserArticlesEvent(status: articleStatus[index]),
+                          UserArticlesEvent(
+                            status: articleStatus[index],
+                            search: '',
+                          ),
                         );
                       },
                     );

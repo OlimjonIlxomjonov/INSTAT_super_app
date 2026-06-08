@@ -136,10 +136,7 @@ class _ArticlesMainFilesViewState extends State<ArticlesMainFilesView> {
 
     context.read<MainFileBloc>().add(
       MainFileArticleEvent(
-        params: AddMainFileParams(
-          reviewId: reviewId,
-          mainFile: picked.file,
-        ),
+        params: AddMainFileParams(reviewId: reviewId, mainFile: picked.file),
       ),
     );
   }

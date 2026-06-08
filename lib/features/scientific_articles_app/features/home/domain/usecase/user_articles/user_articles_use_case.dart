@@ -6,7 +6,10 @@ class UserArticlesUseCase {
 
   UserArticlesUseCase({required this.repository});
 
-  Future<UserArticlesResponse> call({required String status}) {
-    return repository.getUserArticles(status: status);
+  Future<UserArticlesResponse> call({
+    required String status,
+    required String search,
+  }) {
+    return repository.getUserArticles(status: status, search: search);
   }
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
+import 'package:intl_phone_field/country_picker_dialog.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/custom_drop_down_menu_wg.dart';
@@ -255,11 +258,34 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
             ),
 
             /// phone number
-            AuthTextFieldWg(
-              label: '+998 90 123 45 67',
-              title: 'Telefon raqami',
+            IntlPhoneField(
+              pickerDialogStyle: PickerDialogStyle(
+                backgroundColor: Colors.white,
+              ),
               controller: _phoneNumberController,
-              leadingIcon: IconlyLight.call,
+              showCountryFlag: false,
+              flagsButtonPadding: const EdgeInsets.only(left: 8.0),
+              decoration: InputDecoration(
+                hintText: 'Telefon raqami',
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: .circular(10),
+                  borderSide: BorderSide(
+                    color: AppColors.greyScale.grey300,
+                    width: 1.0,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: .circular(10),
+                  borderSide: BorderSide(
+                    color: AppColors.primaryColor,
+                    width: 1.0,
+                  ),
+                ),
+              ),
+              initialCountryCode: 'UZ',
+              showDropdownIcon: true,
+              dropdownIcon: Icon(IconlyLight.call),
+              onChanged: (phone) {},
             ),
 
             /// ORCID
@@ -268,6 +294,10 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
               title: 'ORCID',
               controller: _orcidController,
               leadingIcon: LineIcons.identificationCard,
+              inputFormatter: [
+                FilteringTextInputFormatter.digitsOnly,
+                _OrcidInputFormatter(),
+              ],
             ),
 
             const SizedBox(height: 10),
@@ -352,6 +382,29 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _OrcidInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final digits = newValue.text.replaceAll('-', '');
+    if (digits.length > 16) return oldValue;
+
+    final buffer = StringBuffer();
+    for (int i = 0; i < digits.length; i++) {
+      if (i > 0 && i % 4 == 0) buffer.write('-');
+      buffer.write(digits[i]);
+    }
+
+    final text = buffer.toString();
+    return TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
     );
   }
 }

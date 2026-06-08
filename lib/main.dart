@@ -16,9 +16,7 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
   await setup();
   runApp(MyBlocProvider(child: MyApp()));
-
   // logger.f(TokenStorageServiceImpl().getAccessToken());
 }

@@ -21,7 +21,6 @@ class UserArticlesEntity {
 
   ArticleStatus get articleStatus {
     switch (status) {
-      case 'in_review':
       case 'pending':
         return ArticleStatus.pending;
       case 'rejected':
@@ -31,6 +30,8 @@ class UserArticlesEntity {
         return ArticleStatus.draft;
       case 'accepted':
         return ArticleStatus.confirmed;
+      case 'in_review':
+        return ArticleStatus.inReview;
       default:
         return ArticleStatus.draft;
     }

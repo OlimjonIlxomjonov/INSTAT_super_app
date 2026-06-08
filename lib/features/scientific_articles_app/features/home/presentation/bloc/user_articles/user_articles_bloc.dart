@@ -10,7 +10,7 @@ class UserArticlesBloc extends Bloc<ArticlesHomeEvent, UserArticlesState> {
     on<UserArticlesEvent>((event, emit) async {
       emit(UserArticlesLoading());
       try {
-        final response = await useCase.call(status: event.status);
+        final response = await useCase.call(status: event.status, search: event.search);
         emit(UserArticlesLoaded(response: response));
       } catch (e) {
         emit(UserArticlesError());

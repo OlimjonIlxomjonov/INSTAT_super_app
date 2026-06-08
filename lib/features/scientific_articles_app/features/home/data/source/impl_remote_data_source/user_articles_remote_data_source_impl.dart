@@ -20,10 +20,11 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
   @override
   Future<UserArticlesResponseModel> fetchUserArticles({
     required String status,
+    required String search,
   }) async {
     try {
       final response = await _dioClient.get(
-        "${ApiUrls.userArticles}/?status=$status",
+        "${ApiUrls.userArticles}/?status=$status&search=$search",
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);

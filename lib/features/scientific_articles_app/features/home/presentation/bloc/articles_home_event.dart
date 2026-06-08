@@ -8,8 +8,9 @@ class ArticlesHomeEvent {
 /// user articles
 class UserArticlesEvent extends ArticlesHomeEvent {
   final String status;
+  final String search;
 
-  const UserArticlesEvent({required this.status});
+  const UserArticlesEvent({required this.status, required this.search});
 }
 
 /// review authors
@@ -131,9 +132,5 @@ class UpdateReviewAuthorEvent extends ArticlesHomeEvent {
   final Function()? onSuccess;
   final Function(String)? onError;
 
-  UpdateReviewAuthorEvent({
-    required this.author,
-    this.onSuccess,
-    this.onError,
-  });
+  UpdateReviewAuthorEvent({required this.author, this.onSuccess, this.onError});
 }

@@ -10,7 +10,10 @@ import 'package:my_template/features/scientific_articles_app/features/home/data/
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_process/article_process_entity.dart';
 
 abstract class UserArticlesRemoteDataSource {
-  Future<UserArticlesResponseModel> fetchUserArticles({required String status});
+  Future<UserArticlesResponseModel> fetchUserArticles({
+    required String status,
+    required String search,
+  });
 
   Future<List<ReviewAuthorModel>> fetchReviewAuthors(int reviewId);
 

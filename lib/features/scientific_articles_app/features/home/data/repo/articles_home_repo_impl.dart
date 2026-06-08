@@ -16,8 +16,11 @@ class ArticlesHomeRepoImpl implements ArticlesHomeRepository {
   ArticlesHomeRepoImpl({required this.remoteDataSource});
 
   @override
-  Future<UserArticlesResponse> getUserArticles({required String status}) {
-    return remoteDataSource.fetchUserArticles(status: status);
+  Future<UserArticlesResponse> getUserArticles({
+    required String status,
+    required String search,
+  }) {
+    return remoteDataSource.fetchUserArticles(status: status, search: search);
   }
 
   @override

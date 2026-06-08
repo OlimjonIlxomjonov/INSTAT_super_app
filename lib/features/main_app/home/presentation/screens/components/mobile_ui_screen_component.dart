@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -37,6 +38,7 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/detailed_online_book_component.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/similar_onilne_books_component.dart';
 
+import '../../../../../../core/common/test_mode_banner/test_mode_banner.dart';
 import '../../../../../../core/common/ui_states/error_page.dart';
 import '../../../../../scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
 import '../../../../../scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
@@ -100,7 +102,9 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
     );
     context.read<UserMeBloc>().add(UserMeEvent());
     context.read<PopularBooksBloc>().add(FetchPopularBooksEvent());
-    context.read<UserArticlesBloc>().add(UserArticlesEvent(status: 'all'));
+    context.read<UserArticlesBloc>().add(
+      UserArticlesEvent(status: 'all', search: ''),
+    );
   }
 
   @override
@@ -335,6 +339,12 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
 
         child: CustomScrollView(
           slivers: [
+            const SliverAppBar(
+              title: TestModeBanner(),
+              automaticallyImplyLeading: false,
+              titleSpacing: 0,
+            ),
+
             /// HEADER LOGO
             SliverAppBar(
               snap: true,

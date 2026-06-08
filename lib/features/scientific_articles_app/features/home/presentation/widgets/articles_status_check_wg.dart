@@ -27,8 +27,8 @@ class ArticlesStatusCheckWg extends StatelessWidget {
         );
       case ArticleStatus.pending:
         return StatusContainerWg(
-          icon: Icons.warning_amber,
-          statusTitle: ' Tekshirilmoqda',
+          icon: IconlyLight.paper_upload,
+          statusTitle: ' Kutilmoqda',
           iconColor: AppColors.orange500,
           backgroundColor: AppColors.orange50,
         );
@@ -38,6 +38,13 @@ class ArticlesStatusCheckWg extends StatelessWidget {
           statusTitle: ' Rad etilgan',
           iconColor: AppColors.redFailedTaskCard,
           backgroundColor: AppColors.redBackground,
+        );
+      case ArticleStatus.inReview:
+        return StatusContainerWg(
+          icon: Icons.warning_amber,
+          statusTitle: ' Tekshirilmoqda',
+          iconColor: AppColors.orange500,
+          backgroundColor: AppColors.orange50,
         );
     }
   }
