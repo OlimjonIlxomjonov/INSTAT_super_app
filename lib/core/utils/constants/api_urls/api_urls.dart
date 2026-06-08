@@ -66,4 +66,6 @@ class ApiUrls {
 
   //! add main file (articles)
   static const mainFileArticle = 'upload-main-file/';
+  static const antiplagiatFileArticle = 'upload-antiplagiat-file/';
+  static const reviewFilesArticle = 'review-files/';
 }

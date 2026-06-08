@@ -69,6 +69,8 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
             keywords: _parseKeywords(detail.keywords),
             existingMainFileUrl: detail.mainFile,
             existingMainFileSize: detail.mainFileSize,
+            existingAntiplagiatFileUrl: detail.antiplagiatFile,
+            existingAntiplagiatFileSize: detail.antiplagiatFileSize,
             savedAuthors: authors,
             isEditMode: true,
             isLoadingInitialData: false,
@@ -146,6 +148,38 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
         emit(state.copyWith(isSaving: false, errorMessage: e.toString()));
         event.onError?.call(e.toString());
       }
+    });
+
+    on<UpdateArticleUploadedFileEvent>((event, emit) {
+      emit(
+        state.copyWith(
+          uploadedMainFileName: event.mainFileName,
+          uploadedMainFileSize: event.mainFileSize,
+          uploadedAntiplagiatFileName: event.antiplagiatFileName,
+          uploadedAntiplagiatFileSize: event.antiplagiatFileSize,
+        ),
+      );
+    });
+
+    on<RefreshArticleFilesEvent>((event, emit) async {
+      final reviewId = state.reviewId;
+      if (reviewId == null || reviewId == 0) return;
+
+      try {
+        final detail = await reviewDetailUseCase(reviewId);
+        emit(
+          state.copyWith(
+            existingMainFileUrl: detail.mainFile,
+            existingMainFileSize: detail.mainFileSize,
+            existingAntiplagiatFileUrl: detail.antiplagiatFile,
+            existingAntiplagiatFileSize: detail.antiplagiatFileSize,
+            clearUploadedMainFile: detail.mainFile != null &&
+                detail.mainFile!.isNotEmpty,
+            clearUploadedAntiplagiatFile: detail.antiplagiatFile != null &&
+                detail.antiplagiatFile!.isNotEmpty,
+          ),
+        );
+      } catch (_) {}
     });
 
     on<SaveArticleDraftEvent>((event, emit) async {

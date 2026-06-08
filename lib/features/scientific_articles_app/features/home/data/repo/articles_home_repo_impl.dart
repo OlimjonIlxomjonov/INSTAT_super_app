@@ -19,8 +19,13 @@ class ArticlesHomeRepoImpl implements ArticlesHomeRepository {
   Future<UserArticlesResponse> getUserArticles({
     required String status,
     required String search,
+    int page = 1,
   }) {
-    return remoteDataSource.fetchUserArticles(status: status, search: search);
+    return remoteDataSource.fetchUserArticles(
+      status: status,
+      search: search,
+      page: page,
+    );
   }
 
   @override
@@ -99,5 +104,15 @@ class ArticlesHomeRepoImpl implements ArticlesHomeRepository {
   @override
   Future<void> postArticleMainFile({required AddMainFileParams params}) {
     return remoteDataSource.postMainArticlesFile(params: params);
+  }
+
+  @override
+  Future<void> postAntiplagiatFile({required AddAntiplagiatFileParams params}) {
+    return remoteDataSource.postAntiplagiatFile(params: params);
+  }
+
+  @override
+  Future<ReviewFilesEntity> postReviewFile({required AddReviewFileParams params}) {
+    return remoteDataSource.postReviewFile(params: params);
   }
 }

@@ -5,8 +5,11 @@ import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_
 import 'package:my_template/features/scientific_articles_app/articles_widgets/detailed_article_body_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/review_authors/review_author_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/review_detail/review_detail_entity.dart';
+import 'package:my_template/core/common/params/article_params/article_params.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/add_article_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/add_article_state.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_files/review_files_bloc.dart';
 
 class ArticleInfoSummerizeView extends StatefulWidget {
   const ArticleInfoSummerizeView({super.key});
@@ -17,6 +20,27 @@ class ArticleInfoSummerizeView extends StatefulWidget {
 }
 
 class _ArticleInfoSummerizeViewState extends State<ArticleInfoSummerizeView> {
+  int? _loadedReviewFilesForId;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _loadReviewFiles(context.read<AddArticleBloc>().state.reviewId);
+    });
+  }
+
+  void _loadReviewFiles(int? reviewId) {
+    if (reviewId == null || reviewId == 0 || reviewId == _loadedReviewFilesForId) {
+      return;
+    }
+    _loadedReviewFilesForId = reviewId;
+    context.read<ReviewFilesBloc>().add(
+      ReviewFilesEvent(params: ArticleProcessParams(articleId: reviewId)),
+    );
+  }
+
   /// Build a lightweight ReviewDetailEntity from AddArticleState for preview.
   ReviewDetailEntity _buildPreviewDetail(AddArticleState state) {
     // Encode keywords list as JSON string (or empty array string if empty).
@@ -34,10 +58,10 @@ class _ArticleInfoSummerizeViewState extends State<ArticleInfoSummerizeView> {
       annotationEn: state.annotationEn ?? '',
       annotationRu: state.annotationRu ?? '',
       keywords: keywordsJson,
-      mainFile: state.existingMainFileUrl,
-      mainFileSize: state.existingMainFileSize,
-      antiplagiatFile: null,
-      antiplagiatFileSize: null,
+      mainFile: state.previewMainFile,
+      mainFileSize: state.displayMainFileSize,
+      antiplagiatFile: state.previewAntiplagiatFile,
+      antiplagiatFileSize: state.displayAntiplagiatFileSize,
       status: '',
       language: state.language,
       userId: 0,
@@ -67,8 +91,30 @@ class _ArticleInfoSummerizeViewState extends State<ArticleInfoSummerizeView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddArticleBloc, AddArticleState>(
-      builder: (context, state) {
+    return BlocListener<AddArticleBloc, AddArticleState>(
+      listenWhen: (prev, curr) =>
+          prev.reviewId != curr.reviewId ||
+          prev.existingMainFileUrl != curr.existingMainFileUrl ||
+          prev.uploadedMainFileName != curr.uploadedMainFileName ||
+          prev.existingAntiplagiatFileUrl != curr.existingAntiplagiatFileUrl ||
+          prev.uploadedAntiplagiatFileName != curr.uploadedAntiplagiatFileName,
+      listener: (context, state) {
+        if (state.reviewId != _loadedReviewFilesForId) {
+          _loadedReviewFilesForId = null;
+        }
+        _loadReviewFiles(state.reviewId);
+      },
+      child: BlocBuilder<AddArticleBloc, AddArticleState>(
+        buildWhen: (prev, curr) =>
+            prev.reviewId != curr.reviewId ||
+            prev.title != curr.title ||
+            prev.existingMainFileUrl != curr.existingMainFileUrl ||
+            prev.uploadedMainFileName != curr.uploadedMainFileName ||
+            prev.existingAntiplagiatFileUrl != curr.existingAntiplagiatFileUrl ||
+            prev.uploadedAntiplagiatFileName != curr.uploadedAntiplagiatFileName ||
+            prev.savedAuthors != curr.savedAuthors ||
+            prev.localAuthors != curr.localAuthors,
+        builder: (context, state) {
         final previewDetail = _buildPreviewDetail(state);
         final previewAuthors = _buildPreviewAuthors(state);
 
@@ -134,7 +180,8 @@ class _ArticleInfoSummerizeViewState extends State<ArticleInfoSummerizeView> {
             ),
           ),
         );
-      },
+        },
+      ),
     );
   }
 

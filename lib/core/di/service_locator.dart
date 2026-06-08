@@ -98,7 +98,9 @@ import 'package:my_template/features/scientific_articles_app/features/home/domai
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/drop_down/academic_degree_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/drop_down/article_type_dd_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/drop_down/journal_section_dd_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/antiplagiat_file/add_antiplagiat_file_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/main_file/add_main_file_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/review_file/add_review_file_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/udk/udk_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/article_editions/article_editions_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/article_process/article_process_use_case.dart';
@@ -109,7 +111,9 @@ import 'package:my_template/features/scientific_articles_app/features/home/domai
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/academic_degree/academic_degree_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/article_type/article_type_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/journal_sections/journal_section_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/antiplagiat_file/antiplagiat_file_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/main_file/main_file_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/upload_review_file/upload_review_file_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/udk/udk_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_editions/article_editions_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_process/article_process_bloc.dart';
@@ -250,6 +254,8 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => AcademicDegreeUseCase(repository: sl()));
   //! files
   sl.registerLazySingleton(() => AddMainFileUseCase(repository: sl()));
+  sl.registerLazySingleton(() => AddAntiplagiatFileUseCase(repository: sl()));
+  sl.registerLazySingleton(() => AddReviewFileUseCase(repository: sl()));
 
   /// {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -321,4 +327,6 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => AcademicDegreeBloc(useCase: sl()));
   //! files
   sl.registerLazySingleton(() => MainFileBloc(useCase: sl()));
+  sl.registerLazySingleton(() => AntiplagiatFileBloc(useCase: sl()));
+  sl.registerLazySingleton(() => UploadReviewFileBloc(useCase: sl()));
 }

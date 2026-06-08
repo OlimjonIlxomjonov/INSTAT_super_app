@@ -110,3 +110,29 @@ class AddMainFileParams {
 
   AddMainFileParams({required this.mainFile, required this.reviewId});
 }
+
+class AddAntiplagiatFileParams {
+  final int reviewId;
+  final File file;
+
+  AddAntiplagiatFileParams({required this.file, required this.reviewId});
+}
+
+class AddReviewFileParams {
+  final int reviewId;
+  final File file;
+  final String type;
+
+  AddReviewFileParams({
+    required this.file,
+    required this.reviewId,
+    required this.type,
+  });
+}
+
+class ReviewFileType {
+  ReviewFileType._();
+
+  static const image = 'image';
+  static const excel = 'excel';
+}

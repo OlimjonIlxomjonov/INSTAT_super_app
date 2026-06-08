@@ -16,6 +16,14 @@ class AddArticleState extends Equatable {
   final List<String> keywords;
   final String? existingMainFileUrl;
   final int? existingMainFileSize;
+  final String? existingAntiplagiatFileUrl;
+  final int? existingAntiplagiatFileSize;
+
+  /// Optimistic display while uploading / before detail refresh.
+  final String? uploadedMainFileName;
+  final int? uploadedMainFileSize;
+  final String? uploadedAntiplagiatFileName;
+  final int? uploadedAntiplagiatFileSize;
 
   final bool isEditMode;
   final bool isLoadingInitialData;
@@ -45,6 +53,12 @@ class AddArticleState extends Equatable {
     this.keywords = const [],
     this.existingMainFileUrl,
     this.existingMainFileSize,
+    this.existingAntiplagiatFileUrl,
+    this.existingAntiplagiatFileSize,
+    this.uploadedMainFileName,
+    this.uploadedMainFileSize,
+    this.uploadedAntiplagiatFileName,
+    this.uploadedAntiplagiatFileSize,
     this.isEditMode = false,
     this.isLoadingInitialData = false,
     this.initialLoadError,
@@ -68,6 +82,12 @@ class AddArticleState extends Equatable {
     List<String>? keywords,
     String? existingMainFileUrl,
     int? existingMainFileSize,
+    String? existingAntiplagiatFileUrl,
+    int? existingAntiplagiatFileSize,
+    String? uploadedMainFileName,
+    int? uploadedMainFileSize,
+    String? uploadedAntiplagiatFileName,
+    int? uploadedAntiplagiatFileSize,
     bool? isEditMode,
     bool? isLoadingInitialData,
     String? initialLoadError,
@@ -78,6 +98,9 @@ class AddArticleState extends Equatable {
     String? errorMessage,
     bool clearInitialLoadError = false,
     bool clearExistingMainFile = false,
+    bool clearExistingAntiplagiatFile = false,
+    bool clearUploadedMainFile = false,
+    bool clearUploadedAntiplagiatFile = false,
   }) {
     return AddArticleState(
       reviewId: reviewId ?? this.reviewId,
@@ -96,6 +119,24 @@ class AddArticleState extends Equatable {
       existingMainFileSize: clearExistingMainFile
           ? null
           : (existingMainFileSize ?? this.existingMainFileSize),
+      existingAntiplagiatFileUrl: clearExistingAntiplagiatFile
+          ? null
+          : (existingAntiplagiatFileUrl ?? this.existingAntiplagiatFileUrl),
+      existingAntiplagiatFileSize: clearExistingAntiplagiatFile
+          ? null
+          : (existingAntiplagiatFileSize ?? this.existingAntiplagiatFileSize),
+      uploadedMainFileName: clearUploadedMainFile
+          ? null
+          : (uploadedMainFileName ?? this.uploadedMainFileName),
+      uploadedMainFileSize: clearUploadedMainFile
+          ? null
+          : (uploadedMainFileSize ?? this.uploadedMainFileSize),
+      uploadedAntiplagiatFileName: clearUploadedAntiplagiatFile
+          ? null
+          : (uploadedAntiplagiatFileName ?? this.uploadedAntiplagiatFileName),
+      uploadedAntiplagiatFileSize: clearUploadedAntiplagiatFile
+          ? null
+          : (uploadedAntiplagiatFileSize ?? this.uploadedAntiplagiatFileSize),
       isEditMode: isEditMode ?? this.isEditMode,
       isLoadingInitialData: isLoadingInitialData ?? this.isLoadingInitialData,
       initialLoadError: clearInitialLoadError
@@ -108,6 +149,45 @@ class AddArticleState extends Equatable {
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
+
+  bool get hasMainFile =>
+      (existingMainFileUrl != null && existingMainFileUrl!.isNotEmpty) ||
+      (uploadedMainFileName != null && uploadedMainFileName!.isNotEmpty);
+
+  bool get hasAntiplagiatFile =>
+      (existingAntiplagiatFileUrl != null &&
+          existingAntiplagiatFileUrl!.isNotEmpty) ||
+      (uploadedAntiplagiatFileName != null &&
+          uploadedAntiplagiatFileName!.isNotEmpty);
+
+  String? get displayMainFileName {
+    if (existingMainFileUrl != null && existingMainFileUrl!.isNotEmpty) {
+      return Uri.parse(existingMainFileUrl!).pathSegments.last;
+    }
+    return uploadedMainFileName;
+  }
+
+  String? get displayAntiplagiatFileName {
+    if (existingAntiplagiatFileUrl != null &&
+        existingAntiplagiatFileUrl!.isNotEmpty) {
+      return Uri.parse(existingAntiplagiatFileUrl!).pathSegments.last;
+    }
+    return uploadedAntiplagiatFileName;
+  }
+
+  int? get displayMainFileSize => existingMainFileSize ?? uploadedMainFileSize;
+
+  int? get displayAntiplagiatFileSize =>
+      existingAntiplagiatFileSize ?? uploadedAntiplagiatFileSize;
+
+  /// Value for preview widgets that expect a URL-like string.
+  String? get previewMainFile => hasMainFile
+      ? (existingMainFileUrl ?? 'local://$uploadedMainFileName')
+      : null;
+
+  String? get previewAntiplagiatFile => hasAntiplagiatFile
+      ? (existingAntiplagiatFileUrl ?? 'local://$uploadedAntiplagiatFileName')
+      : null;
 
   @override
   List<Object?> get props => [
@@ -123,6 +203,12 @@ class AddArticleState extends Equatable {
     keywords,
     existingMainFileUrl,
     existingMainFileSize,
+    existingAntiplagiatFileUrl,
+    existingAntiplagiatFileSize,
+    uploadedMainFileName,
+    uploadedMainFileSize,
+    uploadedAntiplagiatFileName,
+    uploadedAntiplagiatFileSize,
     isEditMode,
     isLoadingInitialData,
     initialLoadError,

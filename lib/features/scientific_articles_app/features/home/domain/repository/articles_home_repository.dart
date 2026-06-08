@@ -13,6 +13,7 @@ abstract class ArticlesHomeRepository {
   Future<UserArticlesResponse> getUserArticles({
     required String status,
     required String search,
+    int page = 1,
   });
 
   Future<List<ReviewAuthorEntity>> getReviewAuthors(int reviewId);
@@ -50,6 +51,10 @@ abstract class ArticlesHomeRepository {
 
   //! Add main file to the articles
   Future<void> postArticleMainFile({required AddMainFileParams params});
+
+  Future<void> postAntiplagiatFile({required AddAntiplagiatFileParams params});
+
+  Future<ReviewFilesEntity> postReviewFile({required AddReviewFileParams params});
 
   //! search articles
 }

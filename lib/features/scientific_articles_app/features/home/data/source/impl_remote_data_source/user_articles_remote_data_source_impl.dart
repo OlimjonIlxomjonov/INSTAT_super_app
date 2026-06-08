@@ -21,10 +21,16 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
   Future<UserArticlesResponseModel> fetchUserArticles({
     required String status,
     required String search,
+    int page = 1,
   }) async {
     try {
       final response = await _dioClient.get(
-        "${ApiUrls.userArticles}/?status=$status&search=$search",
+        ApiUrls.userArticles,
+        queryParams: {
+          'status': status,
+          'search': search,
+          'page': page,
+        },
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
@@ -301,6 +307,68 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> postAntiplagiatFile({
+    required AddAntiplagiatFileParams params,
+  }) async {
+    try {
+      final formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(
+          params.file.path,
+          filename: params.file.path.split('/').last,
+        ),
+      });
+      final response = await _dioClient.post(
+        '${ApiUrls.userArticles}${params.reviewId}/${ApiUrls.antiplagiatFileArticle}',
+        data: formData,
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ReviewFilesModel> postReviewFile({
+    required AddReviewFileParams params,
+  }) async {
+    try {
+      final formData = FormData.fromMap({
+        'review_id': params.reviewId,
+        'type': params.type,
+        'file': await MultipartFile.fromFile(
+          params.file.path,
+          filename: params.file.path.split('/').last,
+        ),
+      });
+      final response = await _dioClient.post(
+        '${ApiUrls.userArticles}${params.reviewId}/${ApiUrls.reviewFilesArticle}',
+        data: formData,
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        final data = response.data;
+        if (data is Map<String, dynamic>) {
+          return ReviewFilesModel.fromJson(data);
+        }
+        if (data is List && data.isNotEmpty) {
+          return ReviewFilesModel.fromJson(data.last as Map<String, dynamic>);
+        }
+        throw Exception('Unexpected review file upload response');
       } else {
         throw Exception('THROW EXCEPTION! ${response.statusCode}');
       }

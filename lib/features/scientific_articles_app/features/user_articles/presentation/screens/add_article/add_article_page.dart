@@ -209,7 +209,7 @@ class _AddArticlePageState extends State<AddArticlePage> {
   }
 
   Widget _buildWizard(BuildContext context, AddArticleState state) {
-    final formKey = ValueKey('add_article_form_${state.reviewId}');
+    final formKey = ValueKey('add_article_form_${widget.editReviewId ?? 'new'}');
 
     return Stack(
       children: [

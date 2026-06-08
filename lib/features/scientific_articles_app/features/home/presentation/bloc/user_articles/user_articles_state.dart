@@ -14,11 +14,39 @@ class UserArticlesLoading extends UserArticlesState {}
 
 class UserArticlesLoaded extends UserArticlesState {
   final UserArticlesResponse response;
+  final String status;
+  final String search;
+  final bool isLoadingMore;
+  final bool hasMore;
 
-  const UserArticlesLoaded({required this.response});
+  const UserArticlesLoaded({
+    required this.response,
+    required this.status,
+    required this.search,
+    this.isLoadingMore = false,
+    required this.hasMore,
+  });
+
+  bool get canLoadMore => hasMore && !isLoadingMore;
+
+  UserArticlesLoaded copyWith({
+    UserArticlesResponse? response,
+    String? status,
+    String? search,
+    bool? isLoadingMore,
+    bool? hasMore,
+  }) {
+    return UserArticlesLoaded(
+      response: response ?? this.response,
+      status: status ?? this.status,
+      search: search ?? this.search,
+      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      hasMore: hasMore ?? this.hasMore,
+    );
+  }
 
   @override
-  List<Object?> get props => [response];
+  List<Object?> get props => [response, status, search, isLoadingMore, hasMore];
 }
 
 class UserArticlesError extends UserArticlesState {}

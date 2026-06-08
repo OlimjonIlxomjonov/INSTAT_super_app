@@ -23,7 +23,9 @@ import 'package:my_template/features/online_library_app/features/user_online_boo
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/academic_degree/academic_degree_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/article_type/article_type_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/journal_sections/journal_section_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/antiplagiat_file/antiplagiat_file_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/main_file/main_file_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/upload_review_file/upload_review_file_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/udk/udk_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_editions/article_editions_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_process/article_process_bloc.dart';
@@ -96,6 +98,12 @@ class MyBlocProvider extends StatelessWidget {
         ),
         //! files
         BlocProvider<MainFileBloc>(create: (_) => sl<MainFileBloc>()),
+        BlocProvider<AntiplagiatFileBloc>(
+          create: (_) => sl<AntiplagiatFileBloc>(),
+        ),
+        BlocProvider<UploadReviewFileBloc>(
+          create: (_) => sl<UploadReviewFileBloc>(),
+        ),
       ],
       child: child,
     );

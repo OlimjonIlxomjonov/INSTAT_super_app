@@ -5,14 +5,16 @@ import '../../../../features/scientific_articles_app/features/home/domain/entity
 import '../../../../features/scientific_articles_app/features/home/presentation/widgets/sliver_articles_list_wg.dart';
 
 class UserArticlesSkeletonizer extends StatelessWidget {
-  const UserArticlesSkeletonizer({super.key});
+  final int itemCount;
+
+  const UserArticlesSkeletonizer({super.key, this.itemCount = 5});
 
   @override
   Widget build(BuildContext context) {
     return Skeletonizer.sliver(
       child: SliverArticlesListWg(
         items: List.generate(
-          5,
+          itemCount,
           (index) => UserArticlesEntity(
             id: 0,
             title: 'Loading article title here',

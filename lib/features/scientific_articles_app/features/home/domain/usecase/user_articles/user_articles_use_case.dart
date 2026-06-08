@@ -9,7 +9,12 @@ class UserArticlesUseCase {
   Future<UserArticlesResponse> call({
     required String status,
     required String search,
+    int page = 1,
   }) {
-    return repository.getUserArticles(status: status, search: search);
+    return repository.getUserArticles(
+      status: status,
+      search: search,
+      page: page,
+    );
   }
 }

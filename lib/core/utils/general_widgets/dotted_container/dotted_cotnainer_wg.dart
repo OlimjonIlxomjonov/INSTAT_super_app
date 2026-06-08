@@ -5,8 +5,9 @@ import 'package:my_template/core/utils/app_utils.dart';
 
 class DottedContainerWg extends StatelessWidget {
   final VoidCallback? onTap;
+  final String? formatsHint;
 
-  const DottedContainerWg({super.key, this.onTap});
+  const DottedContainerWg({super.key, this.onTap, this.formatsHint});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,8 @@ class DottedContainerWg extends StatelessWidget {
             SizedBox(height: 6),
             Text(
               textAlign: .center,
-              'JPEG, PNG, .DOC, .DOCX, .XLS, .XLSX, .PDF, .PPT, .PPTX up to 50 MB.',
+              formatsHint ??
+                  'JPEG, PNG, .DOC, .DOCX, .XLS, .XLSX, .PDF, .PPT, .PPTX up to 50 MB.',
               style: AppTextStyles.source.regular(
                 fontSize: 12,
                 color: AppColors.greyScale.grey600,

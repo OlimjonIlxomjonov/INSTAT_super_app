@@ -13,6 +13,7 @@ abstract class UserArticlesRemoteDataSource {
   Future<UserArticlesResponseModel> fetchUserArticles({
     required String status,
     required String search,
+    int page = 1,
   });
 
   Future<List<ReviewAuthorModel>> fetchReviewAuthors(int reviewId);
@@ -50,4 +51,8 @@ abstract class UserArticlesRemoteDataSource {
 
   //! Articles main file
   Future<void> postMainArticlesFile({required AddMainFileParams params});
+
+  Future<void> postAntiplagiatFile({required AddAntiplagiatFileParams params});
+
+  Future<ReviewFilesModel> postReviewFile({required AddReviewFileParams params});
 }

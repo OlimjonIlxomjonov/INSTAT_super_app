@@ -30,6 +30,7 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
   late UserArticlesBloc _bloc;
   Timer? _debounce;
   final _searchController = TextEditingController();
+  final _scrollController = ScrollController();
 
   void _onSearchChanged(String query) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
@@ -46,12 +47,34 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
     _bloc = context.read<UserArticlesBloc>();
   }
 
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    if (currentScroll < maxScroll - 200) return;
+
+    final state = _bloc.state;
+    if (state is! UserArticlesLoaded || !state.canLoadMore) return;
+
+    _bloc.add(
+      UserArticlesEvent(
+        status: state.status,
+        search: state.search,
+        page: state.response.metaData.currentPage + 1,
+        isLoadMore: true,
+      ),
+    );
+  }
+
   @override
   void dispose() {
     // only reset if user changed the filter away from 'all'
     if (_selectedIndex != 0) {
       _bloc.add(UserArticlesEvent(status: 'all', search: ''));
     }
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
     _searchController.dispose();
     _debounce?.cancel();
     super.dispose();
@@ -60,6 +83,7 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(_onScroll);
     context.read<UserArticlesBloc>().add(
       UserArticlesEvent(status: articleStatus[_selectedIndex], search: ''),
     );
@@ -80,6 +104,7 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
           );
         },
         child: CustomScrollView(
+          controller: _scrollController,
           slivers: [
             /// search bar
             SliverAppBar(
@@ -162,7 +187,13 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
                   if (data.isEmpty) {
                     return SliverToBoxAdapter(child: EmptyState());
                   }
-                  return SliverArticlesListWg(items: data);
+                  return SliverMainAxisGroup(
+                    slivers: [
+                      SliverArticlesListWg(items: data),
+                      if (state.isLoadingMore)
+                        const UserArticlesSkeletonizer(itemCount: 2),
+                    ],
+                  );
                 } else if (state is UserArticlesLoading) {
                   return UserArticlesSkeletonizer();
                 } else if (state is UserArticlesError) {

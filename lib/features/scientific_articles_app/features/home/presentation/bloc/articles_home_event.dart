@@ -9,8 +9,15 @@ class ArticlesHomeEvent {
 class UserArticlesEvent extends ArticlesHomeEvent {
   final String status;
   final String search;
+  final int page;
+  final bool isLoadMore;
 
-  const UserArticlesEvent({required this.status, required this.search});
+  const UserArticlesEvent({
+    required this.status,
+    required this.search,
+    this.page = 1,
+    this.isLoadMore = false,
+  });
 }
 
 /// review authors
@@ -121,10 +128,40 @@ class MainFileArticleEvent extends ArticlesHomeEvent {
   MainFileArticleEvent({required this.params});
 }
 
+class AntiplagiatFileEvent extends ArticlesHomeEvent {
+  final AddAntiplagiatFileParams params;
+
+  AntiplagiatFileEvent({required this.params});
+}
+
+class UploadReviewFileEvent extends ArticlesHomeEvent {
+  final AddReviewFileParams params;
+
+  UploadReviewFileEvent({required this.params});
+}
+
 class LoadArticleForEditEvent extends ArticlesHomeEvent {
   final int reviewId;
 
   LoadArticleForEditEvent({required this.reviewId});
+}
+
+class UpdateArticleUploadedFileEvent extends ArticlesHomeEvent {
+  final String? mainFileName;
+  final int? mainFileSize;
+  final String? antiplagiatFileName;
+  final int? antiplagiatFileSize;
+
+  const UpdateArticleUploadedFileEvent({
+    this.mainFileName,
+    this.mainFileSize,
+    this.antiplagiatFileName,
+    this.antiplagiatFileSize,
+  });
+}
+
+class RefreshArticleFilesEvent extends ArticlesHomeEvent {
+  const RefreshArticleFilesEvent();
 }
 
 class UpdateReviewAuthorEvent extends ArticlesHomeEvent {
