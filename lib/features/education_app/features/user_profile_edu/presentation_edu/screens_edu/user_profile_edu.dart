@@ -16,15 +16,15 @@ class UserProfileEdu extends StatefulWidget {
 
 class _UserProfileEduState extends State<UserProfileEdu> {
   void _openSertificatComponent() {
-    openMiniAppSheetFamily(context, child: SertificatsSettingsComponent());
+    openMiniAppSheetFamily(
+      context,
+      showHandler: false,
+      child: SertificatsSettingsComponent(),
+    );
   }
 
   void _openFavouriteComponent() {
     openMiniAppSheetFamily(context, child: FavouriteCourseSettingsComponent());
-  }
-
-  void _openUserGroupsComponent() {
-    openMiniAppSheetFamily(context, child: UserGroupersComponent());
   }
 
   @override
@@ -48,17 +48,11 @@ class _UserProfileEduState extends State<UserProfileEdu> {
                   title: 'Saqlanganlar',
                   onTap: _openFavouriteComponent,
                 ),
-
                 ProfileSettingsTileWg(
-                  leadingIcon: Icons.message_outlined,
+                  leadingIcon: IconlyLight.info_square,
                   title: 'Ko’p beriladigan savollar',
                   onTap: () {},
                 ),
-                // ProfileSettingsTileWg(
-                //   leadingIcon: IconlyLight.user,
-                //   title: 'Guruhlarim',
-                //   onTap: _openUserGroupsComponent,
-                // ),
               ],
             ),
           ),

@@ -130,7 +130,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
     final int rowCount = (total / 2).ceil();
 
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       sliver: SliverList.builder(
         itemCount: rowCount,
         itemBuilder: (context, rowIndex) {
@@ -222,10 +222,13 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
       /// LIBRARY POPULAR BOOKS
       BlocBuilder<PopularBooksBloc, PopularBooksState>(
         builder: (context, state) {
+          final cardWidth = MediaQuery.sizeOf(context).width * 0.46;
+          final listHeight = cardWidth / 0.80 + 75;
           if (state is PopularBooksLoaded && state.response.data.isNotEmpty) {
             final books = state.response.data;
             return SliverSafeArea(
               top: false,
+              bottom: false,
               sliver: SliverToBoxAdapter(
                 child: Column(
                   children: [
@@ -245,46 +248,43 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
 
                     /// books
                     SizedBox(
-                      height: 330,
-                      child: Padding(
-                        padding: .only(right: 10),
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: books.length,
-                          padding: EdgeInsets.zero,
-                          itemBuilder: (context, index) {
-                            final book = books[index];
-                            final thumbnail = book.bookThumbnails.isNotEmpty
-                                ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${book.bookThumbnails.first.file}'
-                                : '';
-                            return SizedBox(
-                              width: 190,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 12),
-                                child: BookGridItem(
-                                  id: book.id,
-                                  isSaved: book.isSaved,
-                                  type: BookCardType.market,
-                                  title: book.name,
-                                  author: book.author.name,
-                                  price: "\u{00A0}${book.price} UZS",
-                                  imagePath: thumbnail.isNotEmpty
-                                      ? thumbnail
-                                      : 'assets/images/temp_book.jpg',
-                                  onTap: () {
-                                    openMiniAppSheetFamily(
-                                      context,
-                                      showHandler: false,
-                                      child: DetailedOnlineBookComponent(
-                                        data: book,
-                                      ),
-                                    );
-                                  },
-                                ),
+                      height: listHeight,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: books.length,
+                        padding: EdgeInsets.only(left: 10),
+                        itemBuilder: (context, index) {
+                          final book = books[index];
+                          final thumbnail = book.bookThumbnails.isNotEmpty
+                              ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${book.bookThumbnails.first.file}'
+                              : '';
+                          return SizedBox(
+                            width: cardWidth,
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 12),
+                              child: BookGridItem(
+                                id: book.id,
+                                isSaved: book.isSaved,
+                                type: BookCardType.market,
+                                title: book.name,
+                                author: book.author.name,
+                                price: "\u{00A0}${book.price} UZS",
+                                imagePath: thumbnail.isNotEmpty
+                                    ? thumbnail
+                                    : 'assets/images/temp_book.jpg',
+                                onTap: () {
+                                  openMiniAppSheetFamily(
+                                    context,
+                                    showHandler: false,
+                                    child: DetailedOnlineBookComponent(
+                                      data: book,
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
-                        ),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ],
@@ -305,7 +305,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
       ),
 
       SliverPadding(
-        padding: AppPadding.horizontal20x(),
+        padding: const .only(left: 20, right: 20, top: 24),
         sliver: SliverToBoxAdapter(
           child: ExtendSectionSeeAllWg(
             title: 'Maqolalaringiz',
@@ -368,7 +368,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
 
             /// SEARCH BAR
             SliverPadding(
-              padding: .only(bottom: 20, top: 20),
+              padding: const .only(bottom: 24, top: 32),
               sliver: SliverAppBar(
                 pinned: false,
                 automaticallyImplyLeading: false,

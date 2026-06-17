@@ -31,6 +31,7 @@ class AddArticlePage extends StatefulWidget {
 
 class _AddArticlePageState extends State<AddArticlePage> {
   final PageController pageController = PageController();
+
   int currentPage = 0;
   double progress = 0.2;
   bool isLastPage = false;
@@ -81,10 +82,7 @@ class _AddArticlePageState extends State<AddArticlePage> {
               context: context,
               barrierDismissible: false,
               builder: (ctx) => AlertDialog.adaptive(
-                title: Text(
-                  'Maqola yuborildi!',
-                  style: CustomTextStyles.h2,
-                ),
+                title: Text('Maqola yuborildi!', style: CustomTextStyles.h2),
                 content: Text(
                   'Maqolangiz ko\'rib chiqish uchun qabul qilindi.',
                   style: CustomTextStyles.h4,
@@ -124,82 +122,89 @@ class _AddArticlePageState extends State<AddArticlePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AddArticleBloc>(
-      create: (_) {
-        final bloc = sl<AddArticleBloc>();
-        if (widget.editReviewId != null) {
-          bloc.add(LoadArticleForEditEvent(reviewId: widget.editReviewId!));
-        }
-        return bloc;
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
       },
-      child: BlocListener<AddArticleBloc, AddArticleState>(
-            listenWhen: (prev, curr) =>
-                prev.errorMessage != curr.errorMessage &&
-                curr.errorMessage != null,
-            listener: (context, state) {},
-            child: PopScope(
-              canPop: false,
-              onPopInvokedWithResult: (didPop, result) async {
-                if (didPop) return;
-                _showExitDialog(context, isEditMode: _isEditMode);
+      child: BlocProvider<AddArticleBloc>(
+        create: (_) {
+          final bloc = sl<AddArticleBloc>();
+          if (widget.editReviewId != null) {
+            bloc.add(LoadArticleForEditEvent(reviewId: widget.editReviewId!));
+          }
+          return bloc;
+        },
+        child: BlocListener<AddArticleBloc, AddArticleState>(
+          listenWhen: (prev, curr) =>
+              prev.errorMessage != curr.errorMessage &&
+              curr.errorMessage != null,
+          listener: (context, state) {},
+          child: PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (didPop, result) async {
+              if (didPop) return;
+              _showExitDialog(context, isEditMode: _isEditMode);
+            },
+            child: BlocBuilder<AddArticleBloc, AddArticleState>(
+              builder: (context, state) {
+                if (_isEditMode && _shouldShowEditLoading(state)) {
+                  return Scaffold(
+                    resizeToAvoidBottomInset: false,
+                    appBar: AppBar(
+                      automaticallyImplyLeading: false,
+                      centerTitle: true,
+                      title: Text(
+                        'Maqolani tahrirlash',
+                        style: CustomTextStyles.h2,
+                      ),
+                    ),
+                    body: const Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    ),
+                  );
+                }
+
+                if (_isEditMode && state.initialLoadError != null) {
+                  return Scaffold(
+                    resizeToAvoidBottomInset: false,
+                    appBar: AppBar(
+                      automaticallyImplyLeading: false,
+                      centerTitle: true,
+                      title: Text(
+                        'Maqolani tahrirlash',
+                        style: CustomTextStyles.h2,
+                      ),
+                    ),
+                    body: Center(
+                      child: Padding(
+                        padding: AppPadding.horizontal20x(),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              state.initialLoadError!,
+                              textAlign: TextAlign.center,
+                              style: CustomTextStyles.h4,
+                            ),
+                            const SizedBox(height: 20),
+                            ElevatedButton(
+                              onPressed: () =>
+                                  FamilyNavigation.familyClose(context),
+                              child: const Text('Orqaga'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }
+
+                return _buildWizard(context, state);
               },
-              child: BlocBuilder<AddArticleBloc, AddArticleState>(
-                builder: (context, state) {
-                  if (_isEditMode && _shouldShowEditLoading(state)) {
-                    return Scaffold(
-                      appBar: AppBar(
-                        automaticallyImplyLeading: false,
-                        centerTitle: true,
-                        title: Text(
-                          'Maqolani tahrirlash',
-                          style: CustomTextStyles.h2,
-                        ),
-                      ),
-                      body: const Center(
-                        child: CircularProgressIndicator.adaptive(),
-                      ),
-                    );
-                  }
-
-                  if (_isEditMode && state.initialLoadError != null) {
-                    return Scaffold(
-                      appBar: AppBar(
-                        automaticallyImplyLeading: false,
-                        centerTitle: true,
-                        title: Text(
-                          'Maqolani tahrirlash',
-                          style: CustomTextStyles.h2,
-                        ),
-                      ),
-                      body: Center(
-                        child: Padding(
-                          padding: AppPadding.horizontal20x(),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                state.initialLoadError!,
-                                textAlign: TextAlign.center,
-                                style: CustomTextStyles.h4,
-                              ),
-                              const SizedBox(height: 20),
-                              ElevatedButton(
-                                onPressed: () =>
-                                    FamilyNavigation.familyClose(context),
-                                child: const Text('Orqaga'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-
-                  return _buildWizard(context, state);
-                },
-              ),
             ),
           ),
+        ),
+      ),
     );
   }
 
@@ -209,7 +214,11 @@ class _AddArticlePageState extends State<AddArticlePage> {
   }
 
   Widget _buildWizard(BuildContext context, AddArticleState state) {
-    final formKey = ValueKey('add_article_form_${widget.editReviewId ?? 'new'}');
+    final keyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
+
+    final formKey = ValueKey(
+      'add_article_form_${widget.editReviewId ?? 'new'}',
+    );
 
     return Stack(
       children: [
@@ -223,6 +232,18 @@ class _AddArticlePageState extends State<AddArticlePage> {
               style: CustomTextStyles.h2,
             ),
           ),
+          bottomNavigationBar: keyboardVisible
+              ? null
+              : SimpleBtnContainerWg(
+                  onFirstTap: () =>
+                      _showExitDialog(context, isEditMode: _isEditMode),
+                  onSecondTap: state.isSaving
+                      ? null
+                      : () => moveNextPageOrFinish(context),
+                  onSecondText: !isLastPage
+                      ? 'Keyingi qadam'
+                      : 'Maqolani yuborish',
+                ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -313,13 +334,6 @@ class _AddArticlePageState extends State<AddArticlePage> {
                   ],
                 ),
               ),
-              SimpleBtnContainerWg(
-                onFirstTap: () => _showExitDialog(context, isEditMode: _isEditMode),
-                onSecondTap:
-                    state.isSaving ? null : () => moveNextPageOrFinish(context),
-                onSecondText:
-                    !isLastPage ? 'Keyingi qadam' : 'Maqolani yuborish',
-              ),
             ],
           ),
         ),
@@ -329,10 +343,7 @@ class _AddArticlePageState extends State<AddArticlePage> {
             child: const Center(
               child: Card(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 28,
-                    horizontal: 36,
-                  ),
+                  padding: EdgeInsets.symmetric(vertical: 28, horizontal: 36),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [

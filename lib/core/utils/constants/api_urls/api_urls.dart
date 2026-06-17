@@ -40,32 +40,35 @@ class ApiUrls {
   /// uploadAvatar
   static const uploadAvatar = 'upload-avatar';
 
-  /// comments
+  //! comments
   static const userComments = '/comments/active';
 
-  /// offline course
+  //! offline course
   static const offlineCourse = 'course-groups/list/my/';
 
-  /// course group dates
+  //! course group dates
   static const courseGroups = 'course-groups/';
   static const courseGroupDates = '/course_group_dates/';
 
-  /// ARTICLES
-  // user articles
+  //! ARTICLES
+  //? user articles
   static const userArticles = 'reviews/';
   static const reviewAuthors = 'review-authors/';
   static const editions = 'editions/';
 
-  // add article
+  //? add article
   static const udk = 'udk-codes/items/find/?code=';
 
-  //! drop downs
+  //? drop downs
   static const articleType = 'article-types/items/all';
   static const journalSection = 'journal-sections/items/all';
   static const academicDegree = 'academic-degrees/items/all/';
 
-  //! add main file (articles)
+  //? add main file (articles)
   static const mainFileArticle = 'upload-main-file/';
   static const antiplagiatFileArticle = 'upload-antiplagiat-file/';
   static const reviewFilesArticle = 'review-files/';
+
+  //? User certificate
+  static const userCertificate = 'courses/certificates/my/';
 }

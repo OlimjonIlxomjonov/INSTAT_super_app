@@ -22,7 +22,7 @@ class ActiveCoursesWithBlocWg extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return SliverPadding(
-      padding: AppPadding.horizontal20x(),
+      padding: const .only(left: 20, right: 20, top: 24),
       sliver: SliverToBoxAdapter(
         child: BlocBuilder<UserCoursesBloc, UserCoursesState>(
           builder: (context, state) {

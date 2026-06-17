@@ -14,6 +14,9 @@ class EmptyState extends StatelessWidget {
       child: Column(
         mainAxisSize: .min,
         children: [
+          message != null
+              ? Text(message!, style: CustomTextStyles.h3half)
+              : SizedBox.shrink(),
           Flexible(
             child: Lottie.asset(
               AppAnimations.emptyState,
@@ -21,7 +24,6 @@ class EmptyState extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          // Text(message, style: CustomTextStyles.h3),
         ],
       ),
     );

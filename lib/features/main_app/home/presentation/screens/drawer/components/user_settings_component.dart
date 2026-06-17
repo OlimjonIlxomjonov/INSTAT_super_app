@@ -34,7 +34,7 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
 
       children: [
         Padding(
-          padding: .only(left: 20, top: 20),
+          padding: .only(left: 20, top: 10),
           child: AutoSizeText(
             localization.accountInfo,
             style: AppTextStyles.source.medium(fontSize: isMobile ? 16 : 24),
@@ -58,7 +58,7 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
           },
         ),
         ProfileSettingsTileWg(
-          leadingIcon: Icons.language,
+          leadingIcon: IconlyLight.category,
           title: localization.appLanguage,
           onTap: () {
             showModalBottomSheet(
@@ -68,7 +68,7 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
           },
         ),
         ProfileSettingsTileWg(
-          leadingIcon: Icons.list_alt,
+          leadingIcon: IconlyLight.chat,
           title: localization.tickets,
           onTap: () {
             openMiniAppSheetFamily(
@@ -79,12 +79,12 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
           },
         ),
         ProfileSettingsTileWg(
-          leadingIcon: Icons.message_outlined,
+          leadingIcon: IconlyLight.info_square,
           title: localization.frQuestions,
           onTap: () {},
         ),
         ProfileSettingsTileWg(
-          leadingIcon: Icons.fingerprint,
+          leadingIcon: IconlyLight.shield_done,
           title: localization.bioAuth,
           trailingIcon: DotSwitch(
             value: biometrickSwitchState,

@@ -50,7 +50,7 @@ class MiniAppSectionCard extends StatelessWidget {
                     title,
                     overflow: .ellipsis,
                     style: AppTextStyles.source.semiBold(
-                      fontSize: 16,
+                      fontSize: 15,
                       color: AppColors.white,
                     ),
                   ),

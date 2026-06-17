@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/article_params/article_params.dart';
@@ -29,6 +31,7 @@ class ArticleInfoView extends StatefulWidget {
 class _ArticleInfoViewState extends State<ArticleInfoView> {
   final titleController = TextEditingController();
   final udkController = TextEditingController();
+  Timer? _udkDebounce;
 
   final List<DropDownEntity> languageOptions = [
     DropDownEntity(
@@ -79,6 +82,7 @@ class _ArticleInfoViewState extends State<ArticleInfoView> {
 
   @override
   void dispose() {
+    _udkDebounce?.cancel();
     titleController.dispose();
     udkController.dispose();
     super.dispose();
@@ -123,16 +127,23 @@ class _ArticleInfoViewState extends State<ArticleInfoView> {
                         context.read<AddArticleBloc>().add(
                           UpdateAddArticleFieldEvent(udkCode: val),
                         );
-                      },
-                      onEditingComplete: () {
-                        final text = udkController.text.trim();
 
-                        if (text.isNotEmpty) {
-                          context.read<UdkBloc>().add(
-                            UdkEvent(params: UdkParams(udkCode: text)),
-                          );
-                        }
+                        _udkDebounce?.cancel();
+
+                        _udkDebounce = Timer(
+                          const Duration(milliseconds: 700),
+                          () {
+                            final text = val.trim();
+
+                            if (text.isNotEmpty) {
+                              context.read<UdkBloc>().add(
+                                UdkEvent(params: UdkParams(udkCode: text)),
+                              );
+                            }
+                          },
+                        );
                       },
+                      // onEditingComplete: () {},
                     ),
                     if (state is UdkLoading)
                       const Skeletonizer(

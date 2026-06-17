@@ -24,10 +24,7 @@ class UserArticlesWithBlocWg extends StatelessWidget {
             /// empty state
             if (data.isEmpty) {
               return SliverToBoxAdapter(
-                child: SizedBox(
-                  height: 180,
-                  child: EmptyState(message: "message"),
-                ),
+                child: SizedBox(height: 180, child: EmptyState()),
               );
             }
             final displayedData = limit != null

@@ -6,8 +6,10 @@ import 'package:my_template/features/education_app/features/home_edu/data/source
 import 'package:my_template/features/education_app/features/home_edu/domain/repository/home_edu_repository.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/comments/comments_use_case.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/per_course/per_course_use_case.dart';
+import 'package:my_template/features/education_app/features/home_edu/domain/usecase/user_certificates/user_certificate_use_case.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/comments/comments_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/per_course/per_course_bloc.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/user_certificate/certificate_bloc.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/data/repo/leader_board_repo_impl.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/data/source/impl_remote_data_source/leader_board_remote_data_source_impl.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/data/source/remote_data_source/leader_board_remote_data_source.dart';
@@ -248,14 +250,16 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => UpdateReviewUseCase(repository: sl()));
   sl.registerLazySingleton(() => CreateReviewAuthorUseCase(repository: sl()));
   sl.registerLazySingleton(() => UpdateReviewAuthorUseCase(repository: sl()));
-  //! drop downs
+  //? drop downs
   sl.registerLazySingleton(() => ArticleTypeDdUseCase(repository: sl()));
   sl.registerLazySingleton(() => JournalSectionDdUseCase(repository: sl()));
   sl.registerLazySingleton(() => AcademicDegreeUseCase(repository: sl()));
-  //! files
+  //? files
   sl.registerLazySingleton(() => AddMainFileUseCase(repository: sl()));
   sl.registerLazySingleton(() => AddAntiplagiatFileUseCase(repository: sl()));
   sl.registerLazySingleton(() => AddReviewFileUseCase(repository: sl()));
+  //? User Certificates
+  sl.registerLazySingleton(() => UserCertificateUseCase(repository: sl()));
 
   /// {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -321,12 +325,14 @@ Future<void> setup() async {
       reviewDetailUseCase: sl(),
     ),
   );
-  //! Drop Downs
+  //? Drop Downs
   sl.registerLazySingleton(() => ArticleTypeBloc(useCase: sl()));
   sl.registerLazySingleton(() => JournalSectionBloc(useCase: sl()));
   sl.registerLazySingleton(() => AcademicDegreeBloc(useCase: sl()));
-  //! files
+  //? files
   sl.registerLazySingleton(() => MainFileBloc(useCase: sl()));
   sl.registerLazySingleton(() => AntiplagiatFileBloc(useCase: sl()));
   sl.registerLazySingleton(() => UploadReviewFileBloc(useCase: sl()));
+  //? User certificates
+  sl.registerLazySingleton(() => CertificateBloc(useCase: sl()));
 }

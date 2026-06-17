@@ -23,6 +23,7 @@ class SectionTile extends StatelessWidget {
         ExpansionTile(
           shape: const Border(),
           collapsedShape: const Border(),
+          iconColor: AppColors.black,
           controlAffinity: ListTileControlAffinity.leading,
           title: Text(
             entity.text,

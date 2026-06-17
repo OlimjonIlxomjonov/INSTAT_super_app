@@ -20,7 +20,7 @@ class OfflineCoursesComponent extends StatelessWidget {
           final data = state.response.data;
 
           if (data.isEmpty) {
-            return EmptyState(message: 'message');
+            return EmptyState();
           }
 
           return Expanded(

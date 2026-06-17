@@ -1,6 +1,7 @@
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/features/education_app/features/home_edu/data/source/remote_data_source/home_edu_remote_data_source.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/entity/comments/comments_response.dart';
+import 'package:my_template/features/education_app/features/home_edu/domain/entity/user_sertificate/user_sertificate_response.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/repository/home_edu_repository.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
 
@@ -18,5 +19,11 @@ class HomeEduRepoImpl implements HomeEduRepository {
   @override
   Future<CourseEntity> getPerCourse({required PerCourseParams params}) {
     return _remoteDataSource.fetchPerCourse(params: params);
+  }
+
+  //? User Certificate
+  @override
+  Future<UserCertificateResponse> getUserCertificates() {
+    return _remoteDataSource.fetchUserCertificate();
   }
 }

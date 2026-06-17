@@ -9,6 +9,7 @@ class CustomAppBarWg extends StatelessWidget implements PreferredSize {
   final List<Widget>? customActions;
   final PreferredSizeWidget? appBarBottom;
   final bool isFamily;
+  final bool showArrow;
 
   const CustomAppBarWg({
     super.key,
@@ -16,6 +17,7 @@ class CustomAppBarWg extends StatelessWidget implements PreferredSize {
     this.customActions,
     this.appBarBottom,
     this.isFamily = false,
+    this.showArrow = true,
   });
 
   @override
@@ -32,17 +34,19 @@ class CustomAppBarWg extends StatelessWidget implements PreferredSize {
       toolbarHeight: 70,
       leadingWidth: 70,
       actionsPadding: EdgeInsets.only(right: 10),
-      leading: IconButton(
-        style: IconButton.styleFrom(
-          backgroundColor: AppColors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: .circular(50),
-            side: BorderSide(color: AppColors.greyScale.grey200),
-          ),
-        ),
-        onPressed: onClose,
-        icon: Icon(IconlyLight.arrow_left_2, size: 20),
-      ),
+      leading: showArrow
+          ? IconButton(
+              style: IconButton.styleFrom(
+                backgroundColor: AppColors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: .circular(50),
+                  side: BorderSide(color: AppColors.greyScale.grey200),
+                ),
+              ),
+              onPressed: onClose,
+              icon: Icon(IconlyLight.arrow_left_2, size: 20),
+            )
+          : SizedBox.shrink(),
       centerTitle: true,
       title: myTitle != null
           ? Text(myTitle!, style: AppTextStyles.source.semiBold(fontSize: 18))
