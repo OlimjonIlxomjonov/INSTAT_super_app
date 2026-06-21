@@ -6,6 +6,7 @@ class DayCellComponent extends StatelessWidget {
   final bool isCurrentMonth;
   final ValueNotifier<DateTime> selectedDate;
   final bool hasEvent;
+  final bool isToday;
 
   const DayCellComponent({
     super.key,
@@ -13,6 +14,7 @@ class DayCellComponent extends StatelessWidget {
     required this.isCurrentMonth,
     required this.selectedDate,
     this.hasEvent = false,
+    this.isToday = false,
   });
 
   @override
@@ -36,6 +38,9 @@ class DayCellComponent extends StatelessWidget {
                       ? AppColors.primaryColor
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(12),
+                  border: isToday && !isSelected
+                      ? Border.all(color: AppColors.primaryColor, width: 1.5)
+                      : null,
                 ),
                 child: Center(
                   child: Column(

@@ -120,11 +120,17 @@ class _SimpleMonthCalendarState extends State<SimpleMonthCalendar> {
                           DateTime(date.year, date.month, date.day),
                         ) ??
                         false;
+                    final now = DateTime.now();
+                    final isToday =
+                        date.year == now.year &&
+                        date.month == now.month &&
+                        date.day == now.day;
                     return DayCellComponent(
                       date: date,
                       isCurrentMonth: date.month == focusedMonth.month,
                       selectedDate: selectedDateNotifier,
                       hasEvent: hasEvent,
+                      isToday: isToday,
                     );
                   }),
                 );

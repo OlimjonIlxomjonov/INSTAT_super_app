@@ -2,18 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/general_widgets/bottom_nav_bar_custom_mini_app/bottom_nav_bar_custom_mini_app.dart';
-import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/home_edu_page.dart';
-import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/screens_edu/stats_edu_page.dart';
-import 'package:my_template/features/education_app/features/table_edu/presentation_edu/screens_edu/table_edu_page.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/user_courses_edu_page.dart';
-import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/user_profile_edu.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/home/mikro_data_home_page.dart';
+import 'package:my_template/features/mikro_data/presentation/screens/profile/micro_data_profile.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/reports/reports_page.dart';
+import 'package:my_template/features/mikro_data/presentation/screens/requests/micro_data_requets.dart';
+
+import '../../../core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 
 class MikroDataBottomNavBar extends StatelessWidget {
   final int? openPageByIndex;
 
   const MikroDataBottomNavBar({super.key, this.openPageByIndex});
+
+  void _openSeeAllRequests(BuildContext context) {
+    openMiniAppSheetFamily(
+      enableDrag: true,
+      showHandler: false,
+      context,
+      child: const MicroDataRequets(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +29,26 @@ class MikroDataBottomNavBar extends StatelessWidget {
 
     return BottomNavBarCustomMiniApp(
       openPageByIndex: openPageByIndex,
+      onTabChangeOverride: (context, newIndex) {
+        if (newIndex == 2) {
+          openMiniAppSheetFamily(
+            enableDrag: true,
+            showHandler: false,
+            context,
+            child: const MicroDataRequets(),
+          );
+          return true; // Ignore tab change
+        }
+        return false;
+      },
       innerPageBuilder: (goToTab) => [
-        MicroDataHomePage(onProfileTap: () => goToTab(3)),
+        MicroDataHomePage(
+          onProfileTap: () => goToTab(3),
+          onSeeAllRequests: () => _openSeeAllRequests(context),
+        ),
         const ReportsPage(),
-        const ReportsPage(),
-        const ReportsPage(),
+        const SizedBox(),
+        const MicroDataProfile(),
       ],
       tabs: [
         MiniAppBottomNavTabItem(

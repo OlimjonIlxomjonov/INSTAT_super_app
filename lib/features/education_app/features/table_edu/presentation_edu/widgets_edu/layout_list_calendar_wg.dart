@@ -6,6 +6,7 @@ import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 
 class SimpleWeekCalendar extends StatefulWidget {
   final Set<DateTime>? markedDates;
+
   const SimpleWeekCalendar({super.key, this.markedDates});
 
   @override
@@ -14,15 +15,56 @@ class SimpleWeekCalendar extends StatefulWidget {
 
 class _SimpleWeekCalendarState extends State<SimpleWeekCalendar> {
   DateTime selectedDate = DateTime.now();
+  late DateTime focusedMonth;
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    focusedMonth = DateTime(DateTime.now().year, DateTime.now().month);
+    _scrollController = ScrollController();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToToday();
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToToday() {
+    final now = DateTime.now();
+    if (now.month == focusedMonth.month && now.year == focusedMonth.year) {
+      final todayIndex = now.day - 1;
+      // Each cell is appW(64) wide + appW(10) spacing
+      final cellWidth = appW(64) + appW(10);
+      final todayCenter = todayIndex * cellWidth + (cellWidth / 2);
+      final viewportWidth = _scrollController.position.viewportDimension;
+      final targetOffset = todayCenter - (viewportWidth / 2);
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(
+          targetOffset.clamp(0.0, _scrollController.position.maxScrollExtent),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final monthTitle = DateFormat('MMMM yyyy').format(selectedDate);
+    final monthTitle = DateFormat('MMMM yyyy').format(focusedMonth);
+    final now = DateTime.now();
 
-    final weekStart = _startOfWeek(selectedDate);
-    final weekDays = List.generate(
-      7,
-      (index) => weekStart.add(Duration(days: index)),
+    // Generate all days in the focused month
+    final daysInMonth = DateUtils.getDaysInMonth(
+      focusedMonth.year,
+      focusedMonth.month,
+    );
+    final monthDays = List.generate(
+      daysInMonth,
+      (index) => DateTime(focusedMonth.year, focusedMonth.month, index + 1),
     );
 
     return Container(
@@ -50,9 +92,14 @@ class _SimpleWeekCalendarState extends State<SimpleWeekCalendar> {
                   icon: const Icon(Icons.chevron_left),
                   onPressed: () {
                     setState(() {
-                      selectedDate = selectedDate.subtract(
-                        const Duration(days: 7),
+                      focusedMonth = DateTime(
+                        focusedMonth.year,
+                        focusedMonth.month - 1,
                       );
+                      _scrollController.jumpTo(0);
+                    });
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      _scrollToToday();
                     });
                   },
                 ),
@@ -71,7 +118,14 @@ class _SimpleWeekCalendarState extends State<SimpleWeekCalendar> {
                   icon: const Icon(Icons.chevron_right),
                   onPressed: () {
                     setState(() {
-                      selectedDate = selectedDate.add(const Duration(days: 7));
+                      focusedMonth = DateTime(
+                        focusedMonth.year,
+                        focusedMonth.month + 1,
+                      );
+                      _scrollController.jumpTo(0);
+                    });
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      _scrollToToday();
                     });
                   },
                 ),
@@ -79,15 +133,17 @@ class _SimpleWeekCalendarState extends State<SimpleWeekCalendar> {
             ),
           ),
 
-          /// WEEK ROW
+          /// DAY ROW — full month, horizontally scrollable
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
+            controller: _scrollController,
             child: Padding(
-              padding: .symmetric(horizontal: appW(20)),
+              padding: EdgeInsets.symmetric(horizontal: appW(20)),
               child: Row(
                 spacing: appW(10),
-                children: weekDays.map((date) {
+                children: monthDays.map((date) {
                   final isSelected = _isSameDay(date, selectedDate);
+                  final isToday = _isSameDay(date, now);
 
                   return GestureDetector(
                     onTap: () {
@@ -103,7 +159,12 @@ class _SimpleWeekCalendarState extends State<SimpleWeekCalendar> {
                             ? AppColors.primaryColor
                             : Colors.white,
                         borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: AppColors.greyScale.grey200),
+                        border: Border.all(
+                          color: isToday && !isSelected
+                              ? AppColors.primaryColor
+                              : AppColors.greyScale.grey200,
+                          width: isToday && !isSelected ? 1.5 : 1,
+                        ),
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -117,26 +178,31 @@ class _SimpleWeekCalendarState extends State<SimpleWeekCalendar> {
                                   : AppColors.greyScale.grey400,
                             ),
                           ),
-                            Text(
-                              "${date.day}",
-                              style: AppTextStyles.source.semiBold(
-                                fontSize: 24,
+                          Text(
+                            "${date.day}",
+                            style: AppTextStyles.source.semiBold(
+                              fontSize: 24,
+                              color: isSelected
+                                  ? Colors.white
+                                  : isToday
+                                  ? AppColors.primaryColor
+                                  : AppColors.greyScale.grey600,
+                            ),
+                          ),
+                          if (widget.markedDates?.contains(
+                                DateTime(date.year, date.month, date.day),
+                              ) ??
+                              false)
+                            Container(
+                              width: 4,
+                              height: 4,
+                              decoration: BoxDecoration(
                                 color: isSelected
                                     ? Colors.white
-                                    : AppColors.greyScale.grey600,
+                                    : AppColors.primaryColor,
+                                shape: BoxShape.circle,
                               ),
                             ),
-                            if (widget.markedDates?.contains(DateTime(date.year, date.month, date.day)) ?? false)
-                              Container(
-                                width: 4,
-                                height: 4,
-                                decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? Colors.white
-                                      : AppColors.primaryColor,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
                         ],
                       ),
                     ),
@@ -148,11 +214,6 @@ class _SimpleWeekCalendarState extends State<SimpleWeekCalendar> {
         ],
       ),
     );
-  }
-
-  DateTime _startOfWeek(DateTime date) {
-    final weekday = date.weekday;
-    return date.subtract(Duration(days: weekday - 1));
   }
 
   bool _isSameDay(DateTime a, DateTime b) {

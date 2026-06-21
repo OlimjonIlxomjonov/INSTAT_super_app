@@ -66,7 +66,6 @@ class _UserCoursesEduPageState extends State<UserCoursesEduPage>
                     });
                   },
                   child: Container(
-                    margin: .only(right: 12),
                     padding: const .symmetric(vertical: 6, horizontal: 10),
                     decoration: BoxDecoration(
                       border: .all(
@@ -97,13 +96,6 @@ class _UserCoursesEduPageState extends State<UserCoursesEduPage>
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                  child: VerticalDivider(
-                    thickness: 2,
-                    color: AppColors.greyScale.grey200,
-                  ),
-                ),
                 ...List.generate(5, (_) => EduCategoriesWg()),
               ],
             ),
@@ -121,21 +113,20 @@ class _UserCoursesEduPageState extends State<UserCoursesEduPage>
           // Tab content
           !isOffline
               ? Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      /// Tab 1 — In Progress
+                      UserCoursesTabContent(
+                        state: 'in_progress',
+                        layout: layout,
+                      ),
 
-                /// Tab 1 — In Progress
-                UserCoursesTabContent(
-                  state: 'in_progress',
-                  layout: layout,
-                ),
-
-                /// Tab 2 — Finished
-                UserCoursesTabContent(state: 'finished', layout: layout),
-              ],
-            ),
-          )
+                      /// Tab 2 — Finished
+                      UserCoursesTabContent(state: 'finished', layout: layout),
+                    ],
+                  ),
+                )
               : OfflineCoursesComponent(),
         ],
       ),

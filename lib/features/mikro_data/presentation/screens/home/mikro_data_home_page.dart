@@ -8,9 +8,13 @@ import '../../../../scientific_articles_app/dummy_data_source/home_brief_info_ca
 import '../../../../scientific_articles_app/features/home/presentation/widgets/sliver_brief_cards_wg.dart';
 
 class MicroDataHomePage extends StatelessWidget {
-  final VoidCallback onProfileTap;
+  final VoidCallback onProfileTap, onSeeAllRequests;
 
-  const MicroDataHomePage({super.key, required this.onProfileTap});
+  const MicroDataHomePage({
+    super.key,
+    required this.onProfileTap,
+    required this.onSeeAllRequests,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +44,7 @@ class MicroDataHomePage extends StatelessWidget {
             sliver: SliverToBoxAdapter(
               child: ExtendSectionSeeAllWg(
                 title: 'Mening so‘rovlarim',
-                onTap: () {},
+                onTap: onSeeAllRequests,
               ),
             ),
           ),
