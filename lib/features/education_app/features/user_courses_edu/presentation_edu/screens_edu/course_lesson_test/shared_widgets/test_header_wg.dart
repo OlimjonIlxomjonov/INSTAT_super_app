@@ -9,6 +9,21 @@ class TestHeaderWg extends StatelessWidget {
 
   const TestHeaderWg({super.key, required this.progress});
 
+  void _showDialog(BuildContext context) {
+    showAdaptiveDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog.adaptive(
+          title: Text('Chiqishni xohlaysizmi?'),
+          actions: [
+            TextButton(onPressed: () {}, child: Text('data')),
+            TextButton(onPressed: () {}, child: Text('data')),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
@@ -16,26 +31,13 @@ class TestHeaderWg extends StatelessWidget {
       sliver: SliverAppBar(
         floating: true,
         automaticallyImplyLeading: false,
-        // leading: IconButton(
-        //   style: IconButton.styleFrom(
-        //     backgroundColor: AppColors.white,
-        //     shape: RoundedRectangleBorder(
-        //       borderRadius: BorderRadius.circular(50),
-        //       side: BorderSide(color: AppColors.greyScale.grey200),
-        //     ),
-        //   ),
-        //   onPressed: () {
-        //     // AppRoute.close();
-        //     FamilyNavigation.familyClose(context);
-        //   },
-        //   icon: const Icon(IconlyLight.arrow_left_2, size: 20),
-        // ),
         centerTitle: true,
         title: LinearProgressIndicator(
           value: progress,
           minHeight: 16,
           borderRadius: BorderRadius.circular(35),
           color: AppColors.primaryColor,
+          backgroundColor: AppColors.greyScale.grey200,
         ),
         actions: [
           IconButton(
@@ -46,9 +48,7 @@ class TestHeaderWg extends StatelessWidget {
                 side: BorderSide(color: AppColors.greyScale.grey200),
               ),
             ),
-            onPressed: () {
-              AppRoute.close();
-            },
+            onPressed: () => _showDialog(context),
             icon: const Icon(Icons.close, size: 20),
           ),
         ],

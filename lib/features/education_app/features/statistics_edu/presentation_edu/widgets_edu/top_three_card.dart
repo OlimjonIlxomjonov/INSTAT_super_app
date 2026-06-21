@@ -3,136 +3,180 @@ import 'package:flutter/material.dart';
 import '../../../../../../core/utils/app_utils.dart';
 import '../../domain/entity/leader_board/leader_board_entity.dart';
 
-class TopThreeCard extends StatelessWidget {
-  final int index;
-  final LeaderBoardEntity item;
-  final String fullName;
-  final String? thumbnail;
-  final VoidCallback onTap;
+/// Renders the top-3 leaderboard users as an Olympic-style podium.
+///
+/// [items] must contain exactly 3 [LeaderBoardEntity]s in rank order
+/// (index 0 = 1st place).
+class TopThreePodium extends StatelessWidget {
+  final List<LeaderBoardEntity> items;
+  final List<String> fullNames;
+  final List<String?> thumbnails;
+  final void Function(int index) onTap;
 
-  const TopThreeCard({
-    required this.index,
-    required this.item,
-    required this.fullName,
-    required this.thumbnail,
+  const TopThreePodium({
+    super.key,
+    required this.items,
+    required this.fullNames,
+    required this.thumbnails,
     required this.onTap,
   });
 
-  static const _medals = ['🥇', '🥈', '🥉'];
-
-  static const _gradients = [
-    [Color(0xFFFFF8DC), Color(0xFFFFD700)], // Gold
-    [Color(0xFFF5F5F5), Color(0xFFC0C0C0)], // Silver
-    [Color(0xFFFFF0E8), Color(0xFFCD7F32)], // Bronze
+  // ── rank colours ──────────────────────────────────────────────
+  static const _rankColors = [
+    Color(0xFFF6B51E), // 1st – gold
+    Color(0xFF9E9E9E), // 2nd – silver
+    Color(0xFFCD7F32), // 3rd – bronze
   ];
 
-  static const _borderColors = [
-    Color(0xFFFFD700),
-    Color(0xFFC0C0C0),
-    Color(0xFFCD7F32),
-  ];
+  // ── Olympic display order: left=2nd, center=1st, right=3rd ────
+  static const _displayOrder = [1, 0, 2];
+
+  // indexed by rank: [0]=1st, [1]=2nd, [2]=3rd
+  static const _stepHeights = [100.0, 74.0, 58.0]; // tallest → shortest
+  static const _avatarRadii = [30.0, 24.0, 22.0]; // biggest → smallest
 
   @override
   Widget build(BuildContext context) {
-    final gradient = _gradients[index];
-    final borderColor = _borderColors[index];
-    final avatarRadius = index == 0 ? 36.0 : 28.0;
+    return Container(
+      margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+      padding: EdgeInsets.only(top: appH(16), bottom: 0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.greyScale.grey200),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          for (final rank in _displayOrder) ...[
+            if (rank != _displayOrder.first) SizedBox(width: appW(4)),
+            _PodiumColumn(
+              rank: rank,
+              item: items[rank],
+              name: fullNames[rank],
+              thumbnail: thumbnails[rank],
+              color: _rankColors[rank],
+              stepHeight: _stepHeights[rank],
+              avatarRadius: _avatarRadii[rank],
+              isFirst: rank == 0,
+              onTap: () => onTap(rank),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
 
+// ── single podium column ──────────────────────────────────────────
+class _PodiumColumn extends StatelessWidget {
+  final int rank;
+  final LeaderBoardEntity item;
+  final String name;
+  final String? thumbnail;
+  final Color color;
+  final double stepHeight;
+  final double avatarRadius;
+  final bool isFirst;
+  final VoidCallback onTap;
+
+  const _PodiumColumn({
+    required this.rank,
+    required this.item,
+    required this.name,
+    required this.thumbnail,
+    required this.color,
+    required this.stepHeight,
+    required this.avatarRadius,
+    required this.isFirst,
+    required this.onTap,
+  });
+
+  String get _rankLabel => switch (rank) {
+    0 => '1',
+    1 => '2',
+    2 => '3',
+    _ => '',
+  };
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        margin: EdgeInsets.only(left: 20, right: 20, bottom: appH(12)),
-        padding: EdgeInsets.symmetric(horizontal: appW(14), vertical: appH(12)),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          gradient: LinearGradient(
-            colors: [gradient[0], gradient[1].withOpacity(0.25)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          border: Border.all(color: borderColor.withOpacity(0.6), width: 1.5),
-          boxShadow: [
-            BoxShadow(
-              color: borderColor.withOpacity(0.2),
-              blurRadius: 8,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Row(
+      child: SizedBox(
+        width: appW(108),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            // Medal + rank label stacked
-            SizedBox(
-              width: 40,
-              child: Text(
-                _medals[index],
-                style: TextStyle(fontSize: index == 0 ? 28 : 22),
-              ),
+            // ── avatar ──
+            _AvatarRing(
+              radius: avatarRadius,
+              color: color,
+              thumbnail: thumbnail,
+              isFirst: isFirst,
             ),
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: borderColor, width: 2),
-              ),
-              child: CircleAvatar(
-                radius: avatarRadius,
-                foregroundImage: thumbnail != null
-                    ? NetworkImage(thumbnail!)
-                    : null,
-                child: thumbnail == null
-                    ? Icon(
-                        Icons.person,
-                        color: AppColors.greyScale.grey800,
-                        size: avatarRadius,
-                      )
-                    : null,
-              ),
-            ),
-            SizedBox(width: 12),
-            // Name + email
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    fullName,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.source.medium(
-                      fontSize: index == 0 ? 15 : 14,
-                    ),
-                  ),
-                  Text(
-                    item.email,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.source.regular(
-                      fontSize: 11,
-                      color: AppColors.greyScale.grey600,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(width: appW(8)),
+            SizedBox(height: appH(6)),
 
-            // Score chip
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: borderColor.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: borderColor.withOpacity(0.4)),
+            // ── name ──
+            Text(
+              name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.source.medium(
+                fontSize: isFirst ? 13 : 12,
+                color: AppColors.black,
               ),
-              child: Row(
+            ),
+            SizedBox(height: appH(3)),
+
+            // ── score with star ──
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.star_rounded, size: isFirst ? 14 : 12, color: color),
+                SizedBox(width: 3),
+                Text(
+                  '${item.scoreSum}',
+                  style: AppTextStyles.source.semiBold(
+                    fontSize: isFirst ? 14 : 12,
+                    color: color,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: appH(8)),
+
+            // ── podium step with rank number inside ──
+            Container(
+              height: stepHeight,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: color.withOpacity(isFirst ? 0.12 : 0.07),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(10),
+                ),
+                border: Border.all(
+                  color: color.withOpacity(isFirst ? 0.25 : 0.15),
+                ),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.star_rounded, size: 16, color: borderColor),
-                  const SizedBox(width: 3),
                   Text(
-                    item.scoreSum.toString(),
-                    style: AppTextStyles.source.medium(
-                      fontSize: 13,
-                      color: AppColors.black,
+                    _rankLabel,
+                    style: AppTextStyles.source.bold(
+                      fontSize: isFirst ? 28 : 22,
+                      color: color,
+                    ),
+                  ),
+                  SizedBox(height: 2),
+                  Text(
+                    'O\'rin',
+                    style: AppTextStyles.source.regular(
+                      fontSize: 10,
+                      color: color,
                     ),
                   ),
                 ],
@@ -140,6 +184,60 @@ class TopThreeCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+// ── avatar ring ────────────────────────────────────────────────
+class _AvatarRing extends StatelessWidget {
+  final double radius;
+  final Color color;
+  final String? thumbnail;
+  final bool isFirst;
+
+  const _AvatarRing({
+    required this.radius,
+    required this.color,
+    required this.thumbnail,
+    required this.isFirst,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(isFirst ? 3 : 2),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: isFirst
+            ? LinearGradient(
+                colors: [color, color.withOpacity(0.5)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              )
+            : null,
+        color: isFirst ? null : color.withOpacity(0.2),
+        boxShadow: isFirst
+            ? [
+                BoxShadow(
+                  color: color.withOpacity(0.25),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+              ]
+            : null,
+      ),
+      child: CircleAvatar(
+        radius: radius,
+        backgroundColor: AppColors.greyScale.grey100,
+        foregroundImage: thumbnail != null ? NetworkImage(thumbnail!) : null,
+        child: thumbnail == null
+            ? Icon(
+                Icons.person,
+                color: AppColors.greyScale.grey500,
+                size: radius,
+              )
+            : null,
       ),
     );
   }

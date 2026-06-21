@@ -1,0 +1,3 @@
+class MicroDataEvent {
+  const MicroDataEvent();
+}

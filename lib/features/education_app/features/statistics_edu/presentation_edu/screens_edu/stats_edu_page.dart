@@ -34,7 +34,7 @@ class _StatsEduPageState extends State<StatsEduPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBarWg(myTitle: 'Foydalanuvchilar'),
+      appBar: CustomAppBarWg(myTitle: 'Foydalanuvchilar', showArrow: false),
       body: CustomRefreshIndicator(
         onRefresh: () async {
           context.read<LeaderBoardBloc>().add(LeaderBoardEvent());
@@ -56,37 +56,63 @@ class _StatsEduPageState extends State<StatsEduPage> {
                       : List.generate(10, (_) => LeaderBoardEntity.empty());
 
                   return Column(
-                    children: List.generate(data.length, (index) {
-                      final item = data[index];
-                      final String? thumbnail = item.avatar != null
-                          ? 'https://test.avacoder.uz${item.avatar}'
-                          : null;
-                      final fullName =
-                          '${item.firstName.capitalize()} ${item.lastName.capitalize()}';
-
-                      Future<dynamic> onTap() => openMiniAppSheetFamily(
-                        context,
-                        showHandler: false,
-                        child: TempDetailedUserEdu(
-                          imagePath: thumbnail,
-                          name: fullName,
-                        ),
-                      );
-
-                      if (index < 3) {
-                        return Skeletonizer(
+                    children: [
+                      // ── Podium for top 3 ──
+                      if (data.length >= 3)
+                        Skeletonizer(
                           enabled: isLoading,
-                          child: TopThreeCard(
-                            index: index,
-                            item: item,
-                            fullName: fullName,
-                            thumbnail: thumbnail,
-                            onTap: onTap,
+                          child: TopThreePodium(
+                            items: data.sublist(0, 3),
+                            fullNames: data
+                                .take(3)
+                                .map((e) =>
+                                    '${e.firstName.capitalize()} ${e.lastName.capitalize()}')
+                                .toList(),
+                            thumbnails: data
+                                .take(3)
+                                .map((e) => e.avatar != null
+                                    ? 'https://test.avacoder.uz${e.avatar}'
+                                    : null)
+                                .toList(),
+                            onTap: (rank) {
+                              final item = data[rank];
+                              final String? thumb = item.avatar != null
+                                  ? 'https://test.avacoder.uz${item.avatar}'
+                                  : null;
+                              final name =
+                                  '${item.firstName.capitalize()} ${item.lastName.capitalize()}';
+                              openMiniAppSheetFamily(
+                                context,
+                                showHandler: false,
+                                child: TempDetailedUserEdu(
+                                  imagePath: thumb,
+                                  name: name,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      // ── Regular cards for 4th+ ──
+                      ...List.generate(data.length, (index) {
+                        final item = data[index];
+                        final String? thumbnail = item.avatar != null
+                            ? 'https://test.avacoder.uz${item.avatar}'
+                            : null;
+                        final fullName =
+                            '${item.firstName.capitalize()} ${item.lastName.capitalize()}';
+
+                        Future<dynamic> onTap() => openMiniAppSheetFamily(
+                          context,
+                          showHandler: false,
+                          child: TempDetailedUserEdu(
+                            imagePath: thumbnail,
+                            name: fullName,
                           ),
                         );
-                      }
 
-                      // Regular card for the rest
+                        if (index < 3) return const SizedBox.shrink();
+
+                        // Regular card for the rest
                       return GestureDetector(
                         onTap: onTap,
                         child: Skeletonizer(
@@ -173,6 +199,7 @@ class _StatsEduPageState extends State<StatsEduPage> {
                         ),
                       );
                     }),
+                    ],
                   );
                 },
               ),

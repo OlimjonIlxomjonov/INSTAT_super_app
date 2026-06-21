@@ -7,11 +7,13 @@ import 'package:my_template/features/education_app/features/statistics_edu/prese
 import 'package:my_template/features/education_app/features/table_edu/presentation_edu/screens_edu/table_edu_page.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/user_courses_edu_page.dart';
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/user_profile_edu.dart';
+import 'package:my_template/features/mikro_data/presentation/screens/home/mikro_data_home_page.dart';
+import 'package:my_template/features/mikro_data/presentation/screens/reports/reports_page.dart';
 
-class EduBottomNavBar extends StatelessWidget {
+class MikroDataBottomNavBar extends StatelessWidget {
   final int? openPageByIndex;
 
-  const EduBottomNavBar({super.key, this.openPageByIndex});
+  const MikroDataBottomNavBar({super.key, this.openPageByIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +22,10 @@ class EduBottomNavBar extends StatelessWidget {
     return BottomNavBarCustomMiniApp(
       openPageByIndex: openPageByIndex,
       innerPageBuilder: (goToTab) => [
-        HomeEduPage(onTap: () => goToTab(2), onProfileTap: () => goToTab(4)),
-        const TableEduPage(),
-        const UserCoursesEduPage(),
-        const StatsEduPage(),
-        const UserProfileEdu(),
+        MicroDataHomePage(onProfileTap: () => goToTab(3)),
+        const ReportsPage(),
+        const ReportsPage(),
+        const ReportsPage(),
       ],
       tabs: [
         MiniAppBottomNavTabItem(
@@ -33,19 +34,14 @@ class EduBottomNavBar extends StatelessWidget {
           label: localization.homePage,
         ),
         MiniAppBottomNavTabItem(
-          icon: IconlyLight.work,
-          activeIcon: IconlyBold.work,
-          label: localization.schedule,
+          icon: IconlyLight.folder,
+          activeIcon: IconlyBold.folder,
+          label: 'Hisobotlar',
         ),
         MiniAppBottomNavTabItem(
-          icon: IconlyLight.bookmark,
-          activeIcon: IconlyBold.bookmark,
-          label: localization.myCourses,
-        ),
-        MiniAppBottomNavTabItem(
-          icon: IconlyLight.chart,
-          activeIcon: IconlyBold.chart,
-          label: localization.statistics,
+          icon: IconlyLight.document,
+          activeIcon: IconlyBold.document,
+          label: "So’rovlarim",
         ),
         MiniAppBottomNavTabItem(
           icon: IconlyLight.profile,

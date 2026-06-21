@@ -93,6 +93,7 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       /// header
+      resizeToAvoidBottomInset: false,
       appBar: CustomAppBarWg(myTitle: 'Mening maqolalarim'),
       body: CustomRefreshIndicator(
         onRefresh: () async {
@@ -227,7 +228,7 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+        padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
         child: SizedBox(
           width: double.infinity,
           child: ElevatedButton.icon(

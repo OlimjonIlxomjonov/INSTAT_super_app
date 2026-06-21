@@ -8,6 +8,7 @@ import 'package:my_template/features/education_app/features/table_edu/presentati
 
 class SimpleMonthCalendar extends StatefulWidget {
   final Set<DateTime>? markedDates;
+
   const SimpleMonthCalendar({super.key, this.markedDates});
 
   @override
@@ -110,13 +111,15 @@ class _SimpleMonthCalendarState extends State<SimpleMonthCalendar> {
 
               SizedBox(height: appH(8)),
 
-              ...List.generate(6, (rowIndex) {
+              ...List.generate(5, (rowIndex) {
                 return Row(
                   children: List.generate(7, (colIndex) {
                     final date = _days[rowIndex * 7 + colIndex];
-                    final hasEvent = widget.markedDates?.contains(
-                      DateTime(date.year, date.month, date.day),
-                    ) ?? false;
+                    final hasEvent =
+                        widget.markedDates?.contains(
+                          DateTime(date.year, date.month, date.day),
+                        ) ??
+                        false;
                     return DayCellComponent(
                       date: date,
                       isCurrentMonth: date.month == focusedMonth.month,
