@@ -86,7 +86,7 @@ class _DetailedOnlineBookComponentState
                   );
                 },
                 icon: Icon(
-                  isSaved ? Icons.favorite_rounded : IconlyLight.heart,
+                  isSaved ? IconlyBold.heart : IconlyLight.heart,
                   color: isSaved ? AppColors.red : null,
                 ),
               );

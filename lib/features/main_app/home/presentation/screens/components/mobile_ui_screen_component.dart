@@ -190,7 +190,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
     return [
       /// BANNERS
       SliverPadding(
-        padding: AppPadding.horizontal20x(),
+        padding: const .only(left: 20, right: 20, bottom: 24),
         sliver: SliverToBoxAdapter(child: BannerPlaceholder()),
       ),
 

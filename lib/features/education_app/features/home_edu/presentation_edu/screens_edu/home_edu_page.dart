@@ -35,12 +35,6 @@ class HomeEduPage extends StatelessWidget {
   });
 
   void _goToAllCourses(BuildContext context) {
-    // FamilyNavigation.familyPush(
-    //   context,
-    //   const ShowAllCoursesBottomSheetPage(),
-    //   showHandle: false,
-    // );
-
     openMiniAppSheetFamily(
       context,
       showHandler: false,

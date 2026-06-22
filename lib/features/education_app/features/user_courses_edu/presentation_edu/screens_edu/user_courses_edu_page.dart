@@ -8,7 +8,6 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/offline_courses_component.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/user_course_tab_content.dart';
-import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/user_groupes/user_groupers_component.dart';
 
 class UserCoursesEduPage extends StatefulWidget {
   const UserCoursesEduPage({super.key});

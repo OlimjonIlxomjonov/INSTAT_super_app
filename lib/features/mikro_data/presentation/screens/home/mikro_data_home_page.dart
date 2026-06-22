@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/common/placeholder/banner_placeholder.dart';
+import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/common/ui_states/empty_state_static_text.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/dragble_app_bar/draggble_app_bar_wg.dart';

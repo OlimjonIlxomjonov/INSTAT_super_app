@@ -18,6 +18,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/main_app/home/presentation/bloc/avatar/avatar_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
+import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/presentation_lib/bloc/cart/cart_bloc.dart';
@@ -107,6 +108,9 @@ class MyBlocProvider extends StatelessWidget {
         ),
         //? User certificate
         BlocProvider<CertificateBloc>(create: (_) => sl<CertificateBloc>()),
+        //! New Section: Micro Data
+        //? Reports
+        BlocProvider<ReportsBloc>(create: (_) => sl<ReportsBloc>()),
       ],
       child: child,
     );

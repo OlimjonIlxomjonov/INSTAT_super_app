@@ -62,6 +62,12 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dom
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_final_test/course_final_test_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/lesson_video_progress/put_lesson_video_progress_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/lesson_video_progress/lesson_video_progress_bloc.dart';
+import 'package:my_template/features/mikro_data/data/repository/micro_repo_impl.dart';
+import 'package:my_template/features/mikro_data/data/source/impl_remote_data_source/micro_remote_data_source_impl.dart';
+import 'package:my_template/features/mikro_data/data/source/remote_data_source/micro_remote_data_source.dart';
+import 'package:my_template/features/mikro_data/domain/repository/micro_repository.dart';
+import 'package:my_template/features/mikro_data/domain/usecase/reports/reports_use_case.dart';
+import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_bloc.dart';
 import 'package:my_template/features/online_library_app/features/offline_books_lib/data/repo/offline_books_repo_impl.dart';
 import 'package:my_template/features/online_library_app/features/offline_books_lib/data/source/impl_remote_data_source/offline_books_remote_data_source_impl.dart';
 import 'package:my_template/features/online_library_app/features/offline_books_lib/data/source/remote_data_source/offline_books_remote_data_source.dart';
@@ -165,6 +171,11 @@ Future<void> setup() async {
     () => UserArticlesRemoteDataSourceImpl(),
   );
 
+  //! Micro Data
+  sl.registerLazySingleton<MicroRemoteDataSource>(
+    () => MicroRemoteDataSourceImpl(),
+  );
+
   /// {REPO}
   sl.registerLazySingleton<HomeRepository>(
     () => HomeRepoImpl(remoteDataSource: sl()),
@@ -194,6 +205,11 @@ Future<void> setup() async {
   /// articles
   sl.registerLazySingleton<ArticlesHomeRepository>(
     () => ArticlesHomeRepoImpl(remoteDataSource: sl()),
+  );
+
+  //! Micro data
+  sl.registerLazySingleton<MicroRepository>(
+    () => MicroRepoImpl(remoteDataSource: sl()),
   );
 
   /// {USE CASE}
@@ -261,6 +277,11 @@ Future<void> setup() async {
   //? User Certificates
   sl.registerLazySingleton(() => UserCertificateUseCase(repository: sl()));
 
+  //! New Section
+  //! Micro Data
+  //? Reports
+  sl.registerLazySingleton(() => ReportsUseCase(repository: sl()));
+
   /// {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
   sl.registerFactory(() => UserCoursesBloc(sl()));
@@ -299,7 +320,9 @@ Future<void> setup() async {
       webSocketService: sl(),
     ),
   );
-  sl.registerLazySingleton(() => CartBloc(useCase: sl()));
+  sl.registerLazySingleton(
+    () => CartBloc(useCase: sl(), addToCartUseCase: sl()),
+  );
   sl.registerLazySingleton(() => LeaderBoardBloc(sl()));
   sl.registerLazySingleton(() => AvatarBloc(useCase: sl()));
   sl.registerLazySingleton(() => CommentsBloc(useCase: sl()));
@@ -335,4 +358,9 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => UploadReviewFileBloc(useCase: sl()));
   //? User certificates
   sl.registerLazySingleton(() => CertificateBloc(useCase: sl()));
+
+  //! New Section
+  //! Micro Data
+  //? Reports
+  sl.registerLazySingleton(() => ReportsBloc(useCase: sl()));
 }

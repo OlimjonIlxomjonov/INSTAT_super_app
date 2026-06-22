@@ -19,7 +19,7 @@ class SeeAllOnlineBooksComponent extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverDefaultAppBarWg(myTitle: 'Kitoblar'),
+          SliverDefaultAppBarWg(myTitle: 'Kitoblar', isFamily: true),
           SliverPadding(
             padding: .symmetric(horizontal: appW(20)),
             sliver: SliverAppBar(

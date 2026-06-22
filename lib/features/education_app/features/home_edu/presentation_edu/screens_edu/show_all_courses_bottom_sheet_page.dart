@@ -51,21 +51,13 @@ class _ShowAllCoursesBottomSheetPageState
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
       /// HEADER OF THE COURSES
-      appBar: CustomAppBarWg(
-        isFamily: true,
-        myTitle: localization.coursesTitle,
+      appBar: AppBar(
+        toolbarHeight: 80,
+        title: AppSearchbarWg(),
+        automaticallyImplyLeading: false,
       ),
       body: CustomScrollView(
         slivers: [
-          /// SEARCH BAR
-          SliverAppBar(
-            primary: false,
-            pinned: true,
-            automaticallyImplyLeading: false,
-            title: AppSearchbarWg(),
-            toolbarHeight: appH(80),
-          ),
-
           /// CATEGORIES
           SliverToBoxAdapter(
             child: SingleChildScrollView(

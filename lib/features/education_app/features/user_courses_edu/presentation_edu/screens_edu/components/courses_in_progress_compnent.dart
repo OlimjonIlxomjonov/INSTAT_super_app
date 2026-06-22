@@ -2,10 +2,9 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/skeletonizer_shimmer/courses/course_shimmer.dart';
-import 'package:my_template/core/common/ui_states/empty_state.dart';
+import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/common/ui_states/error_page.dart';
 import 'package:my_template/core/common/ui_states/lost_internet_connection_state.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -18,6 +17,8 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/course_category_builder.dart';
+
+import '../../../../home_edu/presentation_edu/screens_edu/show_all_courses_bottom_sheet_page.dart';
 
 class CoursesInProgressComponent extends StatefulWidget {
   final CoursesLayout layout;
@@ -146,18 +147,7 @@ class _CoursesInProgressComponentState
   Widget build(BuildContext context) {
     return BlocConsumer<UserCoursesBloc, UserCoursesState>(
       listener: (context, state) {
-        if (state is UserCoursesLoaded) {
-          final isEmpty = state.response.data.isEmpty;
-
-          if (isEmpty) {
-            errorFlushBar(
-              context,
-              widget.state == 'all'
-                  ? 'Hali boshlangan kurslar yo\'q!'
-                  : 'Hech qanday kurs hali tugatilmagan!',
-            );
-          }
-        }
+        //? control states
       },
       builder: (context, state) {
         if (state is UserCoursesLoaded) {
@@ -167,10 +157,21 @@ class _CoursesInProgressComponentState
           if (data.isEmpty) {
             return SliverFillRemaining(
               hasScrollBody: false,
-              child: EmptyState(
-                message: widget.state == 'finished'
-                    ? 'Hech qanday kurs hali tugatilmagan!'
-                    : 'Hali boshlangan kurslar yo\'q!',
+              child: AppEmptyState(
+                title: widget.state == 'finished'
+                    ? 'Hali kurs tugatilmagan'
+                    : 'Hali kurs boshlanmagan',
+                subtitle: widget.state == 'finished'
+                    ? 'Tugatgan kurslaringiz shu yerda ko\'rinadi. Davom eting!'
+                    : 'Boshlangan kurslaringiz shu yerda ko\'rinadi. Kurslarni topib o\'rganishni boshlang!',
+                buttonLabel: 'Kurslarni ko\'rish',
+                onAction: () {
+                  openMiniAppSheetFamily(
+                    context,
+                    showHandler: false,
+                    child: const ShowAllCoursesBottomSheetPage(),
+                  );
+                },
               ),
             );
           }

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
+import 'package:my_template/features/mikro_data/presentation/screens/reports/widgets/reports_card_wg.dart';
 
 import '../../../../../core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import '../../../../../core/utils/widgets/search_bar/app_serachbar_wg.dart';
+import 'filter_bottom_sheet_wg.dart';
 
 class ReportsPage extends StatelessWidget {
   const ReportsPage({super.key});
@@ -19,7 +22,7 @@ class ReportsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBarWg(myTitle: 'Hisobotlar', showArrow: false),
+      appBar: CustomAppBarWg(myTitle: 'Hisobotlar'),
       body: CustomScrollView(
         slivers: [
           //! SEARCH BAR
@@ -51,7 +54,7 @@ class ReportsPage extends StatelessWidget {
                   ),
                   InkWell(
                     borderRadius: .circular(6),
-                    onTap: () {},
+                    onTap: () => showReportsFilterSheet(context),
                     child: Container(
                       padding: const .symmetric(horizontal: 6, vertical: 4),
                       decoration: BoxDecoration(
@@ -71,6 +74,8 @@ class ReportsPage extends StatelessWidget {
               ),
             ),
           ),
+          //! Reports
+          ReportsCardWg(),
         ],
       ),
     );

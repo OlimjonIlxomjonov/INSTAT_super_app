@@ -71,4 +71,9 @@ class ApiUrls {
 
   //? User certificate
   static const userCertificate = 'courses/certificates/my/';
+
+  //! NEW SECTION
+  //! Micro Data
+  //? Reports
+  static const reports = 'data-reports/';
 }
