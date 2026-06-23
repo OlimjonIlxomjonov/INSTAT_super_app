@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:video_player/video_player.dart';
 import 'fullscreen_video_page.dart';
@@ -24,11 +25,17 @@ import 'fullscreen_video_page.dart';
 class BasicOverlayWidget extends StatefulWidget {
   final VideoPlayerController controller;
   final bool isFullscreen;
+  final VoidCallback? onBack;
+  final ValueNotifier<String>? currentResolutionNotifier;
+  final ValueChanged<String>? onResolutionSelected;
 
   const BasicOverlayWidget({
     super.key,
     required this.controller,
     this.isFullscreen = false,
+    this.onBack,
+    this.currentResolutionNotifier,
+    this.onResolutionSelected,
   });
 
   @override
@@ -93,15 +100,17 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
       widget.controller.play();
       _startHideTimer();
     }
-    // No setState — AnimatedBuilder inside build() reacts to the controller.
   }
 
   void _toggleFullscreen() {
     if (!widget.isFullscreen) {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) =>
-              FullscreenVideoPage(controller: widget.controller),
+          builder: (context) => FullscreenVideoPage(
+            controller: widget.controller,
+            currentResolutionNotifier: widget.currentResolutionNotifier,
+            onResolutionSelected: widget.onResolutionSelected,
+          ),
         ),
       );
     } else {
@@ -119,12 +128,12 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // AnimatedBuilder at the root level so isBuffering is always readable,
-    // even when the controls overlay is invisible (hide-timer fired).
     return AnimatedBuilder(
       animation: widget.controller,
       builder: (context, _) {
         final isBuffering = widget.controller.value.isBuffering;
+        final position = widget.controller.value.position;
+        final duration = widget.controller.value.duration;
 
         return Stack(
           children: [
@@ -144,15 +153,157 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
                       ignoring: !isVisible,
                       child: Stack(
                         children: [
-                          // Play/pause button — hidden while buffering so the
-                          // spinner is the sole centre element.
-                          if (!isBuffering) _buildPlayButton(),
-                          // Bottom control bar.
+                          // 1. Semi-transparent background overlay
+                          Positioned.fill(
+                            child: Container(color: Colors.black45),
+                          ),
+
+                          // 2. Top control row (Back & Settings)
+                          Positioned(
+                            top: MediaQuery.of(context).padding.top + 10,
+                            left: 12,
+                            right: 12,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                IconButton(
+                                  onPressed:
+                                      widget.onBack ??
+                                      () => Navigator.of(context).pop(),
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: Colors.black38,
+                                    shape: const CircleBorder(),
+                                  ),
+                                  icon: const Icon(
+                                    IconlyLight.arrow_left_2,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
+                                if (widget.currentResolutionNotifier != null &&
+                                    widget.onResolutionSelected != null)
+                                  ValueListenableBuilder<String>(
+                                    valueListenable:
+                                        widget.currentResolutionNotifier!,
+                                    builder: (context, resolution, _) {
+                                      return PopupMenuButton<String>(
+                                        color: AppColors.white,
+                                        icon: const Icon(
+                                          Icons.settings,
+                                          color: Colors.white,
+                                          size: 24,
+                                        ),
+                                        onSelected: (res) {
+                                          widget.onResolutionSelected!(res);
+                                          _startHideTimer();
+                                        },
+                                        itemBuilder: (context) =>
+                                            ['1080', '720', '480', '240']
+                                                .map(
+                                                  (res) => PopupMenuItem(
+                                                    value: res,
+                                                    child: Text(
+                                                      '${res}p${resolution == res ? ' *' : ''}',
+                                                      style: AppTextStyles
+                                                          .source
+                                                          .medium(
+                                                            fontSize: 14,
+                                                            color:
+                                                                resolution ==
+                                                                    res
+                                                                ? AppColors
+                                                                      .primaryColor
+                                                                : AppColors
+                                                                      .black,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                )
+                                                .toList(),
+                                      );
+                                    },
+                                  ),
+                              ],
+                            ),
+                          ),
+
+                          // 3. Center buttons (Rewind 10s, Play/Pause, Forward 10s)
+                          if (!isBuffering)
+                            Center(
+                              child: GestureDetector(
+                                onTap: _togglePlayPause,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.black38,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  padding: const EdgeInsets.all(12),
+                                  child: Icon(
+                                    widget.controller.value.isPlaying
+                                        ? Icons.pause_rounded
+                                        : Icons.play_arrow_rounded,
+                                    color: Colors.white,
+                                    size: 44,
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                          // 4. Bottom control row and scrubber
                           Positioned(
                             bottom: 0,
                             left: 0,
                             right: 0,
-                            child: _buildIndicator(),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 8,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        '${_formatDuration(position)} / ${_formatDuration(duration)}',
+                                        style: AppTextStyles.source.medium(
+                                          fontSize: 13,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          _toggleFullscreen();
+                                          _startHideTimer();
+                                        },
+                                        child: Icon(
+                                          widget.isFullscreen
+                                              ? Icons.fullscreen_exit
+                                              : Icons.fullscreen,
+                                          color: Colors.white,
+                                          size: 24,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                VideoProgressIndicator(
+                                  widget.controller,
+                                  allowScrubbing: true,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 4,
+                                  ),
+                                  colors: VideoProgressColors(
+                                    playedColor: AppColors.primaryColor,
+                                    bufferedColor: Colors.white24,
+                                    backgroundColor: Colors.white12,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -163,8 +314,41 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
             ),
 
             // ----------------------------------------------------------------
-            // Buffering spinner — always on top, always visible regardless of
-            // whether the controls are currently shown or hidden.
+            // Thin progress bar visible only when controls are hidden
+            // ----------------------------------------------------------------
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: ValueListenableBuilder<bool>(
+                valueListenable: _visibleNotifier,
+                builder: (context, isVisible, _) {
+                  return AnimatedOpacity(
+                    opacity: isVisible ? 0.0 : 1.0,
+                    duration: const Duration(milliseconds: 300),
+                    child: IgnorePointer(
+                      ignoring: true,
+                      child: SizedBox(
+                        height: 3,
+                        child: VideoProgressIndicator(
+                          widget.controller,
+                          allowScrubbing: false,
+                          padding: EdgeInsets.zero,
+                          colors: VideoProgressColors(
+                            playedColor: AppColors.primaryColor,
+                            bufferedColor: Colors.white24,
+                            backgroundColor: Colors.transparent,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            // ----------------------------------------------------------------
+            // Buffering spinner — always on top, always visible
             // ----------------------------------------------------------------
             if (isBuffering)
               Container(
@@ -183,107 +367,15 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
   }
 
   // ---------------------------------------------------------------------------
-  // Indicator bar (progress + time + fullscreen)
-  // ---------------------------------------------------------------------------
-  Widget _buildIndicator() {
-    final position = widget.controller.value.position;
-    final duration = widget.controller.value.duration;
-    final remaining = duration - position;
-
-    return Padding(
-      padding: const EdgeInsets.all(5),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: AppColors.black.withValues(alpha: .5),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          child: Row(
-            children: [
-              GestureDetector(
-                onTap: _togglePlayPause,
-                child: Icon(
-                  widget.controller.value.isPlaying
-                      ? Icons.pause
-                      : Icons.play_arrow,
-                  color: AppColors.white,
-                ),
-              ),
-              const SizedBox(width: 5),
-              Expanded(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: VideoProgressIndicator(
-                    padding: EdgeInsets.zero,
-                    widget.controller,
-                    allowScrubbing: true,
-                    colors: VideoProgressColors(
-                      playedColor: AppColors.primaryColor,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Text(
-                '-${_formatDuration(remaining)}',
-                style: AppTextStyles.source.medium(
-                  fontSize: 14,
-                  color: AppColors.greyScale.grey400,
-                ),
-              ),
-              const SizedBox(width: 20),
-              GestureDetector(
-                onTap: _toggleFullscreen,
-                child: Icon(
-                  widget.isFullscreen
-                      ? Icons.fullscreen_exit
-                      : Icons.fullscreen,
-                  color: AppColors.white,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  // ---------------------------------------------------------------------------
-  // Centre play/pause button
-  // ---------------------------------------------------------------------------
-  Widget _buildPlayButton() {
-    return Container(
-      alignment: Alignment.center,
-      color: Colors.black26,
-      child: GestureDetector(
-        onTap: _togglePlayPause,
-        child: DecoratedBox(
-          decoration: const BoxDecoration(
-            color: AppColors.white,
-            shape: BoxShape.circle,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(
-              widget.controller.value.isPlaying
-                  ? Icons.pause
-                  : Icons.play_arrow,
-              color: AppColors.primaryColor,
-              size: 40,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  // ---------------------------------------------------------------------------
   // Helpers
   // ---------------------------------------------------------------------------
   String _formatDuration(Duration d) {
+    final hours = d.inHours;
     final minutes = d.inMinutes.remainder(60).toString().padLeft(2, '0');
     final seconds = d.inSeconds.remainder(60).toString().padLeft(2, '0');
+    if (hours > 0) {
+      return '$hours:$minutes:$seconds';
+    }
     return '$minutes:$seconds';
   }
 }

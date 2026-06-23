@@ -13,9 +13,9 @@ class ArticlesStatusCheckWg extends StatelessWidget {
     switch (status) {
       case ArticleStatus.draft:
         return StatusContainerWg(
-          icon: Icons.drafts,
+          icon: IconlyLight.paper,
           statusTitle: ' Qoralama',
-          iconColor: AppColors.greyScale.grey600,
+          iconColor: AppColors.greyScale.grey700,
           backgroundColor: AppColors.greyNewCard,
         );
       case ArticleStatus.confirmed:
@@ -34,14 +34,14 @@ class ArticlesStatusCheckWg extends StatelessWidget {
         );
       case ArticleStatus.rejected:
         return StatusContainerWg(
-          icon: IconlyLight.danger,
+          icon: IconlyLight.info_circle,
           statusTitle: ' Rad etilgan',
           iconColor: AppColors.redFailedTaskCard,
           backgroundColor: AppColors.redBackground,
         );
       case ArticleStatus.inReview:
         return StatusContainerWg(
-          icon: Icons.warning_amber,
+          icon: IconlyLight.danger,
           statusTitle: ' Tekshirilmoqda',
           iconColor: AppColors.orange500,
           backgroundColor: AppColors.orange50,

@@ -19,7 +19,7 @@ class MikroDataBottomNavBar extends StatelessWidget {
       enableDrag: true,
       showHandler: false,
       context,
-      child: const MicroDataRequets(),
+      child: const MicroDataRequests(),
     );
   }
 
@@ -35,7 +35,7 @@ class MikroDataBottomNavBar extends StatelessWidget {
             enableDrag: true,
             showHandler: false,
             context,
-            child: const MicroDataRequets(),
+            child: const MicroDataRequests(),
           );
           return true; // Ignore tab change
         }

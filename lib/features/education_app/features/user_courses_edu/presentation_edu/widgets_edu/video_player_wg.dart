@@ -14,11 +14,17 @@ import 'package:video_player/video_player.dart';
 class VideoPlayerWidget extends StatefulWidget {
   final VideoPlayerController controller;
   final bool isFullscreen;
+  final VoidCallback? onBack;
+  final ValueNotifier<String>? currentResolutionNotifier;
+  final ValueChanged<String>? onResolutionSelected;
 
   const VideoPlayerWidget({
     super.key,
     required this.controller,
     this.isFullscreen = false,
+    this.onBack,
+    this.currentResolutionNotifier,
+    this.onResolutionSelected,
   });
 
   @override
@@ -92,6 +98,9 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
             child: BasicOverlayWidget(
               controller: _controller,
               isFullscreen: widget.isFullscreen,
+              onBack: widget.onBack,
+              currentResolutionNotifier: widget.currentResolutionNotifier,
+              onResolutionSelected: widget.onResolutionSelected,
             ),
           ),
         ],

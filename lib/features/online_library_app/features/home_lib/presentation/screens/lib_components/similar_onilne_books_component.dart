@@ -10,12 +10,21 @@ import 'package:my_template/features/online_library_app/features/home_lib/domain
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/detailed_online_book_component.dart';
 
 import '../../../../../../../core/utils/constants/api_urls/api_urls.dart';
+import '../../../../../../../core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import '../../../../../../../core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 
 class SimilarOnlineBooksComponent extends StatelessWidget {
   final List<BookEntity> data;
 
   const SimilarOnlineBooksComponent({super.key, required this.data});
+
+  static const List<Widget> _categories = [
+    EduCategoriesWg(),
+    EduCategoriesWg(),
+    EduCategoriesWg(),
+    EduCategoriesWg(),
+    EduCategoriesWg(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +36,16 @@ class SimilarOnlineBooksComponent extends StatelessWidget {
       ),
       body: CustomScrollView(
         slivers: [
-          // SliverDefaultAppBarWg(isFamily: true, myTitle: 'Kitoblar'),
-          // SliverAppBar(
-          //   primary: false,
-          //   pinned: true,
-          //   automaticallyImplyLeading: false,
-          //   title: AppSearchbarWg(),
-          //   toolbarHeight: 80,
-          // ),
+          //! CATEGORIES
+          SliverToBoxAdapter(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(right: 20, top: 10, bottom: 20),
+              scrollDirection: Axis.horizontal,
+              child: Row(children: _categories),
+            ),
+          ),
           SliverPadding(
-            padding: AppPadding.hAndV20x20(),
+            padding: const .only(left: 20, right: 20, bottom: 16),
             sliver: SliverToBoxAdapter(
               child: Text(
                 'Kitoblar',
@@ -44,7 +53,6 @@ class SimilarOnlineBooksComponent extends StatelessWidget {
               ),
             ),
           ),
-
           SliverPadding(
             padding: AppPadding.horizontal20x(),
             sliver: SliverGrid.builder(

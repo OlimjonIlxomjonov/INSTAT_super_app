@@ -1,13 +1,8 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import 'package:line_icons/line_icons.dart';
-import 'package:lottie/lottie.dart';
 import 'package:my_template/core/common/flush_bar/added_to_cart_flush_bar.dart';
-import 'package:my_template/core/common/flush_bar/success_flush_bar.dart';
 import 'package:my_template/core/common/flush_bar/technical_work_flash_bar.dart';
 import 'package:my_template/core/routes/route_generator.dart';
-import 'package:my_template/core/utils/constants/assets/app_animations.dart';
 import 'package:my_template/core/utils/general_widgets/bought_book_opener/bought_book_opener_wg.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
@@ -15,21 +10,14 @@ import 'package:my_template/core/utils/general_widgets/custom_rating_star/custom
 import 'package:my_template/core/utils/general_widgets/html_content_wg/html_content_wg.dart';
 import 'package:my_template/core/utils/general_widgets/online_book_wg/online_book_wg.dart';
 import 'package:my_template/core/utils/general_widgets/online_lib_style_custom_bottom_sheet/online_lib_style_custom_bottom_sheet_wg.dart';
-import 'package:my_template/core/utils/logger/logger.dart';
-import 'package:my_template/core/utils/widgets/comment_section/user_comments_wg.dart';
 import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
-import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
-import 'package:my_template/core/utils/widgets/open_mini_app/sub_bottom_sheet_opener.dart';
-import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/see_all_course_comments/see_all_course_comments.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_entity.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/leave_comment_section.dart';
-import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/similar_onilne_books_component.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/widgets/detailed_online_book_header_wg.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/widgets/vertical_divider_wg.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/presentation_lib/screens_lib/user_online_book_cart_lib_page.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart'
     as my_template_book;
@@ -143,7 +131,7 @@ class _DetailedOnlineBookComponentState
                     mainAxisAlignment: .spaceBetween,
                     children: [
                       Text(
-                        '4.8',
+                        '4.7',
                         style: AppTextStyles.source.medium(fontSize: 30),
                       ),
                       VerticalDividerWg(),

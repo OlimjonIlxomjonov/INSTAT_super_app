@@ -5,12 +5,16 @@ class EduCategoriesWg extends StatelessWidget {
   final bool isSelected;
   final VoidCallback? onTap;
   final String? categoryName;
+  final IconData? categoryIcon;
+  final Color? categoryColor;
 
   const EduCategoriesWg({
     super.key,
     this.isSelected = false,
     this.onTap,
     this.categoryName,
+    this.categoryIcon,
+    this.categoryColor,
   });
 
   @override
@@ -34,12 +38,14 @@ class EduCategoriesWg extends StatelessWidget {
         child: Row(
           spacing: appW(8),
           mainAxisSize: .min,
+          crossAxisAlignment: .center,
+          mainAxisAlignment: .center,
           children: [
             Icon(
-              Icons.grid_3x3,
+              categoryIcon ?? Icons.grid_3x3,
               color: isSelected
                   ? AppColors.primaryColor
-                  : AppColors.greyScale.grey600,
+                  : categoryColor ?? AppColors.greyScale.grey600,
             ),
             Text(
               categoryName ?? 'Kategoriya nomi',

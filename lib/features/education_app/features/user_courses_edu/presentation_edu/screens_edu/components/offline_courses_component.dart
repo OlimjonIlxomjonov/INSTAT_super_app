@@ -7,6 +7,7 @@ import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/c
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/offline_course/offline_course_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/offline_course/offline_course_state.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/offline_courser/offline_course_wg.dart';
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/user_groupes/detailed_user_group_component.dart';
 
 class OfflineCoursesComponent extends StatelessWidget {
@@ -37,73 +38,7 @@ class OfflineCoursesComponent extends StatelessWidget {
                       child: DetailedUserGroupComponent(courseName: item.name),
                     );
                   },
-                  child: Container(
-                    margin: .fromLTRB(20, 0, 20, 12),
-                    padding: .symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      border: .all(color: AppColors.greyScale.grey200),
-                      borderRadius: .circular(16),
-                    ),
-                    child: Column(
-                      spacing: 8,
-                      crossAxisAlignment: .start,
-                      children: [
-                        Text(
-                          item.name,
-                          style: AppTextStyles.source.medium(fontSize: 16),
-                        ),
-                        Row(
-                          children: [
-                            Icon(
-                              IconlyLight.calendar,
-                              color: AppColors.greyScale.grey600,
-                            ),
-                            Text(
-                              item.course.category?.createdAt
-                                      .toReadableDate() ??
-                                  '',
-                              style: _subStyle(),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          crossAxisAlignment: .start,
-                          children: [
-                            Icon(
-                              IconlyLight.profile,
-                              color: AppColors.greyScale.grey600,
-                            ),
-                            Expanded(
-                              child: Wrap(
-                                spacing: 4,
-                                runSpacing: 4,
-                                children: List.generate(item.teachers.length, (
-                                  index,
-                                ) {
-                                  final teacher = item.teachers[index];
-                                  return Text(
-                                    "${teacher.fullName} |",
-                                    style: _subStyle(),
-                                  );
-                                }),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: CustomLinearIndicatorWg(
-                                progressIndicator: 25,
-                              ),
-                            ),
-                            SizedBox(width: 10),
-                            Text('25%', style: _subStyle()),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                  child: OfflineCourseWg(item: item),
                 );
               },
             ),
@@ -114,10 +49,5 @@ class OfflineCoursesComponent extends StatelessWidget {
     );
   }
 
-  TextStyle _subStyle() {
-    return AppTextStyles.source.regular(
-      fontSize: 13,
-      color: AppColors.greyScale.grey600,
-    );
-  }
+
 }

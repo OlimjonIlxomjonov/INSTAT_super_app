@@ -319,69 +319,28 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                   expandedHeight: 250,
                   collapsedHeight: 250,
                   pinned: true,
+                  automaticallyImplyLeading: false,
                   flexibleSpace: FlexibleSpaceBar(
                     background: _VideoAreaWidget(
                       controllerNotifier: _controllerNotifier,
                       showVideoNotifier: _showVideoNotifier,
                       hasVideoErrorNotifier: _hasVideoErrorNotifier,
                       imagePath: widget.imagePath,
+                      currentResolutionNotifier: _currentResolutionNotifier,
+                      onResolutionSelected: changeResolution,
                       onThumbnailTap: () {
                         _showVideoNotifier.value = true;
                         _initVideo();
                       },
                     ),
                   ),
-                  leading: Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 10),
-                    child: IconButton(
-                      onPressed: () {
-                        _controllerNotifier.value?.pause();
-                        FamilyNavigation.familyClose(context);
-                      },
-                      style: IconButton.styleFrom(
-                        backgroundColor: AppColors.white.withValues(alpha: 0.6),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                      ),
-                      icon: const Icon(IconlyLight.arrow_left_2, size: 20),
-                    ),
-                  ),
-                  actions: [
-                    ValueListenableBuilder<String>(
-                      valueListenable: _currentResolutionNotifier,
-                      builder: (context, resolution, _) {
-                        return PopupMenuButton<String>(
-                          color: AppColors.white,
-                          icon: Icon(
-                            Icons.settings,
-                            color: AppColors.greyScale.grey600,
-                            size: 28,
-                          ),
-                          onSelected: changeResolution,
-                          itemBuilder: (context) => ['1080', '720', '480', '240']
-                              .map(
-                                (res) => PopupMenuItem(
-                                  value: res,
-                                  child: Text(
-                                    '${res}p${resolution == res ? '*' : ''}',
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                        );
-                      },
-                    ),
-                  ],
                 ),
-
                 SliverPadding(
                   padding: AppPadding.horizontal20x(),
                   sliver: SliverToBoxAdapter(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 20),
                         Text(
                           widget.title,
                           style: AppTextStyles.source.medium(fontSize: 20),
@@ -530,6 +489,8 @@ class _VideoAreaWidget extends StatelessWidget {
   final ValueNotifier<bool> showVideoNotifier;
   final ValueNotifier<bool> hasVideoErrorNotifier;
   final String? imagePath;
+  final ValueNotifier<String> currentResolutionNotifier;
+  final ValueChanged<String> onResolutionSelected;
   final VoidCallback onThumbnailTap;
 
   const _VideoAreaWidget({
@@ -537,40 +498,103 @@ class _VideoAreaWidget extends StatelessWidget {
     required this.showVideoNotifier,
     required this.hasVideoErrorNotifier,
     required this.imagePath,
+    required this.currentResolutionNotifier,
+    required this.onResolutionSelected,
     required this.onThumbnailTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: hasVideoErrorNotifier,
-      builder: (context, hasError, _) {
-        if (hasError) return _buildNoVideoWidget(context);
+    return Stack(
+      children: [
+        ValueListenableBuilder<bool>(
+          valueListenable: hasVideoErrorNotifier,
+          builder: (context, hasError, _) {
+            if (hasError) return _buildNoVideoWidget(context);
 
-        return ValueListenableBuilder<bool>(
-          valueListenable: showVideoNotifier,
-          builder: (context, showVideo, _) {
-            if (!showVideo) {
-              return VideoThumbnailWidget(
-                imagePath: imagePath,
-                onTap: onThumbnailTap,
-              );
-            }
-
-            return ValueListenableBuilder<VideoPlayerController?>(
-              valueListenable: controllerNotifier,
-              builder: (context, controller, _) {
-                if (controller == null) {
-                  return const Center(child: CircularProgressIndicator());
+            return ValueListenableBuilder<bool>(
+              valueListenable: showVideoNotifier,
+              builder: (context, showVideo, _) {
+                if (!showVideo) {
+                  return VideoThumbnailWidget(
+                    imagePath: imagePath,
+                    onTap: onThumbnailTap,
+                  );
                 }
-                // VideoPlayerWidget is a StatefulWidget that subscribes to
-                // the controller itself — no further rebuilds from here.
-                return VideoPlayerWidget(controller: controller);
+
+                return ValueListenableBuilder<VideoPlayerController?>(
+                  valueListenable: controllerNotifier,
+                  builder: (context, controller, _) {
+                    if (controller == null) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    return VideoPlayerWidget(
+                      controller: controller,
+                      currentResolutionNotifier: currentResolutionNotifier,
+                      onResolutionSelected: onResolutionSelected,
+                      onBack: () {
+                        controller.pause();
+                        FamilyNavigation.familyClose(context);
+                      },
+                    );
+                  },
+                );
               },
             );
           },
-        );
-      },
+        ),
+
+        // Display static back button when video has NOT loaded (thumbnail, loading, error state)
+        ValueListenableBuilder<bool>(
+          valueListenable: hasVideoErrorNotifier,
+          builder: (context, hasError, _) {
+            if (hasError) {
+              return _buildStaticBackButton(context);
+            }
+            return ValueListenableBuilder<bool>(
+              valueListenable: showVideoNotifier,
+              builder: (context, showVideo, _) {
+                if (!showVideo) {
+                  return _buildStaticBackButton(context);
+                }
+                return ValueListenableBuilder<VideoPlayerController?>(
+                  valueListenable: controllerNotifier,
+                  builder: (context, controller, _) {
+                    final isInitialized =
+                        controller?.value.isInitialized ?? false;
+                    if (!isInitialized) {
+                      return _buildStaticBackButton(context);
+                    }
+                    return const SizedBox.shrink();
+                  },
+                );
+              },
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStaticBackButton(BuildContext context) {
+    return Positioned(
+      top: MediaQuery.of(context).padding.top + 10,
+      left: 12,
+      child: IconButton(
+        onPressed: () {
+          controllerNotifier.value?.pause();
+          FamilyNavigation.familyClose(context);
+        },
+        style: IconButton.styleFrom(
+          backgroundColor: Colors.black38,
+          shape: const CircleBorder(),
+        ),
+        icon: const Icon(
+          IconlyLight.arrow_left_2,
+          color: Colors.white,
+          size: 20,
+        ),
+      ),
     );
   }
 

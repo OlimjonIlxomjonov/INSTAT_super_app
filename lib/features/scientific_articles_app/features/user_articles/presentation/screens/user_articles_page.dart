@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/common/skeletonizer_shimmer/user_articles/user_articles_skeletonizer.dart';
 import 'package:my_template/core/common/ui_states/empty_state.dart';
@@ -121,7 +122,10 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.search, color: AppColors.greyScale.grey600),
+                    Icon(
+                      IconlyLight.search,
+                      color: AppColors.greyScale.grey600,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: TextField(
@@ -137,7 +141,7 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
                           border: InputBorder.none,
                           isDense: true,
                           contentPadding: const EdgeInsets.symmetric(
-                            vertical: 12,
+                            vertical: 14,
                           ),
                         ),
                       ),
@@ -167,6 +171,8 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
                           ),
                         );
                       },
+                      categoryIcon: categoriesIcon[index],
+                      categoryColor: categoryColors[index],
                     );
                   }),
                 ),

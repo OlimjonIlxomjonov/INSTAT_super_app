@@ -44,7 +44,8 @@ class OfflineBookModel extends OfflineBookEntity {
       inLoanCount: json['in_loan_count'] ?? 0,
       isSaved: (json['user_book_count'] ?? 0) >= 1,
       isInCart: (json['in_cart_count'] ?? 0) >= 1,
-      bookThumbnails: (json['book_thumbnails'] as List?)
+      bookThumbnails:
+          (json['book_thumbnails'] as List?)
               ?.map((e) => BookThumbnailModel.fromJson(e))
               .toList() ??
           [],

@@ -5,8 +5,15 @@ import '../video_player_wg.dart';
 
 class FullscreenVideoPage extends StatefulWidget {
   final VideoPlayerController controller;
+  final ValueNotifier<String>? currentResolutionNotifier;
+  final ValueChanged<String>? onResolutionSelected;
 
-  const FullscreenVideoPage({super.key, required this.controller});
+  const FullscreenVideoPage({
+    super.key,
+    required this.controller,
+    this.currentResolutionNotifier,
+    this.onResolutionSelected,
+  });
 
   @override
   State<FullscreenVideoPage> createState() => _FullscreenVideoPageState();
@@ -42,11 +49,15 @@ class _FullscreenVideoPageState extends State<FullscreenVideoPage> {
                 child: VideoPlayerWidget(
                   controller: widget.controller,
                   isFullscreen: true,
+                  currentResolutionNotifier: widget.currentResolutionNotifier,
+                  onResolutionSelected: widget.onResolutionSelected,
                 ),
               )
             : VideoPlayerWidget(
                 controller: widget.controller,
                 isFullscreen: true,
+                currentResolutionNotifier: widget.currentResolutionNotifier,
+                onResolutionSelected: widget.onResolutionSelected,
               ),
       ),
     );

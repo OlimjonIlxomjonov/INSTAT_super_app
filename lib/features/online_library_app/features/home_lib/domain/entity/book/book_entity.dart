@@ -53,6 +53,7 @@ class BookEntity {
     List<BookThumbnailEntity>? bookThumbnails,
     bool? isSaved,
     bool? isInCart,
+    int? starsSum,
   }) {
     return BookEntity(
       id: id ?? this.id,

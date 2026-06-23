@@ -33,8 +33,8 @@ class EduBottomNavBar extends StatelessWidget {
           label: localization.homePage,
         ),
         MiniAppBottomNavTabItem(
-          icon: IconlyLight.work,
-          activeIcon: IconlyBold.work,
+          icon: IconlyLight.category,
+          activeIcon: IconlyBold.category,
           label: localization.schedule,
         ),
         MiniAppBottomNavTabItem(
