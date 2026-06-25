@@ -59,6 +59,7 @@ class _TableEduPageState extends State<TableEduPage> {
     return Scaffold(
       appBar: CustomAppBarWg(
         myTitle: 'Kalenadar',
+        showArrow: false,
         customActions: [
           LayoutButtonsWg(layout: layout, onChanged: _onLayoutChanged),
         ],

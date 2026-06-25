@@ -25,7 +25,7 @@ class ArticlesProfilePage extends StatelessWidget {
           ProfileSettingsTileWg(
             title: 'Ko’p beriladigan savollar',
             onTap: () {},
-            leadingIcon: Icons.message_outlined,
+            leadingIcon: IconlyLight.chat,
           ),
           ProfileSettingsTileWg(
             title: 'Mening maqolalarim',

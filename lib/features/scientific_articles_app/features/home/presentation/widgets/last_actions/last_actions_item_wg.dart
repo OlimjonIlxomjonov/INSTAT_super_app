@@ -46,7 +46,9 @@ class LastActionItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Maqola uchun tolov amalga oshirildi',
+                  processTitleSwitch(
+                    LastActionsStatusX.fromString(item.status),
+                  ),
                   style: AppTextStyles.source.medium(fontSize: 16),
                 ),
 

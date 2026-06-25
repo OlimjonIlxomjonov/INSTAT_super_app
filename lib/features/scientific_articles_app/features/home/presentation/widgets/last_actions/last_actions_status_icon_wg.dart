@@ -10,15 +10,32 @@ class LastActionsStatusIconWg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (status) {
-      case LastActionsStatus.sent:
-        return Icon(Icons.check_circle, color: AppColors.greenDoneTaskCard);
+      case LastActionsStatus.accepted:
+        return Icon(IconlyBold.tick_square, color: AppColors.greenDoneTaskCard);
 
-      case LastActionsStatus.pending:
-        return Icon(IconlyBold.edit, color: AppColors.orange500);
+      case LastActionsStatus.addedExpert:
+        return Icon(IconlyBold.add_user, color: AppColors.orange500);
       case LastActionsStatus.inReview:
-        return Icon(Icons.check_circle, color: AppColors.greenDoneTaskCard);
+        return Icon(IconlyBold.tick_square, color: AppColors.yellow500);
+      case LastActionsStatus.rejected:
+        return Icon(IconlyBold.info_circle, color: AppColors.red);
       default:
-        return Icon(Icons.check_circle, color: AppColors.greenDoneTaskCard);
+        return Icon(IconlyBold.tick_square, color: AppColors.greenDoneTaskCard);
     }
+  }
+}
+
+String processTitleSwitch(LastActionsStatus status) {
+  switch (status) {
+    case LastActionsStatus.inReview:
+      return 'Maqola uchun tolov amalga oshirildi';
+    case LastActionsStatus.addedExpert:
+      return 'Ekspert biriktirildi';
+    case LastActionsStatus.rejected:
+      return 'Expert tomonidan rad etildi';
+    case LastActionsStatus.accepted:
+      return 'Ekspert tomonidan tasdiqlandi';
+    default:
+      return '';
   }
 }

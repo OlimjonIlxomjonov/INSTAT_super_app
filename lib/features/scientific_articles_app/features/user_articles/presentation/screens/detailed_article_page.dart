@@ -151,7 +151,7 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
                 ),
               ),
 
-              /// Maqola ma'lumotlari
+              //! Maqola ma'lumotlari
               if (selectedCategory == 0)
                 BlocBuilder<ReviewDetailBloc, ReviewDetailState>(
                   builder: (context, detailState) {
@@ -243,7 +243,7 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
                     );
                   },
                 )
-              /// Jarayon
+              //! Jarayon
               else ...[
                 BlocBuilder<ArticleProcessBloc, ArticleProcessState>(
                   builder: (context, state) {

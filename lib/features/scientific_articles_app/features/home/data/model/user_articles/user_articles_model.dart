@@ -1,3 +1,4 @@
+import 'package:my_template/features/scientific_articles_app/features/home/data/model/user_articles/user_articles_expert_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/user_articles/user_articles_entity.dart';
 
 class UserArticlesModel extends UserArticlesEntity {
@@ -17,7 +18,7 @@ class UserArticlesModel extends UserArticlesEntity {
       userId: json?['user_id'] ?? 0,
       title: json?['title'] ?? '',
       status: json?['status'] ?? '',
-      expert: json?['expert'],
+      expert: UserArticlesExpertModel.fromJson(json?['expert'] ?? null),
       updatedAt: DateTime.tryParse(json?['updated_at']?.toString() ?? ''),
       createdAt: DateTime.tryParse(json?['created_at']?.toString() ?? ''),
     );

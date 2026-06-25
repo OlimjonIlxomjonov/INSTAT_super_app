@@ -1,11 +1,12 @@
 import 'package:my_template/core/utils/enums/app_enums.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/user_articles/user_articles_expert_entity.dart';
 
 class UserArticlesEntity {
   final int id;
   final int userId;
   final String title;
   final String status;
-  final String? expert;
+  final UserArticlesExpertEntity? expert;
   final DateTime? updatedAt;
   final DateTime? createdAt;
 
@@ -28,7 +29,7 @@ class UserArticlesEntity {
         return ArticleStatus.rejected;
       case 'draft':
         return ArticleStatus.draft;
-      case 'accepted':
+      case 'published':
         return ArticleStatus.confirmed;
       case 'in_review':
         return ArticleStatus.inReview;

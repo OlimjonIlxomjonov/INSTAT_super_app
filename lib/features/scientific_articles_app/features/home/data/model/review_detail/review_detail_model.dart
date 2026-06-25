@@ -1,3 +1,4 @@
+import 'package:my_template/features/scientific_articles_app/features/home/data/model/user_articles/user_articles_expert_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/review_detail/review_detail_entity.dart';
 
 class ReviewDetailModel extends ReviewDetailEntity {
@@ -38,7 +39,7 @@ class ReviewDetailModel extends ReviewDetailEntity {
       udkCode: json['udk_code'] ?? '',
       status: json['status'] ?? '',
       language: json['language'] ?? '',
-      expert: json['expert'],
+      expert: UserArticlesExpertModel.fromJson(json['expert']),
       userId: json['user_id'] ?? 0,
       keywords: json['keywords'] ?? '',
       createdAt: DateTime.tryParse(json['created_at']?.toString() ?? ''),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
 import 'package:my_template/core/common/params/article_params/article_params.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/common/ui_states/empty_state.dart';
@@ -9,7 +8,6 @@ import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
-import 'package:my_template/features/scientific_articles_app/dummy_data_source/magazine_sources.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_editions/article_editions_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_editions/article_editions_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_editions/article_editions_state.dart';
@@ -36,7 +34,7 @@ class _MagazinesPageState extends State<MagazinesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBarWg(myTitle: 'Jurnallar'),
+      appBar: AppBar(title: AppSearchbarWg(), automaticallyImplyLeading: false),
       body: CustomRefreshIndicator(
         onRefresh: () async {
           context.read<ArticleEditionsBloc>().add(
@@ -47,14 +45,6 @@ class _MagazinesPageState extends State<MagazinesPage> {
         },
         child: CustomScrollView(
           slivers: [
-            SliverAppBar(
-              toolbarHeight: 56 + 24,
-              floating: true,
-              snap: true,
-              automaticallyImplyLeading: false,
-              titleSpacing: 20,
-              title: AppSearchbarWg(),
-            ),
             SliverPadding(
               padding: AppPadding.hAndV20x20(),
               sliver: SliverToBoxAdapter(

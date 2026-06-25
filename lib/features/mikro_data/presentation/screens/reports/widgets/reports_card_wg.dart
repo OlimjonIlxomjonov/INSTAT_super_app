@@ -7,6 +7,7 @@ import 'package:my_template/features/mikro_data/presentation/bloc/reports/report
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../../../core/utils/app_utils.dart';
+import '../filter_bottom_sheet_wg.dart';
 
 class ReportsCardWg extends StatefulWidget {
   const ReportsCardWg({super.key});
@@ -27,120 +28,161 @@ class _ReportsCardWgState extends State<ReportsCardWg> {
     return SliverPadding(
       padding: AppPadding.horizontal20x(),
       sliver: SliverFillRemaining(
-        child: BlocBuilder<ReportsBloc, ReportsState>(
-          builder: (context, state) {
-            if (state is ReportsLoaded) {
-              final data = state.response.data;
-              return GridView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemCount: data.length,
-                itemBuilder: (context, index) {
-                  final item = data[index];
-                  return Container(
-                    padding: const .all(12),
-                    decoration: BoxDecoration(
-                      borderRadius: .circular(16),
-                      color: AppColors.greyScale.grey50,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Row(
+                mainAxisAlignment: .spaceBetween,
+                children: [
+                  Text(
+                    'Hisobotlar',
+                    style: AppTextStyles.source.semiBold(fontSize: 18),
+                  ),
+                  InkWell(
+                    borderRadius: .circular(6),
+                    onTap: () => showReportsFilterSheet(context),
+                    child: Container(
+                      padding: const .symmetric(horizontal: 6, vertical: 4),
+                      decoration: BoxDecoration(
+                        borderRadius: .circular(6),
+                        border: Border.all(color: AppColors.greyScale.grey200),
+                      ),
+                      child: Text(
+                        'Filter',
+                        style: AppTextStyles.source.medium(
+                          fontSize: 12,
+                          color: AppColors.greyScale.grey600,
+                        ),
+                      ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: .start,
-                      children: [
-                        Text(
-                          item.category.nameUz,
-                          style: AppTextStyles.source.medium(
-                            fontSize: 12,
-                            color: AppColors.splashBackgroundColor,
+                  ),
+                ],
+              ),
+            ),
+
+            Expanded(
+              child: BlocBuilder<ReportsBloc, ReportsState>(
+                builder: (context, state) {
+                  if (state is ReportsLoaded) {
+                    final data = state.response.data;
+                    return GridView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                      ),
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        final item = data[index];
+                        return Container(
+                          padding: const .all(12),
+                          decoration: BoxDecoration(
+                            borderRadius: .circular(16),
+                            color: AppColors.greyScale.grey50,
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          item.name,
-                          maxLines: 2,
-                          overflow: .ellipsis,
-                          style: AppTextStyles.source.medium(fontSize: 14),
-                        ),
-                        Spacer(),
-                        _buildSectionRows(
-                          icon: IconlyLight.location,
-                          title: 'O‘zbekiston Respublikasi',
-                        ),
-                        const SizedBox(height: 4),
-                        _buildSectionRows(
-                          icon: IconlyLight.time_circle,
-                          title: '2021–2024',
-                        ),
-                        const SizedBox(height: 4),
-                        _buildSectionRows(
-                          icon: IconlyLight.document,
-                          title: 'Ecxel/PDF — 130MB',
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              );
-            }
-            return Skeletonizer(
-              enabled: true,
-              child: GridView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemCount: 6,
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: const .all(12),
-                    decoration: BoxDecoration(
-                      borderRadius: .circular(16),
-                      color: AppColors.greyScale.grey50,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: .start,
-                      children: [
-                        Text(
-                          'Category Name',
-                          style: AppTextStyles.source.medium(
-                            fontSize: 12,
-                            color: AppColors.splashBackgroundColor,
+                          child: Column(
+                            crossAxisAlignment: .start,
+                            children: [
+                              Text(
+                                item.category.nameUz,
+                                style: AppTextStyles.source.medium(
+                                  fontSize: 12,
+                                  color: AppColors.splashBackgroundColor,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                item.name,
+                                maxLines: 2,
+                                overflow: .ellipsis,
+                                style: AppTextStyles.source.medium(
+                                  fontSize: 14,
+                                ),
+                              ),
+                              Spacer(),
+                              _buildSectionRows(
+                                icon: IconlyLight.location,
+                                title: 'O‘zbekiston Respublikasi',
+                              ),
+                              const SizedBox(height: 4),
+                              _buildSectionRows(
+                                icon: IconlyLight.time_circle,
+                                title: '2021–2024',
+                              ),
+                              const SizedBox(height: 4),
+                              _buildSectionRows(
+                                icon: IconlyLight.document,
+                                title: 'Ecxel/PDF — 130MB',
+                              ),
+                            ],
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Aholi sonining yosh bo‘yicha taqsimoti',
-                          maxLines: 2,
-                          overflow: .ellipsis,
-                          style: AppTextStyles.source.medium(fontSize: 14),
-                        ),
-                        const SizedBox(height: 12),
-                        _buildSectionRows(
-                          icon: IconlyLight.location,
-                          title: 'O‘zbekiston Respublikasi',
-                        ),
-                        const SizedBox(height: 4),
-                        _buildSectionRows(
-                          icon: IconlyLight.time_circle,
-                          title: '2021–2024',
-                        ),
-                        const SizedBox(height: 4),
-                        _buildSectionRows(
-                          icon: IconlyLight.document,
-                          title: 'Ecxel/PDF — 130MB',
-                        ),
-                      ],
+                        );
+                      },
+                    );
+                  }
+                  return Skeletonizer(
+                    enabled: true,
+                    child: GridView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                      ),
+                      itemCount: 6,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          padding: const .all(12),
+                          decoration: BoxDecoration(
+                            borderRadius: .circular(16),
+                            color: AppColors.greyScale.grey50,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: .start,
+                            children: [
+                              Text(
+                                'Category Name',
+                                style: AppTextStyles.source.medium(
+                                  fontSize: 12,
+                                  color: AppColors.splashBackgroundColor,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Aholi sonining yosh bo‘yicha taqsimoti',
+                                maxLines: 2,
+                                overflow: .ellipsis,
+                                style: AppTextStyles.source.medium(
+                                  fontSize: 14,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              _buildSectionRows(
+                                icon: IconlyLight.location,
+                                title: 'O‘zbekiston Respublikasi',
+                              ),
+                              const SizedBox(height: 4),
+                              _buildSectionRows(
+                                icon: IconlyLight.time_circle,
+                                title: '2021–2024',
+                              ),
+                              const SizedBox(height: 4),
+                              _buildSectionRows(
+                                icon: IconlyLight.document,
+                                title: 'Ecxel/PDF — 130MB',
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
                   );
                 },
               ),
-            );
-          },
+            ),
+          ],
         ),
       ),
     );

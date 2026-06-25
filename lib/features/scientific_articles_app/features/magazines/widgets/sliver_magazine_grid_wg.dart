@@ -33,7 +33,7 @@ class SliverMagazineGridWg extends StatelessWidget {
                 Expanded(
                   flex: 3,
                   child: AspectRatio(
-                    aspectRatio: 0.78,
+                    aspectRatio: 16 / 6,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(14),
                       child:
@@ -67,21 +67,20 @@ class SliverMagazineGridWg extends StatelessWidget {
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: .start,
-                    children: [
-                      Text(item.title ?? '', style: CustomTextStyles.h3),
-                      SizedBox(height: 4),
-                      Text(
-                        "${item.year}-yil ${item.number}-son",
-                        style: AppTextStyles.source.regular(
-                          fontSize: 12,
-                          color: AppColors.greyScale.grey600,
-                        ),
+                SizedBox(height: 10),
+                Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    Text(item.title ?? '', style: CustomTextStyles.h3),
+                    SizedBox(height: 4),
+                    Text(
+                      "${item.year}-yil ${item.number}-son",
+                      style: AppTextStyles.source.regular(
+                        fontSize: 12,
+                        color: AppColors.greyScale.grey600,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),

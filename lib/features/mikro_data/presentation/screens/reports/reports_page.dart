@@ -42,39 +42,6 @@ class ReportsPage extends StatelessWidget {
               child: Row(children: _categories),
             ),
           ),
-          SliverPadding(
-            padding: AppPadding.hAndV20x20(),
-            sliver: SliverToBoxAdapter(
-              child: Row(
-                mainAxisAlignment: .spaceBetween,
-                children: [
-                  Text(
-                    'Hisobotlar',
-                    style: AppTextStyles.source.semiBold(fontSize: 18),
-                  ),
-                  InkWell(
-                    borderRadius: .circular(6),
-                    onTap: () => showReportsFilterSheet(context),
-                    child: Container(
-                      padding: const .symmetric(horizontal: 6, vertical: 4),
-                      decoration: BoxDecoration(
-                        borderRadius: .circular(6),
-                        border: Border.all(color: AppColors.greyScale.grey200),
-                      ),
-                      child: Text(
-                        'Filter',
-                        style: AppTextStyles.source.medium(
-                          fontSize: 12,
-                          color: AppColors.greyScale.grey600,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          //! Reports
           ReportsCardWg(),
         ],
       ),

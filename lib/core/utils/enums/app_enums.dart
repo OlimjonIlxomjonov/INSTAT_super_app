@@ -8,18 +8,20 @@ enum BookCardType { bought, market, library }
 
 enum ArticleStatus { confirmed, pending, rejected, draft, inReview }
 
-enum LastActionsStatus { inReview, sent, pending }
+enum LastActionsStatus { inReview, accepted, addedExpert, rejected }
 
 extension LastActionsStatusX on LastActionsStatus {
   static LastActionsStatus fromString(String value) {
     switch (value) {
       case 'in_review':
         return LastActionsStatus.inReview;
-      case 'pending':
-        return LastActionsStatus.pending;
-      case 'sent':
+      case 'added_expert':
+        return LastActionsStatus.addedExpert;
+      case 'rejected':
+        return LastActionsStatus.rejected;
+      case 'accepted':
       default:
-        return LastActionsStatus.sent;
+        return LastActionsStatus.accepted;
     }
   }
 }

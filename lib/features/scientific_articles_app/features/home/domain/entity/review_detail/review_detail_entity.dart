@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:my_template/core/utils/enums/app_enums.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/user_articles/user_articles_expert_entity.dart';
 
 class ReviewDetailEntity {
   final int id;
@@ -17,7 +18,7 @@ class ReviewDetailEntity {
   final String udkCode;
   final String status;
   final String language;
-  final String? expert;
+  final UserArticlesExpertEntity? expert;
   final int userId;
   final String keywords; // Raw JSON String of keywords (e.g. '["key","hello"]')
   final DateTime? createdAt;

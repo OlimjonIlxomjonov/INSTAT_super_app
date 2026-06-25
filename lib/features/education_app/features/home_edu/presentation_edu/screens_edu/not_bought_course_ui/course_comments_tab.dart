@@ -54,10 +54,7 @@ class _CourseCommentsTabState extends State<CourseCommentsTab>
             if (state is CommentsLoaded) {
               final data = state.response.reviews;
               if (data.isEmpty) {
-                return SizedBox(
-                  width: 200,
-                  child: EmptyState(message: 'Bosh!'),
-                );
+                return SizedBox(width: 200, child: EmptyState());
               }
 
               return Column(

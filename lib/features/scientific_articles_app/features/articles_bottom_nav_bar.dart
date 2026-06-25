@@ -47,13 +47,13 @@ class ArticlesBottomNavBar extends StatelessWidget {
           label: localization.homePage,
         ),
         MiniAppBottomNavTabItem(
-          icon: Icons.book_outlined,
-          activeIcon: Icons.book,
+          icon: IconlyLight.paper,
+          activeIcon: IconlyBold.paper,
           label: 'Jurnallar',
         ),
         MiniAppBottomNavTabItem(
-          icon: Icons.article_outlined,
-          activeIcon: Icons.article,
+          icon: IconlyLight.document,
+          activeIcon: IconlyBold.document,
           label: 'Maqolalar',
         ),
         MiniAppBottomNavTabItem(
