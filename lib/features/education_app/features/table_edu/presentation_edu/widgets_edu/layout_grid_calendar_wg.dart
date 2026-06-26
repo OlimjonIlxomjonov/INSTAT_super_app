@@ -6,10 +6,19 @@ import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/features/education_app/features/table_edu/presentation_edu/screens_edu/components/day_cell_component.dart';
 import 'package:my_template/features/education_app/features/table_edu/presentation_edu/screens_edu/components/week_label_component.dart';
 
-class SimpleMonthCalendar extends StatefulWidget {
-  final Set<DateTime>? markedDates;
+import '../../domain/entity/course_group_date_entity.dart';
 
-  const SimpleMonthCalendar({super.key, this.markedDates});
+class SimpleMonthCalendar extends StatefulWidget {
+  // final Set<DateTime>? markedDates;
+  final List<CourseGroupDateEntity> dates;
+  final ValueChanged<CourseGroupDateEntity>? onDateSelected;
+
+  const SimpleMonthCalendar({
+    super.key,
+    // this.markedDates,
+    required this.dates,
+    this.onDateSelected,
+  });
 
   @override
   State<SimpleMonthCalendar> createState() => _SimpleMonthCalendarState();
@@ -96,7 +105,6 @@ class _SimpleMonthCalendarState extends State<SimpleMonthCalendar> {
 
               SizedBox(height: appH(8)),
 
-              /// WEEKDAY LABELS — already const ✅
               const Row(
                 children: [
                   WeekLabelComponent("MO"),
@@ -115,11 +123,18 @@ class _SimpleMonthCalendarState extends State<SimpleMonthCalendar> {
                 return Row(
                   children: List.generate(7, (colIndex) {
                     final date = _days[rowIndex * 7 + colIndex];
-                    final hasEvent =
-                        widget.markedDates?.contains(
-                          DateTime(date.year, date.month, date.day),
-                        ) ??
-                        false;
+                    CourseGroupDateEntity? courseDate;
+
+                    for (final item in widget.dates) {
+                      if (item.dateTime.year == date.year &&
+                          item.dateTime.month == date.month &&
+                          item.dateTime.day == date.day) {
+                        courseDate = item;
+                        break;
+                      }
+                    }
+
+                    final hasEvent = courseDate != null;
                     final now = DateTime.now();
                     final isToday =
                         date.year == now.year &&
@@ -131,6 +146,11 @@ class _SimpleMonthCalendarState extends State<SimpleMonthCalendar> {
                       selectedDate: selectedDateNotifier,
                       hasEvent: hasEvent,
                       isToday: isToday,
+                      onTap: courseDate == null
+                          ? null
+                          : () {
+                              widget.onDateSelected?.call(courseDate!);
+                            },
                     );
                   }),
                 );

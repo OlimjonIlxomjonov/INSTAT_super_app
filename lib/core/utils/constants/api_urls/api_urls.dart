@@ -48,10 +48,14 @@ class ApiUrls {
 
   //! offline course
   static const offlineCourse = 'course-groups/list/my/';
+  static const offlineLessons = 'lessons';
 
   //! course group dates
   static const courseGroups = 'course-groups/';
   static const courseGroupDates = '/course_group_dates/';
+
+  //? scan QR
+  static const scanQr = 'create-attendance/';
 
   //! ARTICLES
   //? user articles

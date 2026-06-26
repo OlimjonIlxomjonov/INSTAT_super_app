@@ -9,6 +9,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dom
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_option_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_topics/course_lesson_topics_response.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_offline_lessons_entity/course_offline_lessons_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/course_list_response.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/offline_course/offline_course_response.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/repository/user_courses_repository.dart';
@@ -135,5 +136,17 @@ class UserCoursesRepoImpl implements UserCoursesRepository {
   @override
   Future<OfflineCourseResponse> getOfflineCourse() {
     return _remoteDataSource.fetchOfflineCourse();
+  }
+
+  @override
+  Future<void> scanQR(ScanQrParams params) {
+    return _remoteDataSource.scanQr(params: params);
+  }
+
+  @override
+  Future<List<CourseOfflineLessonsEntity>> getOfflineLessons({
+    required OfflineLessonsParams params,
+  }) {
+    return _remoteDataSource.fetchOfflineLessons(params: params);
   }
 }

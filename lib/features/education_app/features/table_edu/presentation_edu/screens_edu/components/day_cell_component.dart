@@ -7,6 +7,7 @@ class DayCellComponent extends StatelessWidget {
   final ValueNotifier<DateTime> selectedDate;
   final bool hasEvent;
   final bool isToday;
+  final VoidCallback? onTap;
 
   const DayCellComponent({
     super.key,
@@ -15,6 +16,7 @@ class DayCellComponent extends StatelessWidget {
     required this.selectedDate,
     this.hasEvent = false,
     this.isToday = false,
+    this.onTap,
   });
 
   @override
@@ -29,7 +31,19 @@ class DayCellComponent extends StatelessWidget {
               selected.day == date.day;
 
           return GestureDetector(
-            onTap: isCurrentMonth ? () => selectedDate.value = date : null,
+            onTap: isCurrentMonth
+                ? () {
+                    final alreadySelected =
+                        selectedDate.value.year == date.year &&
+                        selectedDate.value.month == date.month &&
+                        selectedDate.value.day == date.day;
+
+                    if (alreadySelected) return;
+
+                    selectedDate.value = date;
+                    onTap?.call();
+                  }
+                : null,
             child: AspectRatio(
               aspectRatio: 1,
               child: DecoratedBox(

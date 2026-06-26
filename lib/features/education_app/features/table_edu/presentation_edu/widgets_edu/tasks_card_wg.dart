@@ -6,7 +6,8 @@ import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/c
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 
 class TasksCardWg extends StatelessWidget {
-  final String title, subTitle, deadlineDate, daysLeft;
+  final String title, deadlineDate, daysLeft;
+  final String? subTitle;
   final Color statusBorderColor;
   final VoidCallback onTap;
   final bool? isTaskDone;
@@ -15,7 +16,7 @@ class TasksCardWg extends StatelessWidget {
   const TasksCardWg({
     super.key,
     required this.title,
-    required this.subTitle,
+    this.subTitle,
     required this.deadlineDate,
     required this.onTap,
     required this.daysLeft,
@@ -32,11 +33,11 @@ class TasksCardWg extends StatelessWidget {
         margin: .only(bottom: appH(12)),
         padding: .symmetric(horizontal: appW(16), vertical: appH(16)),
         decoration: BoxDecoration(
-          color: isTaskDone == null
-              ? AppColors.greyScale.grey50
-              : isTaskDone!
-              ? AppColors.greenBackground
-              : AppColors.redBackground,
+          // color: isTaskDone == null
+          //     ? AppColors.greyScale.grey50
+          //     : isTaskDone!
+          //     ? AppColors.greenBackground
+          //     : AppColors.redBackground,
           border: Border(left: BorderSide(color: statusBorderColor, width: 5)),
           borderRadius: .circular(10),
         ),
@@ -65,27 +66,29 @@ class TasksCardWg extends StatelessWidget {
             SizedBox(height: appH(8)),
 
             /// SUB TITLE
-            Row(
-              children: [
-                if (isLessons)
-                  Icon(
-                    IconlyLight.profile,
-                    size: 20,
-                    color: AppColors.greyScale.grey600,
-                  ),
-                Expanded(
-                  child: Text(
-                    maxLines: 1,
-                    overflow: .ellipsis,
-                    subTitle,
-                    style: AppTextStyles.source.regular(
-                      fontSize: 13,
-                      color: AppColors.greyScale.grey600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            subTitle != null
+                ? Row(
+                    children: [
+                      if (isLessons)
+                        Icon(
+                          IconlyLight.profile,
+                          size: 20,
+                          color: AppColors.greyScale.grey600,
+                        ),
+                      Expanded(
+                        child: Text(
+                          maxLines: 1,
+                          overflow: .ellipsis,
+                          subTitle ?? '',
+                          style: AppTextStyles.source.regular(
+                            fontSize: 13,
+                            color: AppColors.greyScale.grey600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : SizedBox.shrink(),
             Divider(color: AppColors.greyScale.grey200),
 
             /// DEADLINE DATA / TIME

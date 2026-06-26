@@ -18,5 +18,5 @@ Future<void> main() async {
   ]);
   await setup();
   runApp(MyBlocProvider(child: MyApp()));
-  // logger.f(TokenStorageServiceImpl().getAccessToken());
+  logger.f(TokenStorageServiceImpl().getAccessToken());
 }

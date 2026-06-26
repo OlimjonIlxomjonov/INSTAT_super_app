@@ -4,10 +4,19 @@ import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 
-class SimpleWeekCalendar extends StatefulWidget {
-  final Set<DateTime>? markedDates;
+import '../../domain/entity/course_group_date_entity.dart';
 
-  const SimpleWeekCalendar({super.key, this.markedDates});
+class SimpleWeekCalendar extends StatefulWidget {
+  // final Set<DateTime>? markedDates;
+  final List<CourseGroupDateEntity> dates;
+  final ValueChanged<CourseGroupDateEntity>? onDateSelected;
+
+  const SimpleWeekCalendar({
+    super.key,
+    // this.markedDates,
+    required this.dates,
+    this.onDateSelected,
+  });
 
   @override
   State<SimpleWeekCalendar> createState() => _SimpleWeekCalendarState();
@@ -142,14 +151,30 @@ class _SimpleWeekCalendarState extends State<SimpleWeekCalendar> {
               child: Row(
                 spacing: appW(10),
                 children: monthDays.map((date) {
+                  CourseGroupDateEntity? courseDate;
+
+                  for (final item in widget.dates) {
+                    if (item.dateTime.year == date.year &&
+                        item.dateTime.month == date.month &&
+                        item.dateTime.day == date.day) {
+                      courseDate = item;
+                      break;
+                    }
+                  }
                   final isSelected = _isSameDay(date, selectedDate);
                   final isToday = _isSameDay(date, now);
 
                   return GestureDetector(
                     onTap: () {
+                      if (_isSameDay(selectedDate, date)) return;
+
                       setState(() {
                         selectedDate = date;
                       });
+
+                      if (courseDate != null) {
+                        widget.onDateSelected?.call(courseDate);
+                      }
                     },
                     child: Container(
                       width: appW(64),
@@ -189,10 +214,7 @@ class _SimpleWeekCalendarState extends State<SimpleWeekCalendar> {
                                   : AppColors.greyScale.grey600,
                             ),
                           ),
-                          if (widget.markedDates?.contains(
-                                DateTime(date.year, date.month, date.day),
-                              ) ??
-                              false)
+                          if (courseDate != null)
                             Container(
                               width: 4,
                               height: 4,

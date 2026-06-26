@@ -29,6 +29,8 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dom
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/lesson_items/lessons_items_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/lessons_topics/lessons_topics_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/offline_course/offline_course_use_case.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/offline_lessons/offline_lessons_use_case.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/scan_qr/scan_qr_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/about_course_features/about_cours_features_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/buy_course/buy_course_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/check_final_test_access/check_final_test_access_bloc.dart';
@@ -37,6 +39,8 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_items/course_lesson_items_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_topics/course_lesson_topics_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/offline_course/offline_course_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/offline_lessons/offline_lessons_blox.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/scan_qr/scan_qr_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
 import 'package:my_template/features/main_app/home/data/repo/home_repo_impl.dart';
 import 'package:my_template/features/main_app/home/data/source/impl_remote_data_source/home_remote_data_source_impl.dart';
@@ -276,6 +280,10 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => AddReviewFileUseCase(repository: sl()));
   //? User Certificates
   sl.registerLazySingleton(() => UserCertificateUseCase(repository: sl()));
+  //? scan qr
+  sl.registerLazySingleton(() => ScanQrUseCase(repository: sl()));
+  //? offline lessons
+  sl.registerLazySingleton(() => OfflineLessonsUseCase(repository: sl()));
 
   //! New Section
   //! Micro Data
@@ -358,6 +366,10 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => UploadReviewFileBloc(useCase: sl()));
   //? User certificates
   sl.registerLazySingleton(() => CertificateBloc(useCase: sl()));
+  //? scan qr
+  sl.registerLazySingleton(() => ScanQrBloc(sl()));
+  //? offline lessons
+  sl.registerLazySingleton(() => OfflineLessonsBloc(useCase: sl()));
 
   //! New Section
   //! Micro Data

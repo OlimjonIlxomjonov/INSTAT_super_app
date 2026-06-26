@@ -53,3 +53,15 @@ class CheckFinalTestAccessEvent extends CoursesEvent {
 }
 
 class OfflineCourseEvent extends CoursesEvent {}
+
+class ScanQrEvent extends CoursesEvent {
+  final ScanQrParams params;
+
+  ScanQrEvent({required this.params});
+}
+
+class OfflineLessonsEvent extends CoursesEvent {
+  final OfflineLessonsParams params;
+
+  OfflineLessonsEvent({required this.params});
+}

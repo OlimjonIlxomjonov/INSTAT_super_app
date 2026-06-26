@@ -68,8 +68,8 @@ class _TableEduPageState extends State<TableEduPage> {
         slivers: [
           SliverToBoxAdapter(
             child: layout == CalendarLayout.month
-                ? const SimpleMonthCalendar()
-                : const SimpleWeekCalendar(),
+                ? const SimpleMonthCalendar(dates: [])
+                : const SimpleWeekCalendar(dates: []),
           ),
 
           SliverPadding(

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -15,7 +14,6 @@ import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/general_widgets/online_book_wg/online_book_wg.dart';
-import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/core/utils/widgets/user_articles_with_bloc/user_articles_with_bloc_wg.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
@@ -223,7 +221,21 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
       BlocBuilder<PopularBooksBloc, PopularBooksState>(
         builder: (context, state) {
           final cardWidth = MediaQuery.sizeOf(context).width * 0.46;
-          final listHeight = cardWidth / 0.80 + 75;
+          final textScaler = MediaQuery.textScalerOf(context);
+          final titleLineHeight =
+              textScaler.scale(15) *
+              1.3; // line height multiplier for your font
+          final authorLineHeight = textScaler.scale(13) * 1.3;
+          final priceLineHeight = textScaler.scale(14) * 1.3;
+
+          final textBlockHeight =
+              authorLineHeight + 4 + titleLineHeight + priceLineHeight;
+          final listHeight =
+              cardWidth / 0.78 +
+              10 +
+              8 +
+              textBlockHeight +
+              2; // +6 safety margin
           if (state is PopularBooksLoaded && state.response.data.isNotEmpty) {
             final books = state.response.data;
             return SliverSafeArea(

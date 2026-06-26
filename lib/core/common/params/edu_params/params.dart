@@ -131,3 +131,20 @@ class PerCourseParams {
 
   PerCourseParams({required this.courseId});
 }
+
+//! scan qr
+class ScanQrParams {
+  final String id, groupId, barCode;
+
+  const ScanQrParams({
+    required this.id,
+    required this.groupId,
+    required this.barCode,
+  });
+}
+
+class OfflineLessonsParams {
+  final String id, groupId;
+
+  const OfflineLessonsParams({required this.id, required this.groupId});
+}

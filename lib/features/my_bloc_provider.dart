@@ -12,6 +12,8 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_items/course_lesson_items_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_topics/course_lesson_topics_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/offline_course/offline_course_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/offline_lessons/offline_lessons_blox.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/scan_qr/scan_qr_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_final_test/course_final_test_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/lesson_video_progress/lesson_video_progress_bloc.dart';
@@ -111,6 +113,12 @@ class MyBlocProvider extends StatelessWidget {
         //! New Section: Micro Data
         //? Reports
         BlocProvider<ReportsBloc>(create: (_) => sl<ReportsBloc>()),
+        //! scan qr
+        BlocProvider<ScanQrBloc>(create: (_) => sl<ScanQrBloc>()),
+        //! offline lessons
+        BlocProvider<OfflineLessonsBloc>(
+          create: (_) => sl<OfflineLessonsBloc>(),
+        ),
       ],
       child: child,
     );

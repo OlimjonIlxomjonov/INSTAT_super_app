@@ -238,6 +238,7 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                               ),
                             ),
                             SizedBox(height: 8),
+                            //! Confirm account
                             Container(
                               padding: EdgeInsets.all(4),
                               decoration: BoxDecoration(

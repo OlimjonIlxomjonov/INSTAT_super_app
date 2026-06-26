@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/ui_states/empty_state.dart';
-import 'package:my_template/core/utils/app_utils.dart';
-import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/offline_course/offline_course_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/offline_course/offline_course_state.dart';
@@ -35,7 +32,10 @@ class OfflineCoursesComponent extends StatelessWidget {
                     openMiniAppSheetFamily(
                       context,
                       showHandler: false,
-                      child: DetailedUserGroupComponent(courseName: item.name),
+                      child: DetailedUserGroupComponent(
+                        courseName: item.name,
+                        courseGroupId: item.id,
+                      ),
                     );
                   },
                   child: OfflineCourseWg(item: item),
@@ -48,6 +48,4 @@ class OfflineCoursesComponent extends StatelessWidget {
       },
     );
   }
-
-
 }
