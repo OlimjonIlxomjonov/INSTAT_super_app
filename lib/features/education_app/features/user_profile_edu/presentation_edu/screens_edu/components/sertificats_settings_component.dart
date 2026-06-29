@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
+import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/common/ui_states/empty_state.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
@@ -58,8 +59,10 @@ class _SertificatsSettingsComponentState
                   if (state is CertificateLoaded) {
                     if (state.response.data.isEmpty) {
                       return SliverToBoxAdapter(
-                        child: EmptyState(
-                          message: 'Sertificaklar mavjud emas!',
+                        child: AppEmptyState(
+                          title: 'Sizda hali sertifikatlar yoʻq',
+                          subtitle:
+                              'Ilk sertifikatingizni qoʻlga kiritish uchun yangi oʻquv yoʻnalishini boshlang.',
                         ),
                       );
                     }

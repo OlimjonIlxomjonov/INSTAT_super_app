@@ -65,14 +65,18 @@ class _StatsEduPageState extends State<StatsEduPage> {
                             items: data.sublist(0, 3),
                             fullNames: data
                                 .take(3)
-                                .map((e) =>
-                                    '${e.firstName.capitalize()} ${e.lastName.capitalize()}')
+                                .map(
+                                  (e) =>
+                                      '${e.firstName.capitalize()} ${e.lastName.capitalize()}',
+                                )
                                 .toList(),
                             thumbnails: data
                                 .take(3)
-                                .map((e) => e.avatar != null
-                                    ? 'https://test.avacoder.uz${e.avatar}'
-                                    : null)
+                                .map(
+                                  (e) => e.avatar != null
+                                      ? 'https://test.avacoder.uz${e.avatar}'
+                                      : null,
+                                )
                                 .toList(),
                             onTap: (rank) {
                               final item = data[rank];
@@ -113,92 +117,94 @@ class _StatsEduPageState extends State<StatsEduPage> {
                         if (index < 3) return const SizedBox.shrink();
 
                         // Regular card for the rest
-                      return GestureDetector(
-                        onTap: onTap,
-                        child: Skeletonizer(
-                          enabled: isLoading,
-                          child: Container(
-                            margin: EdgeInsets.only(
-                              left: appW(20),
-                              right: appW(20),
-                              bottom: appH(12),
-                            ),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: appW(12),
-                              vertical: appH(8),
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: AppColors.greyScale.grey200,
+                        return GestureDetector(
+                          onTap: onTap,
+                          child: Skeletonizer(
+                            enabled: isLoading,
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                left: appW(20),
+                                right: appW(20),
+                                bottom: appH(12),
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: appW(12),
+                                vertical: appH(8),
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: AppColors.greyScale.grey200,
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    '#${index + 1}',
+                                    style: AppTextStyles.source.regular(
+                                      fontSize: 13,
+                                      color: AppColors.greyScale.grey600,
+                                    ),
+                                  ),
+                                  SizedBox(width: appW(10)),
+                                  CircleAvatar(
+                                    backgroundColor:
+                                        AppColors.greyScale.grey300,
+                                    radius: 30,
+                                    foregroundImage: thumbnail != null
+                                        ? NetworkImage(thumbnail)
+                                        : null,
+                                    child: thumbnail == null
+                                        ? Icon(
+                                            Icons.person,
+                                            color: AppColors.greyScale.grey800,
+                                            size: 28,
+                                          )
+                                        : null,
+                                  ),
+                                  SizedBox(width: appW(12)),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          fullName,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: AppTextStyles.source.medium(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        Text(
+                                          item.email,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: AppTextStyles.source.regular(
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(width: appW(12)),
+                                  Text(
+                                    item.scoreSum.toString(),
+                                    style: AppTextStyles.source.medium(
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    size: 20,
+                                    color: AppColors.orange,
+                                  ),
+                                ],
                               ),
                             ),
-                            child: Row(
-                              children: [
-                                Text(
-                                  '#${index + 1}',
-                                  style: AppTextStyles.source.regular(
-                                    fontSize: 13,
-                                    color: AppColors.greyScale.grey600,
-                                  ),
-                                ),
-                                SizedBox(width: appW(10)),
-                                CircleAvatar(
-                                  radius: 30,
-                                  foregroundImage: thumbnail != null
-                                      ? NetworkImage(thumbnail)
-                                      : null,
-                                  child: thumbnail == null
-                                      ? Icon(
-                                          Icons.person,
-                                          color: AppColors.greyScale.grey800,
-                                          size: 28,
-                                        )
-                                      : null,
-                                ),
-                                SizedBox(width: appW(12)),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        fullName,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: AppTextStyles.source.medium(
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                      Text(
-                                        item.email,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: AppTextStyles.source.regular(
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(width: appW(12)),
-                                Text(
-                                  item.scoreSum.toString(),
-                                  style: AppTextStyles.source.medium(
-                                    fontSize: 13,
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.star,
-                                  size: 20,
-                                  color: AppColors.orange,
-                                ),
-                              ],
-                            ),
                           ),
-                        ),
-                      );
-                    }),
+                        );
+                      }),
                     ],
                   );
                 },

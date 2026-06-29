@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/ui_states/empty_state.dart';
+import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/widgets/comment_section/user_comments_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
@@ -57,10 +58,20 @@ class _CourseCommentsTabState extends State<CourseCommentsTab>
                 return SizedBox(width: 200, child: EmptyState());
               }
 
-              return Column(
-                children: List.generate(data.length, (index) {
-                  return UserCommentsWg(entity: data[index]);
-                }),
+              return SizedBox(
+                height: 200,
+                child: ListView.separated(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: data.length,
+                  separatorBuilder: (_, __) => const SizedBox(width: 12),
+                  itemBuilder: (context, index) {
+                    return SizedBox(
+                      width: appW(320),
+                      child: UserCommentsWg(entity: data[index]),
+                    );
+                  },
+                ),
               );
             }
             return SizedBox.shrink();

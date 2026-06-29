@@ -352,7 +352,11 @@ class _AuthorCardWg extends StatelessWidget {
       child: Row(
         spacing: 12,
         children: [
-          const CircleAvatar(radius: 25, child: Icon(Icons.person)),
+          CircleAvatar(
+            radius: 25,
+            backgroundColor: AppColors.greyScale.grey300,
+            child: Icon(Icons.person, color: AppColors.greyScale.grey600),
+          ),
           Expanded(
             child: Column(
               spacing: 4,

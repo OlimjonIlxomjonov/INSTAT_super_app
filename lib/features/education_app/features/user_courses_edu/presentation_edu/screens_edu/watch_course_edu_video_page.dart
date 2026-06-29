@@ -341,6 +341,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        SizedBox(height: 10),
                         Text(
                           widget.title,
                           style: AppTextStyles.source.medium(fontSize: 20),
@@ -600,6 +601,7 @@ class _VideoAreaWidget extends StatelessWidget {
 
   Widget _buildNoVideoWidget(BuildContext context) {
     return Container(
+      width: double.infinity,
       color: AppColors.greyScale.grey100,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

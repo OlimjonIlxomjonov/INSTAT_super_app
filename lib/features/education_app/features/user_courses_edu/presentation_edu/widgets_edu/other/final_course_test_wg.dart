@@ -48,6 +48,7 @@ class FinalCourseTestWg extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Umumiy test savollari', style: CustomTextStyles.h3),
+
                   Icon(
                     IconlyLight.arrow_right_2,
                     color: AppColors.greyScale.grey400,
@@ -62,7 +63,6 @@ class FinalCourseTestWg extends StatelessWidget {
             previous is! CheckFinalTestAccessLoaded,
         listener: (context, state) {
           if (state is CheckFinalTestAccessLoaded && state.entity.ok == true) {
-            // Navigate using a full page route, but animate it from bottom to top like a bottom sheet
             Navigator.of(context, rootNavigator: true).push(
               PageRouteBuilder(
                 pageBuilder: (context, animation, secondaryAnimation) =>

@@ -2,6 +2,7 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:iconly/iconly.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
@@ -91,14 +92,28 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _buildColumn(
-              title: '$percentage%',
+              title: Text(
+                "$percentage%",
+                style: AppTextStyles.source.medium(fontSize: 20),
+              ),
               subTitle: '${state.totalQuestions - state.correctAnswers} ta',
+              textColor: AppColors.redFailedTaskCard,
             ),
             _buildColumn(
-              title: '${state.correctAnswers} ⭐',
+              title: Row(
+                children: [
+                  Text(
+                    state.correctAnswers.toString(),
+                    style: AppTextStyles.source.medium(fontSize: 20),
+                  ),
+
+                  Icon(IconlyBold.star, color: AppColors.yellow500),
+                ],
+              ),
               subTitle: '${state.correctAnswers} ta',
               titleDesc: 'To’g’ri javoblar',
               subTitleDesc: 'Berilgan ball',
+              textColor: AppColors.greenDoneTaskCard,
             ),
           ],
         ),
@@ -120,15 +135,16 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
   }
 
   Column _buildColumn({
-    required String title,
+    required Widget title,
     required String subTitle,
     String titleDesc = 'Noto’g’ri javob',
     String subTitleDesc = 'Tugatish foizi',
+    Color? textColor,
   }) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(title, style: AppTextStyles.source.medium(fontSize: 20)),
+        title,
         Text(
           subTitleDesc,
           style: AppTextStyles.source.regular(
@@ -137,7 +153,10 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
           ),
         ),
         SizedBox(height: appH(12)),
-        Text(subTitle, style: AppTextStyles.source.medium(fontSize: 20)),
+        Text(
+          subTitle,
+          style: AppTextStyles.source.medium(fontSize: 20, color: textColor),
+        ),
         Text(
           titleDesc,
           style: AppTextStyles.source.regular(

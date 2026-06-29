@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
+import 'package:my_template/core/common/flush_bar/success_flush_bar.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
@@ -16,10 +17,12 @@ import 'package:my_template/features/main_app/home/presentation/bloc/avatar/avat
 import 'package:my_template/features/main_app/home/presentation/bloc/home_event.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_state.dart';
+import 'package:my_template/features/main_app/home/presentation/screens/drawer/my_id_configs/my_id_conf.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
 
+import '../../../../../../../core/utils/logger/logger.dart';
 import '../../../../../../education_app/features/statistics_edu/presentation_edu/widgets_edu/avatar_view_wg.dart';
 
 class UserAvatarComponent extends StatefulWidget {
@@ -239,30 +242,47 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                             ),
                             SizedBox(height: 8),
                             //! Confirm account
-                            Container(
-                              padding: EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                color: AppColors.orange50,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                spacing: 5,
-                                children: [
-                                  Icon(
-                                    IconlyLight.danger,
-                                    color: AppColors.orange500,
-                                  ),
-                                  AutoSizeText(
-                                    AppLocalizations.of(
-                                      context,
-                                    )!.accountConfirm,
-                                    style: AppTextStyles.source.medium(
-                                      fontSize: 13,
+                            GestureDetector(
+                              onTap: () async {
+                                final startFaceVerification = MyIdConf();
+
+                                final success = await startFaceVerification
+                                    .startFaceVerification(context);
+                                logger.f('Raw MyID result: $success');
+
+                                if (success) {
+                                  // context.read<SelfInfoBloc>().add(
+                                  //   SelfInfoEvent(),
+                                  // );
+                                  successFlushBar(context, 'Success!');
+                                }
+                                return;
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: AppColors.orange50,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  spacing: 5,
+                                  children: [
+                                    Icon(
+                                      IconlyLight.danger,
                                       color: AppColors.orange500,
                                     ),
-                                  ),
-                                ],
+                                    AutoSizeText(
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.accountConfirm,
+                                      style: AppTextStyles.source.medium(
+                                        fontSize: 13,
+                                        color: AppColors.orange500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],

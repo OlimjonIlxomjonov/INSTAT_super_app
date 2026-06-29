@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/widgets/comment_section/user_comments_wg.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/entity/comments/comments_entity.dart';
-import 'package:my_template/features/education_app/features/home_edu/domain/entity/comments/comments_response.dart';
+
+import '../../../../../../../../core/utils/constants/textstyles/app_text_style.dart';
 
 class SeeAllCourseComments extends StatelessWidget {
   final List<CommentsEntity> response;
@@ -11,12 +12,33 @@ class SeeAllCourseComments extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: SingleChildScrollView(
-        child: Column(
-          children: List.generate(response.length, (index) {
-            return UserCommentsWg(entity: response[index]);
-          }),
-        ),
+      child: CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: .only(left: 20, bottom: 20),
+            sliver: SliverToBoxAdapter(
+              child: Text(
+                'Qoldirilgan izohlar',
+                style: AppTextStyles.source.medium(fontSize: 18),
+              ),
+            ),
+          ),
+          SliverFillRemaining(
+            child: ListView.builder(
+              itemCount: response.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(
+                    left: 20,
+                    right: 20,
+                    bottom: 10,
+                  ),
+                  child: UserCommentsWg(entity: response[index]),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

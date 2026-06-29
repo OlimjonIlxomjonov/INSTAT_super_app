@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
 import 'package:my_template/core/utils/app_utils.dart';
-import 'package:my_template/core/utils/constants/colors/app_colors.dart';
-import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
-import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/entity/comments/comments_entity.dart';
 
 class UserCommentsWg extends StatelessWidget {
@@ -18,7 +16,7 @@ class UserCommentsWg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: .only(bottom: 9, left: 8, right: 10),
+      // margin: .only(left: 20),
       padding: .all(12),
       decoration: BoxDecoration(
         color: AppColors.greyScale.grey50,
@@ -52,9 +50,21 @@ class UserCommentsWg extends StatelessWidget {
                 color: AppColors.greyScale.grey600,
               ),
             ),
-            trailing: Text(
-              '${entity.stars} ⭐',
-              style: AppTextStyles.source.medium(fontSize: 15),
+            trailing: TextButton.icon(
+              onPressed: null,
+              style: TextButton.styleFrom(
+                padding: .zero,
+                minimumSize: Size(0, 0),
+              ),
+              iconAlignment: .end,
+              icon: Icon(IconlyBold.star, color: AppColors.yellow500),
+              label: Text(
+                '${entity.stars}',
+                style: AppTextStyles.source.medium(
+                  fontSize: 15,
+                  color: AppColors.black,
+                ),
+              ),
             ),
           ),
           SizedBox(height: appH(8)),

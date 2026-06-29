@@ -63,7 +63,7 @@ class CourseVideoBriefTileWg extends StatelessWidget {
           },
         ),
 
-        /// Course final test
+        //! Course final test
         FinalCourseTestWg(courseId: courseId),
       ],
     );
