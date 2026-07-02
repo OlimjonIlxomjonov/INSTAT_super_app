@@ -8,4 +8,7 @@ abstract class HomeRemoteDataSource {
   Future<CourseListResponseModel> fetchCourses();
 
   Future<void> postModelAvatar({required AvatarParams params});
+
+  //! face rec
+  Future<void> faceRec({required FaceRecParams params});
 }

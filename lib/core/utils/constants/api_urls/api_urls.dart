@@ -83,4 +83,7 @@ class ApiUrls {
   //! Micro Data
   //? Reports
   static const reports = 'data-reports/';
+
+  //! Face Recognition
+  static const faceRec = 'face-recognition/my-id';
 }

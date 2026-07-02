@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
+import 'package:my_template/core/utils/widgets/app_widgets.dart';
+import 'package:my_template/features/online_library_app/features/user_online_book_profile_lib/presentation_lib/screens_lib/components/saved_books_component.dart';
+
+import '../../../../../../core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 
 class UserOnlineBookProfileLib extends StatefulWidget {
   const UserOnlineBookProfileLib({super.key});
@@ -23,7 +28,7 @@ class _UserOnlineBookProfileLibState extends State<UserOnlineBookProfileLib> {
     super.didChangeDependencies();
     _leadingIcons = [
       IconlyLight.heart,
-      IconlyLight.message,
+      IconlyLight.chat,
       IconlyLight.location,
       LineIcons.history,
     ];
@@ -51,7 +56,7 @@ class _UserOnlineBookProfileLibState extends State<UserOnlineBookProfileLib> {
                   ),
                 ),
                 child: ListTile(
-                  onTap: () {},
+                  onTap: () => _navigateTo(index),
                   contentPadding: AppPadding.horizontal20x(),
                   leading: Icon(
                     _leadingIcons[index],
@@ -76,5 +81,18 @@ class _UserOnlineBookProfileLibState extends State<UserOnlineBookProfileLib> {
         ],
       ),
     );
+  }
+
+  void _navigateTo(int index) {
+    switch (index) {
+      case 0:
+        openMiniAppSheetFamily(
+          context,
+          child: SavedBooksComponent(),
+          showHandler: false,
+        );
+      default:
+        errorFlushBar(context, 'Tez Orada!');
+    }
   }
 }

@@ -49,11 +49,16 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
                     margin: .only(left: 8, top: 8),
                     decoration: BoxDecoration(
                       borderRadius: .circular(12),
-                      color: AppColors.white,
+                      color: AppColors.white.withValues(alpha: 0.7),
                     ),
                     child: Row(
                       children: [
-                        Icon(Icons.star, color: AppColors.yellow),
+                        Icon(
+                          IconlyBold.star,
+                          color: AppColors.orange500,
+                          size: 18,
+                        ),
+                        SizedBox(width: 3),
                         Text(widget.data.ratingsCount.toString()),
                       ],
                     ),
@@ -91,13 +96,13 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
           Row(
             spacing: 5,
             children: [
-              Icon(IconlyLight.time_circle),
+              Icon(IconlyLight.time_circle, size: 18),
               AutoSizeText(
                 formatDuration(widget.data.totalDuration),
                 style: AppTextStyles.source.regular(fontSize: 13),
               ),
               SizedBox(width: appW(12)),
-              Icon(IconlyLight.document),
+              Icon(IconlyLight.document, size: 18),
               AutoSizeText(
                 "${widget.data.lessonsCount} ta dars",
                 style: AppTextStyles.source.regular(fontSize: 13),

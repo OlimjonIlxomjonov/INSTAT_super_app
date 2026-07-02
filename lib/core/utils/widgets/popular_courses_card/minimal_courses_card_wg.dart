@@ -61,16 +61,16 @@ class MinimalCoursesCardWg extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        Container(
-                          padding: EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: AppColors.greyScale.grey200,
-                            ),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Icon(IconlyLight.heart),
-                        ),
+                        // Container(
+                        //   padding: EdgeInsets.all(2),
+                        //   decoration: BoxDecoration(
+                        //     border: Border.all(
+                        //       color: AppColors.greyScale.grey200,
+                        //     ),
+                        //     borderRadius: BorderRadius.circular(6),
+                        //   ),
+                        //   child: Icon(IconlyLight.heart),
+                        // ),
                       ],
                     ),
                     Text(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 class NoParams {}
 
 class UserCoursesParams {
@@ -147,4 +149,12 @@ class OfflineLessonsParams {
   final String id, groupId;
 
   const OfflineLessonsParams({required this.id, required this.groupId});
+}
+
+//! face rec
+class FaceRecParams {
+  final String code;
+  final File imgPath;
+
+  FaceRecParams({required this.code, required this.imgPath});
 }

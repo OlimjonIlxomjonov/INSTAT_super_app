@@ -45,7 +45,7 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                 Row(
                   spacing: 5,
                   children: [
-                    const Icon(Icons.star, color: AppColors.orange),
+                    Icon(IconlyBold.star, color: AppColors.orange, size: 17),
                     Text(
                       "${data.ratingsCount ?? 0}",
                       style: AppTextStyles.source.medium(
@@ -57,6 +57,7 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                     Icon(
                       IconlyLight.document,
                       color: AppColors.greyScale.grey600,
+                      size: 17,
                     ),
                     Text(
                       '${data.lessonsCount} ta',
@@ -69,6 +70,7 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                     Icon(
                       IconlyLight.time_circle,
                       color: AppColors.greyScale.grey600,
+                      size: 17,
                     ),
                     Text(
                       formatDuration(data.totalDuration),

@@ -98,4 +98,29 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       rethrow;
     }
   }
+
+  @override
+  Future<void> faceRec({required FaceRecParams params}) async {
+    try {
+      final formData = FormData.fromMap({
+        "code": params.code,
+        "image": await MultipartFile.fromFile(
+          params.imgPath.path,
+          filename: "myid_image.jpg",
+        ),
+      });
+
+      final response = await _dioClient.post(ApiUrls.faceRec, data: formData);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i("Success! ${response.data}");
+      } else {
+        throw Exception(
+          'Thrown Exception: ${response.data} ${response.statusCode} ',
+        );
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
 }

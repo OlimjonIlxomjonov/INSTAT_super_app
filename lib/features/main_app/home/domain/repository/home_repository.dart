@@ -9,4 +9,7 @@ abstract class HomeRepository {
 
   /// pick the avatar
   Future<void> postAvatar({required AvatarParams params});
+
+  //! Face Recognition
+  Future<void> faceRecognition({required FaceRecParams params});
 }

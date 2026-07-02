@@ -2,7 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
+import 'package:my_template/core/common/params/edu_params/params.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/home_event.dart';
 import 'package:myid/enums.dart';
 import 'package:myid/myid.dart';
 import 'package:myid/myid_config.dart';
@@ -36,6 +40,7 @@ class MyIdConf {
       logger.f("Base64 length: ${result.base64?.length}");
 
       final raw = cleanBase64(result.base64);
+      logger.f(raw);
       if (raw == null || raw.isEmpty) {
         logger.e(" No image in MyID result");
         return false;
@@ -48,9 +53,11 @@ class MyIdConf {
 
       logger.f("Image saved at: ${file.path}");
 
-      // context.read<FaceRecMyIdBloc>().add(
-      //   FaceRecMyIdEvent(result.code ?? '', file),
-      // );
+      context.read<FaceRecBloc>().add(
+        FaceRecEvent(
+          params: FaceRecParams(code: result.code ?? '', imgPath: file),
+        ),
+      );
       logger.f("code: ${result.code}");
       return true;
     } on PlatformException catch (e) {
@@ -71,6 +78,6 @@ class MyIdConf {
         .replaceAll(" ", "")
         .replaceAll("-", "+")
         .replaceAll("_", "/")
-        .replaceAll(RegExp(r"^data:image\/[a-z]+;base64,"), "");
+        .replaceAll(RegExp(r"^data:image/[a-z]+;base64,"), "");
   }
 }

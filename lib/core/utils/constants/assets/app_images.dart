@@ -8,11 +8,18 @@ abstract class AppImages {
   static const baseHomePath = 'assets/home_page/';
 
   // images
-  // onboarding
-  static const firstOnboarding = '${baseOnboardingPath}c_onboarding_1$format';
-  static const secondOnboarding = '${baseOnboardingPath}c_onboarding_2$format';
-  static const thirdOnboarding = '${baseOnboardingPath}c_onboarding_3$format';
-  static const fourthOnboarding = '${baseOnboardingPath}c_onboarding_4$format';
+  //? onboarding without screen
+  // static const firstOnboarding = '${baseOnboardingPath}c_onboarding_1$format';
+  // static const secondOnboarding = '${baseOnboardingPath}c_onboarding_2$format';
+  // static const thirdOnboarding = '${baseOnboardingPath}c_onboarding_3$format';
+  // static const fourthOnboarding = '${baseOnboardingPath}c_onboarding_4$format';
+  static const fifthOnboarding = '${baseOnboardingPath}c_onboarding_5$format';
+
+  //? onboarding with screen
+  static const firstOnboarding = '${baseOnboardingPath}onboarding-1$format';
+  static const secondOnboarding = '${baseOnboardingPath}onboarding-2$format';
+  static const thirdOnboarding = '${baseOnboardingPath}onboarding-3$format';
+  static const fourthOnboarding = '${baseOnboardingPath}onboarding-4$format';
   static const onboardingLogIn = '${baseOnboardingPath}onboarding_bg_image.svg';
 
   /// HOME PAGE

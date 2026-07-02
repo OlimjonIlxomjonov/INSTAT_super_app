@@ -59,7 +59,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             padding: EdgeInsets.only(bottom: appH(80)),
             child: PageView(
               onPageChanged: (int index) {
-                _isLastPage.value = index == 3;
+                _isLastPage.value = index == 4;
               },
               controller: pageController,
               children: [
@@ -87,6 +87,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   imagePath: AppImages.fourthOnboarding,
                   imageWidthDivider: 1.1,
                 ),
+                OnboardingWg(
+                  title: 'Orzuingizdagi ishni toping',
+                  subTitle:
+                      'Eng so‘nggi vakansiyalarni ko‘rib chiqing va o‘zingizga mos ishni toping.',
+                  imagePath: AppImages.fifthOnboarding,
+                  imageWidthDivider: 1,
+                ),
               ],
             ),
           ),
@@ -103,7 +110,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               children: [
                 SmoothPageIndicator(
                   controller: pageController,
-                  count: 4,
+                  count: 5,
                   effect: ExpandingDotsEffect(
                     activeDotColor: AppColors.primaryColor,
                     expansionFactor: 2,
@@ -127,7 +134,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             backgroundColor: AppColors.greyScale.grey50,
                             foregroundColor: AppColors.greyScale.grey600,
                           ),
-                          onPressed: () => pageController.jumpToPage(3),
+                          onPressed: () => pageController.jumpToPage(4),
                           child: AutoSizeText(localization.skipOnboarding),
                         ),
                         ElevatedButton(

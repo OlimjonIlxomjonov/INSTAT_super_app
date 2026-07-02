@@ -13,3 +13,10 @@ class AvatarEvent extends HomeEvent {
 
   AvatarEvent({required this.params});
 }
+
+//! face rec
+class FaceRecEvent extends HomeEvent {
+  final FaceRecParams params;
+
+  FaceRecEvent({required this.params});
+}

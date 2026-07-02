@@ -40,27 +40,34 @@ class ExpandedCoursesCardWg extends StatelessWidget {
                   children: [
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      margin: EdgeInsets.only(left: appW(12), top: appH(12)),
+                      margin: const EdgeInsets.only(left: 12, top: 12),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color: AppColors.white,
+                        color: AppColors.white.withValues(alpha: 0.7),
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.star, color: AppColors.yellow),
+                          //! star/ rating
+                          Icon(
+                            IconlyBold.star,
+                            color: AppColors.orange500,
+                            size: 18,
+                          ),
                           Text(" ${entity.ratingsCount ?? 0}"),
                         ],
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      margin: EdgeInsets.only(right: appW(12), top: appH(12)),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: AppColors.white,
-                      ),
-                      child: Icon(IconlyLight.heart),
-                    ),
+                    //! heart icon
+
+                    // Container(
+                    //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    //   margin: EdgeInsets.only(right: appW(12), top: appH(12)),
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(12),
+                    //     color: AppColors.white,
+                    //   ),
+                    //   child: Icon(IconlyLight.heart),
+                    // ),
                   ],
                 ),
               ],

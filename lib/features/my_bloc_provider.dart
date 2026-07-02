@@ -19,6 +19,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/lesson_video_progress/lesson_video_progress_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/avatar/avatar_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart';
@@ -119,6 +120,8 @@ class MyBlocProvider extends StatelessWidget {
         BlocProvider<OfflineLessonsBloc>(
           create: (_) => sl<OfflineLessonsBloc>(),
         ),
+        //! face Rec
+        BlocProvider<FaceRecBloc>(create: (_) => sl<FaceRecBloc>()),
       ],
       child: child,
     );

@@ -48,11 +48,13 @@ import 'package:my_template/features/main_app/home/data/source/remote_data_sourc
 import 'package:my_template/features/main_app/home/domain/repository/home_repository.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/avatar/avatar_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/courses/courses_use_case.dart';
+import 'package:my_template/features/main_app/home/domain/usecase/face_rec/face_rec_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/user_me/user_me_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/search_courses/search_courses_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/search_courses/search_courses_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/avatar/avatar_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/course_lesson_test/get_lesson_tests_usecase.dart';
@@ -284,7 +286,8 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => ScanQrUseCase(repository: sl()));
   //? offline lessons
   sl.registerLazySingleton(() => OfflineLessonsUseCase(repository: sl()));
-
+  //? Face Recognition
+  sl.registerLazySingleton(() => FaceRecUseCase(repository: sl()));
   //! New Section
   //! Micro Data
   //? Reports
@@ -370,6 +373,8 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => ScanQrBloc(sl()));
   //? offline lessons
   sl.registerLazySingleton(() => OfflineLessonsBloc(useCase: sl()));
+  //? Face Recognition
+  sl.registerLazySingleton(() => FaceRecBloc(useCase: sl()));
 
   //! New Section
   //! Micro Data

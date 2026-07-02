@@ -24,4 +24,9 @@ class HomeRepoImpl implements HomeRepository {
   Future<void> postAvatar({required AvatarParams params}) {
     return _remoteDataSource.postModelAvatar(params: params);
   }
+
+  @override
+  Future<void> faceRecognition({required FaceRecParams params}) {
+    return _remoteDataSource.faceRec(params: params);
+  }
 }
