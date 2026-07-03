@@ -29,4 +29,15 @@ class HomeRepoImpl implements HomeRepository {
   Future<void> faceRecognition({required FaceRecParams params}) {
     return _remoteDataSource.faceRec(params: params);
   }
+
+  @override
+  Future<String> getMyIdSessionId({
+    required String birthDate,
+    required String passportData,
+  }) {
+    return _remoteDataSource.fetchMyIdSessionId(
+      birthDate: birthDate,
+      passportData: passportData,
+    );
+  }
 }

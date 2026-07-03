@@ -20,3 +20,15 @@ class FaceRecEvent extends HomeEvent {
 
   FaceRecEvent({required this.params});
 }
+
+class GetMyIdSessionEvent extends HomeEvent {
+  final String birthDate;
+  final String passportData;
+
+  GetMyIdSessionEvent({
+    required this.birthDate,
+    required this.passportData,
+  });
+}
+
+class ResetFaceRecEvent extends HomeEvent {}

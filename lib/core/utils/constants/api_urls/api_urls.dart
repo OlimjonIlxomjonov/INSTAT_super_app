@@ -85,5 +85,6 @@ class ApiUrls {
   static const reports = 'data-reports/';
 
   //! Face Recognition
-  static const faceRec = 'face-recognition/my-id';
+  static const faceRec = 'my-id/accept';
+  static const myIdSession = 'my-id/get-session-id';
 }

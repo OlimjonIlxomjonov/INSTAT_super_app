@@ -61,21 +61,6 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
 
     return Stack(
       children: [
-        // Stack(
-        //   children: [
-        //     Positioned.fill(
-        //       child: Align(
-        //         alignment: .center,
-        //         child: SvgPicture.asset(AppVectors.mainAppLogo),
-        //       ),
-        //     ),
-        //     ConstrainedBox(
-        //       constraints: BoxConstraints(minWidth: double.infinity),
-        //       child: SvgPicture.asset(AppImages.onboardingLogIn, fit: .cover),
-        //     ),
-        //   ],
-        // ),
-
         /// CONTENT
         Align(
           alignment: .bottomCenter,

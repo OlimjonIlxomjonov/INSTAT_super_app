@@ -12,4 +12,9 @@ abstract class HomeRepository {
 
   //! Face Recognition
   Future<void> faceRecognition({required FaceRecParams params});
+
+  Future<String> getMyIdSessionId({
+    required String birthDate,
+    required String passportData,
+  });
 }

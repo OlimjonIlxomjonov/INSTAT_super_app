@@ -11,4 +11,9 @@ abstract class HomeRemoteDataSource {
 
   //! face rec
   Future<void> faceRec({required FaceRecParams params});
+
+  Future<String> fetchMyIdSessionId({
+    required String birthDate,
+    required String passportData,
+  });
 }

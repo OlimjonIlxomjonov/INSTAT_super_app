@@ -20,13 +20,15 @@ class MyIdConf {
   static const String _clientHash =
       'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp64tPQLPNz+q9N6qc3ZFnJYRhFBhKsKc07bUT5aahz+QSny9u94+gcEIhMJeyFID8NeWCiUPAyntOWhWQl6JQfe+GyxAfyHPbfYNsCh+FxICwzdBo/P4q0wco8g6kQpbLxlrJO9MAC/JnG4itnOuD6tc1hDMi/pQjoJzd8eT8mWCmSxzcGKRy5uyBPtW19I9PZ2ZgPCvMbxfQULUSSPWDuTgFQAhCXOxja1dywORZkFVYFpi2+LeJ+bR+btk8wOeLJ6gm8/+E1QkxRLnH8cou8suaOa1aqJemXPLsdDkgjhIpbPgjGPW8Q3sVSxGsDZUi6dzbdRXRDHHYhpPlMvjFwIDAQAB';
 
-  Future<bool> startFaceVerification(BuildContext context) async {
+  Future<bool> startFaceVerification(
+    BuildContext context, {
+    required String sessionId,
+  }) async {
     try {
       final result = await MyIdClient.start(
         //! Production
         config: MyIdConfig(
-          // sessionId: _clientHashId,
-          clientId: _clientId,
+          sessionId: sessionId,
           clientHash: _clientHash,
           clientHashId: _clientHashId,
           environment: MyIdEnvironment.DEBUG,
@@ -61,8 +63,10 @@ class MyIdConf {
       logger.f("code: ${result.code}");
       return true;
     } on PlatformException catch (e) {
-      errorFlushBar(context, e.message ?? "Verification failed");
       logger.e('${e.message ?? "Verification failed"} ');
+      if (context.mounted) {
+        errorFlushBar(context, e.message ?? "Verification failed");
+      }
       return false;
     } catch (e, st) {
       logger.e("Unexpected error: $e\n$st");

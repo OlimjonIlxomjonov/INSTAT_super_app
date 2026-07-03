@@ -18,6 +18,8 @@ import 'package:my_template/features/main_app/home/presentation/bloc/home_event.
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_state.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/drawer/my_id_configs/my_id_conf.dart';
+import 'package:my_template/features/main_app/home/presentation/screens/drawer/components/my_id_form_bottom_sheet.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
@@ -244,17 +246,22 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                             //! Confirm account
                             GestureDetector(
                               onTap: () async {
-                                final startFaceVerification = MyIdConf();
+                                final success = await showModalBottomSheet<bool>(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  builder: (context) => const MyIdFormBottomSheet(),
+                                );
 
-                                final success = await startFaceVerification
-                                    .startFaceVerification(context);
-                                logger.f('Raw MyID result: $success');
+                                logger.f('MyID form result: $success');
 
-                                if (success) {
-                                  // context.read<SelfInfoBloc>().add(
-                                  //   SelfInfoEvent(),
-                                  // );
-                                  successFlushBar(context, 'Success!');
+                                if (context.mounted) {
+                                  context.read<FaceRecBloc>().add(ResetFaceRecEvent());
+                                }
+
+                                if (success == true) {
+                                  if (context.mounted) {
+                                    successFlushBar(context, 'Success!');
+                                  }
                                 }
                                 return;
                               },

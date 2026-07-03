@@ -123,4 +123,39 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       rethrow;
     }
   }
+
+  @override
+  Future<String> fetchMyIdSessionId({
+    required String birthDate,
+    required String passportData,
+  }) async {
+    try {
+      final data = {"birth_date": birthDate, "pass_data": passportData};
+
+      final response = await _dioClient.post(ApiUrls.myIdSession, data: data);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i("MyID session response: ${response.data}");
+        final responseData = response.data;
+        if (responseData is Map) {
+          final sessionId =
+              responseData['session_id'] ??
+              responseData['sessionId'] ??
+              responseData['data']?['session_id'] ??
+              responseData['data']?['sessionId'];
+          if (sessionId != null) {
+            return sessionId.toString();
+          }
+        }
+        throw Exception("Session ID not found in response payload.");
+      } else {
+        throw ServerException(
+          statusCode: response.statusCode,
+          message: response.statusMessage,
+        );
+      }
+    } catch (e) {
+      logger.e("Failed to fetch MyID session ID: $e");
+      rethrow;
+    }
+  }
 }

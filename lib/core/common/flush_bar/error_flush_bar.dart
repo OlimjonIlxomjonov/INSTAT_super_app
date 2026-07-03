@@ -18,11 +18,11 @@ void errorFlushBar(BuildContext context, String message) {
       ),
     ),
     backgroundColor: AppColors.redFailedTaskCard.withValues(alpha: 0.7),
-    duration: const Duration(seconds: 2),
+    duration: const Duration(seconds: 3),
     flushbarPosition: FlushbarPosition.TOP,
     icon: Lottie.asset(AppAnimations.errorState, repeat: false),
     margin: const EdgeInsets.all(8),
-    padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20),
+    padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 10),
     borderRadius: BorderRadius.circular(8),
   );
 
