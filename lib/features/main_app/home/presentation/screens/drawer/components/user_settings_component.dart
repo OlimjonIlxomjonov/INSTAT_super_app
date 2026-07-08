@@ -31,10 +31,9 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
 
     return Column(
       crossAxisAlignment: .start,
-
       children: [
         Padding(
-          padding: .only(left: 20, top: 10),
+          padding: .only(left: 20),
           child: AutoSizeText(
             localization.accountInfo,
             style: AppTextStyles.source.medium(fontSize: isMobile ? 16 : 24),

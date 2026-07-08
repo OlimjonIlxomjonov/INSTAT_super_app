@@ -87,6 +87,7 @@ class SubmitLessonTestAnswerParams {
   final int lessonId;
   final int testId;
   final int optionId; // Sent as "lesson_test_option" in body
+  final String? image;
 
   SubmitLessonTestAnswerParams({
     required this.courseId,
@@ -94,6 +95,7 @@ class SubmitLessonTestAnswerParams {
     required this.lessonId,
     required this.testId,
     required this.optionId,
+    this.image,
   });
 }
 

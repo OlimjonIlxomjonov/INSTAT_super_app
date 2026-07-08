@@ -11,7 +11,7 @@ enum _AuthState { loading, idle, error }
 class OneIdLoginPage extends StatefulWidget {
   final OneIdAuthService authService;
   final VoidCallback onSuccess;
-  final VoidCallback? onFailure;
+  final void Function(Exception error)? onFailure;
 
   const OneIdLoginPage({
     super.key,
@@ -73,13 +73,14 @@ class _OneIdLoginPageState extends State<OneIdLoginPage> {
         try {
           await widget.authService.handleAuthSuccess(code);
           widget.onSuccess();
-        } catch (e) {
+        } on Exception catch (e) {
           logger.e('Auth handling failed: $e');
-          widget.onFailure?.call();
+          widget.onFailure?.call(e);
         }
       } else {
-        logger.w('Redirect hit but no code found: $url');
-        widget.onFailure?.call();
+        widget.onFailure?.call(
+          Exception('Authorization code was not returned.'),
+        );
       }
 
       return NavigationDecision.prevent;

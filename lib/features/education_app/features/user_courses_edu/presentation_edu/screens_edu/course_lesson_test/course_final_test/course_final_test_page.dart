@@ -7,7 +7,10 @@ import 'package:lottie/lottie.dart';
 import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/routes/route_generator.dart';
+import 'package:my_template/core/services/camera_service.dart';
 import 'package:my_template/core/utils/constants/assets/app_animations.dart';
+import 'package:my_template/core/utils/logger/logger.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets/camera_preview_widget.dart';
 import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
@@ -30,6 +33,7 @@ class CourseFinalTestPage extends StatefulWidget {
 
 class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
   late ConfettiController _confettiController;
+  late CameraService _cameraService;
 
   @override
   void initState() {
@@ -37,6 +41,9 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
     _confettiController = ConfettiController(
       duration: const Duration(seconds: 2),
     );
+    _cameraService = CameraService();
+    _cameraService.init();
+
     context.read<CourseFinalTestBloc>().add(
       LoadCourseFinalTestsEvent(
         params: CourseLessonTestParams(
@@ -52,6 +59,7 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
   @override
   void dispose() {
     _confettiController.dispose();
+    _cameraService.dispose();
     super.dispose();
   }
 
@@ -175,7 +183,7 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
         if (state is CourseFinalTestFinished) {
           _showFinishDialog(state);
         } else if (state is CourseFinalTestError) {
-          errorFlushBar(context, 'Unexpected error!');
+          errorFlushBar(context, state.message);
         }
       },
       builder: (context, state) {
@@ -205,9 +213,18 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
           );
 
           if (state.selectedOptionId != null && !state.isSubmitting) {
-            onButtonTap = () => context.read<CourseFinalTestBloc>().add(
-              SubmitCourseFinalTestAnswerEvent(),
-            );
+            onButtonTap = () async {
+              final image = await _cameraService.captureBase64();
+              if (image == null && mounted) {
+                errorFlushBar(context, 'Camera capture failed. Please try again.');
+                return;
+              }
+              if (mounted) {
+                context.read<CourseFinalTestBloc>().add(
+                  SubmitCourseFinalTestAnswerEvent(proctorImage: image),
+                );
+              }
+            };
           }
         } else if (state is CourseFinalTestAnswerResult) {
           progress = state.tests.isNotEmpty
@@ -237,15 +254,29 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
           questionText = '';
         }
 
-        return TestLayout(
-          progress: progress,
-          questionTitle: questionTitle,
-          questionText: questionText,
-          optionList: optionList,
-          isLoading: isLoading,
-          buttonText: buttonText,
-          onButtonTap: onButtonTap,
-          banner: banner,
+        return ListenableBuilder(
+          listenable: _cameraService,
+          builder: (context, _) {
+            return Stack(
+              children: [
+                TestLayout(
+                  progress: progress,
+                  questionTitle: questionTitle,
+                  questionText: questionText,
+                  optionList: optionList,
+                  isLoading: isLoading,
+                  buttonText: buttonText,
+                  onButtonTap: onButtonTap,
+                  banner: banner,
+                  isSubmitting: state is CourseFinalTestLoaded ? state.isSubmitting : false,
+                ),
+                if (_cameraService.isReady && _cameraService.controller != null)
+                  CameraPreviewWidget(
+                    controller: _cameraService.controller!,
+                  ),
+              ],
+            );
+          },
         );
       },
     );

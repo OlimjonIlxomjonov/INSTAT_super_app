@@ -16,6 +16,10 @@ class SelectCourseFinalTestOptionEvent extends CourseFinalTestEvent {
   const SelectCourseFinalTestOptionEvent({required this.optionId});
 }
 
-class SubmitCourseFinalTestAnswerEvent extends CourseFinalTestEvent {}
+class SubmitCourseFinalTestAnswerEvent extends CourseFinalTestEvent {
+  final String? proctorImage;
+
+  const SubmitCourseFinalTestAnswerEvent({this.proctorImage});
+}
 
 class NextCourseFinalTestQuestionEvent extends CourseFinalTestEvent {}

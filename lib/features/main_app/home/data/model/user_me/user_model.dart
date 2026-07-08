@@ -11,6 +11,7 @@ class UserModel extends UserEntity {
     required super.groups,
     required super.isSuperuser,
     super.avatar,
+    required super.isVerified,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -25,6 +26,7 @@ class UserModel extends UserEntity {
           .map((e) => UserGroupsModel.fromJson(e))
           .toList(),
       isSuperuser: json['is_superuser'] ?? false,
+      isVerified: json['is_verified'] ?? false,
     );
   }
 }

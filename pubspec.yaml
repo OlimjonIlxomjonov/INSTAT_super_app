@@ -36,6 +36,7 @@ dependencies:
   lottie: ^3.3.2
   carousel_slider: ^5.1.2
   #  turnable_page: ^1.0.1  # Book swiper effect # conflicts with SDK
+  camera: ^0.11.0
 
   # app localization
   flutter_localizations:

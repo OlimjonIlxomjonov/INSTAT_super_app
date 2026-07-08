@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
@@ -324,9 +325,14 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
     required SubmitLessonTestAnswerParams params,
   }) async {
     try {
+      final body = <String, dynamic>{"course_test_option": params.optionId};
+      if (params.image != null) {
+        body["image"] = params.image;
+      }
+
       final response = await _dioClient.post(
         "${ApiUrls.courses}${params.courseId}/course_tests/${params.testId}/answer/",
-        data: {"course_test_option": params.optionId},
+        data: body,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;
@@ -335,6 +341,32 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
       } else {
         throw Exception('ERROR ${response.statusCode}');
       }
+    } on DioException catch (e) {
+      // Parse error response from DioException (e.g., 400 validation errors)
+      String? extractedError;
+
+      if (e.response != null) {
+        try {
+          final errorData = e.response!.data;
+          if (errorData is Map && errorData['error'] != null) {
+            final error = errorData['error'];
+            if (error is Map && error['details'] is List) {
+              final details = error['details'] as List;
+              if (details.isNotEmpty) {
+                extractedError = details[0];
+              }
+            }
+          }
+        } catch (parseError) {
+          // If parsing fails, extracted error stays null
+        }
+      }
+
+      logger.e(e);
+      if (extractedError != null) {
+        throw Exception(extractedError);
+      }
+      rethrow;
     } catch (e) {
       logger.e(e);
       rethrow;

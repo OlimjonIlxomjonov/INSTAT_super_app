@@ -35,6 +35,7 @@ class UserAvatarComponent extends StatefulWidget {
 }
 
 class _UserAvatarComponentState extends State<UserAvatarComponent> {
+  final GlobalKey<TooltipState> _verifiedToolTipKey = GlobalKey<TooltipState>();
   final ImagePicker _picker = ImagePicker();
   static const int _maxImageSizeBytes = 4 * 1024 * 1024; // 4MB
 
@@ -150,6 +151,9 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                           state is UserMeLoaded && state.entity.avatar != null
                           ? state.entity.avatar
                           : null;
+                      final bool isVerified = state is UserMeLoaded
+                          ? state.entity.isVerified
+                          : false;
                       return Skeletonizer(
                         enabled: isLoading,
                         child: Column(
@@ -236,62 +240,80 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                               ],
                             ),
                             SizedBox(height: 15),
-                            AutoSizeText(
-                              displayName,
-                              style: AppTextStyles.source.medium(
-                                fontSize: isMobile ? 22 : 32,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            //! Confirm account
-                            GestureDetector(
-                              onTap: () async {
-                                final success = await showModalBottomSheet<bool>(
-                                  context: context,
-                                  isScrollControlled: true,
-                                  builder: (context) => const MyIdFormBottomSheet(),
-                                );
-
-                                logger.f('MyID form result: $success');
-
-                                if (context.mounted) {
-                                  context.read<FaceRecBloc>().add(ResetFaceRecEvent());
-                                }
-
-                                if (success == true) {
-                                  if (context.mounted) {
-                                    successFlushBar(context, 'Success!');
-                                  }
-                                }
-                                return;
-                              },
-                              child: Container(
-                                padding: EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                  color: AppColors.orange50,
-                                  borderRadius: BorderRadius.circular(6),
+                            Row(
+                              mainAxisAlignment: .center,
+                              spacing: 5,
+                              children: [
+                                AutoSizeText(
+                                  displayName,
+                                  style: AppTextStyles.source.medium(
+                                    fontSize: isMobile ? 22 : 32,
+                                  ),
                                 ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  spacing: 5,
-                                  children: [
-                                    Icon(
-                                      IconlyLight.danger,
-                                      color: AppColors.orange500,
-                                    ),
-                                    AutoSizeText(
-                                      AppLocalizations.of(
+                                _buildVerifiedBadge(),
+                              ],
+                            ),
+                            if (!isVerified) SizedBox(height: 8),
+                            //! Confirm account
+                            if (!isVerified)
+                              GestureDetector(
+                                onTap: () async {
+                                  final success =
+                                      await showModalBottomSheet<bool>(
+                                        context: context,
+                                        isScrollControlled: true,
+                                        builder: (context) =>
+                                            const MyIdFormBottomSheet(),
+                                      );
+
+                                  logger.f('MyID form result: $success');
+
+                                  if (context.mounted) {
+                                    context.read<FaceRecBloc>().add(
+                                      ResetFaceRecEvent(),
+                                    );
+                                  }
+
+                                  if (success == true) {
+                                    if (context.mounted) {
+                                      successFlushBar(
                                         context,
-                                      )!.accountConfirm,
-                                      style: AppTextStyles.source.medium(
-                                        fontSize: 13,
+                                        'Siz muvaffaqiyatli shaxsingizni tasdiqladingiz!',
+                                      );
+                                      context.read<UserMeBloc>().add(
+                                        UserMeEvent(),
+                                      );
+                                    }
+                                  }
+                                  return;
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.orange50,
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    spacing: 5,
+                                    children: [
+                                      Icon(
+                                        IconlyLight.danger,
                                         color: AppColors.orange500,
                                       ),
-                                    ),
-                                  ],
+                                      AutoSizeText(
+                                        AppLocalizations.of(
+                                          context,
+                                        )!.accountConfirm,
+                                        style: AppTextStyles.source.medium(
+                                          fontSize: 13,
+                                          color: AppColors.orange500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
                           ],
                         ),
                       );
@@ -302,6 +324,38 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildVerifiedBadge() {
+    return Tooltip(
+      key: _verifiedToolTipKey,
+      message: 'Siz shaxsingizni tasdiqlagansiz',
+      preferBelow: true,
+      triggerMode: TooltipTriggerMode.manual,
+      decoration: BoxDecoration(
+        color: AppColors.greyScale.grey400,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      textStyle: AppTextStyles.source.medium(
+        fontSize: 12,
+        color: AppColors.greyScale.grey900,
+      ),
+      child: GestureDetector(
+        onTap: () {
+          _verifiedToolTipKey.currentState?.ensureTooltipVisible();
+        },
+        child: Container(
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppColors.primaryColor,
+            border: Border.all(color: AppColors.white, width: 3),
+          ),
+          child: Icon(Icons.check, color: AppColors.white, size: 16),
+        ),
       ),
     );
   }

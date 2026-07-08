@@ -10,6 +10,7 @@ class CustomBottomNavContainerWg extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback? onCartTap;
   final IconData? leadingIcon;
+  final bool isLoading;
 
   const CustomBottomNavContainerWg({
     super.key,
@@ -18,6 +19,7 @@ class CustomBottomNavContainerWg extends StatelessWidget {
     required this.onTap,
     this.leadingIcon,
     this.onCartTap,
+    this.isLoading = false,
   });
 
   @override
@@ -45,12 +47,21 @@ class CustomBottomNavContainerWg extends StatelessWidget {
               Expanded(
                 flex: anotherButton != null && anotherButton is! SizedBox ? 3 : 1,
                 child: ElevatedButton.icon(
-                  onPressed: onTap,
-                  icon: leadingIcon != null
-                      ? Icon(leadingIcon, size: 20)
-                      : null,
+                  onPressed: isLoading ? null : onTap,
+                  icon: isLoading
+                      ? SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              AppColors.primaryColor,
+                            ),
+                          ),
+                        )
+                      : (leadingIcon != null ? Icon(leadingIcon, size: 20) : null),
                   label: Text(
-                    buttonText,
+                    isLoading ? '' : buttonText,
                     key: ValueKey<String>(buttonText),
                     style: AppTextStyles.source.medium(fontSize: 14),
                   ),

@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
@@ -46,9 +47,19 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
             AppRoute.open(const HomePage());
             logger.i(token);
           },
-          onFailure: () {
+          onFailure: (error) {
             Navigator.of(context).pop();
-            errorFlushBar(context, 'Login failed. Try again.');
+
+            if (error is DioException) {
+              final statusCode = error.response?.statusCode;
+              // final data = error.response?.data;
+
+              errorFlushBar(context, 'Login failed\nStatus code: $statusCode');
+
+              logger.e(error.response?.data);
+            } else {
+              errorFlushBar(context, error.toString());
+            }
           },
         ),
       ),

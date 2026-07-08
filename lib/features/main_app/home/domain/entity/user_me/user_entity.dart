@@ -9,6 +9,7 @@ class UserEntity {
   final String lastName;
   final List<UserGroupsEntity> groups;
   final bool isSuperuser;
+  final bool isVerified;
 
   const UserEntity({
     required this.id,
@@ -19,5 +20,6 @@ class UserEntity {
     required this.lastName,
     required this.groups,
     required this.isSuperuser,
+    required this.isVerified,
   });
 }

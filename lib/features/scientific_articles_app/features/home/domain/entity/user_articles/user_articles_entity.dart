@@ -10,6 +10,7 @@ class UserArticlesEntity {
   final DateTime? updatedAt;
   final DateTime? createdAt;
 
+
   const UserArticlesEntity({
     required this.id,
     required this.userId,

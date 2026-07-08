@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/error/exceptions.dart';
@@ -7,6 +10,7 @@ import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/courses/course_list_response_model.dart';
 import 'package:my_template/features/main_app/home/data/model/user_me/user_model.dart';
 import 'package:my_template/features/main_app/home/data/source/remote_data_source/home_remote_data_source.dart';
+import 'package:path_provider/path_provider.dart';
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   final _dioClient = DioClient();
@@ -112,7 +116,20 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
 
       final response = await _dioClient.post(ApiUrls.faceRec, data: formData);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        logger.i("Success! ${response.data}");
+        final json = const JsonEncoder.withIndent('  ').convert(response.data);
+
+        final dir = await getTemporaryDirectory();
+        final file = File('${dir.path}/myid.json');
+
+        await file.writeAsString(json);
+
+        logger.i(file.path);
+        final docData = response.data['profile']['doc_data'];
+
+        logger.i(response.data);
+        logger.i(docData);
+        logger.i(docData['issued_by']);
+        logger.i(docData['issued_date']);
       } else {
         throw Exception(
           'Thrown Exception: ${response.data} ${response.statusCode} ',

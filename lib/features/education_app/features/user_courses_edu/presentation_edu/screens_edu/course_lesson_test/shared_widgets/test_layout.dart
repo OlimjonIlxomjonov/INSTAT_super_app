@@ -18,6 +18,7 @@ class TestLayout extends StatelessWidget {
   final String buttonText;
   final VoidCallback? onButtonTap;
   final Widget? banner;
+  final bool isSubmitting;
 
   const TestLayout({
     super.key,
@@ -29,6 +30,7 @@ class TestLayout extends StatelessWidget {
     this.buttonText = "Tasdiqlash",
     this.onButtonTap,
     this.banner,
+    this.isSubmitting = false,
   });
 
   @override
@@ -65,6 +67,7 @@ class TestLayout extends StatelessWidget {
           CustomBottomNavContainerWg(
             buttonText: buttonText,
             onTap: onButtonTap ?? () {},
+            isLoading: isSubmitting,
           ),
         ],
       ),
