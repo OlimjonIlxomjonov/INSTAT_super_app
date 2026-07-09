@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
+import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/domain/entity/leader_board/leader_board_entity.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/bloc/leader_board/leader_board_bloc.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/bloc/leader_board/leader_board_state.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/bloc/leader_board_events.dart';
+import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/bloc/search_students/search_students_bloc.dart';
+import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/screens_edu/search_students_page.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/screens_edu/temp_detailed_user_edu.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -31,6 +35,17 @@ class _StatsEduPageState extends State<StatsEduPage> {
     context.read<LeaderBoardBloc>().add(LeaderBoardEvent());
   }
 
+  void _openSearch(BuildContext context) {
+    FamilyNavigation.familyPush(
+      showHandle: false,
+      context,
+      BlocProvider(
+        create: (_) => sl<SearchStudentsBloc>(),
+        child: const SearchStudentsPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +58,9 @@ class _StatsEduPageState extends State<StatsEduPage> {
           slivers: [
             SliverPadding(
               padding: AppPadding.hAndV20x20(),
-              sliver: SliverToBoxAdapter(child: AppSearchbarWg()),
+              sliver: SliverToBoxAdapter(
+                child: AppSearchbarWg(onTap: () => _openSearch(context)),
+              ),
             ),
 
             /// USERS LEADERBOARD

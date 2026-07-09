@@ -112,6 +112,7 @@ class CourseLessonTestBloc
           lessonId: _currentLessonId,
           testId: currentTestId,
           optionId: currentState.selectedOptionId!,
+          image: event.proctorImage,
         );
 
         final response = await submitLessonTestAnswerUseCase(params);
@@ -128,7 +129,25 @@ class CourseLessonTestBloc
           answerResponse: response,
         ));
       } catch (e) {
-        emit(CourseLessonTestError(message: e.toString()));
+        final isFaceError = e.toString().contains('no_face_found');
+        final errorMessage = isFaceError
+            ? 'No Face Found'
+            : 'Something went wrong. Please try again.';
+
+        emit(CourseLessonTestError(message: errorMessage));
+
+        // For face detection errors, restore the quiz state so UI stays visible
+        if (isFaceError) {
+          await Future.delayed(const Duration(milliseconds: 100));
+          // Recreate the loaded state to force a rebuild with button enabled for retry
+          emit(CourseLessonTestLoaded(
+            tests: _tests,
+            currentTestIndex: currentState.currentTestIndex,
+            currentOptions: currentState.currentOptions,
+            selectedOptionId: currentState.selectedOptionId,
+            isSubmitting: false,
+          ));
+        }
       }
     }
   }

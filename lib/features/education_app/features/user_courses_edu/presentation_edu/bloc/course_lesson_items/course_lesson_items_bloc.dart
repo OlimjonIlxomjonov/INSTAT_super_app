@@ -8,6 +8,10 @@ class CourseLessonItemsBloc
   final LessonsItemsUseCase useCase;
 
   CourseLessonItemsBloc(this.useCase) : super(const CourseLessonItemsState()) {
+    on<ResetCourseLessonItemsEvent>((event, emit) {
+      emit(const CourseLessonItemsState());
+    });
+
     on<CourseLessonItemsEvent>((event, emit) async {
       final blockId = event.params.blockId;
 

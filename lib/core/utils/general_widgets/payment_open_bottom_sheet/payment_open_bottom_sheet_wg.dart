@@ -26,7 +26,7 @@ class PaymentOpenBottomSheetWg extends StatelessWidget {
       listener: (context, state) {
         if (state is BuyCourseLoaded) {
           AppRoute.close();
-          successFlushBar(context, 'Kurs sotip olindi!');
+          // successFlushBar(context, 'Kurs sotip olindi!');
         }
       },
       child: SafeArea(
@@ -43,7 +43,6 @@ class PaymentOpenBottomSheetWg extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 50),
           ],
         ),
       ),
@@ -57,30 +56,14 @@ class PaymentOpenBottomSheetWg extends StatelessWidget {
           return GestureDetector(
             onTap: isLoading ? null : () => _buyCourse(context),
             child: Container(
-              height: 64,
-              padding: const EdgeInsets.symmetric(horizontal: 40),
+              padding: const .all(15),
+              height: 80,
               decoration: BoxDecoration(
                 color: AppColors.greyScale.grey50,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: AppColors.greyScale.grey200),
               ),
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                child: isLoading
-                    ? const SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: AppColors.primaryColor,
-                        ),
-                      )
-                    : Image.asset(
-                        imagePath,
-                        key: ValueKey(imagePath),
-                        fit: BoxFit.contain,
-                      ),
-              ),
+              child: Image.asset(imagePath, fit: .cover),
             ),
           );
         },

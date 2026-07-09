@@ -1,3 +1,4 @@
+import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/data/source/remote_data_source/leader_board_remote_data_source.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/domain/entity/leader_board/leader_board_response.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/domain/repository/leader_board_repository.dart';
@@ -11,5 +12,12 @@ class LeaderBoardRepoImpl implements LeaderBoardRepository {
   @override
   Future<LeaderBoardResponse> getLeaderBoard() {
     return _remote.fetchLeaderBoard();
+  }
+
+  @override
+  Future<LeaderBoardResponse> searchStudents({
+    required SearchStudentsParams params,
+  }) {
+    return _remote.searchStudents(params: params);
   }
 }

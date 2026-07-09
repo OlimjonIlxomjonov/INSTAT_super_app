@@ -47,4 +47,7 @@ abstract class AppVectors {
   static const bookOpenBrief = '${basePath}book_open_brief.svg';
   static const bookShvBrief = '${basePath}book_shv_brief.svg';
   static const trophyBrief = '${basePath}trophy_brief.svg';
+
+  //? verified
+  static const verified = '${baseHomePath}verified.svg';
 }

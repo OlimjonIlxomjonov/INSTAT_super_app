@@ -17,7 +17,7 @@ void errorFlushBar(BuildContext context, String message) {
         fontSize: 16,
       ),
     ),
-    backgroundColor: AppColors.redFailedTaskCard.withValues(alpha: 0.7),
+    backgroundColor: AppColors.redFailedTaskCard.withValues(alpha: 0.8),
     duration: const Duration(seconds: 3),
     flushbarPosition: FlushbarPosition.TOP,
     icon: Lottie.asset(AppAnimations.errorState, repeat: false),

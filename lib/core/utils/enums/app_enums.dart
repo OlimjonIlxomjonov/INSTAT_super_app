@@ -27,3 +27,5 @@ extension LastActionsStatusX on LastActionsStatus {
 }
 
 enum AnnotationLanguageEnum { uz, en, ru }
+
+enum PaymentStatusEnum { paid, pending, notBought }

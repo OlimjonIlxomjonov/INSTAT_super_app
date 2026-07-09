@@ -15,7 +15,9 @@ import 'package:my_template/features/education_app/features/statistics_edu/data/
 import 'package:my_template/features/education_app/features/statistics_edu/data/source/remote_data_source/leader_board_remote_data_source.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/domain/repository/leader_board_repository.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/domain/usecase/leader_board/leader_board_use_case.dart';
+import 'package:my_template/features/education_app/features/statistics_edu/domain/usecase/search_students/search_students_use_case.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/bloc/leader_board/leader_board_bloc.dart';
+import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/bloc/search_students/search_students_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/repo/user_courses_repo_impl.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/sources/impl_remote_data_source/user_courses_remote_data_source_impl.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/sources/remote_data_source/user_courses_remote_data_source.dart';
@@ -255,6 +257,7 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => AddToCartUseCase(repository: sl()));
   sl.registerLazySingleton(() => CartUseCase(repository: sl()));
   sl.registerLazySingleton(() => LeaderBoardUseCase(repository: sl()));
+  sl.registerLazySingleton(() => SearchStudentsUseCase(repository: sl()));
   sl.registerLazySingleton(() => AvatarUseCase(repository: sl()));
   sl.registerLazySingleton(() => CommentsUseCase(repository: sl()));
   sl.registerLazySingleton(() => OfflineCourseUseCase(repository: sl()));
@@ -337,6 +340,7 @@ Future<void> setup() async {
     () => CartBloc(useCase: sl(), addToCartUseCase: sl()),
   );
   sl.registerLazySingleton(() => LeaderBoardBloc(sl()));
+  sl.registerFactory(() => SearchStudentsBloc(useCase: sl()));
   sl.registerLazySingleton(() => AvatarBloc(useCase: sl()));
   sl.registerLazySingleton(() => CommentsBloc(useCase: sl()));
   sl.registerLazySingleton(() => OfflineCourseBloc(useCase: sl()));

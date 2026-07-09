@@ -66,6 +66,7 @@ dependencies:
   marquee: ^2.3.0
   qr_code_scanner_plus: ^2.1.2
   myid: ^3.1.44
+  url_launcher: ^6.2.0
 
 
 

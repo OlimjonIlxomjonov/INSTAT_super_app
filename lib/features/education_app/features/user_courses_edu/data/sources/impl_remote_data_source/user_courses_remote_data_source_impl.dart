@@ -15,6 +15,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dat
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_offline_lessons/course_offline_lessons_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/courses/course_list_response_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/offline_course/offline_course_response_model.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/data/models/order_payment/order_payment_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/sources/remote_data_source/user_courses_remote_data_source.dart';
 
 class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
@@ -148,7 +149,9 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
   }
 
   @override
-  Future<void> postBoughtCourses({required BuyCourseParams params}) async {
+  Future<OrderPaymentModel> postBoughtCourses({
+    required BuyCourseParams params,
+  }) async {
     try {
       final response = await _dioClient.post(
         "${ApiUrls.courses}/${params.courseId}/order/",
@@ -156,6 +159,7 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;
         logger.i(data);
+        return OrderPaymentModel.fromJson(data);
       } else {
         throw Exception('ERROR ${response.statusCode}');
       }
@@ -238,9 +242,15 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
     required SubmitLessonTestAnswerParams params,
   }) async {
     try {
+      final requestData = <String, dynamic>{"lesson_test_option": params.optionId};
+      final image = params.image;
+      if (image != null) {
+        requestData["image"] = image;
+      }
+
       final response = await _dioClient.post(
         "${ApiUrls.courses}${params.courseId}/course_blocks/${params.blockId}/lessons/${params.lessonId}/lesson_tests/${params.testId}/answer/",
-        data: {"lesson_test_option": params.optionId},
+        data: requestData,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;
@@ -249,6 +259,32 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
       } else {
         throw Exception('ERROR ${response.statusCode}');
       }
+    } on DioException catch (e) {
+      // Parse error response from DioException (e.g., 400 validation errors)
+      String? extractedError;
+
+      if (e.response != null) {
+        try {
+          final errorData = e.response!.data;
+          if (errorData is Map && errorData['error'] != null) {
+            final error = errorData['error'];
+            if (error is Map && error['details'] is List) {
+              final details = error['details'] as List;
+              if (details.isNotEmpty) {
+                extractedError = details[0];
+              }
+            }
+          }
+        } catch (parseError) {
+          // If parsing fails, extracted error stays null
+        }
+      }
+
+      logger.e(e);
+      if (extractedError != null) {
+        throw Exception(extractedError);
+      }
+      rethrow;
     } catch (e) {
       logger.e(e);
       rethrow;

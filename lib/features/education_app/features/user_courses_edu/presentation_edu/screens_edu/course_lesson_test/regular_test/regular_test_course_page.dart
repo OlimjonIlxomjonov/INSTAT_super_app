@@ -7,6 +7,7 @@ import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/routes/route_generator.dart';
+import 'package:my_template/core/services/camera_service.dart';
 import 'package:my_template/core/utils/constants/assets/app_animations.dart';
 import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
@@ -19,6 +20,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/finish_lesson_test_dialog/finish_lesson_test_dialog_screen.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/shared_widgets/test_layout.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/shared_widgets/test_option_list_wg.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets/camera_preview_widget.dart';
 
 class RegularTestCoursePage extends StatefulWidget {
   final int courseId;
@@ -39,6 +41,7 @@ class RegularTestCoursePage extends StatefulWidget {
 class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
   late ConfettiController _confettiController;
   late CourseLessonTestBloc _bloc;
+  late CameraService _cameraService;
 
   @override
   void initState() {
@@ -47,6 +50,8 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
     _confettiController = ConfettiController(
       duration: const Duration(seconds: 2),
     );
+    _cameraService = CameraService();
+    _cameraService.init();
     _bloc = sl<CourseLessonTestBloc>();
     _bloc.add(
       LoadCourseLessonTestsEvent(
@@ -62,6 +67,7 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
   @override
   void dispose() {
     _confettiController.dispose();
+    _cameraService.dispose();
     _bloc.close();
     super.dispose();
   }
@@ -200,9 +206,18 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
             );
 
             if (state.selectedOptionId != null && !state.isSubmitting) {
-              onButtonTap = () => context.read<CourseLessonTestBloc>().add(
-                SubmitLessonTestAnswerEvent(),
-              );
+              onButtonTap = () async {
+                final image = await _cameraService.captureBase64();
+                if (image == null && mounted) {
+                  errorFlushBar(context, 'Camera capture failed. Please try again.');
+                  return;
+                }
+                if (mounted) {
+                  context.read<CourseLessonTestBloc>().add(
+                    SubmitLessonTestAnswerEvent(proctorImage: image),
+                  );
+                }
+              };
             }
           } else if (state is CourseLessonTestAnswerResult) {
             progress = state.tests.isNotEmpty
@@ -232,15 +247,28 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
             questionText = '';
           }
 
-          return TestLayout(
-            progress: progress,
-            questionTitle: questionTitle,
-            questionText: questionText,
-            optionList: optionList,
-            isLoading: isLoading,
-            buttonText: buttonText,
-            onButtonTap: onButtonTap,
-            banner: banner,
+          return ListenableBuilder(
+            listenable: _cameraService,
+            builder: (context, _) {
+              return Stack(
+                children: [
+                  TestLayout(
+                    progress: progress,
+                    questionTitle: questionTitle,
+                    questionText: questionText,
+                    optionList: optionList,
+                    isLoading: isLoading,
+                    buttonText: buttonText,
+                    onButtonTap: onButtonTap,
+                    banner: banner,
+                  ),
+                  if (_cameraService.isReady && _cameraService.controller != null)
+                    CameraPreviewWidget(
+                      controller: _cameraService.controller!,
+                    ),
+                ],
+              );
+            },
           );
         },
       ),

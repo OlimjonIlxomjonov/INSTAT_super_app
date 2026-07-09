@@ -11,6 +11,8 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/check_final_test_access/check_final_test_access_state.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/course_final_test/course_final_test_page.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_state.dart';
 
 class FinalCourseTestWg extends StatelessWidget {
   final int courseId;
@@ -22,6 +24,18 @@ class FinalCourseTestWg extends StatelessWidget {
         is CheckFinalTestAccessLoading) {
       return; // prevent rapid double tap from firing twice
     }
+
+    final userState = context.read<UserMeBloc>().state;
+    final isVerified = userState is UserMeLoaded && userState.entity.isVerified;
+
+    if (!isVerified) {
+      errorFlushBar(
+        context,
+        "Testga kirish uchun avval o'zingizni tasdiqlaginingiz kerak. Tasdiqlanish uchun profil bo'limiga o'ting.",
+      );
+      return;
+    }
+
     logger.f(courseId);
     context.read<CheckFinalTestAccessBloc>().add(
       CheckFinalTestAccessEvent(

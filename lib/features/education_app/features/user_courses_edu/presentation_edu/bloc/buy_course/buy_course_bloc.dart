@@ -10,10 +10,10 @@ class BuyCourseBloc extends Bloc<CoursesEvent, BuyCourseState> {
     on<BuyCourseEvent>((event, emit) async {
       emit(BuyCourseLoading());
       try {
-        await useCase.call(params: event.params);
-        emit(BuyCourseLoaded());
+        final payment = await useCase.call(params: event.params);
+        emit(BuyCourseLoaded(payment: payment));
       } catch (e) {
-        emit(BuyCourseError());
+        emit(BuyCourseError(message: e.toString()));
       }
     });
   }

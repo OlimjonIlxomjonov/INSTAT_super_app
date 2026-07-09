@@ -12,6 +12,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dom
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_option_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_answer_response_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/offline_course/offline_course_response.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/order_payment/order_payment_entity.dart';
 
 abstract class UserCoursesRepository {
   Future<CourseListResponse> getUserCourses({
@@ -38,7 +39,7 @@ abstract class UserCoursesRepository {
     required CourseFilesParams params,
   });
 
-  Future<void> postBuyCourse({required BuyCourseParams params});
+  Future<OrderPaymentEntity> postBuyCourse({required BuyCourseParams params});
 
   Future<CourseListResponse> searchCourses({
     required SearchCoursesParams params,

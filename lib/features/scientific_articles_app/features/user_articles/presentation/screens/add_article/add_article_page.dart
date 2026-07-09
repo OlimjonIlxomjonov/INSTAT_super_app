@@ -5,6 +5,7 @@ import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
 import 'package:my_template/core/common/flush_bar/success_flush_bar.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
+import 'package:my_template/core/utils/general_widgets/confirm_dialog/confirm_dialog_wg.dart';
 import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
 import 'package:my_template/core/utils/general_widgets/simple_btn_container_wg/simple_btn_container_wg.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
@@ -75,28 +76,14 @@ class _AddArticlePageState extends State<AddArticlePage> {
   void _submitArticle(BuildContext context) {
     context.read<AddArticleBloc>().add(
       SaveArticleDraftEvent(
-        status: 'pending',
+        status: 'in_review',
         onSuccess: () {
           if (mounted) {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (ctx) => AlertDialog.adaptive(
-                title: Text('Maqola yuborildi!', style: CustomTextStyles.h2),
-                content: Text(
-                  'Maqolangiz ko\'rib chiqish uchun qabul qilindi.',
-                  style: CustomTextStyles.h4,
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(ctx);
-                      FamilyNavigation.familyClose(context);
-                    },
-                    child: const Text('Yaxshi'),
-                  ),
-                ],
-              ),
+            showSuccessDialog(
+              context,
+              title: 'Maqola yuborildi!',
+              description: 'Maqolangiz ko\'rib chiqish uchun qabul qilindi.',
+              onDismiss: () => FamilyNavigation.familyClose(context),
             );
           }
         },
@@ -362,29 +349,12 @@ class _AddArticlePageState extends State<AddArticlePage> {
 }
 
 void _showExitDialog(BuildContext context, {required bool isEditMode}) {
-  showDialog(
-    context: context,
-    builder: (ctx) => AlertDialog.adaptive(
-      title: Text('Chiqishni xohlaysizmi?', style: CustomTextStyles.h2),
-      // content: Text(
-      //   isEditMode
-      //       ? "Saqlanmagan o'zgarishlar yo'qolishi mumkin."
-      //       : "Kiritilgan ma'lumotlar saqlanmasligi mumkin.",
-      //   style: CustomTextStyles.h4,
-      // ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(ctx),
-          child: const Text('Qolish'),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.pop(ctx);
-            FamilyNavigation.familyClose(context);
-          },
-          child: Text('Chiqish', style: TextStyle(color: AppColors.red)),
-        ),
-      ],
-    ),
+  showConfirmDialog(
+    context,
+    title: 'Chiqishni xohlaysizmi?',
+    description: isEditMode
+        ? "Saqlanmagan o'zgarishlar yo'qolishi mumkin."
+        : "Kiritilgan ma'lumotlar saqlanmasligi mumkin.",
+    onConfirm: () => FamilyNavigation.familyClose(context),
   );
 }

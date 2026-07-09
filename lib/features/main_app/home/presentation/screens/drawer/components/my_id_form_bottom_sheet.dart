@@ -50,6 +50,34 @@ class PassportInputFormatter extends TextInputFormatter {
   }
 }
 
+class DateInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final digitsOnly = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+
+    if (digitsOnly.length > 8) {
+      return oldValue;
+    }
+
+    final buffer = StringBuffer();
+    for (int i = 0; i < digitsOnly.length; i++) {
+      buffer.write(digitsOnly[i]);
+      if ((i == 1 || i == 3) && i != digitsOnly.length - 1) {
+        buffer.write('.');
+      }
+    }
+
+    final text = buffer.toString();
+    return TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
+    );
+  }
+}
+
 class MyIdFormBottomSheet extends StatefulWidget {
   const MyIdFormBottomSheet({super.key});
 
@@ -61,7 +89,6 @@ class _MyIdFormBottomSheetState extends State<MyIdFormBottomSheet> {
   final _formKey = GlobalKey<FormState>();
   final _passportController = TextEditingController();
   final _birthDateController = TextEditingController();
-  DateTime? _selectedBirthDate;
 
   @override
   void dispose() {
@@ -70,44 +97,35 @@ class _MyIdFormBottomSheetState extends State<MyIdFormBottomSheet> {
     super.dispose();
   }
 
-  Future<void> _selectBirthDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedBirthDate ?? DateTime(2000, 1, 1),
-      firstDate: DateTime(1930),
-      lastDate: DateTime.now(),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: AppColors.primaryColor,
-              onPrimary: AppColors.white,
-              onSurface: AppColors.greyScale.grey900,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-    if (picked != null) {
-      setState(() {
-        _selectedBirthDate = picked;
-        _birthDateController.text =
-            "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
-      });
-    }
+  /// Converts "dd.mm.yyyy" entered by the user to "yyyy-mm-dd" expected by
+  /// the backend. Returns null if the input isn't a complete valid date.
+  String? _toBackendDate(String input) {
+    final parts = input.split('.');
+    if (parts.length != 3) return null;
+
+    final day = int.tryParse(parts[0]);
+    final month = int.tryParse(parts[1]);
+    final year = int.tryParse(parts[2]);
+    if (day == null || month == null || year == null) return null;
+    if (parts[2].length != 4) return null;
+    if (month < 1 || month > 12) return null;
+    if (day < 1 || day > 31) return null;
+
+    return "$year-${month.toString().padLeft(2, '0')}-${day.toString().padLeft(2, '0')}";
   }
 
   @override
   Widget build(BuildContext context) {
     final titleText = "Shaxsni tasdiqlash";
     final passportLabel = "Pasport seriyasi va raqami";
-    final birthDateLabel = "Tug'ilgan sana (YYYY-MM-DD)";
+    final birthDateLabel = "Tug'ilgan sana (KK.OO.YYYY)";
     final submitButtonText = "Tasdiqlashni boshlash";
 
     final fillAllFieldsError = "Barcha maydonlarni to'ldiring";
     final invalidPassportError =
         "Pasport formati noto'g'ri (masalan, AA1234567)";
+    final invalidBirthDateError =
+        "Tug'ilgan sana formati noto'g'ri (masalan, 01.02.2000)";
 
     return BlocConsumer<FaceRecBloc, FaceRecState>(
       listener: (context, state) async {
@@ -186,17 +204,14 @@ class _MyIdFormBottomSheetState extends State<MyIdFormBottomSheet> {
                   ),
                   const SizedBox(height: 15),
 
-                  // Birth Date (DatePicker selector)
-                  GestureDetector(
-                    onTap: isLoading ? null : () => _selectBirthDate(context),
-                    child: AbsorbPointer(
-                      child: AuthTextFieldWg(
-                        label: "YYYY-MM-DD",
-                        title: birthDateLabel,
-                        controller: _birthDateController,
-                        leadingIcon: IconlyLight.calendar,
-                      ),
-                    ),
+                  // Birth Date (typed, auto-inserts dots as dd.mm.yyyy)
+                  AuthTextFieldWg(
+                    label: "01.02.2000",
+                    title: birthDateLabel,
+                    controller: _birthDateController,
+                    leadingIcon: IconlyLight.calendar,
+                    isTypeNum: true,
+                    inputFormatter: [DateInputFormatter()],
                   ),
                   const SizedBox(height: 25),
 
@@ -214,10 +229,10 @@ class _MyIdFormBottomSheetState extends State<MyIdFormBottomSheet> {
                               FocusManager.instance.primaryFocus?.unfocus();
 
                               final passport = _passportController.text.trim();
-                              final birthDate = _birthDateController.text
+                              final birthDateInput = _birthDateController.text
                                   .trim();
 
-                              if (passport.isEmpty || birthDate.isEmpty) {
+                              if (passport.isEmpty || birthDateInput.isEmpty) {
                                 errorFlushBar(context, fillAllFieldsError);
                                 return;
                               }
@@ -227,6 +242,14 @@ class _MyIdFormBottomSheetState extends State<MyIdFormBottomSheet> {
                               );
                               if (!passportRegex.hasMatch(passport)) {
                                 errorFlushBar(context, invalidPassportError);
+                                return;
+                              }
+
+                              final birthDate = _toBackendDate(
+                                birthDateInput,
+                              );
+                              if (birthDate == null) {
+                                errorFlushBar(context, invalidBirthDateError);
                                 return;
                               }
 

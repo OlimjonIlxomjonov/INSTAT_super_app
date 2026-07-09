@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
-import 'package:my_template/core/utils/constants/colors/app_colors.dart';
+import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/online_lib_style_custom_bottom_sheet/online_lib_style_custom_bottom_sheet_wg.dart';
 import 'package:my_template/core/utils/general_widgets/payment_open_bottom_sheet/payment_open_bottom_sheet_wg.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
-import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
 import 'package:my_template/core/utils/widgets/custom_tab_bar/custom_tab_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/detailed_course_info_header/deatiled_course_info_header_wg.dart';
@@ -26,6 +25,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/buy_course/buy_course_state.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/detailed_user_bought_courses_edu_page.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailedCourseInfoPage extends StatefulWidget {
   final CourseEntity data;
@@ -122,12 +122,13 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
   Widget build(BuildContext context) {
     final perCourse = context.watch<PerCourseBloc>().state;
     final item = perCourse is PerCourseLoaded ? perCourse.entity : null;
-    final isPaid = item?.userOrder?.status == 'paid';
     final isLoading = perCourse is PerCourseLoading;
+    final status = _paymentStatus(item?.userOrder?.status);
 
     return BlocListener<BuyCourseBloc, BuyCourseState>(
       listener: (context, state) {
         if (state is BuyCourseLoaded) {
+          _openPaymentUrl(state.payment.redirectUrl, context);
           context.read<PerCourseBloc>().add(
             PerCourseEvent(params: PerCourseParams(courseId: widget.data.id)),
           );
@@ -137,43 +138,96 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
         body: CustomScrollView(
           slivers: [
             ..._headerSlivers,
-            SliverToBoxAdapter(
-              child: _tabController.index == 0
-                  ? AboutThisCourseTab(
-                      data: widget.data,
-                      courseCategory: widget.courseCategory,
-                      total: widget.total,
-                    )
-                  : _tabController.index == 1
-                  ? const CoursePlanTab()
-                  : CourseCommentsTab(),
-            ),
+            SliverToBoxAdapter(child: _buildTabContent()),
             const SliverToBoxAdapter(child: SizedBox(height: 32)),
           ],
         ),
         bottomNavigationBar: Skeletonizer(
           enabled: isLoading,
-          child: CustomBottomNavContainerWg(
-            onTap: () => isPaid
-                ? FamilyNavigation.familyPush(
-                    showHandle: false,
-                    context,
-                    DetailedUserBoughtCoursesEduPage(
-                      data: widget.data,
-                      categoryName: widget.courseCategory,
-                    ),
-                  )
-                : onlineLibStyleCustomBottomSheetWg(
-                    context,
-                    headerTitle: "To'lov turi",
-                    child: PaymentOpenBottomSheetWg(courseId: widget.data.id),
-                  ),
-            buttonText: isPaid
-                ? 'Davom etish'
-                : 'Sotib olish - ${widget.data.price} UZS',
+          child: AbsorbPointer(
+            absorbing: status == PaymentStatusEnum.pending,
+            child: Opacity(
+              opacity: status == PaymentStatusEnum.pending ? 0.5 : 1.0,
+              child: CustomBottomNavContainerWg(
+                onTap: () => _handleBottomNavTap(context, status),
+                buttonText: _buttonTextFor(status),
+              ),
+            ),
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildTabContent() {
+    switch (_tabController.index) {
+      case 0:
+        return AboutThisCourseTab(
+          data: widget.data,
+          courseCategory: widget.courseCategory,
+          total: widget.total,
+        );
+      case 1:
+        return const CoursePlanTab();
+      default:
+        return CourseCommentsTab();
+    }
+  }
+
+  void _handleBottomNavTap(BuildContext context, PaymentStatusEnum status) {
+    switch (status) {
+      case PaymentStatusEnum.paid:
+        FamilyNavigation.familyPush(
+          showHandle: false,
+          context,
+          DetailedUserBoughtCoursesEduPage(
+            data: widget.data,
+            categoryName: widget.courseCategory,
+          ),
+        );
+        break;
+      case PaymentStatusEnum.pending:
+        break; // no-op, matches original `null`
+      case PaymentStatusEnum.notBought:
+        onlineLibStyleCustomBottomSheetWg(
+          context,
+          headerTitle: "To'lov turi",
+          child: PaymentOpenBottomSheetWg(courseId: widget.data.id),
+        );
+        break;
+    }
+  }
+
+  String _buttonTextFor(PaymentStatusEnum status) {
+    switch (status) {
+      case PaymentStatusEnum.paid:
+        return 'Davom etish';
+      case PaymentStatusEnum.pending:
+        return 'Ko‘rib chiqilmoqda';
+      case PaymentStatusEnum.notBought:
+        return "Sotib olish - ${widget.data.price} UZS";
+    }
+  }
+
+  PaymentStatusEnum _paymentStatus(String? orderStatus) {
+    switch (orderStatus) {
+      case 'paid':
+        return PaymentStatusEnum.paid;
+      case 'pending':
+        return PaymentStatusEnum.notBought;
+      default:
+        return PaymentStatusEnum.notBought;
+    }
+  }
+
+  Future<void> _openPaymentUrl(String url, BuildContext context) async {
+    try {
+      logger.i('Opening payment URL: $url');
+      final uri = Uri.parse(url);
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+      logger.i('URL launched successfully');
+    } catch (e) {
+      logger.e('Failed to open payment URL: $e');
+    }
   }
 }

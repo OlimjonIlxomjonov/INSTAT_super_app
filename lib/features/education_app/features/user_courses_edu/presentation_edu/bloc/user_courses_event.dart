@@ -28,6 +28,10 @@ class CourseLessonItemsEvent extends CoursesEvent {
   CourseLessonItemsEvent({required this.params});
 }
 
+class ResetCourseLessonItemsEvent extends CoursesEvent {
+  const ResetCourseLessonItemsEvent();
+}
+
 class AboutCourseFeaturesEvent extends CoursesEvent {
   final CourseCategoryByIdParams params;
 

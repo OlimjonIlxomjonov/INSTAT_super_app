@@ -154,8 +154,49 @@ class _ArticleInfoViewState extends State<ArticleInfoView> {
                       ),
                     if (state is UdkLoaded &&
                         udkController.text.trim().isNotEmpty)
-                      Text(state.entity.title, style: CustomTextStyles.h4),
-                    if (state is UdkError) const Text('Invalid UDK!'),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.check_circle_outline_rounded,
+                              size: 16,
+                              color: AppColors.iconGreen,
+                            ),
+                            const SizedBox(width: 6),
+                            Flexible(
+                              child: Text(
+                                state.entity.title,
+                                style: CustomTextStyles.h4.copyWith(
+                                  color: AppColors.iconGreen,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    if (state is UdkError)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.error_outline_rounded,
+                              size: 16,
+                              color: AppColors.iconRed,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              "UDK raqami noto'g'ri",
+                              style: CustomTextStyles.h4.copyWith(
+                                color: AppColors.iconRed,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                   ],
                 );
               },

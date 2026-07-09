@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
-import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
-
-import '../../../../../../../../core/utils/constants/custom_text_styles/custom_text_styles.dart';
+import 'package:my_template/core/utils/general_widgets/confirm_dialog/confirm_dialog_wg.dart';
 
 class TestHeaderWg extends StatelessWidget {
   final double progress;
@@ -12,30 +9,11 @@ class TestHeaderWg extends StatelessWidget {
   const TestHeaderWg({super.key, required this.progress});
 
   void _showDialog(BuildContext context) {
-    showAdaptiveDialog(
-      context: context,
-      builder: (ctx) {
-        return AlertDialog.adaptive(
-          title: Text('Chiqishni xohlaysizmi?', style: CustomTextStyles.h2),
-          content: Text(
-            "Kiritilgan ma'lumotlar saqlanip qolinmaydi!",
-            style: CustomTextStyles.h4,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Qolish'),
-            ),
-            TextButton(
-              onPressed: () {
-                AppRoute.close();
-                Navigator.pop(ctx);
-              },
-              child: Text('Chiqish', style: TextStyle(color: AppColors.red)),
-            ),
-          ],
-        );
-      },
+    showConfirmDialog(
+      context,
+      title: 'Chiqishni xohlaysizmi?',
+      description: "Kiritilgan ma'lumotlar saqlanip qolinmaydi!",
+      onConfirm: () => AppRoute.close(),
     );
   }
 

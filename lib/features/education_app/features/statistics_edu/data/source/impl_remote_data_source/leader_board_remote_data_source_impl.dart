@@ -1,3 +1,4 @@
+import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
@@ -11,6 +12,27 @@ class LeaderBoardRemoteDataSourceImpl implements LeaderBoardRemoteDataSource {
   Future<LeaderBoardResponseModel> fetchLeaderBoard() async {
     try {
       final response = await _dioClient.get(ApiUrls.leaderBoard);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return LeaderBoardResponseModel.fromJson(response.data);
+      } else {
+        throw Exception('Exception: ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e('Catch: $e');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<LeaderBoardResponseModel> searchStudents({
+    required SearchStudentsParams params,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        ApiUrls.leaderBoard,
+        queryParams: {'search': params.search, 'page': params.page},
+      );
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
         return LeaderBoardResponseModel.fromJson(response.data);

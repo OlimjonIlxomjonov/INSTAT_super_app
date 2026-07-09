@@ -30,6 +30,8 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/lesson_video_progress/lesson_video_progress_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/lesson_video_progress/lesson_video_progress_event.dart';
 import 'package:my_template/core/utils/general_widgets/file_opening_overlay/file_opening_overlay_wg.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_state.dart';
 
 class WatchCourseEduVideoPage extends StatefulWidget {
   final String title;
@@ -422,10 +424,23 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                             tileOverflow: TextOverflow.ellipsis,
                             tileLeading: null,
                             onTap: () async {
+                              final userState = context.read<UserMeBloc>().state;
+                              final isVerified =
+                                  userState is UserMeLoaded && userState.entity.isVerified;
+
+                              if (!isVerified) {
+                                errorFlushBar(
+                                  context,
+                                  "Testga kirish uchun avval o'zingizni tasdiqlaginingiz kerak. Tasdiqlanish uchun profil bo'limiga o'ting.",
+                                );
+                                return;
+                              }
+
                               _controllerNotifier.value?.pause();
                               await openMiniAppSheetFamily(
                                 context,
                                 showHandler: false,
+                                enableDrag: false,
                                 child: RegularTestCoursePage(
                                   courseId: widget.courseId,
                                   blockId: widget.topicId,

@@ -180,7 +180,8 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
                                     size: 20,
                                   ),
                                 ),
-                                if (widget.currentResolutionNotifier != null &&
+                                if (!widget.isFullscreen &&
+                                    widget.currentResolutionNotifier != null &&
                                     widget.onResolutionSelected != null)
                                   ValueListenableBuilder<String>(
                                     valueListenable:
@@ -348,15 +349,19 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
             ),
 
             // ----------------------------------------------------------------
-            // Buffering spinner — always on top, always visible
+            // Buffering spinner — always on top, always visible, but must
+            // never block taps to the controls underneath (back, fullscreen,
+            // resolution, scrubbing) while a seek is buffering.
             // ----------------------------------------------------------------
             if (isBuffering)
-              Container(
-                color: Colors.black26,
-                child: const Center(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 3,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              IgnorePointer(
+                child: Container(
+                  color: Colors.black26,
+                  child: const Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
                   ),
                 ),
               ),

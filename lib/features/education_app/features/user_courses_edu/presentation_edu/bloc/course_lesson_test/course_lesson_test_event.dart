@@ -16,6 +16,10 @@ class SelectLessonTestOptionEvent extends CourseLessonTestEvent {
   const SelectLessonTestOptionEvent({required this.optionId});
 }
 
-class SubmitLessonTestAnswerEvent extends CourseLessonTestEvent {}
+class SubmitLessonTestAnswerEvent extends CourseLessonTestEvent {
+  final String? proctorImage;
+
+  const SubmitLessonTestAnswerEvent({this.proctorImage});
+}
 
 class NextLessonTestQuestionEvent extends CourseLessonTestEvent {}

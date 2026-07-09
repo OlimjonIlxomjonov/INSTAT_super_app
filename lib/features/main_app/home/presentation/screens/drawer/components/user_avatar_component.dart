@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
@@ -242,6 +243,7 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                             SizedBox(height: 15),
                             Row(
                               mainAxisAlignment: .center,
+                              crossAxisAlignment: .center,
                               spacing: 5,
                               children: [
                                 AutoSizeText(
@@ -250,10 +252,10 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                                     fontSize: isMobile ? 22 : 32,
                                   ),
                                 ),
-                                _buildVerifiedBadge(),
+                                if (isVerified) _buildVerifiedBadge(),
                               ],
                             ),
-                            if (!isVerified) SizedBox(height: 8),
+                            SizedBox(height: 8),
                             //! Confirm account
                             if (!isVerified)
                               GestureDetector(
@@ -335,27 +337,18 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
       preferBelow: true,
       triggerMode: TooltipTriggerMode.manual,
       decoration: BoxDecoration(
-        color: AppColors.greyScale.grey400,
+        color: AppColors.primaryColor,
         borderRadius: BorderRadius.circular(8),
       ),
       textStyle: AppTextStyles.source.medium(
         fontSize: 12,
-        color: AppColors.greyScale.grey900,
+        color: AppColors.white,
       ),
       child: GestureDetector(
         onTap: () {
           _verifiedToolTipKey.currentState?.ensureTooltipVisible();
         },
-        child: Container(
-          width: 32,
-          height: 32,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.primaryColor,
-            border: Border.all(color: AppColors.white, width: 3),
-          ),
-          child: Icon(Icons.check, color: AppColors.white, size: 16),
-        ),
+        child: SvgPicture.asset(AppVectors.verified, width: 23, height: 23),
       ),
     );
   }

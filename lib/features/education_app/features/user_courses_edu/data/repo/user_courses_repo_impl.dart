@@ -12,6 +12,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dom
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_offline_lessons_entity/course_offline_lessons_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/course_list_response.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/offline_course/offline_course_response.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/order_payment/order_payment_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/repository/user_courses_repository.dart';
 
 class UserCoursesRepoImpl implements UserCoursesRepository {
@@ -63,7 +64,7 @@ class UserCoursesRepoImpl implements UserCoursesRepository {
   }
 
   @override
-  Future<void> postBuyCourse({required BuyCourseParams params}) {
+  Future<OrderPaymentEntity> postBuyCourse({required BuyCourseParams params}) {
     return _remoteDataSource.postBoughtCourses(params: params);
   }
 

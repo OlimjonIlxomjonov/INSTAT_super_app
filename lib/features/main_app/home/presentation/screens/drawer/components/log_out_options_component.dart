@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/features/auth/presentation/screens/log_in_options_page.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_items/course_lesson_items_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
 
 class LogOutOptionsComponent extends StatelessWidget {
   const LogOutOptionsComponent({super.key});
@@ -73,6 +76,11 @@ class LogOutOptionsComponent extends StatelessWidget {
                     child: ElevatedButton.icon(
                       onPressed: () async {
                         await TokenStorageServiceImpl().deleteAccessToken();
+                        // Clear per-account cached lesson access so the
+                        // next logged-in user doesn't see stale data.
+                        sl<CourseLessonItemsBloc>().add(
+                          const ResetCourseLessonItemsEvent(),
+                        );
                         AppRoute.open(LogInOptionsPage());
                       },
                       label: Text(
