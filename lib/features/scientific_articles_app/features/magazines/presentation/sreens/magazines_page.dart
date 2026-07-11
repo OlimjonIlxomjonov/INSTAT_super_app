@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/common/flush_bar/technical_work_flash_bar.dart';
 import 'package:my_template/core/common/params/article_params/article_params.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
+import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/common/ui_states/empty_state.dart';
 import 'package:my_template/core/common/ui_states/error_page.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
-import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_editions/article_editions_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_editions/article_editions_bloc.dart';
@@ -14,6 +15,8 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
 import 'package:my_template/features/scientific_articles_app/features/magazines/widgets/sliver_magazine_grid_wg.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+
+import '../../../../../../core/common/flush_bar/flush_bars.dart';
 
 class MagazinesPage extends StatefulWidget {
   const MagazinesPage({super.key});
@@ -58,22 +61,22 @@ class _MagazinesPageState extends State<MagazinesPage> {
                 if (state is ArticleEditionsLoaded) {
                   if (state.response.data.isEmpty) {
                     return SliverToBoxAdapter(
-                      child: Column(
-                        children: [
-                          /// empty
-                          Text(
-                            'Hech qanday Jurnallar mavjud emas!',
-                            style: CustomTextStyles.h3half,
-                          ),
-                          EmptyState(),
-                        ],
+                      child: AppEmptyState(
+                        title: 'Mutolaa javonida sukunat!',
+                        subtitle:
+                            ' Jurnallarni shu yerda ko‘rish uchun ularni saqlang yoki yangisini yarating.',
+                        buttonLabel: 'Jurnal qo‘shish',
+                        onAction: () {
+                          technicalWorkFlushBar(context, 'Tez orada!');
+                        },
                       ),
                     );
                   }
 
-                  /// actual data
+                  //! actual data
                   return SliverMagazineGridWg(items: state.response.data);
                 } else if (state is ArticleEditionsLoading) {
+                  //! loading sate
                   return Skeletonizer.sliver(
                     child: SliverMagazineGridWg(
                       items: List.generate(

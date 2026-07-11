@@ -36,10 +36,19 @@ class _StatsEduPageState extends State<StatsEduPage> {
   }
 
   void _openSearch(BuildContext context) {
-    FamilyNavigation.familyPush(
-      showHandle: false,
+    // FamilyNavigation.familyPush(
+    //   showHandle: false,
+    //   context,
+    //   BlocProvider(
+    //     create: (_) => sl<SearchStudentsBloc>(),
+    //     child: const SearchStudentsPage(),
+    //   ),
+    // );
+
+    openMiniAppSheetFamily(
+      showHandler: false,
       context,
-      BlocProvider(
+      child: BlocProvider(
         create: (_) => sl<SearchStudentsBloc>(),
         child: const SearchStudentsPage(),
       ),
@@ -49,7 +58,7 @@ class _StatsEduPageState extends State<StatsEduPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBarWg(myTitle: 'Foydalanuvchilar', showArrow: false),
+      appBar: CustomAppBarWg(myTitle: 'Foydalanuvchilar'),
       body: CustomRefreshIndicator(
         onRefresh: () async {
           context.read<LeaderBoardBloc>().add(LeaderBoardEvent());

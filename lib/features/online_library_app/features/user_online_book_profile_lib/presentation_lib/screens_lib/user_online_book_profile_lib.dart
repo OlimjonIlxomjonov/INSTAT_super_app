@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
+import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_profile_lib/presentation_lib/screens_lib/components/saved_books_component.dart';
-
-import '../../../../../../core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 
 class UserOnlineBookProfileLib extends StatefulWidget {
   const UserOnlineBookProfileLib({super.key});
@@ -43,7 +41,11 @@ class _UserOnlineBookProfileLibState extends State<UserOnlineBookProfileLib> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBarWg(myTitle: 'Akkaunt ma’lumotlari'),
+      appBar: CustomAppBarWg(
+        myTitle: 'Akkaunt ma’lumotlari',
+        showArrow: false,
+        centerTitle: false,
+      ),
       body: CustomScrollView(
         slivers: [
           SliverList.builder(

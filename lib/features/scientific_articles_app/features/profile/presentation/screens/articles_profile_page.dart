@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
+import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 
 class ArticlesProfilePage extends StatelessWidget {
@@ -10,27 +11,33 @@ class ArticlesProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: .start,
-        children: [
-          Padding(
-            padding: AppPadding.hAndV20x20(),
-            child: Text('Akkaunt ma’lumotlari', style: CustomTextStyles.h2),
+      appBar: CustomAppBarWg(
+        myTitle: 'Akkaunt ma’lumotlari',
+        showArrow: false,
+        centerTitle: false,
+      ),
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: ProfileSettingsTileWg(
+              title: 'Saqlanganlar',
+              onTap: () {},
+              leadingIcon: IconlyLight.heart,
+            ),
           ),
-          ProfileSettingsTileWg(
-            title: 'Saqlanganlar',
-            onTap: () {},
-            leadingIcon: IconlyLight.heart,
+          SliverToBoxAdapter(
+            child: ProfileSettingsTileWg(
+              title: 'Ko’p beriladigan savollar',
+              onTap: () {},
+              leadingIcon: IconlyLight.chat,
+            ),
           ),
-          ProfileSettingsTileWg(
-            title: 'Ko’p beriladigan savollar',
-            onTap: () {},
-            leadingIcon: IconlyLight.chat,
-          ),
-          ProfileSettingsTileWg(
-            title: 'Mening maqolalarim',
-            onTap: () {},
-            leadingIcon: IconlyLight.document,
+          SliverToBoxAdapter(
+            child: ProfileSettingsTileWg(
+              title: 'Mening maqolalarim',
+              onTap: () {},
+              leadingIcon: IconlyLight.document,
+            ),
           ),
         ],
       ),

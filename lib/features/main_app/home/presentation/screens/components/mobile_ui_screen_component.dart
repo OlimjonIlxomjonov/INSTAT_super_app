@@ -1,10 +1,9 @@
 import 'dart:async';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:iconly/iconly.dart';
+import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/placeholder/banner_placeholder.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
@@ -37,11 +36,8 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/similar_onilne_books_component.dart';
 
 import '../../../../../../core/common/test_mode_banner/test_mode_banner.dart';
-import '../../../../../../core/common/ui_states/error_page.dart';
 import '../../../../../scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
 import '../../../../../scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
-import '../../../../../scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_state.dart';
-import '../../../../../scientific_articles_app/features/home/presentation/widgets/sliver_articles_list_wg.dart';
 import '../../../../../scientific_articles_app/features/user_articles/presentation/screens/user_articles_page.dart';
 
 class MobileUiScreenComponent extends StatefulWidget {
@@ -128,7 +124,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
     final int rowCount = (total / 2).ceil();
 
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
       sliver: SliverList.builder(
         itemCount: rowCount,
         itemBuilder: (context, rowIndex) {
@@ -369,8 +365,19 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
               centerTitle: true,
               actions: [
                 IconButton(
-                  onPressed: () {},
-                  icon: const Icon(IconlyLight.notification),
+                  onPressed: () {
+                    // successFlushBar(
+                    //   context,
+                    //   "import 'package:my_template/core/utils/constants/assets/app_animations.dart';",
+                    // );
+                    // errorFlushBar(
+                    //   context,
+                    //   "import 'package:my_template/core/utils/constants/assets/app_animations.dart';",
+                    // );
+                    // addedToCartFlushBar(context, 'message');
+                    // technicalWorkFlushBar(context, 'message');
+                  },
+                  icon: const Icon(Icons.notifications_none_outlined),
                 ),
               ],
             ),

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
-import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
-import 'package:my_template/core/common/flush_bar/success_flush_bar.dart';
+import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/general_widgets/confirm_dialog/confirm_dialog_wg.dart';

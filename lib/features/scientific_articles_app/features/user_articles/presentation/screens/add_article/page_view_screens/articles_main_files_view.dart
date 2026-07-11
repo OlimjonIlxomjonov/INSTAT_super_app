@@ -2,8 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
-import 'package:my_template/core/common/flush_bar/success_flush_bar.dart';
+import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/article_params/article_params.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/review_files/review_files_entity.dart';

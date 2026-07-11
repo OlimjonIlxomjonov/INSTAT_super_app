@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iconly/iconly.dart';
 import 'package:lottie/lottie.dart';
-import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
+import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/camera_service.dart';
@@ -216,7 +216,10 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
             onButtonTap = () async {
               final image = await _cameraService.captureBase64();
               if (image == null && mounted) {
-                errorFlushBar(context, 'Camera capture failed. Please try again.');
+                errorFlushBar(
+                  context,
+                  'Camera capture failed. Please try again.',
+                );
                 return;
               }
               if (mounted) {
@@ -268,12 +271,12 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
                   buttonText: buttonText,
                   onButtonTap: onButtonTap,
                   banner: banner,
-                  isSubmitting: state is CourseFinalTestLoaded ? state.isSubmitting : false,
+                  isSubmitting: state is CourseFinalTestLoaded
+                      ? state.isSubmitting
+                      : false,
                 ),
                 if (_cameraService.isReady && _cameraService.controller != null)
-                  CameraPreviewWidget(
-                    controller: _cameraService.controller!,
-                  ),
+                  CameraPreviewWidget(controller: _cameraService.controller!),
               ],
             );
           },

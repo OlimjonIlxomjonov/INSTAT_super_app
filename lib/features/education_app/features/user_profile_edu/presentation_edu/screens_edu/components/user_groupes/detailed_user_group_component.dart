@@ -27,8 +27,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../../../../../../../../core/common/flush_bar/error_flush_bar.dart';
-import '../../../../../../../../core/common/flush_bar/success_flush_bar.dart';
+import '../../../../../../../../core/common/flush_bar/flush_bars.dart';
 import '../../../../../table_edu/domain/entity/course_group_date_entity.dart';
 import '../../../../../user_courses_edu/presentation_edu/screens_edu/qr_scan/qr_scan_configs.dart';
 

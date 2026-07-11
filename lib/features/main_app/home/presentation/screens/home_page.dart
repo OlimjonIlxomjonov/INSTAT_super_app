@@ -19,6 +19,8 @@ import 'package:my_template/features/main_app/home/presentation/screens/drawer/m
 import 'package:my_template/features/main_app/home/presentation/widgets/model/mini_app_model.dart';
 import 'package:my_template/features/online_library_app/features/online_lib_bottom_nav_bar.dart';
 
+import '../../../../../core/common/flush_bar/flush_bars.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 

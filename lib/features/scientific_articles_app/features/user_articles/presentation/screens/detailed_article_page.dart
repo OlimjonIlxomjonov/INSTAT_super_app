@@ -11,7 +11,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
+import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';

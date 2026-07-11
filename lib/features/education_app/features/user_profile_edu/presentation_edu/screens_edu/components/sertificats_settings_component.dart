@@ -45,7 +45,7 @@ class _SertificatsSettingsComponentState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBarWg(myTitle: 'Sertifikatlar', showArrow: false),
+      appBar: CustomAppBarWg(myTitle: 'Sertifikatlar'),
       body: CustomRefreshIndicator(
         onRefresh: () async {
           context.read<CertificateBloc>().add(UserCertificateEvent());

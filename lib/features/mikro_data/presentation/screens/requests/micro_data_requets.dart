@@ -8,6 +8,7 @@ import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
 
+import '../../../../../core/common/flush_bar/flush_bars.dart';
 import '../../../../../core/utils/widgets/edu_categories/edu_categories_wg.dart';
 
 class MicroDataRequests extends StatelessWidget {

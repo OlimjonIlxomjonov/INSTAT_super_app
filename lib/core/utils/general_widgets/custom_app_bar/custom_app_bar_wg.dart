@@ -9,7 +9,7 @@ class CustomAppBarWg extends StatelessWidget implements PreferredSize {
   final List<Widget>? customActions;
   final PreferredSizeWidget? appBarBottom;
   final bool isFamily;
-  final bool showArrow;
+  final bool showArrow, centerTitle;
 
   const CustomAppBarWg({
     super.key,
@@ -18,6 +18,7 @@ class CustomAppBarWg extends StatelessWidget implements PreferredSize {
     this.appBarBottom,
     this.isFamily = false,
     this.showArrow = true,
+    this.centerTitle = true,
   });
 
   @override
@@ -46,8 +47,10 @@ class CustomAppBarWg extends StatelessWidget implements PreferredSize {
               onPressed: onClose,
               icon: Icon(IconlyLight.arrow_left_2, size: 20),
             )
-          : SizedBox.shrink(),
-      centerTitle: true,
+          : null,
+      automaticallyImplyLeading: false,
+      centerTitle: centerTitle,
+      titleSpacing: 22,
       title: myTitle != null
           ? Text(myTitle!, style: AppTextStyles.source.semiBold(fontSize: 18))
           : SizedBox.shrink(),

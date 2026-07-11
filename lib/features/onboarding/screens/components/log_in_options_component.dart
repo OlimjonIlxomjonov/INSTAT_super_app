@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
+import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/routes/route_generator.dart';

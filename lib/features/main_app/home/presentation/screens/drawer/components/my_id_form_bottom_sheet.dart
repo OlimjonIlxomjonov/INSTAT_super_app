@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
-import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
+import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/features/auth/presentation/widgets/auth_text_field_wg.dart';
@@ -125,7 +125,7 @@ class _MyIdFormBottomSheetState extends State<MyIdFormBottomSheet> {
     final invalidPassportError =
         "Pasport formati noto'g'ri (masalan, AA1234567)";
     final invalidBirthDateError =
-        "Tug'ilgan sana formati noto'g'ri (masalan, 01.02.2000)";
+        "Tug'ilgan sana formati noto'g'ri (masalan, kk.oo.yyyy)";
 
     return BlocConsumer<FaceRecBloc, FaceRecState>(
       listener: (context, state) async {

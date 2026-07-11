@@ -7,8 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:my_template/core/common/flush_bar/error_flush_bar.dart';
-import 'package:my_template/core/common/flush_bar/success_flush_bar.dart';
+import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
@@ -290,7 +289,10 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                                   return;
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.all(4),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
                                   decoration: BoxDecoration(
                                     color: AppColors.orange50,
                                     borderRadius: BorderRadius.circular(6),
@@ -300,7 +302,7 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                                     spacing: 5,
                                     children: [
                                       Icon(
-                                        IconlyLight.danger,
+                                        IconlyBold.danger,
                                         color: AppColors.orange500,
                                       ),
                                       AutoSizeText(

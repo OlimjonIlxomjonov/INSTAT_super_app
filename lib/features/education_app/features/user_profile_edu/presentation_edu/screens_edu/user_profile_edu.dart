@@ -30,7 +30,11 @@ class _UserProfileEduState extends State<UserProfileEdu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBarWg(myTitle: 'Akkaunt ma’lumotlari', showArrow: false),
+      appBar: CustomAppBarWg(
+        myTitle: 'Akkaunt ma’lumotlari',
+        showArrow: false,
+        centerTitle: false,
+      ),
       body: CustomScrollView(
         slivers: [
           /// SETTINGS

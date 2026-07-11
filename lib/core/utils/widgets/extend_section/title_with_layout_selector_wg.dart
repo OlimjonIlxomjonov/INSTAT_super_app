@@ -8,11 +8,13 @@ import 'package:my_template/core/utils/enums/app_enums.dart';
 class TitleWithLayoutSelectorWg extends StatefulWidget {
   final String prefsKey;
   final ValueChanged<CoursesLayout> onChanged;
+  final String text;
 
   const TitleWithLayoutSelectorWg({
     super.key,
     required this.onChanged,
     required this.prefsKey,
+    this.text = 'Kurslar',
   });
 
   @override
@@ -49,7 +51,7 @@ class _TitleWithLayoutSelectorWgState extends State<TitleWithLayoutSelectorWg> {
       crossAxisAlignment: .center,
       mainAxisAlignment: .spaceBetween,
       children: [
-        Text('Kurslar', style: AppTextStyles.source.semiBold(fontSize: 18)),
+        Text(widget.text, style: AppTextStyles.source.semiBold(fontSize: 18)),
         Container(
           margin: const .symmetric(vertical: 10),
           padding: .all(4),

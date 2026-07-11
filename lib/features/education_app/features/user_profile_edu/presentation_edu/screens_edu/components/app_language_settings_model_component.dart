@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:my_template/core/common/flush_bar/success_flush_bar.dart';
+import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/language_storage/language_service_storage.dart';
 import 'package:my_template/core/streams/general_streams.dart';

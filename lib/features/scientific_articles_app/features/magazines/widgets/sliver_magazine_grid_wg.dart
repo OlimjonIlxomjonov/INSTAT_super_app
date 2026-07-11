@@ -6,6 +6,8 @@ import 'package:my_template/features/scientific_articles_app/dummy_models/magazi
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_editions/article_editions_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_editions/article_editions_response.dart';
 
+import '../../../../../core/common/flush_bar/flush_bars.dart';
+
 class SliverMagazineGridWg extends StatelessWidget {
   final List<ArticleEditionsEntity> items;
 
@@ -29,6 +31,7 @@ class SliverMagazineGridWg extends StatelessWidget {
               technicalWorkFlushBar(context, 'Tez orada!');
             },
             child: Column(
+              crossAxisAlignment: .start,
               children: [
                 Expanded(
                   flex: 3,

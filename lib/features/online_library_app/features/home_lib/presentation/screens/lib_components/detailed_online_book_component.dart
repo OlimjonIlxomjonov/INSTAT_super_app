@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import 'package:my_template/core/common/flush_bar/added_to_cart_flush_bar.dart';
-import 'package:my_template/core/common/flush_bar/technical_work_flash_bar.dart';
+import 'package:my_template/core/common/flush_bar/technical_work_flash_bar.dart' hide technicalWorkFlushBar;
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/general_widgets/bought_book_opener/bought_book_opener_wg.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -21,6 +20,8 @@ import 'package:my_template/features/online_library_app/features/user_online_boo
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart'
     as my_template_book;
+
+import '../../../../../../../core/common/flush_bar/flush_bars.dart';
 
 class DetailedOnlineBookComponent extends StatefulWidget {
   final bool isBookBought, isOffline;
