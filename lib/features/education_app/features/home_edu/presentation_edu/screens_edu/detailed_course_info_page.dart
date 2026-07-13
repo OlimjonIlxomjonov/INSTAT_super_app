@@ -77,7 +77,7 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
         automaticallyImplyLeading: false,
         toolbarHeight: 0,
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(appH(90)),
+          preferredSize: Size.fromHeight(90),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
             child: CustomTabBarWg(

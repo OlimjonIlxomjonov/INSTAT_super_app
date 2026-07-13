@@ -27,7 +27,29 @@ class CameraService extends ChangeNotifier {
         enableAudio: false,
       );
 
-      await _controller!.initialize();
+      try {
+        await _controller!.initialize();
+      } on CameraException {
+        // Some Android devices (CameraX) don't support a Preview +
+        // ImageCapture surface combination at `medium` resolution and throw
+        // "No supported surface combination is found" — retry at `low`,
+        // which uses a smaller/more universally supported surface size.
+        try {
+          await _controller!.dispose();
+        } catch (_) {
+          // A controller whose initialize() failed partway through was
+          // never fully bound on the CameraX side — disposing it can throw
+          // (releaseSurfaceProvider on a surface that was never set up).
+          // Safe to ignore; we're discarding this controller either way.
+        }
+        _controller = CameraController(
+          frontCamera,
+          ResolutionPreset.low,
+          enableAudio: false,
+        );
+        await _controller!.initialize();
+      }
+
       await _controller!.setFlashMode(FlashMode.off);
       notifyListeners();
     } catch (e) {
