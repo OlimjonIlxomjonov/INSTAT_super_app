@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/common/ui_states/empty_state.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
@@ -44,8 +45,9 @@ class _SertificatsSettingsComponentState
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: CustomAppBarWg(myTitle: 'Sertifikatlar'),
+      appBar: CustomAppBarWg(myTitle: localization.certificates),
       body: CustomRefreshIndicator(
         onRefresh: () async {
           context.read<CertificateBloc>().add(UserCertificateEvent());
@@ -60,9 +62,8 @@ class _SertificatsSettingsComponentState
                     if (state.response.data.isEmpty) {
                       return SliverToBoxAdapter(
                         child: AppEmptyState(
-                          title: 'Sizda hali sertifikatlar yoʻq',
-                          subtitle:
-                              'Ilk sertifikatingizni qoʻlga kiritish uchun yangi oʻquv yoʻnalishini boshlang.',
+                          title: localization.noCertificatesYet,
+                          subtitle: localization.noCertificatesSubtitle,
                         ),
                       );
                     }

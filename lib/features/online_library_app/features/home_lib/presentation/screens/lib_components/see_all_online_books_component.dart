@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
@@ -16,10 +17,11 @@ class SeeAllOnlineBooksComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverDefaultAppBarWg(myTitle: 'Kitoblar', isFamily: true),
+          SliverDefaultAppBarWg(myTitle: localization.books, isFamily: true),
           SliverPadding(
             padding: .symmetric(horizontal: appW(20)),
             sliver: SliverAppBar(
@@ -48,7 +50,7 @@ class SeeAllOnlineBooksComponent extends StatelessWidget {
             padding: AppPadding.horizontal20x(),
             sliver: SliverToBoxAdapter(
               child: Text(
-                'Kitoblar',
+                localization.books,
                 style: AppTextStyles.source.semiBold(fontSize: 17),
               ),
             ),

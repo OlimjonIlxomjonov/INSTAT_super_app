@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/ui_states/empty_state.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/comment_section/user_comments_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
@@ -41,7 +42,7 @@ class _CourseCommentsTabState extends State<CourseCommentsTab>
             ? Padding(
                 padding: AppPadding.horizontal20x(),
                 child: ExtendSectionSeeAllWg(
-                  title: 'Qoldirilgan izohlar',
+                  title: AppLocalizations.of(context)!.commentsLeft,
                   onTap: () => _openAllComments(context, items!),
                 ),
               )

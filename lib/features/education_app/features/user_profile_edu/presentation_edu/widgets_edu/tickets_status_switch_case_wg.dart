@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
 
-Widget ticketsStatusSwitchCase(TicketStatus status) {
+Widget ticketsStatusSwitchCase(BuildContext context, TicketStatus status) {
+  final localization = AppLocalizations.of(context)!;
   switch (status) {
     case TicketStatus.approved:
       return Container(
@@ -22,7 +24,7 @@ Widget ticketsStatusSwitchCase(TicketStatus status) {
               color: AppColors.greenDoneTaskCard,
             ),
             Text(
-              ' Tasdiqlangan',
+              ' ${localization.statusConfirmed}',
               style: AppTextStyles.source.medium(
                 fontSize: 12,
                 color: AppColors.greenDoneTaskCard,
@@ -43,7 +45,7 @@ Widget ticketsStatusSwitchCase(TicketStatus status) {
           children: [
             Icon(IconlyBold.danger, size: 20, color: AppColors.orange),
             Text(
-              ' Kutilmoqda',
+              ' ${localization.statusPending}',
               style: AppTextStyles.source.medium(
                 fontSize: 12,
                 color: AppColors.orange,
@@ -64,7 +66,7 @@ Widget ticketsStatusSwitchCase(TicketStatus status) {
           children: [
             Icon(Icons.dangerous, size: 20, color: AppColors.redFailedTaskCard),
             Text(
-              ' Bekor qilingan',
+              ' ${localization.cancelledBrief}',
               style: AppTextStyles.source.medium(
                 fontSize: 12,
                 color: AppColors.redFailedTaskCard,

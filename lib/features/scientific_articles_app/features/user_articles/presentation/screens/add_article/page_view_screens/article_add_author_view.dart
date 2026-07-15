@@ -5,6 +5,7 @@ import 'package:iconly/iconly.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/custom_drop_down_menu_wg.dart';
 import 'package:my_template/features/auth/presentation/widgets/auth_text_field_wg.dart';
@@ -48,6 +49,7 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
   }
 
   void _saveAuthor() {
+    final localization = AppLocalizations.of(context)!;
     final firstName = _firstNameController.text.trim();
     final lastName = _lastNameController.text.trim();
     final organization = _organizationController.text.trim();
@@ -57,36 +59,36 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
     final orcid = _orcidController.text.trim();
 
     if (firstName.isEmpty) {
-      _showError("Muallif ismini kiriting");
+      _showError(localization.enterAuthorFirstName);
       return;
     }
     if (lastName.isEmpty) {
-      _showError("Muallif familiyasini kiriting");
+      _showError(localization.enterAuthorLastName);
       return;
     }
     if (_selectedDegreeId == null) {
-      _showError("Ilmiy darajani tanlang");
+      _showError(localization.selectAcademicDegree);
       return;
     }
     if (organization.isEmpty) {
-      _showError("Tashkilotni kiriting");
+      _showError(localization.enterOrganization);
       return;
     }
     if (email.isEmpty) {
-      _showError("Elektron pochtani kiriting");
+      _showError(localization.enterEmail);
       return;
     }
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(email)) {
-      _showError("Yaroqsiz elektron pochta manzili");
+      _showError(localization.invalidEmail);
       return;
     }
     if (address.isEmpty) {
-      _showError("Shahar, davlatni kiriting");
+      _showError(localization.enterCityCountry);
       return;
     }
     if (phoneNumber.isEmpty) {
-      _showError("Telefon raqamini kiriting");
+      _showError(localization.enterPhoneNumber);
       return;
     }
 
@@ -112,13 +114,11 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
           onSuccess: () {
             _clearFields();
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Muallif muvaffaqiyatli yangilandi'),
-              ),
+              SnackBar(content: Text(localization.authorUpdatedSuccessfully)),
             );
           },
           onError: (err) {
-            _showError('Muallifni yangilashda xatolik: $err');
+            _showError(localization.authorUpdateError(err));
           },
         ),
       );
@@ -132,7 +132,7 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
       );
       _clearFields();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Muallif ro'yxatga qo'shildi (mahalliy)")),
+        SnackBar(content: Text(localization.authorAddedLocally)),
       );
     } else {
       // Review exists on server, POST immediately
@@ -142,11 +142,11 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
           onSuccess: () {
             _clearFields();
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Muallif muvaffaqiyatli saqlandi")),
+              SnackBar(content: Text(localization.authorSavedSuccessfully)),
             );
           },
           onError: (err) {
-            _showError("Muallifni saqlashda xatolik: $err");
+            _showError(localization.authorSaveError(err));
           },
         ),
       );
@@ -189,6 +189,7 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Padding(
       padding: AppPadding.horizontal20x(),
       child: SingleChildScrollView(
@@ -198,16 +199,16 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
           children: [
             //? NAME
             AuthTextFieldWg(
-              label: 'Muallif ismi',
-              title: 'Ismi',
+              label: localization.authorFirstNameHint,
+              title: localization.firstNameLabel,
               controller: _firstNameController,
               leadingIcon: IconlyLight.profile,
             ),
 
             //? SURNAME
             AuthTextFieldWg(
-              label: 'Muallif familiyasi',
-              title: 'Familiya',
+              label: localization.authorLastNameHint,
+              title: localization.lastNameLabel,
               controller: _lastNameController,
               leadingIcon: IconlyLight.profile,
             ),
@@ -219,8 +220,8 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
                     ? state.entity
                     : null;
                 return CustomDropDownMenuWg(
-                  title: 'Ilmiy Daraja',
-                  hintText: 'Ilmiy daraja',
+                  title: localization.academicDegreeTitle,
+                  hintText: localization.academicDegreeHint,
                   leadingIcon: Icons.school_outlined,
                   options: loaded,
                   value: _selectedDegreeId,
@@ -235,8 +236,8 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
 
             //? COMPANY
             AuthTextFieldWg(
-              label: 'Tashkilot nomini yozing',
-              title: 'Tashkilot',
+              label: localization.organizationHint,
+              title: localization.organizationLabel,
               controller: _organizationController,
               leadingIcon: Icons.corporate_fare,
             ),
@@ -244,7 +245,7 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
             /// email
             AuthTextFieldWg(
               label: 'example@gmail.com',
-              title: 'Elektron pochta',
+              title: localization.emailLabel,
               controller: _emailController,
               leadingIcon: IconlyLight.message,
             ),
@@ -252,7 +253,7 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
             /// address
             AuthTextFieldWg(
               label: 'Toshkent, O\'zbekiston',
-              title: 'Shahar, davlat',
+              title: localization.cityCountryLabel,
               controller: _addressController,
               leadingIcon: IconlyLight.location,
             ),
@@ -266,7 +267,7 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
               showCountryFlag: false,
               flagsButtonPadding: const EdgeInsets.only(left: 8.0),
               decoration: InputDecoration(
-                hintText: 'Telefon raqami',
+                hintText: localization.phoneNumberLabel,
                 enabledBorder: OutlineInputBorder(
                   borderRadius: .circular(10),
                   borderSide: BorderSide(
@@ -316,8 +317,8 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
               child: Center(
                 child: Text(
                   _editingAuthorId != null
-                      ? 'Muallifni yangilash'
-                      : 'Muallifni saqlash',
+                      ? localization.updateAuthorButton
+                      : localization.saveAuthorButton,
                   style: AppTextStyles.source.medium(
                     fontSize: 16,
                     color: Colors.white,
@@ -328,7 +329,7 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
             if (_editingAuthorId != null) ...[
               TextButton(
                 onPressed: _clearFields,
-                child: const Text('Tahrirlashni bekor qilish'),
+                child: Text(localization.cancelEditButton),
               ),
             ],
 
@@ -346,7 +347,10 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 20),
-                    Text("Kiritilgan mualliflar", style: CustomTextStyles.h2),
+                    Text(
+                      localization.enteredAuthorsHeader,
+                      style: CustomTextStyles.h2,
+                    ),
                     const SizedBox(height: 10),
                     // Render local authors
                     ...addState.localAuthors.asMap().entries.map((entry) {

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/article_params/article_params.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/general_widgets/custom_drop_down_menu_wg.dart';
@@ -33,22 +34,22 @@ class _ArticleInfoViewState extends State<ArticleInfoView> {
   final udkController = TextEditingController();
   Timer? _udkDebounce;
 
-  final List<DropDownEntity> languageOptions = [
+  List<DropDownEntity> _languageOptions(AppLocalizations localization) => [
     DropDownEntity(
       id: 1,
-      name: "O'zbek tili",
+      name: localization.languageUzbek,
       isActive: true,
       createdAt: DateTime.now(),
     ),
     DropDownEntity(
       id: 2,
-      name: "Rus tili",
+      name: localization.languageRussian,
       isActive: true,
       createdAt: DateTime.now(),
     ),
     DropDownEntity(
       id: 3,
-      name: "Ingliz tili",
+      name: localization.languageEnglish,
       isActive: true,
       createdAt: DateTime.now(),
     ),
@@ -90,6 +91,7 @@ class _ArticleInfoViewState extends State<ArticleInfoView> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Padding(
       padding: AppPadding.horizontal20x(),
       child: SingleChildScrollView(
@@ -97,10 +99,10 @@ class _ArticleInfoViewState extends State<ArticleInfoView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             /// TEXT AREA
-            Text('Sarlavha', style: CustomTextStyles.h3half),
+            Text(localization.titleLabel, style: CustomTextStyles.h3half),
             SizedBox(height: 8),
             EduCustomTextAreaWg(
-              hintText: 'Maqola sarlavhasini kiriting...',
+              hintText: localization.titleHint,
               controller: titleController,
               onChanged: (val) {
                 context.read<AddArticleBloc>().add(
@@ -120,7 +122,7 @@ class _ArticleInfoViewState extends State<ArticleInfoView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AuthTextFieldWg(
-                      label: 'UDK raqamini kiriting',
+                      label: localization.enterUdkNumber,
                       controller: udkController,
                       isTypeNum: true,
                       onChanged: (val) {
@@ -146,11 +148,9 @@ class _ArticleInfoViewState extends State<ArticleInfoView> {
                       // onEditingComplete: () {},
                     ),
                     if (state is UdkLoading)
-                      const Skeletonizer(
+                      Skeletonizer(
                         enabled: true,
-                        child: Text(
-                          'This field is trying to find valid UDK,\nplease wait!...',
-                        ),
+                        child: Text(localization.udkSearchingLoading),
                       ),
                     if (state is UdkLoaded &&
                         udkController.text.trim().isNotEmpty)
@@ -189,7 +189,7 @@ class _ArticleInfoViewState extends State<ArticleInfoView> {
                             ),
                             const SizedBox(width: 6),
                             Text(
-                              "UDK raqami noto'g'ri",
+                              localization.incorrectUdkNumber,
                               style: CustomTextStyles.h4.copyWith(
                                 color: AppColors.iconRed,
                               ),
@@ -212,8 +212,8 @@ class _ArticleInfoViewState extends State<ArticleInfoView> {
                 return BlocBuilder<AddArticleBloc, AddArticleState>(
                   builder: (context, addState) {
                     return CustomDropDownMenuWg(
-                      title: 'Maqola turi',
-                      hintText: 'Turini tanlang',
+                      title: localization.articleTypeTitle,
+                      hintText: localization.selectTypeHint,
                       options: loaded,
                       value: addState.articleType,
                       onChanged: (val) {
@@ -232,9 +232,9 @@ class _ArticleInfoViewState extends State<ArticleInfoView> {
             BlocBuilder<AddArticleBloc, AddArticleState>(
               builder: (context, addState) {
                 return CustomDropDownMenuWg(
-                  title: 'Maqolani tili',
-                  hintText: 'O\'zbek tili',
-                  options: languageOptions,
+                  title: localization.articleLanguageTitle,
+                  hintText: localization.languageUzbek,
+                  options: _languageOptions(localization),
                   value: _mapLanguageToId(addState.language),
                   onChanged: (val) {
                     context.read<AddArticleBloc>().add(
@@ -258,8 +258,8 @@ class _ArticleInfoViewState extends State<ArticleInfoView> {
                 return BlocBuilder<AddArticleBloc, AddArticleState>(
                   builder: (context, addState) {
                     return CustomDropDownMenuWg(
-                      title: 'Jurnal bo’limi',
-                      hintText: 'Bo\'limni tanlang',
+                      title: localization.journalSectionTitle,
+                      hintText: localization.selectSectionHint,
                       options: loaded,
                       value: addState.journalSection,
                       onChanged: (val) {

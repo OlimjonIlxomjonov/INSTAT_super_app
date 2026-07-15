@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
@@ -55,6 +56,7 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
   Widget build(BuildContext context) {
     return BlocBuilder<CourseLessonItemsBloc, CourseLessonItemsState>(
       builder: (context, state) {
+        final localization = AppLocalizations.of(context)!;
         final isLoading = state.loadingBlocks.contains(widget.blockId);
         final hasError = state.errorBlocks.containsKey(widget.blockId);
         final loadedResponse = state.loadedBlocks[widget.blockId];
@@ -118,7 +120,7 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
             return Padding(
               padding: EdgeInsets.only(bottom: appH(12)),
               child: Text(
-                'Hali darslar topilmadi.',
+                localization.noLessonsFoundYet,
                 style: AppTextStyles.source.regular(
                   fontSize: 14,
                   color: AppColors.greyScale.grey500,
@@ -161,7 +163,7 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
                       } else {
                         errorFlushBar(
                           context,
-                          'Ushbu darslik uchun hozircha ruxsat yo\'q',
+                          localization.noAccessToLessonYet,
                         );
                       }
                     },

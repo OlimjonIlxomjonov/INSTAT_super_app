@@ -6,6 +6,7 @@ import 'package:lottie/lottie.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/di/service_locator.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/camera_service.dart';
 import 'package:my_template/core/utils/constants/assets/app_animations.dart';
@@ -72,7 +73,11 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
     super.dispose();
   }
 
-  void _showFinishDialog(CourseLessonTestFinished state) {
+  void _showFinishDialog(
+    BuildContext context,
+    CourseLessonTestFinished state,
+  ) {
+    final localization = AppLocalizations.of(context)!;
     _confettiController.play();
 
     final percentage = state.totalQuestions > 0
@@ -95,9 +100,8 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
           ),
         ],
       ),
-      title: 'Ajoyib natija',
-      subTitle:
-          "Keyingi safar ko'proq o'rganing va barcha to'g'ri javoblarni oling.",
+      title: localization.greatResultTitle,
+      subTitle: localization.regularTestFinishSubtitle,
       body: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
@@ -112,12 +116,14 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
             _buildColumn(
               title: '$percentage%',
               subTitle: '${state.totalQuestions - state.correctAnswers} ta',
+              titleDesc: localization.wrongAnswer,
+              subTitleDesc: localization.completionPercentageLabel,
             ),
             _buildColumn(
               title: '${state.correctAnswers} ⭐',
               subTitle: '${state.correctAnswers} ta',
-              titleDesc: 'To’g’ri javoblar',
-              subTitleDesc: 'Berilgan ball',
+              titleDesc: localization.correctAnswersLabel,
+              subTitleDesc: localization.pointsGivenLabel,
             ),
           ],
         ),
@@ -130,7 +136,7 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
               AppRoute.close();
               AppRoute.close(); // Close the test page context as well
             },
-            child: const Text('Davom etish'),
+            child: Text(localization.continueButton),
           ),
         ),
       ],
@@ -141,8 +147,8 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
   Column _buildColumn({
     required String title,
     required String subTitle,
-    String titleDesc = 'Noto’g’ri javob',
-    String subTitleDesc = 'Tugatish foizi',
+    required String titleDesc,
+    required String subTitleDesc,
   }) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -175,18 +181,19 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
       child: BlocConsumer<CourseLessonTestBloc, CourseLessonTestState>(
         listener: (context, state) {
           if (state is CourseLessonTestFinished) {
-            _showFinishDialog(state);
+            _showFinishDialog(context, state);
           } else if (state is CourseLessonTestError) {
             errorFlushBar(context, state.message);
           }
         },
         builder: (context, state) {
+          final localization = AppLocalizations.of(context)!;
           double progress = 0.0;
           String questionTitle = "";
           String questionText = "";
           bool isLoading = state is CourseLessonTestLoading;
           Widget optionList = const SizedBox.shrink();
-          String buttonText = "Tasdiqlash";
+          String buttonText = localization.confirm;
           VoidCallback? onButtonTap;
           Widget? banner;
 
@@ -195,7 +202,9 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
                 ? ((state.currentTestIndex) / state.tests.length)
                 : 0.0;
             final currentTest = state.tests[state.currentTestIndex];
-            questionTitle = '${state.currentTestIndex + 1}-Savol';
+            questionTitle = localization.questionNumberTemplate(
+              state.currentTestIndex + 1,
+            );
             questionText = currentTest.question;
 
             optionList = TestOptionListWg(
@@ -209,7 +218,7 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
               onButtonTap = () async {
                 final image = await _cameraService.captureBase64();
                 if (image == null && mounted) {
-                  errorFlushBar(context, 'Camera capture failed. Please try again.');
+                  errorFlushBar(context, localization.cameraCaptureFailedMessage);
                   return;
                 }
                 if (mounted) {
@@ -224,7 +233,9 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
                 ? ((state.currentTestIndex + 1) / state.tests.length)
                 : 0.0;
             final currentTest = state.tests[state.currentTestIndex];
-            questionTitle = '${state.currentTestIndex + 1}-Savol';
+            questionTitle = localization.questionNumberTemplate(
+              state.currentTestIndex + 1,
+            );
             questionText = currentTest.question;
 
             optionList = TestOptionListWg(
@@ -234,16 +245,17 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
               isCorrect: state.answerResponse.isCorrect,
             );
 
-            buttonText = "Keyingi savol";
+            buttonText = localization.nextQuestionButton;
             onButtonTap = () => context.read<CourseLessonTestBloc>().add(
               NextLessonTestQuestionEvent(),
             );
 
             banner = buildTestResultBanner(
               isCorrect: state.answerResponse.isCorrect,
+              localization: localization,
             );
           } else if (isLoading) {
-            questionTitle = 'Yuklanmoqda...';
+            questionTitle = localization.loadingEllipsis;
             questionText = '';
           }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/widgets/comment_section/user_comments_wg.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/entity/comments/comments_entity.dart';
 
@@ -18,7 +19,7 @@ class SeeAllCourseComments extends StatelessWidget {
             padding: .only(left: 20, bottom: 20),
             sliver: SliverToBoxAdapter(
               child: Text(
-                'Qoldirilgan izohlar',
+                AppLocalizations.of(context)!.commentsLeft,
                 style: AppTextStyles.source.medium(fontSize: 18),
               ),
             ),

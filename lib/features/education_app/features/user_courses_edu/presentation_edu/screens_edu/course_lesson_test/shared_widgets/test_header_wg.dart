@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/general_widgets/confirm_dialog/confirm_dialog_wg.dart';
@@ -9,10 +10,11 @@ class TestHeaderWg extends StatelessWidget {
   const TestHeaderWg({super.key, required this.progress});
 
   void _showDialog(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     showConfirmDialog(
       context,
-      title: 'Chiqishni xohlaysizmi?',
-      description: "Kiritilgan ma'lumotlar saqlanip qolinmaydi!",
+      title: localization.exitConfirmTitle,
+      description: localization.exitConfirmNewMode,
       onConfirm: () => AppRoute.close(),
     );
   }

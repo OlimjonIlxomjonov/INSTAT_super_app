@@ -318,6 +318,7 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                                   ),
                                 ),
                               ),
+                            SizedBox(height: 15),
                           ],
                         ),
                       );

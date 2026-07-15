@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
@@ -40,14 +41,35 @@ class _ReportsFilterBottomSheetState extends State<ReportsFilterBottomSheet> {
   DateTimeRange? _dateRange;
   final Set<String> _selectedStatuses = {};
 
+  // Stable internal values (independent of device locale) — the displayed
+  // label for each is resolved via `_statusLabel` at render time.
   static const _statusOptions = [
-    'Jarayonda',
-    'Bajarildi',
-    'Bekor qilindi',
-    'Kutilmoqda',
-    'Yangi',
-    'Qayta ishlangan',
+    'in_progress',
+    'completed',
+    'cancelled',
+    'pending',
+    'new',
+    'processed',
   ];
+
+  String _statusLabel(AppLocalizations localization, String status) {
+    switch (status) {
+      case 'in_progress':
+        return localization.statusInProgress;
+      case 'completed':
+        return localization.statusCompleted;
+      case 'cancelled':
+        return localization.statusCancelled;
+      case 'pending':
+        return localization.statusPending;
+      case 'new':
+        return localization.statusNew;
+      case 'processed':
+        return localization.statusProcessed;
+      default:
+        return status;
+    }
+  }
 
   void _clearAll() {
     setState(() {
@@ -105,14 +127,15 @@ class _ReportsFilterBottomSheetState extends State<ReportsFilterBottomSheet> {
     }
   }
 
-  String _formatDate(DateTimeRange? range) {
-    if (range == null) return 'Sana tanlang';
+  String _formatDate(AppLocalizations localization, DateTimeRange? range) {
+    if (range == null) return localization.selectDate;
     final fmt = DateFormat('yyyy-MM-dd');
     return '${fmt.format(range.start)}  —  ${fmt.format(range.end)}';
   }
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -148,7 +171,7 @@ class _ReportsFilterBottomSheetState extends State<ReportsFilterBottomSheet> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Filtrlash',
+                    localization.filtering,
                     style: AppTextStyles.source.semiBold(fontSize: 18),
                   ),
                   IconButton(
@@ -170,19 +193,19 @@ class _ReportsFilterBottomSheetState extends State<ReportsFilterBottomSheet> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // ── Date range (single picker) ──
-                    _buildSectionTitle('Sana oralig\'i'),
+                    _buildSectionTitle(localization.dateRange),
                     SizedBox(height: appH(10)),
                     _buildDateRow(
-                      label: _formatDate(_dateRange),
+                      label: _formatDate(localization, _dateRange),
                       onTap: _pickDateRange,
                     ),
 
                     SizedBox(height: appH(20)),
 
                     // ── Status section ──
-                    _buildSectionTitle('Holati'),
+                    _buildSectionTitle(localization.status),
                     SizedBox(height: appH(10)),
-                    _buildStatusChips(),
+                    _buildStatusChips(localization),
                   ],
                 ),
               ),
@@ -210,7 +233,7 @@ class _ReportsFilterBottomSheetState extends State<ReportsFilterBottomSheet> {
                       ),
                       onPressed: _clearAll,
                       child: Text(
-                        'Tozalash',
+                        localization.clear,
                         style: AppTextStyles.source.medium(
                           fontSize: 14,
                           color: AppColors.greyScale.grey700,
@@ -231,7 +254,7 @@ class _ReportsFilterBottomSheetState extends State<ReportsFilterBottomSheet> {
                       ),
                       onPressed: _apply,
                       child: Text(
-                        'Qo\'llash',
+                        localization.apply,
                         style: AppTextStyles.source.medium(
                           fontSize: 14,
                           color: AppColors.white,
@@ -310,7 +333,7 @@ class _ReportsFilterBottomSheetState extends State<ReportsFilterBottomSheet> {
   }
 
   // ── Status chips ──
-  Widget _buildStatusChips() {
+  Widget _buildStatusChips(AppLocalizations localization) {
     return Wrap(
       spacing: appW(8),
       runSpacing: appH(8),
@@ -345,7 +368,7 @@ class _ReportsFilterBottomSheetState extends State<ReportsFilterBottomSheet> {
               ),
             ),
             child: Text(
-              status,
+              _statusLabel(localization, status),
               style: AppTextStyles.source.medium(
                 fontSize: 13,
                 color: isSelected

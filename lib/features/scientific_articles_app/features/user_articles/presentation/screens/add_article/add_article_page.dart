@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/general_widgets/confirm_dialog/confirm_dialog_wg.dart';
@@ -50,6 +51,7 @@ class _AddArticlePageState extends State<AddArticlePage> {
   }
 
   void _saveDraft(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     context.read<AddArticleBloc>().add(
       SaveArticleDraftEvent(
         status: 'draft',
@@ -58,14 +60,14 @@ class _AddArticlePageState extends State<AddArticlePage> {
             successFlushBar(
               context,
               _isEditMode
-                  ? 'O\'zgarishlar saqlandi!'
-                  : 'Qoralama muvaffaqiyatli saqlandi!',
+                  ? localization.changesSaved
+                  : localization.draftSavedSuccessfully,
             );
           }
         },
         onError: (err) {
           if (mounted) {
-            errorFlushBar(context, 'Saqlashda xatolik yuz berdi');
+            errorFlushBar(context, localization.savingError);
           }
         },
       ),
@@ -73,6 +75,7 @@ class _AddArticlePageState extends State<AddArticlePage> {
   }
 
   void _submitArticle(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     context.read<AddArticleBloc>().add(
       SaveArticleDraftEvent(
         status: 'in_review',
@@ -80,8 +83,8 @@ class _AddArticlePageState extends State<AddArticlePage> {
           if (mounted) {
             showSuccessDialog(
               context,
-              title: 'Maqola yuborildi!',
-              description: 'Maqolangiz ko\'rib chiqish uchun qabul qilindi.',
+              title: localization.articleSubmitted,
+              description: localization.articleSubmittedDescription,
               onDismiss: () => FamilyNavigation.familyClose(context),
             );
           }
@@ -95,7 +98,7 @@ class _AddArticlePageState extends State<AddArticlePage> {
     super.initState();
     pageController.addListener(() {
       setState(() {
-        progress = (pageController.page! + 1) / titles.length;
+        progress = (pageController.page! + 1) / 5;
       });
     });
   }
@@ -108,6 +111,7 @@ class _AddArticlePageState extends State<AddArticlePage> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -140,7 +144,7 @@ class _AddArticlePageState extends State<AddArticlePage> {
                       automaticallyImplyLeading: false,
                       centerTitle: true,
                       title: Text(
-                        'Maqolani tahrirlash',
+                        localization.editArticleTitle,
                         style: CustomTextStyles.h2,
                       ),
                     ),
@@ -157,7 +161,7 @@ class _AddArticlePageState extends State<AddArticlePage> {
                       automaticallyImplyLeading: false,
                       centerTitle: true,
                       title: Text(
-                        'Maqolani tahrirlash',
+                        localization.editArticleTitle,
                         style: CustomTextStyles.h2,
                       ),
                     ),
@@ -176,7 +180,7 @@ class _AddArticlePageState extends State<AddArticlePage> {
                             ElevatedButton(
                               onPressed: () =>
                                   FamilyNavigation.familyClose(context),
-                              child: const Text('Orqaga'),
+                              child: Text(localization.back),
                             ),
                           ],
                         ),
@@ -200,6 +204,10 @@ class _AddArticlePageState extends State<AddArticlePage> {
   }
 
   Widget _buildWizard(BuildContext context, AddArticleState state) {
+    final localization = AppLocalizations.of(context)!;
+    final titles = getWizardTitles(localization);
+    final stepsDesc = getWizardStepsDesc(localization);
+    final articlesHeaderData = getArticlesHeaderData(localization);
     final keyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
 
     final formKey = ValueKey(
@@ -214,7 +222,7 @@ class _AddArticlePageState extends State<AddArticlePage> {
             automaticallyImplyLeading: false,
             centerTitle: true,
             title: Text(
-              _isEditMode ? 'Maqolani tahrirlash' : titles[currentPage],
+              _isEditMode ? localization.editArticleTitle : titles[currentPage],
               style: CustomTextStyles.h2,
             ),
           ),
@@ -227,8 +235,8 @@ class _AddArticlePageState extends State<AddArticlePage> {
                       ? null
                       : () => moveNextPageOrFinish(context),
                   onSecondText: !isLastPage
-                      ? 'Keyingi qadam'
-                      : 'Maqolani yuborish',
+                      ? localization.nextStep
+                      : localization.submitArticleButton,
                 ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -287,7 +295,7 @@ class _AddArticlePageState extends State<AddArticlePage> {
                               color: AppColors.greyScale.grey600,
                             ),
                             Text(
-                              ' Saqlash',
+                              ' ${localization.save}',
                               style: AppTextStyles.source.medium(
                                 fontSize: 12,
                                 color: AppColors.greyScale.grey600,
@@ -326,16 +334,19 @@ class _AddArticlePageState extends State<AddArticlePage> {
         if (state.isSaving)
           Container(
             color: Colors.black.withValues(alpha: 0.4),
-            child: const Center(
+            child: Center(
               child: Card(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 28, horizontal: 36),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 28,
+                    horizontal: 36,
+                  ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      CircularProgressIndicator.adaptive(),
-                      SizedBox(height: 16),
-                      Text('Saqlanmoqda...'),
+                      const CircularProgressIndicator.adaptive(),
+                      const SizedBox(height: 16),
+                      Text(localization.savingEllipsis),
                     ],
                   ),
                 ),
@@ -348,12 +359,13 @@ class _AddArticlePageState extends State<AddArticlePage> {
 }
 
 void _showExitDialog(BuildContext context, {required bool isEditMode}) {
+  final localization = AppLocalizations.of(context)!;
   showConfirmDialog(
     context,
-    title: 'Chiqishni xohlaysizmi?',
+    title: localization.exitConfirmTitle,
     description: isEditMode
-        ? "Saqlanmagan o'zgarishlar yo'qolishi mumkin."
-        : "Kiritilgan ma'lumotlar saqlanmasligi mumkin.",
+        ? localization.exitConfirmEditMode
+        : localization.exitConfirmNewMode,
     onConfirm: () => FamilyNavigation.familyClose(context),
   );
 }

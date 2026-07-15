@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
@@ -24,6 +25,7 @@ class _UserOnlineBookProfileLibState extends State<UserOnlineBookProfileLib> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    final localization = AppLocalizations.of(context)!;
     _leadingIcons = [
       IconlyLight.heart,
       IconlyLight.chat,
@@ -31,18 +33,19 @@ class _UserOnlineBookProfileLibState extends State<UserOnlineBookProfileLib> {
       LineIcons.history,
     ];
     _title = [
-      'Saqlanganlar',
-      'Ko’p beriladigan savollar',
-      'Kutubxona manzili',
-      'Xaridlar tarixi',
+      localization.savedItems,
+      localization.frQuestions,
+      localization.libraryAddress,
+      localization.purchaseHistory,
     ];
   }
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: CustomAppBarWg(
-        myTitle: 'Akkaunt ma’lumotlari',
+        myTitle: localization.accountInfo,
         showArrow: false,
         centerTitle: false,
       ),
@@ -94,7 +97,7 @@ class _UserOnlineBookProfileLibState extends State<UserOnlineBookProfileLib> {
           showHandler: false,
         );
       default:
-        errorFlushBar(context, 'Tez Orada!');
+        errorFlushBar(context, AppLocalizations.of(context)!.comingSoon);
     }
   }
 }

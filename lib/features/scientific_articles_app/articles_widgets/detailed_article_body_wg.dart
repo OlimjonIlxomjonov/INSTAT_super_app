@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/ui_states/empty_state.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/general_widgets/annotation_language/annotation_language_wg.dart';
@@ -32,18 +33,20 @@ class DetailedArticleBodyWg extends StatefulWidget {
 
 class _DetailedArticleBodyWgState extends State<DetailedArticleBodyWg> {
   String _formatFileSize(int? bytes) {
-    if (bytes == null) return 'Noma\'lum hajm';
+    if (bytes == null) return AppLocalizations.of(context)!.unknownSize;
     if (bytes < 1024) return '$bytes B';
     if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)} KB';
     return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
   }
 
   String _getFileName(String? urlPath) {
-    if (urlPath == null || urlPath.isEmpty) return 'Fayl nomi yo\'q';
+    if (urlPath == null || urlPath.isEmpty) {
+      return AppLocalizations.of(context)!.fileNameNotFound;
+    }
     try {
       return Uri.parse(urlPath).pathSegments.last;
     } catch (_) {
-      return 'Fayl';
+      return AppLocalizations.of(context)!.fileWord;
     }
   }
 
@@ -70,21 +73,20 @@ class _DetailedArticleBodyWgState extends State<DetailedArticleBodyWg> {
   AnnotationLanguageEnum _selectedLang = AnnotationLanguageEnum.uz;
 
   String get _displayedAnnotation {
+    final noAnnotation = AppLocalizations.of(context)!.noAnnotationAvailable;
     switch (_selectedLang) {
       case AnnotationLanguageEnum.uz:
-        return widget.detail?.annotationUz ??
-            'Hech qanday annotatsiya mavjud emas!';
+        return widget.detail?.annotationUz ?? noAnnotation;
       case AnnotationLanguageEnum.en:
-        return widget.detail?.annotationEn ??
-            'Hech qanday annotatsiya mavjud emas!';
+        return widget.detail?.annotationEn ?? noAnnotation;
       case AnnotationLanguageEnum.ru:
-        return widget.detail?.annotationRu ??
-            'Hech qanday annotatsiya mavjud emas!';
+        return widget.detail?.annotationRu ?? noAnnotation;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     final List<bool> isSelected = [
       _selectedLang == AnnotationLanguageEnum.uz,
       _selectedLang == AnnotationLanguageEnum.en,
@@ -109,7 +111,7 @@ class _DetailedArticleBodyWgState extends State<DetailedArticleBodyWg> {
             ),
             if (widget.detail != null && widget.detail!.udkCode.isNotEmpty)
               Text(
-                'UDK: ${widget.detail!.udkCode}',
+                localization.udkValue(widget.detail!.udkCode),
                 style: AppTextStyles.source.medium(
                   fontSize: 14,
                   color: AppColors.greyScale.grey600,
@@ -129,11 +131,11 @@ class _DetailedArticleBodyWgState extends State<DetailedArticleBodyWg> {
         const SizedBox(height: 24),
 
         /// Authors section
-        Text('Mualliflar', style: CustomTextStyles.h2),
+        Text(localization.authors, style: CustomTextStyles.h2),
         const SizedBox(height: 16),
 
         if (widget.authors == null || widget.authors!.isEmpty)
-          _AuthorCardWg(name: 'Muallif tanlanmagan!', phone: '---')
+          _AuthorCardWg(name: localization.noAuthorSelected, phone: '---')
         else
           Column(
             children: widget.authors!.map((author) {
@@ -149,7 +151,7 @@ class _DetailedArticleBodyWgState extends State<DetailedArticleBodyWg> {
         Row(
           mainAxisAlignment: .spaceBetween,
           children: [
-            Text('Annotatsiya', style: CustomTextStyles.h2),
+            Text(localization.annotation, style: CustomTextStyles.h2),
             SizedBox(
               height: 45,
               child: AnnotationLanguageWg(
@@ -172,10 +174,10 @@ class _DetailedArticleBodyWgState extends State<DetailedArticleBodyWg> {
         const SizedBox(height: 24),
 
         /// Keywords
-        Text('Kalit so\'zlar', style: CustomTextStyles.h2),
+        Text(localization.keywords, style: CustomTextStyles.h2),
         const SizedBox(height: 16),
         if (parsedKeywords.isEmpty)
-          _KeywordChip(label: 'Hech qanday kalit soz mavjud emas!')
+          _KeywordChip(label: localization.noKeywordsAvailable)
         else
           Wrap(
             spacing: 8,
@@ -187,7 +189,7 @@ class _DetailedArticleBodyWgState extends State<DetailedArticleBodyWg> {
         const SizedBox(height: 24),
 
         /// Hujjatlar section
-        Text('Hujjatlar', style: CustomTextStyles.h2),
+        Text(localization.documents, style: CustomTextStyles.h2),
         const SizedBox(height: 16),
 
         if (widget.detail == null)
@@ -207,7 +209,7 @@ class _DetailedArticleBodyWgState extends State<DetailedArticleBodyWg> {
           )
         else
           Text(
-            'Hujjat biriktirilmagan',
+            localization.noMainFileAttached,
             style: AppTextStyles.source.regular(
               fontSize: 14,
               color: AppColors.greyScale.grey600,
@@ -216,10 +218,13 @@ class _DetailedArticleBodyWgState extends State<DetailedArticleBodyWg> {
         const SizedBox(height: 20),
 
         /// Antiplagiat section
-        Text('Antiplagiat fayli', style: CustomTextStyles.h2),
+        Text(localization.antiplagiarismFile, style: CustomTextStyles.h2),
         const SizedBox(height: 15),
         if (widget.detail == null)
-          SelectedFileContainerWg(fileName: 'Yuklanmoqda...', fileSize: '')
+          SelectedFileContainerWg(
+            fileName: localization.loadingEllipsis,
+            fileSize: '',
+          )
         else if (widget.detail!.antiplagiatFile != null)
           Padding(
             padding: const EdgeInsets.only(bottom: 20.0),
@@ -234,7 +239,7 @@ class _DetailedArticleBodyWgState extends State<DetailedArticleBodyWg> {
         else
           Padding(
             padding: const EdgeInsets.only(bottom: 20.0),
-            child: Text("Fayl tanlanmagan", style: CustomTextStyles.h4),
+            child: Text(localization.noFileSelected, style: CustomTextStyles.h4),
           ),
 
         /// IMAGES AND EXCELS
@@ -250,13 +255,13 @@ class _DetailedArticleBodyWgState extends State<DetailedArticleBodyWg> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   /// Rasmlar section
-                  Text('Rasmlar', style: CustomTextStyles.h2),
+                  Text(localization.images, style: CustomTextStyles.h2),
                   const SizedBox(height: 15),
                   if (images.isEmpty)
                     Padding(
                       padding: const .only(bottom: 20),
                       child: Text(
-                        "Rasm tanlanmagan",
+                        localization.noImageSelected,
                         style: CustomTextStyles.h4,
                       ),
                     )
@@ -279,13 +284,13 @@ class _DetailedArticleBodyWgState extends State<DetailedArticleBodyWg> {
                       : const SizedBox(height: 15),
 
                   /// Jadvallar section
-                  Text('Jadvallar', style: CustomTextStyles.h2),
+                  Text(localization.tables, style: CustomTextStyles.h2),
                   const SizedBox(height: 15),
                   if (excels.isEmpty)
                     SizedBox(
                       height: 60,
                       child: Text(
-                        "Jadval tanlanmagan",
+                        localization.noTableSelected,
                         style: CustomTextStyles.h4,
                       ),
                     )
@@ -310,17 +315,17 @@ class _DetailedArticleBodyWgState extends State<DetailedArticleBodyWg> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Rasmlar', style: CustomTextStyles.h2),
+                Text(localization.images, style: CustomTextStyles.h2),
                 const SizedBox(height: 15),
                 SelectedFileContainerWg(
-                  fileName: 'Rasm tanlanmagan!',
+                  fileName: localization.noImageSelected,
                   fileSize: '',
                 ),
                 const SizedBox(height: 24),
-                Text('Jadvallar', style: CustomTextStyles.h2),
+                Text(localization.tables, style: CustomTextStyles.h2),
                 const SizedBox(height: 15),
                 SelectedFileContainerWg(
-                  fileName: 'Jadval tanlanmagan!',
+                  fileName: localization.noTableSelected,
                   fileSize: '',
                 ),
                 const SizedBox(height: 15),

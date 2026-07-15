@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
@@ -256,8 +257,9 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
   }
 
   Future<void> _openFile(String? url, String? fileName) async {
+    final localization = AppLocalizations.of(context)!;
     if (url == null || url.isEmpty || fileName == null || fileName.isEmpty) {
-      errorFlushBar(context, 'Fayl manzili topilmadi');
+      errorFlushBar(context, localization.fileUrlNotFound);
       return;
     }
 
@@ -273,14 +275,11 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
 
       final result = await OpenFilex.open(savePath);
       if (result.type != ResultType.done && mounted) {
-        errorFlushBar(
-          context,
-          'Faylni ochishda xatolik yuz berdi. ${result.message}',
-        );
+        errorFlushBar(context, localization.fileOpenError(result.message));
       }
     } catch (e) {
       if (mounted) {
-        errorFlushBar(context, 'Faylni yuklab olishda xatolik yuz berdi.');
+        errorFlushBar(context, localization.fileDownloadError);
       }
       logger.e(e.toString());
     } finally {
@@ -290,6 +289,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return BlocListener<LessonVideoProgressBloc, LessonVideoProgressState>(
       listener: (context, state) {
         if (state is LessonVideoProgressSuccess && state.progress == 100) {
@@ -353,7 +353,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                         /// Files section
                         const SizedBox(height: 10),
                         Text(
-                          'Fayllar',
+                          localization.filesTitle,
                           style: AppTextStyles.source.semiBold(fontSize: 17),
                         ),
                         const SizedBox(height: 14),
@@ -367,8 +367,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                               final data = state.entity;
                               if (data.isEmpty) {
                                 return _emptyFileAndTest(
-                                  text:
-                                      'Hozirda kursga tegishli hech qanday fayylar mavjud emas!',
+                                  text: localization.noFilesAvailable,
                                 );
                               }
                               return Column(
@@ -385,7 +384,9 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                                       _controllerNotifier.value?.pause();
                                       _openFile(item.file, item.fileName);
                                     },
-                                    tileTitle: item.fileName ?? 'File ',
+                                    tileTitle:
+                                        item.fileName ??
+                                        localization.fileFallbackName,
                                     subTitle: formatFileSize(
                                       item.fileSize ?? 0,
                                     ),
@@ -414,7 +415,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                         /// Tests section
                         const SizedBox(height: 10),
                         Text(
-                          'Test topshiriqlar',
+                          localization.testsTitle,
                           style: AppTextStyles.source.semiBold(fontSize: 17),
                         ),
                         const SizedBox(height: 16),
@@ -431,7 +432,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                               if (!isVerified) {
                                 errorFlushBar(
                                   context,
-                                  "Testga kirish uchun avval o'zingizni tasdiqlaginingiz kerak. Tasdiqlanish uchun profil bo'limiga o'ting.",
+                                  localization.verificationRequiredMessage,
                                 );
                                 return;
                               }
@@ -448,8 +449,8 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                                 ),
                               );
                             },
-                            tileTitle: 'Test topshirig\'i',
-                            subTitle: 'Mavzulashtirilgan test savollari',
+                            tileTitle: localization.testAssignmentTileTitle,
+                            subTitle: localization.testAssignmentTileSubtitle,
                             tileAction: Icon(
                               IconlyLight.arrow_right_2,
                               color: AppColors.greyScale.grey400,
@@ -457,8 +458,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                           )
                         else
                           _emptyFileAndTest(
-                            text:
-                                'Hozirda kursga tegishli hech qanday testlar mavjud emas!',
+                            text: localization.noTestsAvailable,
                           ),
                         const SizedBox(height: 20),
                       ],
@@ -628,7 +628,7 @@ class _VideoAreaWidget extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            'Video hali yuklanmagan',
+            AppLocalizations.of(context)!.videoNotUploadedYet,
             style: AppTextStyles.source.semiBold(
               fontSize: 15,
               color: AppColors.greyScale.grey600,
@@ -636,7 +636,7 @@ class _VideoAreaWidget extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Ushbu dars uchun video mavjud emas',
+            AppLocalizations.of(context)!.noVideoForLesson,
             style: AppTextStyles.source.regular(
               fontSize: 13,
               color: AppColors.greyScale.grey400,

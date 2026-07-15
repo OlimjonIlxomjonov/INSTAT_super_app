@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 
 class QrScanConfigs extends StatefulWidget {
@@ -43,7 +44,12 @@ class QrScanConfigsState extends State<QrScanConfigs> {
             flex: 5,
             child: QRView(key: qrKey, onQRViewCreated: _onQRViewCreated),
           ),
-          Expanded(flex: 1, child: Center(child: Text('Attendance'))),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: Text(AppLocalizations.of(context)!.attendanceLabel),
+            ),
+          ),
         ],
       ),
     );

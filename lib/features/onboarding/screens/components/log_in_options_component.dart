@@ -54,7 +54,12 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
               final statusCode = error.response?.statusCode;
               // final data = error.response?.data;
 
-              errorFlushBar(context, 'Login failed\nStatus code: $statusCode');
+              errorFlushBar(
+                context,
+                AppLocalizations.of(context)!.loginFailedWithStatus(
+                  statusCode ?? 'unknown',
+                ),
+              );
 
               logger.e(error.response?.data);
             } else {
@@ -141,7 +146,7 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
                                   horizontal: appW(12),
                                 ),
                                 child: AutoSizeText(
-                                  'Yoki',
+                                  localization.or,
                                   style: AppTextStyles.source.regular(
                                     fontSize: 14,
                                     color: AppColors.greyScale.grey600,

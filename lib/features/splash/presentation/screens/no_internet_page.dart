@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:lottie/lottie.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/assets/app_animations.dart';
@@ -65,6 +66,7 @@ class _NoInternetPageState extends State<NoInternetPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -84,13 +86,13 @@ class _NoInternetPageState extends State<NoInternetPage> {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  'Internet aloqasi yo\'q',
+                  localization.noInternetConnection,
                   style: CustomTextStyles.h2,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Iltimos, internet aloqangizni tekshiring va qayta urinib ko\'ring.',
+                  localization.checkConnectionAndRetry,
                   style: CustomTextStyles.h4,
                   textAlign: TextAlign.center,
                 ),
@@ -100,7 +102,7 @@ class _NoInternetPageState extends State<NoInternetPage> {
                     : FilledButton.icon(
                         onPressed: _retry,
                         icon: const Icon(Icons.refresh_rounded),
-                        label: const Text('Qayta urinish'),
+                        label: Text(localization.retry),
                       ),
               ],
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
@@ -104,6 +105,7 @@ class _DetailedUserGroupComponentState
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return BlocProvider(
       create: (context) => sl<CourseGroupDatesBloc>()
         ..add(
@@ -179,9 +181,8 @@ class _DetailedUserGroupComponentState
                   if (_selectedCourseDate == null) {
                     return SliverToBoxAdapter(
                       child: AppEmptyState(
-                        title: 'Sanani tanlang',
-                        subtitle:
-                            'Darslarni ko‘rish uchun yuqoridagi kalendardan bir sanani tanlang.',
+                        title: localization.selectDateEmptyTitle,
+                        subtitle: localization.selectDateEmptySubtitle,
                       ),
                     );
                   }
@@ -191,8 +192,8 @@ class _DetailedUserGroupComponentState
                     if (data.isEmpty) {
                       return SliverToBoxAdapter(
                         child: AppEmptyState(
-                          title: 'Darslar hali qo‘shilmagan.',
-                          subtitle: 'Boshqa sanani tanlab ko‘ring.',
+                          title: localization.noLessonsAddedYetTitle,
+                          subtitle: localization.tryAnotherDateSubtitle,
                         ),
                       );
                     }
@@ -206,14 +207,14 @@ class _DetailedUserGroupComponentState
                               mainAxisAlignment: .spaceBetween,
                               children: [
                                 Text(
-                                  'Darslar',
+                                  localization.lessonsTitle,
                                   style: AppTextStyles.source.semiBold(
                                     fontSize: 17,
                                   ),
                                 ),
                                 TextButton(
                                   onPressed: _qrScan,
-                                  child: const Text("Scan"),
+                                  child: Text(localization.scanButton),
                                 ),
                               ],
                             ),
@@ -241,7 +242,8 @@ class _DetailedUserGroupComponentState
                                       );
                                     },
                                     isLessons: true,
-                                    daysLeft: " ${daysLeft(lessonDate)}",
+                                    daysLeft:
+                                        " ${daysLeft(context, lessonDate)}",
                                     statusBorderColor:
                                         _selectedCourseDate?.attendanceCount ==
                                             1
@@ -300,21 +302,22 @@ class _DetailedUserGroupComponentState
     );
   }
 
-  String daysLeft(DateTime lessonDate) {
+  String daysLeft(BuildContext context, DateTime lessonDate) {
+    final localization = AppLocalizations.of(context)!;
     final difference = lessonDate.difference(DateTime.now());
 
     if (difference.isNegative) {
-      return "Completed";
+      return localization.dayStatusCompleted;
     }
 
     if (difference.inDays == 0) {
-      return "Today";
+      return localization.dayStatusToday;
     }
 
     if (difference.inDays == 1) {
-      return "1 day left";
+      return localization.dayStatusOneDayLeft;
     }
 
-    return "${difference.inDays} days left";
+    return localization.dayStatusDaysLeft(difference.inDays);
   }
 }

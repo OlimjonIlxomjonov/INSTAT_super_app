@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/widgets/lib_entity_wg.dart';
 
 import '../../../../../../core/utils/app_utils.dart';
@@ -9,6 +10,8 @@ class UserLibInfoWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+    final cardInfo = getCardInfo(localization);
     return SliverPadding(
       padding: AppPadding.horizontal20x(),
       sliver: SliverGrid.builder(
@@ -57,7 +60,7 @@ class UserLibInfoWg extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      ' dona',
+                      localization.unitsSuffix,
                       style: AppTextStyles.source.medium(
                         fontSize: 14,
                         color: AppColors.greyScale.grey300,

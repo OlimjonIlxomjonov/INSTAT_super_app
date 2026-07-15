@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/features/scientific_articles_app/dummy_models/last_actions_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_process/article_process_entity.dart';
@@ -12,6 +13,7 @@ class LastActionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Container(
       padding: const .all(12),
       decoration: BoxDecoration(
@@ -47,6 +49,7 @@ class LastActionItem extends StatelessWidget {
               children: [
                 Text(
                   processTitleSwitch(
+                    localization,
                     LastActionsStatusX.fromString(item.status),
                   ),
                   style: AppTextStyles.source.medium(fontSize: 16),

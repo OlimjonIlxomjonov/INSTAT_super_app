@@ -3,6 +3,7 @@ import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/flush_bar/technical_work_flash_bar.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/common/ui_states/empty_state_static_text.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
@@ -24,8 +25,9 @@ class MicroDataRequests extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: CustomAppBarWg(myTitle: 'Mening so‘rovlarim', showArrow: false),
+      appBar: CustomAppBarWg(myTitle: localization.myRequests, showArrow: false),
       body: CustomScrollView(
         slivers: [
           //! FAKE SEARCH BAR
@@ -50,7 +52,7 @@ class MicroDataRequests extends StatelessWidget {
             padding: AppPadding.horizontal20x(),
             sliver: SliverToBoxAdapter(
               child: Text(
-                'So‘rovlar',
+                localization.requests,
                 style: AppTextStyles.source.semiBold(fontSize: 18),
               ),
             ),
@@ -59,19 +61,18 @@ class MicroDataRequests extends StatelessWidget {
             padding: const .only(top: 16),
             sliver: SliverToBoxAdapter(
               child: AppEmptyState(
-                title: 'So’rovlar bosh!',
-                subtitle:
-                    'Sizda hali soʻrovlar mavjud emas. Birinchisini yarating!',
+                title: localization.noRequestsTitle,
+                subtitle: localization.noRequestsSubtitle,
               ),
             ),
           ),
         ],
       ),
       bottomNavigationBar: CustomBottomNavContainerWg(
-        buttonText: 'So’rov yuborish',
+        buttonText: localization.submitRequest,
         leadingIcon: Icons.add,
         onTap: () {
-          technicalWorkFlushBar(context, 'Tez orada!');
+          technicalWorkFlushBar(context, localization.comingSoon);
         },
       ),
     );

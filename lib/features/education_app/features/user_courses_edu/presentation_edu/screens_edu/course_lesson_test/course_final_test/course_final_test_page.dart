@@ -6,6 +6,7 @@ import 'package:iconly/iconly.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/camera_service.dart';
 import 'package:my_template/core/utils/constants/assets/app_animations.dart';
@@ -63,7 +64,8 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
     super.dispose();
   }
 
-  void _showFinishDialog(CourseFinalTestFinished state) {
+  void _showFinishDialog(BuildContext context, CourseFinalTestFinished state) {
+    final localization = AppLocalizations.of(context)!;
     _confettiController.play();
 
     final percentage = state.totalQuestions > 0
@@ -86,8 +88,8 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
           ),
         ],
       ),
-      title: 'Ajoyib natija',
-      subTitle: "Yakuniy testni muvaffaqiyatli yakunladingiz!",
+      title: localization.greatResultTitle,
+      subTitle: localization.finalTestFinishSubtitle,
       body: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
@@ -105,6 +107,8 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
                 style: AppTextStyles.source.medium(fontSize: 20),
               ),
               subTitle: '${state.totalQuestions - state.correctAnswers} ta',
+              titleDesc: localization.wrongAnswer,
+              subTitleDesc: localization.completionPercentageLabel,
               textColor: AppColors.redFailedTaskCard,
             ),
             _buildColumn(
@@ -119,8 +123,8 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
                 ],
               ),
               subTitle: '${state.correctAnswers} ta',
-              titleDesc: 'To’g’ri javoblar',
-              subTitleDesc: 'Berilgan ball',
+              titleDesc: localization.correctAnswersLabel,
+              subTitleDesc: localization.pointsGivenLabel,
               textColor: AppColors.greenDoneTaskCard,
             ),
           ],
@@ -134,7 +138,7 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
               AppRoute.close();
               AppRoute.close();
             },
-            child: const Text('Davom etish'),
+            child: Text(localization.continueButton),
           ),
         ),
       ],
@@ -145,8 +149,8 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
   Column _buildColumn({
     required Widget title,
     required String subTitle,
-    String titleDesc = 'Noto’g’ri javob',
-    String subTitleDesc = 'Tugatish foizi',
+    required String titleDesc,
+    required String subTitleDesc,
     Color? textColor,
   }) {
     return Column(
@@ -181,18 +185,19 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
     return BlocConsumer<CourseFinalTestBloc, CourseFinalTestState>(
       listener: (context, state) {
         if (state is CourseFinalTestFinished) {
-          _showFinishDialog(state);
+          _showFinishDialog(context, state);
         } else if (state is CourseFinalTestError) {
           errorFlushBar(context, state.message);
         }
       },
       builder: (context, state) {
+        final localization = AppLocalizations.of(context)!;
         double progress = 0.0;
         String questionTitle = "";
         String questionText = "";
         bool isLoading = state is CourseFinalTestLoading;
         Widget optionList = const SizedBox.shrink();
-        String buttonText = "Tasdiqlash";
+        String buttonText = localization.confirm;
         VoidCallback? onButtonTap;
         Widget? banner;
 
@@ -201,7 +206,9 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
               ? ((state.currentTestIndex) / state.tests.length)
               : 0.0;
           final currentTest = state.tests[state.currentTestIndex];
-          questionTitle = '${state.currentTestIndex + 1}-Savol';
+          questionTitle = localization.questionNumberTemplate(
+            state.currentTestIndex + 1,
+          );
           questionText = currentTest.question;
 
           optionList = TestOptionListWg(
@@ -218,7 +225,7 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
               if (image == null && mounted) {
                 errorFlushBar(
                   context,
-                  'Camera capture failed. Please try again.',
+                  localization.cameraCaptureFailedMessage,
                 );
                 return;
               }
@@ -234,7 +241,9 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
               ? ((state.currentTestIndex + 1) / state.tests.length)
               : 0.0;
           final currentTest = state.tests[state.currentTestIndex];
-          questionTitle = '${state.currentTestIndex + 1}-Savol';
+          questionTitle = localization.questionNumberTemplate(
+            state.currentTestIndex + 1,
+          );
           questionText = currentTest.question;
 
           optionList = TestOptionListWg(
@@ -244,16 +253,17 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
             isCorrect: state.answerResponse.isCorrect,
           );
 
-          buttonText = "Keyingi savol";
+          buttonText = localization.nextQuestionButton;
           onButtonTap = () => context.read<CourseFinalTestBloc>().add(
             NextCourseFinalTestQuestionEvent(),
           );
 
           banner = buildTestResultBanner(
             isCorrect: state.answerResponse.isCorrect,
+            localization: localization,
           );
         } else if (isLoading) {
-          questionTitle = 'Yuklanmoqda...';
+          questionTitle = localization.loadingEllipsis;
           questionText = '';
         }
 

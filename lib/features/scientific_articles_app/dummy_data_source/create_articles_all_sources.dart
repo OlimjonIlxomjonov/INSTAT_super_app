@@ -1,31 +1,25 @@
+import 'package:my_template/core/l10n/app_localizations.dart';
 
-final titles = [
-  'Yangi maqola',
-  'Muallif ma’lumotlari',
-  'Maqola yuborish',
-  'Fayllarni yuklash',
-  'Ko‘rib chiqish va yuborish',
+List<String> getWizardTitles(AppLocalizations localization) => [
+  localization.wizardStepNewArticle,
+  localization.wizardStepAuthorInfo,
+  localization.wizardStepSubmitArticle,
+  localization.wizardStepUploadFiles,
+  localization.wizardStepReviewSubmit,
 ];
 
-final stepsDesc = [
-  'Asosiy ma’lumot',
-  'Muallif ma’lumotlarini kiritish',
-  'Annotatsiya va kalit so‘zlar',
-  'Fayllarni yuklash',
-  "Yakunlashdan oldin ma'lumotlarni tekshiring",
+List<String> getWizardStepsDesc(AppLocalizations localization) => [
+  localization.wizardDescBasicInfo,
+  localization.wizardDescAuthorInfo,
+  localization.wizardDescAnnotationKeywords,
+  localization.wizardStepUploadFiles,
+  localization.wizardDescReviewBeforeFinish,
 ];
 
-final articlesHeaderData = [
-  'Maqola ma’lumotlari',
-  'Muallif qo’shish',
-  'Maqola ma’lumotlari',
-  'Maqolaning asosiy fayli',
-  "Ma'lumotlar xulosasi",
-];
-
-final keyWordsDummyTemp = [
-  'Digital Painting',
-  'Retrowave',
-  'NFT',
-  'Digital Painting',
+List<String> getArticlesHeaderData(AppLocalizations localization) => [
+  localization.wizardHeaderArticleInfo,
+  localization.wizardHeaderAddAuthor,
+  localization.wizardHeaderArticleInfo,
+  localization.wizardHeaderMainFile,
+  localization.wizardHeaderSummary,
 ];

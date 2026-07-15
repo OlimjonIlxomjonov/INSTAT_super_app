@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/di/service_locator.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
@@ -49,11 +50,12 @@ class _OfflineBooksLibPageState extends State<OfflineBooksLibPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return BlocProvider.value(
       value: _bloc,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: CustomAppBarWg(myTitle: 'Kutubxona'),
+        appBar: CustomAppBarWg(myTitle: localization.library),
         body: CustomScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           slivers: [
@@ -79,7 +81,7 @@ class _OfflineBooksLibPageState extends State<OfflineBooksLibPage> {
                         onChanged: _onSearchChanged,
                         style: AppTextStyles.source.regular(fontSize: 14),
                         decoration: InputDecoration(
-                          hintText: 'Kitob qidiring...',
+                          hintText: localization.searchBooksHint,
                           hintStyle: AppTextStyles.source.regular(
                             fontSize: 14,
                             color: AppColors.greyScale.grey500,
@@ -117,7 +119,7 @@ class _OfflineBooksLibPageState extends State<OfflineBooksLibPage> {
               padding: const EdgeInsets.only(left: 20),
               sliver: SliverToBoxAdapter(
                 child: Text(
-                  'Kitoblar',
+                  localization.books,
                   style: AppTextStyles.source.semiBold(fontSize: 17),
                 ),
               ),
@@ -135,8 +137,8 @@ class _OfflineBooksLibPageState extends State<OfflineBooksLibPage> {
                 if (state is OfflineBooksLoaded) {
                   final data = state.response.data;
                   if (data.isEmpty) {
-                    return const SliverFillRemaining(
-                      child: Center(child: Text('Kitoblar topilmadi')),
+                    return SliverFillRemaining(
+                      child: Center(child: Text(localization.booksNotFound)),
                     );
                   }
                   return SliverPadding(

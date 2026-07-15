@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/general_widgets/annotation_language/annotation_language_wg.dart';
@@ -58,17 +59,18 @@ class _ArticleAnnotationViewState extends State<ArticleAnnotationView> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     final List<bool> isSelected = [
       _selectedLang == AnnotationLanguageEnum.uz,
       _selectedLang == AnnotationLanguageEnum.en,
       _selectedLang == AnnotationLanguageEnum.ru,
     ];
 
-    String annotationTitle = 'Annotatsiya (O‘zbek)';
+    String annotationTitle = localization.annotationUzTitle;
     if (_selectedLang == AnnotationLanguageEnum.en) {
-      annotationTitle = 'Annotatsiya (Ingliz)';
+      annotationTitle = localization.annotationEnTitle;
     } else if (_selectedLang == AnnotationLanguageEnum.ru) {
-      annotationTitle = 'Annotatsiya (Rus)';
+      annotationTitle = localization.annotationRuTitle;
     }
 
     return Padding(
@@ -97,9 +99,8 @@ class _ArticleAnnotationViewState extends State<ArticleAnnotationView> {
             EduCustomTextAreaWg(
               maxLength: 300,
               controller: annotationController,
-              hintText: 'Maqolangiz uchun annotatsiyani shu yerga kiriting...',
-              helperText:
-                  'Maqsad: 250-300 so‘z. Hozirgi hisob minimal miqdordan kam.',
+              hintText: localization.annotationHint,
+              helperText: localization.annotationWordCountHelper,
               onChanged: (val) {
                 if (_selectedLang == AnnotationLanguageEnum.uz) {
                   context.read<AddArticleBloc>().add(
@@ -121,8 +122,8 @@ class _ArticleAnnotationViewState extends State<ArticleAnnotationView> {
 
             /// Key Words INPUT
             AuthTextFieldWg(
-              title: 'Kalit sozlar',
-              label: 'Kalit sozlarni kiriting (Enter bosing)',
+              title: localization.keywords,
+              label: localization.keywordsHint,
               controller: keywordController,
               onEditingComplete: () {
                 final text = keywordController.text.trim();

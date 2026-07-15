@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
@@ -9,12 +10,13 @@ class EduTicketsChatComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     TDeviceUtils.systemNavigationBar(AppColors.white);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: CustomScrollView(
         slivers: [
-          SliverDefaultAppBarWg(myTitle: 'Chat'),
+          SliverDefaultAppBarWg(myTitle: localization.chatTitle),
           SliverPadding(
             padding: AppPadding.hAndV20x20(),
             sliver: SliverToBoxAdapter(
@@ -47,7 +49,7 @@ class EduTicketsChatComponent extends StatelessWidget {
                           onPressed: () {},
                           icon: const Icon(Icons.attach_file, size: 25),
                         ),
-                        hintText: 'message',
+                        hintText: localization.messageHint,
                         border: InputBorder.none,
                       ),
                     ),

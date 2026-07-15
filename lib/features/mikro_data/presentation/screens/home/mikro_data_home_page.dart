@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_template/core/common/placeholder/banner_placeholder.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/common/ui_states/empty_state_static_text.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/dragble_app_bar/draggble_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
@@ -19,6 +20,7 @@ class MicroDataHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: DraggableAppBarWg(onProfileTap: onProfileTap),
       body: CustomScrollView(
@@ -38,20 +40,20 @@ class MicroDataHomePage extends StatelessWidget {
             sliver: SliverToBoxAdapter(child: BannerPlaceholder()),
           ),
           //! Brief card lists
-          SliverBriefCardsWg(items: microDataBrief),
+          SliverBriefCardsWg(items: getMicroDataBrief(localization)),
           //! User requests
           SliverPadding(
             padding: AppPadding.horizontal20x(),
             sliver: SliverToBoxAdapter(
               child: ExtendSectionSeeAllWg(
-                title: 'Mening so‘rovlarim',
+                title: localization.myRequests,
                 onTap: onSeeAllRequests,
               ),
             ),
           ),
           SliverToBoxAdapter(
             child: EmptyStateStaticText(
-              message: 'Hech qanday so\'rovlar mavjud emas!',
+              message: localization.noRequestsAvailable,
             ),
           ),
 
@@ -60,14 +62,14 @@ class MicroDataHomePage extends StatelessWidget {
             padding: AppPadding.horizontal20x(),
             sliver: SliverToBoxAdapter(
               child: ExtendSectionSeeAllWg(
-                title: 'Ohirgi harakatlar',
+                title: localization.recentActions,
                 onTap: () {},
               ),
             ),
           ),
           SliverToBoxAdapter(
             child: EmptyStateStaticText(
-              message: 'Ohirgi harakatlar mavjud emas!',
+              message: localization.noRecentActionsAvailable,
             ),
           ),
         ],

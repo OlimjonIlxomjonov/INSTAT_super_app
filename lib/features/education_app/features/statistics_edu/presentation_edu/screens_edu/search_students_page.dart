@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
@@ -67,6 +68,7 @@ class _SearchStudentsPageState extends State<SearchStudentsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.white,
@@ -104,7 +106,7 @@ class _SearchStudentsPageState extends State<SearchStudentsPage> {
                           onChanged: _search,
                           style: AppTextStyles.source.regular(fontSize: 14),
                           decoration: InputDecoration(
-                            hintText: 'Foydalanuvchi qidiring...',
+                            hintText: localization.searchUsersHint,
                             hintStyle: AppTextStyles.source.regular(
                               fontSize: 14,
                               color: AppColors.greyScale.grey500,
@@ -121,7 +123,7 @@ class _SearchStudentsPageState extends State<SearchStudentsPage> {
                       GestureDetector(
                         onTap: () => FamilyNavigation.familyClose(context),
                         child: Text(
-                          'Bekor',
+                          localization.cancelShort,
                           style: AppTextStyles.source.medium(
                             fontSize: 14,
                             color: AppColors.primaryColor,
@@ -153,8 +155,8 @@ class _SearchStudentsPageState extends State<SearchStudentsPage> {
                     return Center(
                       child: Text(
                         state.isConnectionError
-                            ? 'Internet aloqasi yo\'q'
-                            : 'Xatolik yuz berdi',
+                            ? localization.noInternetConnection
+                            : localization.genericError,
                         style: AppTextStyles.source.regular(
                           fontSize: 14,
                           color: AppColors.greyScale.grey700,
@@ -175,7 +177,7 @@ class _SearchStudentsPageState extends State<SearchStudentsPage> {
                           ),
                           SizedBox(height: appH(16)),
                           Text(
-                            'Hech narsa topilmadi',
+                            localization.nothingFound,
                             style: AppTextStyles.source.medium(
                               fontSize: 16,
                               color: AppColors.greyScale.grey600,
@@ -240,7 +242,7 @@ class _SearchStudentsPageState extends State<SearchStudentsPage> {
                                     children: [
                                       Text(
                                         fullName.isEmpty
-                                            ? 'Foydalanuvchi'
+                                            ? localization.genericUserFallback
                                             : fullName,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,

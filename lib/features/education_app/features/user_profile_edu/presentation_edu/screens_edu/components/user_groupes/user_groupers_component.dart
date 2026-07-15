@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
@@ -16,7 +17,7 @@ class UserGroupersComponent extends StatelessWidget {
         toolbarHeight: 80,
         automaticallyImplyLeading: false,
         title: Text(
-          'Guruhlarim',
+          AppLocalizations.of(context)!.myGroupsTitle,
           style: AppTextStyles.source.semiBold(fontSize: 18),
         ),
         centerTitle: true,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
@@ -76,7 +77,10 @@ class TestLayout extends StatelessWidget {
 }
 
 /// Helper to build the result banner
-Widget buildTestResultBanner({required bool isCorrect}) {
+Widget buildTestResultBanner({
+  required bool isCorrect,
+  required AppLocalizations localization,
+}) {
   return Container(
     margin: const EdgeInsets.only(bottom: 12, left: 20, right: 20),
     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -93,7 +97,7 @@ Widget buildTestResultBanner({required bool isCorrect}) {
         ),
         const SizedBox(width: 8),
         Text(
-          isCorrect ? "To'g'ri javob" : "Noto'g'ri javob",
+          isCorrect ? localization.correctAnswerBanner : localization.wrongAnswer,
           style: AppTextStyles.source.medium(fontSize: 16, color: Colors.white),
         ),
       ],

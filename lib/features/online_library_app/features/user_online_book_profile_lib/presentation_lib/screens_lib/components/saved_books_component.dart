@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 
@@ -7,8 +8,9 @@ class SavedBooksComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: CustomAppBarWg(myTitle: 'Saqlanganlar'),
+      appBar: CustomAppBarWg(myTitle: localization.savedItems),
       body: CustomScrollView(
         slivers: [
           SliverFillRemaining(
@@ -18,7 +20,7 @@ class SavedBooksComponent extends StatelessWidget {
                 crossAxisAlignment: .start,
                 children: [
                   Text(
-                    'Kitoblar',
+                    localization.books,
                     style: AppTextStyles.source.semiBold(fontSize: 18),
                   ),
                 ],

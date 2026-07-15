@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
@@ -50,6 +51,7 @@ class _SimpleMonthCalendarState extends State<SimpleMonthCalendar> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: appW(20), vertical: appH(20)),
       child: DecoratedBox(
@@ -105,15 +107,15 @@ class _SimpleMonthCalendarState extends State<SimpleMonthCalendar> {
 
               SizedBox(height: appH(8)),
 
-              const Row(
+              Row(
                 children: [
-                  WeekLabelComponent("MO"),
-                  WeekLabelComponent("TU"),
-                  WeekLabelComponent("WE"),
-                  WeekLabelComponent("TH"),
-                  WeekLabelComponent("FR"),
-                  WeekLabelComponent("SA"),
-                  WeekLabelComponent("SU"),
+                  WeekLabelComponent(localization.weekdayMon),
+                  WeekLabelComponent(localization.weekdayTue),
+                  WeekLabelComponent(localization.weekdayWed),
+                  WeekLabelComponent(localization.weekdayThu),
+                  WeekLabelComponent(localization.weekdayFri),
+                  WeekLabelComponent(localization.weekdaySat),
+                  WeekLabelComponent(localization.weekdaySun),
                 ],
               ),
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
@@ -28,6 +29,7 @@ class SimilarOnlineBooksComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
@@ -48,7 +50,7 @@ class SimilarOnlineBooksComponent extends StatelessWidget {
             padding: const .only(left: 20, right: 20, bottom: 16),
             sliver: SliverToBoxAdapter(
               child: Text(
-                'Kitoblar',
+                localization.books,
                 style: AppTextStyles.source.semiBold(fontSize: 17),
               ),
             ),

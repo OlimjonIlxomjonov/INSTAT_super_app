@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/di/service_locator.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -13,17 +14,18 @@ class LogOutOptionsComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Column(
       children: [
         Text(
-          'Akkauntdan chiqish',
+          localization.leaveAccount,
           style: AppTextStyles.source.medium(
             fontSize: 24,
             color: AppColors.redFailedTaskCard,
           ),
         ),
         Text(
-          'Siz rostdan ham akkauntingizdan chiqmoqchimisiz?',
+          localization.logoutConfirmMessage,
           style: CustomTextStyles.h4,
         ),
         SizedBox(height: 25),
@@ -63,7 +65,7 @@ class LogOutOptionsComponent extends StatelessWidget {
                         AppRoute.close();
                       },
                       label: Text(
-                        'Bekor qilish',
+                        localization.cancel,
                         style: AppTextStyles.source.medium(
                           fontSize: 14,
                           color: AppColors.greyScale.grey600,
@@ -84,7 +86,7 @@ class LogOutOptionsComponent extends StatelessWidget {
                         AppRoute.open(LogInOptionsPage());
                       },
                       label: Text(
-                        'Tasdiqlash',
+                        localization.confirm,
                         style: AppTextStyles.source.medium(fontSize: 14),
                       ),
                     ),

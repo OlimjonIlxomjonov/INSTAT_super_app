@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/placeholder/banner_placeholder.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/common/ui_states/error_page.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/dragble_app_bar/draggble_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
@@ -38,6 +39,7 @@ class ArticlesHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       /// HEADER USER PROFILE (on click leads to profile page)
       appBar: DraggableAppBarWg(onProfileTap: onProfileTap),
@@ -66,14 +68,14 @@ class ArticlesHomePage extends StatelessWidget {
             ),
 
             /// BRIEF CARD SECTIONS
-            SliverBriefCardsWg(items: briefInfoCardList),
+            SliverBriefCardsWg(items: getBriefInfoCardList(localization)),
 
             /// SEE ALL ARTICLES
             SliverPadding(
               padding: AppPadding.horizontal20x(),
               sliver: SliverToBoxAdapter(
                 child: ExtendSectionSeeAllWg(
-                  title: 'Maqolalar',
+                  title: localization.articles,
                   onTap: () => _openUserArticlesPage(context),
                 ),
               ),

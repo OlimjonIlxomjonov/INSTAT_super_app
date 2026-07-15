@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
 import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
@@ -71,6 +72,7 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.splashBackgroundColor,
       extendBodyBehindAppBar: true,
@@ -100,7 +102,7 @@ class _SplashPageState extends State<SplashPage> {
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Text(
-                  'A better eLearning platform',
+                  localization.betterElearningPlatform,
                   style: AppTextStyles.source.regular(
                     fontSize: 12,
                     color: AppColors.white,

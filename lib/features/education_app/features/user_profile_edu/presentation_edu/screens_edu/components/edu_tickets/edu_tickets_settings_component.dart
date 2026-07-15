@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
@@ -17,6 +18,7 @@ class EduTicketsSettingsComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     final List<TicketStatus> status = [
       TicketStatus.approved,
       TicketStatus.pending,
@@ -28,16 +30,16 @@ class EduTicketsSettingsComponent extends StatelessWidget {
       child: Scaffold(
         body: CustomScrollView(
           slivers: [
-            SliverDefaultAppBarWg(myTitle: 'Tikketlar'),
+            SliverDefaultAppBarWg(myTitle: localization.tickets),
             SliverPadding(
               padding: AppPadding.hAndV20x20(),
               sliver: SliverToBoxAdapter(
                 child: Column(
                   children: [
                     CustomTabBarWg(
-                      firstTab: 'Tasdiqlangan',
-                      secondTab: 'Jarayonda',
-                      thirdTab: 'Bekor qilingan',
+                      firstTab: localization.statusConfirmed,
+                      secondTab: localization.statusInProgress,
+                      thirdTab: localization.cancelledBrief,
                     ),
 
                     SizedBox(height: appH(20)),
@@ -82,7 +84,7 @@ class EduTicketsSettingsComponent extends StatelessWidget {
                         color: AppColors.greyScale.grey600,
                       ),
                     ),
-                    trailing: ticketsStatusSwitchCase(status[index]),
+                    trailing: ticketsStatusSwitchCase(context, status[index]),
                   ),
                 ),
               ),
@@ -90,7 +92,7 @@ class EduTicketsSettingsComponent extends StatelessWidget {
           ],
         ),
         bottomNavigationBar: CustomBottomNavContainerWg(
-          buttonText: '+  Yangi tikket yaratish',
+          buttonText: localization.newTicketButton,
           onTap: () {
             openMiniAppSheetFamily(context, child: EduCreateTicketsComponent());
           },

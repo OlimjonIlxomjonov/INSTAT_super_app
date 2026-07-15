@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/title_with_layout_selector_wg.dart';
@@ -12,7 +13,10 @@ class SeeAllSimilarCourses extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverDefaultAppBarWg(myTitle: 'O\'xshash kurslar', isFamily: true),
+          SliverDefaultAppBarWg(
+            myTitle: AppLocalizations.of(context)!.similarCourses,
+            isFamily: true,
+          ),
           SliverPadding(
             padding: AppPadding.hAndV20x20(),
             sliver: SliverToBoxAdapter(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/article_params/article_params.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/review_files/review_files_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/add_article_bloc.dart';
@@ -73,7 +74,7 @@ class _ArticlesMainFilesViewState extends State<ArticlesMainFilesView> {
   void _showReviewIdRequiredError() {
     errorFlushBar(
       context,
-      'Avval maqola ma\'lumotlarini saqlang (Saqlash tugmasi)',
+      AppLocalizations.of(context)!.saveArticleInfoFirst,
     );
   }
 
@@ -112,7 +113,7 @@ class _ArticlesMainFilesViewState extends State<ArticlesMainFilesView> {
     final fileSize = await file.length();
     if (fileSize > ArticleFilePickerHelper.maxFileSizeBytes) {
       if (!mounted) return;
-      errorFlushBar(context, 'Fayl hajmi 50 MB dan oshmasligi kerak');
+      errorFlushBar(context, AppLocalizations.of(context)!.fileSizeLimitError);
       return;
     }
     if (!mounted) return;
@@ -121,11 +122,13 @@ class _ArticlesMainFilesViewState extends State<ArticlesMainFilesView> {
 
   Future<void> _pickAndUploadMainFile(int reviewId) async {
     try {
+      final localization = AppLocalizations.of(context)!;
       final picked = await ArticleFilePickerHelper.pickFiles(
         allowedExtensions: _mainFileExtensions,
         allowMultiple: false,
-        invalidExtensionMessage:
-            'Faqat PDF, Office va rasm fayllari qabul qilinadi',
+        invalidExtensionMessage: localization.mainFileInvalidExtension,
+        noFileChosenMessage: localization.noFileChosen,
+        pickErrorMessage: localization.filePickError,
         useImagePickerFallback: true,
       );
       if (picked.isEmpty || !mounted) return;
@@ -160,11 +163,13 @@ class _ArticlesMainFilesViewState extends State<ArticlesMainFilesView> {
 
   Future<void> _pickAndUploadAntiplagiatFile(int reviewId) async {
     try {
+      final localization = AppLocalizations.of(context)!;
       final picked = await ArticleFilePickerHelper.pickFiles(
         allowedExtensions: _antiplagiatExtensions,
         allowMultiple: false,
-        invalidExtensionMessage:
-            'Antiplagiat uchun faqat PDF fayl qabul qilinadi',
+        invalidExtensionMessage: localization.antiplagiarismInvalidExtension,
+        noFileChosenMessage: localization.noFileChosen,
+        pickErrorMessage: localization.filePickError,
       );
       if (picked.isEmpty || !mounted) return;
 
@@ -204,10 +209,13 @@ class _ArticlesMainFilesViewState extends State<ArticlesMainFilesView> {
     bool useImagePickerFallback = false,
   }) async {
     try {
+      final localization = AppLocalizations.of(context)!;
       final picked = await ArticleFilePickerHelper.pickFiles(
         allowedExtensions: allowedExtensions,
         allowMultiple: true,
         invalidExtensionMessage: invalidExtensionMessage,
+        noFileChosenMessage: localization.noFileChosen,
+        pickErrorMessage: localization.filePickError,
         useImagePickerFallback: useImagePickerFallback,
       );
       if (picked.isEmpty || !mounted) return;
@@ -220,7 +228,10 @@ class _ArticlesMainFilesViewState extends State<ArticlesMainFilesView> {
         final fileSize = await item.file.length();
         if (!mounted) return;
         if (fileSize > ArticleFilePickerHelper.maxFileSizeBytes) {
-          errorFlushBar(context, 'Fayl hajmi 50 MB dan oshmasligi kerak');
+          errorFlushBar(
+            context,
+            AppLocalizations.of(context)!.fileSizeLimitError,
+          );
           return;
         }
 
@@ -244,11 +255,14 @@ class _ArticlesMainFilesViewState extends State<ArticlesMainFilesView> {
         if (!mounted) return;
 
         if (uploadState is UploadReviewFileError) {
-          errorFlushBar(context, 'Faylni yuklashda xatolik yuz berdi');
+          errorFlushBar(context, AppLocalizations.of(context)!.fileUploadError);
           return;
         }
         if (uploadState is UploadReviewFileLoaded) {
-          successFlushBar(context, 'Fayl muvaffaqiyatli yuklandi');
+          successFlushBar(
+            context,
+            AppLocalizations.of(context)!.fileUploadedSuccessfully,
+          );
           setState(() {
             if (type == ReviewFileType.image) {
               _imageFiles = [..._imageFiles, uploadState.entity];
@@ -266,15 +280,19 @@ class _ArticlesMainFilesViewState extends State<ArticlesMainFilesView> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return MultiBlocListener(
       listeners: [
         BlocListener<MainFileBloc, MainFileState>(
           listener: (context, state) {
             if (state is MainFileLoaded) {
-              successFlushBar(context, 'Asosiy fayl muvaffaqiyatli yuklandi');
+              successFlushBar(
+                context,
+                localization.mainFileUploadedSuccessfully,
+              );
               _refreshArticleFilesFromServer();
             } else if (state is MainFileError) {
-              errorFlushBar(context, 'Faylni yuklashda xatolik yuz berdi');
+              errorFlushBar(context, localization.fileUploadError);
             }
           },
         ),
@@ -283,11 +301,11 @@ class _ArticlesMainFilesViewState extends State<ArticlesMainFilesView> {
             if (state is AntiplagiatFileLoaded) {
               successFlushBar(
                 context,
-                'Antiplagiat fayli muvaffaqiyatli yuklandi',
+                localization.antiplagiarismUploadedSuccessfully,
               );
               _refreshArticleFilesFromServer();
             } else if (state is AntiplagiatFileError) {
-              errorFlushBar(context, 'Faylni yuklashda xatolik yuz berdi');
+              errorFlushBar(context, localization.fileUploadError);
             }
           },
         ),
@@ -349,7 +367,7 @@ class _ArticlesMainFilesViewState extends State<ArticlesMainFilesView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               ArticleSingleFileUploadSectionWg(
-                                title: 'Asosiy fayl',
+                                title: localization.mainFileTitle,
                                 formatsHint:
                                     'JPEG, PNG, .DOC, .DOCX, .XLS, .XLSX, .PDF, .PPT, .PPTX up to 50 MB.',
                                 isUploading: isMainUploading,
@@ -372,8 +390,8 @@ class _ArticlesMainFilesViewState extends State<ArticlesMainFilesView> {
                               const SizedBox(height: 24),
 
                               ArticleSingleFileUploadSectionWg(
-                                title: 'Antiplagiat fayli',
-                                formatsHint: 'Faqat PDF format, 50 MB gacha.',
+                                title: localization.antiplagiarismFile,
+                                formatsHint: localization.antiplagiarismFormatsHint,
                                 isUploading: isAntiplagiatUploading,
                                 onPickTap: () {
                                   if (_requireReviewId(reviewId)) {
@@ -396,9 +414,8 @@ class _ArticlesMainFilesViewState extends State<ArticlesMainFilesView> {
                               const SizedBox(height: 24),
 
                               ArticleMultiFileUploadSectionWg(
-                                title: 'Rasmlar',
-                                formatsHint:
-                                    'PNG va JPEG formatlar, 50 MB gacha.',
+                                title: localization.images,
+                                formatsHint: localization.imagesFormatsHint,
                                 isUploading: isImageUploading,
                                 files: _imageFiles,
                                 onPickTap: () {
@@ -408,7 +425,7 @@ class _ArticlesMainFilesViewState extends State<ArticlesMainFilesView> {
                                       allowedExtensions: _imageExtensions,
                                       type: ReviewFileType.image,
                                       invalidExtensionMessage:
-                                          'Rasmlar uchun faqat PNG va JPEG qabul qilinadi',
+                                          localization.imagesInvalidExtension,
                                       useImagePickerFallback: true,
                                     );
                                   }
@@ -418,8 +435,8 @@ class _ArticlesMainFilesViewState extends State<ArticlesMainFilesView> {
                               const SizedBox(height: 24),
 
                               ArticleMultiFileUploadSectionWg(
-                                title: 'Jadvallar',
-                                formatsHint: 'Faqat XLSX format, 50 MB gacha.',
+                                title: localization.tables,
+                                formatsHint: localization.tablesFormatsHint,
                                 isUploading: isExcelUploading,
                                 files: _excelFiles,
                                 onPickTap: () {
@@ -429,7 +446,7 @@ class _ArticlesMainFilesViewState extends State<ArticlesMainFilesView> {
                                       allowedExtensions: _excelExtensions,
                                       type: ReviewFileType.excel,
                                       invalidExtensionMessage:
-                                          'Jadvallar uchun faqat XLSX qabul qilinadi',
+                                          localization.tablesInvalidExtension,
                                     );
                                   }
                                 },

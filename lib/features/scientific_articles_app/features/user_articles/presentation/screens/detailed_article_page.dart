@@ -12,6 +12,7 @@ import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
@@ -89,7 +90,9 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
 
   Future<void> _openFile(String? url) async {
     if (url == null || url.isEmpty) {
-      if (mounted) errorFlushBar(context, 'Fayl manzili topilmadi');
+      if (mounted) {
+        errorFlushBar(context, AppLocalizations.of(context)!.fileUrlNotFound);
+      }
       return;
     }
 
@@ -109,28 +112,34 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
       if (result.type != ResultType.done && mounted) {
         errorFlushBar(
           context,
-          'Faylni ochishda xatolik yuz berdi. ${result.message}',
+          AppLocalizations.of(context)!.fileOpenError(result.message),
         );
       }
     } catch (e) {
       if (mounted) {
-        errorFlushBar(context, 'Faylni yuklab olishda xatolik yuz berdi.');
+        errorFlushBar(
+          context,
+          AppLocalizations.of(context)!.fileDownloadError,
+        );
       }
     } finally {
       if (mounted) _isOpeningFile.value = false;
     }
   }
 
-  final _categoryName = ["Maqola ma'lumotlari", "Jarayon"];
-
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+    final categoryName = [
+      localization.wizardHeaderArticleInfo,
+      localization.processTab,
+    ];
     return Scaffold(
       body: Stack(
         children: [
           CustomScrollView(
             slivers: [
-              const SliverDefaultAppBarWg(myTitle: 'Maqola tafsilotlari'),
+              SliverDefaultAppBarWg(myTitle: localization.articleDetailsTitle),
 
               /// CATEGORIES tab row
               SliverToBoxAdapter(
@@ -140,7 +149,7 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
                   child: Row(
                     children: List.generate(2, (index) {
                       return EduCategoriesWg(
-                        categoryName: _categoryName[index],
+                        categoryName: categoryName[index],
                         isSelected: selectedCategory == index,
                         onTap: () {
                           setState(() => selectedCategory = index);
@@ -168,13 +177,13 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
                             authorsState is ReviewAuthorsError;
 
                         if (isError) {
-                          return const SliverToBoxAdapter(
+                          return SliverToBoxAdapter(
                             child: Center(
                               child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 48),
-                                child: Text(
-                                  'Tafsilotlarni yuklashda xatolik yuz berdi',
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 48,
                                 ),
+                                child: Text(localization.detailsLoadError),
                               ),
                             ),
                           );
@@ -271,7 +280,7 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
                               ),
                               sliver: SliverToBoxAdapter(
                                 child: Text(
-                                  '$cycle-tsikl',
+                                  localization.cycleLabel(cycle),
                                   style: CustomTextStyles.h2,
                                 ),
                               ),
@@ -321,7 +330,7 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
       bottomNavigationBar: widget.status == ArticleStatus.draft
           ? CustomBottomNavContainerWg(
               leadingIcon: IconlyLight.edit,
-              buttonText: 'Tahrirlash',
+              buttonText: localization.edit,
               onTap: () => _openEditDraft(context),
             )
           : null,

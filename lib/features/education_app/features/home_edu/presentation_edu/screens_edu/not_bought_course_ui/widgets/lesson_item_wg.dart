@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_items/course_lesson_items_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_items/course_lesson_items_state.dart';
@@ -49,7 +50,7 @@ class _LessonItemState extends State<LessonItem> {
             child: ListTile(
               leading: const Icon(Icons.video_collection),
               title: Text(
-                'Loading...',
+                AppLocalizations.of(context)!.loadingEllipsis,
                 style: AppTextStyles.source.regular(fontSize: 13),
               ),
               tileColor: AppColors.greyScale.grey100,
@@ -63,7 +64,7 @@ class _LessonItemState extends State<LessonItem> {
             return Padding(
               padding: EdgeInsets.only(bottom: appH(12)),
               child: Text(
-                'Hali darslar topilmadi.',
+                AppLocalizations.of(context)!.noLessonsFoundYet,
                 style: AppTextStyles.source.regular(
                   fontSize: 14,
                   color: AppColors.greyScale.grey500,

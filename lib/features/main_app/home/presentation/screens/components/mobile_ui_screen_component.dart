@@ -243,7 +243,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                     Padding(
                       padding: AppPadding.horizontal20x(),
                       child: ExtendSectionSeeAllWg(
-                        title: 'Eng ommabop kitoblar',
+                        title: localization.mostPopularBooks,
                         onTap: () {
                           openMiniAppSheetFamily(
                             context,
@@ -316,7 +316,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
         padding: const .only(left: 20, right: 20, top: 24),
         sliver: SliverToBoxAdapter(
           child: ExtendSectionSeeAllWg(
-            title: 'Maqolalaringiz',
+            title: localization.yourArticles,
             onTap: () {
               openMiniAppSheetFamily(
                 showHandler: false,

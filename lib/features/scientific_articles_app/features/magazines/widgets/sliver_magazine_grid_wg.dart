@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/common/flush_bar/technical_work_flash_bar.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/features/scientific_articles_app/dummy_models/magazine_model.dart';
@@ -15,6 +16,7 @@ class SliverMagazineGridWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return SliverPadding(
       padding: AppPadding.horizontal20x(),
       sliver: SliverGrid.builder(
@@ -28,7 +30,7 @@ class SliverMagazineGridWg extends StatelessWidget {
           final item = items[index];
           return GestureDetector(
             onTap: () {
-              technicalWorkFlushBar(context, 'Tez orada!');
+              technicalWorkFlushBar(context, localization.comingSoon);
             },
             child: Column(
               crossAxisAlignment: .start,
@@ -77,7 +79,10 @@ class SliverMagazineGridWg extends StatelessWidget {
                     Text(item.title ?? '', style: CustomTextStyles.h3),
                     SizedBox(height: 4),
                     Text(
-                      "${item.year}-yil ${item.number}-son",
+                      localization.yearIssue(
+                        item.year ?? '',
+                        item.number ?? '',
+                      ),
                       style: AppTextStyles.source.regular(
                         fontSize: 12,
                         color: AppColors.greyScale.grey600,

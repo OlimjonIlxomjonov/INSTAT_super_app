@@ -59,12 +59,12 @@ class MikroDataBottomNavBar extends StatelessWidget {
         MiniAppBottomNavTabItem(
           icon: IconlyLight.folder,
           activeIcon: IconlyBold.folder,
-          label: 'Hisobotlar',
+          label: localization.reports,
         ),
         MiniAppBottomNavTabItem(
           icon: IconlyLight.document,
           activeIcon: IconlyBold.document,
-          label: "So’rovlarim",
+          label: localization.myRequestsTab,
         ),
         MiniAppBottomNavTabItem(
           icon: IconlyLight.profile,

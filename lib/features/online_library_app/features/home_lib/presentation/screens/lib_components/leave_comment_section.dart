@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
@@ -15,6 +16,7 @@ class LeaveCommentSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     final thumbnail = data.bookThumbnails.isNotEmpty
         ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${data.bookThumbnails.first.file}'
         : '';
@@ -29,11 +31,11 @@ class LeaveCommentSection extends StatelessWidget {
             bookType: data.category.name,
           ),
           SizedBox(height: 16),
-          Text('Baholash', style: AppTextStyles.source.medium(fontSize: 13)),
+          Text(localization.assessment, style: AppTextStyles.source.medium(fontSize: 13)),
           SizedBox(height: 4),
           CustomRatingStarWg(starRating: 4, starSize: 30),
           SizedBox(height: 16),
-          EduCustomTextAreaWg(hintText: 'Mavzuni yozing...'),
+          EduCustomTextAreaWg(hintText: localization.writeTopicHint),
           SizedBox(height: 20),
           Row(
             children: [
@@ -50,14 +52,14 @@ class LeaveCommentSection extends StatelessWidget {
                   onPressed: () {
                     AppRoute.close();
                   },
-                  child: Text('Bekor qilish'),
+                  child: Text(localization.cancel),
                 ),
               ),
               SizedBox(width: 12),
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {},
-                  child: Text('Tasdiqlash'),
+                  child: Text(localization.confirm),
                 ),
               ),
             ],

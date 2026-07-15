@@ -7,6 +7,7 @@ import 'package:my_template/core/common/skeletonizer_shimmer/courses/course_shim
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/common/ui_states/error_page.dart';
 import 'package:my_template/core/common/ui_states/lost_internet_connection_state.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/popular_courses_card/expanded_courses_card_wg.dart';
@@ -150,6 +151,7 @@ class _CoursesInProgressComponentState
         //? control states
       },
       builder: (context, state) {
+        final localization = AppLocalizations.of(context)!;
         if (state is UserCoursesLoaded) {
           final data = state.response.data;
 
@@ -159,12 +161,12 @@ class _CoursesInProgressComponentState
               hasScrollBody: false,
               child: AppEmptyState(
                 title: widget.state == 'finished'
-                    ? 'Hali kurs tugatilmagan'
-                    : 'Hali kurs boshlanmagan',
+                    ? localization.courseNotFinishedYetTitle
+                    : localization.courseNotStartedYetTitle,
                 subtitle: widget.state == 'finished'
-                    ? 'Tugatgan kurslaringiz shu yerda ko\'rinadi. Davom eting!'
-                    : 'Boshlangan kurslaringiz shu yerda ko\'rinadi. Kurslarni topib o\'rganishni boshlang!',
-                buttonLabel: 'Kurslarni ko\'rish',
+                    ? localization.finishedCoursesEmptySubtitle
+                    : localization.startedCoursesEmptySubtitle,
+                buttonLabel: localization.viewCoursesButton,
                 onAction: () {
                   openMiniAppSheetFamily(
                     context,

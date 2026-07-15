@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -116,7 +117,11 @@ class _BlurTopBanner extends StatefulWidget {
 }
 
 class _BlurTopBannerState extends State<_BlurTopBanner>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
+  static const double _dismissDragDistance = 40;
+  static const double _dismissFlingVelocity = -300;
+  static const double _maxDragOffset = -300;
+
   late final AnimationController _controller = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 300),
@@ -126,21 +131,85 @@ class _BlurTopBannerState extends State<_BlurTopBanner>
     end: Offset.zero,
   ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
 
+  Timer? _autoDismissTimer;
+  AnimationController? _dragAnimController;
+  bool _isDismissing = false;
+  double _dragOffsetY = 0;
+
   @override
   void initState() {
     super.initState();
     _controller.forward();
-    Future.delayed(widget.duration, _dismiss);
+    _scheduleAutoDismiss();
+  }
+
+  void _scheduleAutoDismiss() {
+    _autoDismissTimer?.cancel();
+    _autoDismissTimer = Timer(widget.duration, _dismiss);
   }
 
   Future<void> _dismiss() async {
-    if (!mounted) return;
+    if (_isDismissing || !mounted) return;
+    _isDismissing = true;
     await _controller.reverse();
-    widget.onDismissed();
+    if (mounted) widget.onDismissed();
+  }
+
+  void _onVerticalDragUpdate(DragUpdateDetails details) {
+    if (_isDismissing) return;
+    _autoDismissTimer?.cancel();
+    setState(() {
+      _dragOffsetY = (_dragOffsetY + details.primaryDelta!).clamp(
+        _maxDragOffset,
+        0.0,
+      );
+    });
+  }
+
+  void _onVerticalDragEnd(DragEndDetails details) {
+    if (_isDismissing) return;
+    final flungUp =
+        (details.primaryVelocity ?? 0) < _dismissFlingVelocity;
+    final draggedFarEnough = _dragOffsetY < -_dismissDragDistance;
+
+    if (flungUp || draggedFarEnough) {
+      _dismissViaSwipe();
+    } else {
+      _snapBack();
+    }
+  }
+
+  Future<void> _animateDragOffsetTo(double target, Duration duration) async {
+    _dragAnimController?.dispose();
+    final controller = AnimationController(vsync: this, duration: duration);
+    _dragAnimController = controller;
+    final animation = Tween<double>(
+      begin: _dragOffsetY,
+      end: target,
+    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeOut));
+    animation.addListener(() {
+      if (mounted) setState(() => _dragOffsetY = animation.value);
+    });
+    await controller.forward();
+    controller.dispose();
+    if (_dragAnimController == controller) _dragAnimController = null;
+  }
+
+  Future<void> _dismissViaSwipe() async {
+    _isDismissing = true;
+    await _animateDragOffsetTo(_maxDragOffset, const Duration(milliseconds: 200));
+    if (mounted) widget.onDismissed();
+  }
+
+  Future<void> _snapBack() async {
+    await _animateDragOffsetTo(0, const Duration(milliseconds: 200));
+    _scheduleAutoDismiss();
   }
 
   @override
   void dispose() {
+    _autoDismissTimer?.cancel();
+    _dragAnimController?.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -151,44 +220,54 @@ class _BlurTopBannerState extends State<_BlurTopBanner>
       top: MediaQuery.of(context).padding.top + 8,
       left: 8,
       right: 8,
-      child: SlideTransition(
-        position: _slide,
-        child: Material(
-          color: Colors.transparent,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: widget.color.withValues(alpha: widget.backgroundAlpha),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                padding: widget.padding,
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: widget.iconPadding,
-                      child: SizedBox(
-                        width: 50,
-                        height: 50,
-                        child: Lottie.asset(
-                          widget.animationAsset,
-                          repeat: false,
-                        ),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onVerticalDragUpdate: _onVerticalDragUpdate,
+        onVerticalDragEnd: _onVerticalDragEnd,
+        child: SlideTransition(
+          position: _slide,
+          child: Transform.translate(
+            offset: Offset(0, _dragOffsetY),
+            child: Material(
+              color: Colors.transparent,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: widget.color.withValues(
+                        alpha: widget.backgroundAlpha,
                       ),
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        widget.message,
-                        style: AppTextStyles.source.semiBold(
-                          color: AppColors.white,
-                          fontSize: 16,
+                    padding: widget.padding,
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: widget.iconPadding,
+                          child: SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: Lottie.asset(
+                              widget.animationAsset,
+                              repeat: false,
+                            ),
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            widget.message,
+                            style: AppTextStyles.source.semiBold(
+                              color: AppColors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),

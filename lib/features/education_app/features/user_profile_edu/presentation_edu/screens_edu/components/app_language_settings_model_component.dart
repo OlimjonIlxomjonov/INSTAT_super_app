@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/language_storage/language_service_storage.dart';
 import 'package:my_template/core/streams/general_streams.dart';
@@ -22,7 +23,6 @@ class _AppLanguageSettingsModelComponentState
     extends State<AppLanguageSettingsModelComponent> {
   int isIndex = 0;
 
-  final List<String> languageTitle = ['O’zbek tili', 'Rus tili'];
   final List<String> languageLeading = [
     AppVectors.uzbekistanFlag,
     AppVectors.russiaFlag,
@@ -52,15 +52,21 @@ class _AppLanguageSettingsModelComponentState
   Future<void> _selectLanguage(int index) async {
     setState(() => isIndex = index);
 
+    final successMessage = AppLocalizations.of(context)!.success;
     final currentLocale = languageLocale[index];
     await LanguageServiceStorage.saveLocale(currentLocale);
     GeneralStream.languageStream.add(currentLocale);
     AppRoute.close();
-    successFlushBar(context, 'Success!');
+    successFlushBar(context, successMessage);
   }
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+    final languageTitle = [
+      localization.languageUzbek,
+      localization.languageRussian,
+    ];
     TDeviceUtils.systemNavigationBar(AppColors.white);
     return SafeArea(
       child: Padding(
@@ -78,7 +84,7 @@ class _AppLanguageSettingsModelComponentState
               ),
             ),
             Text(
-              'Ilova tili',
+              localization.appLanguage,
               style: AppTextStyles.source.semiBold(fontSize: 17),
             ),
             SizedBox(height: appH(12)),

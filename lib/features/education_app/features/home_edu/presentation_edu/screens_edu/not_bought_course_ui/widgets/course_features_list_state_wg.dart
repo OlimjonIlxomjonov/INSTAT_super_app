@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/widgets/study_item_wg.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/about_course_features/about_cours_features_bloc.dart';
@@ -45,8 +46,10 @@ class CourseFeaturesListState extends State<CourseFeaturesList> {
                     onPressed: () => setState(() => _isExpanded = !_isExpanded),
                     child: Text(
                       _isExpanded
-                          ? "Kamroq ko'rish"
-                          : "Barchasini ko'rish (${data.length})",
+                          ? AppLocalizations.of(context)!.showLess
+                          : AppLocalizations.of(
+                              context,
+                            )!.showAllCount(data.length),
                       style: AppTextStyles.source.medium(
                         fontSize: 14,
                         color: AppColors.primaryColor,

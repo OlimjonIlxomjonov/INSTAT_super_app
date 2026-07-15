@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/widgets_edu/body_container.dart';
@@ -15,7 +16,7 @@ class UserAchievementsTab extends StatelessWidget {
     return SingleChildScrollView(
       padding: EdgeInsets.only(bottom: appH(16)),
       child: BodyContainer(
-        title: 'Medallar',
+        title: AppLocalizations.of(context)!.medalsTab,
         body: GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),

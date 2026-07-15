@@ -88,9 +88,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   imageWidthDivider: 1.1,
                 ),
                 OnboardingWg(
-                  title: 'Orzuingizdagi ishni toping',
-                  subTitle:
-                      'Eng so‘nggi vakansiyalarni ko‘rib chiqing va o‘zingizga mos ishni toping.',
+                  title: localization.findYourDreamJob,
+                  subTitle: localization.browseLatestVacancies,
                   imagePath: AppImages.fifthOnboarding,
                   imageWidthDivider: 1,
                 ),

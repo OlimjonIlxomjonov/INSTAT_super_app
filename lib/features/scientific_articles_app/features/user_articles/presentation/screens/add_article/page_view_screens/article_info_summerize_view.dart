@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/features/scientific_articles_app/articles_widgets/detailed_article_body_wg.dart';
@@ -50,7 +51,9 @@ class _ArticleInfoSummerizeViewState extends State<ArticleInfoSummerizeView> {
 
     return ReviewDetailEntity(
       id: state.reviewId ?? 0,
-      title: state.title.isEmpty ? "Maqola nomi kiritilmagan" : state.title,
+      title: state.title.isEmpty
+          ? AppLocalizations.of(context)!.articleTitleNotEntered
+          : state.title,
       articleType: state.articleType ?? 1,
       journalSection: state.journalSection ?? 1,
       udkCode: state.udkCode,
@@ -91,6 +94,7 @@ class _ArticleInfoSummerizeViewState extends State<ArticleInfoSummerizeView> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return BlocListener<AddArticleBloc, AddArticleState>(
       listenWhen: (prev, curr) =>
           prev.reviewId != curr.reviewId ||
@@ -152,7 +156,7 @@ class _ArticleInfoSummerizeViewState extends State<ArticleInfoSummerizeView> {
                             color: AppColors.greyScale.grey600,
                           ),
                           Text(
-                            ' Yakuniy tasdiqlash',
+                            ' ${localization.finalConfirmationHeader}',
                             style: CustomTextStyles.h3,
                           ),
                         ],
@@ -161,15 +165,11 @@ class _ArticleInfoSummerizeViewState extends State<ArticleInfoSummerizeView> {
                       const SizedBox(height: 20),
 
                       /// Checkbox + text
+                      _approveSection(localization.originalityStatement),
                       _approveSection(
-                        "Originallik bayonoti: Maqola originalligini tasdiqlayman, ushbu qo'lyozma avval chop etilmagan va hozirda boshqa joyda ko'rib chiqilmayapti.Originallik bayonoti: Maqola originalligini tasdiqlayman, ushbu qo'lyozma avval chop etilmagan va hozirda boshqa joyda ko'rib chiqilmayapti.",
+                        localization.termsAndConditionsStatement,
                       ),
-                      _approveSection(
-                        "Shartlar va qoidalar: Jurnal qoidalariga roziman, shuningdek ma'lumotlar siyosati va mualliflik huquqi shartnomasiga.",
-                      ),
-                      _approveSection(
-                        "Axloqiy me'yorlar: Men barcha tadqiqotlar axloqiy ko'rsatmalarga javob berishini, shu jumladan tegishli institutsional ko'rib chiqish kengashlarining roziligini tasdiqlayman.",
-                      ),
+                      _approveSection(localization.ethicalStandardsStatement),
                     ],
                   ),
                 ),

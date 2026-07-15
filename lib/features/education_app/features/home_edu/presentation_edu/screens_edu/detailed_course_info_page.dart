@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/online_lib_style_custom_bottom_sheet/online_lib_style_custom_bottom_sheet_wg.dart';
 import 'package:my_template/core/utils/general_widgets/payment_open_bottom_sheet/payment_open_bottom_sheet_wg.dart';
@@ -45,7 +46,6 @@ class DetailedCourseInfoPage extends StatefulWidget {
 
 class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
     with SingleTickerProviderStateMixin {
-  late final List<Widget> _headerSlivers;
   late TabController _tabController;
 
   @override
@@ -59,37 +59,6 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
 
     logger.f("rating count: ${widget.data.ratingsCount}");
     logger.f("desc: ${widget.data.descriptionUz}");
-
-    _headerSlivers = [
-      // image header
-      DetailedCourseInfoHeaderImage(imagePath: widget.data.thumbnail),
-      // course title and brief info till "Izoh"
-      DetailedCourseInfoHeaderWg(
-        data: widget.data,
-        categoryName: widget.courseCategory,
-      ),
-
-      /// course tabs
-      SliverAppBar(
-        pinned: true,
-        backgroundColor: AppColors.white,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        toolbarHeight: 0,
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(90),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-            child: CustomTabBarWg(
-              controller: _tabController,
-              firstTab: "Kurs haqida",
-              secondTab: "O'quv reja",
-              thirdTab: "Izohlar",
-            ),
-          ),
-        ),
-      ),
-    ];
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
@@ -137,7 +106,7 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
       child: Scaffold(
         body: CustomScrollView(
           slivers: [
-            ..._headerSlivers,
+            ..._buildHeaderSlivers(context),
             SliverToBoxAdapter(child: _buildTabContent()),
             const SliverToBoxAdapter(child: SizedBox(height: 32)),
           ],
@@ -150,13 +119,47 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
               opacity: status == PaymentStatusEnum.pending ? 0.5 : 1.0,
               child: CustomBottomNavContainerWg(
                 onTap: () => _handleBottomNavTap(context, status),
-                buttonText: _buttonTextFor(status),
+                buttonText: _buttonTextFor(context, status),
               ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  List<Widget> _buildHeaderSlivers(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+    return [
+      // image header
+      DetailedCourseInfoHeaderImage(imagePath: widget.data.thumbnail),
+      // course title and brief info till "Izoh"
+      DetailedCourseInfoHeaderWg(
+        data: widget.data,
+        categoryName: widget.courseCategory,
+      ),
+
+      /// course tabs
+      SliverAppBar(
+        pinned: true,
+        backgroundColor: AppColors.white,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        toolbarHeight: 0,
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(90),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+            child: CustomTabBarWg(
+              controller: _tabController,
+              firstTab: localization.aboutCourseTab,
+              secondTab: localization.curriculumTab,
+              thirdTab: localization.commentsTab,
+            ),
+          ),
+        ),
+      ),
+    ];
   }
 
   Widget _buildTabContent() {
@@ -191,21 +194,22 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
       case PaymentStatusEnum.notBought:
         onlineLibStyleCustomBottomSheetWg(
           context,
-          headerTitle: "To'lov turi",
+          headerTitle: AppLocalizations.of(context)!.paymentTypeTitle,
           child: PaymentOpenBottomSheetWg(courseId: widget.data.id),
         );
         break;
     }
   }
 
-  String _buttonTextFor(PaymentStatusEnum status) {
+  String _buttonTextFor(BuildContext context, PaymentStatusEnum status) {
+    final localization = AppLocalizations.of(context)!;
     switch (status) {
       case PaymentStatusEnum.paid:
-        return 'Davom etish';
+        return localization.continueButton;
       case PaymentStatusEnum.pending:
-        return 'Ko‘rib chiqilmoqda';
+        return localization.pendingReview;
       case PaymentStatusEnum.notBought:
-        return "Sotib olish - ${widget.data.price} UZS";
+        return localization.buyForPrice(widget.data.price);
     }
   }
 

@@ -32,6 +32,8 @@ class ArticleFilePickerHelper {
     required Set<String> allowedExtensions,
     required bool allowMultiple,
     required String invalidExtensionMessage,
+    required String noFileChosenMessage,
+    required String pickErrorMessage,
     bool useImagePickerFallback = false,
   }) async {
     try {
@@ -50,7 +52,7 @@ class ArticleFilePickerHelper {
         }
         final path = file.path;
         if (path == null) {
-          throw const ArticleFilePickerException('Fayl tanlanmadi');
+          throw ArticleFilePickerException(noFileChosenMessage);
         }
         picked.add((file: File(path), name: file.name));
       }
@@ -59,7 +61,7 @@ class ArticleFilePickerHelper {
       rethrow;
     } on MissingPluginException {
       if (!useImagePickerFallback || allowMultiple) {
-        throw const ArticleFilePickerException('Fayl tanlashda xatolik yuz berdi');
+        throw ArticleFilePickerException(pickErrorMessage);
       }
       final imagePicker = ImagePicker();
       final picked = await imagePicker.pickImage(
@@ -70,7 +72,7 @@ class ArticleFilePickerHelper {
       final file = File(picked.path);
       return [(file: file, name: file.path.split('/').last)];
     } catch (_) {
-      throw const ArticleFilePickerException('Fayl tanlashda xatolik yuz berdi');
+      throw ArticleFilePickerException(pickErrorMessage);
     }
   }
 }

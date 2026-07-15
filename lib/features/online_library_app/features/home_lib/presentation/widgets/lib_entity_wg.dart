@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 
 class UserLibInfo {
@@ -14,24 +15,24 @@ class UserLibInfo {
   });
 }
 
-final cardInfo = [
+List<UserLibInfo> getCardInfo(AppLocalizations localization) => [
   UserLibInfo(
-    cardName: 'Xaridlar',
+    cardName: localization.purchases,
     iconPath: AppVectors.cartBrief,
     backColors: [AppColors.linearLightGreen, AppColors.linearDarkGreen],
   ),
   UserLibInfo(
-    cardName: "O'qilmoqda",
+    cardName: localization.currentlyReading,
     iconPath: AppVectors.bookOpenBrief,
     backColors: [AppColors.linearLightBlue, AppColors.linearDarkBlue],
   ),
   UserLibInfo(
-    cardName: 'Olingan kitoblar',
+    cardName: localization.booksObtained,
     iconPath: AppVectors.bookShvBrief,
     backColors: [AppColors.linearLightOrange, AppColors.linearDarkOrange],
   ),
   UserLibInfo(
-    cardName: 'Tugalangan',
+    cardName: localization.finished,
     iconPath: AppVectors.trophyBrief,
     backColors: [AppColors.linearLightPurple, AppColors.linearDarkPurple],
   ),

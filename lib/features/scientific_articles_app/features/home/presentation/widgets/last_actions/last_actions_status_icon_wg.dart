@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 
 class LastActionsStatusIconWg extends StatelessWidget {
@@ -25,16 +26,19 @@ class LastActionsStatusIconWg extends StatelessWidget {
   }
 }
 
-String processTitleSwitch(LastActionsStatus status) {
+String processTitleSwitch(
+  AppLocalizations localization,
+  LastActionsStatus status,
+) {
   switch (status) {
     case LastActionsStatus.inReview:
-      return 'Maqola uchun tolov amalga oshirildi';
+      return localization.paymentMadeForArticle;
     case LastActionsStatus.addedExpert:
-      return 'Ekspert biriktirildi';
+      return localization.expertAssigned;
     case LastActionsStatus.rejected:
-      return 'Expert tomonidan rad etildi';
+      return localization.rejectedByExpert;
     case LastActionsStatus.accepted:
-      return 'Ekspert tomonidan tasdiqlandi';
+      return localization.approvedByExpert;
     default:
       return '';
   }

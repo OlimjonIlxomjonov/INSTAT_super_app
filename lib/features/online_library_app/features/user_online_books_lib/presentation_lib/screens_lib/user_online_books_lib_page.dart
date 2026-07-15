@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
@@ -14,6 +15,7 @@ class UserOnlineBooksLibPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -22,8 +24,8 @@ class UserOnlineBooksLibPage extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
             child: CustomTabBarWg(
-              firstTab: "Jarayonda",
-              secondTab: "Tugallangan",
+              firstTab: localization.statusInProgress,
+              secondTab: localization.finished,
             ),
           ),
         ),
@@ -53,7 +55,7 @@ class UserOnlineBooksLibPage extends StatelessWidget {
               padding: .only(left: 20, top: 20),
               sliver: SliverToBoxAdapter(
                 child: Text(
-                  'Kitoblarim',
+                  localization.myBooks,
                   style: AppTextStyles.source.semiBold(fontSize: 17),
                 ),
               ),

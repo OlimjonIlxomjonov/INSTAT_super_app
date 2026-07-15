@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/flush_bar/technical_work_flash_bar.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
@@ -39,6 +40,7 @@ class _UserOnlineBookCartLibPageState extends State<UserOnlineBookCartLibPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     final cartState = context.watch<CartBloc>().state;
     final isLoading = cartState is CartLoading;
     final items = cartState is CartLoaded ? cartState.response.data : null;
@@ -50,7 +52,7 @@ class _UserOnlineBookCartLibPageState extends State<UserOnlineBookCartLibPage> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverDefaultAppBarWg(myTitle: 'Savat'),
+          SliverDefaultAppBarWg(myTitle: localization.cart),
           SliverPadding(
             padding: AppPadding.hAndV20x20(),
             sliver: SliverToBoxAdapter(
@@ -115,10 +117,9 @@ class _UserOnlineBookCartLibPageState extends State<UserOnlineBookCartLibPage> {
                   ),
                   if (isEmpty)
                     AppEmptyState(
-                      title: 'Savatcha bo\'sh!',
-                      subtitle:
-                          'Oʻzingizni xursand qilish vaqti keldi. Savatga biror narsa qoʻshamizmi?',
-                      buttonLabel: 'Davom etish',
+                      title: localization.cartEmpty,
+                      subtitle: localization.cartEmptySubtitle,
+                      buttonLabel: localization.continueButton,
                       onAction: () {
                         // openMiniAppSheetFamily(
                         //   context,
@@ -134,7 +135,10 @@ class _UserOnlineBookCartLibPageState extends State<UserOnlineBookCartLibPage> {
                     ),
                   SizedBox(height: appH(30)),
                   if (!isEmpty)
-                    _buildSimpleRow('Umumiy mahsulotlar', '$itemCount ta'),
+                    _buildSimpleRow(
+                      localization.totalItems,
+                      localization.countSuffix(itemCount),
+                    ),
                   SizedBox(height: 12),
                   if (!isEmpty) Divider(color: AppColors.greyScale.grey200),
                   SizedBox(height: 16),
@@ -143,7 +147,7 @@ class _UserOnlineBookCartLibPageState extends State<UserOnlineBookCartLibPage> {
                       mainAxisAlignment: .spaceBetween,
                       children: [
                         Text(
-                          'Umumiy summa',
+                          localization.totalAmount,
                           style: AppTextStyles.source.medium(fontSize: 17),
                         ),
                         Text(
@@ -160,14 +164,14 @@ class _UserOnlineBookCartLibPageState extends State<UserOnlineBookCartLibPage> {
       ),
       bottomNavigationBar: !isEmpty
           ? CustomBottomNavContainerWg(
-              buttonText: 'Sotib olish - $totalPrice UZS',
+              buttonText: localization.buyForPrice(totalPrice),
               onTap: () {
                 // onlineLibStyleCustomBottomSheetWg(
                 //   context,
                 //   headerTitle: 'To\'lov turi',
                 //   child: PaymentOpenBottomSheetWg(),
                 // );
-                technicalWorkFlushBar(context, 'Tez orada!');
+                technicalWorkFlushBar(context, localization.comingSoon);
               },
             )
           : null,

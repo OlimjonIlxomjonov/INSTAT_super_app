@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/profile_settings_tile/profile_settings_tile_wg.dart';
@@ -29,9 +30,10 @@ class _UserProfileEduState extends State<UserProfileEdu> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: CustomAppBarWg(
-        myTitle: 'Akkaunt ma’lumotlari',
+        myTitle: localization.accountInfo,
         showArrow: false,
         centerTitle: false,
       ),
@@ -44,17 +46,17 @@ class _UserProfileEduState extends State<UserProfileEdu> {
               children: [
                 ProfileSettingsTileWg(
                   leadingIcon: IconlyLight.document,
-                  title: 'Sertificatlar',
+                  title: localization.certificates,
                   onTap: _openSertificatComponent,
                 ),
                 ProfileSettingsTileWg(
                   leadingIcon: IconlyLight.heart,
-                  title: 'Saqlanganlar',
+                  title: localization.savedItems,
                   onTap: _openFavouriteComponent,
                 ),
                 ProfileSettingsTileWg(
                   leadingIcon: IconlyLight.info_square,
-                  title: 'Ko’p beriladigan savollar',
+                  title: localization.frQuestions,
                   onTap: () {},
                 ),
               ],

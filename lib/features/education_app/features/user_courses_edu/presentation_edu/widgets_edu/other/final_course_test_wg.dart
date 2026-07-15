@@ -4,6 +4,7 @@ import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/di/service_locator.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
@@ -31,7 +32,7 @@ class FinalCourseTestWg extends StatelessWidget {
     if (!isVerified) {
       errorFlushBar(
         context,
-        "Testga kirish uchun avval o'zingizni tasdiqlaginingiz kerak. Tasdiqlanish uchun profil bo'limiga o'ting.",
+        AppLocalizations.of(context)!.verificationRequiredMessage,
       );
       return;
     }
@@ -61,7 +62,10 @@ class FinalCourseTestWg extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Umumiy test savollari', style: CustomTextStyles.h3),
+                  Text(
+                    AppLocalizations.of(context)!.overallTestQuestions,
+                    style: CustomTextStyles.h3,
+                  ),
 
                   Icon(
                     IconlyLight.arrow_right_2,
@@ -102,7 +106,10 @@ class FinalCourseTestWg extends StatelessWidget {
             );
           } else if (state is CheckFinalTestAccessLoaded &&
               state.entity.ok == false) {
-            errorFlushBar(context, 'Yakuniy test ga hali ruxsat yo\'q!');
+            errorFlushBar(
+              context,
+              AppLocalizations.of(context)!.noAccessToFinalTestYet,
+            );
           }
         },
       ),

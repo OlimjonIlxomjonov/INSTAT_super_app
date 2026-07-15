@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
@@ -14,10 +15,11 @@ class EduCreateTicketsComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverDefaultAppBarWg(myTitle: 'Tikket yaratish'),
+          SliverDefaultAppBarWg(myTitle: localization.createTicketTitle),
 
           SliverPadding(
             padding: AppPadding.hAndV20x20(),
@@ -26,32 +28,32 @@ class EduCreateTicketsComponent extends StatelessWidget {
                 crossAxisAlignment: .start,
                 children: [
                   Text(
-                    'Ticket nomi*',
+                    localization.ticketNameLabel,
                     style: AppTextStyles.source.medium(fontSize: 14),
                   ),
                   SizedBox(height: appH(4)),
                   EduCustomTextAreaWg(
-                    hintText: 'Tikket nomi...',
+                    hintText: localization.ticketNameHint,
                     helperText: ' This is a hint text to help user.',
                   ),
                   SizedBox(height: appH(12)),
                   Text(
-                    'Mavzu*',
+                    localization.subjectLabel,
                     style: AppTextStyles.source.medium(fontSize: 14),
                   ),
                   SizedBox(height: appH(4)),
                   EduCustomTextAreaWg(
-                    hintText: 'Mavzu yozing...',
+                    hintText: localization.subjectHint,
                     helperText: ' This is a hint text to help user.',
                   ),
                   SizedBox(height: appH(12)),
                   Text(
-                    'Izoh*',
+                    localization.commentFieldLabel,
                     style: AppTextStyles.source.medium(fontSize: 14),
                   ),
                   SizedBox(height: appH(4)),
                   EduCustomTextAreaWg(
-                    hintText: 'Izoh yozing...',
+                    hintText: localization.commentHint,
                     helperText: ' This is a hint text to help user.',
                   ),
 
@@ -66,7 +68,7 @@ class EduCreateTicketsComponent extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: CustomBottomNavContainerWg(
-        buttonText: 'Tasdiqlash',
+        buttonText: localization.confirm,
         anotherButton: ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.greyScale.grey50,
@@ -75,7 +77,7 @@ class EduCreateTicketsComponent extends StatelessWidget {
             AppRoute.close();
           },
           child: Text(
-            'Bekor qilish',
+            localization.cancel,
             style: AppTextStyles.source.medium(
               fontSize: 14,
               color: AppColors.greyScale.grey600,

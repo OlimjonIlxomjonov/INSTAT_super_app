@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/custom_tab_bar/custom_tab_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/title_with_layout_selector_wg.dart';
@@ -36,6 +37,7 @@ class _UserCoursesEduPageState extends State<UserCoursesEduPage>
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(appH(90)),
@@ -43,9 +45,9 @@ class _UserCoursesEduPageState extends State<UserCoursesEduPage>
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
           child: CustomTabBarWg(
             controller: _tabController,
-            firstTab: "Jarayonda",
-            secondTab: "Tugallangan",
-            thirdTab: 'Offline Kurslar',
+            firstTab: localization.statusInProgress,
+            secondTab: localization.finished,
+            thirdTab: localization.offlineCoursesTab,
           ),
         ),
       ),
@@ -101,7 +103,7 @@ class _UserCoursesEduPageState extends State<UserCoursesEduPage>
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: TitleWithLayoutSelectorWg(
-              text: 'Mening kurslarim',
+              text: localization.myCoursesTitle,
               prefsKey: "user_courses",
               onChanged: (newLayout) => setState(() => layout = newLayout),
             ),

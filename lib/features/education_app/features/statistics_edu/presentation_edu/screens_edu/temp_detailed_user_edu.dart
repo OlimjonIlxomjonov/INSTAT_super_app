@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/assets/app_images.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
@@ -44,6 +45,7 @@ class TempDetailedUserEdu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -69,7 +71,7 @@ class TempDetailedUserEdu extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Champion',
+                    localization.champion,
                     style: AppTextStyles.source.medium(
                       fontSize: 14,
                       color: AppColors.greyScale.grey600,
@@ -80,9 +82,9 @@ class TempDetailedUserEdu extends StatelessWidget {
               ),
               SizedBox(height: appH(20)),
               CustomTabBarWg(
-                firstTab: "Ma'lumotlar",
-                secondTab: "Medallar",
-                thirdTab: "Sertifikatlar",
+                firstTab: localization.infoTab,
+                secondTab: localization.medalsTab,
+                thirdTab: localization.certificates,
               ),
               SizedBox(height: appH(12)),
               Expanded(

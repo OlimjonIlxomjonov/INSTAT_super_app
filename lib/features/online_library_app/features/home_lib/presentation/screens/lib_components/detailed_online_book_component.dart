@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import 'package:my_template/core/common/flush_bar/technical_work_flash_bar.dart' hide technicalWorkFlushBar;
+import 'package:my_template/core/common/flush_bar/technical_work_flash_bar.dart'
+    hide technicalWorkFlushBar;
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/general_widgets/bought_book_opener/bought_book_opener_wg.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -45,10 +47,11 @@ class _DetailedOnlineBookComponentState
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       /// HEADER
       appBar: CustomAppBarWg(
-        myTitle: 'Kitob haqida',
+        myTitle: localization.aboutBook,
         customActions: [
           BlocBuilder<
             my_template_book.BookActionsBloc,
@@ -109,7 +112,7 @@ class _DetailedOnlineBookComponentState
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Kitob haqida',
+                              localization.aboutBook,
                               style: AppTextStyles.source.medium(fontSize: 16),
                             ),
                             const SizedBox(height: 8),
@@ -117,7 +120,7 @@ class _DetailedOnlineBookComponentState
                               collapsedLines: 7,
                               htmlData: widget.data.description.isNotEmpty
                                   ? widget.data.description
-                                  : 'Izoh topilmadi',
+                                  : localization.descriptionNotFound,
                             ),
                           ],
                         ),
@@ -155,11 +158,15 @@ class _DetailedOnlineBookComponentState
                         onPressed: () {
                           onlineLibStyleCustomBottomSheetWg(
                             context,
-                            headerTitle: 'Izoh qoldirish',
+                            headerTitle: localization.leaveComment,
                             child: LeaveCommentSection(data: widget.data),
                           );
                         },
-                        child: Text('Izoh qoldirish'),
+                        child: Text(
+                          localization.leaveComment,
+                          maxLines: 1,
+                          overflow: .ellipsis,
+                        ),
                       ),
                     ],
                   ),
@@ -210,7 +217,7 @@ class _DetailedOnlineBookComponentState
                 child: Column(
                   children: [
                     ExtendSectionSeeAllWg(
-                      title: 'O’xshash kitoblar',
+                      title: localization.similarBooks,
                       onTap: () {
                         // FamilyNavigation.familyPush(
                         //   context,
@@ -306,10 +313,10 @@ class _DetailedOnlineBookComponentState
                             : const SizedBox.shrink(),
                         // onCartTap: () {},
                         buttonText: widget.isBookBought
-                            ? 'O’qishni davom ettirish'
+                            ? localization.continueReadingButton
                             : inCart
-                            ? 'Savatga o\'tish'
-                            : 'Sotib olish - ${widget.data.price} UZS',
+                            ? localization.goToCart
+                            : localization.buyForPrice(widget.data.price),
                         onTap: () {
                           if (widget.isBookBought) {
                             AppRoute.go(const BoughtBookOpenerWg());
@@ -324,7 +331,7 @@ class _DetailedOnlineBookComponentState
                                 );
                             addedToCartFlushBar(
                               context,
-                              'Muvaffaqiyatli saqlandi',
+                              localization.successfullySaved,
                             );
                           } else {
                             openMiniAppSheetFamily(

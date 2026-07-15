@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/di/service_locator.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
@@ -58,7 +59,9 @@ class _StatsEduPageState extends State<StatsEduPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBarWg(myTitle: 'Foydalanuvchilar'),
+      appBar: CustomAppBarWg(
+        myTitle: AppLocalizations.of(context)!.usersTitle,
+      ),
       body: CustomRefreshIndicator(
         onRefresh: () async {
           context.read<LeaderBoardBloc>().add(LeaderBoardEvent());

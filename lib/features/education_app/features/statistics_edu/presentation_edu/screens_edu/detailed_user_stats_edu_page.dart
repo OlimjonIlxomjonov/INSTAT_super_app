@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/assets/app_images.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
@@ -18,6 +19,7 @@ class DetailedUserStatsEduPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -41,7 +43,7 @@ class DetailedUserStatsEduPage extends StatelessWidget {
                       mainAxisSize: .min,
                       children: [
                         Text(
-                          'Champion',
+                          localization.champion,
                           style: AppTextStyles.source.medium(
                             fontSize: 14,
                             color: AppColors.greyScale.grey600,
@@ -55,9 +57,9 @@ class DetailedUserStatsEduPage extends StatelessWidget {
 
                     /// body tabbar
                     CustomTabBarWg(
-                      firstTab: 'Ma’lumotlar',
-                      secondTab: "Medallar",
-                      thirdTab: "Sertifikatlar",
+                      firstTab: localization.infoTab,
+                      secondTab: localization.medalsTab,
+                      thirdTab: localization.certificates,
                     ),
                   ],
                 ),

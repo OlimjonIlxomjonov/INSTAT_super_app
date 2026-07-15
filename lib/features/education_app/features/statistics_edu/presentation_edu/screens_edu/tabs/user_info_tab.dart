@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
@@ -8,31 +9,32 @@ class UserInfoTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     final List<String> userInfoCard = [
-      'Reyting',
-      'Ball',
-      'Medallar',
-      'Sertifikat',
+      localization.rankLabel,
+      localization.scoreLabel,
+      localization.medalsTab,
+      localization.certificateLabel,
     ];
     const userTrailing = ['#1', '3 246 ⭐', '12 🏅', '16 ta'];
     final List<String> userStudyProcess = [
-      'Tugallangan kurslar',
-      'Faol kurslar',
-      'Tugatish foizi',
-      'Umumiy ta’lim vaqti',
+      localization.completedCoursesLabel,
+      localization.activeCoursesLabel,
+      localization.completionPercentageLabel,
+      localization.totalEducationTimeLabel,
     ];
     const userStudyProcessTrailing = ['23 ta', '5 ta', '96%', '467 soat'];
 
     return ListView(
       children: [
         userProfileInfoCardWg(
-          'Foydalanuvchi ma’lumoti',
+          localization.userInfoCardTitle,
           userInfoCard,
           userTrailing,
         ),
         SizedBox(height: appH(12)),
         userProfileInfoCardWg(
-          'O’qish jarayoni',
+          localization.learningProgressCardTitle,
           userStudyProcess,
           userStudyProcessTrailing,
         ),

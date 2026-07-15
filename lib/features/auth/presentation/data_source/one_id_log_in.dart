@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/features/auth/presentation/auth_service/auth_service.dart';
@@ -50,7 +51,7 @@ class _OneIdLoginPageState extends State<OneIdLoginPage> {
               AppRoute.close();
               errorFlushBar(
                 context,
-                'Something went wrong please try again later!',
+                AppLocalizations.of(context)!.somethingWentWrongTryAgain,
               );
             }
           },
@@ -103,6 +104,7 @@ class _OneIdLoginPageState extends State<OneIdLoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(title: const Text('OneID'), leading: const CloseButton()),
       body: Stack(
@@ -115,11 +117,11 @@ class _OneIdLoginPageState extends State<OneIdLoginPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text('Something went wrong. Please try again.'),
+                  Text(localization.somethingWentWrongTryAgain),
                   const SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: _initController,
-                    child: const Text('Retry'),
+                    child: Text(localization.retry),
                   ),
                 ],
               ),

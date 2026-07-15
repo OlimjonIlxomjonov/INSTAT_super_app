@@ -15,6 +15,7 @@ import 'package:my_template/core/utils/widgets/extend_section/extend_section_see
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
 import 'package:my_template/core/di/service_locator.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/wb_blocs/popular_books_with_bloc_wg.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
@@ -60,6 +61,7 @@ class _HomeLibPageState extends State<HomeLibPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: DraggableAppBarWg(onProfileTap: widget.onProfileTap),
       body: CustomScrollView(
@@ -125,7 +127,7 @@ class _HomeLibPageState extends State<HomeLibPage> {
             padding: AppPadding.horizontal20x(),
             sliver: SliverToBoxAdapter(
               child: ExtendSectionSeeAllWg(
-                title: 'Kitoblar',
+                title: localization.books,
                 onTap: () {
                   openMiniAppSheetFamily(
                     showHandler: false,

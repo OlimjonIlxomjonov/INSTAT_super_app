@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
@@ -51,6 +52,7 @@ class _AboutThisCourseTabState extends State<AboutThisCourseTab>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final localization = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: .start,
       children: [
@@ -67,7 +69,7 @@ class _AboutThisCourseTabState extends State<AboutThisCourseTab>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Nimalarni o'rganasiz!",
+                    localization.whatYoullLearn,
                     style: AppTextStyles.source.medium(fontSize: 16),
                   ),
                   CourseFeaturesList(courseId: widget.data.id),
@@ -79,7 +81,7 @@ class _AboutThisCourseTabState extends State<AboutThisCourseTab>
         Padding(
           padding: EdgeInsets.symmetric(horizontal: appW(20)),
           child: ExtendSectionSeeAllWg(
-            title: "O'xshash kurslar",
+            title: localization.similarCourses,
             onTap: () => _openSimilarCourses(context),
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 
 import '../../../../../../core/utils/app_utils.dart';
 import '../../domain/entity/leader_board/leader_board_entity.dart';
@@ -173,7 +174,7 @@ class _PodiumColumn extends StatelessWidget {
                   ),
                   SizedBox(height: 2),
                   Text(
-                    'O\'rin',
+                    AppLocalizations.of(context)!.placeLabel,
                     style: AppTextStyles.source.regular(
                       fontSize: 10,
                       color: color,

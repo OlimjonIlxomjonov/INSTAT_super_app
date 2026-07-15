@@ -6,6 +6,7 @@ import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidca
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/common/ui_states/empty_state.dart';
 import 'package:my_template/core/common/ui_states/error_page.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
@@ -36,6 +37,7 @@ class _MagazinesPageState extends State<MagazinesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(title: AppSearchbarWg(), automaticallyImplyLeading: false),
       body: CustomRefreshIndicator(
@@ -51,7 +53,7 @@ class _MagazinesPageState extends State<MagazinesPage> {
             SliverPadding(
               padding: AppPadding.hAndV20x20(),
               sliver: SliverToBoxAdapter(
-                child: Text('Jurnallar', style: CustomTextStyles.h2),
+                child: Text(localization.journals, style: CustomTextStyles.h2),
               ),
             ),
 
@@ -62,12 +64,11 @@ class _MagazinesPageState extends State<MagazinesPage> {
                   if (state.response.data.isEmpty) {
                     return SliverToBoxAdapter(
                       child: AppEmptyState(
-                        title: 'Mutolaa javonida sukunat!',
-                        subtitle:
-                            ' Jurnallarni shu yerda ko‘rish uchun ularni saqlang yoki yangisini yarating.',
-                        buttonLabel: 'Jurnal qo‘shish',
+                        title: localization.emptyMagazineShelfTitle,
+                        subtitle: localization.emptyMagazineShelfSubtitle,
+                        buttonLabel: localization.addMagazine,
                         onAction: () {
-                          technicalWorkFlushBar(context, 'Tez orada!');
+                          technicalWorkFlushBar(context, localization.comingSoon);
                         },
                       ),
                     );

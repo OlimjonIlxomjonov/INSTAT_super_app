@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_event.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_state.dart';
@@ -25,6 +26,7 @@ class _ReportsCardWgState extends State<ReportsCardWg> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return SliverPadding(
       padding: AppPadding.horizontal20x(),
       sliver: SliverFillRemaining(
@@ -36,7 +38,7 @@ class _ReportsCardWgState extends State<ReportsCardWg> {
                 mainAxisAlignment: .spaceBetween,
                 children: [
                   Text(
-                    'Hisobotlar',
+                    localization.reports,
                     style: AppTextStyles.source.semiBold(fontSize: 18),
                   ),
                   InkWell(
@@ -49,7 +51,7 @@ class _ReportsCardWgState extends State<ReportsCardWg> {
                         border: Border.all(color: AppColors.greyScale.grey200),
                       ),
                       child: Text(
-                        'Filter',
+                        localization.filter,
                         style: AppTextStyles.source.medium(
                           fontSize: 12,
                           color: AppColors.greyScale.grey600,
@@ -104,7 +106,7 @@ class _ReportsCardWgState extends State<ReportsCardWg> {
                               Spacer(),
                               _buildSectionRows(
                                 icon: IconlyLight.location,
-                                title: 'O‘zbekiston Respublikasi',
+                                title: localization.republicOfUzbekistan,
                               ),
                               const SizedBox(height: 4),
                               _buildSectionRows(
@@ -114,7 +116,7 @@ class _ReportsCardWgState extends State<ReportsCardWg> {
                               const SizedBox(height: 4),
                               _buildSectionRows(
                                 icon: IconlyLight.document,
-                                title: 'Ecxel/PDF — 130MB',
+                                title: 'Excel/PDF — 130MB',
                               ),
                             ],
                           ),
@@ -161,7 +163,7 @@ class _ReportsCardWgState extends State<ReportsCardWg> {
                               const SizedBox(height: 12),
                               _buildSectionRows(
                                 icon: IconlyLight.location,
-                                title: 'O‘zbekiston Respublikasi',
+                                title: localization.republicOfUzbekistan,
                               ),
                               const SizedBox(height: 4),
                               _buildSectionRows(
@@ -171,7 +173,7 @@ class _ReportsCardWgState extends State<ReportsCardWg> {
                               const SizedBox(height: 4),
                               _buildSectionRows(
                                 icon: IconlyLight.document,
-                                title: 'Ecxel/PDF — 130MB',
+                                title: 'Excel/PDF — 130MB',
                               ),
                             ],
                           ),

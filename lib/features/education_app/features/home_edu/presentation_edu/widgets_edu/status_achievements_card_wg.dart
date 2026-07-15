@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 
@@ -18,7 +19,10 @@ class StatusAchievementsCardWg extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text('Chempion', style: AppTextStyles.source.bold(fontSize: 17)),
+          Text(
+            AppLocalizations.of(context)!.champion,
+            style: AppTextStyles.source.bold(fontSize: 17),
+          ),
           Text(
             descText,
             maxLines: 1,

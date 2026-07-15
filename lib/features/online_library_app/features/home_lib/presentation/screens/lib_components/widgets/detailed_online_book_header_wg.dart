@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
@@ -16,6 +17,7 @@ class DetailedOnlineBookHeaderWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Container(
       padding: .symmetric(vertical: 20),
       decoration: BoxDecoration(
@@ -91,21 +93,24 @@ class DetailedOnlineBookHeaderWg extends StatelessWidget {
             children: [
               DetailedOnlineBookHeaderItemsWg(
                 value: '4.7',
-                label: 'Rating',
+                label: localization.ratingLabel,
                 icon: Icons.star,
               ),
               const VerticalDividerWg(),
               DetailedOnlineBookHeaderItemsWg(
                 value: data.pagesCount.toString(),
-                label: 'Sahifa',
+                label: localization.pageLabel,
               ),
               const VerticalDividerWg(),
               DetailedOnlineBookHeaderItemsWg(
                 value: data.userBookCount.toString(),
-                label: 'Sotuv',
+                label: localization.salesLabel,
               ),
               const VerticalDividerWg(),
-              DetailedOnlineBookHeaderItemsWg(value: 'N/A', label: "O'lcham"),
+              DetailedOnlineBookHeaderItemsWg(
+                value: 'N/A',
+                label: localization.sizeLabel,
+              ),
               // Can be derived if needed
             ],
           ),

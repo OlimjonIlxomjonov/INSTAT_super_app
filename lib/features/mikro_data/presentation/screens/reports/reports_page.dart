@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/reports/widgets/reports_card_wg.dart';
@@ -21,8 +22,9 @@ class ReportsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: CustomAppBarWg(myTitle: 'Hisobotlar'),
+      appBar: CustomAppBarWg(myTitle: localization.reports),
       body: CustomScrollView(
         slivers: [
           //! SEARCH BAR

@@ -6,6 +6,7 @@ import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/common/skeletonizer_shimmer/user_articles/user_articles_skeletonizer.dart';
 import 'package:my_template/core/common/ui_states/empty_state.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
@@ -92,10 +93,11 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       /// header
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBarWg(myTitle: 'Mening maqolalarim'),
+      appBar: CustomAppBarWg(myTitle: localization.myArticles),
       body: CustomRefreshIndicator(
         onRefresh: () async {
           context.read<UserArticlesBloc>().add(
@@ -133,7 +135,7 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
                         onChanged: _onSearchChanged,
                         style: AppTextStyles.source.regular(fontSize: 14),
                         decoration: InputDecoration(
-                          hintText: 'Maqola qidiring...',
+                          hintText: localization.searchArticlesHint,
                           hintStyle: AppTextStyles.source.regular(
                             fontSize: 14,
                             color: AppColors.greyScale.grey500,
@@ -182,7 +184,7 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
             SliverPadding(
               padding: AppPadding.hAndV20x20(),
               sliver: SliverToBoxAdapter(
-                child: Text('Maqolalar', style: CustomTextStyles.h2),
+                child: Text(localization.articles, style: CustomTextStyles.h2),
               ),
             ),
 
@@ -212,12 +214,12 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
                           children: [
                             ErrorPage(),
                             Text(
-                              'Something went wrong!',
+                              localization.somethingWentWrongTitle,
                               style: CustomTextStyles.h3half,
                             ),
                             Text(
                               textAlign: .center,
-                              'Please check your internet connection and try again!',
+                              localization.checkConnectionAndRetry,
                               style: CustomTextStyles.h4,
                             ),
                           ],
@@ -246,7 +248,7 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
               );
             },
             icon: Icon(Icons.add),
-            label: Text('Maqola qo’shish'),
+            label: Text(localization.addArticleButton),
           ),
         ),
       ),

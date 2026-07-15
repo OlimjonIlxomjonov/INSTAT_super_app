@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/services/layout/layout_prefs_service.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
@@ -56,9 +57,10 @@ class _TableEduPageState extends State<TableEduPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: CustomAppBarWg(
-        myTitle: 'Kalenadar',
+        myTitle: localization.calendarTitle,
         showArrow: false,
         customActions: [
           LayoutButtonsWg(layout: layout, onChanged: _onLayoutChanged),
@@ -80,7 +82,7 @@ class _TableEduPageState extends State<TableEduPage> {
                 children: [
                   SizedBox(height: appH(16)),
                   Text(
-                    'Topshiriqlar',
+                    localization.tasksTitle,
                     style: AppTextStyles.source.semiBold(fontSize: 17),
                   ),
                   SizedBox(height: appH(16)),
