@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/services/layout/layout_prefs_service.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
@@ -63,7 +64,7 @@ class _TitleWithLayoutSelectorWgState extends State<TitleWithLayoutSelectorWg> {
             children: [
               _LayoutBtn(
                 selected: isGrid,
-                icon: IconlyLight.category,
+                icon: FlutterRemix.layout_grid_line,
                 onTap: () => _onTap(CoursesLayout.grid),
               ),
               _LayoutBtn(

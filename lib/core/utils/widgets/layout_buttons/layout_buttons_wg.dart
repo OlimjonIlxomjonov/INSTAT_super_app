@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
@@ -26,7 +27,7 @@ class LayoutButtonsWg extends StatelessWidget {
       child: Row(
         children: [
           _CustomIconButton(
-            icon: Icons.grid_view,
+            icon: FlutterRemix.layout_grid_line,
             selected: isMonth,
             onTap: () => onChanged(CalendarLayout.month),
           ),

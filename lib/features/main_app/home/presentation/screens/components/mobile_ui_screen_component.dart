@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
@@ -359,7 +360,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
               floating: true,
               leading: IconButton(
                 onPressed: () => widget.scaffoldKey.currentState?.openDrawer(),
-                icon: const Icon(Icons.menu),
+                icon: const Icon(FlutterRemix.menu_line),
               ),
               title: SvgPicture.asset(AppVectors.homeInstatLogo),
               centerTitle: true,
@@ -377,7 +378,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                     // addedToCartFlushBar(context, 'message');
                     // technicalWorkFlushBar(context, 'message');
                   },
-                  icon: const Icon(Icons.notifications_none_outlined),
+                  icon: Icon(FlutterRemix.notification_2_line),
                 ),
               ],
             ),

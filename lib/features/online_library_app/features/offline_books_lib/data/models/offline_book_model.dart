@@ -23,6 +23,7 @@ class OfflineBookModel extends OfflineBookEntity {
     required super.inLoanCount,
     super.isSaved,
     super.isInCart,
+    required super.orderCount,
   });
 
   factory OfflineBookModel.fromJson(Map<String, dynamic> json) {
@@ -49,6 +50,7 @@ class OfflineBookModel extends OfflineBookEntity {
               ?.map((e) => BookThumbnailModel.fromJson(e))
               .toList() ??
           [],
+      orderCount: json['order_count'] ?? 0,
     );
   }
 }

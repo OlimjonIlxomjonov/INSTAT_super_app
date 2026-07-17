@@ -238,6 +238,7 @@
   "languageUzbek": "Узбекский язык",
   "languageRussian": "Русский язык",
   "languageEnglish": "Английский язык",
+  "languageUzbekCyrillic": "Узбекский язык (Кириллица)",
   "titleLabel": "Заголовок",
   "titleHint": "Введите заголовок статьи...",
   "enterUdkNumber": "Введите номер УДК",
@@ -365,5 +366,6 @@
   "dayStatusOneDayLeft": "Остался 1 день",
   "dayStatusDaysLeft": "Осталось {days} дн.",
   "showAllCount": "Показать все ({count})",
-  "questionNumberTemplate": "Вопрос {number}"
+  "questionNumberTemplate": "Вопрос {number}",
+  "selectAtLeastOneBookMessage": "Выберите хотя бы одну книгу для покупки"
 }

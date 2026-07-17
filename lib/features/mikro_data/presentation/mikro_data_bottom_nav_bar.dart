@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/general_widgets/bottom_nav_bar_custom_mini_app/bottom_nav_bar_custom_mini_app.dart';
@@ -52,23 +53,23 @@ class MikroDataBottomNavBar extends StatelessWidget {
       ],
       tabs: [
         MiniAppBottomNavTabItem(
-          icon: IconlyLight.home,
-          activeIcon: IconlyBold.home,
+          icon: FlutterRemix.home_line,
+          activeIcon: FlutterRemix.home_fill,
           label: localization.homePage,
         ),
         MiniAppBottomNavTabItem(
-          icon: IconlyLight.folder,
-          activeIcon: IconlyBold.folder,
+          icon: FlutterRemix.folder_3_line,
+          activeIcon: FlutterRemix.folder_3_fill,
           label: localization.reports,
         ),
         MiniAppBottomNavTabItem(
-          icon: IconlyLight.document,
-          activeIcon: IconlyBold.document,
+          icon: FlutterRemix.clipboard_line,
+          activeIcon: FlutterRemix.clipboard_fill,
           label: localization.myRequestsTab,
         ),
         MiniAppBottomNavTabItem(
-          icon: IconlyLight.profile,
-          activeIcon: IconlyBold.profile,
+          icon: FlutterRemix.user_line,
+          activeIcon: FlutterRemix.user_fill,
           label: localization.profile,
         ),
       ],

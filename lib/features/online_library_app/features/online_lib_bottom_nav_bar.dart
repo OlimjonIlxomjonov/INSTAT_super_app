@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/general_widgets/bottom_nav_bar_custom_mini_app/bottom_nav_bar_custom_mini_app.dart';
@@ -41,18 +42,18 @@ class OnlineLibBottomNavBar extends StatelessWidget {
       ],
       tabs: [
         MiniAppBottomNavTabItem(
-          icon: IconlyLight.home,
-          activeIcon: IconlyBold.home,
+          icon: FlutterRemix.home_line,
+          activeIcon: FlutterRemix.home_fill,
           label: localization.homePage,
         ),
         MiniAppBottomNavTabItem(
-          icon: Icons.book_outlined,
-          activeIcon: Icons.book,
+          icon: FlutterRemix.book_3_line,
+          activeIcon: FlutterRemix.book_3_fill,
           label: localization.myBooks,
         ),
         MiniAppBottomNavTabItem(
-          icon: IconlyLight.buy,
-          activeIcon: IconlyBold.buy,
+          icon: FlutterRemix.shopping_cart_line,
+          activeIcon: FlutterRemix.shopping_cart_fill,
           label: localization.cart,
         ),
         MiniAppBottomNavTabItem(
@@ -61,8 +62,8 @@ class OnlineLibBottomNavBar extends StatelessWidget {
           label: localization.library,
         ),
         MiniAppBottomNavTabItem(
-          icon: IconlyLight.profile,
-          activeIcon: IconlyBold.profile,
+          icon: FlutterRemix.user_line,
+          activeIcon: FlutterRemix.user_fill,
           label: localization.profile,
         ),
       ],

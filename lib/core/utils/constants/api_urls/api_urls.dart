@@ -79,7 +79,6 @@ class ApiUrls {
   //? User certificate
   static const userCertificate = 'courses/certificates/my/';
 
-  //! NEW SECTION
   //! Micro Data
   //? Reports
   static const reports = 'data-reports/';
@@ -87,4 +86,7 @@ class ApiUrls {
   //! Face Recognition
   static const faceRec = 'my-id/accept';
   static const myIdSession = 'my-id/get-session-id';
+
+  //! buy book
+  static const buyBook = 'books/order/';
 }

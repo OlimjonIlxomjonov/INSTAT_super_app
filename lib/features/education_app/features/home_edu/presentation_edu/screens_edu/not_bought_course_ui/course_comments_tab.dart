@@ -4,6 +4,7 @@ import 'package:my_template/core/common/ui_states/empty_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/comment_section/user_comments_wg.dart';
+import 'package:my_template/core/utils/widgets/extend_comment/extend_comment_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/sub_bottom_sheet_opener.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/entity/comments/comments_entity.dart';
@@ -65,7 +66,12 @@ class _CourseCommentsTabState extends State<CourseCommentsTab>
                   itemBuilder: (context, index) {
                     return SizedBox(
                       width: appW(320),
-                      child: UserCommentsWg(entity: data[index]),
+                      child: GestureDetector(
+                        onTap: () {
+                          extendCommentWg(context, data[index]);
+                        },
+                        child: UserCommentsWg(entity: data[index]),
+                      ),
                     );
                   },
                 ),

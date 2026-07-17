@@ -168,8 +168,7 @@ class _BlurTopBannerState extends State<_BlurTopBanner>
 
   void _onVerticalDragEnd(DragEndDetails details) {
     if (_isDismissing) return;
-    final flungUp =
-        (details.primaryVelocity ?? 0) < _dismissFlingVelocity;
+    final flungUp = (details.primaryVelocity ?? 0) < _dismissFlingVelocity;
     final draggedFarEnough = _dragOffsetY < -_dismissDragDistance;
 
     if (flungUp || draggedFarEnough) {
@@ -197,7 +196,10 @@ class _BlurTopBannerState extends State<_BlurTopBanner>
 
   Future<void> _dismissViaSwipe() async {
     _isDismissing = true;
-    await _animateDragOffsetTo(_maxDragOffset, const Duration(milliseconds: 200));
+    await _animateDragOffsetTo(
+      _maxDragOffset,
+      const Duration(milliseconds: 200),
+    );
     if (mounted) widget.onDismissed();
   }
 

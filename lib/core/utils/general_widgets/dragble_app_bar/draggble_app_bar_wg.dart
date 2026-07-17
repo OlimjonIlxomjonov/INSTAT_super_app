@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -69,7 +70,10 @@ class DraggableAppBarWg extends StatelessWidget implements PreferredSize {
         ),
       ),
       actions: [
-        IconButton(onPressed: () {}, icon: Icon(IconlyLight.notification)),
+        IconButton(
+          onPressed: () {},
+          icon: Icon(FlutterRemix.notification_line),
+        ),
       ],
     );
   }

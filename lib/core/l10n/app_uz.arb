@@ -304,6 +304,7 @@
   "languageUzbek": "O'zbek tili",
   "languageRussian": "Rus tili",
   "languageEnglish": "Ingliz tili",
+  "languageUzbekCyrillic": "O'zbek tili (Kirill)",
   "titleLabel": "Sarlavha",
   "titleHint": "Maqola sarlavhasini kiriting...",
   "enterUdkNumber": "UDK raqamini kiriting",
@@ -452,5 +453,6 @@
         "type": "Object"
       }
     }
-  }
+  },
+  "selectAtLeastOneBookMessage": "Xarid qilish uchun kamida bitta kitob tanlang"
 }

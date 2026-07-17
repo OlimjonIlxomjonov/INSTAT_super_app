@@ -23,7 +23,9 @@ import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/fa
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_comments/book_comments_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
+import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/presentation_lib/bloc/buy_book/buy_book_bloc.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/presentation_lib/bloc/cart/cart_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/academic_degree/academic_degree_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/article_type/article_type_bloc.dart';
@@ -122,6 +124,10 @@ class MyBlocProvider extends StatelessWidget {
         ),
         //! face Rec
         BlocProvider<FaceRecBloc>(create: (_) => sl<FaceRecBloc>()),
+        //! book comments
+        BlocProvider<BookCommentsBloc>(create: (_) => sl<BookCommentsBloc>()),
+        //! Buy Book
+        BlocProvider<BuyBookBloc>(create: (_) => sl<BuyBookBloc>()),
       ],
       child: child,
     );

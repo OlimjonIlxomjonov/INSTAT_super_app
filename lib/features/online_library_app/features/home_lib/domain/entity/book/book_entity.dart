@@ -8,6 +8,7 @@ class BookEntity {
   final String description;
   final bool isActive;
   final String type;
+  final int orderCount;
   final BookCategoryEntity category;
   final int price;
   final BookAuthorEntity author;
@@ -35,6 +36,7 @@ class BookEntity {
     required this.bookThumbnails,
     this.isSaved = false,
     this.isInCart = false,
+    required this.orderCount,
   });
 
   BookEntity copyWith({
@@ -54,6 +56,7 @@ class BookEntity {
     bool? isSaved,
     bool? isInCart,
     int? starsSum,
+    int? orderCount,
   }) {
     return BookEntity(
       id: id ?? this.id,
@@ -71,6 +74,7 @@ class BookEntity {
       bookThumbnails: bookThumbnails ?? this.bookThumbnails,
       isSaved: isSaved ?? this.isSaved,
       isInCart: isInCart ?? this.isInCart,
+      orderCount: orderCount ?? this.orderCount,
     );
   }
 }

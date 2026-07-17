@@ -1,6 +1,7 @@
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
@@ -198,8 +199,8 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
                       ),
                       child: Icon(
                         lesson.userLessons != 0
-                            ? Icons.play_arrow
-                            : Icons.lock_outline,
+                            ? FlutterRemix.play_line
+                            : FlutterRemix.lock_line,
                         color: AppColors.primaryColor,
                       ),
                     ),

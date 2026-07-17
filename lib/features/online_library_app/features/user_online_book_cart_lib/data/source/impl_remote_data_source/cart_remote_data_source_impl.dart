@@ -1,6 +1,8 @@
+import 'package:my_template/core/common/params/online_books/online_books_params.dart';
 import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/data/models/order_payment/order_payment_model.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/data/models/book/book_list_response_model.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/data/source/remote_data_source/cart_remote_data_srouce.dart';
 
@@ -23,6 +25,29 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
         }
 
         return BookListResponseModel.fromJson(response.data);
+      } else {
+        throw Exception('Else ERROR OCCURED: ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("Catch: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<OrderPaymentModel> buyBooks({required BuyBookParams params}) async {
+    try {
+      final response = await _dioClient.post(
+        ApiUrls.buyBook,
+        data: {
+          "book_ids": params.bookId,
+          "payment_method": params.paymentMethod,
+        },
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+
+        return OrderPaymentModel.fromJson(response.data);
       } else {
         throw Exception('Else ERROR OCCURED: ${response.statusCode}');
       }

@@ -22,7 +22,7 @@ class PopularBooksWithBlocWg extends StatelessWidget {
             sliver: SliverGrid.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                mainAxisSpacing: 16,
+                mainAxisSpacing: 5,
                 crossAxisSpacing: 16,
                 childAspectRatio: 0.52,
               ),
@@ -38,6 +38,8 @@ class PopularBooksWithBlocWg extends StatelessWidget {
                   type: BookCardType.market,
                   title: book.name,
                   author: book.author.name,
+                  // oldPrice: '999 UZS',
+                  rating: 5,
                   price: "\u{00A0}${book.price} UZS",
                   imagePath: thumbnail.isNotEmpty
                       ? thumbnail

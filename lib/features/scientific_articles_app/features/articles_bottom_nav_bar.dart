@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/general_widgets/bottom_nav_bar_custom_mini_app/bottom_nav_bar_custom_mini_app.dart';
@@ -42,23 +43,23 @@ class ArticlesBottomNavBar extends StatelessWidget {
       ],
       tabs: [
         MiniAppBottomNavTabItem(
-          icon: IconlyLight.home,
-          activeIcon: IconlyBold.home,
+          icon: FlutterRemix.home_line,
+          activeIcon: FlutterRemix.home_fill,
           label: localization.homePage,
         ),
         MiniAppBottomNavTabItem(
-          icon: IconlyLight.paper,
-          activeIcon: IconlyBold.paper,
+          icon: FlutterRemix.book_3_line,
+          activeIcon: FlutterRemix.book_3_fill,
           label: localization.journals,
         ),
         MiniAppBottomNavTabItem(
-          icon: IconlyLight.document,
-          activeIcon: IconlyBold.document,
+          icon: FlutterRemix.file_edit_line,
+          activeIcon: FlutterRemix.file_edit_fill,
           label: localization.articles,
         ),
         MiniAppBottomNavTabItem(
-          icon: IconlyLight.profile,
-          activeIcon: IconlyBold.profile,
+          icon: FlutterRemix.user_line,
+          activeIcon: FlutterRemix.user_fill,
           label: localization.profile,
         ),
       ],

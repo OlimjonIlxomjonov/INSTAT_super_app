@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
@@ -27,10 +28,10 @@ class _UserOnlineBookProfileLibState extends State<UserOnlineBookProfileLib> {
     super.didChangeDependencies();
     final localization = AppLocalizations.of(context)!;
     _leadingIcons = [
-      IconlyLight.heart,
-      IconlyLight.chat,
-      IconlyLight.location,
-      LineIcons.history,
+      FlutterRemix.heart_line,
+      FlutterRemix.message_2_line,
+      FlutterRemix.map_pin_line,
+      FlutterRemix.time_line,
     ];
     _title = [
       localization.savedItems,
@@ -97,7 +98,10 @@ class _UserOnlineBookProfileLibState extends State<UserOnlineBookProfileLib> {
           showHandler: false,
         );
       default:
-        errorFlushBar(context, AppLocalizations.of(context)!.comingSoon);
+        technicalWorkFlushBar(
+          context,
+          AppLocalizations.of(context)!.comingSoon,
+        );
     }
   }
 }

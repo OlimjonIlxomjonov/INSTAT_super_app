@@ -34,7 +34,7 @@ class SeeAllCourseComments extends StatelessWidget {
                     right: 20,
                     bottom: 10,
                   ),
-                  child: UserCommentsWg(entity: response[index]),
+                  child: UserCommentsWg(entity: response[index], showAll: true),
                 );
               },
             ),

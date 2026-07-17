@@ -103,7 +103,7 @@ class DetailedOnlineBookHeaderWg extends StatelessWidget {
               ),
               const VerticalDividerWg(),
               DetailedOnlineBookHeaderItemsWg(
-                value: data.userBookCount.toString(),
+                value: data.orderCount.toString(),
                 label: localization.salesLabel,
               ),
               const VerticalDividerWg(),

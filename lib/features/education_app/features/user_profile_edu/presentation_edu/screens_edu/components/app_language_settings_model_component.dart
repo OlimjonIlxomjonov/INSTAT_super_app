@@ -26,9 +26,16 @@ class _AppLanguageSettingsModelComponentState
   final List<String> languageLeading = [
     AppVectors.uzbekistanFlag,
     AppVectors.russiaFlag,
+    AppVectors.ukFlag,
+    AppVectors.uzbekistanFlag,
   ];
 
-  final List<Locale> languageLocale = const [Locale('uz'), Locale('ru')];
+  final List<Locale> languageLocale = const [
+    Locale('uz'),
+    Locale('ru'),
+    Locale('en'),
+    Locale.fromSubtags(languageCode: 'uz', scriptCode: 'Cyrl'),
+  ];
 
   @override
   void initState() {
@@ -38,8 +45,12 @@ class _AppLanguageSettingsModelComponentState
 
   Future<void> _loadSavedLanguage() async {
     final savedLocale = await LanguageServiceStorage.loadLocale();
+    // Uzbek Latin and Uzbek Cyrillic share the same languageCode, so the
+    // scriptCode has to match too or they'd be indistinguishable here.
     final index = languageLocale.indexWhere(
-      (locale) => locale.languageCode == savedLocale.languageCode,
+      (locale) =>
+          locale.languageCode == savedLocale.languageCode &&
+          locale.scriptCode == savedLocale.scriptCode,
     );
 
     if (index != -1) {
@@ -66,6 +77,8 @@ class _AppLanguageSettingsModelComponentState
     final languageTitle = [
       localization.languageUzbek,
       localization.languageRussian,
+      localization.languageEnglish,
+      localization.languageUzbekCyrillic,
     ];
     TDeviceUtils.systemNavigationBar(AppColors.white);
     return SafeArea(

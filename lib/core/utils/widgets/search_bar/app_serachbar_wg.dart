@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
@@ -22,7 +23,7 @@ class AppSearchbarWg extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(IconlyLight.search),
+          Icon(FlutterRemix.search_line),
           const SizedBox(width: 8),
           AutoSizeText(
             localization.whatAreYouLookingFor,

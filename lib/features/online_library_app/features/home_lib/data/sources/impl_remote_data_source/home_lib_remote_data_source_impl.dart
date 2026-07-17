@@ -1,6 +1,8 @@
+import 'package:my_template/core/common/params/online_books/online_books_params.dart';
 import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
+import 'package:my_template/features/education_app/features/home_edu/data/model/comments/comments_response_model.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/data/models/book/book_list_response_model.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/data/sources/remote_data_source/home_lib_remote_data_source.dart';
 
@@ -64,6 +66,28 @@ class HomeLibRemoteDataSourceImpl implements HomeLibRemoteDataSource {
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;
         return BookListResponseModel.fromJson(data);
+      } else {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  //! Book comments
+  @override
+  Future<CommentsResponseModel> fetchBookComments({
+    required OnlineBookCommentsParams params,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        'books/${params.bookId}/comments/?id=${params.bookId}',
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data;
+        logger.i(data);
+        return CommentsResponseModel.fromJson(data);
       } else {
         throw Exception('ERROR ${response.statusCode}');
       }

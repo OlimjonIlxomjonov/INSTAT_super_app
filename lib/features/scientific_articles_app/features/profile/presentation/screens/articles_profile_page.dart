@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -24,21 +25,21 @@ class ArticlesProfilePage extends StatelessWidget {
             child: ProfileSettingsTileWg(
               title: localization.savedItems,
               onTap: () {},
-              leadingIcon: IconlyLight.heart,
+              leadingIcon: FlutterRemix.heart_line,
             ),
           ),
           SliverToBoxAdapter(
             child: ProfileSettingsTileWg(
               title: localization.frQuestions,
               onTap: () {},
-              leadingIcon: IconlyLight.chat,
+              leadingIcon: FlutterRemix.message_2_line,
             ),
           ),
           SliverToBoxAdapter(
             child: ProfileSettingsTileWg(
               title: localization.myArticles,
               onTap: () {},
-              leadingIcon: IconlyLight.document,
+              leadingIcon: FlutterRemix.file_edit_line,
             ),
           ),
         ],

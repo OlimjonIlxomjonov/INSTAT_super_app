@@ -83,6 +83,7 @@ class ArticlesHomePage extends StatelessWidget {
 
             /// ARTICLES - Placed directly as a sliver widget
             UserArticlesWithBlocWg(limit: 2),
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
             /// SEE ALL LAST ACTIONS
             // SliverPadding(

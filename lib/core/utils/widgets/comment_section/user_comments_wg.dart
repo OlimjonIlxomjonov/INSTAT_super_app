@@ -4,10 +4,13 @@ import 'package:intl/intl.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/entity/comments/comments_entity.dart';
 
+import '../../logger/logger.dart';
+
 class UserCommentsWg extends StatelessWidget {
   final CommentsEntity entity;
+  final bool showAll;
 
-  const UserCommentsWg({super.key, required this.entity});
+  const UserCommentsWg({super.key, required this.entity, this.showAll = false});
 
   String get formattedDate {
     return DateFormat('dd MMMM yyyy').format(entity.createdAt);
@@ -29,13 +32,17 @@ class UserCommentsWg extends StatelessWidget {
             contentPadding: .zero,
             leading: CircleAvatar(
               radius: 25,
+              backgroundColor: AppColors.greyScale.grey300,
               backgroundImage: NetworkImage(
                 'https://test.avacoder.uz${entity.user.avatar}',
               ),
               onBackgroundImageError: (exception, stackTrace) {
-                print('Error loading avatar: $exception');
+                logger.e('Error loading avatar: $exception');
               },
-              child: const Icon(Icons.person),
+              child: entity.user.avatar == null
+                  ? Icon(Icons.person, color: AppColors.greyScale.grey600)
+                  : null,
+              // child: Icon(Icons.person, color: AppColors.greyScale.grey600),
             ),
             title: Text(
               '${entity.user.firstName} ${entity.user.lastName}',
@@ -67,17 +74,16 @@ class UserCommentsWg extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: appH(8)),
+          const SizedBox(height: 8),
           Text(
             entity.text,
-            maxLines: 4,
-            overflow: .ellipsis,
+            maxLines: showAll ? null : 5,
+            overflow: showAll ? null : .ellipsis,
             style: AppTextStyles.source.regular(
               fontSize: 14,
               color: AppColors.greyScale.grey600,
             ),
           ),
-          SizedBox(height: appH(10)),
         ],
       ),
     );

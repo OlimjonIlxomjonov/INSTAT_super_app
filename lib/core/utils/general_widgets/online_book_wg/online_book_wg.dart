@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
@@ -118,12 +119,13 @@ class BookGridItem extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
           ),
+          // Positioned(left: 8, top: 8, child: Text('data')),
 
           // Rating Badge (Market only)
           if (type == BookCardType.market && rating != null)
             Positioned(
-              top: 10,
-              left: 10,
+              top: 8,
+              left: 8,
               child: _buildGlassBadge(
                 child: Row(
                   children: [
@@ -131,10 +133,7 @@ class BookGridItem extends StatelessWidget {
                     const SizedBox(width: 4),
                     Text(
                       rating!.toStringAsFixed(1).replaceAll('.', ','),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12,
-                      ),
+                      style: AppTextStyles.source.medium(fontSize: 12),
                     ),
                   ],
                 ),
@@ -144,8 +143,8 @@ class BookGridItem extends StatelessWidget {
           // Favorite Button (Market only)
           if (type == BookCardType.market)
             Positioned(
-              top: 10,
-              right: 10,
+              top: 8,
+              right: 8,
               child: _buildGlassBadge(
                 isCircle: true,
                 child:
@@ -173,8 +172,8 @@ class BookGridItem extends StatelessWidget {
                           },
                           child: Icon(
                             currentSavedState
-                                ? IconlyBold.heart
-                                : IconlyLight.heart,
+                                ? FlutterRemix.heart_fill
+                                : FlutterRemix.heart_line,
                             size: 20,
                             color: currentSavedState
                                 ? AppColors.redFailedTaskCard
@@ -291,9 +290,9 @@ class BookGridItem extends StatelessWidget {
   Widget _buildLibraryLocation() {
     return Column(
       children: [
-        _locationRow('Javon raqami', shelfNumber?.toString() ?? '-'),
+        _locationRow('Nuxsakar', shelfNumber?.toString() ?? '-'),
         const SizedBox(height: 4),
-        _locationRow('Tokcha raqami', rowNumber?.toString() ?? '-'),
+        _locationRow('Mavjud Kitoblar', rowNumber?.toString() ?? '-'),
       ],
     );
   }

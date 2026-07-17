@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
@@ -45,17 +46,17 @@ class _UserProfileEduState extends State<UserProfileEdu> {
               crossAxisAlignment: .start,
               children: [
                 ProfileSettingsTileWg(
-                  leadingIcon: IconlyLight.document,
+                  leadingIcon: FlutterRemix.file_3_line,
                   title: localization.certificates,
                   onTap: _openSertificatComponent,
                 ),
                 ProfileSettingsTileWg(
-                  leadingIcon: IconlyLight.heart,
+                  leadingIcon: FlutterRemix.heart_line,
                   title: localization.savedItems,
                   onTap: _openFavouriteComponent,
                 ),
                 ProfileSettingsTileWg(
-                  leadingIcon: IconlyLight.info_square,
+                  leadingIcon: FlutterRemix.message_2_line,
                   title: localization.frQuestions,
                   onTap: () {},
                 ),

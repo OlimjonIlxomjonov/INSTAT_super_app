@@ -23,6 +23,6 @@ class OfflineBookEntity extends BookEntity {
     required this.notPostedCount,
     required this.inLoanCount,
     super.isSaved,
-    super.isInCart,
+    super.isInCart, required super.orderCount,
   });
 }

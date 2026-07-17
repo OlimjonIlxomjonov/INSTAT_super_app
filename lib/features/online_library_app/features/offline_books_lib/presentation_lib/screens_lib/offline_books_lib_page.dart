@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconly/iconly.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -66,14 +67,20 @@ class _OfflineBooksLibPageState extends State<OfflineBooksLibPage> {
               automaticallyImplyLeading: false,
               titleSpacing: 20,
               title: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 5,
+                ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   color: AppColors.greyScale.grey200,
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.search, color: AppColors.greyScale.grey600),
+                    Icon(
+                      IconlyLight.search,
+                      color: AppColors.greyScale.grey600,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: TextField(
@@ -100,23 +107,8 @@ class _OfflineBooksLibPageState extends State<OfflineBooksLibPage> {
               toolbarHeight: 80,
             ),
 
-            /// CATEGORIES
             SliverPadding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              sliver: SliverToBoxAdapter(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.only(right: 20, bottom: 20),
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: List.generate(5, (index) {
-                      return const EduCategoriesWg();
-                    }),
-                  ),
-                ),
-              ),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.only(left: 20),
+              padding: const EdgeInsets.only(left: 20, top: 15),
               sliver: SliverToBoxAdapter(
                 child: Text(
                   localization.books,
@@ -163,8 +155,8 @@ class _OfflineBooksLibPageState extends State<OfflineBooksLibPage> {
                           type: BookCardType.library,
                           title: book.name,
                           author: book.author.name,
-                          shelfNumber: 1,
-                          rowNumber: 12,
+                          shelfNumber: book.copiesCount,
+                          rowNumber: book.copiesCount,
                           imagePath: thumbnail.isNotEmpty
                               ? thumbnail
                               : 'assets/images/temp_book.jpg',

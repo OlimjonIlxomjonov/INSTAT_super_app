@@ -139,7 +139,7 @@ class _HomeLibPageState extends State<HomeLibPage> {
             ),
           ),
 
-          /// BODY
+          /// BODY // books
           PopularBooksWithBlocWg(),
         ],
       ),

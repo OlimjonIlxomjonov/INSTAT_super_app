@@ -20,6 +20,7 @@ class BookModel extends BookEntity {
     required super.bookThumbnails,
     required super.isSaved,
     required super.isInCart,
+    required super.orderCount,
   });
 
   factory BookModel.fromJson(Map<String, dynamic> json) {
@@ -43,6 +44,7 @@ class BookModel extends BookEntity {
               ?.map((e) => BookThumbnailModel.fromJson(e))
               .toList() ??
           [],
+      orderCount: json['order_count'] ?? 0,
     );
   }
 }

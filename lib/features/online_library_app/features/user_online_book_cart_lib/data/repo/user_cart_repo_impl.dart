@@ -1,3 +1,5 @@
+import 'package:my_template/core/common/params/online_books/online_books_params.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/order_payment/order_payment_entity.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_list_response.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/data/source/remote_data_source/cart_remote_data_srouce.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/domain/repository/user_online_book_cart_repository.dart';
@@ -11,5 +13,10 @@ class UserCartRepoImpl implements UserOnlineBookCartRepository {
   @override
   Future<BookListResponse> getCart() {
     return _remoteDataSource.fetchCart();
+  }
+
+  @override
+  Future<OrderPaymentEntity> buyBook({required BuyBookParams params}) {
+    return _remoteDataSource.buyBooks(params: params);
   }
 }

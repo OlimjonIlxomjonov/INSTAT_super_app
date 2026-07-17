@@ -77,6 +77,8 @@ import 'package:my_template/features/mikro_data/data/source/remote_data_source/m
 import 'package:my_template/features/mikro_data/domain/repository/micro_repository.dart';
 import 'package:my_template/features/mikro_data/domain/usecase/reports/reports_use_case.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_bloc.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/book_comments/book_comments_use_case.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_comments/book_comments_bloc.dart';
 import 'package:my_template/features/online_library_app/features/offline_books_lib/data/repo/offline_books_repo_impl.dart';
 import 'package:my_template/features/online_library_app/features/offline_books_lib/data/source/impl_remote_data_source/offline_books_remote_data_source_impl.dart';
 import 'package:my_template/features/online_library_app/features/offline_books_lib/data/source/remote_data_source/offline_books_remote_data_source.dart';
@@ -106,7 +108,9 @@ import 'package:my_template/features/online_library_app/features/user_online_boo
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/data/source/impl_remote_data_source/cart_remote_data_source_impl.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/data/source/remote_data_source/cart_remote_data_srouce.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/domain/repository/user_online_book_cart_repository.dart';
+import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/domain/usercase/buy_book/buy_book_use_case.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/domain/usercase/cart/cart_use_case.dart';
+import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/presentation_lib/bloc/buy_book/buy_book_bloc.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/presentation_lib/bloc/cart/cart_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/repo/articles_home_repo_impl.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/source/impl_remote_data_source/user_articles_remote_data_source_impl.dart';
@@ -216,12 +220,12 @@ Future<void> setup() async {
     () => ArticlesHomeRepoImpl(remoteDataSource: sl()),
   );
 
-  //! Micro data
+  //? Micro data
   sl.registerLazySingleton<MicroRepository>(
     () => MicroRepoImpl(remoteDataSource: sl()),
   );
 
-  /// {USE CASE}
+  //! {USE CASE}
   sl.registerLazySingleton(() => UserMeUseCase(repository: sl()));
   sl.registerLazySingleton(() => CoursesUseCase(repository: sl()));
   sl.registerLazySingleton(() => CourseCategoryByIdUseCase(repository: sl()));
@@ -293,10 +297,14 @@ Future<void> setup() async {
   //? Face Recognition
   sl.registerLazySingleton(() => FaceRecUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetMyIdSessionUseCase(repository: sl()));
-  //! New Section
-  //! Micro Data
+  //? Micro Data
   //? Reports
   sl.registerLazySingleton(() => ReportsUseCase(repository: sl()));
+
+  //? book comments
+  sl.registerLazySingleton(() => BookCommentsUseCase(repository: sl()));
+  //? buy books
+  sl.registerLazySingleton(() => BuyBookUseCase(repository: sl()));
 
   /// {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -380,10 +388,14 @@ Future<void> setup() async {
   //? offline lessons
   sl.registerLazySingleton(() => OfflineLessonsBloc(useCase: sl()));
   //? Face Recognition
-  sl.registerLazySingleton(() => FaceRecBloc(useCase: sl(), getSessionUseCase: sl()));
-
-  //! New Section
-  //! Micro Data
+  sl.registerLazySingleton(
+    () => FaceRecBloc(useCase: sl(), getSessionUseCase: sl()),
+  );
+  //? Micro Data
   //? Reports
   sl.registerLazySingleton(() => ReportsBloc(useCase: sl()));
+  //? book comments
+  sl.registerLazySingleton(() => BookCommentsBloc(useCase: sl()));
+  //? Buy Book
+  sl.registerLazySingleton(() => BuyBookBloc(useCase: sl()));
 }
