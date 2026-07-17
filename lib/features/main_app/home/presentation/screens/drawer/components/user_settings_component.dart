@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
@@ -41,12 +42,12 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
         ),
         SizedBox(height: appH(5)),
         ProfileSettingsTileWg(
-          leadingIcon: IconlyLight.profile,
+          leadingIcon: FlutterRemix.user_line,
           title: localization.personalInfo,
           onTap: () {},
         ),
         ProfileSettingsTileWg(
-          leadingIcon: IconlyLight.notification,
+          leadingIcon: FlutterRemix.notification_line,
           title: localization.notifications,
           onTap: () {
             openMiniAppSheetFamily(
@@ -57,7 +58,7 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
           },
         ),
         ProfileSettingsTileWg(
-          leadingIcon: IconlyLight.category,
+          leadingIcon: FlutterRemix.earth_line,
           title: localization.appLanguage,
           onTap: () {
             showModalBottomSheet(
@@ -67,7 +68,7 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
           },
         ),
         ProfileSettingsTileWg(
-          leadingIcon: IconlyLight.chat,
+          leadingIcon: FlutterRemix.message_2_line,
           title: localization.tickets,
           onTap: () {
             openMiniAppSheetFamily(
@@ -83,7 +84,7 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
           onTap: () {},
         ),
         ProfileSettingsTileWg(
-          leadingIcon: IconlyLight.shield_done,
+          leadingIcon: FlutterRemix.fingerprint_line,
           title: localization.bioAuth,
           trailingIcon: DotSwitch(
             value: biometrickSwitchState,
@@ -96,7 +97,7 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
           onTap: () {},
         ),
         ProfileSettingsTileWg(
-          leadingIcon: IconlyLight.logout,
+          leadingIcon: FlutterRemix.logout_box_r_line,
           title: localization.leaveAccount,
           trailingIcon: SizedBox.shrink(),
           onTap: () async {
