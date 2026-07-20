@@ -5,6 +5,7 @@ class UserOrder {
   final int currentLesson;
   final String createdAt;
   final double progress;
+  final double scores;
 
   UserOrder({
     required this.id,
@@ -13,7 +14,6 @@ class UserOrder {
     required this.currentLesson,
     required this.createdAt,
     required this.progress,
+    required this.scores,
   });
-
-
 }

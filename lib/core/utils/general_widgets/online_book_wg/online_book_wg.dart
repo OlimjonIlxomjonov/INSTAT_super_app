@@ -290,7 +290,7 @@ class BookGridItem extends StatelessWidget {
   Widget _buildLibraryLocation() {
     return Column(
       children: [
-        _locationRow('Nuxsakar', shelfNumber?.toString() ?? '-'),
+        _locationRow('Nuxsalar', shelfNumber?.toString() ?? '-'),
         const SizedBox(height: 4),
         _locationRow('Mavjud Kitoblar', rowNumber?.toString() ?? '-'),
       ],

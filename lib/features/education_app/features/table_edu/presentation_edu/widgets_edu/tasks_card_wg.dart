@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+
+import '../../../user_courses_edu/domain/entity/offline_course/offline_course_teacher_entity.dart';
 
 class TasksCardWg extends StatelessWidget {
   final String title, deadlineDate, daysLeft;
@@ -12,6 +16,7 @@ class TasksCardWg extends StatelessWidget {
   final VoidCallback onTap;
   final bool? isTaskDone;
   final bool isLessons;
+  final List<OfflineCourseTeacherEntity>? teachers;
 
   const TasksCardWg({
     super.key,
@@ -23,6 +28,7 @@ class TasksCardWg extends StatelessWidget {
     required this.statusBorderColor,
     required this.isTaskDone,
     this.isLessons = false,
+    this.teachers,
   });
 
   @override
@@ -33,11 +39,13 @@ class TasksCardWg extends StatelessWidget {
         margin: .only(bottom: appH(12)),
         padding: .symmetric(horizontal: appW(16), vertical: appH(16)),
         decoration: BoxDecoration(
-          // color: isTaskDone == null
-          //     ? AppColors.greyScale.grey50
-          //     : isTaskDone!
-          //     ? AppColors.greenBackground
-          //     : AppColors.redBackground,
+          color: isLessons
+              ? isTaskDone == null
+                    ? AppColors.greyScale.grey50
+                    : isTaskDone!
+                    ? AppColors.greenBackground
+                    : AppColors.redBackground
+              : null,
           border: Border(left: BorderSide(color: statusBorderColor, width: 5)),
           borderRadius: .circular(10),
         ),
@@ -89,12 +97,38 @@ class TasksCardWg extends StatelessWidget {
                     ],
                   )
                 : SizedBox.shrink(),
+            Column(
+              crossAxisAlignment: .start,
+              children: List.generate(teachers?.length ?? 0, (index) {
+                return Row(
+                  spacing: 5,
+                  children: [
+                    Icon(
+                      FlutterRemix.user_2_line,
+                      size: 18,
+                      color: AppColors.greyScale.grey600,
+                    ),
+                    Text(
+                      teachers?[index].fullName.capitalize() ?? '',
+                      style: AppTextStyles.source.regular(
+                        fontSize: 14,
+                        color: AppColors.greyScale.grey600,
+                      ),
+                    ),
+                  ],
+                );
+              }),
+            ),
             Divider(color: AppColors.greyScale.grey200),
 
             /// DEADLINE DATA / TIME
             Row(
               children: [
-                Icon(IconlyLight.calendar, color: AppColors.greyScale.grey400),
+                Icon(
+                  FlutterRemix.calendar_line,
+                  color: AppColors.greyScale.grey400,
+                  size: 18,
+                ),
                 Text(
                   deadlineDate,
                   style: AppTextStyles.source.regular(
@@ -106,6 +140,7 @@ class TasksCardWg extends StatelessWidget {
                 Icon(
                   IconlyLight.time_circle,
                   color: AppColors.greyScale.grey400,
+                  size: 18,
                 ),
                 Text(
                   daysLeft,

@@ -74,6 +74,7 @@ class SimilarOnlineBooksComponent extends StatelessWidget {
                   id: book.id,
                   isSaved: book.isSaved,
                   type: BookCardType.market,
+                  rating: 5,
                   title: book.name,
                   author: book.author.name,
                   price: "${book.price} UZS",

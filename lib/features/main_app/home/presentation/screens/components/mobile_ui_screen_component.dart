@@ -264,6 +264,10 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                         padding: EdgeInsets.only(left: 10),
                         itemBuilder: (context, index) {
                           final book = books[index];
+                          final average = book.commentCount == 0
+                              ? 0.0
+                              : book.starsSum / book.commentCount;
+
                           final thumbnail = book.bookThumbnails.isNotEmpty
                               ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${book.bookThumbnails.first.file}'
                               : '';
@@ -276,6 +280,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                                 isSaved: book.isSaved,
                                 type: BookCardType.market,
                                 title: book.name,
+                                rating: average,
                                 author: book.author.name,
                                 price: "\u{00A0}${book.price} UZS",
                                 imagePath: thumbnail.isNotEmpty

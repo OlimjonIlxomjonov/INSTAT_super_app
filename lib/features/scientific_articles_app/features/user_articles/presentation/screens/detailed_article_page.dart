@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/params/article_params/article_params.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
@@ -117,10 +118,7 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
       }
     } catch (e) {
       if (mounted) {
-        errorFlushBar(
-          context,
-          AppLocalizations.of(context)!.fileDownloadError,
-        );
+        errorFlushBar(context, AppLocalizations.of(context)!.fileDownloadError);
       }
     } finally {
       if (mounted) _isOpeningFile.value = false;
@@ -149,6 +147,7 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
                   child: Row(
                     children: List.generate(2, (index) {
                       return EduCategoriesWg(
+                        categoryIcon: FlutterRemix.layout_grid_line,
                         categoryName: categoryName[index],
                         isSelected: selectedCategory == index,
                         onTap: () {

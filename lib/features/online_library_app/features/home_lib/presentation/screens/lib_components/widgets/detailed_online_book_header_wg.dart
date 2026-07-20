@@ -18,6 +18,10 @@ class DetailedOnlineBookHeaderWg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
+    final average = data.commentCount == 0
+        ? 0.0
+        : data.starsSum / data.commentCount;
+
     return Container(
       padding: .symmetric(vertical: 20),
       decoration: BoxDecoration(
@@ -92,7 +96,7 @@ class DetailedOnlineBookHeaderWg extends StatelessWidget {
             mainAxisAlignment: .spaceEvenly,
             children: [
               DetailedOnlineBookHeaderItemsWg(
-                value: '4.7',
+                value: average.toStringAsFixed(1),
                 label: localization.ratingLabel,
                 icon: Icons.star,
               ),

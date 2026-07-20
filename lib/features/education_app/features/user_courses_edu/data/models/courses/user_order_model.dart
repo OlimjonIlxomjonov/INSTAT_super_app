@@ -8,6 +8,7 @@ class UserOrderModel extends UserOrder {
     required super.createdAt,
     required super.progress,
     super.paymentMethod,
+    required super.scores,
   });
 
   factory UserOrderModel.fromJson(Map<String, dynamic> json) {
@@ -18,6 +19,7 @@ class UserOrderModel extends UserOrder {
       currentLesson: json['current_lesson'],
       createdAt: json['created_at'],
       progress: (json['progress'] as num).toDouble(),
+      scores: json['scores'] ?? 0,
     );
   }
 }

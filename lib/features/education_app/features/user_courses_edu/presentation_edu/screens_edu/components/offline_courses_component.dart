@@ -40,6 +40,7 @@ class OfflineCoursesComponent extends StatelessWidget {
                     child: DetailedUserGroupComponent(
                       courseName: item.name,
                       courseGroupId: item.id,
+                      teacherName: item.teachers,
                     ),
                   );
                 },

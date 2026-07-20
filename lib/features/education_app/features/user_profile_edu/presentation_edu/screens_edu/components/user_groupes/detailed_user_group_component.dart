@@ -30,16 +30,19 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../../../../../core/common/flush_bar/flush_bars.dart';
 import '../../../../../table_edu/domain/entity/course_group_date_entity.dart';
+import '../../../../../user_courses_edu/domain/entity/offline_course/offline_course_teacher_entity.dart';
 import '../../../../../user_courses_edu/presentation_edu/screens_edu/qr_scan/qr_scan_configs.dart';
 
 class DetailedUserGroupComponent extends StatefulWidget {
   final String courseName;
   final int courseGroupId;
+  final List<OfflineCourseTeacherEntity> teacherName;
 
   const DetailedUserGroupComponent({
     super.key,
     required this.courseName,
     required this.courseGroupId,
+    required this.teacherName,
   });
 
   @override
@@ -212,9 +215,23 @@ class _DetailedUserGroupComponentState
                                     fontSize: 17,
                                   ),
                                 ),
-                                TextButton(
+                                FilledButton.icon(
                                   onPressed: _qrScan,
-                                  child: Text(localization.scanButton),
+                                  icon: const Icon(
+                                    Icons.qr_code_scanner,
+                                    size: 20,
+                                  ),
+                                  label: Text(localization.scanButton),
+                                  style: FilledButton.styleFrom(
+                                    backgroundColor: AppColors.primaryColor,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                      vertical: 12,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -229,6 +246,7 @@ class _DetailedUserGroupComponentState
                                       DateTime.now();
                                   final item = data[index];
                                   return TasksCardWg(
+                                    teachers: widget.teacherName,
                                     title: item.title
                                         .replaceAll(RegExp(r'\s+'), ' ')
                                         .trim(),

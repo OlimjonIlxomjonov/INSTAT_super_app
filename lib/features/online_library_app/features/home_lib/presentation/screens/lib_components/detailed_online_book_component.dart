@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/params/online_books/online_books_params.dart';
+import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/general_widgets/bought_book_opener/bought_book_opener_wg.dart';
@@ -31,6 +32,8 @@ import '../../../../../../../core/common/flush_bar/flush_bars.dart';
 import '../../../../../../../core/utils/widgets/comment_section/user_comments_wg.dart';
 import '../../../../../../../core/utils/widgets/open_mini_app/sub_bottom_sheet_opener.dart';
 import '../../../../../../education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/see_all_course_comments/see_all_course_comments.dart';
+import '../../bloc/popular_books/popular_books_bloc.dart';
+import '../../bloc/popular_books/popular_books_event.dart';
 
 class DetailedOnlineBookComponent extends StatefulWidget {
   final bool isBookBought, isOffline;
@@ -65,6 +68,10 @@ class _DetailedOnlineBookComponentState
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
+    final average = widget.data.commentCount == 0
+        ? 0.0
+        : widget.data.starsSum / widget.data.commentCount;
+
     return Scaffold(
       /// HEADER
       appBar: CustomAppBarWg(
@@ -152,16 +159,16 @@ class _DetailedOnlineBookComponentState
                     mainAxisAlignment: .spaceBetween,
                     children: [
                       Text(
-                        '4.7',
+                        average.toStringAsFixed(1),
                         style: AppTextStyles.source.medium(fontSize: 30),
                       ),
                       VerticalDividerWg(),
                       Column(
                         crossAxisAlignment: .start,
                         children: [
-                          CustomRatingStarWg(starRating: 4, starSize: 25),
+                          CustomRatingStarWg(starRating: average, starSize: 25),
                           Text(
-                            '56 ta izoh',
+                            '${widget.data.commentCount} ta izoh',
                             style: AppTextStyles.source.regular(
                               fontSize: 13,
                               color: AppColors.greyScale.grey600,
@@ -170,7 +177,7 @@ class _DetailedOnlineBookComponentState
                         ],
                       ),
 
-                      /// LEAVE A COMMENT
+                      //! LEAVE/ADD A COMMENT
                       ElevatedButton(
                         onPressed: () {
                           onlineLibStyleCustomBottomSheetWg(

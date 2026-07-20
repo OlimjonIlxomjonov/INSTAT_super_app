@@ -9,16 +9,24 @@ import 'package:my_template/core/utils/general_widgets/online_book_wg/short_book
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/widgets_edu/edu_custom_text_area_wg.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_entity.dart';
 
-class LeaveCommentSection extends StatelessWidget {
+class LeaveCommentSection extends StatefulWidget {
   final BookEntity data;
 
   const LeaveCommentSection({super.key, required this.data});
 
   @override
+  State<LeaveCommentSection> createState() => _LeaveCommentSectionState();
+}
+
+class _LeaveCommentSectionState extends State<LeaveCommentSection> {
+  double rating = 0;
+  final TextEditingController _commentController = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
-    final thumbnail = data.bookThumbnails.isNotEmpty
-        ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${data.bookThumbnails.first.file}'
+    final thumbnail = widget.data.bookThumbnails.isNotEmpty
+        ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${widget.data.bookThumbnails.first.file}'
         : '';
     return SafeArea(
       child: Column(
@@ -26,16 +34,30 @@ class LeaveCommentSection extends StatelessWidget {
         children: [
           ShortBookDetailsWg(
             imagePath: thumbnail,
-            bookName: data.name,
-            bookAuthor: data.author.name,
-            bookType: data.category.name,
+            bookName: widget.data.name,
+            bookAuthor: widget.data.author.name,
+            bookType: widget.data.category.name,
           ),
           SizedBox(height: 16),
-          Text(localization.assessment, style: AppTextStyles.source.medium(fontSize: 13)),
+          Text(
+            localization.assessment,
+            style: AppTextStyles.source.medium(fontSize: 13),
+          ),
           SizedBox(height: 4),
-          CustomRatingStarWg(starRating: 4, starSize: 30),
+          CustomRatingStarWg(
+            starRating: rating,
+            starSize: 30,
+            onRatingChanged: (newRating) {
+              setState(() {
+                rating = newRating;
+              });
+            },
+          ),
           SizedBox(height: 16),
-          EduCustomTextAreaWg(hintText: localization.writeTopicHint),
+          EduCustomTextAreaWg(
+            hintText: localization.writeTopicHint,
+            controller: _commentController,
+          ),
           SizedBox(height: 20),
           Row(
             children: [

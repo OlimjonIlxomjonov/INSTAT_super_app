@@ -53,7 +53,9 @@ class ExpandedCoursesCardWg extends StatelessWidget {
                             color: AppColors.orange500,
                             size: 18,
                           ),
-                          Text(" ${entity.ratingsCount ?? 0}"),
+                          Text(
+                            " ${entity.userOrder?.status != 'paid' ? entity.ratingsCount ?? 0 : entity.userOrder?.scores ?? 0.0}",
+                          ),
                         ],
                       ),
                     ),

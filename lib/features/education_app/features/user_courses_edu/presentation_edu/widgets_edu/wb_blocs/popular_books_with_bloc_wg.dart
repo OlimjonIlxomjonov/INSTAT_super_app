@@ -29,6 +29,10 @@ class PopularBooksWithBlocWg extends StatelessWidget {
               itemCount: data.length,
               itemBuilder: (context, index) {
                 final book = data[index];
+                final average = book.commentCount == 0
+                    ? 0.0
+                    : book.starsSum / book.commentCount;
+
                 final thumbnail = book.bookThumbnails.isNotEmpty
                     ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${book.bookThumbnails.first.file}'
                     : '';
@@ -39,7 +43,7 @@ class PopularBooksWithBlocWg extends StatelessWidget {
                   title: book.name,
                   author: book.author.name,
                   // oldPrice: '999 UZS',
-                  rating: 5,
+                  rating: average,
                   price: "\u{00A0}${book.price} UZS",
                   imagePath: thumbnail.isNotEmpty
                       ? thumbnail

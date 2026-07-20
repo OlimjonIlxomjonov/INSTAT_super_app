@@ -45,14 +45,14 @@ List<HomeBriefInfoCardModel> getMicroDataBrief(AppLocalizations localization) =>
       HomeBriefInfoCardModel(
         iconColor: AppColors.iconBlue,
         iconBackgroundColor: AppColors.iconBlueBackground,
-        icon: IconlyLight.document,
+        icon: FlutterRemix.file_list_line,
         title: localization.allRequestsBrief,
         value: '12',
       ),
       HomeBriefInfoCardModel(
         iconColor: AppColors.orange500,
         iconBackgroundColor: AppColors.orange50,
-        icon: IconlyLight.graph,
+        icon: FlutterRemix.pie_chart_line,
         title: localization.statusInProgress,
         value: '3',
       ),

@@ -1,10 +1,11 @@
 class ApiUrls {
   ApiUrls._();
 
-  //! MY ID CONFIGS
-
   //! base url
   static const baseUrl = 'https://test.avacoder.uz/api/';
+
+  //! main base url
+  // static const baseUrl = 'https://api1.instat.uz/api/';
 
   /// websocket
   // library

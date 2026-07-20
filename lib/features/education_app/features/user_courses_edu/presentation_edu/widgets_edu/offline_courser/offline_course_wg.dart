@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/offline_course/offline_group_entity.dart';
 
@@ -29,7 +30,11 @@ class OfflineCourseWg extends StatelessWidget {
             crossAxisAlignment: .center,
             spacing: 4,
             children: [
-              Icon(IconlyLight.calendar, color: AppColors.greyScale.grey600),
+              Icon(
+                FlutterRemix.calendar_line,
+                color: AppColors.greyScale.grey600,
+                size: 18,
+              ),
               Text(
                 _item.course.category?.createdAt.toReadableDate() ?? '',
                 style: _subStyle(),
@@ -40,7 +45,11 @@ class OfflineCourseWg extends StatelessWidget {
             spacing: 4,
             crossAxisAlignment: .center,
             children: [
-              Icon(IconlyLight.profile, color: AppColors.greyScale.grey600),
+              Icon(
+                FlutterRemix.user_line,
+                color: AppColors.greyScale.grey600,
+                size: 18,
+              ),
               Expanded(
                 child: Wrap(
                   spacing: 4,

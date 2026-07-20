@@ -12,6 +12,7 @@ class BookEntity {
   final BookCategoryEntity category;
   final int price;
   final BookAuthorEntity author;
+  final int commentCount;
   final int pagesCount;
   final String createdAt;
   final int userBookCount;
@@ -19,6 +20,7 @@ class BookEntity {
   final List<BookThumbnailEntity> bookThumbnails;
   final bool isSaved;
   final bool isInCart;
+  final int starsSum;
 
   BookEntity({
     required this.id,
@@ -37,6 +39,8 @@ class BookEntity {
     this.isSaved = false,
     this.isInCart = false,
     required this.orderCount,
+    required this.commentCount,
+    required this.starsSum,
   });
 
   BookEntity copyWith({
@@ -57,6 +61,7 @@ class BookEntity {
     bool? isInCart,
     int? starsSum,
     int? orderCount,
+    int? commentCount,
   }) {
     return BookEntity(
       id: id ?? this.id,
@@ -75,6 +80,8 @@ class BookEntity {
       isSaved: isSaved ?? this.isSaved,
       isInCart: isInCart ?? this.isInCart,
       orderCount: orderCount ?? this.orderCount,
+      commentCount: commentCount ?? this.commentCount,
+      starsSum: starsSum ?? this.starsSum,
     );
   }
 }

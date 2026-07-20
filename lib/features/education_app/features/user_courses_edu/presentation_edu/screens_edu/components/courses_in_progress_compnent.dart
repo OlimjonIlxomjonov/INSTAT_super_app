@@ -60,8 +60,6 @@ class _CoursesInProgressComponentState
     _listenToConnectivity();
   }
 
-  /// Check connectivity once at startup so that _wasDisconnected is correct
-  /// if the app launches with no internet — reconnect retry will then fire.
   Future<void> _checkInitialConnectivity() async {
     final results = await Connectivity().checkConnectivity();
     final hasInternet = results.any((r) => r != ConnectivityResult.none);
