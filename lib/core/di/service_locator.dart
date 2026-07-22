@@ -6,9 +6,11 @@ import 'package:my_template/features/education_app/features/home_edu/data/source
 import 'package:my_template/features/education_app/features/home_edu/domain/repository/home_edu_repository.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/comments/comments_use_case.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/per_course/per_course_use_case.dart';
+import 'package:my_template/features/education_app/features/home_edu/domain/usecase/similar_courses/similar_courses_use_caase.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/user_certificates/user_certificate_use_case.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/comments/comments_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/per_course/per_course_bloc.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/similar_courses/similar_courses_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/user_certificate/certificate_bloc.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/data/repo/leader_board_repo_impl.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/data/source/impl_remote_data_source/leader_board_remote_data_source_impl.dart';
@@ -77,7 +79,9 @@ import 'package:my_template/features/mikro_data/data/source/remote_data_source/m
 import 'package:my_template/features/mikro_data/domain/repository/micro_repository.dart';
 import 'package:my_template/features/mikro_data/domain/usecase/reports/reports_use_case.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_bloc.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/add_comment/add_comment_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/book_comments/book_comments_use_case.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/add_comment/add_comments_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_comments/book_comments_bloc.dart';
 import 'package:my_template/features/online_library_app/features/offline_books_lib/data/repo/offline_books_repo_impl.dart';
 import 'package:my_template/features/online_library_app/features/offline_books_lib/data/source/impl_remote_data_source/offline_books_remote_data_source_impl.dart';
@@ -305,8 +309,12 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => BookCommentsUseCase(repository: sl()));
   //? buy books
   sl.registerLazySingleton(() => BuyBookUseCase(repository: sl()));
+  //? Similar Courses
+  sl.registerLazySingleton(() => SimilarCoursesUseCase(repository: sl()));
+  //? Add Comments to the books
+  sl.registerLazySingleton(() => AddCommentUseCase(repository: sl()));
 
-  /// {BLOC}
+  //! {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
   sl.registerFactory(() => UserCoursesBloc(sl()));
   sl.registerLazySingleton(() => UserCategoryByIdBloc(sl()));
@@ -398,4 +406,8 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => BookCommentsBloc(useCase: sl()));
   //? Buy Book
   sl.registerLazySingleton(() => BuyBookBloc(useCase: sl()));
+  //? Similar Courses
+  sl.registerLazySingleton(() => SimilarCoursesBloc(useCase: sl()));
+  //? Add Comments to the books
+  sl.registerLazySingleton(() => AddCommentsBloc(useCase: sl()));
 }

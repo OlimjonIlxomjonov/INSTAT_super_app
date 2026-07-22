@@ -15,4 +15,7 @@ abstract class HomeLibRemoteDataSource {
   Future<CommentsResponseModel> fetchBookComments({
     required OnlineBookCommentsParams params,
   });
+
+  //! Add Comment
+  Future<void> addComment({required AddCommentParams params});
 }

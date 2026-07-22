@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_state.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/home_event.dart';
 import 'package:myid/enums.dart';
 import 'package:myid/myid.dart';
@@ -55,13 +56,22 @@ class MyIdConf {
 
       logger.f("Image saved at: ${file.path}");
 
-      context.read<FaceRecBloc>().add(
+      final faceRecBloc = context.read<FaceRecBloc>();
+      // Wait for the actual backend verification (the /my-id/accept +
+      // face-recognition calls) to finish before reporting success —
+      // add() only enqueues the event, it doesn't wait for it to process.
+      final resultState = faceRecBloc.stream.firstWhere(
+        (state) => state is FaceRecLoaded || state is FaceRecError,
+      );
+      faceRecBloc.add(
         FaceRecEvent(
           params: FaceRecParams(code: result.code ?? '', imgPath: file),
         ),
       );
       logger.f("code: ${result.code}");
-      return true;
+
+      final finalState = await resultState;
+      return finalState is FaceRecLoaded;
     } on PlatformException catch (e) {
       logger.e('${e.message ?? "Verification failed"} ');
       if (context.mounted) {

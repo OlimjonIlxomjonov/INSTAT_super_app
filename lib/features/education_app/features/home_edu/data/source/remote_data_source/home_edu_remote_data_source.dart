@@ -3,6 +3,8 @@ import 'package:my_template/features/education_app/features/home_edu/data/model/
 import 'package:my_template/features/education_app/features/home_edu/data/model/user_certificate/user_certificate_response_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
 
+import '../../../../user_courses_edu/data/models/courses/course_model.dart';
+
 abstract class HomeEduRemoteDataSource {
   Future<CommentsResponseModel> fetchComments({required CommentsParams params});
 
@@ -10,4 +12,9 @@ abstract class HomeEduRemoteDataSource {
 
   //? User Certificate
   Future<UserCertificateResponseModel> fetchUserCertificate();
+
+  //? Similar Courses
+  Future<List<CourseModel>> fetchSimilarCourses({
+    required PerCourseParams params,
+  });
 }

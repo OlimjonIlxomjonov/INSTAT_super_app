@@ -7,7 +7,6 @@ import 'package:my_template/features/auth/presentation/auth_service/auth_service
 import 'package:my_template/features/auth/presentation/data_source/auth_constatns.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-
 enum _AuthState { loading, idle, error }
 
 class OneIdLoginPage extends StatefulWidget {

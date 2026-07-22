@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
@@ -31,10 +32,18 @@ class TestQuestionWg extends StatelessWidget {
             color: AppColors.greyScale.grey50,
             border: Border.all(color: AppColors.greyScale.grey200),
           ),
-          child: Text(
-            questionText,
-            textAlign: TextAlign.center,
-            style: AppTextStyles.source.medium(fontSize: 17),
+          child: Html(
+            data: questionText,
+            style: {
+              'body': Style(
+                margin: Margins.zero,
+                padding: HtmlPaddings.zero,
+                fontSize: FontSize(17),
+                fontWeight: FontWeight.w500,
+                textAlign: TextAlign.center,
+              ),
+              'p': Style(margin: Margins.zero),
+            },
           ),
         ),
       ],

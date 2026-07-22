@@ -20,3 +20,10 @@ class PerCourseEvent extends HomeEduEvent {
 class UserCertificateEvent extends HomeEduEvent {
   const UserCertificateEvent();
 }
+
+//? Similar Courses
+class SimilarCoursesEvent extends HomeEduEvent {
+  final PerCourseParams params;
+
+  SimilarCoursesEvent({required this.params});
+}

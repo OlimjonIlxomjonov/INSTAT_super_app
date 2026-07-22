@@ -367,5 +367,6 @@
   "dayStatusDaysLeft": "Осталось {days} дн.",
   "showAllCount": "Показать все ({count})",
   "questionNumberTemplate": "Вопрос {number}",
-  "selectAtLeastOneBookMessage": "Выберите хотя бы одну книгу для покупки"
+  "selectAtLeastOneBookMessage": "Выберите хотя бы одну книгу для покупки",
+  "sessionExpiredMessage": "Срок сессии истёк. Пожалуйста, войдите снова."
 }

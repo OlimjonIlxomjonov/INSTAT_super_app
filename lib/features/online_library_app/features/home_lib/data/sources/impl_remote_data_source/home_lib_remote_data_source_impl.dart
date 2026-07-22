@@ -96,4 +96,24 @@ class HomeLibRemoteDataSourceImpl implements HomeLibRemoteDataSource {
       rethrow;
     }
   }
+
+  //! Add Comment
+  @override
+  Future<void> addComment({required AddCommentParams params}) async {
+    try {
+      final response = await _dioClient.post(
+        "books/${params.bookId}${ApiUrls.addBookComment}",
+        data: {"stars": params.stars, "text": params.bookDesc},
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data;
+        logger.i(data);
+      } else {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
 }

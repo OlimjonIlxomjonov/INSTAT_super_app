@@ -367,5 +367,6 @@
   "dayStatusDaysLeft": "{days} days left",
   "showAllCount": "Show all ({count})",
   "questionNumberTemplate": "Question {number}",
-  "selectAtLeastOneBookMessage": "Select at least one book to purchase"
+  "selectAtLeastOneBookMessage": "Select at least one book to purchase",
+  "sessionExpiredMessage": "Your session has expired. Please log in again."
 }

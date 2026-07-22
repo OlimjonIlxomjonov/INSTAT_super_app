@@ -2,14 +2,16 @@ class ApiUrls {
   ApiUrls._();
 
   //! base url
-  static const baseUrl = 'https://test.avacoder.uz/api/';
+  // static const baseUrl = 'https://test.avacoder.uz/api/';
 
   //! main base url
-  // static const baseUrl = 'https://api1.instat.uz/api/';
+  static const baseUrl = 'https://api1.instat.uz/api/';
 
   /// websocket
-  // library
-  static const webSocket = 'wss://test.avacoder.uz/ws/books/?token=';
+  //! library // debug
+  // static const webSocket = 'wss://test.avacoder.uz/ws/books/?token=';
+  //! Production
+  static const webSocket = 'wss://api1.instat.uz/ws/books/?token=';
 
   /// user
   static const me = 'me';
@@ -46,6 +48,7 @@ class ApiUrls {
 
   //! comments
   static const userComments = '/comments/active';
+  static const addBookComment = '/add-comment/';
 
   //! offline course
   static const offlineCourse = 'course-groups/list/my/';
@@ -90,4 +93,7 @@ class ApiUrls {
 
   //! buy book
   static const buyBook = 'books/order/';
+
+  //? Similar Courses
+  static const similarCourses = 'by-category/';
 }

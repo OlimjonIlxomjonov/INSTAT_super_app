@@ -46,7 +46,7 @@ class BookModel extends BookEntity {
               ?.map((e) => BookThumbnailModel.fromJson(e))
               .toList() ??
           [],
-      orderCount: json['order_count'] ?? 0,
+      orderCount: json['orders_count'] ?? 0,
       commentCount: json['comments_count'] ?? 0,
       starsSum: json['stars_sum'] ?? 0,
     );

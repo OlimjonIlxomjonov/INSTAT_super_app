@@ -9,6 +9,7 @@ import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart'
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/general_widgets/online_book_wg/short_book_details_wg.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_entity.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
@@ -147,6 +148,17 @@ class _UserOnlineBookCartLibPageState extends State<UserOnlineBookCartLibPage> {
                                     onTap: () {
                                       context.read<CartBloc>().add(
                                         RemoveFromCartEvent(bookId: item.id),
+                                      );
+                                      // Keep BookActionsBloc's cached
+                                      // "in cart" flag (used by the book
+                                      // detail page) in sync — otherwise
+                                      // it stays stuck showing "in cart"
+                                      // even after removal here.
+                                      context.read<BookActionsBloc>().add(
+                                        UpdateBookStateFromSocketEvent(
+                                          bookId: item.id,
+                                          isInCart: false,
+                                        ),
                                       );
                                     },
                                     child: Container(

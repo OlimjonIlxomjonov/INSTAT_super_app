@@ -15,6 +15,7 @@ import 'package:my_template/features/education_app/features/home_edu/presentatio
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/home_edu_event.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/per_course/per_course_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/per_course/per_course_state.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/similar_courses/similar_courses_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/about_this_course_tab.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/course_comments_tab.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/course_plan_tab.dart';
@@ -77,6 +78,9 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
       );
       context.read<PerCourseBloc>().add(
         PerCourseEvent(params: PerCourseParams(courseId: widget.data.id)),
+      );
+      context.read<SimilarCoursesBloc>().add(
+        SimilarCoursesEvent(params: PerCourseParams(courseId: widget.data.id)),
       );
     });
   }

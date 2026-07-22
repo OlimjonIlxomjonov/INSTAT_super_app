@@ -34,6 +34,7 @@ class SliverArticlesListWg extends StatelessWidget {
                   status: item.articleStatus,
                 ),
                 showHandler: false,
+                enableDrag: false,
               );
             },
             child: Container(

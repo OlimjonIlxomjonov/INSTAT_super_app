@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_event.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_bloc.dart';
@@ -68,6 +69,14 @@ class _ReportsCardWgState extends State<ReportsCardWg> {
                 builder: (context, state) {
                   if (state is ReportsLoaded) {
                     final data = state.response.data;
+                    if (data.isEmpty) {
+                      return AppEmptyState(
+                        title: 'Hozircha hisobotlar yaratilmagan.',
+                        subtitle:
+                            'Asosiy samaradorlik ko‘rsatkichlarini kuzatish va natijalarni tahlil qilish uchun birinchi hisobotingizni yarating.',
+                      );
+                    }
+
                     return GridView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

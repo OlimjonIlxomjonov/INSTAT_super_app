@@ -30,20 +30,7 @@ class UserCommentsWg extends StatelessWidget {
         children: [
           ListTile(
             contentPadding: .zero,
-            leading: CircleAvatar(
-              radius: 25,
-              backgroundColor: AppColors.greyScale.grey300,
-              backgroundImage: NetworkImage(
-                'https://test.avacoder.uz${entity.user.avatar}',
-              ),
-              onBackgroundImageError: (exception, stackTrace) {
-                logger.e('Error loading avatar: $exception');
-              },
-              child: entity.user.avatar == null
-                  ? Icon(Icons.person, color: AppColors.greyScale.grey600)
-                  : null,
-              // child: Icon(Icons.person, color: AppColors.greyScale.grey600),
-            ),
+            leading: _buildAvatar(),
             title: Text(
               '${entity.user.firstName} ${entity.user.lastName}',
               maxLines: 1,
@@ -86,6 +73,26 @@ class UserCommentsWg extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildAvatar() {
+    final avatar = entity.user.avatar;
+    if (avatar == null || avatar.isEmpty) {
+      return CircleAvatar(
+        radius: 25,
+        backgroundColor: AppColors.greyScale.grey300,
+        child: Icon(Icons.person, color: AppColors.greyScale.grey600),
+      );
+    }
+
+    return CircleAvatar(
+      radius: 25,
+      backgroundColor: AppColors.greyScale.grey300,
+      backgroundImage: NetworkImage('https://api1.instat.uz$avatar'),
+      onBackgroundImageError: (exception, stackTrace) {
+        logger.e('Error loading avatar: $exception');
+      },
     );
   }
 }

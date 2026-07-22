@@ -10,4 +10,9 @@ abstract class HomeEduRepository {
 
   //? User Certificates
   Future<UserCertificateResponse> getUserCertificates();
+
+  //? Similar Courses
+  Future<List<CourseEntity>> getSimilarCourses({
+    required PerCourseParams params,
+  });
 }

@@ -1,5 +1,7 @@
 import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service.dart';
+import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
+import 'package:my_template/core/utils/logger/logger.dart';
 
 abstract class OneIdAuthService {
   Future<void> handleAuthSuccess(String code);
@@ -18,7 +20,7 @@ class OneIdAuthServiceImpl implements OneIdAuthService {
   @override
   Future<void> handleAuthSuccess(String code) async {
     final response = await _dioClient.get(
-      'https://test.avacoder.uz/api/one-id/login',
+      '${ApiUrls.baseUrl}one-id/login',
       queryParams: {'code': code, 'state': 'testState'},
     );
 

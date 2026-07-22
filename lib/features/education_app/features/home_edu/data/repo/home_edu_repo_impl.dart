@@ -26,4 +26,11 @@ class HomeEduRepoImpl implements HomeEduRepository {
   Future<UserCertificateResponse> getUserCertificates() {
     return _remoteDataSource.fetchUserCertificate();
   }
+
+  @override
+  Future<List<CourseEntity>> getSimilarCourses({
+    required PerCourseParams params,
+  }) {
+    return _remoteDataSource.fetchSimilarCourses(params: params);
+  }
 }

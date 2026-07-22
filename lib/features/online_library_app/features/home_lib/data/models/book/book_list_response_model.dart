@@ -1,6 +1,5 @@
 import 'package:my_template/features/main_app/home/data/model/pagination/links/lniks_model.dart';
 import 'package:my_template/features/main_app/home/data/model/pagination/meta/meta_model.dart';
-import 'package:my_template/features/online_library_app/features/home_lib/data/models/book/book_model.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_list_response.dart';
 import 'package:my_template/features/online_library_app/features/offline_books_lib/data/models/offline_book_model.dart';
 

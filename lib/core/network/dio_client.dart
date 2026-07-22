@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:my_template/core/common/flush_bar/flush_bars.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
 import 'package:my_template/features/auth/presentation/screens/log_in_options_page.dart';
@@ -7,6 +9,7 @@ import '../utils/constants/api_urls/api_urls.dart';
 
 class DioClient {
   final Dio _dio;
+  bool _isHandlingSessionExpiry = false;
 
   DioClient._internal()
     : _dio = Dio(
@@ -44,8 +47,20 @@ class DioClient {
           final isUnauthorized = statusCode == 401;
           final hasToken = token != null && token.isNotEmpty;
 
-          if (isUnauthorized && hasToken) {
+          // A single failed screen load can fire off several parallel
+          // requests that all 401 at once — only react to the first one.
+          if (isUnauthorized && hasToken && !_isHandlingSessionExpiry) {
+            _isHandlingSessionExpiry = true;
+
             await TokenStorageServiceImpl().deleteAccessToken();
+
+            final context = AppRoute.navigatorKey.currentContext;
+            if (context != null) {
+              errorFlushBar(
+                context,
+                AppLocalizations.of(context)!.sessionExpiredMessage,
+              );
+            }
 
             AppRoute.open(const LogInOptionsPage());
           }
@@ -63,6 +78,9 @@ class DioClient {
   ///
   void setToken(String token) {
     _dio.options.headers['Authorization'] = "Bearer $token";
+    // A fresh token means a new session — the next 401 (if any) is a new
+    // problem and should be handled again.
+    _isHandlingSessionExpiry = false;
   }
 
   /// GET

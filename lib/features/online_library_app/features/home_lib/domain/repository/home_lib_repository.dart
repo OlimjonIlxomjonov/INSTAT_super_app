@@ -15,4 +15,7 @@ abstract class HomeLibRepository {
   Future<CommentsResponse> bookComments({
     required OnlineBookCommentsParams params,
   });
+
+  //! Add a Comment
+  Future<void> addComment({required AddCommentParams params});
 }

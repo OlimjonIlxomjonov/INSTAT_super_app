@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/comments/comments_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/per_course/per_course_bloc.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/similar_courses/similar_courses_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/user_certificate/certificate_bloc.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/bloc/leader_board/leader_board_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/about_course_features/about_cours_features_bloc.dart';
@@ -22,6 +23,7 @@ import 'package:my_template/features/main_app/home/presentation/bloc/courses/cou
 import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_bloc.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/add_comment/add_comments_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_comments/book_comments_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
@@ -128,6 +130,12 @@ class MyBlocProvider extends StatelessWidget {
         BlocProvider<BookCommentsBloc>(create: (_) => sl<BookCommentsBloc>()),
         //! Buy Book
         BlocProvider<BuyBookBloc>(create: (_) => sl<BuyBookBloc>()),
+        //! Similar Courses
+        BlocProvider<SimilarCoursesBloc>(
+          create: (_) => sl<SimilarCoursesBloc>(),
+        ),
+        //! Add Comments to the books
+        BlocProvider<AddCommentsBloc>(create: (_) => sl<AddCommentsBloc>()),
       ],
       child: child,
     );

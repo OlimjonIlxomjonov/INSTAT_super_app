@@ -3,29 +3,6 @@ import 'package:lottie/lottie.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/assets/app_animations.dart';
 
-/// A reusable empty state widget with two modes:
-///
-/// - **Default (full-page):** Lottie illustration + title + optional subtitle
-///   + optional CTA button. Use inside `SliverFillRemaining` or `Center`.
-///
-/// - **Compact:** A slim rounded card with an icon + text. Use inline under
-///   section headers in scrollable lists.
-///
-/// ```dart
-/// // Full-page
-/// AppEmptyState(
-///   title: 'Hali kurs boshlanmagan',
-///   subtitle: 'Kurslarni topib o\'rganishni boshlang!',
-///   buttonLabel: 'Kurslarni ko\'rish',
-///   onAction: () => navigate(),
-/// )
-///
-/// // Compact inline
-/// AppEmptyState.compact(
-///   title: 'Hech qanday so\'rovlar mavjud emas',
-///   icon: IconlyLight.document,
-/// )
-/// ```
 class AppEmptyState extends StatelessWidget {
   final String title;
   final String? subtitle;
@@ -37,7 +14,6 @@ class AppEmptyState extends StatelessWidget {
   final IconData? _compactIcon;
   final IconData _compactButtonIcon;
 
-  /// Full-page empty state with Lottie animation + title + optional CTA.
   const AppEmptyState({
     super.key,
     required this.title,
@@ -46,24 +22,22 @@ class AppEmptyState extends StatelessWidget {
     this.onAction,
     this.animationAsset,
     this.illustrationSize = 180,
-  })  : _compact = false,
-        _compactIcon = null,
-        _compactButtonIcon = Icons.arrow_forward_rounded;
+  }) : _compact = false,
+       _compactIcon = null,
+       _compactButtonIcon = Icons.arrow_forward_rounded;
 
-  /// Compact inline empty state — slim card with icon + text.
-  /// Fits naturally under section headers in scrollable lists.
   const AppEmptyState.compact({
     super.key,
     required this.title,
     IconData? icon,
     this.buttonLabel,
     this.onAction,
-  })  : _compact = true,
-        _compactIcon = icon,
-        _compactButtonIcon = Icons.arrow_forward_rounded,
-        subtitle = null,
-        animationAsset = null,
-        illustrationSize = 180;
+  }) : _compact = true,
+       _compactIcon = icon,
+       _compactButtonIcon = Icons.arrow_forward_rounded,
+       subtitle = null,
+       animationAsset = null,
+       illustrationSize = 180;
 
   @override
   Widget build(BuildContext context) {

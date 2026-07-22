@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
+import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/core/utils/widgets/popular_courses_card/popular_courses_card_wg.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/similar_courses/similar_courses_bloc.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/similar_courses/similar_courses_state.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/detailed_course_info_page.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/see_all_similar_courses/see_all_similar_courses.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/widgets/course_features_list_state_wg.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/course_category_builder.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class AboutThisCourseTab extends StatefulWidget {
   final CourseEntity data;
@@ -30,20 +36,30 @@ class AboutThisCourseTab extends StatefulWidget {
 class _AboutThisCourseTabState extends State<AboutThisCourseTab>
     with AutomaticKeepAliveClientMixin {
   void _openSimilarCourses(BuildContext context) {
-    FamilyNavigation.familyPush(
-      showHandle: false,
+    // FamilyNavigation.familyPush(
+    //   showHandle: false,
+    //   context,
+    //   const SeeAllSimilarCourses(),
+    // );
+
+    openMiniAppSheetFamily(
       context,
-      const SeeAllSimilarCourses(),
+      child: const SeeAllSimilarCourses(),
+      showHandler: false,
     );
   }
 
-  void _openCourseDetail(BuildContext context) {
+  void _openCourseDetail(
+    BuildContext context,
+    CourseEntity course,
+    String categoryName,
+  ) {
     FamilyNavigation.familyPush(
       context,
       // showHandle: false,
       DetailedCourseInfoPage(
-        data: widget.data,
-        courseCategory: widget.courseCategory,
+        data: course,
+        courseCategory: categoryName,
         total: widget.total,
       ),
     );
@@ -88,19 +104,67 @@ class _AboutThisCourseTabState extends State<AboutThisCourseTab>
         const SizedBox(height: 16),
         SizedBox(
           height: 300,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(horizontal: appW(20)),
-            itemCount: widget.total,
-            itemExtent: appW(312),
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: EdgeInsets.only(right: appW(12)),
-                child: PopularCoursesCardWg(
-                  onTap: () => _openCourseDetail(context),
-                  data: widget.data,
-                  categoryName: widget.courseCategory,
-                ),
+          child: BlocBuilder<SimilarCoursesBloc, SimilarCoursesState>(
+            builder: (context, state) {
+              if (state is SimilarCoursesLoaded) {
+                final courses = state.listEntity;
+                if (courses.isEmpty) return const SizedBox.shrink();
+
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  itemCount: courses.length,
+                  itemExtent: 312,
+                  itemBuilder: (context, index) {
+                    final course = courses[index];
+                    return Padding(
+                      padding: EdgeInsets.only(right: appW(12)),
+                      child: CourseCategoryBuilder(
+                        categoryId: course.category,
+                        loadingBuilder: (context) => Skeletonizer(
+                          enabled: true,
+                          child: PopularCoursesCardWg(
+                            onTap: () {},
+                            data: course,
+                            categoryName: '',
+                          ),
+                        ),
+                        builder: (context, categoryName) =>
+                            PopularCoursesCardWg(
+                              onTap: () => _openCourseDetail(
+                                context,
+                                course,
+                                categoryName,
+                              ),
+                              data: course,
+                              categoryName: categoryName,
+                            ),
+                      ),
+                    );
+                  },
+                );
+              }
+
+              if (state is SimilarCoursesError) return const SizedBox.shrink();
+
+              return ListView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                itemCount: 3,
+                itemExtent: 312,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.only(right: appW(12)),
+                    child: Skeletonizer(
+                      enabled: true,
+                      child: PopularCoursesCardWg(
+                        onTap: () {},
+                        data: widget.data,
+                        categoryName: widget.courseCategory,
+                      ),
+                    ),
+                  );
+                },
               );
             },
           ),

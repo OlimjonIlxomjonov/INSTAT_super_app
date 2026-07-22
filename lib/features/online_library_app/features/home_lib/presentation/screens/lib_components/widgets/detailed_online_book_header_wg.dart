@@ -17,6 +17,9 @@ class DetailedOnlineBookHeaderWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    logger.f("Orders Count: ${data.orderCount}");
+    logger.f("Pages Count:  ${data.pagesCount}");
+
     final localization = AppLocalizations.of(context)!;
     final average = data.commentCount == 0
         ? 0.0
@@ -47,10 +50,12 @@ class DetailedOnlineBookHeaderWg extends StatelessWidget {
                 return ClipRRect(
                   borderRadius: .circular(12),
                   child: Image.network(
-                    "${ApiUrls.bookThumbnail}${thumbnail.file}",
+                    "${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${thumbnail.file}",
                     fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) =>
-                        const Icon(Icons.image_not_supported, size: 50),
+                    errorBuilder: (context, error, stackTrace) {
+                      logger.e(error);
+                      return const Icon(Icons.image_not_supported, size: 50);
+                    },
                   ),
                 );
               }).toList(),

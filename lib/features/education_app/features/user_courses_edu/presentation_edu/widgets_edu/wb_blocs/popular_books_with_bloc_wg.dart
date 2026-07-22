@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/general_widgets/online_book_wg/online_book_wg.dart';
+import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_state.dart';
@@ -29,6 +30,7 @@ class PopularBooksWithBlocWg extends StatelessWidget {
               itemCount: data.length,
               itemBuilder: (context, index) {
                 final book = data[index];
+                logger.f(book.orderCount);
                 final average = book.commentCount == 0
                     ? 0.0
                     : book.starsSum / book.commentCount;

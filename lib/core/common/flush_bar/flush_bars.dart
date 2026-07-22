@@ -15,7 +15,7 @@ void errorFlushBar(BuildContext context, String message) {
     backgroundAlpha: 0.5,
     animationAsset: AppAnimations.errorState,
     duration: const Duration(seconds: 3),
-    padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 10),
+    padding: const EdgeInsets.only(left: 20, top: 5, bottom: 5, right: 10),
   );
 }
 
@@ -27,7 +27,7 @@ void successFlushBar(BuildContext context, String message) {
     backgroundAlpha: 0.55,
     animationAsset: AppAnimations.successCheck,
     duration: const Duration(seconds: 3),
-    padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 10),
+    padding: const EdgeInsets.only(left: 20, top: 5, bottom: 5, right: 10),
   );
 }
 
@@ -39,8 +39,8 @@ void addedToCartFlushBar(BuildContext context, String message) {
     backgroundAlpha: 0.55,
     animationAsset: AppAnimations.addToCart,
     duration: const Duration(seconds: 2),
-    padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 10),
-    iconPadding: EdgeInsets.zero,
+    padding: const EdgeInsets.only(left: 20, top: 5, bottom: 5, right: 10),
+    // iconPadding: EdgeInsets.all(10),
   );
 }
 
@@ -52,7 +52,7 @@ void technicalWorkFlushBar(BuildContext context, String message) {
     backgroundAlpha: 0.45,
     animationAsset: AppAnimations.workFuv,
     duration: const Duration(seconds: 3),
-    padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 10),
+    padding: const EdgeInsets.only(left: 20, top: 5, bottom: 5, right: 10),
   );
 }
 
@@ -249,8 +249,8 @@ class _BlurTopBannerState extends State<_BlurTopBanner>
                         Padding(
                           padding: widget.iconPadding,
                           child: SizedBox(
-                            width: 50,
-                            height: 50,
+                            width: 60,
+                            height: 60,
                             child: Lottie.asset(
                               widget.animationAsset,
                               repeat: false,

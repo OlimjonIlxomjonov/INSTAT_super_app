@@ -381,7 +381,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                     //   "import 'package:my_template/core/utils/constants/assets/app_animations.dart';",
                     // );
                     // addedToCartFlushBar(context, 'message');
-                    // technicalWorkFlushBar(context, 'message');
+                    // technicalWorkFlushBar(context, "import 'package:my_template/core/utils/constants/assets/app_animations.dart';");
                   },
                   icon: Icon(FlutterRemix.notification_2_line),
                 ),

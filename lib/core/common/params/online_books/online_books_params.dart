@@ -10,3 +10,14 @@ class BuyBookParams {
 
   BuyBookParams({required this.bookId, required this.paymentMethod});
 }
+
+class AddCommentParams {
+  final int bookId, stars;
+  final String bookDesc;
+
+  AddCommentParams({
+    required this.bookId,
+    required this.stars,
+    required this.bookDesc,
+  });
+}

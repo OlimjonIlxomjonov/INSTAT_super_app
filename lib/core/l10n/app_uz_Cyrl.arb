@@ -367,5 +367,6 @@
   "dayStatusDaysLeft": "{days} кун қолди",
   "showAllCount": "Барчасини кўриш ({count})",
   "questionNumberTemplate": "{number}-Савол",
-  "selectAtLeastOneBookMessage": "Харид қилиш учун камида битта китоб танланг"
+  "selectAtLeastOneBookMessage": "Харид қилиш учун камида битта китоб танланг",
+  "sessionExpiredMessage": "Сессия муддати тугади. Илтимос, қайтадан киринг."
 }

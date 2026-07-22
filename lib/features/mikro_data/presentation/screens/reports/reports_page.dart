@@ -44,7 +44,8 @@ class ReportsPage extends StatelessWidget {
               child: Row(children: _categories),
             ),
           ),
-          ReportsCardWg(),
+          //! Data
+          const ReportsCardWg(),
         ],
       ),
     );

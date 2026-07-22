@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_entity.dart';
@@ -131,22 +132,27 @@ class CourseFinalTestBloc
         ));
       } catch (e) {
         final isFaceError = e.toString().contains('no_face_found');
-        String errorMessage = isFaceError ? 'No Face Found' : 'Something went wrong. Please try again.';
+        final statusCode = e is DioException ? e.response?.statusCode : null;
+        final errorMessage = isFaceError
+            ? 'No Face Found'
+            : statusCode != null
+                ? 'Something went wrong. Status code: $statusCode'
+                : 'Something went wrong. Please try again.';
 
         emit(CourseFinalTestError(message: errorMessage));
 
-        // For face detection errors, restore the quiz state so UI stays visible
-        if (isFaceError) {
-          await Future.delayed(const Duration(milliseconds: 100));
-          // Recreate the loaded state to force a rebuild with button enabled for retry
-          emit(CourseFinalTestLoaded(
-            tests: _tests,
-            currentTestIndex: currentState.currentTestIndex,
-            currentOptions: currentState.currentOptions,
-            selectedOptionId: currentState.selectedOptionId,
-            isSubmitting: false,
-          ));
-        }
+        // Whatever the failure was (face detection, server error, network
+        // hiccup, etc.), the question and options must stay on screen so
+        // the user can just retry — only the error state briefly flashes
+        // by so the listener above can show it as a flushbar.
+        await Future.delayed(const Duration(milliseconds: 100));
+        emit(CourseFinalTestLoaded(
+          tests: _tests,
+          currentTestIndex: currentState.currentTestIndex,
+          currentOptions: currentState.currentOptions,
+          selectedOptionId: currentState.selectedOptionId,
+          isSubmitting: false,
+        ));
       }
     }
   }

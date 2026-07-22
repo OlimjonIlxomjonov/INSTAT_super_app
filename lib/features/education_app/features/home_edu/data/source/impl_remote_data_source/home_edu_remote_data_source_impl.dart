@@ -69,4 +69,25 @@ class HomeEduRemoteDataSourceImpl implements HomeEduRemoteDataSource {
       rethrow;
     }
   }
+
+  @override
+  Future<List<CourseModel>> fetchSimilarCourses({
+    required PerCourseParams params,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        "${ApiUrls.courses}${params.courseId}/${ApiUrls.similarCourses}",
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        final data = response.data as List;
+        return data.map((e) => CourseModel.fromJson(e)).toList();
+      } else {
+        throw Exception('Throw Exception (Else): ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("Catch: $e");
+      rethrow;
+    }
+  }
 }

@@ -32,8 +32,6 @@ import '../../../../../../../core/common/flush_bar/flush_bars.dart';
 import '../../../../../../../core/utils/widgets/comment_section/user_comments_wg.dart';
 import '../../../../../../../core/utils/widgets/open_mini_app/sub_bottom_sheet_opener.dart';
 import '../../../../../../education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/see_all_course_comments/see_all_course_comments.dart';
-import '../../bloc/popular_books/popular_books_bloc.dart';
-import '../../bloc/popular_books/popular_books_event.dart';
 
 class DetailedOnlineBookComponent extends StatefulWidget {
   final bool isBookBought, isOffline;
@@ -112,6 +110,7 @@ class _DetailedOnlineBookComponentState
       ),
       body: CustomScrollView(
         slivers: [
+          //! thumbnail
           SliverToBoxAdapter(
             child: DetailedOnlineBookHeaderWg(data: widget.data),
           ),

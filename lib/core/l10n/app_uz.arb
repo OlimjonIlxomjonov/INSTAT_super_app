@@ -454,5 +454,6 @@
       }
     }
   },
-  "selectAtLeastOneBookMessage": "Xarid qilish uchun kamida bitta kitob tanlang"
+  "selectAtLeastOneBookMessage": "Xarid qilish uchun kamida bitta kitob tanlang",
+  "sessionExpiredMessage": "Sessiya muddati tugadi. Iltimos, qaytadan kiring."
 }
