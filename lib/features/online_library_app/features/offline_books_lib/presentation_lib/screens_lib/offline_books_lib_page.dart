@@ -186,31 +186,34 @@ class _OfflineBooksLibPageState extends State<OfflineBooksLibPage> {
                       ),
                     );
                   }
-                  return SliverGrid.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 16,
-                          crossAxisSpacing: 16,
-                          childAspectRatio: 0.51,
-                        ),
-                    itemCount: 4,
-                    itemBuilder: (context, index) {
-                      return Skeletonizer(
-                        enabled: true,
-                        child: BookGridItem(
-                          id: 0,
-                          isSaved: false,
-                          type: BookCardType.library,
-                          title: "Loading...",
-                          author: 'Loading...',
-                          shelfNumber: 0,
-                          rowNumber: 0,
-                          imagePath: 'assets/images/temp_book.jpg',
-                          onTap: () {},
-                        ),
-                      );
-                    },
+                  return SliverPadding(
+                    padding: AppPadding.hAndV20x20(),
+                    sliver: SliverGrid.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 16,
+                            crossAxisSpacing: 16,
+                            childAspectRatio: 0.51,
+                          ),
+                      itemCount: 4,
+                      itemBuilder: (context, index) {
+                        return Skeletonizer(
+                          enabled: true,
+                          child: BookGridItem(
+                            id: 0,
+                            isSaved: false,
+                            type: BookCardType.library,
+                            title: "Loading...",
+                            author: 'Loading...',
+                            shelfNumber: 0,
+                            rowNumber: 0,
+                            imagePath: 'assets/images/temp_book.jpg',
+                            onTap: () {},
+                          ),
+                        );
+                      },
+                    ),
                   );
                 },
               ),

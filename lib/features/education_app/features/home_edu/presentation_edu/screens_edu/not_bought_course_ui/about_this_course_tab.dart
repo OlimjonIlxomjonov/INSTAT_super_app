@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
@@ -108,7 +109,15 @@ class _AboutThisCourseTabState extends State<AboutThisCourseTab>
             builder: (context, state) {
               if (state is SimilarCoursesLoaded) {
                 final courses = state.listEntity;
-                if (courses.isEmpty) return const SizedBox.shrink();
+                if (courses.isEmpty) {
+                  return Center(
+                    child: AppEmptyState(
+                      title: "O‘xshash kurslar topilmadi.",
+                      subtitle:
+                          "Hozircha ushbu mavzuga mos keladigan boshqa kurslar mavjud emas.",
+                    ),
+                  );
+                }
 
                 return ListView.builder(
                   scrollDirection: Axis.horizontal,

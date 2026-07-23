@@ -56,9 +56,9 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
 
               errorFlushBar(
                 context,
-                AppLocalizations.of(context)!.loginFailedWithStatus(
-                  statusCode ?? 'unknown',
-                ),
+                AppLocalizations.of(
+                  context,
+                )!.loginFailedWithStatus(statusCode ?? 'unknown'),
               );
 
               logger.e(error.response?.data);

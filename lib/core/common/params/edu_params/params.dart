@@ -37,8 +37,9 @@ class CourseFilesParams {
 
 class BuyCourseParams {
   final int courseId;
+  final String paymentMethod;
 
-  BuyCourseParams({required this.courseId});
+  BuyCourseParams({required this.courseId, required this.paymentMethod});
 }
 
 class SearchCoursesParams {

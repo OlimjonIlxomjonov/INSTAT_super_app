@@ -81,8 +81,10 @@ import 'package:my_template/features/mikro_data/domain/usecase/reports/reports_u
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/add_comment/add_comment_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/book_comments/book_comments_use_case.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/user_books/user_books_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/add_comment/add_comments_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_comments/book_comments_bloc.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/user_books/user_book_bloc.dart';
 import 'package:my_template/features/online_library_app/features/offline_books_lib/data/repo/offline_books_repo_impl.dart';
 import 'package:my_template/features/online_library_app/features/offline_books_lib/data/source/impl_remote_data_source/offline_books_remote_data_source_impl.dart';
 import 'package:my_template/features/online_library_app/features/offline_books_lib/data/source/remote_data_source/offline_books_remote_data_source.dart';
@@ -313,6 +315,8 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => SimilarCoursesUseCase(repository: sl()));
   //? Add Comments to the books
   sl.registerLazySingleton(() => AddCommentUseCase(repository: sl()));
+  //? User books
+  sl.registerLazySingleton(() => UserBooksUseCase(repository: sl()));
 
   //! {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -349,6 +353,7 @@ Future<void> setup() async {
     () => BookActionsBloc(
       saveDeleteBookUseCase: sl(),
       addToCartUseCase: sl(),
+      cartUseCase: sl(),
       webSocketService: sl(),
     ),
   );
@@ -410,4 +415,6 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => SimilarCoursesBloc(useCase: sl()));
   //? Add Comments to the books
   sl.registerLazySingleton(() => AddCommentsBloc(useCase: sl()));
+  //? User books
+  sl.registerLazySingleton(() => UserBookBloc(useCase: sl()));
 }

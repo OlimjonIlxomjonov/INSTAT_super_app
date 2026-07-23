@@ -116,4 +116,21 @@ class HomeLibRemoteDataSourceImpl implements HomeLibRemoteDataSource {
       rethrow;
     }
   }
+
+  @override
+  Future<BookListResponseModel> fetchUserBooks() async {
+    try {
+      final response = await _dioClient.get(ApiUrls.userBooks);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data;
+        logger.i(data);
+        return BookListResponseModel.fromJson(data);
+      } else {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
 }

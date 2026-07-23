@@ -41,4 +41,9 @@ class HomeLibRepoImpl implements HomeLibRepository {
   Future<void> addComment({required AddCommentParams params}) {
     return _remoteDataSource.addComment(params: params);
   }
+
+  @override
+  Future<BookListResponse> getUserBooks() {
+    return _remoteDataSource.fetchUserBooks();
+  }
 }

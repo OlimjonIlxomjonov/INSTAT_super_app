@@ -3,12 +3,16 @@ import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image/image.dart' as img;
 
+import '../utils/logger/logger.dart';
+
 class CameraService extends ChangeNotifier {
   CameraController? _controller;
   String? _lastCaptureBase64;
 
   bool get isReady => _controller?.value.isInitialized ?? false;
+
   CameraController? get controller => _controller;
+
   String? get lastCaptureBase64 => _lastCaptureBase64;
 
   Future<void> init() async {
@@ -30,18 +34,9 @@ class CameraService extends ChangeNotifier {
       try {
         await _controller!.initialize();
       } on CameraException {
-        // Some Android devices (CameraX) don't support a Preview +
-        // ImageCapture surface combination at `medium` resolution and throw
-        // "No supported surface combination is found" — retry at `low`,
-        // which uses a smaller/more universally supported surface size.
         try {
           await _controller!.dispose();
-        } catch (_) {
-          // A controller whose initialize() failed partway through was
-          // never fully bound on the CameraX side — disposing it can throw
-          // (releaseSurfaceProvider on a surface that was never set up).
-          // Safe to ignore; we're discarding this controller either way.
-        }
+        } catch (_) {}
         _controller = CameraController(
           frontCamera,
           ResolutionPreset.low,
@@ -53,7 +48,7 @@ class CameraService extends ChangeNotifier {
       await _controller!.setFlashMode(FlashMode.off);
       notifyListeners();
     } catch (e) {
-      print('Camera init error: $e');
+      logger.e('Camera init error: $e');
     }
   }
 
@@ -64,25 +59,37 @@ class CameraService extends ChangeNotifier {
       final XFile file = await _controller!.takePicture();
       final jpegBytes = await file.readAsBytes();
 
-      print('📸 Image captured (JPEG): ${jpegBytes.length} bytes');
+      logger.f('📸 Image captured (JPEG): ${jpegBytes.length} bytes');
 
       // Decode JPEG and encode as PNG
-      final image = img.decodeImage(jpegBytes);
+      var image = img.decodeImage(jpegBytes);
       if (image == null) {
-        print('❌ Failed to decode image');
+        logger.f('❌ Failed to decode image');
         return null;
       }
 
+      logger.f(
+        '🔎 sensorOrientation: ${_controller!.description.sensorOrientation}, '
+        'lensDirection: ${_controller!.description.lensDirection}',
+      );
+      logger.f(
+        '🔎 Decoded pixel buffer: ${image.width}x${image.height}, '
+        'exif orientation tag: ${image.exif.imageIfd.hasOrientation ? image.exif.imageIfd.orientation : 'none'}',
+      );
+
+      image = img.bakeOrientation(image);
+      logger.f('🔎 After bakeOrientation: ${image.width}x${image.height}');
+
       final pngBytes = img.encodePng(image);
-      print('📸 Converted to PNG: ${pngBytes.length} bytes');
+      logger.f('📸 Converted to PNG: ${pngBytes.length} bytes');
 
       _lastCaptureBase64 = 'data:image/png;base64,${base64Encode(pngBytes)}';
-      print('📸 Base64 length: ${_lastCaptureBase64!.length}');
+      logger.f('📸 Base64 length: ${_lastCaptureBase64!.length}');
 
       notifyListeners();
       return _lastCaptureBase64;
     } catch (e) {
-      print('❌ Capture error: $e');
+      logger.f('❌ Capture error: $e');
       return null;
     }
   }

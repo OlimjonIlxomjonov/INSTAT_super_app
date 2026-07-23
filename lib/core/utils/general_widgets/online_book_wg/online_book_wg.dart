@@ -257,7 +257,9 @@ class BookGridItem extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 6),
-        CustomLinearIndicatorWg(progressIndicator: progress),
+        // CustomLinearIndicatorWg expects a 0-100 value, while `progress`
+        // here is documented/passed as a 0.0-1.0 fraction.
+        CustomLinearIndicatorWg(progressIndicator: progress * 100),
       ],
     );
   }

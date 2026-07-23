@@ -18,4 +18,7 @@ abstract class HomeLibRepository {
 
   //! Add a Comment
   Future<void> addComment({required AddCommentParams params});
+
+  //! user bought books
+  Future<BookListResponse> getUserBooks();
 }

@@ -27,6 +27,7 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_comments/book_comments_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/user_books/user_book_bloc.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/presentation_lib/bloc/buy_book/buy_book_bloc.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/presentation_lib/bloc/cart/cart_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/academic_degree/academic_degree_bloc.dart';
@@ -136,6 +137,8 @@ class MyBlocProvider extends StatelessWidget {
         ),
         //! Add Comments to the books
         BlocProvider<AddCommentsBloc>(create: (_) => sl<AddCommentsBloc>()),
+        //! User books
+        BlocProvider<UserBookBloc>(create: (_) => sl<UserBookBloc>()),
       ],
       child: child,
     );

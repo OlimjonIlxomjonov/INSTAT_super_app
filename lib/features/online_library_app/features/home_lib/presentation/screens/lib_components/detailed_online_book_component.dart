@@ -381,10 +381,12 @@ class _DetailedOnlineBookComponentState
       my_template_book.BookActionsState
     >(
       builder: (context, state) {
-        final bool inCart = state.isBookInCart(
-          widget.data.id,
-          defaultValue: widget.data.isInCart,
-        );
+        final bool inCart =
+            !widget.isBookBought &&
+            state.isBookInCart(
+              widget.data.id,
+              defaultValue: widget.data.isInCart,
+            );
 
         return CustomBottomNavContainerWg(
           anotherButton: inCart
@@ -412,10 +414,7 @@ class _DetailedOnlineBookComponentState
           side: BorderSide(color: AppColors.redFailedTaskCard),
         ),
       ),
-      onLongPress: () {
-        AppRoute.go(BoughtBookOpenerWg());
-        technicalWorkFlushBar(context, 'Devloper Mode!');
-      },
+
       onPressed: () {
         context.read<my_template_book.BookActionsBloc>().add(
           my_template_book.ToggleCartBookEvent(

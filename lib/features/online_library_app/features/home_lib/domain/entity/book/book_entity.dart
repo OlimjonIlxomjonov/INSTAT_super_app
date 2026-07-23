@@ -21,6 +21,7 @@ class BookEntity {
   final bool isSaved;
   final bool isInCart;
   final int starsSum;
+  final int currentPage;
 
   BookEntity({
     required this.id,
@@ -41,6 +42,7 @@ class BookEntity {
     required this.orderCount,
     required this.commentCount,
     required this.starsSum,
+    required this.currentPage,
   });
 
   BookEntity copyWith({
@@ -62,6 +64,7 @@ class BookEntity {
     int? starsSum,
     int? orderCount,
     int? commentCount,
+    int? currentPage,
   }) {
     return BookEntity(
       id: id ?? this.id,
@@ -82,6 +85,7 @@ class BookEntity {
       orderCount: orderCount ?? this.orderCount,
       commentCount: commentCount ?? this.commentCount,
       starsSum: starsSum ?? this.starsSum,
+      currentPage: currentPage ?? this.currentPage,
     );
   }
 }

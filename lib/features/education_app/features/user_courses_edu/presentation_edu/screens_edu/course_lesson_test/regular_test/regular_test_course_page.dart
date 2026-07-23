@@ -18,6 +18,9 @@ import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_test/course_lesson_test_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_test/course_lesson_test_event.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_test/course_lesson_test_state.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_items/course_lesson_items_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_topics/course_lesson_topics_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/finish_lesson_test_dialog/finish_lesson_test_dialog_screen.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/shared_widgets/test_layout.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/shared_widgets/test_option_list_wg.dart';
@@ -43,6 +46,13 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
   late ConfettiController _confettiController;
   late CourseLessonTestBloc _bloc;
   late CameraService _cameraService;
+
+  // The bloc's own `isSubmitting` flag only flips once
+  // SubmitLessonTestAnswerEvent is dispatched — it says nothing about the
+  // camera-capture step beforehand, which is the slow part (JPEG decode +
+  // orientation bake + PNG encode). Without this, the button stays tappable
+  // during that window and multiple taps can fire concurrent captures.
+  bool _isCapturing = false;
 
   @override
   void initState() {
@@ -133,6 +143,27 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
           width: double.infinity,
           child: ElevatedButton(
             onPressed: () {
+              // CourseLessonTopicsBloc (block list) and CourseLessonItemsBloc
+              // (lessons within THIS block, which is what actually carries
+              // the lock/unlock flag per lesson) are both global singletons
+              // that cache per course/block for the whole app session.
+              // Finishing this lesson's test can unlock the next lesson in
+              // the same block, so force both to refetch instead of leaving
+              // the lesson list showing stale locked/unlocked state until
+              // the app is restarted.
+              context.read<CourseLessonTopicsBloc>().add(
+                CourseLessonTopicsEvent(
+                  params: CourseCategoryByIdParams(id: widget.courseId),
+                ),
+              );
+              context.read<CourseLessonItemsBloc>().add(
+                CourseLessonItemsEvent(
+                  params: CourseLessonItemsParams(
+                    courseId: widget.courseId,
+                    blockId: widget.blockId,
+                  ),
+                ),
+              );
               AppRoute.close();
               AppRoute.close(); // Close the test page context as well
             },
@@ -214,17 +245,27 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
                   _bloc.add(SelectLessonTestOptionEvent(optionId: id)),
             );
 
-            if (state.selectedOptionId != null && !state.isSubmitting) {
+            if (state.selectedOptionId != null &&
+                !state.isSubmitting &&
+                !_isCapturing) {
               onButtonTap = () async {
-                final image = await _cameraService.captureBase64();
-                if (image == null && mounted) {
-                  errorFlushBar(context, localization.cameraCaptureFailedMessage);
-                  return;
-                }
-                if (mounted) {
-                  context.read<CourseLessonTestBloc>().add(
-                    SubmitLessonTestAnswerEvent(proctorImage: image),
-                  );
+                setState(() => _isCapturing = true);
+                try {
+                  final image = await _cameraService.captureBase64();
+                  if (image == null && mounted) {
+                    errorFlushBar(
+                      context,
+                      localization.cameraCaptureFailedMessage,
+                    );
+                    return;
+                  }
+                  if (mounted) {
+                    context.read<CourseLessonTestBloc>().add(
+                      SubmitLessonTestAnswerEvent(proctorImage: image),
+                    );
+                  }
+                } finally {
+                  if (mounted) setState(() => _isCapturing = false);
                 }
               };
             }
@@ -273,6 +314,10 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
                     buttonText: buttonText,
                     onButtonTap: onButtonTap,
                     banner: banner,
+                    isSubmitting:
+                        _isCapturing ||
+                        (state is CourseLessonTestLoaded &&
+                            state.isSubmitting),
                   ),
                   if (_cameraService.isReady && _cameraService.controller != null)
                     CameraPreviewWidget(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -21,6 +22,7 @@ import 'package:my_template/features/education_app/features/home_edu/presentatio
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/not_bought_course_ui/course_plan_tab.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/about_course_features/about_cours_features_bloc.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_items/course_lesson_items_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_topics/course_lesson_topics_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/buy_course/buy_course_bloc.dart';
@@ -46,12 +48,14 @@ class DetailedCourseInfoPage extends StatefulWidget {
 }
 
 class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late TabController _tabController;
+  bool _awaitingPaymentReturn = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
       if (!mounted) return;
@@ -87,8 +91,20 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _tabController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed && _awaitingPaymentReturn) {
+      _awaitingPaymentReturn = false;
+      context.read<PerCourseBloc>().add(
+        PerCourseEvent(params: PerCourseParams(courseId: widget.data.id)),
+      );
+    }
   }
 
   @override
@@ -101,10 +117,8 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
     return BlocListener<BuyCourseBloc, BuyCourseState>(
       listener: (context, state) {
         if (state is BuyCourseLoaded) {
+          _awaitingPaymentReturn = true;
           _openPaymentUrl(state.payment.redirectUrl, context);
-          context.read<PerCourseBloc>().add(
-            PerCourseEvent(params: PerCourseParams(courseId: widget.data.id)),
-          );
         }
       },
       child: Scaffold(
@@ -117,14 +131,11 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
         ),
         bottomNavigationBar: Skeletonizer(
           enabled: isLoading,
-          child: AbsorbPointer(
-            absorbing: status == PaymentStatusEnum.pending,
-            child: Opacity(
-              opacity: status == PaymentStatusEnum.pending ? 0.5 : 1.0,
-              child: CustomBottomNavContainerWg(
-                onTap: () => _handleBottomNavTap(context, status),
-                buttonText: _buttonTextFor(context, status),
-              ),
+          child: Opacity(
+            opacity: status == PaymentStatusEnum.pending ? 0.6 : 1.0,
+            child: CustomBottomNavContainerWg(
+              onTap: () => _handleBottomNavTap(context, status),
+              buttonText: _buttonTextFor(context, status),
             ),
           ),
         ),
@@ -184,6 +195,18 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
   void _handleBottomNavTap(BuildContext context, PaymentStatusEnum status) {
     switch (status) {
       case PaymentStatusEnum.paid:
+        // CourseLessonTopicsBloc/CourseLessonItemsBloc are global singletons
+        // that cache per course/block for the whole app session. This same
+        // course may have already been previewed (and its topics/blocks
+        // cached) before it was bought, or a prior visit to the bought page
+        // may have cached lessons as locked — force both to refetch so the
+        // bought page never shows pre-purchase/stale locked state.
+        context.read<CourseLessonTopicsBloc>().add(
+          CourseLessonTopicsEvent(
+            params: CourseCategoryByIdParams(id: widget.data.id),
+          ),
+        );
+        context.read<CourseLessonItemsBloc>().add(ResetCourseLessonItemsEvent());
         FamilyNavigation.familyPush(
           showHandle: false,
           context,
@@ -194,7 +217,14 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
         );
         break;
       case PaymentStatusEnum.pending:
-        break; // no-op, matches original `null`
+        context.read<PerCourseBloc>().add(
+          PerCourseEvent(params: PerCourseParams(courseId: widget.data.id)),
+        );
+        technicalWorkFlushBar(
+          context,
+          AppLocalizations.of(context)!.checkingPaymentStatus,
+        );
+        break;
       case PaymentStatusEnum.notBought:
         onlineLibStyleCustomBottomSheetWg(
           context,
@@ -222,7 +252,7 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
       case 'paid':
         return PaymentStatusEnum.paid;
       case 'pending':
-        return PaymentStatusEnum.notBought;
+        return PaymentStatusEnum.pending;
       default:
         return PaymentStatusEnum.notBought;
     }

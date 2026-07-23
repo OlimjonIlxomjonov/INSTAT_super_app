@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image/image.dart' as img;
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_bloc.dart';
@@ -49,7 +50,25 @@ class MyIdConf {
         return false;
       }
 
-      final bytes = base64Decode(raw);
+      var bytes = base64Decode(raw);
+
+      // The myid SDK's own camera capture may not deliver pixels in the
+      // orientation they should display in — same class of bug as our own
+      // CameraService. Bake in the EXIF rotation (if any) before this ever
+      // reaches the backend.
+      final decoded = img.decodeImage(bytes);
+      if (decoded != null) {
+        logger.f(
+          '🔎 MyID image decoded: ${decoded.width}x${decoded.height}, '
+          'exif orientation tag: ${decoded.exif.imageIfd.hasOrientation ? decoded.exif.imageIfd.orientation : 'none'}',
+        );
+        final baked = img.bakeOrientation(decoded);
+        logger.f('🔎 After bakeOrientation: ${baked.width}x${baked.height}');
+        bytes = Uint8List.fromList(img.encodeJpg(baked));
+      } else {
+        logger.e('❌ Failed to decode MyID image for orientation check');
+      }
+
       final tempDir = await getTemporaryDirectory();
       final file = File("${tempDir.path}/myid_image.jpg");
       await file.writeAsBytes(bytes);

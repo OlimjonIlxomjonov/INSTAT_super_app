@@ -8,6 +8,7 @@ import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart'
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/similar_courses/similar_courses_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/similar_courses/similar_courses_state.dart';
 
+import '../../../../../../../../core/common/ui_states/app_empty_state.dart';
 import '../../../../../../../../core/utils/enums/app_enums.dart';
 import '../../../../../../../../core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import '../../../../../../../../core/utils/widgets/popular_courses_card/expanded_courses_card_wg.dart';
@@ -57,6 +58,15 @@ class _SeeAllSimilarCoursesState extends State<SeeAllSimilarCourses> {
                 builder: (context, state) {
                   if (state is SimilarCoursesLoaded) {
                     final data = state.listEntity;
+
+                    if (data.isEmpty) {
+                      return AppEmptyState(
+                        title: "O‘xshash kurslar topilmadi.",
+                        subtitle:
+                            "Hozircha ushbu mavzuga mos keladigan boshqa kurslar mavjud emas.",
+                      );
+                    }
+
                     return Column(
                       children: [
                         AppSearchbarWg(),

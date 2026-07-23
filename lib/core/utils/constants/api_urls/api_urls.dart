@@ -3,9 +3,14 @@ class ApiUrls {
 
   //! base url
   // static const baseUrl = 'https://test.avacoder.uz/api/';
+  // static const videoBase = 'https://test.avacoder.uz';
 
   //! main base url
   static const baseUrl = 'https://api1.instat.uz/api/';
+  static const videoBase = 'https://api1.instat.uz';
+
+  //! image base url
+  static const imageUrlBase = 'https://api1.instat.uz/media/';
 
   /// websocket
   //! library // debug
@@ -96,4 +101,7 @@ class ApiUrls {
 
   //? Similar Courses
   static const similarCourses = 'by-category/';
+
+  //? user books
+  static const userBooks = 'books/items/my/';
 }

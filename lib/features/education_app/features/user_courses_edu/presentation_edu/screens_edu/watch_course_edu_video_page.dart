@@ -9,6 +9,7 @@ import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
 import 'package:my_template/core/utils/app_utils.dart';
+import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
@@ -425,9 +426,12 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                             tileOverflow: TextOverflow.ellipsis,
                             tileLeading: null,
                             onTap: () async {
-                              final userState = context.read<UserMeBloc>().state;
+                              final userState = context
+                                  .read<UserMeBloc>()
+                                  .state;
                               final isVerified =
-                                  userState is UserMeLoaded && userState.entity.isVerified;
+                                  userState is UserMeLoaded &&
+                                  userState.entity.isVerified;
 
                               if (!isVerified) {
                                 errorFlushBar(
@@ -652,7 +656,7 @@ class _VideoAreaWidget extends StatelessWidget {
 class HlsProxyServer {
   HttpServer? _server;
   final String remoteBaseUrl =
-      'https://test.avacoder.uz'; // Updated to actual backend URL
+      ApiUrls.videoBase; // Updated to actual backend URL
   final String token;
 
   HlsProxyServer({required this.token});
