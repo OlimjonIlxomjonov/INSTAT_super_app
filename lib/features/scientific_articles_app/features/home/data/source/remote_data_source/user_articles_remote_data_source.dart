@@ -38,6 +38,8 @@ abstract class UserArticlesRemoteDataSource {
 
   Future<ReviewDetailModel> updateReview(ReviewParams params);
 
+  Future<void> createArticleOrder({required CreateArticleOrderParams params});
+
   Future<ReviewAuthorModel> createReviewAuthor(ReviewAuthorParams params);
 
   Future<ReviewAuthorModel> updateReviewAuthor(ReviewAuthorParams params);

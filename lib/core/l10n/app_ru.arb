@@ -369,5 +369,7 @@
   "showAllCount": "Показать все ({count})",
   "questionNumberTemplate": "Вопрос {number}",
   "selectAtLeastOneBookMessage": "Выберите хотя бы одну книгу для покупки",
-  "sessionExpiredMessage": "Срок сессии истёк. Пожалуйста, войдите снова."
+  "sessionExpiredMessage": "Срок сессии истёк. Пожалуйста, войдите снова.",
+  "foreignUserComingSoonTitle": "Скоро!",
+  "foreignUserComingSoonMessage": "Возможности приложения для иностранных пользователей скоро будут доступны."
 }

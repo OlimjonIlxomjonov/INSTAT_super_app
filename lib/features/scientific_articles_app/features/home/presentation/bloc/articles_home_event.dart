@@ -107,11 +107,25 @@ class RemoveLocalAuthorEvent extends ArticlesHomeEvent {
 }
 
 class SaveArticleDraftEvent extends ArticlesHomeEvent {
-  final String status;
   final Function()? onSuccess;
   final Function(String)? onError;
 
-  SaveArticleDraftEvent({required this.status, this.onSuccess, this.onError});
+  SaveArticleDraftEvent({this.onSuccess, this.onError});
+}
+
+/// Submitting for review is a payment action on the backend (create-order),
+/// not a plain status update — this is what actually transitions the review
+/// out of draft and creates its process log entry.
+class SubmitArticleForReviewEvent extends ArticlesHomeEvent {
+  final String paymentMethod;
+  final Function()? onSuccess;
+  final Function(String)? onError;
+
+  SubmitArticleForReviewEvent({
+    required this.paymentMethod,
+    this.onSuccess,
+    this.onError,
+  });
 }
 
 class CreateReviewAuthorEvent extends ArticlesHomeEvent {

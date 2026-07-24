@@ -199,6 +199,26 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
   }
 
   @override
+  Future<void> createArticleOrder({
+    required CreateArticleOrderParams params,
+  }) async {
+    try {
+      final response = await _dioClient.post(
+        '${ApiUrls.userArticles}${params.reviewId}/create-order/',
+        data: {'payment_method': params.paymentMethod},
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
   Future<ReviewAuthorModel> createReviewAuthor(
     ReviewAuthorParams params,
   ) async {

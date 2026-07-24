@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/article_params/article_params.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/create_article_order_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/create_review_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/update_review_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_authors/create_review_author_use_case.dart';
@@ -18,6 +19,7 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
   final UpdateReviewAuthorUseCase updateReviewAuthorUseCase;
   final ReviewAuthorsUseCase getReviewAuthorsUseCase;
   final ReviewDetailUseCase reviewDetailUseCase;
+  final CreateArticleOrderUseCase createArticleOrderUseCase;
 
   AddArticleBloc({
     required this.createReviewUseCase,
@@ -26,6 +28,7 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
     required this.updateReviewAuthorUseCase,
     required this.getReviewAuthorsUseCase,
     required this.reviewDetailUseCase,
+    required this.createArticleOrderUseCase,
   }) : super(const AddArticleState()) {
     on<ResetAddArticleEvent>((event, emit) {
       emit(const AddArticleState());
@@ -185,54 +188,40 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
     on<SaveArticleDraftEvent>((event, emit) async {
       emit(state.copyWith(isSaving: true, isSuccess: false, errorMessage: null));
       try {
-        int finalReviewId = state.reviewId ?? 0;
+        final finalReviewId = await _saveReviewFields(state);
+        final saved = await getReviewAuthorsUseCase(finalReviewId);
 
-        if (finalReviewId == 0) {
-          final reviewParams = ReviewParams(
-            title: state.title,
-            articleType: state.articleType ?? 1,
-            journalSection: state.journalSection ?? 1,
-            annotationUz: state.annotationUz,
-            annotationRu: state.annotationRu,
-            annotationEn: state.annotationEn,
-            udkCode: state.udkCode,
-            status: event.status,
-            language: state.language,
-            keywords: state.keywords,
-          );
-          final response = await createReviewUseCase(reviewParams);
-          finalReviewId = response.id;
-        } else {
-          final reviewParams = ReviewParams(
-            id: finalReviewId,
-            title: state.title,
-            articleType: state.articleType ?? 1,
-            journalSection: state.journalSection ?? 1,
-            annotationUz: state.annotationUz,
-            annotationRu: state.annotationRu,
-            annotationEn: state.annotationEn,
-            udkCode: state.udkCode,
-            status: event.status,
-            language: state.language,
-            keywords: state.keywords,
-          );
-          await updateReviewUseCase(reviewParams);
-        }
+        emit(state.copyWith(
+          reviewId: finalReviewId,
+          localAuthors: const [],
+          savedAuthors: saved,
+          isSaving: false,
+          isSuccess: true,
+          isEditMode: state.isEditMode || finalReviewId > 0,
+        ));
+        event.onSuccess?.call();
+      } catch (e) {
+        emit(state.copyWith(isSaving: false, errorMessage: e.toString()));
+        event.onError?.call(e.toString());
+      }
+    });
 
-        for (var author in state.localAuthors) {
-          final authorParams = ReviewAuthorParams(
-            firstName: author.firstName,
-            lastName: author.lastName,
-            review: finalReviewId,
-            academicDegree: author.academicDegree,
-            address: author.address,
-            organization: author.organization,
-            email: author.email,
-            phoneNumber: author.phoneNumber,
-            orcidCode: author.orcidCode,
-          );
-          await createReviewAuthorUseCase(authorParams);
-        }
+    on<SubmitArticleForReviewEvent>((event, emit) async {
+      emit(state.copyWith(isSaving: true, isSuccess: false, errorMessage: null));
+      try {
+        final finalReviewId = await _saveReviewFields(state);
+
+        // This is the actual "submit for review" action — it's what
+        // transitions status away from draft and creates the process log
+        // entry server-side, matching exactly what the website does.
+        // Sending `status: 'in_review'` directly on the plain update call
+        // above would just silently set the field with no side effects.
+        await createArticleOrderUseCase(
+          CreateArticleOrderParams(
+            reviewId: finalReviewId,
+            paymentMethod: event.paymentMethod,
+          ),
+        );
 
         final saved = await getReviewAuthorsUseCase(finalReviewId);
 
@@ -250,6 +239,52 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
         event.onError?.call(e.toString());
       }
     });
+  }
+
+  /// Creates the review (as draft) if it doesn't exist yet, or updates it
+  /// otherwise, then saves any not-yet-persisted local authors. Status is
+  /// always sent as 'draft' here — the client never sets any other status
+  /// directly; submitting for review happens through create-order instead.
+  Future<int> _saveReviewFields(AddArticleState state) async {
+    int finalReviewId = state.reviewId ?? 0;
+
+    final reviewParams = ReviewParams(
+      id: finalReviewId == 0 ? null : finalReviewId,
+      title: state.title,
+      articleType: state.articleType ?? 1,
+      journalSection: state.journalSection ?? 1,
+      annotationUz: state.annotationUz,
+      annotationRu: state.annotationRu,
+      annotationEn: state.annotationEn,
+      udkCode: state.udkCode,
+      status: 'draft',
+      language: state.language,
+      keywords: state.keywords,
+    );
+
+    if (finalReviewId == 0) {
+      final response = await createReviewUseCase(reviewParams);
+      finalReviewId = response.id;
+    } else {
+      await updateReviewUseCase(reviewParams);
+    }
+
+    for (var author in state.localAuthors) {
+      final authorParams = ReviewAuthorParams(
+        firstName: author.firstName,
+        lastName: author.lastName,
+        review: finalReviewId,
+        academicDegree: author.academicDegree,
+        address: author.address,
+        organization: author.organization,
+        email: author.email,
+        phoneNumber: author.phoneNumber,
+        orcidCode: author.orcidCode,
+      );
+      await createReviewAuthorUseCase(authorParams);
+    }
+
+    return finalReviewId;
   }
 
   static List<String> _parseKeywords(String raw) {

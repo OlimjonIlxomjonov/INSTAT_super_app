@@ -103,6 +103,9 @@ import 'package:my_template/features/online_library_app/features/home_lib/data/s
 import 'package:my_template/features/online_library_app/features/home_lib/data/sources/remote_data_source/book_websocket_service.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/data/sources/remote_data_source/home_lib_remote_data_source.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/repository/home_lib_repository.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/fetch_book_pages_count_use_case.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/fetch_book_pages_use_case.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/update_book_current_page_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/get_popular_books_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/save_delete_book_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/add_to_cart_use_case.dart';
@@ -148,6 +151,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_authors/review_authors_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_detail/review_detail_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/create_article_order_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/create_review_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/update_review_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_authors/create_review_author_use_case.dart';
@@ -266,6 +270,11 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => SaveDeleteBookUseCase(repository: sl()));
   sl.registerLazySingleton(() => AddToCartUseCase(repository: sl()));
   sl.registerLazySingleton(() => CartUseCase(repository: sl()));
+  sl.registerLazySingleton(() => FetchBookPagesCountUseCase(repository: sl()));
+  sl.registerLazySingleton(() => FetchBookPagesUseCase(repository: sl()));
+  sl.registerLazySingleton(
+    () => UpdateBookCurrentPageUseCase(repository: sl()),
+  );
   sl.registerLazySingleton(() => LeaderBoardUseCase(repository: sl()));
   sl.registerLazySingleton(() => SearchStudentsUseCase(repository: sl()));
   sl.registerLazySingleton(() => AvatarUseCase(repository: sl()));
@@ -284,6 +293,7 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => UdkUseCase(repository: sl()));
   sl.registerLazySingleton(() => CreateReviewUseCase(repository: sl()));
   sl.registerLazySingleton(() => UpdateReviewUseCase(repository: sl()));
+  sl.registerLazySingleton(() => CreateArticleOrderUseCase(repository: sl()));
   sl.registerLazySingleton(() => CreateReviewAuthorUseCase(repository: sl()));
   sl.registerLazySingleton(() => UpdateReviewAuthorUseCase(repository: sl()));
   //? drop downs
@@ -384,6 +394,7 @@ Future<void> setup() async {
       updateReviewAuthorUseCase: sl(),
       getReviewAuthorsUseCase: sl(),
       reviewDetailUseCase: sl(),
+      createArticleOrderUseCase: sl(),
     ),
   );
   //? Drop Downs

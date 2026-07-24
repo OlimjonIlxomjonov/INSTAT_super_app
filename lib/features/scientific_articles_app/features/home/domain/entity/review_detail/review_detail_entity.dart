@@ -46,19 +46,25 @@ class ReviewDetailEntity {
 
   List<String> get keywordsParsed => List<String>.from(jsonDecode(keywords));
 
+  // Kept in sync with UserArticlesEntity.articleStatus — the two entities
+  // represent the same backend `status` field and must map it identically.
   ArticleStatus get articleStatus {
     switch (status) {
-      case 'confirmed':
-      case 'approved':
-      case 'published':
-        return ArticleStatus.confirmed;
+      case 'pending':
+        return ArticleStatus.pending;
       case 'rejected':
       case 'failed':
         return ArticleStatus.rejected;
+      case 'draft':
+        return ArticleStatus.draft;
+      case 'published':
+      case 'confirmed':
+      case 'approved':
+        return ArticleStatus.confirmed;
       case 'in_review':
-      case 'pending':
+        return ArticleStatus.inReview;
       default:
-        return ArticleStatus.pending;
+        return ArticleStatus.draft;
     }
   }
 }

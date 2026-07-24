@@ -1,6 +1,8 @@
 import 'package:my_template/core/common/params/online_books/online_books_params.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/entity/comments/comments_response.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_list_response.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_page_entity.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_pages_count_entity.dart';
 
 abstract class HomeLibRepository {
   Future<BookListResponse> getPopularBooks();
@@ -21,4 +23,13 @@ abstract class HomeLibRepository {
 
   //! user bought books
   Future<BookListResponse> getUserBooks();
+
+  //! online book reader
+  Future<BookPagesCountEntity> getBookPagesCount(int bookId);
+
+  Future<List<BookPageEntity>> getBookPages({required BookPagesParams params});
+
+  Future<void> updateBookCurrentPage({
+    required UpdateBookCurrentPageParams params,
+  });
 }

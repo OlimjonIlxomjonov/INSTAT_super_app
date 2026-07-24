@@ -2,6 +2,8 @@ import 'package:my_template/core/common/params/online_books/online_books_params.
 import 'package:my_template/features/education_app/features/home_edu/domain/entity/comments/comments_response.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/data/sources/remote_data_source/home_lib_remote_data_source.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_list_response.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_page_entity.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_pages_count_entity.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/repository/home_lib_repository.dart';
 
 class HomeLibRepoImpl implements HomeLibRepository {
@@ -45,5 +47,22 @@ class HomeLibRepoImpl implements HomeLibRepository {
   @override
   Future<BookListResponse> getUserBooks() {
     return _remoteDataSource.fetchUserBooks();
+  }
+
+  @override
+  Future<BookPagesCountEntity> getBookPagesCount(int bookId) {
+    return _remoteDataSource.fetchBookPagesCount(bookId);
+  }
+
+  @override
+  Future<List<BookPageEntity>> getBookPages({required BookPagesParams params}) {
+    return _remoteDataSource.fetchBookPages(params: params);
+  }
+
+  @override
+  Future<void> updateBookCurrentPage({
+    required UpdateBookCurrentPageParams params,
+  }) {
+    return _remoteDataSource.updateBookCurrentPage(params: params);
   }
 }

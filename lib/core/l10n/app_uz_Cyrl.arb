@@ -369,5 +369,7 @@
   "showAllCount": "Барчасини кўриш ({count})",
   "questionNumberTemplate": "{number}-Савол",
   "selectAtLeastOneBookMessage": "Харид қилиш учун камида битта китоб танланг",
-  "sessionExpiredMessage": "Сессия муддати тугади. Илтимос, қайтадан киринг."
+  "sessionExpiredMessage": "Сессия муддати тугади. Илтимос, қайтадан киринг.",
+  "foreignUserComingSoonTitle": "Тез орада!",
+  "foreignUserComingSoonMessage": "Хорижий фойдаланувчилар учун илова имкониятлари тез орада ишга туширилади."
 }

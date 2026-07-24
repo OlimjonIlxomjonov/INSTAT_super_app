@@ -27,8 +27,14 @@ class ReviewDetailModel extends ReviewDetailEntity {
     return ReviewDetailModel(
       id: json['id'] ?? 0,
       title: json['title'] ?? '',
-      articleType: json['article_type'] ?? 0,
-      journalSection: json['journal_section'] ?? 0,
+      // Some endpoints (e.g. create) resolve these to their display name
+      // string instead of returning the id they were created with — only
+      // trust it when it's actually an int, otherwise there's no id to
+      // recover from a name alone.
+      articleType: json['article_type'] is int ? json['article_type'] : 0,
+      journalSection: json['journal_section'] is int
+          ? json['journal_section']
+          : 0,
       annotationUz: json['annotation_uz'],
       annotationRu: json['annotation_ru'],
       annotationEn: json['annotation_en'],

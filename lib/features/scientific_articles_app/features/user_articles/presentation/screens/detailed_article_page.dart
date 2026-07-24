@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/params/article_params/article_params.dart';
+import 'package:my_template/core/common/ui_states/app_empty_state.dart';
+import 'package:my_template/core/utils/constants/assets/app_animations.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_process/article_process_bloc.dart';
@@ -132,6 +134,16 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
       localization.wizardHeaderArticleInfo,
       localization.processTab,
     ];
+
+    // widget.status is frozen at the moment this page was opened — after
+    // editing/submitting from within it (e.g. draft -> in_review), nothing
+    // would ever update it. Prefer the live ReviewDetailBloc status once
+    // it's loaded, and only fall back to the constructor value before that.
+    final reviewDetailState = context.watch<ReviewDetailBloc>().state;
+    final effectiveStatus = reviewDetailState is ReviewDetailLoaded
+        ? reviewDetailState.response.articleStatus
+        : widget.status;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -229,7 +241,7 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
                                       ),
                                       const Spacer(),
                                       ArticlesStatusCheckWg(
-                                        status: widget.status,
+                                        status: effectiveStatus,
                                       ),
                                     ],
                                   ),
@@ -309,6 +321,21 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
                         }).toList(),
                       );
                     }
+                    if (state is ArticleProcessError) {
+                      // Never surface the raw backend error to the user —
+                      // just a generic, localized "couldn't load" message.
+                      return SliverToBoxAdapter(
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 48),
+                            child: AppEmptyState(
+                              animationAsset: AppAnimations.errorState,
+                              title: localization.detailsLoadError,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
                     return SliverToBoxAdapter(child: SizedBox.shrink());
                   },
                 ),
@@ -326,7 +353,7 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
           ),
         ],
       ),
-      bottomNavigationBar: widget.status == ArticleStatus.draft
+      bottomNavigationBar: effectiveStatus == ArticleStatus.draft
           ? CustomBottomNavContainerWg(
               leadingIcon: IconlyLight.edit,
               buttonText: localization.edit,

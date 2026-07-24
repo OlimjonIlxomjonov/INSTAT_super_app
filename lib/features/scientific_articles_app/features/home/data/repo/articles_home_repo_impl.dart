@@ -75,6 +75,11 @@ class ArticlesHomeRepoImpl implements ArticlesHomeRepository {
   }
 
   @override
+  Future<void> createArticleOrder({required CreateArticleOrderParams params}) {
+    return remoteDataSource.createArticleOrder(params: params);
+  }
+
+  @override
   Future<ReviewAuthorEntity> createReviewAuthor(ReviewAuthorParams params) {
     return remoteDataSource.createReviewAuthor(params);
   }

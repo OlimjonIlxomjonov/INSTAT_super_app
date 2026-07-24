@@ -10,6 +10,8 @@ import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/home_event.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_state.dart';
+import 'package:my_template/features/main_app/home/presentation/screens/foreign_user_coming_soon_page.dart';
 import 'package:my_template/features/mikro_data/presentation/mikro_data_bottom_nav_bar.dart';
 import 'package:my_template/features/scientific_articles_app/features/articles_bottom_nav_bar.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
@@ -128,6 +130,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final userMeState = context.watch<UserMeBloc>().state;
+    if (userMeState is UserMeLoaded && !userMeState.entity.isResident) {
+      return const ForeignUserComingSoonPage();
+    }
+
     /// DEPENDING ON SCREEN SIZE & Orientation
     return Responsive(
       mobile: Scaffold(

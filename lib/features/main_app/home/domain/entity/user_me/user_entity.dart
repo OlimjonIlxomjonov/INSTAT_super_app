@@ -10,6 +10,7 @@ class UserEntity {
   final List<UserGroupsEntity> groups;
   final bool isSuperuser;
   final bool isVerified;
+  final bool isResident;
 
   const UserEntity({
     required this.id,
@@ -21,5 +22,6 @@ class UserEntity {
     required this.groups,
     required this.isSuperuser,
     required this.isVerified,
+    required this.isResident,
   });
 }

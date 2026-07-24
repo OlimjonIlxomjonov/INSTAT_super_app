@@ -433,7 +433,7 @@ class _DetailedOnlineBookComponentState
     bool inCart,
   ) {
     if (widget.isBookBought) {
-      AppRoute.go(const BoughtBookOpenerWg());
+      AppRoute.go(BoughtBookOpenerWg(bookId: widget.data.id));
       return;
     }
 

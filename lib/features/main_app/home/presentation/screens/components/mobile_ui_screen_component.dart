@@ -363,7 +363,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
             onTap: () {
               openMiniAppSheetFamily(
                 showHandler: false,
-                enableDrag: false,
+                enableDrag: true,
                 context,
                 child: const UserArticlesPage(),
               );

@@ -10,6 +10,7 @@ import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
+import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
@@ -243,11 +244,19 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
         child: SizedBox(
           width: double.infinity,
           child: ElevatedButton.icon(
-            onPressed: () {
-              FamilyNavigation.familyPush(
+            onPressed: () async {
+              await openMiniAppSheetFamily(
                 context,
-                AddArticlePage(),
-                showHandle: false,
+                child: const AddArticlePage(),
+                enableDrag: false,
+                showHandler: false,
+              );
+              if (!mounted) return;
+              context.read<UserArticlesBloc>().add(
+                UserArticlesEvent(
+                  status: articleStatus[_selectedIndex],
+                  search: '',
+                ),
               );
             },
             icon: Icon(Icons.add),

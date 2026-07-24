@@ -104,4 +104,7 @@ class ApiUrls {
 
   //? user books
   static const userBooks = 'books/items/my/';
+
+  //! online book reader — page images require auth, unlike plain /media/ files
+  static String bookPageImageUrl(int pageId) => '${baseUrl}book-pages/$pageId';
 }

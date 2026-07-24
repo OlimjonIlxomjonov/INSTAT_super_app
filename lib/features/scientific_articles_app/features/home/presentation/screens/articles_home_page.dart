@@ -31,7 +31,7 @@ class ArticlesHomePage extends StatelessWidget {
   void _openUserArticlesPage(BuildContext context) {
     openMiniAppSheetFamily(
       showHandler: false,
-      enableDrag: false,
+      enableDrag: true,
       context,
       child: const UserArticlesPage(),
     );

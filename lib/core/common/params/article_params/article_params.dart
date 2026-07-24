@@ -7,6 +7,13 @@ class ArticleProcessParams {
   ArticleProcessParams({required this.articleId});
 }
 
+class CreateArticleOrderParams {
+  final int reviewId;
+  final String paymentMethod;
+
+  CreateArticleOrderParams({required this.reviewId, required this.paymentMethod});
+}
+
 class ArticleEditionsParams {
   final String status;
 

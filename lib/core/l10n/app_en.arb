@@ -369,5 +369,7 @@
   "showAllCount": "Show all ({count})",
   "questionNumberTemplate": "Question {number}",
   "selectAtLeastOneBookMessage": "Select at least one book to purchase",
-  "sessionExpiredMessage": "Your session has expired. Please log in again."
+  "sessionExpiredMessage": "Your session has expired. Please log in again.",
+  "foreignUserComingSoonTitle": "Coming soon!",
+  "foreignUserComingSoonMessage": "App features for foreign users will be available soon."
 }

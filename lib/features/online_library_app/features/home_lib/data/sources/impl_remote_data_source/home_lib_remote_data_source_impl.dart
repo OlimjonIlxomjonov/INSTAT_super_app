@@ -4,6 +4,8 @@ import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/features/education_app/features/home_edu/data/model/comments/comments_response_model.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/data/models/book/book_list_response_model.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/data/models/book/book_page_model.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/data/models/book/book_pages_count_model.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/data/sources/remote_data_source/home_lib_remote_data_source.dart';
 
 class HomeLibRemoteDataSourceImpl implements HomeLibRemoteDataSource {
@@ -131,6 +133,71 @@ class HomeLibRemoteDataSourceImpl implements HomeLibRemoteDataSource {
     } catch (e) {
       logger.e(e);
       rethrow;
+    }
+  }
+
+  @override
+  Future<BookPagesCountModel> fetchBookPagesCount(int bookId) async {
+    try {
+      final response = await _dioClient.get(
+        'books/$bookId/pages-count/',
+        queryParams: {'book_id': bookId},
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return BookPagesCountModel.fromJson(response.data);
+      } else {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<BookPageModel>> fetchBookPages({
+    required BookPagesParams params,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        'books/${params.bookId}/pages/',
+        queryParams: {
+          'book_id': params.bookId,
+          'page_number': params.pageNumber,
+        },
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        final data = response.data as List;
+        return data.map((e) => BookPageModel.fromJson(e)).toList();
+      } else {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateBookCurrentPage({
+    required UpdateBookCurrentPageParams params,
+  }) async {
+    try {
+      // book_id is sent as a string here to match the exact shape the
+      // website already sends — the backend may be strict about it.
+      final response = await _dioClient.post(
+        'books/${params.bookId}/current-page/',
+        data: {
+          'book_id': params.bookId.toString(),
+          'current_page': params.currentPage,
+        },
+      );
+      logger.i(response.data);
+    } catch (e) {
+      // Fire-and-forget: never let a failed progress update disrupt reading.
+      logger.e(e);
     }
   }
 }

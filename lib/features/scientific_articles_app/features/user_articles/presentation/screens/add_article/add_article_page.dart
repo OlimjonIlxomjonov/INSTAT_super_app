@@ -7,18 +7,22 @@ import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/general_widgets/confirm_dialog/confirm_dialog_wg.dart';
 import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
+import 'package:my_template/core/utils/general_widgets/online_lib_style_custom_bottom_sheet/online_lib_style_custom_bottom_sheet_wg.dart';
 import 'package:my_template/core/utils/general_widgets/simple_btn_container_wg/simple_btn_container_wg.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/features/scientific_articles_app/dummy_data_source/dummy_data_source_export.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/add_article_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/add_article_state.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_process/article_process_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_detail/review_detail_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/add_article/page_view_screens/article_add_author_view.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/add_article/page_view_screens/article_annotation_view.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/add_article/page_view_screens/article_info_summerize_view.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/add_article/page_view_screens/article_info_view.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/add_article/page_view_screens/articles_main_files_view.dart';
+import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/widgets/article_payment_options_wg.dart';
 
 class AddArticlePage extends StatefulWidget {
   /// When set, opens the wizard in edit mode and pre-fills from GET reviews/{id}/.
@@ -54,7 +58,6 @@ class _AddArticlePageState extends State<AddArticlePage> {
     final localization = AppLocalizations.of(context)!;
     context.read<AddArticleBloc>().add(
       SaveArticleDraftEvent(
-        status: 'draft',
         onSuccess: () {
           if (mounted) {
             successFlushBar(
@@ -76,19 +79,40 @@ class _AddArticlePageState extends State<AddArticlePage> {
 
   void _submitArticle(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
-    context.read<AddArticleBloc>().add(
-      SaveArticleDraftEvent(
-        status: 'in_review',
-        onSuccess: () {
-          if (mounted) {
-            showSuccessDialog(
-              context,
-              title: localization.articleSubmitted,
-              description: localization.articleSubmittedDescription,
-              onDismiss: () => FamilyNavigation.familyClose(context),
-            );
-          }
-        },
+    final bloc = context.read<AddArticleBloc>();
+    // Submitting is a payment action (create-order), not a plain status
+    // update — pick a method, same as buying a book/course.
+    onlineLibStyleCustomBottomSheetWg(
+      context,
+      headerTitle: localization.paymentTypeTitle,
+      child: BlocProvider.value(
+        value: bloc,
+        child: ArticlePaymentOptionsWg(
+          onSuccess: () {
+            // DetailedArticlePage (which this wizard was opened on top of,
+            // for edits) reads these same global blocs but has no way of
+            // knowing the review just changed — without this it keeps
+            // showing draft/edit UI even though the backend already moved
+            // it to in_review.
+            final reviewId = bloc.state.reviewId;
+            if (reviewId != null && reviewId != 0) {
+              context.read<ReviewDetailBloc>().add(
+                ReviewDetailEvent(reviewId: reviewId),
+              );
+              context.read<ArticleProcessBloc>().add(
+                ArticleProcessEvent(articleId: reviewId),
+              );
+            }
+            if (mounted) {
+              showSuccessDialog(
+                context,
+                title: localization.articleSubmitted,
+                description: localization.articleSubmittedDescription,
+                onDismiss: () => FamilyNavigation.familyClose(context),
+              );
+            }
+          },
+        ),
       ),
     );
   }
