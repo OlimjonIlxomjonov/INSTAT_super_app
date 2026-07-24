@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
+import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
@@ -30,6 +31,8 @@ class StatsEduPage extends StatefulWidget {
 }
 
 class _StatsEduPageState extends State<StatsEduPage> {
+  final imageBaseUrl = ApiUrls.imageUrlBase;
+
   @override
   void initState() {
     super.initState();
@@ -59,9 +62,7 @@ class _StatsEduPageState extends State<StatsEduPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBarWg(
-        myTitle: AppLocalizations.of(context)!.usersTitle,
-      ),
+      appBar: CustomAppBarWg(myTitle: AppLocalizations.of(context)!.usersTitle),
       body: CustomRefreshIndicator(
         onRefresh: () async {
           context.read<LeaderBoardBloc>().add(LeaderBoardEvent());
@@ -103,14 +104,14 @@ class _StatsEduPageState extends State<StatsEduPage> {
                                 .take(3)
                                 .map(
                                   (e) => e.avatar != null
-                                      ? 'https://test.avacoder.uz${e.avatar}'
+                                      ? 'https://api1.instat.uz${e.avatar}'
                                       : null,
                                 )
                                 .toList(),
                             onTap: (rank) {
                               final item = data[rank];
                               final String? thumb = item.avatar != null
-                                  ? 'https://test.avacoder.uz${item.avatar}'
+                                  ? 'https://api1.instat.uz${item.avatar}'
                                   : null;
                               final name =
                                   '${item.firstName.capitalize()} ${item.lastName.capitalize()}';
@@ -129,7 +130,7 @@ class _StatsEduPageState extends State<StatsEduPage> {
                       ...List.generate(data.length, (index) {
                         final item = data[index];
                         final String? thumbnail = item.avatar != null
-                            ? 'https://test.avacoder.uz${item.avatar}'
+                            ? 'https://api1.instat.uz${item.avatar}'
                             : null;
                         final fullName =
                             '${item.firstName.capitalize()} ${item.lastName.capitalize()}';

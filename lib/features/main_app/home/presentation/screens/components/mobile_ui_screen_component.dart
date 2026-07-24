@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/placeholder/banner_placeholder.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
@@ -14,6 +13,7 @@ import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/general_widgets/online_book_wg/online_book_wg.dart';
+import 'package:my_template/core/utils/widgets/active_books/active_books_with_bloc.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/core/utils/widgets/user_articles_with_bloc/user_articles_with_bloc_wg.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
@@ -33,8 +33,11 @@ import 'package:my_template/features/main_app/home/presentation/widgets/popular_
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_event.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_state.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/user_books/user_book_bloc.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/user_books/user_books_event.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/detailed_online_book_component.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/similar_onilne_books_component.dart';
+import 'package:my_template/features/online_library_app/features/online_lib_bottom_nav_bar.dart';
 
 import '../../../../../../core/common/test_mode_banner/test_mode_banner.dart';
 import '../../../../../scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
@@ -100,12 +103,25 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
     context.read<UserArticlesBloc>().add(
       UserArticlesEvent(status: 'all', search: ''),
     );
+    context.read<UserBookBloc>().add(UserBooksEvent());
   }
 
   @override
   void dispose() {
     _connectivitySub?.cancel();
     super.dispose();
+  }
+
+  /// Measures the real rendered height of a single line of text in [style],
+  /// accounting for both the app's own responsive font scaling and the
+  /// device's accessibility text scale — instead of guessing a multiplier.
+  double _measureLineHeight(BuildContext context, TextStyle style) {
+    final painter = TextPainter(
+      text: TextSpan(text: 'Ag', style: style),
+      textDirection: TextDirection.ltr,
+      textScaler: MediaQuery.textScalerOf(context),
+    )..layout();
+    return painter.height;
   }
 
   void _goToAllCourses(BuildContext context) {
@@ -189,7 +205,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
         sliver: SliverToBoxAdapter(child: BannerPlaceholder()),
       ),
 
-      /// ACTIVE COURSES
+      //! ACTIVE COURSES
       ActiveCoursesWithBlocWg(
         onSeeAll: () => openMiniAppSheetFamily(
           isTransparent: false,
@@ -211,19 +227,40 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
         ),
       ),
 
-      /// EDU POPULAR COURSES
+      //! EDU POPULAR COURSES
       SliverToBoxAdapter(child: PopularWithBlocWg()),
+
+      //! Active Books
+      SliverPadding(
+        padding: const .symmetric(horizontal: 20),
+        sliver: SliverToBoxAdapter(
+          child: ActiveBooksWithBloc(
+            onTap: () => openMiniAppSheetFamily(
+              context,
+              showHandler: false,
+              child: OnlineLibBottomNavBar(openPageByIndex: 1),
+            ),
+          ),
+        ),
+      ),
 
       /// LIBRARY POPULAR BOOKS
       BlocBuilder<PopularBooksBloc, PopularBooksState>(
         builder: (context, state) {
           final cardWidth = MediaQuery.sizeOf(context).width * 0.46;
-          final textScaler = MediaQuery.textScalerOf(context);
-          final titleLineHeight =
-              textScaler.scale(15) *
-              1.3; // line height multiplier for your font
-          final authorLineHeight = textScaler.scale(13) * 1.3;
-          final priceLineHeight = textScaler.scale(14) * 1.3;
+
+          final titleLineHeight = _measureLineHeight(
+            context,
+            AppTextStyles.source.medium(fontSize: 15),
+          );
+          final authorLineHeight = _measureLineHeight(
+            context,
+            AppTextStyles.source.regular(fontSize: 13),
+          );
+          final priceLineHeight = _measureLineHeight(
+            context,
+            AppTextStyles.source.regular(fontSize: 14),
+          );
 
           final textBlockHeight =
               authorLineHeight + 4 + titleLineHeight + priceLineHeight;
@@ -232,7 +269,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
               10 +
               8 +
               textBlockHeight +
-              2; // +6 safety margin
+              4; // small rounding buffer
           if (state is PopularBooksLoaded && state.response.data.isNotEmpty) {
             final books = state.response.data;
             return SliverSafeArea(

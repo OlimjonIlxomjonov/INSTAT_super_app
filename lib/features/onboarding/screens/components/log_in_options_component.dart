@@ -9,7 +9,9 @@ import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:my_template/features/auth/presentation/auth_service/auth_service.dart';
+import 'package:my_template/features/auth/presentation/auth_service/google_auth_service.dart';
 import 'package:my_template/features/auth/presentation/data_source/one_id_log_in.dart';
 import 'package:my_template/features/auth/presentation/widgets/continue_with_options.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/home_page.dart';
@@ -69,6 +71,39 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
         ),
       ),
     );
+  }
+
+  Future<void> googleLogin() async {
+    try {
+      await GoogleAuthServiceImpl(
+        tokenStorage: TokenStorageServiceImpl(),
+        dioClient: DioClient(),
+      ).signIn();
+
+      if (!mounted) return;
+      AppRoute.open(const HomePage());
+    } on GoogleSignInException catch (e, stackTrace) {
+      // User closed the account picker / backed out — not an error, just
+      // close quietly the same way tapping outside a native sheet would.
+      if (e.code == GoogleSignInExceptionCode.canceled) return;
+
+      logger.e('Google sign-in failed: ${e.code}', error: e, stackTrace: stackTrace);
+      if (mounted) errorFlushBar(context, e.description ?? e.toString());
+    } catch (e, stackTrace) {
+      if (e is DioException) {
+        logger.e('Google sign-in backend call failed', error: e.response?.data ?? e, stackTrace: stackTrace);
+        if (mounted) {
+          final statusCode = e.response?.statusCode;
+          errorFlushBar(
+            context,
+            AppLocalizations.of(context)!.loginFailedWithStatus(statusCode ?? 'unknown'),
+          );
+        }
+      } else {
+        logger.e('Google sign-in failed', error: e, stackTrace: stackTrace);
+        if (mounted) errorFlushBar(context, e.toString());
+      }
+    }
   }
 
   @override
@@ -169,7 +204,7 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
                           ),
                           ContinueWithOptions(
                             iconPath: AppVectors.googleLogo,
-                            onTap: () {},
+                            onTap: googleLogin,
                             continueWithText: localization.continueWithGoogle,
                           ),
                           SafeArea(

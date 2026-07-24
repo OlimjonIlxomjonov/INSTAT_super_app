@@ -68,6 +68,7 @@ dependencies:
   myid: ^3.1.44
   url_launcher: ^6.2.0
   flutter_remix: ^0.0.3
+  google_sign_in: ^7.1.0
 
 
 

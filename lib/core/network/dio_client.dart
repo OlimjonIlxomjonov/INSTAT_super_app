@@ -54,12 +54,21 @@ class DioClient {
 
             await TokenStorageServiceImpl().deleteAccessToken();
 
-            final context = AppRoute.navigatorKey.currentContext;
-            if (context != null) {
-              errorFlushBar(
-                context,
-                AppLocalizations.of(context)!.sessionExpiredMessage,
-              );
+            // The redirect must happen no matter what — a 401 storm can
+            // land right as the app is transitioning off the splash screen,
+            // when the navigator's context doesn't have a mounted Overlay
+            // yet. errorFlushBar throwing there must never block the actual
+            // login redirect, so it's best-effort only.
+            try {
+              final context = AppRoute.navigatorKey.currentContext;
+              if (context != null) {
+                errorFlushBar(
+                  context,
+                  AppLocalizations.of(context)!.sessionExpiredMessage,
+                );
+              }
+            } catch (_) {
+              // Overlay not ready yet — skip the toast, redirect still happens.
             }
 
             AppRoute.open(const LogInOptionsPage());

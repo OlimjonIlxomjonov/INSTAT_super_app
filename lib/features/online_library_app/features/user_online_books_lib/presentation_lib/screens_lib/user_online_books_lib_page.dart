@@ -14,6 +14,7 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/user_books/user_books_event.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+import '../../../../../../core/common/ui_states/app_empty_state.dart';
 import '../../../../../../core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import '../../../home_lib/presentation/screens/lib_components/detailed_online_book_component.dart';
 
@@ -82,6 +83,16 @@ class _UserOnlineBooksLibPageState extends State<UserOnlineBooksLibPage> {
               builder: (context, state) {
                 if (state is UserBookLoaded) {
                   final data = state.response.data;
+                  if (data.isEmpty) {
+                    return SliverToBoxAdapter(
+                      child: AppEmptyState(
+                        title: 'Javoningiz bo‘sh',
+                        subtitle:
+                            'Xarid qilingan kitoblaringiz shu yerda ko‘rinadi.',
+                      ),
+                    );
+                  }
+
                   return SliverPadding(
                     padding: AppPadding.hAndV20x20(),
                     sliver: SliverGrid.builder(
