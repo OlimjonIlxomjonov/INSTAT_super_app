@@ -126,6 +126,8 @@
   "cartEmpty": "Savatcha bo'sh!",
   "cartEmptySubtitle": "O'zingizni xursand qilish vaqti keldi. Savatga biror narsa qo'shamizmi?",
   "continueButton": "Davom etish",
+  "savedBooksEmpty": "Hali saqlangan kitoblar yo'q",
+  "savedBooksEmptySubtitle": "Yoqtirgan kitoblaringiz shu yerda ko'rinadi. O'qish uchun biror narsa topamizmi?",
   "totalItems": "Umumiy mahsulotlar",
   "totalAmount": "Umumiy summa",
   "libraryAddress": "Kutubxona manzili",

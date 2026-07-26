@@ -196,9 +196,7 @@ class _SearchStudentsPageState extends State<SearchStudentsPage> {
                       final thumbnail = item?.avatar != null
                           ? 'https://test.avacoder.uz${item!.avatar}'
                           : null;
-                      final fullName = item != null
-                          ? '${item.firstName.capitalize()} ${item.lastName.capitalize()}'
-                          : '';
+                      final fullName = item?.displayName ?? '';
 
                       return GestureDetector(
                         onTap: item == null

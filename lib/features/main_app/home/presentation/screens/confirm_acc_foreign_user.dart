@@ -9,6 +9,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
+import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/general_widgets/custom_drop_down_menu_wg.dart';
 import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
 import 'package:my_template/features/auth/presentation/widgets/auth_text_field_wg.dart';
@@ -115,51 +116,11 @@ class _ConfirmAccForeignUserState extends State<ConfirmAccForeignUser> {
     final localization = AppLocalizations.of(context)!;
 
     return Scaffold(
+      appBar: CustomAppBarWg(myTitle: localization.accountConfirm),
       body: SafeArea(
         bottom: false,
         child: Column(
           children: [
-            // Padding(
-            //   padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
-            //   child: Row(
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     children: [
-            //       Container(
-            //         width: 44,
-            //         height: 44,
-            //         decoration: BoxDecoration(
-            //           shape: BoxShape.circle,
-            //           border: Border.all(color: AppColors.greyScale.grey200),
-            //         ),
-            //         child: Icon(
-            //           IconlyLight.profile,
-            //           color: AppColors.greyScale.grey600,
-            //         ),
-            //       ),
-            //       const SizedBox(width: 12),
-            //       Expanded(
-            //         child: Column(
-            //           crossAxisAlignment: CrossAxisAlignment.start,
-            //           children: [
-            //             Text(
-            //               localization.foreignUserProfileTitle,
-            //               style: CustomTextStyles.h2,
-            //             ),
-            //             const SizedBox(height: 4),
-            //             Text(
-            //               localization.foreignUserProfileSubtitle,
-            //               style: AppTextStyles.source.regular(
-            //                 fontSize: 14,
-            //                 color: AppColors.greyScale.grey600,
-            //               ),
-            //             ),
-            //           ],
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // const Divider(height: 1),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(20),
@@ -167,19 +128,6 @@ class _ConfirmAccForeignUserState extends State<ConfirmAccForeignUser> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 14,
                   children: [
-                    IconButton(
-                      onPressed: () {
-                        subBottomSheetOpener(
-                          context,
-                          child: const LogOutOptionsComponent(),
-                          isExpanded: false,
-                        );
-                      },
-                      icon: Icon(
-                        IconlyLight.logout,
-                        color: AppColors.redFailedTaskCard,
-                      ),
-                    ),
                     CustomDropDownMenuWg(
                       title: localization.countryLabel,
                       hintText: localization.selectCountryHint,
@@ -256,21 +204,18 @@ class _ConfirmAccForeignUserState extends State<ConfirmAccForeignUser> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 6),
                     Text(
                       localization.documentPhotoTitle,
                       style: CustomTextStyles.h3half,
                     ),
-                    const SizedBox(height: 8),
                     DottedContainerWg(
                       formatsHint: localization.documentPhotoFormatsHint,
                       onTap: _isPickingFile ? null : _pickDocumentPhoto,
                     ),
                     if (_isPickingFile) ...[
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 10),
                       const Center(child: CircularProgressIndicator.adaptive()),
                     ] else if (_documentFile != null) ...[
-                      const SizedBox(height: 15),
                       SelectedFileContainerWg(
                         fileName: _documentFileName,
                         fileSize: _documentFileSize != null
@@ -330,6 +275,9 @@ class _AgreementCheckboxRow extends StatelessWidget {
           child: Checkbox(
             value: value,
             onChanged: onChanged,
+            checkColor: AppColors.primaryColor,
+            activeColor: AppColors.white,
+            side: BorderSide(width: 0.5),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4),
             ),

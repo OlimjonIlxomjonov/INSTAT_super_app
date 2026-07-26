@@ -131,10 +131,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final userMeState = context.watch<UserMeBloc>().state;
-    if (userMeState is UserMeLoaded && !userMeState.entity.isResident) {
-      return const ConfirmAccForeignUser();
-    }
 
     /// DEPENDING ON SCREEN SIZE & Orientation
     return Responsive(

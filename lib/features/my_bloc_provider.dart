@@ -30,6 +30,7 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/user_books/user_book_bloc.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/presentation_lib/bloc/buy_book/buy_book_bloc.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/presentation_lib/bloc/cart/cart_bloc.dart';
+import 'package:my_template/features/online_library_app/features/user_online_book_profile_lib/presentation_lib/bloc/saved_books/saved_books_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/academic_degree/academic_degree_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/article_type/article_type_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/drop_down/journal_sections/journal_section_bloc.dart';
@@ -139,6 +140,8 @@ class MyBlocProvider extends StatelessWidget {
         BlocProvider<AddCommentsBloc>(create: (_) => sl<AddCommentsBloc>()),
         //! User books
         BlocProvider<UserBookBloc>(create: (_) => sl<UserBookBloc>()),
+        //! Saved (liked) books
+        BlocProvider<SavedBooksBloc>(create: (_) => sl<SavedBooksBloc>()),
       ],
       child: child,
     );

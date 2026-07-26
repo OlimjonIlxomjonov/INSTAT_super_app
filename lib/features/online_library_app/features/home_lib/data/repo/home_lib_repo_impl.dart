@@ -50,6 +50,11 @@ class HomeLibRepoImpl implements HomeLibRepository {
   }
 
   @override
+  Future<BookListResponse> getSavedBooks() {
+    return _remoteDataSource.fetchSavedBooks();
+  }
+
+  @override
   Future<BookPagesCountEntity> getBookPagesCount(int bookId) {
     return _remoteDataSource.fetchBookPagesCount(bookId);
   }

@@ -1,3 +1,5 @@
+import 'package:my_template/core/utils/devices/device_unitlity.dart';
+
 class LeaderBoardEntity {
   final int id;
   final String username;
@@ -35,4 +37,9 @@ class LeaderBoardEntity {
     paidCourseCount: 1,
     certificatesCount: 1,
   );
+
+  String get displayName {
+    final name = '${firstName.capitalize()} ${lastName.capitalize()}'.trim();
+    return name.isNotEmpty ? name : email;
+  }
 }

@@ -24,6 +24,9 @@ abstract class HomeLibRemoteDataSource {
   //! user books
   Future<BookListResponseModel> fetchUserBooks();
 
+  //! user saved (liked) books
+  Future<BookListResponseModel> fetchSavedBooks();
+
   //! online book reader
   Future<BookPagesCountModel> fetchBookPagesCount(int bookId);
 

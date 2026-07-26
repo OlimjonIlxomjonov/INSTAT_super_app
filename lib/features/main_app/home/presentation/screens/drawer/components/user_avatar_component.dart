@@ -17,6 +17,7 @@ import 'package:my_template/features/main_app/home/presentation/bloc/avatar/avat
 import 'package:my_template/features/main_app/home/presentation/bloc/home_event.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_state.dart';
+import 'package:my_template/features/main_app/home/presentation/screens/confirm_acc_foreign_user.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/drawer/my_id_configs/my_id_conf.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/drawer/components/my_id_form_bottom_sheet.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_bloc.dart';
@@ -107,6 +108,11 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
   @override
   Widget build(BuildContext context) {
     final bool isMobile = Responsive.isMobile(context);
+    final userMeState = context.watch<UserMeBloc>().state;
+    // if (userMeState is UserMeLoaded && !userMeState.entity.isResident) {
+    //   return const ConfirmAccForeignUser();
+    // }
+
     return SafeArea(
       child: Stack(
         children: [
@@ -258,36 +264,42 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                             //! Confirm account
                             if (!isVerified)
                               GestureDetector(
-                                onTap: () async {
-                                  final success =
-                                      await showModalBottomSheet<bool>(
-                                        context: context,
-                                        isScrollControlled: true,
-                                        builder: (context) =>
-                                            const MyIdFormBottomSheet(),
-                                      );
+                                onTap:
+                                    userMeState is UserMeLoaded &&
+                                        !userMeState.entity.isResident
+                                    ? () {
+                                        AppRoute.go(ConfirmAccForeignUser());
+                                      }
+                                    : () async {
+                                        final success =
+                                            await showModalBottomSheet<bool>(
+                                              context: context,
+                                              isScrollControlled: true,
+                                              builder: (context) =>
+                                                  const MyIdFormBottomSheet(),
+                                            );
 
-                                  logger.f('MyID form result: $success');
+                                        logger.f('MyID form result: $success');
 
-                                  if (context.mounted) {
-                                    context.read<FaceRecBloc>().add(
-                                      ResetFaceRecEvent(),
-                                    );
-                                  }
+                                        if (context.mounted) {
+                                          context.read<FaceRecBloc>().add(
+                                            ResetFaceRecEvent(),
+                                          );
+                                        }
 
-                                  if (success == true) {
-                                    if (context.mounted) {
-                                      successFlushBar(
-                                        context,
-                                        'Siz muvaffaqiyatli shaxsingizni tasdiqladingiz!',
-                                      );
-                                      context.read<UserMeBloc>().add(
-                                        UserMeEvent(),
-                                      );
-                                    }
-                                  }
-                                  return;
-                                },
+                                        if (success == true) {
+                                          if (context.mounted) {
+                                            successFlushBar(
+                                              context,
+                                              'Siz muvaffaqiyatli shaxsingizni tasdiqladingiz!',
+                                            );
+                                            context.read<UserMeBloc>().add(
+                                              UserMeEvent(),
+                                            );
+                                          }
+                                        }
+                                        return;
+                                      },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
                                     horizontal: 8,

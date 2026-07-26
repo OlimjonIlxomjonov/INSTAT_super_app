@@ -62,8 +62,7 @@ class TempDetailedUserEdu extends StatelessWidget {
                     ? NetworkImage(imagePath!)
                     : AssetImage(AppImages.profileBackground),
                 heroTag: 'user_avatar',
-                onAvatarTap: () =>
-                    _openAvatarViewer(context),
+                onAvatarTap: () => _openAvatarViewer(context),
               ),
               SizedBox(height: appH(12)),
               Text(name, style: AppTextStyles.source.semiBold(fontSize: 22)),

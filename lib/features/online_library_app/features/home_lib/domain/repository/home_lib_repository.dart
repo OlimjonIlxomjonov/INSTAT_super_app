@@ -24,6 +24,9 @@ abstract class HomeLibRepository {
   //! user bought books
   Future<BookListResponse> getUserBooks();
 
+  //! user saved (liked) books
+  Future<BookListResponse> getSavedBooks();
+
   //! online book reader
   Future<BookPagesCountEntity> getBookPagesCount(int bookId);
 

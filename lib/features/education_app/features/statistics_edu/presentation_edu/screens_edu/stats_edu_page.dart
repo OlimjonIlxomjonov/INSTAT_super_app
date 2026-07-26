@@ -95,10 +95,7 @@ class _StatsEduPageState extends State<StatsEduPage> {
                             items: data.sublist(0, 3),
                             fullNames: data
                                 .take(3)
-                                .map(
-                                  (e) =>
-                                      '${e.firstName.capitalize()} ${e.lastName.capitalize()}',
-                                )
+                                .map((e) => e.displayName)
                                 .toList(),
                             thumbnails: data
                                 .take(3)
@@ -113,8 +110,7 @@ class _StatsEduPageState extends State<StatsEduPage> {
                               final String? thumb = item.avatar != null
                                   ? 'https://api1.instat.uz${item.avatar}'
                                   : null;
-                              final name =
-                                  '${item.firstName.capitalize()} ${item.lastName.capitalize()}';
+                              final name = item.displayName;
                               openMiniAppSheetFamily(
                                 context,
                                 showHandler: false,
@@ -132,8 +128,7 @@ class _StatsEduPageState extends State<StatsEduPage> {
                         final String? thumbnail = item.avatar != null
                             ? 'https://api1.instat.uz${item.avatar}'
                             : null;
-                        final fullName =
-                            '${item.firstName.capitalize()} ${item.lastName.capitalize()}';
+                        final fullName = item.displayName;
 
                         Future<dynamic> onTap() => openMiniAppSheetFamily(
                           context,
@@ -206,14 +201,14 @@ class _StatsEduPageState extends State<StatsEduPage> {
                                             fontSize: 14,
                                           ),
                                         ),
-                                        Text(
-                                          item.email,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: AppTextStyles.source.regular(
-                                            fontSize: 12,
+                                        if (fullName != item.email)
+                                          Text(
+                                            item.email,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: AppTextStyles.source
+                                                .regular(fontSize: 12),
                                           ),
-                                        ),
                                       ],
                                     ),
                                   ),

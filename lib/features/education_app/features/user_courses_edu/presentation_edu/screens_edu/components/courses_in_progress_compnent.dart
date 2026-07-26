@@ -165,13 +165,15 @@ class _CoursesInProgressComponentState
                     ? localization.finishedCoursesEmptySubtitle
                     : localization.startedCoursesEmptySubtitle,
                 buttonLabel: localization.viewCoursesButton,
-                onAction: () {
-                  openMiniAppSheetFamily(
-                    context,
-                    showHandler: false,
-                    child: const ShowAllCoursesBottomSheetPage(),
-                  );
-                },
+                onAction: widget.state == 'finished'
+                    ? null
+                    : () {
+                        openMiniAppSheetFamily(
+                          context,
+                          showHandler: false,
+                          child: const ShowAllCoursesBottomSheetPage(),
+                        );
+                      },
               ),
             );
           }
