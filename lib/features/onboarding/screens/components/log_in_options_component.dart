@@ -83,8 +83,6 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
       if (!mounted) return;
       AppRoute.open(const HomePage());
     } on GoogleSignInException catch (e, stackTrace) {
-      // User closed the account picker / backed out — not an error, just
-      // close quietly the same way tapping outside a native sheet would.
       if (e.code == GoogleSignInExceptionCode.canceled) return;
 
       logger.e('Google sign-in failed: ${e.code}', error: e, stackTrace: stackTrace);
