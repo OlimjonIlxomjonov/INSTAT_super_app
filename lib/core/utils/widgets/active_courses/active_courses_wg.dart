@@ -30,7 +30,7 @@ class ActiveCoursesWg extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 80,
+        constraints: const BoxConstraints(minHeight: 80, maxHeight: 80),
         margin: .only(bottom: 12, right: isTablet ? 20 : 0),
         padding: .symmetric(horizontal: 8, vertical: isTablet ? 8 : 5),
         decoration: BoxDecoration(

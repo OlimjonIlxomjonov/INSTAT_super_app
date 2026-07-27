@@ -7,12 +7,14 @@ class FullscreenVideoPage extends StatefulWidget {
   final VideoPlayerController controller;
   final ValueNotifier<String>? currentResolutionNotifier;
   final ValueChanged<String>? onResolutionSelected;
+  final ValueNotifier<bool>? isSwitchingResolutionNotifier;
 
   const FullscreenVideoPage({
     super.key,
     required this.controller,
     this.currentResolutionNotifier,
     this.onResolutionSelected,
+    this.isSwitchingResolutionNotifier,
   });
 
   @override
@@ -51,6 +53,7 @@ class _FullscreenVideoPageState extends State<FullscreenVideoPage> {
                   isFullscreen: true,
                   currentResolutionNotifier: widget.currentResolutionNotifier,
                   onResolutionSelected: widget.onResolutionSelected,
+                  isSwitchingResolutionNotifier: widget.isSwitchingResolutionNotifier,
                 ),
               )
             : VideoPlayerWidget(

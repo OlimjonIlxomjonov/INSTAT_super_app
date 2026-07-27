@@ -28,9 +28,16 @@ Future<T?> openMiniAppSheetFamily<T>(
     barrierColor: AppColors.greyScale.grey100.withValues(alpha: 0.9),
     // barrierColor: AppColors.greyScale.grey50,
     isDismissible: false,
-    useSafeArea: true,
+    useSafeArea: false,
     showDragHandle: false,
-    backgroundColor: isTransparent ? AppColors.transparent : AppColors.white,
-    builder: (ctx) => MiniAppSheetShell(showHandle: showHandler, child: child),
+
+    backgroundColor: AppColors.transparent,
+    builder: (ctx) => MiniAppSheetShell(
+      showHandle: showHandler,
+      cardBackgroundColor: isTransparent
+          ? AppColors.transparent
+          : AppColors.white,
+      child: child,
+    ),
   );
 }

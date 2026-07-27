@@ -108,6 +108,20 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
 
+    return Responsive(
+      mobile: _buildMobile(localization),
+      // Tablet: full-bleed split — logo panel on one side, the login card
+      // on the other. A full-width bottom sheet (the mobile layout) would
+      // stretch edge-to-edge across a tablet and look wrong.
+      tablet: _buildSplit(localization, isDesktop: false),
+      // Desktop: same split, but constrained to a max width and centered —
+      // a full-bleed split row starts looking absurd once the window is
+      // 1600-1900px wide (the logo panel especially).
+      desktop: _buildSplit(localization, isDesktop: true),
+    );
+  }
+
+  Widget _buildMobile(AppLocalizations localization) {
     return Stack(
       children: [
         /// CONTENT
@@ -130,97 +144,139 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
                 ),
                 child: SizedBox(
                   width: double.infinity,
-                  // height: Responsive.isMobile(context) ? screenHeight / 1.6 : null,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       vertical: 20,
                       horizontal: 20,
                     ),
                     child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AutoSizeText(
-                            localization.getStart,
-                            maxFontSize: 35,
-                            style: AppTextStyles.source.bold(fontSize: 22),
-                          ),
-                          SizedBox(height: appH(8)),
-                          AutoSizeText(
-                            localization.registerOrEnterTheSystem,
-                            maxLines: 2,
-                            maxFontSize: 22,
-                            style: AppTextStyles.source.regular(
-                              fontSize: 15,
-                              color: AppColors.greyScale.grey600,
-                            ),
-                          ),
-                          SizedBox(height: appH(32)),
-
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: oneIdLogin,
-                              child: SvgPicture.asset(AppVectors.oneIdLogo),
-                            ),
-                          ),
-
-                          const SizedBox(height: 32),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Divider(
-                                  color: AppColors.greyScale.grey400,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: appW(12),
-                                ),
-                                child: AutoSizeText(
-                                  localization.or,
-                                  style: AppTextStyles.source.regular(
-                                    fontSize: 14,
-                                    color: AppColors.greyScale.grey600,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Divider(
-                                  color: AppColors.greyScale.grey400,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: appH(20)),
-
-                          ContinueWithOptions(
-                            iconPath: AppVectors.appleLogo,
-                            onTap: () {},
-                            continueWithText: localization.continueWithApple,
-                          ),
-                          ContinueWithOptions(
-                            iconPath: AppVectors.googleLogo,
-                            onTap: googleLogin,
-                            continueWithText: localization.continueWithGoogle,
-                          ),
-                          SafeArea(
-                            top: false,
-                            child: ContinueWithOptions(
-                              iconPath: AppVectors.facebookLogo,
-                              onTap: () {},
-                              continueWithText:
-                                  localization.continueWithFaceBook,
-                            ),
-                          ),
-                        ],
-                      ),
+                      child: _buildLoginOptionsContent(localization),
                     ),
                   ),
                 ),
               ),
             ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSplit(AppLocalizations localization, {required bool isDesktop}) {
+    final split = Row(
+      children: [
+        Expanded(
+          child: ColoredBox(
+            color: AppColors.primaryColor,
+            child: Center(
+              child: SvgPicture.asset(
+                AppVectors.mainAppLogo,
+                width: isDesktop ? 220 : 180,
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          child: ColoredBox(
+            color: AppColors.white,
+            child: Center(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(
+                  horizontal: isDesktop ? 48 : 32,
+                  vertical: 32,
+                ),
+                child: _buildLoginOptionsContent(localization),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+
+    if (!isDesktop) return split;
+
+    return Container(
+      color: AppColors.greyScale.grey50,
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1100, maxHeight: 720),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(24),
+            child: split,
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// The actual "get started / one id / continue with ..." content, shared
+  /// by the mobile bottom sheet and the tablet/desktop split layouts so it
+  /// only has to be maintained in one place.
+  Widget _buildLoginOptionsContent(AppLocalizations localization) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AutoSizeText(
+          localization.getStart,
+          maxFontSize: 35,
+          style: AppTextStyles.source.bold(fontSize: 22),
+        ),
+        SizedBox(height: appH(8)),
+        AutoSizeText(
+          localization.registerOrEnterTheSystem,
+          maxLines: 2,
+          maxFontSize: 22,
+          style: AppTextStyles.source.regular(
+            fontSize: 15,
+            color: AppColors.greyScale.grey600,
+          ),
+        ),
+        SizedBox(height: appH(32)),
+
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: oneIdLogin,
+            child: SvgPicture.asset(AppVectors.oneIdLogo),
+          ),
+        ),
+
+        const SizedBox(height: 32),
+        Row(
+          children: [
+            Expanded(child: Divider(color: AppColors.greyScale.grey400)),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: appW(12)),
+              child: AutoSizeText(
+                localization.or,
+                style: AppTextStyles.source.regular(
+                  fontSize: 14,
+                  color: AppColors.greyScale.grey600,
+                ),
+              ),
+            ),
+            Expanded(child: Divider(color: AppColors.greyScale.grey400)),
+          ],
+        ),
+        SizedBox(height: appH(20)),
+
+        ContinueWithOptions(
+          iconPath: AppVectors.appleLogo,
+          onTap: () {},
+          continueWithText: localization.continueWithApple,
+        ),
+        ContinueWithOptions(
+          iconPath: AppVectors.googleLogo,
+          onTap: googleLogin,
+          continueWithText: localization.continueWithGoogle,
+        ),
+        SafeArea(
+          top: false,
+          child: ContinueWithOptions(
+            iconPath: AppVectors.facebookLogo,
+            onTap: () {},
+            continueWithText: localization.continueWithFaceBook,
           ),
         ),
       ],

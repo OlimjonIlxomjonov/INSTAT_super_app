@@ -110,12 +110,15 @@ class OnboardingWg extends StatelessWidget {
                       fit: BoxFit.contain,
                     ),
                   ),
-                  // The fade band
+                  // The fade band — was hardcoded to 800px, which either
+                  // overflowed the image column on smaller tablets or left
+                  // an oddly small band on larger ones. Reuse the same
+                  // height ratio as the mobile layout instead.
                   Positioned(
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    height: 800,
+                    height: fadeH,
                     child: const IgnorePointer(
                       child: DecoratedBox(
                         decoration: BoxDecoration(
@@ -166,6 +169,94 @@ class OnboardingWg extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+      // Desktop reuses the same split layout as tablet, but a full-bleed
+      // 50/50 row starts to look wrong once the window is 1400-1900px wide
+      // (the text column gets huge and sparse). Constrain the split content
+      // to a max width and center it instead, like a typical desktop app
+      // window rather than a stretched phone/tablet layout.
+      desktop: Container(
+        height: size.height,
+        width: double.infinity,
+        color: AppColors.greyScale.grey50,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1200, maxHeight: 720),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        ColoredBox(
+                          color: Colors.white,
+                          child: Center(
+                            child: Image.asset(
+                              imagePath,
+                              width: 420 / imageWidthDivider,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          height: 160,
+                          child: const IgnorePointer(
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Color(0x00FFFFFF),
+                                    Color(0xD9FFFFFF),
+                                    Color(0xFFFFFFFF),
+                                  ],
+                                  stops: [0.0, 0.55, 1.0],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: ColoredBox(
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(48),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              title,
+                              maxLines: 2,
+                              style: AppTextStyles.source.bold(fontSize: 38),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              subTitle,
+                              maxLines: 3,
+                              style: AppTextStyles.source.regular(
+                                fontSize: 17,
+                                color: AppColors.greyScale.grey500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );

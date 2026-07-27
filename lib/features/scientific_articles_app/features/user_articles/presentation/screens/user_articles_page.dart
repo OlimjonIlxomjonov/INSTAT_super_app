@@ -239,28 +239,30 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
-        child: SizedBox(
-          width: double.infinity,
-          child: ElevatedButton.icon(
-            onPressed: () async {
-              await openMiniAppSheetFamily(
-                context,
-                child: const AddArticlePage(),
-                enableDrag: false,
-                showHandler: false,
-              );
-              if (!mounted) return;
-              context.read<UserArticlesBloc>().add(
-                UserArticlesEvent(
-                  status: articleStatus[_selectedIndex],
-                  search: '',
-                ),
-              );
-            },
-            icon: Icon(Icons.add),
-            label: Text(localization.addArticleButton),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
+          child: SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: () async {
+                await openMiniAppSheetFamily(
+                  context,
+                  child: const AddArticlePage(),
+                  enableDrag: false,
+                  showHandler: false,
+                );
+                if (!mounted) return;
+                context.read<UserArticlesBloc>().add(
+                  UserArticlesEvent(
+                    status: articleStatus[_selectedIndex],
+                    search: '',
+                  ),
+                );
+              },
+              icon: Icon(Icons.add),
+              label: Text(localization.addArticleButton),
+            ),
           ),
         ),
       ),

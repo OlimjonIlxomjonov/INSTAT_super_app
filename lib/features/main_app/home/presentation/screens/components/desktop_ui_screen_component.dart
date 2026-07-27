@@ -41,22 +41,22 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/user_articles_page.dart';
 
-/// Tablet layout: a static-ish left column (mini-app grid, search, banner)
-/// next to a scrolling content column (active/popular courses, books,
-/// articles) — same underlying data/blocs as MobileUiScreenComponent, just
-/// arranged side by side instead of stacked, since a single narrow column
-/// wastes most of a tablet-width screen.
-class TabletUiScreenComponent extends StatefulWidget {
+/// Desktop/laptop layout: same two-column idea as tablet (mini-app grid +
+/// search on the left, real content on the right), but the whole thing is
+/// constrained to a max width and centered — a full-bleed split row starts
+/// looking absurd once the window is 1600-1900px wide, especially the
+/// mini-app grid stretching out with huge gaps between cards.
+class DesktopUiScreenComponent extends StatefulWidget {
   final List<MiniAppModel> sections;
 
-  const TabletUiScreenComponent({super.key, required this.sections});
+  const DesktopUiScreenComponent({super.key, required this.sections});
 
   @override
-  State<TabletUiScreenComponent> createState() =>
-      _TabletUiScreenComponentState();
+  State<DesktopUiScreenComponent> createState() =>
+      _DesktopUiScreenComponentState();
 }
 
-class _TabletUiScreenComponentState extends State<TabletUiScreenComponent> {
+class _DesktopUiScreenComponentState extends State<DesktopUiScreenComponent> {
   StreamSubscription<List<ConnectivityResult>>? _connectivitySub;
   bool _wasDisconnected = false;
 
@@ -131,9 +131,9 @@ class _TabletUiScreenComponentState extends State<TabletUiScreenComponent> {
       physics: const NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.symmetric(horizontal: 20),
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 220,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
+        maxCrossAxisExtent: 260,
+        crossAxisSpacing: 14,
+        mainAxisSpacing: 14,
         // Higher aspect ratio = shorter cards for the same width. Phone
         // keeps its own separate value in MobileUiScreenComponent.
         childAspectRatio: 1.8,
@@ -386,152 +386,73 @@ class _TabletUiScreenComponentState extends State<TabletUiScreenComponent> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      bottom: false,
-      child: Column(
-        children: [
-          const TestModeBanner(),
-          Expanded(
-            child: OrientationBuilder(
-              builder: (context, orientation) {
-                // Portrait tablet width isn't that different from a big
-                // phone — splitting it into two columns left huge dead gaps
-                // wherever a right-column section had less content than the
-                // left column's grid (they scroll independently, so nothing
-                // lines up). Portrait now flows everything top-to-bottom in
-                // one column, same as phone. Landscape keeps the
-                // side-by-side split, where the extra width is actually put
-                // to use.
-                if (orientation == Orientation.portrait) {
-                  return _buildPortrait(context);
-                }
-                return _buildLandscape(context);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPortrait(BuildContext context) {
-    final localization = AppLocalizations.of(context)!;
-
-    return CustomRefreshIndicator(
-      onRefresh: () async => _reloadAll(),
-      child: CustomScrollView(
-        slivers: [
-          SliverPadding(
-            padding: AppPadding.hAndV20x20(),
-            sliver: SliverToBoxAdapter(child: const AppSearchbarWg()),
-          ),
-          SliverToBoxAdapter(child: _buildMiniAppGrid()),
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-            sliver: SliverToBoxAdapter(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: const BannerPlaceholder(),
-              ),
-            ),
-          ),
-          BlocBuilder<CoursesBloc, CoursesState>(
-            buildWhen: (prev, curr) =>
-                curr is CoursesError ||
-                curr is CoursesLoading ||
-                curr is CoursesLoaded,
-            builder: (context, coursesState) {
-              return BlocBuilder<UserCoursesBloc, UserCoursesState>(
-                buildWhen: (prev, curr) =>
-                    curr is UserCoursesError ||
-                    curr is UserCoursesLoading ||
-                    curr is UserCoursesLoaded,
-                builder: (context, userCoursesState) {
-                  return BlocBuilder<UserMeBloc, UserMeState>(
-                    buildWhen: (prev, curr) =>
-                        curr is UserMeError ||
-                        curr is UserMeLoading ||
-                        curr is UserMeLoaded,
-                    builder: (context, userMeState) {
-                      final isConnectionError =
-                          (coursesState is CoursesError &&
-                              coursesState.isConnectionError) ||
-                          (userCoursesState is UserCoursesError &&
-                              userCoursesState.isConnectionError);
-
-                      if (isConnectionError) {
-                        return SliverFillRemaining(
-                          hasScrollBody: false,
-                          child: LostInternetConnectionState(
-                            onRetry: _reloadAll,
+    return ColoredBox(
+      color: AppColors.greyScale.grey50,
+      child: SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            const TestModeBanner(),
+            Expanded(
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 1600),
+                  child: ColoredBox(
+                    color: AppColors.white,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        /// LEFT — mini apps, search, banner (static, own
+                        /// scroll)
+                        Expanded(
+                          flex: 2,
+                          child: SingleChildScrollView(
+                            padding: const EdgeInsets.only(
+                              top: 16,
+                              bottom: 24,
+                            ),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: AppPadding.hAndV20x20(),
+                                  child: const AppSearchbarWg(),
+                                ),
+                                _buildMiniAppGrid(),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                    20,
+                                    20,
+                                    20,
+                                    0,
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(16),
+                                    child: const BannerPlaceholder(),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        );
-                      }
+                        ),
 
-                      if (userMeState is UserMeError &&
-                          (userMeState.statusCode == 502 ||
-                              userMeState.statusCode == 503)) {
-                        return SliverFillRemaining(
-                          hasScrollBody: false,
-                          child: ServerErrorState(
-                            onRetry: _reloadAll,
-                            statusCode: userMeState.statusCode,
-                            message: userMeState.message,
-                          ),
-                        );
-                      }
-
-                      return SliverMainAxisGroup(
-                        slivers: _buildContentSlivers(context, localization),
-                      );
-                    },
-                  );
-                },
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLandscape(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        /// LEFT — mini apps, search, banner (static, own scroll)
-        Expanded(
-          flex: 2,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.only(top: 16, bottom: 24),
-            child: Column(
-              children: [
-                Padding(
-                  padding: AppPadding.hAndV20x20(),
-                  child: const AppSearchbarWg(),
-                ),
-                _buildMiniAppGrid(),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: const BannerPlaceholder(),
+                        /// RIGHT — real content: active/popular courses,
+                        /// books, articles. Its own CustomScrollView so the
+                        /// existing sliver-based bloc widgets
+                        /// (ActiveCoursesWithBlocWg, UserArticlesWithBlocWg)
+                        /// can be reused as-is.
+                        Expanded(
+                          flex: 3,
+                          child: _buildContentColumn(context),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
-
-        /// RIGHT — real content: active/popular courses, books,
-        /// articles. Its own CustomScrollView so the existing
-        /// sliver-based bloc widgets (ActiveCoursesWithBlocWg,
-        /// UserArticlesWithBlocWg) can be reused as-is.
-        Expanded(
-          flex: 3,
-          child: _buildContentColumn(context),
-        ),
-      ],
+      ),
     );
   }
 }

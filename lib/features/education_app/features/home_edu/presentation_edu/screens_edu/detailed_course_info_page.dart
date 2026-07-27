@@ -195,12 +195,7 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
   void _handleBottomNavTap(BuildContext context, PaymentStatusEnum status) {
     switch (status) {
       case PaymentStatusEnum.paid:
-        // CourseLessonTopicsBloc/CourseLessonItemsBloc are global singletons
-        // that cache per course/block for the whole app session. This same
-        // course may have already been previewed (and its topics/blocks
-        // cached) before it was bought, or a prior visit to the bought page
-        // may have cached lessons as locked — force both to refetch so the
-        // bought page never shows pre-purchase/stale locked state.
+
         context.read<CourseLessonTopicsBloc>().add(
           CourseLessonTopicsEvent(
             params: CourseCategoryByIdParams(id: widget.data.id),

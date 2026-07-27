@@ -57,7 +57,7 @@ class _AboutThisCourseTabState extends State<AboutThisCourseTab>
   ) {
     FamilyNavigation.familyPush(
       context,
-      // showHandle: false,
+      showHandle: false,
       DetailedCourseInfoPage(
         data: course,
         courseCategory: categoryName,

@@ -16,6 +16,7 @@ import 'package:my_template/features/main_app/home/presentation/screens/foreign_
 import 'package:my_template/features/mikro_data/presentation/mikro_data_bottom_nav_bar.dart';
 import 'package:my_template/features/scientific_articles_app/features/articles_bottom_nav_bar.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
+import 'package:my_template/features/main_app/home/presentation/screens/components/desktop_ui_screen_component.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/components/mobile_ui_screen_component.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/components/tablet_ui_screen_component.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/drawer/main_app_drawer.dart';
@@ -164,6 +165,29 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         body: TabletUiScreenComponent(sections: _sections),
+      ),
+      desktop: Scaffold(
+        key: scaffoldKey,
+        drawer: const MainAppDrawer(),
+
+        /// HEADER LOGO
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              scaffoldKey.currentState?.openDrawer();
+            },
+            icon: const Icon(Icons.menu),
+          ),
+          title: SvgPicture.asset(AppVectors.homeInstatLogo),
+          centerTitle: false,
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(IconlyLight.notification),
+            ),
+          ],
+        ),
+        body: DesktopUiScreenComponent(sections: _sections),
       ),
     );
   }

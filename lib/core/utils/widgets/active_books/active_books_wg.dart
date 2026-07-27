@@ -35,7 +35,7 @@ class ActiveBooksWg extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 90,
+        constraints: const BoxConstraints(minHeight: 90, maxHeight: 100),
         margin: .only(bottom: 12, right: isTablet ? 20 : 0),
         padding: .symmetric(horizontal: 8, vertical: isTablet ? 8 : 5),
         decoration: BoxDecoration(
@@ -44,15 +44,24 @@ class ActiveBooksWg extends StatelessWidget {
         ),
         child: Row(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                "${ApiUrls.imageUrlBase}${data.bookThumbnails.first.file}",
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, progress) => progress == null
-                    ? child
-                    : const Center(child: CircularProgressIndicator.adaptive()),
-                errorBuilder: (_, obj, t) => const Icon(Icons.broken_image),
+            SizedBox(
+              width: 64,
+              child: AspectRatio(
+                aspectRatio: 3 / 4,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    "${ApiUrls.imageUrlBase}${data.bookThumbnails.first.file}",
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context, child, progress) =>
+                        progress == null
+                        ? child
+                        : const Center(
+                            child: CircularProgressIndicator.adaptive(),
+                          ),
+                    errorBuilder: (_, obj, t) => const Icon(Icons.broken_image),
+                  ),
+                ),
               ),
             ),
             const SizedBox(width: 12),

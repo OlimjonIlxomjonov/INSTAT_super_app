@@ -112,9 +112,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
     super.dispose();
   }
 
-  /// Measures the real rendered height of a single line of text in [style],
-  /// accounting for both the app's own responsive font scaling and the
-  /// device's accessibility text scale — instead of guessing a multiplier.
+
   double _measureLineHeight(BuildContext context, TextStyle style) {
     final painter = TextPainter(
       text: TextSpan(text: 'Ag', style: style),

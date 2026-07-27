@@ -31,7 +31,7 @@ class DraggableAppBarWg extends StatelessWidget implements PreferredSize {
 
     final localization = AppLocalizations.of(context)!;
     return AppBar(
-      actionsPadding: .only(right: 5),
+      actionsPadding: const .only(right: 5),
       automaticallyImplyLeading: false,
       title: GestureDetector(
         behavior: .opaque,

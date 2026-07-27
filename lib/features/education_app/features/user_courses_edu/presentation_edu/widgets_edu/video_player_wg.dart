@@ -8,6 +8,7 @@ class VideoPlayerWidget extends StatefulWidget {
   final VoidCallback? onBack;
   final ValueNotifier<String>? currentResolutionNotifier;
   final ValueChanged<String>? onResolutionSelected;
+  final ValueNotifier<bool>? isSwitchingResolutionNotifier;
 
   const VideoPlayerWidget({
     super.key,
@@ -16,6 +17,7 @@ class VideoPlayerWidget extends StatefulWidget {
     this.onBack,
     this.currentResolutionNotifier,
     this.onResolutionSelected,
+    this.isSwitchingResolutionNotifier,
   });
 
   @override
@@ -80,6 +82,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
               onBack: widget.onBack,
               currentResolutionNotifier: widget.currentResolutionNotifier,
               onResolutionSelected: widget.onResolutionSelected,
+              isSwitchingResolutionNotifier: widget.isSwitchingResolutionNotifier,
             ),
           ),
         ],

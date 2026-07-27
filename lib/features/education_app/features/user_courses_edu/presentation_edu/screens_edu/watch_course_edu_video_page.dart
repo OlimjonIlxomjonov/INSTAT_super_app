@@ -66,6 +66,13 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
   final ValueNotifier<String> _currentResolutionNotifier = ValueNotifier(
     '1080',
   );
+  final ValueNotifier<bool> _isSwitchingResolutionNotifier = ValueNotifier(
+    false,
+  );
+  // Bumped on every changeResolution() call so a slow, now-stale switch
+  // can't clobber a newer one that finished first (or reset the spinner
+  // it's still showing).
+  int _resolutionSwitchGeneration = 0;
 
   int _lastSentProgress = -1;
   DateTime? _lastProgressCheck;
@@ -100,6 +107,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
     _hasVideoErrorNotifier.dispose();
     _isDownloadingNotifier.dispose();
     _currentResolutionNotifier.dispose();
+    _isSwitchingResolutionNotifier.dispose();
     super.dispose();
   }
 
@@ -202,19 +210,32 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
 
   Future<void> changeResolution(String newRes) async {
     final currentController = _controllerNotifier.value;
-    if (newRes == _currentResolutionNotifier.value ||
-        currentController == null) {
+    final previousRes = _currentResolutionNotifier.value;
+    if (newRes == previousRes || currentController == null) {
       return;
     }
 
     final currentPos = currentController.value.position;
     final wasPlaying = currentController.value.isPlaying;
 
+    // Optimistic UI: reflect the pick and show a spinner immediately,
+    // instead of leaving the paused old frame with no feedback while the
+    // new stream loads in the background. A generation token means that if
+    // the user taps another quality before this one finishes, this call's
+    // result gets silently discarded instead of clobbering the newer pick.
+    final myGeneration = ++_resolutionSwitchGeneration;
+    _currentResolutionNotifier.value = newRes;
+    _isSwitchingResolutionNotifier.value = true;
+
     await currentController.pause();
 
     final token = TokenStorageServiceImpl().getAccessToken();
     if (token == null) {
       logger.e('No token found');
+      if (mounted && myGeneration == _resolutionSwitchGeneration) {
+        _currentResolutionNotifier.value = previousRes;
+        _isSwitchingResolutionNotifier.value = false;
+      }
       return;
     }
 
@@ -240,17 +261,29 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
     } catch (e) {
       logger.e('Video resolution switch error: $e');
       await newController.dispose();
-      if (mounted) _hasVideoErrorNotifier.value = true;
+      // A newer switch has since started — let it own the UI state.
+      if (myGeneration != _resolutionSwitchGeneration) return;
+      if (mounted) {
+        _hasVideoErrorNotifier.value = true;
+        _currentResolutionNotifier.value = previousRes;
+        _isSwitchingResolutionNotifier.value = false;
+      }
       return;
     }
 
     await newController.seekTo(currentPos);
+
+    if (myGeneration != _resolutionSwitchGeneration) {
+      // Superseded by a later pick while this one was loading — drop it.
+      await newController.dispose();
+      return;
+    }
+
     newController.addListener(_videoListener);
-
-    _currentResolutionNotifier.value = newRes;
-
     _controllerNotifier.value = newController;
     await _disposeController(currentController);
+
+    _isSwitchingResolutionNotifier.value = false;
 
     if (wasPlaying) {
       newController.play();
@@ -330,6 +363,8 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                       hasVideoErrorNotifier: _hasVideoErrorNotifier,
                       imagePath: widget.imagePath,
                       currentResolutionNotifier: _currentResolutionNotifier,
+                      isSwitchingResolutionNotifier:
+                          _isSwitchingResolutionNotifier,
                       onResolutionSelected: changeResolution,
                       onThumbnailTap: () {
                         _showVideoNotifier.value = true;
@@ -510,6 +545,7 @@ class _VideoAreaWidget extends StatelessWidget {
   final ValueNotifier<bool> hasVideoErrorNotifier;
   final String? imagePath;
   final ValueNotifier<String> currentResolutionNotifier;
+  final ValueNotifier<bool> isSwitchingResolutionNotifier;
   final ValueChanged<String> onResolutionSelected;
   final VoidCallback onThumbnailTap;
 
@@ -519,6 +555,7 @@ class _VideoAreaWidget extends StatelessWidget {
     required this.hasVideoErrorNotifier,
     required this.imagePath,
     required this.currentResolutionNotifier,
+    required this.isSwitchingResolutionNotifier,
     required this.onResolutionSelected,
     required this.onThumbnailTap,
   });
@@ -551,6 +588,8 @@ class _VideoAreaWidget extends StatelessWidget {
                     return VideoPlayerWidget(
                       controller: controller,
                       currentResolutionNotifier: currentResolutionNotifier,
+                      isSwitchingResolutionNotifier:
+                          isSwitchingResolutionNotifier,
                       onResolutionSelected: onResolutionSelected,
                       onBack: () {
                         controller.pause();

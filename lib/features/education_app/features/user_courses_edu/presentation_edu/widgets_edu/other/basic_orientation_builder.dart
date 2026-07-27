@@ -28,6 +28,7 @@ class BasicOverlayWidget extends StatefulWidget {
   final VoidCallback? onBack;
   final ValueNotifier<String>? currentResolutionNotifier;
   final ValueChanged<String>? onResolutionSelected;
+  final ValueNotifier<bool>? isSwitchingResolutionNotifier;
 
   const BasicOverlayWidget({
     super.key,
@@ -36,6 +37,7 @@ class BasicOverlayWidget extends StatefulWidget {
     this.onBack,
     this.currentResolutionNotifier,
     this.onResolutionSelected,
+    this.isSwitchingResolutionNotifier,
   });
 
   @override
@@ -110,6 +112,7 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
             controller: widget.controller,
             currentResolutionNotifier: widget.currentResolutionNotifier,
             onResolutionSelected: widget.onResolutionSelected,
+            isSwitchingResolutionNotifier: widget.isSwitchingResolutionNotifier,
           ),
         ),
       );
@@ -187,40 +190,25 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
                                     valueListenable:
                                         widget.currentResolutionNotifier!,
                                     builder: (context, resolution, _) {
-                                      return PopupMenuButton<String>(
-                                        color: AppColors.white,
-                                        icon: const Icon(
-                                          Icons.settings,
-                                          color: Colors.white,
-                                          size: 24,
-                                        ),
-                                        onSelected: (res) {
-                                          widget.onResolutionSelected!(res);
-                                          _startHideTimer();
-                                        },
-                                        itemBuilder: (context) =>
-                                            ['1080', '720', '480', '240']
-                                                .map(
-                                                  (res) => PopupMenuItem(
-                                                    value: res,
-                                                    child: Text(
-                                                      '${res}p${resolution == res ? ' *' : ''}',
-                                                      style: AppTextStyles
-                                                          .source
-                                                          .medium(
-                                                            fontSize: 14,
-                                                            color:
-                                                                resolution ==
-                                                                    res
-                                                                ? AppColors
-                                                                      .primaryColor
-                                                                : AppColors
-                                                                      .black,
-                                                          ),
-                                                    ),
-                                                  ),
-                                                )
-                                                .toList(),
+                                      // Disabled (not hidden — keeps the
+                                      // layout stable) while a switch is
+                                      // already in flight, so taps can't
+                                      // pile up faster than they resolve.
+                                      final isSwitchingNotifier =
+                                          widget.isSwitchingResolutionNotifier;
+                                      if (isSwitchingNotifier == null) {
+                                        return _buildResolutionMenu(
+                                          resolution: resolution,
+                                          enabled: true,
+                                        );
+                                      }
+                                      return ValueListenableBuilder<bool>(
+                                        valueListenable: isSwitchingNotifier,
+                                        builder: (context, isSwitching, _) =>
+                                            _buildResolutionMenu(
+                                              resolution: resolution,
+                                              enabled: !isSwitching,
+                                            ),
                                       );
                                     },
                                   ),
@@ -228,27 +216,28 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
                             ),
                           ),
 
-                          // 3. Center buttons (Rewind 10s, Play/Pause, Forward 10s)
-                          if (!isBuffering)
-                            Center(
-                              child: GestureDetector(
-                                onTap: _togglePlayPause,
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    color: Colors.black38,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  padding: const EdgeInsets.all(12),
-                                  child: Icon(
-                                    widget.controller.value.isPlaying
-                                        ? Icons.pause_rounded
-                                        : Icons.play_arrow_rounded,
-                                    color: Colors.white,
-                                    size: 44,
-                                  ),
-                                ),
-                              ),
-                            ),
+                          // 3. Center play/pause button — hidden while
+                          // buffering OR switching resolution. During a
+                          // switch, the controller underneath is just the
+                          // old, paused one; tapping play here would resume
+                          // it invisibly behind the spinner, and that
+                          // progress gets thrown away once the new
+                          // controller swaps in and seeks back to the
+                          // position captured when the switch started.
+                          widget.isSwitchingResolutionNotifier != null
+                              ? ValueListenableBuilder<bool>(
+                                  valueListenable:
+                                      widget.isSwitchingResolutionNotifier!,
+                                  builder: (context, isSwitching, _) {
+                                    if (isBuffering || isSwitching) {
+                                      return const SizedBox.shrink();
+                                    }
+                                    return _buildPlayPauseButton();
+                                  },
+                                )
+                              : (isBuffering
+                                    ? const SizedBox.shrink()
+                                    : _buildPlayPauseButton()),
 
                           // 4. Bottom control row and scrubber
                           Positioned(
@@ -349,22 +338,24 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
             ),
 
             // ----------------------------------------------------------------
-            // Buffering spinner — always on top, always visible, but must
-            // never block taps to the controls underneath (back, fullscreen,
-            // resolution, scrubbing) while a seek is buffering.
+            // Buffering / resolution-switch spinner — always on top, always
+            // visible, but must never block taps to the controls underneath
+            // (back, fullscreen, resolution, scrubbing).
+            //
+            // Resolution switches build a whole new controller in the
+            // background and only swap it in once ready, so the *old*
+            // controller just looks paused the entire time — it never
+            // reports isBuffering. Without this, switching quality looked
+            // like the player had silently frozen. isSwitchingResolutionNotifier
+            // covers that gap so the same spinner shows during the switch.
             // ----------------------------------------------------------------
-            if (isBuffering)
-              IgnorePointer(
-                child: Container(
-                  color: Colors.black26,
-                  child: const Center(
-                    child: CircularProgressIndicator(
-                      strokeWidth: 3,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-                  ),
-                ),
-              ),
+            widget.isSwitchingResolutionNotifier != null
+                ? ValueListenableBuilder<bool>(
+                    valueListenable: widget.isSwitchingResolutionNotifier!,
+                    builder: (context, isSwitching, _) =>
+                        _buildLoadingOverlay(isBuffering || isSwitching),
+                  )
+                : _buildLoadingOverlay(isBuffering),
           ],
         );
       },
@@ -374,6 +365,77 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
   // ---------------------------------------------------------------------------
   // Helpers
   // ---------------------------------------------------------------------------
+  Widget _buildResolutionMenu({
+    required String resolution,
+    required bool enabled,
+  }) {
+    return Opacity(
+      opacity: enabled ? 1.0 : 0.4,
+      child: PopupMenuButton<String>(
+        enabled: enabled,
+        color: AppColors.white,
+        icon: const Icon(Icons.settings, color: Colors.white, size: 24),
+        onSelected: (res) {
+          widget.onResolutionSelected!(res);
+          _startHideTimer();
+        },
+        itemBuilder: (context) => ['1080', '720', '480', '240']
+            .map(
+              (res) => PopupMenuItem(
+                value: res,
+                child: Text(
+                  '${res}p${resolution == res ? ' *' : ''}',
+                  style: AppTextStyles.source.medium(
+                    fontSize: 14,
+                    color: resolution == res
+                        ? AppColors.primaryColor
+                        : AppColors.black,
+                  ),
+                ),
+              ),
+            )
+            .toList(),
+      ),
+    );
+  }
+
+  Widget _buildPlayPauseButton() {
+    return Center(
+      child: GestureDetector(
+        onTap: _togglePlayPause,
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Colors.black38,
+            shape: BoxShape.circle,
+          ),
+          padding: const EdgeInsets.all(12),
+          child: Icon(
+            widget.controller.value.isPlaying
+                ? Icons.pause_rounded
+                : Icons.play_arrow_rounded,
+            color: Colors.white,
+            size: 44,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoadingOverlay(bool visible) {
+    if (!visible) return const SizedBox.shrink();
+    return IgnorePointer(
+      child: Container(
+        color: Colors.black26,
+        child: const Center(
+          child: CircularProgressIndicator(
+            strokeWidth: 3,
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
+
   String _formatDuration(Duration d) {
     final hours = d.inHours;
     final minutes = d.inMinutes.remainder(60).toString().padLeft(2, '0');
