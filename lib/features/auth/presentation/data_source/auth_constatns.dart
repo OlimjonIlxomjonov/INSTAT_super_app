@@ -6,18 +6,14 @@ abstract class AuthConstants {
   static const String clientId = 'instat_uz';
 
   // static const String redirectUri = 'https://test.avacoder.uz/api/one-id/login';
-  static const String redirectUri = 'https://api1.instat.uz/api/one-id/login';
+  // static const String redirectUri = 'https://api1.instat.uz/api/one-id/login';
 
-  // static const String redirectUri = '${ApiUrls.baseUrl}one-id/login';
+  static const String redirectUri = '${ApiUrls.baseUrl}one-id/login';
 
   static const String scope = 'instat_uz';
 
   static const String redirectPath = '/api/one-id/login';
 
-  // Google Sign-In "Web application" OAuth client — this is what the
-  // backend's /api/auth/google/ endpoint checks the token audience against.
-  // The Android/iOS OAuth clients (registered separately, matched by package
-  // name + SHA-1 / bundle ID) never appear directly in app code.
   static const String googleServerClientId =
       '1050827484257-7k7mua9f0b2pai9fn6392auir1aeb6cq.apps.googleusercontent.com';
 

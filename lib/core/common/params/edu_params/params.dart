@@ -168,3 +168,24 @@ class FaceRecParams {
 
   FaceRecParams({required this.code, required this.imgPath});
 }
+
+//! not-resident (foreign user) account confirmation
+class RegisterNotResidentParams {
+  final String firstName;
+  final String lastName;
+  final String middleName;
+  final String phoneNumber;
+  final String passportNumber;
+  final int countryId;
+  final File verifiedImage;
+
+  RegisterNotResidentParams({
+    required this.firstName,
+    required this.lastName,
+    required this.middleName,
+    required this.phoneNumber,
+    required this.passportNumber,
+    required this.countryId,
+    required this.verifiedImage,
+  });
+}

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/network/dio_error_classifier.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/get_search_books_usecase.dart';
 import 'search_books_event.dart';
 import 'search_books_state.dart';
@@ -24,7 +25,7 @@ class SearchBooksBloc extends Bloc<SearchBooksEvent, SearchBooksState> {
     } on DioException catch (e) {
       emit(SearchBooksError(
         message: e.message ?? 'Unknown error',
-        isConnectionError: true,
+        isConnectionError: isNoInternetError(e),
       ));
     } catch (e) {
       emit(SearchBooksError(message: e.toString()));

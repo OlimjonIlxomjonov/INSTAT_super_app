@@ -8,6 +8,7 @@ import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/courses/course_list_response_model.dart';
+import 'package:my_template/features/main_app/home/data/model/country/country_model.dart';
 import 'package:my_template/features/main_app/home/data/model/user_me/user_model.dart';
 import 'package:my_template/features/main_app/home/data/source/remote_data_source/home_remote_data_source.dart';
 import 'package:path_provider/path_provider.dart';
@@ -172,6 +173,96 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       }
     } catch (e) {
       logger.e("Failed to fetch MyID session ID: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<CountryModel>> fetchCountries() async {
+    try {
+      final response = await _dioClient.get(ApiUrls.countriesList);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data as List;
+        return data
+            .map((e) => CountryModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      } else {
+        throw ServerException(
+          statusCode: response.statusCode,
+          message: response.statusMessage,
+        );
+      }
+    } on DioException catch (e) {
+      logger.e(e);
+      throw ServerException(
+        statusCode: e.response?.statusCode,
+        message: e.response?.statusMessage ?? e.message,
+      );
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> registerNotResident({
+    required RegisterNotResidentParams params,
+  }) async {
+    try {
+      final formData = FormData.fromMap({
+        'first_name': params.firstName,
+        'last_name': params.lastName,
+        'middle_name': params.middleName,
+        'phone_number': params.phoneNumber,
+        'pport_no': params.passportNumber,
+        'country': params.countryId,
+        'verified_image': await MultipartFile.fromFile(
+          params.verifiedImage.path,
+          filename: params.verifiedImage.path.split('/').last,
+        ),
+      });
+
+      final response = await _dioClient.post(
+        ApiUrls.registerNotResident,
+        data: formData,
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+      } else {
+        throw ServerException(
+          statusCode: response.statusCode,
+          message: response.statusMessage,
+        );
+      }
+    } on DioException catch (e) {
+      logger.e(e);
+
+      // Surfaces backend field-level validation errors (e.g. passport
+      // number already registered) as a typed exception so the UI can show
+      // the exact message under the right field instead of a generic one.
+      final errorBody = e.response?.data;
+      if (errorBody is Map && errorBody['error'] is Map) {
+        final error = errorBody['error'] as Map;
+        if (error['type'] == 'ValidationError' && error['details'] is Map) {
+          final rawDetails = error['details'] as Map;
+          final fieldErrors = <String, List<String>>{};
+          rawDetails.forEach((key, value) {
+            if (value is List) {
+              fieldErrors[key.toString()] = value
+                  .map((m) => m.toString())
+                  .toList();
+            }
+          });
+          throw ValidationException(fieldErrors);
+        }
+      }
+
+      throw ServerException(
+        statusCode: e.response?.statusCode,
+        message: e.response?.statusMessage ?? e.message,
+      );
+    } catch (e) {
+      logger.e(e);
       rethrow;
     }
   }

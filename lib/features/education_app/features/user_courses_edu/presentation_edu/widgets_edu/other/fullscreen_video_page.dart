@@ -53,7 +53,8 @@ class _FullscreenVideoPageState extends State<FullscreenVideoPage> {
                   isFullscreen: true,
                   currentResolutionNotifier: widget.currentResolutionNotifier,
                   onResolutionSelected: widget.onResolutionSelected,
-                  isSwitchingResolutionNotifier: widget.isSwitchingResolutionNotifier,
+                  isSwitchingResolutionNotifier:
+                      widget.isSwitchingResolutionNotifier,
                 ),
               )
             : VideoPlayerWidget(
@@ -61,6 +62,8 @@ class _FullscreenVideoPageState extends State<FullscreenVideoPage> {
                 isFullscreen: true,
                 currentResolutionNotifier: widget.currentResolutionNotifier,
                 onResolutionSelected: widget.onResolutionSelected,
+                isSwitchingResolutionNotifier:
+                    widget.isSwitchingResolutionNotifier,
               ),
       ),
     );

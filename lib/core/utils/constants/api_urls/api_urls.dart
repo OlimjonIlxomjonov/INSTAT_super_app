@@ -108,6 +108,10 @@ class ApiUrls {
   //? saved (liked) books
   static const savedBooks = 'books/items/saved/';
 
-  //! online book reader — page images require auth, unlike plain /media/ files
+  //? online book reader — page images require auth, unlike plain /media/ files
   static String bookPageImageUrl(int pageId) => '${baseUrl}book-pages/$pageId';
+
+  //! Not-resident (foreign user) account confirmation
+  static const countriesList = 'countries/items/all/';
+  static const registerNotResident = 'register-not-resident';
 }

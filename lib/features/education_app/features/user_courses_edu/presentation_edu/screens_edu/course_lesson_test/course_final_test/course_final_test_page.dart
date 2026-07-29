@@ -9,6 +9,7 @@ import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/camera_service.dart';
+import 'package:my_template/core/utils/general_widgets/camera_access_denied/camera_access_denied_overlay_wg.dart';
 import 'package:my_template/core/utils/constants/assets/app_animations.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets/camera_preview_widget.dart';
@@ -32,13 +33,15 @@ class CourseFinalTestPage extends StatefulWidget {
   State<CourseFinalTestPage> createState() => _CourseFinalTestPageState();
 }
 
-class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
+class _CourseFinalTestPageState extends State<CourseFinalTestPage>
+    with WidgetsBindingObserver {
   late ConfettiController _confettiController;
   late CameraService _cameraService;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _confettiController = ConfettiController(
       duration: const Duration(seconds: 2),
     );
@@ -57,8 +60,20 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
     );
   }
 
+  // Retry init on resume so granting the permission in system settings and
+  // coming back clears the denied overlay without restarting the test.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed &&
+        _cameraService.isPermissionDenied) {
+      _cameraService.init();
+    }
+  }
+
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _confettiController.dispose();
     _cameraService.dispose();
     super.dispose();
@@ -287,6 +302,8 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage> {
                 ),
                 if (_cameraService.isReady && _cameraService.controller != null)
                   CameraPreviewWidget(controller: _cameraService.controller!),
+                if (_cameraService.isPermissionDenied)
+                  const CameraAccessDeniedOverlayWg(),
               ],
             );
           },

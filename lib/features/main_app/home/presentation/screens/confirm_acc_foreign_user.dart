@@ -2,10 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
-import 'package:intl_phone_field/countries.dart' as intl_countries;
 import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:my_template/core/common/flush_bar/flush_bars.dart';
+import 'package:my_template/core/common/params/edu_params/params.dart';
+import 'package:my_template/core/di/service_locator.dart';
+import 'package:my_template/core/error/exceptions.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
@@ -13,13 +17,15 @@ import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app
 import 'package:my_template/core/utils/general_widgets/custom_drop_down_menu_wg.dart';
 import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
 import 'package:my_template/features/auth/presentation/widgets/auth_text_field_wg.dart';
+import 'package:my_template/features/main_app/home/domain/entity/country/country_entity.dart';
+import 'package:my_template/features/main_app/home/domain/usecase/get_countries_use_case.dart';
+import 'package:my_template/features/main_app/home/domain/usecase/register_not_resident_use_case.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/home_event.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/add_article/drop_down/drop_down_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/widgets/article_file_picker_helper.dart';
 import 'package:my_template/core/utils/general_widgets/dotted_container/dotted_cotnainer_wg.dart';
 import 'package:my_template/core/utils/general_widgets/selected_file_container/selected_file_container_wg.dart';
-
-import '../../../../../core/utils/widgets/open_mini_app/sub_bottom_sheet_opener.dart';
-import 'drawer/components/log_out_options_component.dart';
 
 class ConfirmAccForeignUser extends StatefulWidget {
   const ConfirmAccForeignUser({super.key});
@@ -35,7 +41,7 @@ class _ConfirmAccForeignUserState extends State<ConfirmAccForeignUser> {
   final _documentNumberController = TextEditingController();
   final _phoneNumberController = TextEditingController();
 
-  int? _selectedCountryIndex;
+  int? _selectedCountryIndex; // index into _countries
   bool _agreedToTerms = false;
 
   File? _documentFile;
@@ -43,15 +49,52 @@ class _ConfirmAccForeignUserState extends State<ConfirmAccForeignUser> {
   int? _documentFileSize;
   bool _isPickingFile = false;
 
-  late final List<DropDownEntity> _countryOptions = List.generate(
-    intl_countries.countries.length,
-    (index) => DropDownEntity(
-      id: index,
-      name: intl_countries.countries[index].name,
-      isActive: true,
-      createdAt: DateTime.now(),
-    ),
-  );
+  List<CountryEntity> _countries = [];
+  bool _isLoadingCountries = true;
+  bool _countriesLoadFailed = false;
+
+  bool _isSubmitting = false;
+  String? _passportError;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCountries();
+  }
+
+  Future<void> _fetchCountries() async {
+    setState(() {
+      _isLoadingCountries = true;
+      _countriesLoadFailed = false;
+    });
+    try {
+      final countries = await sl<GetCountriesUseCase>().call();
+      if (!mounted) return;
+      setState(() {
+        _countries = countries;
+        _isLoadingCountries = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _isLoadingCountries = false;
+        _countriesLoadFailed = true;
+      });
+    }
+  }
+
+  List<DropDownEntity> get _countryOptions {
+    final localeCode = Localizations.localeOf(context).languageCode;
+    return List.generate(
+      _countries.length,
+      (index) => DropDownEntity(
+        id: index,
+        name: _countries[index].displayName(localeCode),
+        isActive: true,
+        createdAt: DateTime.now(),
+      ),
+    );
+  }
 
   @override
   void dispose() {
@@ -107,8 +150,47 @@ class _ConfirmAccForeignUserState extends State<ConfirmAccForeignUser> {
     }
   }
 
-  void _submit() {
-    if (!_isFormValid) return;
+  Future<void> _submit() async {
+    if (!_isFormValid || _isSubmitting || _selectedCountryIndex == null) {
+      return;
+    }
+    final localization = AppLocalizations.of(context)!;
+
+    setState(() {
+      _isSubmitting = true;
+      _passportError = null;
+    });
+
+    try {
+      final country = _countries[_selectedCountryIndex!];
+      await sl<RegisterNotResidentUseCase>().call(
+        RegisterNotResidentParams(
+          firstName: _firstNameController.text.trim(),
+          lastName: _lastNameController.text.trim(),
+          middleName: _fatherNameController.text.trim(),
+          phoneNumber: _phoneNumberController.text.trim(),
+          passportNumber: _documentNumberController.text.trim(),
+          countryId: country.id,
+          verifiedImage: _documentFile!,
+        ),
+      );
+
+      if (!mounted) return;
+      successFlushBar(context, localization.notResidentSubmitSuccess);
+      context.read<UserMeBloc>().add(UserMeEvent());
+    } on ValidationException catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _passportError =
+            e.firstErrorFor('pport_no') ??
+            localization.somethingWentWrongTryAgain;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      errorFlushBar(context, localization.somethingWentWrongTryAgain);
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
+    }
   }
 
   @override
@@ -130,13 +212,30 @@ class _ConfirmAccForeignUserState extends State<ConfirmAccForeignUser> {
                   children: [
                     CustomDropDownMenuWg(
                       title: localization.countryLabel,
-                      hintText: localization.selectCountryHint,
+                      hintText: _isLoadingCountries
+                          ? localization.loadingEllipsis
+                          : (_countriesLoadFailed
+                                ? localization.countriesLoadErrorHint
+                                : localization.selectCountryHint),
                       leadingIcon: IconlyLight.location,
                       options: _countryOptions,
                       value: _selectedCountryIndex,
-                      onChanged: (val) =>
-                          setState(() => _selectedCountryIndex = val),
+                      onChanged: (_isLoadingCountries || _countriesLoadFailed)
+                          ? null
+                          : (val) =>
+                                setState(() => _selectedCountryIndex = val),
                     ),
+                    if (_countriesLoadFailed)
+                      GestureDetector(
+                        onTap: _fetchCountries,
+                        child: Text(
+                          localization.retry,
+                          style: AppTextStyles.source.medium(
+                            fontSize: 13,
+                            color: AppColors.primaryColor,
+                          ),
+                        ),
+                      ),
                     AuthTextFieldWg(
                       title: localization.lastNameLabel,
                       label: localization.enterLastNameHint,
@@ -163,8 +262,16 @@ class _ConfirmAccForeignUserState extends State<ConfirmAccForeignUser> {
                       label: localization.enterDocumentNumberHint,
                       controller: _documentNumberController,
                       leadingIcon: IconlyLight.document,
-                      onChanged: (_) => setState(() {}),
+                      onChanged: (_) => setState(() => _passportError = null),
                     ),
+                    if (_passportError != null)
+                      Text(
+                        _passportError!,
+                        style: AppTextStyles.source.regular(
+                          fontSize: 12,
+                          color: AppColors.red,
+                        ),
+                      ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -236,10 +343,11 @@ class _ConfirmAccForeignUserState extends State<ConfirmAccForeignUser> {
               ),
             ),
             Opacity(
-              opacity: _isFormValid ? 1.0 : 0.5,
+              opacity: (_isFormValid && !_isSubmitting) ? 1.0 : 0.5,
               child: CustomBottomNavContainerWg(
                 buttonText: localization.confirm,
-                onTap: _isFormValid ? _submit : () {},
+                isLoading: _isSubmitting,
+                onTap: (_isFormValid && !_isSubmitting) ? _submit : () {},
               ),
             ),
           ],

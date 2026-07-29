@@ -77,7 +77,7 @@ class HomeEduPage extends StatelessWidget {
           slivers: [
             /// SEARCH BAR
             SliverAppBar(
-              toolbarHeight: 56 + 24,
+              toolbarHeight: 80,
               floating: true,
               snap: true,
               automaticallyImplyLeading: false,

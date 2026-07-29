@@ -39,7 +39,11 @@ class _MagazinesPageState extends State<MagazinesPage> {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: AppSearchbarWg(), automaticallyImplyLeading: false),
+      appBar: AppBar(
+        title: AppSearchbarWg(),
+        automaticallyImplyLeading: false,
+        toolbarHeight: 80,
+      ),
       body: CustomRefreshIndicator(
         onRefresh: () async {
           context.read<ArticleEditionsBloc>().add(
@@ -68,7 +72,10 @@ class _MagazinesPageState extends State<MagazinesPage> {
                         subtitle: localization.emptyMagazineShelfSubtitle,
                         buttonLabel: localization.addMagazine,
                         onAction: () {
-                          technicalWorkFlushBar(context, localization.comingSoon);
+                          technicalWorkFlushBar(
+                            context,
+                            localization.comingSoon,
+                          );
                         },
                       ),
                     );

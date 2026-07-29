@@ -1,5 +1,6 @@
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/course_list_response.dart';
+import 'package:my_template/features/main_app/home/domain/entity/country/country_entity.dart';
 import 'package:my_template/features/main_app/home/domain/entity/user_me/user_entity.dart';
 
 abstract class HomeRepository {
@@ -16,5 +17,12 @@ abstract class HomeRepository {
   Future<String> getMyIdSessionId({
     required String birthDate,
     required String passportData,
+  });
+
+  //! not-resident (foreign user) account confirmation
+  Future<List<CountryEntity>> getCountries();
+
+  Future<void> registerNotResident({
+    required RegisterNotResidentParams params,
   });
 }

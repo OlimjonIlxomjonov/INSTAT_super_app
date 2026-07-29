@@ -51,11 +51,11 @@ class MicroDataHomePage extends StatelessWidget {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: EmptyStateStaticText(
-              message: localization.noRequestsAvailable,
-            ),
-          ),
+          // SliverToBoxAdapter(
+          //   child: EmptyStateStaticText(
+          //     message: localization.noRequestsAvailable,
+          //   ),
+          // ),
 
           //! User last Actions
           SliverPadding(
@@ -67,11 +67,11 @@ class MicroDataHomePage extends StatelessWidget {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: EmptyStateStaticText(
-              message: localization.noRecentActionsAvailable,
-            ),
-          ),
+          // SliverToBoxAdapter(
+          //   child: EmptyStateStaticText(
+          //     message: localization.noRecentActionsAvailable,
+          //   ),
+          // ),
         ],
       ),
     );

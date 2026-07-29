@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/network/dio_error_classifier.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/search_courses/search_courses_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/search_courses/search_courses_event.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/search_courses/search_courses_state.dart';
@@ -17,17 +18,9 @@ class SearchCoursesBloc extends Bloc<CoursesEvent, SearchCoursesState> {
         final response = await useCase.call(params: event.params);
         emit(SearchCoursesLoaded(response: response));
       } on DioException catch (e) {
-        final isNoInternet =
-            e.type == DioExceptionType.connectionTimeout ||
-            e.type == DioExceptionType.connectionError ||
-            e.type == DioExceptionType.receiveTimeout ||
-            e.type == DioExceptionType.sendTimeout ||
-            e.type == DioExceptionType.unknown ||
-            e.error is SocketException;
-
         emit(
           SearchCoursesError(
-            isConnectionError: isNoInternet,
+            isConnectionError: isNoInternetError(e),
             message: e.message ?? 'Unknown error',
           ),
         );

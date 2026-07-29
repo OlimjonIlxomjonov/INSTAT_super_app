@@ -357,15 +357,31 @@ class _TabletUiScreenComponentState extends State<TabletUiScreenComponent> {
                         );
                       }
 
-                      if (userMeState is UserMeError &&
-                          (userMeState.statusCode == 502 ||
-                              userMeState.statusCode == 503)) {
+                      // Any other error (bad TLS/certificate handshake
+                      // reaching the server, unexpected 5xx, malformed
+                      // response, etc.) is NOT "no internet" — show a real
+                      // server-error state instead of silently falling
+                      // through to empty-looking sections.
+                      final hasServerError =
+                          (coursesState is CoursesError &&
+                              !coursesState.isConnectionError) ||
+                          (userCoursesState is UserCoursesError &&
+                              !userCoursesState.isConnectionError) ||
+                          userMeState is UserMeError;
+
+                      if (hasServerError) {
+                        final statusCode = userMeState is UserMeError
+                            ? userMeState.statusCode
+                            : null;
+                        final message = userMeState is UserMeError
+                            ? userMeState.message
+                            : null;
                         return SliverFillRemaining(
                           hasScrollBody: false,
                           child: ServerErrorState(
                             onRetry: _reloadAll,
-                            statusCode: userMeState.statusCode,
-                            message: userMeState.message,
+                            statusCode: statusCode,
+                            message: message,
                           ),
                         );
                       }
@@ -468,15 +484,31 @@ class _TabletUiScreenComponentState extends State<TabletUiScreenComponent> {
                         );
                       }
 
-                      if (userMeState is UserMeError &&
-                          (userMeState.statusCode == 502 ||
-                              userMeState.statusCode == 503)) {
+                      // Any other error (bad TLS/certificate handshake
+                      // reaching the server, unexpected 5xx, malformed
+                      // response, etc.) is NOT "no internet" — show a real
+                      // server-error state instead of silently falling
+                      // through to empty-looking sections.
+                      final hasServerError =
+                          (coursesState is CoursesError &&
+                              !coursesState.isConnectionError) ||
+                          (userCoursesState is UserCoursesError &&
+                              !userCoursesState.isConnectionError) ||
+                          userMeState is UserMeError;
+
+                      if (hasServerError) {
+                        final statusCode = userMeState is UserMeError
+                            ? userMeState.statusCode
+                            : null;
+                        final message = userMeState is UserMeError
+                            ? userMeState.message
+                            : null;
                         return SliverFillRemaining(
                           hasScrollBody: false,
                           child: ServerErrorState(
                             onRetry: _reloadAll,
-                            statusCode: userMeState.statusCode,
-                            message: userMeState.message,
+                            statusCode: statusCode,
+                            message: message,
                           ),
                         );
                       }

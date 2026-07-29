@@ -39,9 +39,9 @@ class _UserOnlineBooksLibPageState extends State<UserOnlineBooksLibPage> {
       length: 2,
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(90),
+          preferredSize: const Size.fromHeight(90),
           child: Padding(
-            padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
             child: CustomTabBarWg(
               firstTab: localization.statusInProgress,
               secondTab: localization.finished,
@@ -56,7 +56,6 @@ class _UserOnlineBooksLibPageState extends State<UserOnlineBooksLibPage> {
               snap: true,
               automaticallyImplyLeading: false,
               title: AppSearchbarWg(),
-              toolbarHeight: 80,
             ),
             SliverToBoxAdapter(
               child: SingleChildScrollView(

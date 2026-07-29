@@ -42,7 +42,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     final isMobile = Responsive.isMobile(context);
-    final isDesktop = Responsive.isDesktop(context);
 
     return Scaffold(
       extendBody: true,
@@ -104,64 +103,52 @@ class _OnboardingPageState extends State<OnboardingPage> {
           color: AppColors.white,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            // On desktop, OnboardingWg renders a centered ~1200px-wide card
-            // rather than a full-bleed split — right-aligning these buttons
-            // to the true window edge would leave them floating far from
-            // that card. Center this bar to the same max width instead.
-            child: Align(
-              alignment: isDesktop ? Alignment.center : Alignment.centerLeft,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: isDesktop ? 1200 : double.infinity,
+            child: Column(
+              mainAxisSize: .min,
+              crossAxisAlignment: isMobile ? .start : .end,
+              children: [
+                SmoothPageIndicator(
+                  controller: pageController,
+                  count: 5,
+                  effect: ExpandingDotsEffect(
+                    activeDotColor: AppColors.primaryColor,
+                    expansionFactor: 2,
+                    radius: 5,
+                    dotHeight: appH(4),
+                    dotWidth: appW(10),
+                  ),
                 ),
-                child: Column(
-                  mainAxisSize: .min,
-                  crossAxisAlignment: isMobile ? .start : .end,
-                  children: [
-                    SmoothPageIndicator(
-                      controller: pageController,
-                      count: 5,
-                      effect: ExpandingDotsEffect(
-                        activeDotColor: AppColors.primaryColor,
-                        expansionFactor: 2,
-                        radius: 5,
-                        dotHeight: appH(4),
-                        dotWidth: appW(10),
-                      ),
-                    ),
-                    const SizedBox(height: 25),
-                    ValueListenableBuilder<bool>(
-                      valueListenable: _isLastPage,
-                      builder: (context, isLast, _) {
-                        return Row(
-                          spacing: 20,
-                          mainAxisAlignment: isMobile
-                              ? MainAxisAlignment.spaceBetween
-                              : MainAxisAlignment.end,
-                          children: [
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.greyScale.grey50,
-                                foregroundColor: AppColors.greyScale.grey600,
-                              ),
-                              onPressed: () => pageController.jumpToPage(4),
-                              child: AutoSizeText(localization.skipOnboarding),
-                            ),
-                            ElevatedButton(
-                              onPressed: moveNextPage,
-                              child: AutoSizeText(
-                                isLast
-                                    ? localization.startOnboarding
-                                    : localization.nextOnboarding,
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
+                const SizedBox(height: 25),
+                ValueListenableBuilder<bool>(
+                  valueListenable: _isLastPage,
+                  builder: (context, isLast, _) {
+                    return Row(
+                      spacing: 20,
+                      mainAxisAlignment: isMobile
+                          ? MainAxisAlignment.spaceBetween
+                          : MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.greyScale.grey50,
+                            foregroundColor: AppColors.greyScale.grey600,
+                          ),
+                          onPressed: () => pageController.jumpToPage(4),
+                          child: AutoSizeText(localization.skipOnboarding),
+                        ),
+                        ElevatedButton(
+                          onPressed: moveNextPage,
+                          child: AutoSizeText(
+                            isLast
+                                ? localization.startOnboarding
+                                : localization.nextOnboarding,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
-              ),
+              ],
             ),
           ),
         ),

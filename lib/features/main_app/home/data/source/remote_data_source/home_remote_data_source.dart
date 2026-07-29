@@ -1,5 +1,6 @@
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/courses/course_list_response_model.dart';
+import 'package:my_template/features/main_app/home/data/model/country/country_model.dart';
 import 'package:my_template/features/main_app/home/data/model/user_me/user_model.dart';
 
 abstract class HomeRemoteDataSource {
@@ -15,5 +16,12 @@ abstract class HomeRemoteDataSource {
   Future<String> fetchMyIdSessionId({
     required String birthDate,
     required String passportData,
+  });
+
+  //! not-resident (foreign user) account confirmation
+  Future<List<CountryModel>> fetchCountries();
+
+  Future<void> registerNotResident({
+    required RegisterNotResidentParams params,
   });
 }

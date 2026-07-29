@@ -5,29 +5,16 @@ import 'package:my_template/core/utils/app_utils.dart';
 import 'package:video_player/video_player.dart';
 import 'fullscreen_video_page.dart';
 
-/// BasicOverlayWidget renders the video controls overlay (play/pause button,
-/// progress bar, remaining time, fullscreen toggle).
-///
-/// Architecture notes:
-/// • Controls visibility is managed by a local [ValueNotifier<bool>]
-///   (_visibleNotifier). AnimatedOpacity reads it via [ValueListenableBuilder]
-///   so only the opacity subtree rebuilds when visibility toggles.
-/// • The progress indicator row (time + scrubber + icons) is wrapped in an
-///   [AnimatedBuilder] keyed to the [VideoPlayerController]. This means the
-///   scrubber and remaining-time label update on every video frame tick, but
-///   ONLY within that subtree — nothing outside it is rebuilt.
-/// • The play/pause button in the centre is also inside [AnimatedBuilder] so
-///   it reflects the playing state without triggering a setState on the whole
-///   overlay.
-/// • The playback listener (_playbackListener) only handles the edge case of
-///   auto-revealing controls when playback pauses unexpectedly (e.g., buffering
-///   end of stream). It never calls setState directly.
 class BasicOverlayWidget extends StatefulWidget {
   final VideoPlayerController controller;
   final bool isFullscreen;
   final VoidCallback? onBack;
   final ValueNotifier<String>? currentResolutionNotifier;
   final ValueChanged<String>? onResolutionSelected;
+  // Purely cosmetic: only ever read to decide whether to paint the small
+  // spinner on top. Nothing else in this widget branches on it, so it can
+  // never hide the back button / resolution menu / progress bar the way the
+  // old switching-aware overlay logic used to.
   final ValueNotifier<bool>? isSwitchingResolutionNotifier;
 
   const BasicOverlayWidget({
@@ -66,12 +53,13 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
   }
 
   // Reveals controls when the video genuinely pauses (user action, end of
-  // stream). Does NOT trigger during buffering — the spinner handles that.
+  // stream) or starts buffering — a resolution switch never touches this
+  // controller directly, so it never needs to know about that separately.
   void _playbackListener() {
     if (!mounted) return;
     final isBuffering = widget.controller.value.isBuffering;
     final isPlaying = widget.controller.value.isPlaying;
-    if (!isPlaying && !isBuffering && !_visibleNotifier.value) {
+    if ((!isPlaying || isBuffering) && !_visibleNotifier.value) {
       _visibleNotifier.value = true;
       _hideTimer?.cancel();
     }
@@ -79,11 +67,18 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
 
   void _startHideTimer() {
     _hideTimer?.cancel();
-    _hideTimer = Timer(const Duration(seconds: 3), () {
-      if (mounted && widget.controller.value.isPlaying) {
-        _visibleNotifier.value = false;
-      }
-    });
+    _hideTimer = Timer(const Duration(seconds: 3), _maybeHide);
+  }
+
+  void _maybeHide() {
+    if (!mounted) return;
+    if (widget.controller.value.isBuffering) {
+      _hideTimer = Timer(const Duration(milliseconds: 500), _maybeHide);
+      return;
+    }
+    if (widget.controller.value.isPlaying) {
+      _visibleNotifier.value = false;
+    }
   }
 
   void _toggleVisibility() {
@@ -142,6 +137,9 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
           children: [
             // ----------------------------------------------------------------
             // Controls overlay — shown/hidden by the visibility notifier.
+            // Never touched by resolution switching: that just swaps the
+            // controller in the background once it's ready, so from this
+            // widget's perspective nothing is happening while it loads.
             // ----------------------------------------------------------------
             GestureDetector(
               behavior: HitTestBehavior.opaque,
@@ -149,11 +147,12 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
               child: ValueListenableBuilder<bool>(
                 valueListenable: _visibleNotifier,
                 builder: (context, isVisible, _) {
+                  final effectiveVisible = isVisible || isBuffering;
                   return AnimatedOpacity(
-                    opacity: isVisible ? 1.0 : 0.0,
+                    opacity: effectiveVisible ? 1.0 : 0.0,
                     duration: const Duration(milliseconds: 300),
                     child: IgnorePointer(
-                      ignoring: !isVisible,
+                      ignoring: !effectiveVisible,
                       child: Stack(
                         children: [
                           // 1. Semi-transparent background overlay
@@ -190,25 +189,40 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
                                     valueListenable:
                                         widget.currentResolutionNotifier!,
                                     builder: (context, resolution, _) {
-                                      // Disabled (not hidden — keeps the
-                                      // layout stable) while a switch is
-                                      // already in flight, so taps can't
-                                      // pile up faster than they resolve.
-                                      final isSwitchingNotifier =
-                                          widget.isSwitchingResolutionNotifier;
-                                      if (isSwitchingNotifier == null) {
-                                        return _buildResolutionMenu(
-                                          resolution: resolution,
-                                          enabled: true,
-                                        );
-                                      }
-                                      return ValueListenableBuilder<bool>(
-                                        valueListenable: isSwitchingNotifier,
-                                        builder: (context, isSwitching, _) =>
-                                            _buildResolutionMenu(
-                                              resolution: resolution,
-                                              enabled: !isSwitching,
-                                            ),
+                                      return PopupMenuButton<String>(
+                                        color: AppColors.white,
+                                        icon: const Icon(
+                                          Icons.settings,
+                                          color: Colors.white,
+                                          size: 24,
+                                        ),
+                                        onSelected: (res) {
+                                          widget.onResolutionSelected!(res);
+                                          _startHideTimer();
+                                        },
+                                        itemBuilder: (context) =>
+                                            ['1080', '720', '480', '240']
+                                                .map(
+                                                  (res) => PopupMenuItem(
+                                                    value: res,
+                                                    child: Text(
+                                                      '${res}p${resolution == res ? ' *' : ''}',
+                                                      style: AppTextStyles
+                                                          .source
+                                                          .medium(
+                                                            fontSize: 14,
+                                                            color:
+                                                                resolution ==
+                                                                    res
+                                                                ? AppColors
+                                                                      .primaryColor
+                                                                : AppColors
+                                                                      .black,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                )
+                                                .toList(),
                                       );
                                     },
                                   ),
@@ -216,28 +230,8 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
                             ),
                           ),
 
-                          // 3. Center play/pause button — hidden while
-                          // buffering OR switching resolution. During a
-                          // switch, the controller underneath is just the
-                          // old, paused one; tapping play here would resume
-                          // it invisibly behind the spinner, and that
-                          // progress gets thrown away once the new
-                          // controller swaps in and seeks back to the
-                          // position captured when the switch started.
-                          widget.isSwitchingResolutionNotifier != null
-                              ? ValueListenableBuilder<bool>(
-                                  valueListenable:
-                                      widget.isSwitchingResolutionNotifier!,
-                                  builder: (context, isSwitching, _) {
-                                    if (isBuffering || isSwitching) {
-                                      return const SizedBox.shrink();
-                                    }
-                                    return _buildPlayPauseButton();
-                                  },
-                                )
-                              : (isBuffering
-                                    ? const SizedBox.shrink()
-                                    : _buildPlayPauseButton()),
+                          // 3. Center play/pause button
+                          if (!isBuffering) _buildPlayPauseButton(),
 
                           // 4. Bottom control row and scrubber
                           Positioned(
@@ -313,8 +307,9 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
               child: ValueListenableBuilder<bool>(
                 valueListenable: _visibleNotifier,
                 builder: (context, isVisible, _) {
+                  final effectiveVisible = isVisible || isBuffering;
                   return AnimatedOpacity(
-                    opacity: isVisible ? 0.0 : 1.0,
+                    opacity: effectiveVisible ? 0.0 : 1.0,
                     duration: const Duration(milliseconds: 300),
                     child: IgnorePointer(
                       ignoring: true,
@@ -340,22 +335,22 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
             // ----------------------------------------------------------------
             // Buffering / resolution-switch spinner — always on top, always
             // visible, but must never block taps to the controls underneath
-            // (back, fullscreen, resolution, scrubbing).
-            //
-            // Resolution switches build a whole new controller in the
-            // background and only swap it in once ready, so the *old*
-            // controller just looks paused the entire time — it never
-            // reports isBuffering. Without this, switching quality looked
-            // like the player had silently frozen. isSwitchingResolutionNotifier
-            // covers that gap so the same spinner shows during the switch.
+            // (back, fullscreen, resolution, scrubbing). This is the ONLY
+            // thing isSwitchingResolutionNotifier affects — it doesn't touch
+            // opacity, the play/pause button, or the resolution menu, so a
+            // switch can't hide anything else while it's in flight.
             // ----------------------------------------------------------------
             widget.isSwitchingResolutionNotifier != null
                 ? ValueListenableBuilder<bool>(
                     valueListenable: widget.isSwitchingResolutionNotifier!,
                     builder: (context, isSwitching, _) =>
-                        _buildLoadingOverlay(isBuffering || isSwitching),
+                        (isBuffering || isSwitching)
+                        ? _buildLoadingOverlay()
+                        : const SizedBox.shrink(),
                   )
-                : _buildLoadingOverlay(isBuffering),
+                : (isBuffering
+                      ? _buildLoadingOverlay()
+                      : const SizedBox.shrink()),
           ],
         );
       },
@@ -365,40 +360,6 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
   // ---------------------------------------------------------------------------
   // Helpers
   // ---------------------------------------------------------------------------
-  Widget _buildResolutionMenu({
-    required String resolution,
-    required bool enabled,
-  }) {
-    return Opacity(
-      opacity: enabled ? 1.0 : 0.4,
-      child: PopupMenuButton<String>(
-        enabled: enabled,
-        color: AppColors.white,
-        icon: const Icon(Icons.settings, color: Colors.white, size: 24),
-        onSelected: (res) {
-          widget.onResolutionSelected!(res);
-          _startHideTimer();
-        },
-        itemBuilder: (context) => ['1080', '720', '480', '240']
-            .map(
-              (res) => PopupMenuItem(
-                value: res,
-                child: Text(
-                  '${res}p${resolution == res ? ' *' : ''}',
-                  style: AppTextStyles.source.medium(
-                    fontSize: 14,
-                    color: resolution == res
-                        ? AppColors.primaryColor
-                        : AppColors.black,
-                  ),
-                ),
-              ),
-            )
-            .toList(),
-      ),
-    );
-  }
-
   Widget _buildPlayPauseButton() {
     return Center(
       child: GestureDetector(
@@ -421,12 +382,15 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
     );
   }
 
-  Widget _buildLoadingOverlay(bool visible) {
-    if (!visible) return const SizedBox.shrink();
-    return IgnorePointer(
-      child: Container(
-        color: Colors.black26,
-        child: const Center(
+  // Constrained to a small centered box (not a full-bleed Container) so the
+  // spinner doesn't visually cover the back/fullscreen/scrubber controls
+  // underneath — IgnorePointer only affects hit-testing, not painting.
+  Widget _buildLoadingOverlay() {
+    return const IgnorePointer(
+      child: Center(
+        child: SizedBox(
+          width: 44,
+          height: 44,
           child: CircularProgressIndicator(
             strokeWidth: 3,
             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),

@@ -40,9 +40,9 @@ class _UserCoursesEduPageState extends State<UserCoursesEduPage>
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(appH(90)),
+        preferredSize: const Size.fromHeight(90),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
           child: CustomTabBarWg(
             controller: _tabController,
             firstTab: localization.statusInProgress,

@@ -63,15 +63,13 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
   final ValueNotifier<bool> _showVideoNotifier = ValueNotifier(false);
   final ValueNotifier<bool> _hasVideoErrorNotifier = ValueNotifier(false);
   final ValueNotifier<bool> _isDownloadingNotifier = ValueNotifier(false);
-  final ValueNotifier<String> _currentResolutionNotifier = ValueNotifier(
-    '1080',
-  );
+  final ValueNotifier<String> _currentResolutionNotifier = ValueNotifier('720');
+  // Drives only the small spinner in BasicOverlayWidget — nothing else reads
+  // this, so it can't hide the back button / resolution menu / progress bar.
   final ValueNotifier<bool> _isSwitchingResolutionNotifier = ValueNotifier(
     false,
   );
-  // Bumped on every changeResolution() call so a slow, now-stale switch
-  // can't clobber a newer one that finished first (or reset the spinner
-  // it's still showing).
+
   int _resolutionSwitchGeneration = 0;
 
   int _lastSentProgress = -1;
@@ -92,12 +90,10 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
         ),
       ),
     );
-    // Video is intentionally NOT initialized here — lazy load on user tap.
   }
 
   @override
   void dispose() {
-    // Dispose the active controller cleanly before the page is destroyed.
     _disposeController(_controllerNotifier.value);
 
     _proxyServer?.stop();
@@ -218,13 +214,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
     final currentPos = currentController.value.position;
     final wasPlaying = currentController.value.isPlaying;
 
-    // Optimistic UI: reflect the pick and show a spinner immediately,
-    // instead of leaving the paused old frame with no feedback while the
-    // new stream loads in the background. A generation token means that if
-    // the user taps another quality before this one finishes, this call's
-    // result gets silently discarded instead of clobbering the newer pick.
     final myGeneration = ++_resolutionSwitchGeneration;
-    _currentResolutionNotifier.value = newRes;
     _isSwitchingResolutionNotifier.value = true;
 
     await currentController.pause();
@@ -232,8 +222,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
     final token = TokenStorageServiceImpl().getAccessToken();
     if (token == null) {
       logger.e('No token found');
-      if (mounted && myGeneration == _resolutionSwitchGeneration) {
-        _currentResolutionNotifier.value = previousRes;
+      if (myGeneration == _resolutionSwitchGeneration) {
         _isSwitchingResolutionNotifier.value = false;
       }
       return;
@@ -265,7 +254,6 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
       if (myGeneration != _resolutionSwitchGeneration) return;
       if (mounted) {
         _hasVideoErrorNotifier.value = true;
-        _currentResolutionNotifier.value = previousRes;
         _isSwitchingResolutionNotifier.value = false;
       }
       return;
@@ -280,6 +268,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
     }
 
     newController.addListener(_videoListener);
+    _currentResolutionNotifier.value = newRes;
     _controllerNotifier.value = newController;
     await _disposeController(currentController);
 
@@ -448,7 +437,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                           },
                         ),
 
-                        /// Tests section
+                        //! Tests section
                         const SizedBox(height: 10),
                         Text(
                           localization.testsTitle,
@@ -583,7 +572,11 @@ class _VideoAreaWidget extends StatelessWidget {
                   valueListenable: controllerNotifier,
                   builder: (context, controller, _) {
                     if (controller == null) {
-                      return const Center(child: CircularProgressIndicator());
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primaryColor,
+                        ),
+                      );
                     }
                     return VideoPlayerWidget(
                       controller: controller,

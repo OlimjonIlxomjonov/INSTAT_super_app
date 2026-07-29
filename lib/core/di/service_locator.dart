@@ -54,6 +54,8 @@ import 'package:my_template/features/main_app/home/domain/usecase/avatar/avatar_
 import 'package:my_template/features/main_app/home/domain/usecase/courses/courses_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/face_rec/face_rec_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/face_rec/get_my_id_session_use_case.dart';
+import 'package:my_template/features/main_app/home/domain/usecase/get_countries_use_case.dart';
+import 'package:my_template/features/main_app/home/domain/usecase/register_not_resident_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/user_me/user_me_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/search_courses/search_courses_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/search_courses/search_courses_bloc.dart';
@@ -315,6 +317,9 @@ Future<void> setup() async {
   //? Face Recognition
   sl.registerLazySingleton(() => FaceRecUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetMyIdSessionUseCase(repository: sl()));
+  //? Not-resident (foreign user) account confirmation
+  sl.registerLazySingleton(() => GetCountriesUseCase(repository: sl()));
+  sl.registerLazySingleton(() => RegisterNotResidentUseCase(repository: sl()));
   //? Micro Data
   //? Reports
   sl.registerLazySingleton(() => ReportsUseCase(repository: sl()));

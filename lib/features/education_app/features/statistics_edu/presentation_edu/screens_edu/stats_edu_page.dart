@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
+import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
@@ -40,15 +41,6 @@ class _StatsEduPageState extends State<StatsEduPage> {
   }
 
   void _openSearch(BuildContext context) {
-    // FamilyNavigation.familyPush(
-    //   showHandle: false,
-    //   context,
-    //   BlocProvider(
-    //     create: (_) => sl<SearchStudentsBloc>(),
-    //     child: const SearchStudentsPage(),
-    //   ),
-    // );
-
     openMiniAppSheetFamily(
       showHandler: false,
       context,
@@ -85,10 +77,22 @@ class _StatsEduPageState extends State<StatsEduPage> {
                       ? state.response.data
                       : List.generate(10, (_) => LeaderBoardEntity.empty());
 
+                  if (data.isEmpty) {
+                    return AppEmptyState(
+                      title: "Heli hech kim ball to'plamadi!",
+                      subtitle:
+                          'Kurs testini yakunlang va o\'z bilimingizni isbotlang',
+                    );
+                  }
+
+                  // Podium needs at least 3 people to make sense — below
+                  // that, everyone just shows as a regular ranked row.
+                  final showPodium = data.length >= 3;
+
                   return Column(
                     children: [
                       // ── Podium for top 3 ──
-                      if (data.length >= 3)
+                      if (showPodium)
                         Skeletonizer(
                           enabled: isLoading,
                           child: TopThreePodium(
@@ -139,7 +143,12 @@ class _StatsEduPageState extends State<StatsEduPage> {
                           ),
                         );
 
-                        if (index < 3) return const SizedBox.shrink();
+                        // Only skip the top 3 here if the podium actually
+                        // absorbed them — otherwise (fewer than 3 people
+                        // total) everyone needs to show up in this list.
+                        if (showPodium && index < 3) {
+                          return const SizedBox.shrink();
+                        }
 
                         // Regular card for the rest
                         return GestureDetector(
@@ -206,8 +215,9 @@ class _StatsEduPageState extends State<StatsEduPage> {
                                             item.email,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
-                                            style: AppTextStyles.source
-                                                .regular(fontSize: 12),
+                                            style: AppTextStyles.source.regular(
+                                              fontSize: 12,
+                                            ),
                                           ),
                                       ],
                                     ),

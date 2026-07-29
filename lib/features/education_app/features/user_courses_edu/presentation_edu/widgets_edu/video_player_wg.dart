@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/other/basic_orientation_builder.dart';
 import 'package:video_player/video_player.dart';
 
@@ -27,10 +28,21 @@ class VideoPlayerWidget extends StatefulWidget {
 class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   late VideoPlayerController _controller;
 
+  // Once the player has shown a real frame + controls for the first time,
+  // it must never fall back to the bare "not initialized" spinner again —
+  // that fallback replaces the whole player (video, back button, resolution
+  // menu, progress bar, everything) with nothing but a spinner. A
+  // resolution switch always hands this widget an already-initialized
+  // controller, so this should never re-trigger in practice, but gating on
+  // "ever initialized" instead of "currently initialized" makes that a
+  // guarantee instead of an assumption.
+  bool _everInitialized = false;
+
   @override
   void initState() {
     super.initState();
     _controller = widget.controller;
+    _everInitialized = _controller.value.isInitialized;
     _controller.addListener(_onControllerUpdate);
   }
 
@@ -41,6 +53,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
       // Controller reference changed (resolution switch). Re-subscribe.
       oldWidget.controller.removeListener(_onControllerUpdate);
       _controller = widget.controller;
+      if (_controller.value.isInitialized) _everInitialized = true;
       _controller.addListener(_onControllerUpdate);
     }
   }
@@ -48,7 +61,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   void _onControllerUpdate() {
     if (mounted && _controller.value.isInitialized) {
       _controller.removeListener(_onControllerUpdate);
-      setState(() {});
+      setState(() => _everInitialized = true);
     }
   }
 
@@ -60,10 +73,12 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_controller.value.isInitialized) {
-      return const SizedBox(
+    if (!_everInitialized) {
+      return SizedBox(
         height: 200,
-        child: Center(child: CircularProgressIndicator()),
+        child: Center(
+          child: CircularProgressIndicator(color: AppColors.primaryColor),
+        ),
       );
     }
 
@@ -82,7 +97,8 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
               onBack: widget.onBack,
               currentResolutionNotifier: widget.currentResolutionNotifier,
               onResolutionSelected: widget.onResolutionSelected,
-              isSwitchingResolutionNotifier: widget.isSwitchingResolutionNotifier,
+              isSwitchingResolutionNotifier:
+                  widget.isSwitchingResolutionNotifier,
             ),
           ),
         ],

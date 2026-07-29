@@ -27,7 +27,7 @@ class MicroDataRequests extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: CustomAppBarWg(myTitle: localization.myRequests, showArrow: false),
+      appBar: CustomAppBarWg(myTitle: localization.myRequests, showArrow: true),
       body: CustomScrollView(
         slivers: [
           //! FAKE SEARCH BAR

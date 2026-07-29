@@ -9,6 +9,7 @@ import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/camera_service.dart';
+import 'package:my_template/core/utils/general_widgets/camera_access_denied/camera_access_denied_overlay_wg.dart';
 import 'package:my_template/core/utils/constants/assets/app_animations.dart';
 import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
@@ -42,26 +43,23 @@ class RegularTestCoursePage extends StatefulWidget {
   State<RegularTestCoursePage> createState() => _RegularTestCoursePageState();
 }
 
-class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
+class _RegularTestCoursePageState extends State<RegularTestCoursePage>
+    with WidgetsBindingObserver {
   late ConfettiController _confettiController;
   late CourseLessonTestBloc _bloc;
   late CameraService _cameraService;
 
-  // The bloc's own `isSubmitting` flag only flips once
-  // SubmitLessonTestAnswerEvent is dispatched — it says nothing about the
-  // camera-capture step beforehand, which is the slow part (JPEG decode +
-  // orientation bake + PNG encode). Without this, the button stays tappable
-  // during that window and multiple taps can fire concurrent captures.
   bool _isCapturing = false;
 
   @override
   void initState() {
     super.initState();
-    logger.f('Regular test check out');
+    WidgetsBinding.instance.addObserver(this);
     _confettiController = ConfettiController(
       duration: const Duration(seconds: 2),
     );
     _cameraService = CameraService();
+
     _cameraService.init();
     _bloc = sl<CourseLessonTestBloc>();
     _bloc.add(
@@ -76,17 +74,24 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed &&
+        _cameraService.isPermissionDenied) {
+      _cameraService.init();
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _confettiController.dispose();
     _cameraService.dispose();
     _bloc.close();
     super.dispose();
   }
 
-  void _showFinishDialog(
-    BuildContext context,
-    CourseLessonTestFinished state,
-  ) {
+  void _showFinishDialog(BuildContext context, CourseLessonTestFinished state) {
     final localization = AppLocalizations.of(context)!;
     _confettiController.play();
 
@@ -143,14 +148,6 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
           width: double.infinity,
           child: ElevatedButton(
             onPressed: () {
-              // CourseLessonTopicsBloc (block list) and CourseLessonItemsBloc
-              // (lessons within THIS block, which is what actually carries
-              // the lock/unlock flag per lesson) are both global singletons
-              // that cache per course/block for the whole app session.
-              // Finishing this lesson's test can unlock the next lesson in
-              // the same block, so force both to refetch instead of leaving
-              // the lesson list showing stale locked/unlocked state until
-              // the app is restarted.
               context.read<CourseLessonTopicsBloc>().add(
                 CourseLessonTopicsEvent(
                   params: CourseCategoryByIdParams(id: widget.courseId),
@@ -316,13 +313,13 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage> {
                     banner: banner,
                     isSubmitting:
                         _isCapturing ||
-                        (state is CourseLessonTestLoaded &&
-                            state.isSubmitting),
+                        (state is CourseLessonTestLoaded && state.isSubmitting),
                   ),
-                  if (_cameraService.isReady && _cameraService.controller != null)
-                    CameraPreviewWidget(
-                      controller: _cameraService.controller!,
-                    ),
+                  if (_cameraService.isReady &&
+                      _cameraService.controller != null)
+                    CameraPreviewWidget(controller: _cameraService.controller!),
+                  if (_cameraService.isPermissionDenied)
+                    const CameraAccessDeniedOverlayWg(),
                 ],
               );
             },

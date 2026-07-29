@@ -85,16 +85,26 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
     } on GoogleSignInException catch (e, stackTrace) {
       if (e.code == GoogleSignInExceptionCode.canceled) return;
 
-      logger.e('Google sign-in failed: ${e.code}', error: e, stackTrace: stackTrace);
+      logger.e(
+        'Google sign-in failed: ${e.code}',
+        error: e,
+        stackTrace: stackTrace,
+      );
       if (mounted) errorFlushBar(context, e.description ?? e.toString());
     } catch (e, stackTrace) {
       if (e is DioException) {
-        logger.e('Google sign-in backend call failed', error: e.response?.data ?? e, stackTrace: stackTrace);
+        logger.e(
+          'Google sign-in backend call failed',
+          error: e.response?.data ?? e,
+          stackTrace: stackTrace,
+        );
         if (mounted) {
           final statusCode = e.response?.statusCode;
           errorFlushBar(
             context,
-            AppLocalizations.of(context)!.loginFailedWithStatus(statusCode ?? 'unknown'),
+            AppLocalizations.of(
+              context,
+            )!.loginFailedWithStatus(statusCode ?? 'unknown'),
           );
         }
       } else {
@@ -110,13 +120,7 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
 
     return Responsive(
       mobile: _buildMobile(localization),
-      // Tablet: full-bleed split — logo panel on one side, the login card
-      // on the other. A full-width bottom sheet (the mobile layout) would
-      // stretch edge-to-edge across a tablet and look wrong.
       tablet: _buildSplit(localization, isDesktop: false),
-      // Desktop: same split, but constrained to a max width and centered —
-      // a full-bleed split row starts looking absurd once the window is
-      // 1600-1900px wide (the logo panel especially).
       desktop: _buildSplit(localization, isDesktop: true),
     );
   }
@@ -209,9 +213,6 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
     );
   }
 
-  /// The actual "get started / one id / continue with ..." content, shared
-  /// by the mobile bottom sheet and the tablet/desktop split layouts so it
-  /// only has to be maintained in one place.
   Widget _buildLoginOptionsContent(AppLocalizations localization) {
     return Column(
       mainAxisSize: MainAxisSize.min,
