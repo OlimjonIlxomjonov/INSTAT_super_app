@@ -10,6 +10,7 @@ class ApiUrls {
   static const videoBase = 'https://api1.instat.uz';
 
   //! image base url
+  // static const imageUrlBase = 'https://test.avacoder.uz/media/';
   static const imageUrlBase = 'https://api1.instat.uz/media/';
 
   /// websocket
@@ -97,6 +98,15 @@ class ApiUrls {
 
   //? User data requests
   static const dataRequests = 'data-requests/';
+
+  /// `data-requests/{id}/` ga qo'shiladi
+  static const dataRequestUploadFile = 'upload-file/';
+  static const dataRequestSend = 'send/';
+  static const dataRequestProcesses = 'processes/';
+
+  //? Add request dropdowns
+  static const microDataCategories = 'categories/items/all/?type=micro-data';
+  static const regions = 'regions/';
 
   //! Face Recognition
   static const faceRec = 'my-id/accept';

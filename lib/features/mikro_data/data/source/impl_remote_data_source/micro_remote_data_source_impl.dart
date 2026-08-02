@@ -1,7 +1,14 @@
+import 'package:dio/dio.dart';
+import 'package:my_template/core/common/params/micro_data_params/data_request_params.dart';
+import 'package:my_template/core/error/api_validation_parser.dart';
 import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
+import 'package:my_template/features/mikro_data/data/model/data_requests/data_request_category_model.dart';
+import 'package:my_template/features/mikro_data/data/model/data_requests/data_request_detail_model.dart';
+import 'package:my_template/features/mikro_data/data/model/data_requests/data_request_process_model.dart';
 import 'package:my_template/features/mikro_data/data/model/data_requests/data_requests_response_model.dart';
+import 'package:my_template/features/mikro_data/data/model/regions/region_model.dart';
 import 'package:my_template/features/mikro_data/data/model/reports/reports_response_model.dart';
 import 'package:my_template/features/mikro_data/data/source/remote_data_source/micro_remote_data_source.dart';
 
@@ -18,6 +25,9 @@ class MicroRemoteDataSourceImpl implements MicroRemoteDataSource {
       } else {
         throw Exception('ELSE ERROR: ${response.statusCode}');
       }
+    } on DioException catch (e) {
+      logger.e("CATCH: $e");
+      throw ApiValidationParser.tryParse(e.response?.data) ?? e;
     } catch (e) {
       logger.e("CATCH: $e");
       rethrow;
@@ -42,6 +52,188 @@ class MicroRemoteDataSourceImpl implements MicroRemoteDataSource {
       } else {
         throw Exception('THROW EXCEPTION! ${response.statusCode}');
       }
+    } on DioException catch (e) {
+      logger.e("CATCH: $e");
+      throw ApiValidationParser.tryParse(e.response?.data) ?? e;
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<DataRequestCategoryModel>> fetchMicroDataCategories() async {
+    try {
+      final response = await _dioClient.get(ApiUrls.microDataCategories);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return DataRequestCategoryModel.listFromJson(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      logger.e("CATCH: $e");
+      throw ApiValidationParser.tryParse(e.response?.data) ?? e;
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<RegionModel>> fetchRegions() async {
+    try {
+      final response = await _dioClient.get(ApiUrls.regions);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return RegionModel.listFromJson(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      logger.e("CATCH: $e");
+      throw ApiValidationParser.tryParse(e.response?.data) ?? e;
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<DataRequestDetailModel> fetchDataRequest(int requestId) async {
+    try {
+      final response = await _dioClient.get(
+        '${ApiUrls.dataRequests}$requestId/',
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return DataRequestDetailModel.fromJson(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      logger.e("CATCH: $e");
+      throw ApiValidationParser.tryParse(e.response?.data) ?? e;
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<DataRequestDetailModel> createDataRequest(
+    DataRequestParams params,
+  ) async {
+    try {
+      final response = await _dioClient.post(
+        ApiUrls.dataRequests,
+        data: params.toJson(),
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return DataRequestDetailModel.fromJson(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      logger.e("CATCH: $e");
+      throw ApiValidationParser.tryParse(e.response?.data) ?? e;
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<DataRequestDetailModel> updateDataRequest(
+    DataRequestParams params,
+  ) async {
+    try {
+      final response = await _dioClient.put(
+        '${ApiUrls.dataRequests}${params.id}/',
+        data: params.toJson(),
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return DataRequestDetailModel.fromJson(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      logger.e("CATCH: $e");
+      throw ApiValidationParser.tryParse(e.response?.data) ?? e;
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<DataRequestDetailModel> uploadDataRequestFile(
+    UploadDataRequestFileParams params,
+  ) async {
+    try {
+      final formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(
+          params.file.path,
+          filename: params.file.path.split('/').last,
+        ),
+      });
+      final response = await _dioClient.post(
+        '${ApiUrls.dataRequests}${params.requestId}/'
+        '${ApiUrls.dataRequestUploadFile}',
+        data: formData,
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return DataRequestDetailModel.fromJson(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      logger.e("CATCH: $e");
+      throw ApiValidationParser.tryParse(e.response?.data) ?? e;
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> sendDataRequest(int requestId) async {
+    try {
+      final response = await _dioClient.post(
+        '${ApiUrls.dataRequests}$requestId/${ApiUrls.dataRequestSend}',
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      logger.e("CATCH: $e");
+      throw ApiValidationParser.tryParse(e.response?.data) ?? e;
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<DataRequestProcessModel>> fetchDataRequestProcesses(
+    int requestId,
+  ) async {
+    try {
+      final response = await _dioClient.get(
+        '${ApiUrls.dataRequests}$requestId/${ApiUrls.dataRequestProcesses}',
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return DataRequestProcessModel.listFromJson(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      logger.e("CATCH: $e");
+      throw ApiValidationParser.tryParse(e.response?.data) ?? e;
     } catch (e) {
       logger.e("CATCH: $e");
       rethrow;

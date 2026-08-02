@@ -18,53 +18,51 @@ class UserArticlesWithBlocWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverSafeArea(
-      sliver: BlocBuilder<UserArticlesBloc, UserArticlesState>(
-        builder: (context, state) {
-          if (state is UserArticlesLoaded) {
-            final data = state.response.data;
+    return BlocBuilder<UserArticlesBloc, UserArticlesState>(
+      builder: (context, state) {
+        if (state is UserArticlesLoaded) {
+          final data = state.response.data;
 
-            /// empty state
-            if (data.isEmpty) {
-              return SliverToBoxAdapter(
-                child: AppEmptyState(
-                  title: 'Birinchi maqolangizni yozing!',
-                  subtitle:
-                      'Hoziroq boshlang va g‘oyalaringizni dunyoga ulashing.',
-                  buttonLabel: 'Maqola Qoshish',
-                  onAction: () {
-                    openMiniAppSheetFamily(
-                      context,
-                      enableDrag: false,
-                      showHandler: false,
-                      child: AddArticlePage(),
-                    );
-                  },
-                ),
-              );
-            }
-            final displayedData = limit != null
-                ? data.take(limit!).toList()
-                : data;
-
-            /// actual data
-            return SliverArticlesListWg(items: displayedData);
-          } else if (state is UserArticlesLoading) {
-            return UserArticlesSkeletonizer();
-          } else if (state is UserArticlesError) {
-            return const SliverToBoxAdapter(
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 24),
-                  child: SizedBox(height: 150, child: ErrorPage()),
-                ),
+          /// empty state
+          if (data.isEmpty) {
+            return SliverToBoxAdapter(
+              child: AppEmptyState(
+                title: 'Birinchi maqolangizni yozing!',
+                subtitle:
+                    'Hoziroq boshlang va g‘oyalaringizni dunyoga ulashing.',
+                buttonLabel: 'Maqola Qoshish',
+                onAction: () {
+                  openMiniAppSheetFamily(
+                    context,
+                    enableDrag: false,
+                    showHandler: false,
+                    child: AddArticlePage(),
+                  );
+                },
               ),
             );
           }
-          // Initial or any fallback state
-          return const SliverToBoxAdapter(child: SizedBox.shrink());
-        },
-      ),
+          final displayedData = limit != null
+              ? data.take(limit!).toList()
+              : data;
+
+          /// actual data
+          return SliverArticlesListWg(items: displayedData);
+        } else if (state is UserArticlesLoading) {
+          return UserArticlesSkeletonizer();
+        } else if (state is UserArticlesError) {
+          return const SliverToBoxAdapter(
+            child: Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 24),
+                child: SizedBox(height: 150, child: ErrorPage()),
+              ),
+            ),
+          );
+        }
+        // Initial or any fallback state
+        return const SliverToBoxAdapter(child: SizedBox.shrink());
+      },
     );
   }
 }

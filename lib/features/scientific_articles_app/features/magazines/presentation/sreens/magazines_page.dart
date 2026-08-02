@@ -70,13 +70,13 @@ class _MagazinesPageState extends State<MagazinesPage> {
                       child: AppEmptyState(
                         title: localization.emptyMagazineShelfTitle,
                         subtitle: localization.emptyMagazineShelfSubtitle,
-                        buttonLabel: localization.addMagazine,
-                        onAction: () {
-                          technicalWorkFlushBar(
-                            context,
-                            localization.comingSoon,
-                          );
-                        },
+                        // buttonLabel: localization.addMagazine,
+                        // onAction: () {
+                        //   technicalWorkFlushBar(
+                        //     context,
+                        //     localization.comingSoon,
+                        //   );
+                        // },
                       ),
                     );
                   }

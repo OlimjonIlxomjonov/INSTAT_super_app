@@ -81,7 +81,12 @@ import 'package:my_template/features/mikro_data/data/repository/micro_repo_impl.
 import 'package:my_template/features/mikro_data/data/source/impl_remote_data_source/micro_remote_data_source_impl.dart';
 import 'package:my_template/features/mikro_data/data/source/remote_data_source/micro_remote_data_source.dart';
 import 'package:my_template/features/mikro_data/domain/repository/micro_repository.dart';
+import 'package:my_template/features/mikro_data/domain/usecase/data_requests/add_request_use_cases.dart';
 import 'package:my_template/features/mikro_data/domain/usecase/data_requests/data_requests_use_case.dart';
+import 'package:my_template/features/mikro_data/presentation/bloc/add_data_request/add_data_request_bloc.dart';
+import 'package:my_template/features/mikro_data/presentation/bloc/data_request_processes/data_request_processes_bloc.dart';
+import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_categories/micro_data_categories_bloc.dart';
+import 'package:my_template/features/mikro_data/presentation/bloc/regions/regions_bloc.dart';
 import 'package:my_template/features/mikro_data/domain/usecase/reports/reports_use_case.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/data_requests/data_requests_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_bloc.dart';
@@ -331,6 +336,17 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => ReportsUseCase(repository: sl()));
   //? User data requests
   sl.registerLazySingleton(() => DataRequestsUseCase(repository: sl()));
+  //? Add data request
+  sl.registerLazySingleton(() => MicroDataCategoriesUseCase(repository: sl()));
+  sl.registerLazySingleton(() => RegionsUseCase(repository: sl()));
+  sl.registerLazySingleton(() => CreateDataRequestUseCase(repository: sl()));
+  sl.registerLazySingleton(() => UpdateDataRequestUseCase(repository: sl()));
+  sl.registerLazySingleton(() => UploadDataRequestFileUseCase(repository: sl()));
+  sl.registerLazySingleton(() => SendDataRequestUseCase(repository: sl()));
+  sl.registerLazySingleton(() => GetDataRequestUseCase(repository: sl()));
+  sl.registerLazySingleton(
+    () => DataRequestProcessesUseCase(repository: sl()),
+  );
 
   //? book comments
   sl.registerLazySingleton(() => BookCommentsUseCase(repository: sl()));
@@ -439,6 +455,19 @@ Future<void> setup() async {
   //? User data requests — sahifa uni lokal BlocProvider bilan yaratadi,
   //? shuning uchun factory (har ochilishda yangi instance kerak).
   sl.registerFactory(() => DataRequestsBloc(useCase: sl()));
+  //? Add data request wizard — har ochilishda toza holat kerak.
+  sl.registerFactory(() => MicroDataCategoriesBloc(useCase: sl()));
+  sl.registerFactory(() => RegionsBloc(useCase: sl()));
+  sl.registerFactory(() => DataRequestProcessesBloc(useCase: sl()));
+  sl.registerFactory(
+    () => AddDataRequestBloc(
+      createUseCase: sl(),
+      updateUseCase: sl(),
+      uploadFileUseCase: sl(),
+      sendUseCase: sl(),
+      getUseCase: sl(),
+    ),
+  );
   //? book comments
   sl.registerLazySingleton(() => BookCommentsBloc(useCase: sl()));
   //? Buy Book

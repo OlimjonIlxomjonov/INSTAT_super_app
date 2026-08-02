@@ -16,8 +16,7 @@ class ReportsOptionsModel extends ReportsOptionsEntity {
 
     return ReportsOptionsModel(
       id: json['id'] as int? ?? 0,
-      dateFrom:
-          DateTime.tryParse(json['date_from']?.toString() ?? '') ?? epoch,
+      dateFrom: DateTime.tryParse(json['date_from']?.toString() ?? '') ?? epoch,
       dateTo: DateTime.tryParse(json['date_to']?.toString() ?? '') ?? epoch,
       fileExtension: json['file_extension'] as String? ?? '',
     );

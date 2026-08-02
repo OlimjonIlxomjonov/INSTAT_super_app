@@ -16,6 +16,8 @@ import 'package:my_template/core/utils/general_widgets/online_book_wg/online_boo
 import 'package:my_template/core/utils/widgets/active_books/active_books_with_bloc.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/core/utils/widgets/user_articles_with_bloc/user_articles_with_bloc_wg.dart';
+import 'package:my_template/core/utils/widgets/user_requests_with_bloc/user_requests_with_bloc_wg.dart';
+import 'package:my_template/features/mikro_data/presentation/screens/requests/micro_data_requets.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/show_all_courses_bottom_sheet_page.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
@@ -374,8 +376,29 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
         ),
       ),
 
-      /// ARTICLES
-      UserArticlesWithBlocWg(limit: 2),
+      //! ARTICLES
+      const UserArticlesWithBlocWg(limit: 2),
+
+      //! See all requests
+      SliverPadding(
+        padding: const .only(left: 20, right: 20, top: 24),
+        sliver: SliverToBoxAdapter(
+          child: ExtendSectionSeeAllWg(
+            title: localization.myRequests,
+            onTap: () {
+              openMiniAppSheetFamily(
+                showHandler: false,
+                enableDrag: true,
+                context,
+                child: const MicroDataRequests(),
+              );
+            },
+          ),
+        ),
+      ),
+
+      //! REQUESTS
+      SliverSafeArea(sliver: const UserRequestsWithBlocWg(limit: 3)),
     ];
   }
 

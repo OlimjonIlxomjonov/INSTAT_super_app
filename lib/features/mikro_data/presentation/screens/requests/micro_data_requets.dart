@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
-import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/common/skeletonizer_shimmer/data_requests/data_requests_skeletonizer.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
@@ -15,7 +14,9 @@ import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
 import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
+import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/add_data_request_page.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/data_requests/data_requests_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/data_requests/data_requests_state.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_event.dart';
@@ -225,7 +226,10 @@ class _MicroDataRequestsViewState extends State<_MicroDataRequestsView> {
                   }
                   return SliverMainAxisGroup(
                     slivers: [
-                      SliverDataRequestsListWg(items: data),
+                      SliverDataRequestsListWg(
+                        items: data,
+                        onRequestUpdated: _fetch,
+                      ),
                       if (state.isLoadingMore)
                         const DataRequestsSkeletonizer(itemCount: 2),
                     ],
@@ -266,8 +270,15 @@ class _MicroDataRequestsViewState extends State<_MicroDataRequestsView> {
           : CustomBottomNavContainerWg(
               buttonText: localization.submitRequest,
               leadingIcon: Icons.add,
-              onTap: () {
-                technicalWorkFlushBar(context, localization.comingSoon);
+              onTap: () async {
+                await openMiniAppSheetFamily(
+                  context,
+                  child: const AddDataRequestPage(),
+                  enableDrag: false,
+                  showHandler: false,
+                );
+                if (!mounted) return;
+                _fetch();
               },
             ),
     );

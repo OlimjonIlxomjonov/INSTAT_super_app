@@ -32,4 +32,13 @@ class DataRequestCategoryModel extends DataRequestCategoryEntity {
       createdAt: DateTime.tryParse(json['created_at']?.toString() ?? ''),
     );
   }
+
+  /// `GET categories/items/all/?type=micro-data` oddiy massiv qaytaradi.
+  static List<DataRequestCategoryModel> listFromJson(dynamic json) {
+    if (json is! List) return const [];
+    return json
+        .map((e) => fromJson(e as Map<String, dynamic>?))
+        .whereType<DataRequestCategoryModel>()
+        .toList();
+  }
 }

@@ -6,6 +6,7 @@ import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/dragble_app_bar/draggble_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
+import 'package:my_template/core/utils/widgets/user_requests_with_bloc/user_requests_with_bloc_wg.dart';
 import '../../../../../core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 import '../../../../scientific_articles_app/dummy_data_source/home_brief_info_card_source.dart';
 import '../../../../scientific_articles_app/features/home/presentation/widgets/sliver_brief_cards_wg.dart';
@@ -60,22 +61,19 @@ class MicroDataHomePage extends StatelessWidget {
               ),
             ),
           ),
-          // SliverToBoxAdapter(
-          //   child: EmptyStateStaticText(
-          //     message: localization.noRequestsAvailable,
-          //   ),
-          // ),
+          const UserRequestsWithBlocWg(limit: 3),
 
           //! User last Actions
-          SliverPadding(
-            padding: AppPadding.horizontal20x(),
-            sliver: SliverToBoxAdapter(
-              child: ExtendSectionSeeAllWg(
-                title: localization.recentActions,
-                onTap: () {},
-              ),
-            ),
-          ),
+
+          // SliverPadding(
+          //   padding: AppPadding.horizontal20x(),
+          //   sliver: SliverToBoxAdapter(
+          //     child: ExtendSectionSeeAllWg(
+          //       title: localization.recentActions,
+          //       onTap: () {},
+          //     ),
+          //   ),
+          // ),
           // SliverToBoxAdapter(
           //   child: EmptyStateStaticText(
           //     message: localization.noRecentActionsAvailable,
