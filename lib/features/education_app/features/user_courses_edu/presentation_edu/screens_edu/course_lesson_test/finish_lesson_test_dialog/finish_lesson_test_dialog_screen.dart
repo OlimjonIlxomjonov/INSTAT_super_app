@@ -67,7 +67,7 @@ Future<void> finishLessonTestDialogScreen(
             // ),
             Align(
               alignment: Alignment.center,
-              child: LottieBuilder.asset(AppAnimations.confetti, repeat: true,),
+              child: LottieBuilder.asset(AppAnimations.confetti, repeat: true),
             ),
           ],
         ),

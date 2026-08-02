@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/html_content_wg/html_content_wg.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
@@ -20,6 +21,9 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+    final localeCode = Localizations.localeOf(context).languageCode;
+
     return SliverMainAxisGroup(
       slivers: [
         /// Metadata row
@@ -102,13 +106,15 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Izoh',
+                        localization.courseDescriptionTitle,
                         style: AppTextStyles.source.medium(fontSize: 16),
                       ),
                       SizedBox(height: appH(8)),
                       HtmlContentWg(
                         collapsedLines: 10,
-                        htmlData: data.descriptionUz ?? 'No Description',
+                        htmlData:
+                            data.localizedDescription(localeCode) ??
+                            localization.descriptionNotProvidedForLanguage,
                       ),
                     ],
                   ),

@@ -5,7 +5,7 @@ import 'package:my_template/features/online_library_app/features/home_lib/data/m
 import 'package:my_template/features/online_library_app/features/home_lib/data/models/book/book_pages_count_model.dart';
 
 abstract class HomeLibRemoteDataSource {
-  Future<BookListResponseModel> fetchPopularBooks();
+  Future<BookListResponseModel> fetchPopularBooks({int page = 1});
 
   Future<void> saveDeleteBook(int id);
 
@@ -22,10 +22,10 @@ abstract class HomeLibRemoteDataSource {
   Future<void> addComment({required AddCommentParams params});
 
   //! user books
-  Future<BookListResponseModel> fetchUserBooks();
+  Future<BookListResponseModel> fetchUserBooks({int page = 1});
 
   //! user saved (liked) books
-  Future<BookListResponseModel> fetchSavedBooks();
+  Future<BookListResponseModel> fetchSavedBooks({int page = 1});
 
   //! online book reader
   Future<BookPagesCountModel> fetchBookPagesCount(int bookId);

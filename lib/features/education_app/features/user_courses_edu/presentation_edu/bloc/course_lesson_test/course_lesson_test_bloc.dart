@@ -46,10 +46,9 @@ class CourseLessonTestBloc
       _tests = tests;
 
       if (tests.isEmpty) {
-        emit(const CourseLessonTestFinished(
-          totalQuestions: 0,
-          correctAnswers: 0,
-        ));
+        emit(
+          const CourseLessonTestFinished(totalQuestions: 0, correctAnswers: 0),
+        );
         return;
       }
 
@@ -74,12 +73,14 @@ class CourseLessonTestBloc
 
       final options = await getLessonTestOptionsUseCase(optionsParams);
 
-      emit(CourseLessonTestLoaded(
-        tests: _tests,
-        currentTestIndex: testIndex,
-        currentOptions: options,
-        selectedOptionId: null,
-      ));
+      emit(
+        CourseLessonTestLoaded(
+          tests: _tests,
+          currentTestIndex: testIndex,
+          currentOptions: options,
+          selectedOptionId: null,
+        ),
+      );
     } catch (e) {
       emit(CourseLessonTestError(message: e.toString()));
     }
@@ -122,21 +123,23 @@ class CourseLessonTestBloc
           _correctAnswers++;
         }
 
-        emit(CourseLessonTestAnswerResult(
-          tests: _tests,
-          currentTestIndex: currentState.currentTestIndex,
-          currentOptions: currentState.currentOptions,
-          selectedOptionId: currentState.selectedOptionId!,
-          answerResponse: response,
-        ));
+        emit(
+          CourseLessonTestAnswerResult(
+            tests: _tests,
+            currentTestIndex: currentState.currentTestIndex,
+            currentOptions: currentState.currentOptions,
+            selectedOptionId: currentState.selectedOptionId!,
+            answerResponse: response,
+          ),
+        );
       } catch (e) {
         final isFaceError = e.toString().contains('no_face_found');
         final statusCode = e is DioException ? e.response?.statusCode : null;
         final errorMessage = isFaceError
             ? 'No Face Found'
             : statusCode != null
-                ? 'Something went wrong. Status code: $statusCode'
-                : 'Something went wrong. Please try again.';
+            ? 'Something went wrong. Status code: $statusCode'
+            : 'Something went wrong. Please try again.';
 
         emit(CourseLessonTestError(message: errorMessage));
 
@@ -145,13 +148,15 @@ class CourseLessonTestBloc
         // the user can just retry — only the error state briefly flashes
         // by so the listener above can show it as a flushbar.
         await Future.delayed(const Duration(milliseconds: 100));
-        emit(CourseLessonTestLoaded(
-          tests: _tests,
-          currentTestIndex: currentState.currentTestIndex,
-          currentOptions: currentState.currentOptions,
-          selectedOptionId: currentState.selectedOptionId,
-          isSubmitting: false,
-        ));
+        emit(
+          CourseLessonTestLoaded(
+            tests: _tests,
+            currentTestIndex: currentState.currentTestIndex,
+            currentOptions: currentState.currentOptions,
+            selectedOptionId: currentState.selectedOptionId,
+            isSubmitting: false,
+          ),
+        );
       }
     }
   }
@@ -164,10 +169,12 @@ class CourseLessonTestBloc
       final currentState = state as CourseLessonTestAnswerResult;
 
       if (currentState.currentTestIndex + 1 >= _tests.length) {
-        emit(CourseLessonTestFinished(
-          totalQuestions: _tests.length,
-          correctAnswers: _correctAnswers,
-        ));
+        emit(
+          CourseLessonTestFinished(
+            totalQuestions: _tests.length,
+            correctAnswers: _correctAnswers,
+          ),
+        );
       } else {
         emit(CourseLessonTestLoading());
         await _loadOptionsForTest(currentState.currentTestIndex + 1, emit);

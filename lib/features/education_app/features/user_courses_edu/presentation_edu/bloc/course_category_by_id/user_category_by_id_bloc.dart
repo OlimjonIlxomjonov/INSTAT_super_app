@@ -16,7 +16,12 @@ class UserCategoryByIdBloc
       final id = event.params.id;
 
       if (_cache.containsKey(id)) {
-        emit(UserCategoryByIdLoaded(entity: _cache[id]!, categories: Map.from(_cache)));
+        emit(
+          UserCategoryByIdLoaded(
+            entity: _cache[id]!,
+            categories: Map.from(_cache),
+          ),
+        );
         return;
       }
 
@@ -29,7 +34,9 @@ class UserCategoryByIdBloc
         final entity = await useCase.call(params: event.params);
         _cache[id] = entity;
         _fetchingIds.remove(id);
-        emit(UserCategoryByIdLoaded(entity: entity, categories: Map.from(_cache)));
+        emit(
+          UserCategoryByIdLoaded(entity: entity, categories: Map.from(_cache)),
+        );
       } catch (e) {
         _fetchingIds.remove(id);
         emit(UserCategoryByIdError(categories: Map.from(_cache)));

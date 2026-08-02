@@ -29,15 +29,32 @@ class UserArticlesBloc extends Bloc<ArticlesHomeEvent, UserArticlesState> {
           search: event.search,
           page: event.page,
         );
+
+        // The user may have switched filter/search while this page was in
+        // flight. `currentState` was captured before the await, so emitting
+        // a copyWith of it here would resurrect the old filter's results
+        // and merge the stale page into them — discard instead.
+        final latest = state;
+        if (latest is! UserArticlesLoaded ||
+            latest.status != currentState.status ||
+            latest.search != currentState.search) {
+          return;
+        }
+
         emit(
-          currentState.copyWith(
-            response: _mergeResponses(currentState.response, response),
+          latest.copyWith(
+            response: _mergeResponses(latest.response, response),
             isLoadingMore: false,
             hasMore: _hasMorePages(response),
           ),
         );
       } catch (_) {
-        emit(currentState.copyWith(isLoadingMore: false));
+        final latest = state;
+        if (latest is UserArticlesLoaded &&
+            latest.status == currentState.status &&
+            latest.search == currentState.search) {
+          emit(latest.copyWith(isLoadingMore: false));
+        }
       }
       return;
     }

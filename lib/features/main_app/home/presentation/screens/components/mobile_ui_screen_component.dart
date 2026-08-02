@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
-import 'package:my_template/core/common/placeholder/banner_placeholder.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
+import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/common/ui_states/lost_internet_connection_state.dart';
 import 'package:my_template/core/common/ui_states/server_error_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -22,6 +22,9 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_state.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
 import 'package:my_template/features/education_app/widgets/active_courses_with_bloc_wg.dart';
+import 'package:my_template/core/utils/widgets/promo_banners/promo_banners_carousel_wg.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/banner/banner_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/banner/banner_event.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_state.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/home_event.dart';
@@ -95,6 +98,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
 
   void _reloadAll() {
     context.read<CoursesBloc>().add(AvailableCoursesEvent());
+    context.read<BannerBloc>().add(const FetchBannersEvent());
     context.read<UserCoursesBloc>().add(
       UserCoursesEvent(params: UserCoursesParams(state: 'in_progress')),
     );
@@ -111,7 +115,6 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
     _connectivitySub?.cancel();
     super.dispose();
   }
-
 
   double _measureLineHeight(BuildContext context, TextStyle style) {
     final painter = TextPainter(
@@ -198,10 +201,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
   ) {
     return [
       /// BANNERS
-      SliverPadding(
-        padding: const .only(left: 20, right: 20, bottom: 24),
-        sliver: SliverToBoxAdapter(child: BannerPlaceholder()),
-      ),
+      SliverToBoxAdapter(child: PromoBannersCarouselWg()),
 
       //! ACTIVE COURSES
       ActiveCoursesWithBlocWg(
@@ -268,8 +268,12 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
               8 +
               textBlockHeight +
               4; // small rounding buffer
+
+          //! empty state
+
           if (state is PopularBooksLoaded && state.response.data.isNotEmpty) {
             final books = state.response.data;
+
             return SliverSafeArea(
               top: false,
               bottom: false,
@@ -388,11 +392,11 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
 
         child: CustomScrollView(
           slivers: [
-            const SliverAppBar(
-              title: TestModeBanner(),
-              automaticallyImplyLeading: false,
-              titleSpacing: 0,
-            ),
+            // const SliverAppBar(
+            //   title: TestModeBanner(),
+            //   automaticallyImplyLeading: false,
+            //   titleSpacing: 0,
+            // ),
 
             /// HEADER LOGO
             SliverAppBar(
@@ -406,18 +410,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
               centerTitle: true,
               actions: [
                 IconButton(
-                  onPressed: () {
-                    // successFlushBar(
-                    //   context,
-                    //   "import 'package:my_template/core/utils/constants/assets/app_animations.dart';",
-                    // );
-                    // errorFlushBar(
-                    //   context,
-                    //   "import 'package:my_template/core/utils/constants/assets/app_animations.dart';",
-                    // );
-                    // addedToCartFlushBar(context, 'message');
-                    // technicalWorkFlushBar(context, "import 'package:my_template/core/utils/constants/assets/app_animations.dart';");
-                  },
+                  onPressed: () {},
                   icon: Icon(FlutterRemix.notification_2_line),
                 ),
               ],
@@ -469,11 +462,6 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                           );
                         }
 
-                        // Any other error (bad TLS/certificate handshake
-                        // reaching the server, unexpected 5xx, malformed
-                        // response, etc.) is NOT "no internet" — show a
-                        // real server-error state instead of silently
-                        // falling through to empty-looking sections.
                         final hasServerError =
                             (coursesState is CoursesError &&
                                 !coursesState.isConnectionError) ||

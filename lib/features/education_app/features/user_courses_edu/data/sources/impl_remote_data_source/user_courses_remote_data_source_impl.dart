@@ -26,8 +26,14 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
     required UserCoursesParams params,
   }) async {
     try {
+      // ApiUrls.userCourses already ends in "?status=", and Dio appends
+      // queryParameters with "&" when the path already has a query string.
       final response = await _dioClient.get(
         "${ApiUrls.userCourses}${params.state}",
+        queryParams: {
+          'page': params.page,
+          if (params.perPage != null) 'per_page': params.perPage,
+        },
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;

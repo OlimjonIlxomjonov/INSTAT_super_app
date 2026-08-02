@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 class CameraPreviewWidget extends StatefulWidget {
   final CameraController controller;
 
-  const CameraPreviewWidget({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
+  const CameraPreviewWidget({Key? key, required this.controller})
+    : super(key: key);
 
   @override
   State<CameraPreviewWidget> createState() => _CameraPreviewWidgetState();
@@ -39,10 +37,14 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
         behavior: HitTestBehavior.opaque,
         onPanUpdate: (details) {
           setState(() {
-            final newX = (_offset.dx + details.delta.dx)
-                .clamp(0.0, screenSize.width - width);
-            final newY = (_offset.dy + details.delta.dy)
-                .clamp(0.0, screenSize.height - height);
+            final newX = (_offset.dx + details.delta.dx).clamp(
+              0.0,
+              screenSize.width - width,
+            );
+            final newY = (_offset.dy + details.delta.dy).clamp(
+              0.0,
+              screenSize.height - height,
+            );
             _offset = Offset(newX, newY);
           });
         },

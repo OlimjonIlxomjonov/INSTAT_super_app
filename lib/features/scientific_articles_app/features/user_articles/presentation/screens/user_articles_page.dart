@@ -13,6 +13,7 @@ import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/sliver_articles_list_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/add_article/add_article_page.dart';
@@ -98,7 +99,7 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
     return Scaffold(
       /// header
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBarWg(myTitle: localization.myArticles),
+      // appBar: CustomAppBarWg(myTitle: localization.myArticles),
       body: CustomRefreshIndicator(
         onRefresh: () async {
           context.read<UserArticlesBloc>().add(
@@ -113,8 +114,10 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
           slivers: [
             /// search bar
             SliverAppBar(
-              floating: true,
-              snap: true,
+              toolbarHeight: 80,
+              // floating: true,
+              // snap: true,
+              pinned: true,
               automaticallyImplyLeading: false,
               titleSpacing: 20,
               title: Container(
@@ -123,33 +126,35 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
                   borderRadius: BorderRadius.circular(12),
                   color: AppColors.greyScale.grey200,
                 ),
-                child: Row(
-                  children: [
-                    Icon(
-                      IconlyLight.search,
-                      color: AppColors.greyScale.grey600,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        controller: _searchController,
-                        onChanged: _onSearchChanged,
-                        style: AppTextStyles.source.regular(fontSize: 14),
-                        decoration: InputDecoration(
-                          hintText: localization.searchArticlesHint,
-                          hintStyle: AppTextStyles.source.regular(
-                            fontSize: 14,
-                            color: AppColors.greyScale.grey500,
-                          ),
-                          border: InputBorder.none,
-                          isDense: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 14,
+                child: SheetDragAreaWg(
+                  child: Row(
+                    children: [
+                      Icon(
+                        IconlyLight.search,
+                        color: AppColors.greyScale.grey600,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextField(
+                          controller: _searchController,
+                          onChanged: _onSearchChanged,
+                          style: AppTextStyles.source.regular(fontSize: 14),
+                          decoration: InputDecoration(
+                            hintText: localization.searchArticlesHint,
+                            hintStyle: AppTextStyles.source.regular(
+                              fontSize: 14,
+                              color: AppColors.greyScale.grey500,
+                            ),
+                            border: InputBorder.none,
+                            isDense: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 14,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -175,7 +180,7 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
                         );
                       },
                       categoryIcon: categoriesIcon[index],
-                      categoryColor: categoryColors[index],
+                      // categoryColor: categoryColors[index],
                     );
                   }),
                 ),
@@ -185,7 +190,10 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
             SliverPadding(
               padding: AppPadding.hAndV20x20(),
               sliver: SliverToBoxAdapter(
-                child: Text(localization.articles, style: CustomTextStyles.h2),
+                child: Text(
+                  localization.myArticles,
+                  style: CustomTextStyles.h2,
+                ),
               ),
             ),
 

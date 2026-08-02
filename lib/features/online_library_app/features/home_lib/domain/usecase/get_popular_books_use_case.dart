@@ -6,7 +6,7 @@ class GetPopularBooksUseCase {
 
   GetPopularBooksUseCase({required this.repository});
 
-  Future<BookListResponse> call() {
-    return repository.getPopularBooks();
+  Future<BookListResponse> call({int page = 1}) {
+    return repository.getPopularBooks(page: page);
   }
 }

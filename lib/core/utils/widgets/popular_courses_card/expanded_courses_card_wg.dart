@@ -84,7 +84,7 @@ class ExpandedCoursesCardWg extends StatelessWidget {
             ),
             SizedBox(height: appH(4)),
             Text(
-              entity.name,
+              entity.displayName(Localizations.localeOf(context).languageCode),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: AppTextStyles.source.medium(fontSize: 15),

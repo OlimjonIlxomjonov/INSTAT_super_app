@@ -195,13 +195,14 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
   void _handleBottomNavTap(BuildContext context, PaymentStatusEnum status) {
     switch (status) {
       case PaymentStatusEnum.paid:
-
         context.read<CourseLessonTopicsBloc>().add(
           CourseLessonTopicsEvent(
             params: CourseCategoryByIdParams(id: widget.data.id),
           ),
         );
-        context.read<CourseLessonItemsBloc>().add(ResetCourseLessonItemsEvent());
+        context.read<CourseLessonItemsBloc>().add(
+          ResetCourseLessonItemsEvent(),
+        );
         FamilyNavigation.familyPush(
           showHandle: false,
           context,

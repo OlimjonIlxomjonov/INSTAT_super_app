@@ -156,6 +156,10 @@ class _ConfirmAccForeignUserState extends State<ConfirmAccForeignUser> {
     }
     final localization = AppLocalizations.of(context)!;
 
+    // Close the keyboard on submit — otherwise it stays up over the result,
+    // covering the success bar or the passport error under the field.
+    FocusManager.instance.primaryFocus?.unfocus();
+
     setState(() {
       _isSubmitting = true;
       _passportError = null;
@@ -199,158 +203,170 @@ class _ConfirmAccForeignUserState extends State<ConfirmAccForeignUser> {
 
     return Scaffold(
       appBar: CustomAppBarWg(myTitle: localization.accountConfirm),
-      body: SafeArea(
-        bottom: false,
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 14,
-                  children: [
-                    CustomDropDownMenuWg(
-                      title: localization.countryLabel,
-                      hintText: _isLoadingCountries
-                          ? localization.loadingEllipsis
-                          : (_countriesLoadFailed
-                                ? localization.countriesLoadErrorHint
-                                : localization.selectCountryHint),
-                      leadingIcon: IconlyLight.location,
-                      options: _countryOptions,
-                      value: _selectedCountryIndex,
-                      onChanged: (_isLoadingCountries || _countriesLoadFailed)
-                          ? null
-                          : (val) =>
-                                setState(() => _selectedCountryIndex = val),
-                    ),
-                    if (_countriesLoadFailed)
-                      GestureDetector(
-                        onTap: _fetchCountries,
-                        child: Text(
-                          localization.retry,
-                          style: AppTextStyles.source.medium(
-                            fontSize: 13,
-                            color: AppColors.primaryColor,
+      // Tapping anywhere outside a field dismisses the keyboard. Opaque hit
+      // testing makes the blank areas between fields tappable too; children
+      // that handle their own taps (fields, dropdown, buttons) still win the
+      // gesture arena, so this doesn't swallow anything.
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 14,
+                    children: [
+                      CustomDropDownMenuWg(
+                        title: localization.countryLabel,
+                        hintText: _isLoadingCountries
+                            ? localization.loadingEllipsis
+                            : (_countriesLoadFailed
+                                  ? localization.countriesLoadErrorHint
+                                  : localization.selectCountryHint),
+                        leadingIcon: IconlyLight.location,
+                        options: _countryOptions,
+                        value: _selectedCountryIndex,
+                        onChanged: (_isLoadingCountries || _countriesLoadFailed)
+                            ? null
+                            : (val) =>
+                                  setState(() => _selectedCountryIndex = val),
+                      ),
+                      if (_countriesLoadFailed)
+                        GestureDetector(
+                          onTap: _fetchCountries,
+                          child: Text(
+                            localization.retry,
+                            style: AppTextStyles.source.medium(
+                              fontSize: 13,
+                              color: AppColors.primaryColor,
+                            ),
                           ),
                         ),
+                      AuthTextFieldWg(
+                        title: localization.lastNameLabel,
+                        label: localization.enterLastNameHint,
+                        controller: _lastNameController,
+                        leadingIcon: IconlyLight.profile,
+                        onChanged: (_) => setState(() {}),
                       ),
-                    AuthTextFieldWg(
-                      title: localization.lastNameLabel,
-                      label: localization.enterLastNameHint,
-                      controller: _lastNameController,
-                      leadingIcon: IconlyLight.profile,
-                      onChanged: (_) => setState(() {}),
-                    ),
-                    AuthTextFieldWg(
-                      title: localization.firstNameLabel,
-                      label: localization.enterFirstNameHint,
-                      controller: _firstNameController,
-                      leadingIcon: IconlyLight.profile,
-                      onChanged: (_) => setState(() {}),
-                    ),
-                    AuthTextFieldWg(
-                      title: localization.fatherNameLabel,
-                      label: localization.enterFatherNameHint,
-                      controller: _fatherNameController,
-                      leadingIcon: IconlyLight.profile,
-                      onChanged: (_) => setState(() {}),
-                    ),
-                    AuthTextFieldWg(
-                      title: localization.documentNumberLabel,
-                      label: localization.enterDocumentNumberHint,
-                      controller: _documentNumberController,
-                      leadingIcon: IconlyLight.document,
-                      onChanged: (_) => setState(() => _passportError = null),
-                    ),
-                    if (_passportError != null)
-                      Text(
-                        _passportError!,
-                        style: AppTextStyles.source.regular(
-                          fontSize: 12,
-                          color: AppColors.red,
-                        ),
+                      AuthTextFieldWg(
+                        title: localization.firstNameLabel,
+                        label: localization.enterFirstNameHint,
+                        controller: _firstNameController,
+                        leadingIcon: IconlyLight.profile,
+                        onChanged: (_) => setState(() {}),
                       ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      AuthTextFieldWg(
+                        title: localization.fatherNameLabel,
+                        label: localization.enterFatherNameHint,
+                        controller: _fatherNameController,
+                        leadingIcon: IconlyLight.profile,
+                        onChanged: (_) => setState(() {}),
+                      ),
+                      AuthTextFieldWg(
+                        title: localization.documentNumberLabel,
+                        label: localization.enterDocumentNumberHint,
+                        controller: _documentNumberController,
+                        leadingIcon: IconlyLight.document,
+                        onChanged: (_) => setState(() => _passportError = null),
+                      ),
+                      if (_passportError != null)
                         Text(
-                          localization.phoneNumberLabel,
-                          style: CustomTextStyles.h3half,
+                          _passportError!,
+                          style: AppTextStyles.source.regular(
+                            fontSize: 12,
+                            color: AppColors.red,
+                          ),
                         ),
-                        const SizedBox(height: 8),
-                        IntlPhoneField(
-                          pickerDialogStyle: PickerDialogStyle(
-                            backgroundColor: Colors.white,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            localization.phoneNumberLabel,
+                            style: CustomTextStyles.h3half,
                           ),
-                          controller: _phoneNumberController,
-                          showCountryFlag: false,
-                          flagsButtonPadding: const EdgeInsets.only(left: 8.0),
-                          decoration: InputDecoration(
-                            hintText: localization.enterPhoneNumberHint,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: AppColors.greyScale.grey300,
-                                width: 1.0,
+                          const SizedBox(height: 8),
+                          IntlPhoneField(
+                            pickerDialogStyle: PickerDialogStyle(
+                              backgroundColor: Colors.white,
+                            ),
+                            controller: _phoneNumberController,
+                            showCountryFlag: false,
+                            flagsButtonPadding: const EdgeInsets.only(
+                              left: 8.0,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: localization.enterPhoneNumberHint,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  color: AppColors.greyScale.grey300,
+                                  width: 1.0,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  color: AppColors.primaryColor,
+                                  width: 1.0,
+                                ),
                               ),
                             ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: AppColors.primaryColor,
-                                width: 1.0,
-                              ),
-                            ),
+                            initialCountryCode: 'UZ',
+                            showDropdownIcon: true,
+                            dropdownIcon: const Icon(IconlyLight.call),
+                            onChanged: (_) => setState(() {}),
                           ),
-                          initialCountryCode: 'UZ',
-                          showDropdownIcon: true,
-                          dropdownIcon: const Icon(IconlyLight.call),
-                          onChanged: (_) => setState(() {}),
+                        ],
+                      ),
+                      Text(
+                        localization.documentPhotoTitle,
+                        style: CustomTextStyles.h3half,
+                      ),
+                      DottedContainerWg(
+                        formatsHint: localization.documentPhotoFormatsHint,
+                        onTap: _isPickingFile ? null : _pickDocumentPhoto,
+                      ),
+                      if (_isPickingFile) ...[
+                        const SizedBox(height: 10),
+                        const Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        ),
+                      ] else if (_documentFile != null) ...[
+                        SelectedFileContainerWg(
+                          fileName: _documentFileName,
+                          fileSize: _documentFileSize != null
+                              ? ArticleFilePickerHelper.formatFileSize(
+                                  _documentFileSize!,
+                                )
+                              : null,
                         ),
                       ],
-                    ),
-                    Text(
-                      localization.documentPhotoTitle,
-                      style: CustomTextStyles.h3half,
-                    ),
-                    DottedContainerWg(
-                      formatsHint: localization.documentPhotoFormatsHint,
-                      onTap: _isPickingFile ? null : _pickDocumentPhoto,
-                    ),
-                    if (_isPickingFile) ...[
                       const SizedBox(height: 10),
-                      const Center(child: CircularProgressIndicator.adaptive()),
-                    ] else if (_documentFile != null) ...[
-                      SelectedFileContainerWg(
-                        fileName: _documentFileName,
-                        fileSize: _documentFileSize != null
-                            ? ArticleFilePickerHelper.formatFileSize(
-                                _documentFileSize!,
-                              )
-                            : null,
+                      _AgreementCheckboxRow(
+                        value: _agreedToTerms,
+                        onChanged: (val) =>
+                            setState(() => _agreedToTerms = val ?? false),
                       ),
                     ],
-                    const SizedBox(height: 10),
-                    _AgreementCheckboxRow(
-                      value: _agreedToTerms,
-                      onChanged: (val) =>
-                          setState(() => _agreedToTerms = val ?? false),
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-            Opacity(
-              opacity: (_isFormValid && !_isSubmitting) ? 1.0 : 0.5,
-              child: CustomBottomNavContainerWg(
-                buttonText: localization.confirm,
-                isLoading: _isSubmitting,
-                onTap: (_isFormValid && !_isSubmitting) ? _submit : () {},
+              Opacity(
+                opacity: (_isFormValid && !_isSubmitting) ? 1.0 : 0.5,
+                child: CustomBottomNavContainerWg(
+                  buttonText: localization.confirm,
+                  isLoading: _isSubmitting,
+                  onTap: (_isFormValid && !_isSubmitting) ? _submit : () {},
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

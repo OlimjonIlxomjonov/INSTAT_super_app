@@ -5,7 +5,7 @@ import 'package:my_template/features/online_library_app/features/home_lib/domain
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_pages_count_entity.dart';
 
 abstract class HomeLibRepository {
-  Future<BookListResponse> getPopularBooks();
+  Future<BookListResponse> getPopularBooks({int page = 1});
 
   Future<void> saveDeleteBook(int id);
 
@@ -22,10 +22,10 @@ abstract class HomeLibRepository {
   Future<void> addComment({required AddCommentParams params});
 
   //! user bought books
-  Future<BookListResponse> getUserBooks();
+  Future<BookListResponse> getUserBooks({int page = 1});
 
   //! user saved (liked) books
-  Future<BookListResponse> getSavedBooks();
+  Future<BookListResponse> getSavedBooks({int page = 1});
 
   //! online book reader
   Future<BookPagesCountEntity> getBookPagesCount(int bookId);

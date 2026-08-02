@@ -178,6 +178,28 @@ class _CoursesInProgressComponentState
             );
           }
 
+          // Trailing spinner while the next page loads, appended below the
+          // existing items so the list never flashes or jumps.
+          if (state.isLoadingMore) {
+            return SliverMainAxisGroup(
+              slivers: [
+                _buildList(data),
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    child: Center(
+                      child: SizedBox(
+                        width: 28,
+                        height: 28,
+                        child: CircularProgressIndicator(strokeWidth: 2.5),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+
           return _buildList(data);
         }
 

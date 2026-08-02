@@ -8,6 +8,7 @@ import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/courses/course_list_response_model.dart';
+import 'package:my_template/features/main_app/home/data/model/banner/banner_model.dart';
 import 'package:my_template/features/main_app/home/data/model/country/country_model.dart';
 import 'package:my_template/features/main_app/home/data/model/user_me/user_model.dart';
 import 'package:my_template/features/main_app/home/data/source/remote_data_source/home_remote_data_source.dart';
@@ -43,9 +44,12 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
-  Future<CourseListResponseModel> fetchCourses() async {
+  Future<CourseListResponseModel> fetchCourses({int page = 1}) async {
     try {
-      final response = await _dioClient.get(ApiUrls.availableCourses);
+      final response = await _dioClient.get(
+        ApiUrls.availableCourses,
+        queryParams: {'page': page},
+      );
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;
         logger.i(data);
@@ -65,6 +69,33 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
     } catch (e, t) {
       logger.e(e);
       logger.e(t);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<BannerModel>> fetchActiveBanners() async {
+    try {
+      final response = await _dioClient.get(ApiUrls.activeBanners);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data as List;
+        return data
+            .map((e) => BannerModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      } else {
+        throw ServerException(
+          statusCode: response.statusCode,
+          message: response.statusMessage,
+        );
+      }
+    } on DioException catch (e) {
+      logger.e(e);
+      throw ServerException(
+        statusCode: e.response?.statusCode,
+        message: e.response?.statusMessage ?? e.message,
+      );
+    } catch (e) {
+      logger.e(e);
       rethrow;
     }
   }

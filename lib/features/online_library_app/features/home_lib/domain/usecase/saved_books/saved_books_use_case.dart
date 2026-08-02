@@ -6,7 +6,7 @@ class SavedBooksUseCase {
 
   SavedBooksUseCase({required this.repository});
 
-  Future<BookListResponse> call() {
-    return repository.getSavedBooks();
+  Future<BookListResponse> call({int page = 1}) {
+    return repository.getSavedBooks(page: page);
   }
 }

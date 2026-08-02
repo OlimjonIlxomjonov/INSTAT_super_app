@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_template/core/common/placeholder/banner_placeholder.dart';
+import 'package:my_template/core/utils/widgets/promo_banners/promo_banners_carousel_wg.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/common/ui_states/error_page.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -18,6 +18,8 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/sliver_articles_list_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/sliver_brief_cards_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/user_articles_page.dart';
+
+import '../../../../../../core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 
 class ArticlesHomePage extends StatelessWidget {
   final VoidCallback onProfileTap, toArticlesPage;
@@ -42,8 +44,8 @@ class ArticlesHomePage extends StatelessWidget {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
       /// HEADER USER PROFILE (on click leads to profile page)
-      appBar: DraggableAppBarWg(onProfileTap: onProfileTap),
-      body: CustomRefreshIndicator(
+      // appBar: DraggableAppBarWg(onProfileTap: onProfileTap),
+      body: RefreshIndicator(
         onRefresh: () async {
           context.read<UserArticlesBloc>().add(
             UserArticlesEvent(status: 'all', search: ''),
@@ -51,21 +53,29 @@ class ArticlesHomePage extends StatelessWidget {
         },
         child: CustomScrollView(
           slivers: [
+            //! AppBar
+            SliverAppBar(
+              toolbarHeight: 75,
+              automaticallyImplyLeading: false,
+              titleSpacing: 0,
+              title: SheetDragAreaWg(
+                child: DraggableAppBarWg(onProfileTap: onProfileTap),
+              ),
+            ),
+
             /// global search bar
             SliverAppBar(
-              toolbarHeight: 56 + 24,
-              floating: true,
-              snap: true,
+              toolbarHeight: 80,
+              // floating: true,
+              // snap: true,
+              pinned: true,
               automaticallyImplyLeading: false,
               titleSpacing: 20,
               title: const AppSearchbarWg(),
             ),
 
             /// AD BANNERS
-            SliverPadding(
-              padding: AppPadding.horizontal20x(),
-              sliver: const SliverToBoxAdapter(child: BannerPlaceholder()),
-            ),
+            const SliverToBoxAdapter(child: PromoBannersCarouselWg()),
 
             /// BRIEF CARD SECTIONS
             SliverBriefCardsWg(items: getBriefInfoCardList(localization)),

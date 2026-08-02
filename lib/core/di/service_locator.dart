@@ -54,8 +54,10 @@ import 'package:my_template/features/main_app/home/domain/usecase/avatar/avatar_
 import 'package:my_template/features/main_app/home/domain/usecase/courses/courses_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/face_rec/face_rec_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/face_rec/get_my_id_session_use_case.dart';
+import 'package:my_template/features/main_app/home/domain/usecase/banner/get_active_banners_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/get_countries_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/register_not_resident_use_case.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/banner/banner_bloc.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/user_me/user_me_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/search_courses/search_courses_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/search_courses/search_courses_bloc.dart';
@@ -79,7 +81,9 @@ import 'package:my_template/features/mikro_data/data/repository/micro_repo_impl.
 import 'package:my_template/features/mikro_data/data/source/impl_remote_data_source/micro_remote_data_source_impl.dart';
 import 'package:my_template/features/mikro_data/data/source/remote_data_source/micro_remote_data_source.dart';
 import 'package:my_template/features/mikro_data/domain/repository/micro_repository.dart';
+import 'package:my_template/features/mikro_data/domain/usecase/data_requests/data_requests_use_case.dart';
 import 'package:my_template/features/mikro_data/domain/usecase/reports/reports_use_case.dart';
+import 'package:my_template/features/mikro_data/presentation/bloc/data_requests/data_requests_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/add_comment/add_comment_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/book_comments/book_comments_use_case.dart';
@@ -320,9 +324,13 @@ Future<void> setup() async {
   //? Not-resident (foreign user) account confirmation
   sl.registerLazySingleton(() => GetCountriesUseCase(repository: sl()));
   sl.registerLazySingleton(() => RegisterNotResidentUseCase(repository: sl()));
+  //? Home banners
+  sl.registerLazySingleton(() => GetActiveBannersUseCase(repository: sl()));
   //? Micro Data
   //? Reports
   sl.registerLazySingleton(() => ReportsUseCase(repository: sl()));
+  //? User data requests
+  sl.registerLazySingleton(() => DataRequestsUseCase(repository: sl()));
 
   //? book comments
   sl.registerLazySingleton(() => BookCommentsUseCase(repository: sl()));
@@ -344,6 +352,7 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => CourseLessonTopicsBloc(sl()));
   sl.registerLazySingleton(() => CourseLessonItemsBloc(sl()));
   sl.registerLazySingleton(() => CoursesBloc(sl()));
+  sl.registerLazySingleton(() => BannerBloc(sl()));
   sl.registerLazySingleton(() => AboutCourseFeaturesBloc(sl()));
   sl.registerLazySingleton(() => CourseFilesBloc(sl()));
   sl.registerLazySingleton(() => BuyCourseBloc(useCase: sl()));
@@ -427,6 +436,9 @@ Future<void> setup() async {
   //? Micro Data
   //? Reports
   sl.registerLazySingleton(() => ReportsBloc(useCase: sl()));
+  //? User data requests — sahifa uni lokal BlocProvider bilan yaratadi,
+  //? shuning uchun factory (har ochilishda yangi instance kerak).
+  sl.registerFactory(() => DataRequestsBloc(useCase: sl()));
   //? book comments
   sl.registerLazySingleton(() => BookCommentsBloc(useCase: sl()));
   //? Buy Book

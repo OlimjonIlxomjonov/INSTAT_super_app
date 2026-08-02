@@ -96,14 +96,19 @@ class _ReportsCardWgState extends State<ReportsCardWg> {
                           child: Column(
                             crossAxisAlignment: .start,
                             children: [
-                              Text(
-                                item.category.nameUz,
-                                style: AppTextStyles.source.medium(
-                                  fontSize: 12,
-                                  color: AppColors.splashBackgroundColor,
+                              // A report can have no category at all
+                              // ("category": null), which would otherwise
+                              // render an empty line plus its spacing.
+                              if (item.category.nameUz.isNotEmpty) ...[
+                                Text(
+                                  item.category.nameUz,
+                                  style: AppTextStyles.source.medium(
+                                    fontSize: 12,
+                                    color: AppColors.splashBackgroundColor,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 8),
+                                const SizedBox(height: 8),
+                              ],
                               Text(
                                 item.name,
                                 maxLines: 2,

@@ -6,7 +6,13 @@ class HomeEvent {
 
 class UserMeEvent extends HomeEvent {}
 
+/// Loads (or reloads) the first page, replacing whatever was there.
 class AvailableCoursesEvent extends HomeEvent {}
+
+/// Appends the next page to the already-loaded courses. Safe to fire
+/// repeatedly — the bloc ignores it while a page is in flight or when the
+/// last page has been reached.
+class LoadMoreCoursesEvent extends HomeEvent {}
 
 class AvatarEvent extends HomeEvent {
   final AvatarParams params;

@@ -10,8 +10,8 @@ class LeaderBoardRepoImpl implements LeaderBoardRepository {
     : _remote = remote;
 
   @override
-  Future<LeaderBoardResponse> getLeaderBoard() {
-    return _remote.fetchLeaderBoard();
+  Future<LeaderBoardResponse> getLeaderBoard({int page = 1}) {
+    return _remote.fetchLeaderBoard(page: page);
   }
 
   @override

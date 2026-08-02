@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_template/core/common/placeholder/banner_placeholder.dart';
+import 'package:my_template/core/utils/widgets/promo_banners/promo_banners_carousel_wg.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -9,6 +9,7 @@ import 'package:my_template/core/utils/general_widgets/dragble_app_bar/draggble_
 import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
@@ -65,8 +66,7 @@ class HomeEduPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: DraggableAppBarWg(onProfileTap: onProfileTap),
-      body: CustomRefreshIndicator(
+      body: RefreshIndicator(
         onRefresh: () async {
           context.read<CoursesBloc>().add(AvailableCoursesEvent());
           context.read<UserCoursesBloc>().add(
@@ -75,30 +75,32 @@ class HomeEduPage extends StatelessWidget {
         },
         child: CustomScrollView(
           slivers: [
+            //! App Bar
+            SliverAppBar(
+              toolbarHeight: 75,
+              title: SheetDragAreaWg(
+                child: DraggableAppBarWg(onProfileTap: onProfileTap),
+              ),
+              automaticallyImplyLeading: false,
+              titleSpacing: 0,
+            ),
+
             /// SEARCH BAR
             SliverAppBar(
               toolbarHeight: 80,
-              floating: true,
-              snap: true,
+              // floating: true,
+              // snap: true,
+              pinned: true,
               automaticallyImplyLeading: false,
               titleSpacing: 20,
               title: AppSearchbarWg(onTap: () => _openSearch(context)),
             ),
 
+            SliverToBoxAdapter(child: PromoBannersCarouselWg()),
+
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  switch (index) {
-                    case 0:
-                      return BannerPlaceholder();
-                    case 1:
-                      return HomeAchievementsWg();
-                    default:
-                      return const SizedBox.shrink();
-                  }
-                }, childCount: 2),
-              ),
+              padding: AppPadding.horizontal20x(),
+              sliver: SliverToBoxAdapter(child: HomeAchievementsWg()),
             ),
 
             /// Active User Courses
@@ -114,26 +116,26 @@ class HomeEduPage extends StatelessWidget {
             ),
 
             /// All Courses
-            SliverSafeArea(
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  if (index == 0) {
-                    return Padding(
-                      padding: EdgeInsets.only(
-                        left: appW(20),
-                        right: appW(20),
-                        top: appH(10),
-                      ),
-                      child: ExtendSectionSeeAllWg(
-                        title: localization.allCourses,
-                        onTap: () => _goToAllCourses(context),
-                      ),
-                    );
-                  }
-                  return PopularWithBlocWg();
-                }, childCount: 2),
-              ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
+                if (index == 0) {
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      left: appW(20),
+                      right: appW(20),
+                      top: appH(10),
+                    ),
+                    child: ExtendSectionSeeAllWg(
+                      title: localization.allCourses,
+                      onTap: () => _goToAllCourses(context),
+                    ),
+                  );
+                }
+                return PopularWithBlocWg();
+              }, childCount: 2),
             ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
           ],
         ),
       ),

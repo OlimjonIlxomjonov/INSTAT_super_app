@@ -9,9 +9,12 @@ class LeaderBoardRemoteDataSourceImpl implements LeaderBoardRemoteDataSource {
   final _dioClient = DioClient();
 
   @override
-  Future<LeaderBoardResponseModel> fetchLeaderBoard() async {
+  Future<LeaderBoardResponseModel> fetchLeaderBoard({int page = 1}) async {
     try {
-      final response = await _dioClient.get(ApiUrls.leaderBoard);
+      final response = await _dioClient.get(
+        ApiUrls.leaderBoard,
+        queryParams: {'page': page},
+      );
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
         return LeaderBoardResponseModel.fromJson(response.data);

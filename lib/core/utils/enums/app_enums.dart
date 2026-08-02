@@ -8,6 +8,14 @@ enum BookCardType { bought, market, library }
 
 enum ArticleStatus { confirmed, pending, rejected, draft, inReview }
 
+enum MicroDataRequestStatus {
+  accepted,
+  inReview,
+  rejected,
+  pendingPayment,
+  draft,
+}
+
 enum LastActionsStatus { inReview, accepted, addedExpert, rejected }
 
 extension LastActionsStatusX on LastActionsStatus {

@@ -54,7 +54,9 @@ class MinimalCoursesCardWg extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            data.name,
+                            data.displayName(
+                              Localizations.localeOf(context).languageCode,
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: AppTextStyles.source.medium(fontSize: 15),

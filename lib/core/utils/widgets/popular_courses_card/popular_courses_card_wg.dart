@@ -86,10 +86,12 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
             ),
           ),
           SizedBox(height: appH(4)),
-          AutoSizeText(
+          Text(
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            widget.data.name,
+            widget.data.displayName(
+              Localizations.localeOf(context).languageCode,
+            ),
             style: AppTextStyles.source.medium(fontSize: 15),
           ),
           SizedBox(height: appH(8)),

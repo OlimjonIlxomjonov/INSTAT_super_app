@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/common/pagination/load_more_on_scroll.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/di/service_locator.dart';
@@ -54,198 +55,240 @@ class _StatsEduPageState extends State<StatsEduPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBarWg(myTitle: AppLocalizations.of(context)!.usersTitle),
+      appBar: CustomAppBarWg(
+        myTitle: AppLocalizations.of(context)!.usersTitle,
+        showArrow: false,
+      ),
       body: CustomRefreshIndicator(
         onRefresh: () async {
           context.read<LeaderBoardBloc>().add(LeaderBoardEvent());
         },
-        child: CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: AppPadding.hAndV20x20(),
-              sliver: SliverToBoxAdapter(
-                child: AppSearchbarWg(onTap: () => _openSearch(context)),
+        child: BlocBuilder<LeaderBoardBloc, LeaderBoardState>(
+          buildWhen: (prev, curr) {
+            final p = prev is LeaderBoardLoaded ? prev : null;
+            final c = curr is LeaderBoardLoaded ? curr : null;
+            return p?.hasMore != c?.hasMore ||
+                p?.isLoadingMore != c?.isLoadingMore;
+          },
+          builder: (context, pagingState) {
+            final loaded = pagingState is LeaderBoardLoaded
+                ? pagingState
+                : null;
+            return LoadMoreOnScroll(
+              canLoadMore:
+                  (loaded?.hasMore ?? false) &&
+                  !(loaded?.isLoadingMore ?? false),
+              onLoadMore: () => context.read<LeaderBoardBloc>().add(
+                const LoadMoreLeaderBoardEvent(),
               ),
-            ),
+              child: CustomScrollView(
+                slivers: [
+                  SliverPadding(
+                    padding: AppPadding.hAndV20x20(),
+                    sliver: SliverToBoxAdapter(
+                      child: AppSearchbarWg(onTap: () => _openSearch(context)),
+                    ),
+                  ),
 
-            /// USERS LEADERBOARD
-            SliverToBoxAdapter(
-              child: BlocBuilder<LeaderBoardBloc, LeaderBoardState>(
-                builder: (context, state) {
-                  final isLoading = state is LeaderBoardLoading;
-                  final data = state is LeaderBoardLoaded
-                      ? state.response.data
-                      : List.generate(10, (_) => LeaderBoardEntity.empty());
+                  /// USERS LEADERBOARD
+                  SliverToBoxAdapter(
+                    child: BlocBuilder<LeaderBoardBloc, LeaderBoardState>(
+                      builder: (context, state) {
+                        final isLoading = state is LeaderBoardLoading;
+                        final data = state is LeaderBoardLoaded
+                            ? state.response.data
+                            : List.generate(
+                                10,
+                                (_) => LeaderBoardEntity.empty(),
+                              );
 
-                  if (data.isEmpty) {
-                    return AppEmptyState(
-                      title: "Heli hech kim ball to'plamadi!",
-                      subtitle:
-                          'Kurs testini yakunlang va o\'z bilimingizni isbotlang',
-                    );
-                  }
+                        if (data.isEmpty) {
+                          return AppEmptyState(
+                            title: "Heli hech kim ball to'plamadi!",
+                            subtitle:
+                                'Kurs testini yakunlang va o\'z bilimingizni isbotlang',
+                          );
+                        }
 
-                  // Podium needs at least 3 people to make sense — below
-                  // that, everyone just shows as a regular ranked row.
-                  final showPodium = data.length >= 3;
+                        // Podium needs at least 3 people to make sense — below
+                        // that, everyone just shows as a regular ranked row.
+                        final showPodium = data.length >= 3;
 
-                  return Column(
-                    children: [
-                      // ── Podium for top 3 ──
-                      if (showPodium)
-                        Skeletonizer(
-                          enabled: isLoading,
-                          child: TopThreePodium(
-                            items: data.sublist(0, 3),
-                            fullNames: data
-                                .take(3)
-                                .map((e) => e.displayName)
-                                .toList(),
-                            thumbnails: data
-                                .take(3)
-                                .map(
-                                  (e) => e.avatar != null
-                                      ? 'https://api1.instat.uz${e.avatar}'
-                                      : null,
-                                )
-                                .toList(),
-                            onTap: (rank) {
-                              final item = data[rank];
-                              final String? thumb = item.avatar != null
+                        return Column(
+                          children: [
+                            // ── Podium for top 3 ──
+                            if (showPodium)
+                              Skeletonizer(
+                                enabled: isLoading,
+                                child: TopThreePodium(
+                                  items: data.sublist(0, 3),
+                                  fullNames: data
+                                      .take(3)
+                                      .map((e) => e.displayName)
+                                      .toList(),
+                                  thumbnails: data
+                                      .take(3)
+                                      .map(
+                                        (e) => e.avatar != null
+                                            ? 'https://api1.instat.uz${e.avatar}'
+                                            : null,
+                                      )
+                                      .toList(),
+                                  onTap: (rank) {
+                                    final item = data[rank];
+                                    final String? thumb = item.avatar != null
+                                        ? 'https://api1.instat.uz${item.avatar}'
+                                        : null;
+                                    final name = item.displayName;
+                                    openMiniAppSheetFamily(
+                                      context,
+                                      showHandler: false,
+                                      child: TempDetailedUserEdu(
+                                        imagePath: thumb,
+                                        name: name,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            // ── Regular cards for 4th+ ──
+                            ...List.generate(data.length, (index) {
+                              final item = data[index];
+                              final String? thumbnail = item.avatar != null
                                   ? 'https://api1.instat.uz${item.avatar}'
                                   : null;
-                              final name = item.displayName;
-                              openMiniAppSheetFamily(
+                              final fullName = item.displayName;
+
+                              Future<dynamic> onTap() => openMiniAppSheetFamily(
                                 context,
                                 showHandler: false,
                                 child: TempDetailedUserEdu(
-                                  imagePath: thumb,
-                                  name: name,
+                                  imagePath: thumbnail,
+                                  name: fullName,
                                 ),
                               );
-                            },
-                          ),
-                        ),
-                      // ── Regular cards for 4th+ ──
-                      ...List.generate(data.length, (index) {
-                        final item = data[index];
-                        final String? thumbnail = item.avatar != null
-                            ? 'https://api1.instat.uz${item.avatar}'
-                            : null;
-                        final fullName = item.displayName;
 
-                        Future<dynamic> onTap() => openMiniAppSheetFamily(
-                          context,
-                          showHandler: false,
-                          child: TempDetailedUserEdu(
-                            imagePath: thumbnail,
-                            name: fullName,
-                          ),
-                        );
+                              // Only skip the top 3 here if the podium actually
+                              // absorbed them — otherwise (fewer than 3 people
+                              // total) everyone needs to show up in this list.
+                              if (showPodium && index < 3) {
+                                return const SizedBox.shrink();
+                              }
 
-                        // Only skip the top 3 here if the podium actually
-                        // absorbed them — otherwise (fewer than 3 people
-                        // total) everyone needs to show up in this list.
-                        if (showPodium && index < 3) {
-                          return const SizedBox.shrink();
-                        }
-
-                        // Regular card for the rest
-                        return GestureDetector(
-                          onTap: onTap,
-                          child: Skeletonizer(
-                            enabled: isLoading,
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                left: appW(20),
-                                right: appW(20),
-                                bottom: appH(12),
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: appW(12),
-                                vertical: appH(8),
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: AppColors.greyScale.grey200,
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    '#${index + 1}',
-                                    style: AppTextStyles.source.regular(
-                                      fontSize: 13,
-                                      color: AppColors.greyScale.grey600,
+                              // Regular card for the rest
+                              return GestureDetector(
+                                onTap: onTap,
+                                child: Skeletonizer(
+                                  enabled: isLoading,
+                                  child: Container(
+                                    margin: EdgeInsets.only(
+                                      left: appW(20),
+                                      right: appW(20),
+                                      bottom: appH(12),
                                     ),
-                                  ),
-                                  SizedBox(width: appW(10)),
-                                  CircleAvatar(
-                                    backgroundColor:
-                                        AppColors.greyScale.grey300,
-                                    radius: 30,
-                                    foregroundImage: thumbnail != null
-                                        ? NetworkImage(thumbnail)
-                                        : null,
-                                    child: thumbnail == null
-                                        ? Icon(
-                                            Icons.person,
-                                            color: AppColors.greyScale.grey800,
-                                            size: 28,
-                                          )
-                                        : null,
-                                  ),
-                                  SizedBox(width: appW(12)),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: appW(12),
+                                      vertical: appH(8),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: AppColors.greyScale.grey200,
+                                      ),
+                                    ),
+                                    child: Row(
                                       children: [
                                         Text(
-                                          fullName,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: AppTextStyles.source.medium(
-                                            fontSize: 14,
+                                          '#${index + 1}',
+                                          style: AppTextStyles.source.regular(
+                                            fontSize: 13,
+                                            color: AppColors.greyScale.grey600,
                                           ),
                                         ),
-                                        if (fullName != item.email)
-                                          Text(
-                                            item.email,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: AppTextStyles.source.regular(
-                                              fontSize: 12,
-                                            ),
+                                        SizedBox(width: appW(10)),
+                                        CircleAvatar(
+                                          backgroundColor:
+                                              AppColors.greyScale.grey300,
+                                          radius: 30,
+                                          foregroundImage: thumbnail != null
+                                              ? NetworkImage(thumbnail)
+                                              : null,
+                                          child: thumbnail == null
+                                              ? Icon(
+                                                  Icons.person,
+                                                  color: AppColors
+                                                      .greyScale
+                                                      .grey800,
+                                                  size: 28,
+                                                )
+                                              : null,
+                                        ),
+                                        SizedBox(width: appW(12)),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                fullName,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: AppTextStyles.source
+                                                    .medium(fontSize: 14),
+                                              ),
+                                              if (fullName != item.email)
+                                                Text(
+                                                  item.email,
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: AppTextStyles.source
+                                                      .regular(fontSize: 12),
+                                                ),
+                                            ],
                                           ),
+                                        ),
+                                        SizedBox(width: appW(12)),
+                                        Text(
+                                          item.scoreSum.toString(),
+                                          style: AppTextStyles.source.medium(
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                        Icon(
+                                          Icons.star,
+                                          size: 20,
+                                          color: AppColors.orange,
+                                        ),
                                       ],
                                     ),
                                   ),
-                                  SizedBox(width: appW(12)),
-                                  Text(
-                                    item.scoreSum.toString(),
-                                    style: AppTextStyles.source.medium(
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    size: 20,
-                                    color: AppColors.orange,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                                ),
+                              );
+                            }),
+                          ],
                         );
-                      }),
-                    ],
-                  );
-                },
+                      },
+                    ),
+                  ),
+
+                  if (loaded?.isLoadingMore ?? false)
+                    const SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 24),
+                        child: Center(
+                          child: SizedBox(
+                            width: 28,
+                            height: 28,
+                            child: CircularProgressIndicator(strokeWidth: 2.5),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );

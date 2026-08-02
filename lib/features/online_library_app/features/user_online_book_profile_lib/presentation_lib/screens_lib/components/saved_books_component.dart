@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/common/pagination/load_more_on_scroll.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -82,42 +83,73 @@ class _SavedBooksComponentState extends State<SavedBooksComponent> {
             );
           }
 
-          return GridView.builder(
-            padding: EdgeInsets.symmetric(
-              horizontal: appW(20),
-              vertical: appH(16),
+          return LoadMoreOnScroll(
+            // Keyed off the bloc's own paging flags, not visibleItems —
+            // unliking a book removes it from the filtered list without
+            // changing whether the server has more pages.
+            canLoadMore: state.hasMore && !state.isLoadingMore,
+            onLoadMore: () => context.read<SavedBooksBloc>().add(
+              const LoadMoreSavedBooksEvent(),
             ),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 16,
-              crossAxisSpacing: 16,
-              childAspectRatio: 0.56,
+            // Slivers so the spinner sits below the grid rather than
+            // occupying a grid cell (which would look like a broken card).
+            child: CustomScrollView(
+              slivers: [
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: appW(20),
+                    vertical: appH(16),
+                  ),
+                  sliver: SliverGrid.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 16,
+                          crossAxisSpacing: 16,
+                          childAspectRatio: 0.56,
+                        ),
+                    itemCount: visibleItems.length,
+                    itemBuilder: (context, index) {
+                      final book = visibleItems[index];
+                      final thumbnail = book.bookThumbnails.isNotEmpty
+                          ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${book.bookThumbnails.first.file}'
+                          : '';
+                      return BookGridItem(
+                        id: book.id,
+                        isSaved: true,
+                        type: BookCardType.market,
+                        title: book.name,
+                        author: book.author.name,
+                        price: "${book.price} UZS",
+                        imagePath: thumbnail.isNotEmpty
+                            ? thumbnail
+                            : 'assets/images/temp_book.jpg',
+                        onTap: () {
+                          openMiniAppSheetFamily(
+                            context,
+                            showHandler: false,
+                            child: DetailedOnlineBookComponent(data: book),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+                if (state.isLoadingMore)
+                  const SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 24),
+                      child: Center(
+                        child: SizedBox(
+                          width: 28,
+                          height: 28,
+                          child: CircularProgressIndicator(strokeWidth: 2.5),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
-            itemCount: visibleItems.length,
-            itemBuilder: (context, index) {
-              final book = visibleItems[index];
-              final thumbnail = book.bookThumbnails.isNotEmpty
-                  ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${book.bookThumbnails.first.file}'
-                  : '';
-              return BookGridItem(
-                id: book.id,
-                isSaved: true,
-                type: BookCardType.market,
-                title: book.name,
-                author: book.author.name,
-                price: "${book.price} UZS",
-                imagePath: thumbnail.isNotEmpty
-                    ? thumbnail
-                    : 'assets/images/temp_book.jpg',
-                onTap: () {
-                  openMiniAppSheetFamily(
-                    context,
-                    showHandler: false,
-                    child: DetailedOnlineBookComponent(data: book),
-                  );
-                },
-              );
-            },
           );
         },
       ),

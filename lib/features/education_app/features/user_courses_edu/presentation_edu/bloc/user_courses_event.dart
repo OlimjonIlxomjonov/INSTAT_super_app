@@ -4,10 +4,19 @@ class CoursesEvent {
   const CoursesEvent();
 }
 
+/// Loads (or reloads) the first page for the given filter, replacing
+/// whatever was previously loaded.
 class UserCoursesEvent extends CoursesEvent {
   final UserCoursesParams params;
 
   UserCoursesEvent({required this.params});
+}
+
+/// Appends the next page for the filter that is already loaded. Safe to fire
+/// repeatedly — the bloc ignores it while a page is in flight or once the
+/// last page has been reached.
+class LoadMoreUserCoursesEvent extends CoursesEvent {
+  const LoadMoreUserCoursesEvent();
 }
 
 class UserCategoryByIdEvent extends CoursesEvent {

@@ -5,13 +5,14 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dom
 import 'lesson_video_progress_event.dart';
 import 'lesson_video_progress_state.dart';
 
-class LessonVideoProgressBloc extends Bloc<LessonVideoProgressEvent, LessonVideoProgressState> {
+class LessonVideoProgressBloc
+    extends Bloc<LessonVideoProgressEvent, LessonVideoProgressState> {
   final PutLessonVideoProgressUseCase _putLessonVideoProgressUseCase;
 
   LessonVideoProgressBloc({
     required PutLessonVideoProgressUseCase putLessonVideoProgressUseCase,
-  })  : _putLessonVideoProgressUseCase = putLessonVideoProgressUseCase,
-        super(LessonVideoProgressInitial()) {
+  }) : _putLessonVideoProgressUseCase = putLessonVideoProgressUseCase,
+       super(LessonVideoProgressInitial()) {
     on<PutLessonVideoProgressEvent>(_onPutLessonVideoProgressEvent);
   }
 

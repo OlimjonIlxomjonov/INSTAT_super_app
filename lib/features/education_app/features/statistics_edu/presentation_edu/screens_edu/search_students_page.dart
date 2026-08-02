@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
+import 'package:my_template/core/common/pagination/load_more_on_scroll.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
@@ -141,6 +142,7 @@ class _SearchStudentsPageState extends State<SearchStudentsPage> {
               child: BlocBuilder<SearchStudentsBloc, SearchStudentsState>(
                 builder: (context, state) {
                   final isLoading = state is SearchStudentsLoading;
+                  final loaded = state is SearchStudentsLoaded ? state : null;
                   final List<LeaderBoardEntity?> students =
                       state is SearchStudentsLoaded
                       ? state.response.data
@@ -188,95 +190,122 @@ class _SearchStudentsPageState extends State<SearchStudentsPage> {
                     );
                   }
 
-                  return ListView.builder(
-                    padding: EdgeInsets.symmetric(horizontal: appW(20)),
-                    itemCount: students.length,
-                    itemBuilder: (context, index) {
-                      final item = students[index];
-                      final thumbnail = item?.avatar != null
-                          ? 'https://test.avacoder.uz${item!.avatar}'
-                          : null;
-                      final fullName = item?.displayName ?? '';
-
-                      return GestureDetector(
-                        onTap: item == null
-                            ? null
-                            : () => _openDetail(item.avatar, fullName),
-                        child: Skeletonizer(
-                          enabled: isLoading,
-                          child: Container(
-                            margin: EdgeInsets.only(bottom: appH(12)),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: appW(12),
-                              vertical: appH(8),
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: AppColors.greyScale.grey200,
+                  return LoadMoreOnScroll(
+                    canLoadMore:
+                        (loaded?.hasMore ?? false) &&
+                        !(loaded?.isLoadingMore ?? false),
+                    onLoadMore: () => context.read<SearchStudentsBloc>().add(
+                      const LoadMoreSearchStudentsEvent(),
+                    ),
+                    child: ListView.builder(
+                      padding: EdgeInsets.symmetric(horizontal: appW(20)),
+                      // One extra slot for the trailing spinner.
+                      itemCount:
+                          students.length +
+                          ((loaded?.isLoadingMore ?? false) ? 1 : 0),
+                      itemBuilder: (context, index) {
+                        if (index >= students.length) {
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: Center(
+                              child: SizedBox(
+                                width: 28,
+                                height: 28,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                ),
                               ),
                             ),
-                            child: Row(
-                              children: [
-                                CircleAvatar(
-                                  backgroundColor: AppColors.greyScale.grey300,
-                                  radius: 30,
-                                  foregroundImage: thumbnail != null
-                                      ? NetworkImage(thumbnail)
-                                      : null,
-                                  child: thumbnail == null
-                                      ? Icon(
-                                          Icons.person,
-                                          color: AppColors.greyScale.grey800,
-                                          size: 28,
-                                        )
-                                      : null,
+                          );
+                        }
+                        final item = students[index];
+                        final thumbnail = item?.avatar != null
+                            ? 'https://test.avacoder.uz${item!.avatar}'
+                            : null;
+                        final fullName = item?.displayName ?? '';
+
+                        return GestureDetector(
+                          onTap: item == null
+                              ? null
+                              : () => _openDetail(item.avatar, fullName),
+                          child: Skeletonizer(
+                            enabled: isLoading,
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: appH(12)),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: appW(12),
+                                vertical: appH(8),
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: AppColors.greyScale.grey200,
                                 ),
-                                SizedBox(width: appW(12)),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        fullName.isEmpty
-                                            ? localization.genericUserFallback
-                                            : fullName,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: AppTextStyles.source.medium(
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                      Text(
-                                        item?.email ?? 'placeholder@email.com',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: AppTextStyles.source.regular(
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ],
+                              ),
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor:
+                                        AppColors.greyScale.grey300,
+                                    radius: 30,
+                                    foregroundImage: thumbnail != null
+                                        ? NetworkImage(thumbnail)
+                                        : null,
+                                    child: thumbnail == null
+                                        ? Icon(
+                                            Icons.person,
+                                            color: AppColors.greyScale.grey800,
+                                            size: 28,
+                                          )
+                                        : null,
                                   ),
-                                ),
-                                SizedBox(width: appW(12)),
-                                Text(
-                                  (item?.scoreSum ?? 0).toString(),
-                                  style: AppTextStyles.source.medium(
-                                    fontSize: 13,
+                                  SizedBox(width: appW(12)),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          fullName.isEmpty
+                                              ? localization.genericUserFallback
+                                              : fullName,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: AppTextStyles.source.medium(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        Text(
+                                          item?.email ??
+                                              'placeholder@email.com',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: AppTextStyles.source.regular(
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Icon(
-                                  Icons.star,
-                                  size: 20,
-                                  color: AppColors.orange,
-                                ),
-                              ],
+                                  SizedBox(width: appW(12)),
+                                  Text(
+                                    (item?.scoreSum ?? 0).toString(),
+                                    style: AppTextStyles.source.medium(
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    size: 20,
+                                    color: AppColors.orange,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   );
                 },
               ),

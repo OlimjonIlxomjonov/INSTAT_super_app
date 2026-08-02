@@ -16,18 +16,30 @@ class ReportsCategoryModel extends ReportsCategoryEntity {
   });
 
   factory ReportsCategoryModel.fromJson(Map<String, dynamic> json) {
+    // Two real shapes have to survive here:
+    //  * an empty map, because a report can legitimately have
+    //    "category": null and ReportsModel.fromJson substitutes {}
+    //  * a populated category whose untranslated locales are null
+    //    (e.g. "name_ru": null), which would otherwise fail the
+    //    non-nullable String fields.
+    final name = json['name'] as String? ?? '';
+
     return ReportsCategoryModel(
-      id: json['id'],
-      name: json['name'],
-      nameUz: json['name_uz'],
-      nameRu: json['name_ru'],
-      nameEn: json['name_en'],
-      descriptionUz: json['description_uz'],
-      descriptionRu: json['description_ru'],
-      descriptionEn: json['description_en'],
-      thumbnail: json['thumbnail'],
-      type: json['type'],
-      createdAt: DateTime.parse(json['created_at']),
+      id: json['id'] as int? ?? 0,
+      name: name,
+      // Fall back to the base name so an untranslated locale still shows
+      // something readable rather than an empty label.
+      nameUz: json['name_uz'] as String? ?? name,
+      nameRu: json['name_ru'] as String? ?? name,
+      nameEn: json['name_en'] as String? ?? name,
+      descriptionUz: json['description_uz'] as String?,
+      descriptionRu: json['description_ru'] as String?,
+      descriptionEn: json['description_en'] as String?,
+      thumbnail: json['thumbnail'] as String?,
+      type: json['type'] as String? ?? '',
+      createdAt:
+          DateTime.tryParse(json['created_at']?.toString() ?? '') ??
+          DateTime.fromMillisecondsSinceEpoch(0),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/general_widgets/online_book_wg/online_book_wg.dart';
@@ -18,7 +19,12 @@ class PopularBooksWithBlocWg extends StatelessWidget {
       builder: (context, state) {
         if (state is PopularBooksLoaded) {
           final data = state.response.data;
-          return SliverPadding(
+
+          if (data.isEmpty) {
+            return SliverToBoxAdapter(child: AppEmptyState(title: ''));
+          }
+
+          final grid = SliverPadding(
             padding: AppPadding.horizontal20x(),
             sliver: SliverGrid.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -60,6 +66,26 @@ class PopularBooksWithBlocWg extends StatelessWidget {
                 );
               },
             ),
+          );
+
+          if (!state.isLoadingMore) return grid;
+
+          return SliverMainAxisGroup(
+            slivers: [
+              grid,
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Center(
+                    child: SizedBox(
+                      width: 28,
+                      height: 28,
+                      child: CircularProgressIndicator(strokeWidth: 2.5),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           );
         }
         return SliverToBoxAdapter(child: SizedBox.shrink());

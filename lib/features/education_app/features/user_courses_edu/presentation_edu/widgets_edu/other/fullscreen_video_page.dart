@@ -30,7 +30,10 @@ class _FullscreenVideoPageState extends State<FullscreenVideoPage> {
 
   @override
   void dispose() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: SystemUiOverlay.values,
+    );
     super.dispose();
   }
 
@@ -40,7 +43,8 @@ class _FullscreenVideoPageState extends State<FullscreenVideoPage> {
     final isLandscapeVideo = widget.controller.value.aspectRatio >= 1.0;
 
     // Force rotation ONLY if the video is wide but the phone is held in portrait
-    final needsArtificialRotation = isLandscapeVideo && orientation == Orientation.portrait;
+    final needsArtificialRotation =
+        isLandscapeVideo && orientation == Orientation.portrait;
 
     return Scaffold(
       backgroundColor: Colors.black,

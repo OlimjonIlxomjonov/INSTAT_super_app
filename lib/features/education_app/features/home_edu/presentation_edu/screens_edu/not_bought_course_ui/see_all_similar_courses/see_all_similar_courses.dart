@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
+import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/title_with_layout_selector_wg.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/similar_courses/similar_courses_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/similar_courses/similar_courses_state.dart';
@@ -48,17 +50,39 @@ class _SeeAllSimilarCoursesState extends State<SeeAllSimilarCourses> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverDefaultAppBarWg(
-            myTitle: AppLocalizations.of(context)!.similarCourses,
+          // SliverDefaultAppBarWg(
+          //   myTitle: AppLocalizations.of(context)!.similarCourses,
+          // ),
+          //! App Bar
+          SliverAppBar(
+            toolbarHeight: 65,
+            automaticallyImplyLeading: false,
+            titleSpacing: 0,
+            title: SheetDragAreaWg(
+              child: CustomAppBarWg(
+                myTitle: AppLocalizations.of(context)!.similarCourses,
+              ),
+            ),
           ),
+
+          //! Search
+          SliverAppBar(
+            floating: true,
+            snap: true,
+            toolbarHeight: 75,
+            title: AppSearchbarWg(),
+            automaticallyImplyLeading: false,
+          ),
+
           SliverPadding(
-            padding: AppPadding.hAndV20x20(),
+            padding: AppPadding.horizontal20x(),
             sliver: SliverToBoxAdapter(
               child: BlocBuilder<SimilarCoursesBloc, SimilarCoursesState>(
                 builder: (context, state) {
                   if (state is SimilarCoursesLoaded) {
                     final data = state.listEntity;
 
+                    //! Empty State
                     if (data.isEmpty) {
                       return AppEmptyState(
                         title: "O‘xshash kurslar topilmadi.",
@@ -69,7 +93,7 @@ class _SeeAllSimilarCoursesState extends State<SeeAllSimilarCourses> {
 
                     return Column(
                       children: [
-                        AppSearchbarWg(),
+                        //! Courses
                         TitleWithLayoutSelectorWg(
                           prefsKey: 'expanded',
                           onChanged: (v) => setState(() => layout = v),

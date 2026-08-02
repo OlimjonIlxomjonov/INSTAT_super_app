@@ -3,7 +3,6 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
-import 'package:my_template/core/common/placeholder/banner_placeholder.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/common/test_mode_banner/test_mode_banner.dart';
 import 'package:my_template/core/common/ui_states/lost_internet_connection_state.dart';
@@ -21,6 +20,9 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_state.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
 import 'package:my_template/features/education_app/widgets/active_courses_with_bloc_wg.dart';
+import 'package:my_template/core/utils/widgets/promo_banners/promo_banners_carousel_wg.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/banner/banner_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/banner/banner_event.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_state.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/home_event.dart';
@@ -91,6 +93,7 @@ class _DesktopUiScreenComponentState extends State<DesktopUiScreenComponent> {
 
   void _reloadAll() {
     context.read<CoursesBloc>().add(AvailableCoursesEvent());
+    context.read<BannerBloc>().add(const FetchBannersEvent());
     context.read<UserCoursesBloc>().add(
       UserCoursesEvent(params: UserCoursesParams(state: 'in_progress')),
     );
@@ -216,8 +219,7 @@ class _DesktopUiScreenComponentState extends State<DesktopUiScreenComponent> {
 
           final textBlockHeight =
               authorLineHeight + 4 + titleLineHeight + priceLineHeight;
-          final listHeight =
-              cardWidth / 0.78 + 10 + 8 + textBlockHeight + 4;
+          final listHeight = cardWidth / 0.78 + 10 + 8 + textBlockHeight + 4;
 
           if (state is PopularBooksLoaded && state.response.data.isNotEmpty) {
             final books = state.response.data;
@@ -423,10 +425,7 @@ class _DesktopUiScreenComponentState extends State<DesktopUiScreenComponent> {
                         Expanded(
                           flex: 2,
                           child: SingleChildScrollView(
-                            padding: const EdgeInsets.only(
-                              top: 16,
-                              bottom: 24,
-                            ),
+                            padding: const EdgeInsets.only(top: 16, bottom: 24),
                             child: Column(
                               children: [
                                 Padding(
@@ -441,10 +440,7 @@ class _DesktopUiScreenComponentState extends State<DesktopUiScreenComponent> {
                                     20,
                                     0,
                                   ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(16),
-                                    child: const BannerPlaceholder(),
-                                  ),
+                                  child: const PromoBannersCarouselWg(),
                                 ),
                               ],
                             ),
@@ -456,10 +452,7 @@ class _DesktopUiScreenComponentState extends State<DesktopUiScreenComponent> {
                         /// existing sliver-based bloc widgets
                         /// (ActiveCoursesWithBlocWg, UserArticlesWithBlocWg)
                         /// can be reused as-is.
-                        Expanded(
-                          flex: 3,
-                          child: _buildContentColumn(context),
-                        ),
+                        Expanded(flex: 3, child: _buildContentColumn(context)),
                       ],
                     ),
                   ),

@@ -27,8 +27,11 @@ class ApiUrls {
   static const userCategoryById = 'categories/';
   static const availableCourses = 'courses/items/active/';
 
+  /// banners
+  static const activeBanners = 'banners/items/active/';
+
   /// books
-  static const activeBooks = 'books/items/active';
+  static const activeBooks = 'books/items/active/?book_type=online';
   static const offlineBooks = 'books/items/offline/';
   static const bookThumbnail = 'https://test.avacoder.uz/media/';
 
@@ -91,6 +94,9 @@ class ApiUrls {
   //! Micro Data
   //? Reports
   static const reports = 'data-reports/';
+
+  //? User data requests
+  static const dataRequests = 'data-requests/';
 
   //! Face Recognition
   static const faceRec = 'my-id/accept';

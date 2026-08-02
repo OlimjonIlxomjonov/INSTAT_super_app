@@ -6,5 +6,13 @@ import 'package:my_template/features/online_library_app/features/offline_books_l
 class BookListResponse {
   final List<OfflineBookEntity> data;
 
-  BookListResponse({required this.data});
+  /// Pagination info, when the endpoint provides it.
+  ///
+  /// Deliberately optional: several sources build this response without any
+  /// pagination at all (the cart passes an empty `meta`, and the cart bloc
+  /// constructs one directly for optimistic removal). A null meta simply
+  /// means "not paginated", which callers treat as "no further pages".
+  final Meta? meta;
+
+  BookListResponse({required this.data, this.meta});
 }

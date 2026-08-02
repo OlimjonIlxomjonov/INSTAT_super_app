@@ -9,6 +9,7 @@ import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
+import 'package:my_template/core/common/pagination/load_more_on_scroll.dart';
 import 'package:my_template/core/utils/widgets/extend_section/title_with_layout_selector_wg.dart';
 import 'package:my_template/core/utils/widgets/popular_courses_card/expanded_courses_card_wg.dart';
 import 'package:my_template/core/utils/widgets/popular_courses_card/minimal_courses_card_wg.dart';
@@ -179,42 +180,67 @@ class _SearchCoursesPageState extends State<SearchCoursesPage> {
                           ),
                         ),
                         Expanded(
-                          child: ListView.builder(
-                            padding: EdgeInsets.symmetric(horizontal: appW(16)),
-                            itemCount: courses.length,
-                            itemBuilder: (context, index) {
-                              final item = courses[index];
-                              return CourseCategoryBuilder(
-                                categoryId: item.category,
-                                loadingBuilder: (_) =>
-                                    const SkeletonExpandedCourseCard(),
-                                builder: (context, categoryName) {
-                                  void openDetail() {
-                                    openMiniAppSheetFamily(
-                                      showHandler: false,
-                                      context,
-                                      child: DetailedCourseInfoPage(
-                                        data: item,
-                                        courseCategory: categoryName,
-                                        total: state.response.meta.total,
+                          child: LoadMoreOnScroll(
+                            canLoadMore: state.hasMore && !state.isLoadingMore,
+                            onLoadMore: () => context
+                                .read<SearchCoursesBloc>()
+                                .add(const LoadMoreSearchCoursesEvent()),
+                            child: ListView.builder(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: appW(16),
+                              ),
+                              // One extra slot for the trailing spinner.
+                              itemCount:
+                                  courses.length +
+                                  (state.isLoadingMore ? 1 : 0),
+                              itemBuilder: (context, index) {
+                                if (index >= courses.length) {
+                                  return const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 16),
+                                    child: Center(
+                                      child: SizedBox(
+                                        width: 28,
+                                        height: 28,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2.5,
+                                        ),
                                       ),
-                                    );
-                                  }
-
-                                  return _layout == CoursesLayout.grid
-                                      ? ExpandedCoursesCardWg(
-                                          entity: item,
-                                          categoryName: categoryName,
-                                          onTap: openDetail,
-                                        )
-                                      : MinimalCoursesCardWg(
+                                    ),
+                                  );
+                                }
+                                final item = courses[index];
+                                return CourseCategoryBuilder(
+                                  categoryId: item.category,
+                                  loadingBuilder: (_) =>
+                                      const SkeletonExpandedCourseCard(),
+                                  builder: (context, categoryName) {
+                                    void openDetail() {
+                                      openMiniAppSheetFamily(
+                                        showHandler: false,
+                                        context,
+                                        child: DetailedCourseInfoPage(
                                           data: item,
-                                          categoryName: categoryName,
-                                          onTap: openDetail,
-                                        );
-                                },
-                              );
-                            },
+                                          courseCategory: categoryName,
+                                          total: state.response.meta.total,
+                                        ),
+                                      );
+                                    }
+
+                                    return _layout == CoursesLayout.grid
+                                        ? ExpandedCoursesCardWg(
+                                            entity: item,
+                                            categoryName: categoryName,
+                                            onTap: openDetail,
+                                          )
+                                        : MinimalCoursesCardWg(
+                                            data: item,
+                                            categoryName: categoryName,
+                                            onTap: openDetail,
+                                          );
+                                  },
+                                );
+                              },
+                            ),
                           ),
                         ),
                       ],

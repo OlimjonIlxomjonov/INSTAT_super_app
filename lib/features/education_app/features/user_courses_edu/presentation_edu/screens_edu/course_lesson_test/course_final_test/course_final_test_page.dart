@@ -238,10 +238,7 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage>
             onButtonTap = () async {
               final image = await _cameraService.captureBase64();
               if (image == null && mounted) {
-                errorFlushBar(
-                  context,
-                  localization.cameraCaptureFailedMessage,
-                );
+                errorFlushBar(context, localization.cameraCaptureFailedMessage);
                 return;
               }
               if (mounted) {

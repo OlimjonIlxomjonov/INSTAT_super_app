@@ -16,7 +16,12 @@ class AboutCourseFeaturesBloc
       final id = event.params.id;
 
       if (_cache.containsKey(id)) {
-        emit(AboutCourseFeaturesLoaded(response: _cache[id]!, cachedResponses: Map.from(_cache)));
+        emit(
+          AboutCourseFeaturesLoaded(
+            response: _cache[id]!,
+            cachedResponses: Map.from(_cache),
+          ),
+        );
         return;
       }
 
@@ -29,7 +34,12 @@ class AboutCourseFeaturesBloc
         final response = await useCase.call(params: event.params);
         _cache[id] = response;
         _fetchingIds.remove(id);
-        emit(AboutCourseFeaturesLoaded(response: response, cachedResponses: Map.from(_cache)));
+        emit(
+          AboutCourseFeaturesLoaded(
+            response: response,
+            cachedResponses: Map.from(_cache),
+          ),
+        );
       } catch (e) {
         _fetchingIds.remove(id);
         emit(AboutCourseFeaturesError(cachedResponses: Map.from(_cache)));

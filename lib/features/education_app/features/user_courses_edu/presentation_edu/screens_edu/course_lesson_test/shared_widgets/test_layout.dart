@@ -97,7 +97,9 @@ Widget buildTestResultBanner({
         ),
         const SizedBox(width: 8),
         Text(
-          isCorrect ? localization.correctAnswerBanner : localization.wrongAnswer,
+          isCorrect
+              ? localization.correctAnswerBanner
+              : localization.wrongAnswer,
           style: AppTextStyles.source.medium(fontSize: 16, color: Colors.white),
         ),
       ],

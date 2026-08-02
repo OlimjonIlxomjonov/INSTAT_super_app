@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/common/pagination/load_more_on_scroll.dart';
 import 'package:my_template/core/common/skeletonizer_shimmer/courses/course_shimmer.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
@@ -8,6 +9,7 @@ import 'package:my_template/features/education_app/features/home_edu/presentatio
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/course_category_builder.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_state.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/home_event.dart';
 
 class PopularWithBlocWg extends StatelessWidget {
   const PopularWithBlocWg({super.key});
@@ -29,18 +31,6 @@ class PopularWithBlocWg extends StatelessWidget {
           final data = state.response.data;
           final cardWidth = appW(312);
 
-          // Was a SizedBox(height: appH(270)) with card width appW(312) —
-          // appW/appH scale width and height by separate ratios (against
-          // screen width vs screen height), so on a device whose aspect
-          // ratio differs a lot from the reference phone (e.g. an iPad,
-          // much closer to square), the two stop matching up and the text
-          // overflows. Deriving the height from the card's own real
-          // content (like the book carousel elsewhere already does) works
-          // on any device. This also keeps the list lazy (ListView.builder)
-          // rather than building every card eagerly — building all of them
-          // at once was mounting every card's CourseCategoryBuilder
-          // (which share one global bloc) in the same frame, causing a
-          // rebuild-storm assertion crash.
           final imageHeight = cardWidth / 2; // AspectRatio 12/6 in the card
           final categoryLineHeight = _measureLineHeight(
             context,
@@ -63,44 +53,58 @@ class PopularWithBlocWg extends StatelessWidget {
               (nameLineHeight * 2) +
               appH(8) +
               metaRowHeight +
-              4; // small rounding buffer
+              16;
 
           return SizedBox(
             height: listHeight,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              padding: AppPadding.horizontal20x(),
-              itemCount: data.length,
-              cacheExtent: appW(300),
-              itemExtent: appW(312),
-              itemBuilder: (context, index) {
-                final item = data[index];
-                return Padding(
-                  padding: EdgeInsets.only(right: appW(12)),
-                  child: CourseCategoryBuilder(
-                    categoryId: item.category,
-                    loadingBuilder: (context) => const SizedBox.shrink(),
-                    builder: (context, categoryName) {
-                      return PopularCoursesCardWg(
-                        onTap: () {
-                          /// open new a family
-                          openMiniAppSheetFamily(
-                            showHandler: false,
-                            context,
-                            child: DetailedCourseInfoPage(
-                              total: state.response.meta.total,
-                              data: item,
-                              courseCategory: categoryName,
-                            ),
-                          );
-                        },
-                        data: item,
-                        categoryName: categoryName,
-                      );
-                    },
-                  ),
-                );
-              },
+            child: LoadMoreOnScroll(
+              canLoadMore: state.hasMore && !state.isLoadingMore,
+              onLoadMore: () =>
+                  context.read<CoursesBloc>().add(LoadMoreCoursesEvent()),
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: AppPadding.horizontal20x(),
+                itemCount: data.length + (state.isLoadingMore ? 1 : 0),
+                cacheExtent: appW(300),
+                itemExtent: appW(312),
+                itemBuilder: (context, index) {
+                  if (index >= data.length) {
+                    return const Center(
+                      child: SizedBox(
+                        width: 28,
+                        height: 28,
+                        child: CircularProgressIndicator(strokeWidth: 2.5),
+                      ),
+                    );
+                  }
+                  final item = data[index];
+                  return Padding(
+                    padding: EdgeInsets.only(right: appW(12)),
+                    child: CourseCategoryBuilder(
+                      categoryId: item.category,
+                      loadingBuilder: (context) => const SizedBox.shrink(),
+                      builder: (context, categoryName) {
+                        return PopularCoursesCardWg(
+                          onTap: () {
+                            /// open new a family
+                            openMiniAppSheetFamily(
+                              showHandler: false,
+                              context,
+                              child: DetailedCourseInfoPage(
+                                total: state.response.meta.total,
+                                data: item,
+                                courseCategory: categoryName,
+                              ),
+                            );
+                          },
+                          data: item,
+                          categoryName: categoryName,
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
             ),
           );
         } else if (state is CoursesLoading) {

@@ -17,6 +17,7 @@ import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custo
 import 'package:my_template/core/utils/widgets/extend_comment/extend_comment_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_entity.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_comments/book_comments_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_comments/book_comments_event.dart';
@@ -71,45 +72,56 @@ class _DetailedOnlineBookComponentState
         : widget.data.starsSum / widget.data.commentCount;
 
     return Scaffold(
-      /// HEADER
-      appBar: CustomAppBarWg(
-        myTitle: localization.aboutBook,
-        customActions: [
-          BlocBuilder<
-            my_template_book.BookActionsBloc,
-            my_template_book.BookActionsState
-          >(
-            builder: (context, state) {
-              final bool isSaved = state.isBookSaved(
-                widget.data.id,
-                defaultValue: widget.data.isSaved,
-              );
-              return IconButton(
-                style: IconButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: .circular(20),
-                    side: BorderSide(color: AppColors.greyScale.grey200),
-                  ),
-                ),
-                onPressed: () {
-                  context.read<my_template_book.BookActionsBloc>().add(
-                    my_template_book.ToggleSaveBookEvent(
-                      bookId: widget.data.id,
-                      isSaved: !isSaved,
-                    ),
-                  );
-                },
-                icon: Icon(
-                  isSaved ? FlutterRemix.heart_fill : FlutterRemix.heart_line,
-                  color: isSaved ? AppColors.red : null,
-                ),
-              );
-            },
-          ),
-        ],
-      ),
       body: CustomScrollView(
         slivers: [
+          //! App Bar
+          SliverAppBar(
+            titleSpacing: 0,
+            automaticallyImplyLeading: false,
+            title: SheetDragAreaWg(
+              child: CustomAppBarWg(
+                myTitle: localization.aboutBook,
+                customActions: [
+                  BlocBuilder<
+                    my_template_book.BookActionsBloc,
+                    my_template_book.BookActionsState
+                  >(
+                    builder: (context, state) {
+                      final bool isSaved = state.isBookSaved(
+                        widget.data.id,
+                        defaultValue: widget.data.isSaved,
+                      );
+                      return IconButton(
+                        style: IconButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: .circular(20),
+                            side: BorderSide(
+                              color: AppColors.greyScale.grey200,
+                            ),
+                          ),
+                        ),
+                        onPressed: () {
+                          context.read<my_template_book.BookActionsBloc>().add(
+                            my_template_book.ToggleSaveBookEvent(
+                              bookId: widget.data.id,
+                              isSaved: !isSaved,
+                            ),
+                          );
+                        },
+                        icon: Icon(
+                          isSaved
+                              ? FlutterRemix.heart_fill
+                              : FlutterRemix.heart_line,
+                          color: isSaved ? AppColors.red : null,
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+
           //! thumbnail
           SliverToBoxAdapter(
             child: DetailedOnlineBookHeaderWg(data: widget.data),

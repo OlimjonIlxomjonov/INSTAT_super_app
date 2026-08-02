@@ -6,7 +6,7 @@ class LeaderBoardUseCase {
 
   LeaderBoardUseCase({required this.repository});
 
-  Future<LeaderBoardResponse> call() {
-    return repository.getLeaderBoard();
+  Future<LeaderBoardResponse> call({int page = 1}) {
+    return repository.getLeaderBoard(page: page);
   }
 }

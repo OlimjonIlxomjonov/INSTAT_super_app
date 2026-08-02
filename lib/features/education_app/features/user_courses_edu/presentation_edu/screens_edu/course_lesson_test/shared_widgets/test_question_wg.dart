@@ -19,10 +19,7 @@ class TestQuestionWg extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          questionTitle,
-          style: AppTextStyles.source.medium(fontSize: 22),
-        ),
+        Text(questionTitle, style: AppTextStyles.source.medium(fontSize: 22)),
         SizedBox(height: appH(16)),
         Container(
           width: double.infinity,

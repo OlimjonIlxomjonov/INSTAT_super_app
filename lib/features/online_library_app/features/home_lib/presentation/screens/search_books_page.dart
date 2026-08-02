@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/common/pagination/load_more_on_scroll.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -160,42 +161,75 @@ class _SearchBooksPageState extends State<SearchBooksPage> {
                       );
                     }
 
-                    return GridView.builder(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: appW(16),
-                        vertical: appH(16),
+                    return LoadMoreOnScroll(
+                      canLoadMore: state.hasMore && !state.isLoadingMore,
+                      onLoadMore: () => context.read<SearchBooksBloc>().add(
+                        const LoadMoreSearchBooksEvent(),
                       ),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 16,
-                        crossAxisSpacing: 16,
-                        childAspectRatio: 0.52,
+                      // Slivers rather than a plain GridView so the spinner
+                      // can sit *below* the grid instead of occupying a grid
+                      // cell (which would look like a malformed book card).
+                      child: CustomScrollView(
+                        slivers: [
+                          SliverPadding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: appW(16),
+                              vertical: appH(16),
+                            ),
+                            sliver: SliverGrid.builder(
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 16,
+                                    crossAxisSpacing: 16,
+                                    childAspectRatio: 0.52,
+                                  ),
+                              itemCount: books.length,
+                              itemBuilder: (context, index) {
+                                final book = books[index];
+                                final thumbnail = book.bookThumbnails.isNotEmpty
+                                    ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${book.bookThumbnails.first.file}'
+                                    : '';
+                                return BookGridItem(
+                                  id: book.id,
+                                  isSaved: book.isSaved,
+                                  type: BookCardType.market,
+                                  title: book.name,
+                                  author: book.author.name,
+                                  price: "\u{00A0}${book.price} UZS",
+                                  imagePath: thumbnail.isNotEmpty
+                                      ? thumbnail
+                                      : 'assets/images/temp_book.jpg',
+                                  onTap: () {
+                                    openMiniAppSheetFamily(
+                                      context,
+                                      showHandler: false,
+                                      child: DetailedOnlineBookComponent(
+                                        data: book,
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                          if (state.isLoadingMore)
+                            const SliverToBoxAdapter(
+                              child: Padding(
+                                padding: EdgeInsets.only(bottom: 24),
+                                child: Center(
+                                  child: SizedBox(
+                                    width: 28,
+                                    height: 28,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2.5,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
-                      itemCount: books.length,
-                      itemBuilder: (context, index) {
-                        final book = books[index];
-                        final thumbnail = book.bookThumbnails.isNotEmpty
-                            ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${book.bookThumbnails.first.file}'
-                            : '';
-                        return BookGridItem(
-                          id: book.id,
-                          isSaved: book.isSaved,
-                          type: BookCardType.market,
-                          title: book.name,
-                          author: book.author.name,
-                          price: "\u{00A0}${book.price} UZS",
-                          imagePath: thumbnail.isNotEmpty
-                              ? thumbnail
-                              : 'assets/images/temp_book.jpg',
-                          onTap: () {
-                            openMiniAppSheetFamily(
-                              context,
-                              showHandler: false,
-                              child: DetailedOnlineBookComponent(data: book),
-                            );
-                          },
-                        );
-                      },
                     );
                   }
 

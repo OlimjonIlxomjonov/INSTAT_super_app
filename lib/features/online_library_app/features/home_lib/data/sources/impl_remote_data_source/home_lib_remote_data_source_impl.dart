@@ -12,9 +12,12 @@ class HomeLibRemoteDataSourceImpl implements HomeLibRemoteDataSource {
   final _dioClient = DioClient();
 
   @override
-  Future<BookListResponseModel> fetchPopularBooks() async {
+  Future<BookListResponseModel> fetchPopularBooks({int page = 1}) async {
     try {
-      final response = await _dioClient.get(ApiUrls.activeBooks);
+      final response = await _dioClient.get(
+        ApiUrls.activeBooks,
+        queryParams: {'page': page},
+      );
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;
         logger.i(data);
@@ -120,9 +123,12 @@ class HomeLibRemoteDataSourceImpl implements HomeLibRemoteDataSource {
   }
 
   @override
-  Future<BookListResponseModel> fetchUserBooks() async {
+  Future<BookListResponseModel> fetchUserBooks({int page = 1}) async {
     try {
-      final response = await _dioClient.get(ApiUrls.userBooks);
+      final response = await _dioClient.get(
+        ApiUrls.userBooks,
+        queryParams: {'page': page},
+      );
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;
         logger.i(data);
@@ -137,9 +143,12 @@ class HomeLibRemoteDataSourceImpl implements HomeLibRemoteDataSource {
   }
 
   @override
-  Future<BookListResponseModel> fetchSavedBooks() async {
+  Future<BookListResponseModel> fetchSavedBooks({int page = 1}) async {
     try {
-      final response = await _dioClient.get(ApiUrls.savedBooks);
+      final response = await _dioClient.get(
+        ApiUrls.savedBooks,
+        queryParams: {'page': page},
+      );
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;
         logger.i(data);

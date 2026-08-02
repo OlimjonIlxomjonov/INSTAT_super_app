@@ -44,11 +44,16 @@ class _CourseCategoryBuilderState extends State<CourseCategoryBuilder> {
 
   @override
   Widget build(BuildContext context) {
+    final localeCode = Localizations.localeOf(context).languageCode;
+
     return BlocBuilder<UserCategoryByIdBloc, UserCategoryByIdState>(
       builder: (context, state) {
         final categories = state.categories;
         if (categories.containsKey(widget.categoryId)) {
-          return widget.builder(context, categories[widget.categoryId]!.name);
+          return widget.builder(
+            context,
+            categories[widget.categoryId]!.displayName(localeCode),
+          );
         }
 
         if (widget.loadingBuilder != null) {

@@ -22,53 +22,50 @@ class TestOptionListWg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: List.generate(
-        options.length,
-        (index) {
-          final option = options[index];
-          final isSelected = selectedOptionId == option.id;
-          
-          Color? backgroundColor;
-          Color? borderColor;
-          Widget? actionIcon;
+      children: List.generate(options.length, (index) {
+        final option = options[index];
+        final isSelected = selectedOptionId == option.id;
 
-          if (isAnswered && isSelected) {
-            backgroundColor = isCorrect == true
-                ? AppColors.green.withValues(alpha: 0.1)
-                : AppColors.red.withValues(alpha: 0.1);
-            borderColor = isCorrect == true ? AppColors.green : AppColors.red;
-            actionIcon = Icon(
-              isCorrect == true ? Icons.check_circle : Icons.cancel,
-              color: isCorrect == true ? AppColors.green : AppColors.red,
-            );
-          } else if (isAnswered) {
-             backgroundColor = Colors.transparent;
-             borderColor = AppColors.greyScale.grey200;
-             actionIcon = Icon(
-               Icons.circle_outlined, 
-               color: AppColors.greyScale.grey300,
-             );
-          } else {
-             actionIcon = Checkbox(
-              value: isSelected,
-              shape: const CircleBorder(),
-              onChanged: onSelectOption != null 
-                  ? (temp) => onSelectOption!(option.id) 
-                  : null,
-            );
-          }
+        Color? backgroundColor;
+        Color? borderColor;
+        Widget? actionIcon;
 
-          return DefaultCustomTileWg(
-            onTap: onSelectOption != null && !isAnswered
-                ? () => onSelectOption!(option.id)
-                : () {},
-            backgroundColor: backgroundColor,
-            borderColor: borderColor,
-            tileAction: actionIcon,
-            tileTitle: option.text,
+        if (isAnswered && isSelected) {
+          backgroundColor = isCorrect == true
+              ? AppColors.green.withValues(alpha: 0.1)
+              : AppColors.red.withValues(alpha: 0.1);
+          borderColor = isCorrect == true ? AppColors.green : AppColors.red;
+          actionIcon = Icon(
+            isCorrect == true ? Icons.check_circle : Icons.cancel,
+            color: isCorrect == true ? AppColors.green : AppColors.red,
           );
-        },
-      ),
+        } else if (isAnswered) {
+          backgroundColor = Colors.transparent;
+          borderColor = AppColors.greyScale.grey200;
+          actionIcon = Icon(
+            Icons.circle_outlined,
+            color: AppColors.greyScale.grey300,
+          );
+        } else {
+          actionIcon = Checkbox(
+            value: isSelected,
+            shape: const CircleBorder(),
+            onChanged: onSelectOption != null
+                ? (temp) => onSelectOption!(option.id)
+                : null,
+          );
+        }
+
+        return DefaultCustomTileWg(
+          onTap: onSelectOption != null && !isAnswered
+              ? () => onSelectOption!(option.id)
+              : () {},
+          backgroundColor: backgroundColor,
+          borderColor: borderColor,
+          tileAction: actionIcon,
+          tileTitle: option.text,
+        );
+      }),
     );
   }
 }
