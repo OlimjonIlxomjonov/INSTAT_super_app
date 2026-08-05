@@ -111,6 +111,10 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
         },
         child: CustomScrollView(
           controller: _scrollController,
+          // Kontent ekranga sig'ib qolsa standart physics drag'ni qabul
+          // qilmaydi va u bottom sheet'ga o'tib, sheet yopilib ketadi.
+          // 1-2 ta element bo'lganda ham scroll o'ziniki bo'lishi kerak.
+          physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             /// search bar
             SliverAppBar(
@@ -202,6 +206,7 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
               builder: (context, state) {
                 if (state is UserArticlesLoaded) {
                   final data = state.response.data;
+                  //! empty state
                   if (data.isEmpty) {
                     return SliverToBoxAdapter(child: EmptyState());
                   }
@@ -210,7 +215,7 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
                       //! data
                       SliverArticlesListWg(items: data),
 
-                      //? load more data
+                      //! load more data
                       if (state.isLoadingMore)
                         const UserArticlesSkeletonizer(itemCount: 2),
                     ],

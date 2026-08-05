@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/utils/widgets/promo_banners/promo_banners_carousel_wg.dart';
-import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -12,7 +11,6 @@ import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_packa
 import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
-import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/search_courses_page.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/show_all_courses_bottom_sheet_page.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/widgets_edu/home_achivements_wg.dart';
@@ -77,7 +75,7 @@ class HomeEduPage extends StatelessWidget {
           slivers: [
             //! App Bar
             SliverAppBar(
-              toolbarHeight: 75,
+              toolbarHeight: 70,
               title: SheetDragAreaWg(
                 child: DraggableAppBarWg(onProfileTap: onProfileTap),
               ),
@@ -86,14 +84,14 @@ class HomeEduPage extends StatelessWidget {
             ),
 
             /// SEARCH BAR
-            SliverAppBar(
-              toolbarHeight: 80,
-              // floating: true,
-              // snap: true,
-              pinned: true,
-              automaticallyImplyLeading: false,
-              titleSpacing: 20,
-              title: AppSearchbarWg(onTap: () => _openSearch(context)),
+            SliverPadding(
+              padding: const .only(bottom: 10),
+              sliver: SliverAppBar(
+                toolbarHeight: 70,
+                pinned: true,
+                automaticallyImplyLeading: false,
+                title: AppSearchbarWg(onTap: () => _openSearch(context)),
+              ),
             ),
 
             SliverToBoxAdapter(child: PromoBannersCarouselWg()),

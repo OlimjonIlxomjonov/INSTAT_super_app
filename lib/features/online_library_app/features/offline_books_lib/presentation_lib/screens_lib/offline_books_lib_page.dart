@@ -13,6 +13,7 @@ import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app
 import 'package:my_template/core/utils/general_widgets/online_book_wg/online_book_wg.dart';
 import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/detailed_online_book_component.dart';
 import 'package:my_template/features/online_library_app/features/offline_books_lib/presentation_lib/bloc/offline_books_bloc.dart';
 import 'package:my_template/features/online_library_app/features/offline_books_lib/presentation_lib/bloc/offline_books_event.dart';
@@ -59,8 +60,7 @@ class _OfflineBooksLibPageState extends State<OfflineBooksLibPage> {
       value: _bloc,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: CustomAppBarWg(myTitle: localization.library),
-        body: CustomRefreshIndicator(
+        body: RefreshIndicator(
           onRefresh: () async {
             // _bloc = sl<OfflineBooksBloc>();
             // _bloc.add(const FetchOfflineBooks());
@@ -71,9 +71,19 @@ class _OfflineBooksLibPageState extends State<OfflineBooksLibPage> {
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             slivers: [
               SliverAppBar(
-                primary: false,
+                titleSpacing: 0,
                 floating: true,
                 snap: true,
+                automaticallyImplyLeading: false,
+                title: SheetDragAreaWg(
+                  child: CustomAppBarWg(myTitle: localization.library),
+                ),
+              ),
+              SliverAppBar(
+                primary: false,
+                // floating: true,
+                // snap: true,
+                pinned: true,
                 automaticallyImplyLeading: false,
                 titleSpacing: 20,
                 title: Container(

@@ -7,7 +7,9 @@ import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
+import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/general_widgets/online_book_wg/short_book_details_wg.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_entity.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
@@ -59,8 +61,6 @@ class _UserOnlineBookCartLibPageState extends State<UserOnlineBookCartLibPage> {
     final itemCount = items?.length ?? 5;
     final isEmpty = cartState is CartLoaded && cartState.response.data.isEmpty;
 
-    /// Selection only matters once there's more than one book in the cart —
-    /// with a single book it's always the one being bought.
     final isMultiSelect = (items?.length ?? 0) > 1;
 
     if (items != null) {
@@ -88,7 +88,13 @@ class _UserOnlineBookCartLibPageState extends State<UserOnlineBookCartLibPage> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverDefaultAppBarWg(myTitle: localization.cart),
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            titleSpacing: 0,
+            title: SheetDragAreaWg(
+              child: CustomAppBarWg(myTitle: localization.cart),
+            ),
+          ),
           SliverPadding(
             padding: AppPadding.hAndV20x20(),
             sliver: SliverToBoxAdapter(

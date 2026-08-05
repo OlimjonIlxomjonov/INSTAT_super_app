@@ -125,56 +125,58 @@ class _MicroDataRequestsViewState extends State<_MicroDataRequestsView> {
         onRefresh: () async => _fetch(),
         child: CustomScrollView(
           controller: _scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             //! HEADER
-            SliverToBoxAdapter(
-              child: SheetDragAreaWg(
-                child: CustomAppBarWg(
-                  myTitle: localization.myRequests,
-                  showArrow: true,
-                ),
-              ),
-            ),
+            // SliverToBoxAdapter(
+            //   child: SheetDragAreaWg(
+            //     child: CustomAppBarWg(
+            //       myTitle: localization.myRequests,
+            //       showArrow: true,
+            //     ),
+            //   ),
+            // ),
 
             //! SEARCH BAR
             SliverAppBar(
               toolbarHeight: 80,
               pinned: true,
               automaticallyImplyLeading: false,
-              titleSpacing: 20,
-              title: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: AppColors.greyScale.grey200,
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      IconlyLight.search,
-                      color: AppColors.greyScale.grey600,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        controller: _searchController,
-                        onChanged: _onSearchChanged,
-                        style: AppTextStyles.source.regular(fontSize: 14),
-                        decoration: InputDecoration(
-                          hintText: localization.searchRequestsHint,
-                          hintStyle: AppTextStyles.source.regular(
-                            fontSize: 14,
-                            color: AppColors.greyScale.grey500,
-                          ),
-                          border: InputBorder.none,
-                          isDense: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 14,
+              title: SheetDragAreaWg(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: AppColors.greyScale.grey200,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        IconlyLight.search,
+                        color: AppColors.greyScale.grey600,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextField(
+                          controller: _searchController,
+                          onChanged: _onSearchChanged,
+                          style: AppTextStyles.source.regular(fontSize: 14),
+                          decoration: InputDecoration(
+                            hintText: localization.searchRequestsHint,
+                            hintStyle: AppTextStyles.source.regular(
+                              fontSize: 14,
+                              color: AppColors.greyScale.grey500,
+                            ),
+                            border: InputBorder.none,
+                            isDense: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 14,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

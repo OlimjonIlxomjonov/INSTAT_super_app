@@ -22,12 +22,21 @@ class DataRequestDetailModel extends DataRequestDetailEntity {
     super.fileExtension,
   });
 
+  /// Backend ikki xil sxema qaytaradi: `POST /` va `PUT {id}/` da `category`
+  /// oddiy id, `POST {id}/upload-file/` da esa to'liq nested obyekt.
+  /// Ikkalasini ham qabul qilamiz.
+  static int? _categoryId(dynamic value) {
+    if (value is int) return value;
+    if (value is Map) return value['id'] as int?;
+    return null;
+  }
+
   factory DataRequestDetailModel.fromJson(Map<String, dynamic>? json) {
     return DataRequestDetailModel(
       id: json?['id'] ?? 0,
       fullName: json?['full_name'] ?? '',
       companyName: json?['company_name'],
-      categoryId: json?['category'],
+      categoryId: _categoryId(json?['category']),
       description: json?['description'],
       aim: json?['aim'],
       regionCode: json?['region']?.toString(),

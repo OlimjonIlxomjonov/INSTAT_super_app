@@ -55,7 +55,7 @@ class _MagazinesPageState extends State<MagazinesPage> {
         child: CustomScrollView(
           slivers: [
             SliverPadding(
-              padding: AppPadding.hAndV20x20(),
+              padding: AppPadding.horizontal20x(),
               sliver: SliverToBoxAdapter(
                 child: Text(localization.journals, style: CustomTextStyles.h2),
               ),

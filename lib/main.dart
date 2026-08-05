@@ -14,13 +14,6 @@ Future<void> main() async {
   await Hive.initFlutter();
   await Hive.openBox('authBox');
 
-  // Phones stay portrait-only — most screens in this app were only ever
-  // designed for that. Tablets and laptop-width windows are left
-  // unrestricted, since those are the layouts actually built to adapt to
-  // width/orientation changes. Uses the shortest side of the raw display
-  // (orientation-independent — a device's physical size class doesn't
-  // change when it rotates) rather than MediaQuery, since no widget tree
-  // exists yet at this point in startup.
   final view = WidgetsBinding.instance.platformDispatcher.views.first;
   final logicalShortestSide =
       view.physicalSize.shortestSide / view.devicePixelRatio;

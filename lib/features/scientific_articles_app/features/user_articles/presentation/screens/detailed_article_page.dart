@@ -7,7 +7,9 @@ import 'package:my_template/core/common/params/article_params/article_params.dar
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/utils/constants/assets/app_animations.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
+import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_process/article_process_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_process/article_process_state.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_files/review_files_bloc.dart';
@@ -135,10 +137,6 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
       localization.processTab,
     ];
 
-    // widget.status is frozen at the moment this page was opened — after
-    // editing/submitting from within it (e.g. draft -> in_review), nothing
-    // would ever update it. Prefer the live ReviewDetailBloc status once
-    // it's loaded, and only fall back to the constructor value before that.
     final reviewDetailState = context.watch<ReviewDetailBloc>().state;
     final effectiveStatus = reviewDetailState is ReviewDetailLoaded
         ? reviewDetailState.response.articleStatus
@@ -149,7 +147,16 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
         children: [
           CustomScrollView(
             slivers: [
-              SliverDefaultAppBarWg(myTitle: localization.articleDetailsTitle),
+              SliverAppBar(
+                toolbarHeight: 70,
+                titleSpacing: 0,
+                automaticallyImplyLeading: false,
+                title: SheetDragAreaWg(
+                  child: CustomAppBarWg(
+                    myTitle: localization.articleDetailsTitle,
+                  ),
+                ),
+              ),
 
               /// CATEGORIES tab row
               SliverToBoxAdapter(
@@ -247,8 +254,6 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
                                   ),
                                   const SizedBox(height: 8),
 
-                                  /// Body — passes null when loading so skeleton
-                                  /// content is naturally shaped like the real data
                                   DetailedArticleBodyWg(
                                     detail: detail,
                                     authors: isLoading ? authors : authors,
@@ -322,8 +327,6 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
                       );
                     }
                     if (state is ArticleProcessError) {
-                      // Never surface the raw backend error to the user —
-                      // just a generic, localized "couldn't load" message.
                       return SliverToBoxAdapter(
                         child: Center(
                           child: Padding(
@@ -364,8 +367,6 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
   }
 }
 
-/// Skeleton placeholder authors — used while bloc is loading so
-/// Skeletonizer has shaped content to animate over.
 final List<ReviewAuthorEntity> _skeletonAuthors = List.generate(
   2,
   (i) => ReviewAuthorEntity(

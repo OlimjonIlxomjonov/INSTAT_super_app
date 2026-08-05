@@ -34,7 +34,21 @@ class _RequestPersonalInfoViewState extends State<RequestPersonalInfoView> {
     _fullNameController.text = state.fullName;
     _emailController.text = state.email;
     _companyController.text = state.companyName;
-    _initialPhone = state.phoneNumber.isEmpty ? null : state.phoneNumber;
+
+    // Web'da yaratilgan so'rovlarda raqam bo'shliqlar bilan saqlanadi
+    // ("+998 97 604 56 04"). IntlPhoneField faqat "+998" ni kesib tashlaydi,
+    // bo'shliqlar qolib ketadi va ular ham uzunlikka sanaladi — natijada
+    // "13/9" xatosi chiqadi. Shuning uchun raqamlardan boshqasini olib
+    // tashlaymiz va state'ni ham shu ko'rinishga keltiramiz.
+    _initialPhone = _normalizePhone(state.phoneNumber);
+    if (_initialPhone != null && _initialPhone != state.phoneNumber) {
+      _update(UpdateDataRequestFieldEvent(phoneNumber: _initialPhone));
+    }
+  }
+
+  static String? _normalizePhone(String raw) {
+    final cleaned = raw.replaceAll(RegExp(r'[^0-9+]'), '');
+    return cleaned.isEmpty ? null : cleaned;
   }
 
   @override

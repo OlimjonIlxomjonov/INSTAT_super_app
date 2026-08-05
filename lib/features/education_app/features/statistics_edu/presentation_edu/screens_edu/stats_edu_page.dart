@@ -13,6 +13,7 @@ import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/domain/entity/leader_board/leader_board_entity.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/bloc/leader_board/leader_board_bloc.dart';
@@ -55,10 +56,6 @@ class _StatsEduPageState extends State<StatsEduPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBarWg(
-        myTitle: AppLocalizations.of(context)!.usersTitle,
-        showArrow: false,
-      ),
       body: CustomRefreshIndicator(
         onRefresh: () async {
           context.read<LeaderBoardBloc>().add(LeaderBoardEvent());
@@ -83,6 +80,16 @@ class _StatsEduPageState extends State<StatsEduPage> {
               ),
               child: CustomScrollView(
                 slivers: [
+                  SliverAppBar(
+                    automaticallyImplyLeading: false,
+                    titleSpacing: 0,
+                    title: SheetDragAreaWg(
+                      child: CustomAppBarWg(
+                        myTitle: AppLocalizations.of(context)!.usersTitle,
+                      ),
+                    ),
+                  ),
+
                   SliverPadding(
                     padding: AppPadding.hAndV20x20(),
                     sliver: SliverToBoxAdapter(
@@ -110,8 +117,6 @@ class _StatsEduPageState extends State<StatsEduPage> {
                           );
                         }
 
-                        // Podium needs at least 3 people to make sense — below
-                        // that, everyone just shows as a regular ranked row.
                         final showPodium = data.length >= 3;
 
                         return Column(
@@ -168,9 +173,6 @@ class _StatsEduPageState extends State<StatsEduPage> {
                                 ),
                               );
 
-                              // Only skip the top 3 here if the podium actually
-                              // absorbed them — otherwise (fewer than 3 people
-                              // total) everyone needs to show up in this list.
                               if (showPodium && index < 3) {
                                 return const SizedBox.shrink();
                               }

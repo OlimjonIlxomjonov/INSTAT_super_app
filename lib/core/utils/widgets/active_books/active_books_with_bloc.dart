@@ -21,7 +21,7 @@ class ActiveBooksWithBloc extends StatelessWidget {
         if (state is UserBookLoaded) {
           final data = state.response.data;
           if (data.isEmpty) {
-            return SizedBox(height: 20);
+            return SizedBox.shrink();
           }
 
           return Column(

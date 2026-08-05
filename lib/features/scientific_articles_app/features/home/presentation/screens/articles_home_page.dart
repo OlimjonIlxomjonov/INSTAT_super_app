@@ -43,9 +43,7 @@ class ArticlesHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      /// HEADER USER PROFILE (on click leads to profile page)
-      // appBar: DraggableAppBarWg(onProfileTap: onProfileTap),
-      body: RefreshIndicator(
+      body: CustomRefreshIndicator(
         onRefresh: () async {
           context.read<UserArticlesBloc>().add(
             UserArticlesEvent(status: 'all', search: ''),
@@ -55,7 +53,7 @@ class ArticlesHomePage extends StatelessWidget {
           slivers: [
             //! AppBar
             SliverAppBar(
-              toolbarHeight: 75,
+              // toolbarHeight: 75,
               automaticallyImplyLeading: false,
               titleSpacing: 0,
               title: SheetDragAreaWg(

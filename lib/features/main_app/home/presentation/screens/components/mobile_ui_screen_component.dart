@@ -360,7 +360,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
       ),
 
       SliverPadding(
-        padding: const .only(left: 20, right: 20, top: 24),
+        padding: const .only(left: 20, right: 20, top: 15),
         sliver: SliverToBoxAdapter(
           child: ExtendSectionSeeAllWg(
             title: localization.yourArticles,
