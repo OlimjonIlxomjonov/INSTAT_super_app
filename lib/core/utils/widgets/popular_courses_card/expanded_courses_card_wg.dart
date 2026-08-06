@@ -5,6 +5,9 @@ import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_
 import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
 
+import '../../../l10n/app_localizations.dart';
+import '../../general_widgets/glass_badge/glass_badge_wg.dart';
+
 class ExpandedCoursesCardWg extends StatelessWidget {
   final VoidCallback onTap;
   final CourseEntity entity;
@@ -19,6 +22,8 @@ class ExpandedCoursesCardWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+
     return Padding(
       padding: EdgeInsets.only(bottom: appH(16)),
       child: GestureDetector(
@@ -72,6 +77,23 @@ class ExpandedCoursesCardWg extends StatelessWidget {
                     // ),
                   ],
                 ),
+
+                if (entity.userOrder?.status != 'paid')
+                  Positioned(
+                    left: 8,
+                    bottom: 8,
+                    child: GlassBadgeWg(
+                      child: Text(
+                        entity.price == "0"
+                            ? localization.freePrice
+                            : "${formatPrice(entity.price)} UZS",
+                        style: AppTextStyles.source.medium(
+                          fontSize: 13,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
             SizedBox(height: appH(12)),

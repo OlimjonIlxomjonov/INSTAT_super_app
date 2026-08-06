@@ -116,7 +116,7 @@ class _UserOnlineBookCartLibPageState extends State<UserOnlineBookCartLibPage> {
                               bookName: item?.name ?? 'Placeholder Book Title',
                               bookAuthor: item?.author.name ?? 'Author Name',
                               newPrice: item != null
-                                  ? '${item.price} UZS'
+                                  ? '${formatPrice(item.price)} UZS'
                                   : '000 000 UZS',
                             ),
                             if (item != null && isMultiSelect)
@@ -226,7 +226,7 @@ class _UserOnlineBookCartLibPageState extends State<UserOnlineBookCartLibPage> {
                           style: AppTextStyles.source.medium(fontSize: 17),
                         ),
                         Text(
-                          '$totalPrice UZS',
+                          '${formatPrice(totalPrice)} UZS',
                           style: AppTextStyles.source.medium(fontSize: 17),
                         ),
                       ],
@@ -239,7 +239,7 @@ class _UserOnlineBookCartLibPageState extends State<UserOnlineBookCartLibPage> {
       ),
       bottomNavigationBar: !isEmpty
           ? CustomBottomNavContainerWg(
-              buttonText: localization.buyForPrice(totalPrice),
+              buttonText: localization.buyForPrice(formatPrice(totalPrice)),
               onTap: () {
                 if (selectedIds.isEmpty) {
                   errorFlushBar(

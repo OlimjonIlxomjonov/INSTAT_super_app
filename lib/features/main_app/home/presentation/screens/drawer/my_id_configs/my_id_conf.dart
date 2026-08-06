@@ -52,21 +52,17 @@ class MyIdConf {
 
       var bytes = base64Decode(raw);
 
-      // The myid SDK's own camera capture may not deliver pixels in the
-      // orientation they should display in — same class of bug as our own
-      // CameraService. Bake in the EXIF rotation (if any) before this ever
-      // reaches the backend.
       final decoded = img.decodeImage(bytes);
       if (decoded != null) {
         logger.f(
-          '🔎 MyID image decoded: ${decoded.width}x${decoded.height}, '
+          'MyID image decoded: ${decoded.width}x${decoded.height}, '
           'exif orientation tag: ${decoded.exif.imageIfd.hasOrientation ? decoded.exif.imageIfd.orientation : 'none'}',
         );
         final baked = img.bakeOrientation(decoded);
-        logger.f('🔎 After bakeOrientation: ${baked.width}x${baked.height}');
+        logger.f('After bakeOrientation: ${baked.width}x${baked.height}');
         bytes = Uint8List.fromList(img.encodeJpg(baked));
       } else {
-        logger.e('❌ Failed to decode MyID image for orientation check');
+        logger.e('Failed to decode MyID image for orientation check');
       }
 
       final tempDir = await getTemporaryDirectory();
@@ -76,9 +72,7 @@ class MyIdConf {
       logger.f("Image saved at: ${file.path}");
 
       final faceRecBloc = context.read<FaceRecBloc>();
-      // Wait for the actual backend verification (the /my-id/accept +
-      // face-recognition calls) to finish before reporting success —
-      // add() only enqueues the event, it doesn't wait for it to process.
+
       final resultState = faceRecBloc.stream.firstWhere(
         (state) => state is FaceRecLoaded || state is FaceRecError,
       );

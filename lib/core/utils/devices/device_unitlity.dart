@@ -55,6 +55,19 @@ String formatDuration(int totalSeconds) {
   }
 }
 
+String formatPrice(Object price) {
+  final number = price is num ? price : (num.tryParse(price.toString()) ?? 0);
+  final digits = number.round().abs().toString();
+
+  final buffer = StringBuffer();
+  for (int i = 0; i < digits.length; i++) {
+    if (i > 0 && (digits.length - i) % 3 == 0) buffer.write(' ');
+    buffer.write(digits[i]);
+  }
+
+  return number < 0 ? '-$buffer' : buffer.toString();
+}
+
 String formatFileSize(int bytes) {
   double kb = bytes / 1024;
   double mb = kb / 1024;

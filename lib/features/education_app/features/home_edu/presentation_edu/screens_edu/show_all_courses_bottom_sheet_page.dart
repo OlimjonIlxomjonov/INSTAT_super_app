@@ -97,19 +97,11 @@ class _ShowAllCoursesBottomSheetPageState
                                 ),
                               ),
 
-                              // A real SliverList rather than a Column, so
-                              // cards are built lazily as they scroll into
-                              // view. That matters much more now that the
-                              // list keeps growing page by page — a Column
-                              // would build every loaded card (and its
-                              // CourseCategoryBuilder) up front.
                               SliverList.builder(
                                 itemCount: loaded.response.data.length,
                                 itemBuilder: (context, index) {
                                   final item = loaded.response.data[index];
-                                  // The real total from the API, not the
-                                  // number loaded so far — otherwise this
-                                  // would climb as pages are appended.
+
                                   final total = loaded.response.meta.total;
 
                                   return CourseCategoryBuilder(

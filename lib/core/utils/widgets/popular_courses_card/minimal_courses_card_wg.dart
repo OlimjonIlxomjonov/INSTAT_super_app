@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
@@ -21,6 +22,8 @@ class MinimalCoursesCardWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -63,16 +66,19 @@ class MinimalCoursesCardWg extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        // Container(
-                        //   padding: EdgeInsets.all(2),
-                        //   decoration: BoxDecoration(
-                        //     border: Border.all(
-                        //       color: AppColors.greyScale.grey200,
+
+                        // if (data.userOrder?.status != 'paid')
+                        //   GlassBadgeWg(
+                        //     child: Text(
+                        //       data.price == "0"
+                        //           ? localization.freePrice
+                        //           : "${formatPrice(data.price)} UZS",
+                        //       style: AppTextStyles.source.medium(
+                        //         fontSize: 13,
+                        //         color: AppColors.primaryColor,
+                        //       ),
                         //     ),
-                        //     borderRadius: BorderRadius.circular(6),
                         //   ),
-                        //   child: Icon(IconlyLight.heart),
-                        // ),
                       ],
                     ),
                     Text(

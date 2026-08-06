@@ -414,7 +414,7 @@ class _DetailedOnlineBookComponentState
   String _bottomBarButtonText(AppLocalizations localization, bool inCart) {
     if (widget.isBookBought) return localization.continueReadingButton;
     if (inCart) return localization.goToCart;
-    return localization.buyForPrice(widget.data.price);
+    return localization.buyForPrice(formatPrice(widget.data.price));
   }
 
   Widget _buildRemoveFromCartButton(BuildContext context) {

@@ -120,7 +120,7 @@ class _SavedBooksComponentState extends State<SavedBooksComponent> {
                         type: BookCardType.market,
                         title: book.name,
                         author: book.author.name,
-                        price: "${book.price} UZS",
+                        price: "${formatPrice(book.price)} UZS",
                         imagePath: thumbnail.isNotEmpty
                             ? thumbnail
                             : 'assets/images/temp_book.jpg',

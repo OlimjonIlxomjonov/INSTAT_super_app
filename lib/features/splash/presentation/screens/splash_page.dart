@@ -22,22 +22,24 @@ class SplashPage extends StatefulWidget {
   State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> {
-  late final GridBackgroundPainter _painter;
+class _SplashPageState extends State<SplashPage>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _gridController;
 
   @override
   void initState() {
     super.initState();
-    _painter = GridBackgroundPainter(
-      backgroundColor: AppColors.splashBackgroundColor,
-      lineColor: Colors.white,
-      cellSize: appW(100),
-      majorEvery: 4,
-      minorOpacity: 0.06,
-      majorOpacity: 0.12,
-      strokeWidth: 1,
-    );
+    _gridController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1800),
+    )..forward();
     _timerDirection();
+  }
+
+  @override
+  void dispose() {
+    _gridController.dispose();
+    super.dispose();
   }
 
   Future<void> _timerDirection() async {
@@ -78,7 +80,25 @@ class _SplashPageState extends State<SplashPage> {
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          Positioned.fill(child: CustomPaint(painter: _painter)),
+          Positioned.fill(
+            child: AnimatedBuilder(
+              animation: _gridController,
+              builder: (context, _) {
+                return CustomPaint(
+                  painter: GridBackgroundPainter(
+                    backgroundColor: AppColors.splashBackgroundColor,
+                    lineColor: Colors.white,
+                    cellSize: appW(100),
+                    majorEvery: 4,
+                    minorOpacity: 0.06,
+                    majorOpacity: 0.12,
+                    strokeWidth: 1,
+                    progress: _gridController.value,
+                  ),
+                );
+              },
+            ),
+          ),
           //  logo with smooth fade and zoom
           Center(
             child: TweenAnimationBuilder<double>(

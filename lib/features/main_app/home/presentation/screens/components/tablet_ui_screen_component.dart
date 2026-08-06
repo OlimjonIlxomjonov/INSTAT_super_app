@@ -267,7 +267,7 @@ class _TabletUiScreenComponentState extends State<TabletUiScreenComponent> {
                               title: book.name,
                               rating: average,
                               author: book.author.name,
-                              price: "\u{00A0}${book.price} UZS",
+                              price: "\u{00A0}${formatPrice(book.price)} UZS",
                               imagePath: thumbnail.isNotEmpty
                                   ? thumbnail
                                   : 'assets/images/temp_book.jpg',

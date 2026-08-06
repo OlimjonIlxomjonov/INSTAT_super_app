@@ -268,9 +268,11 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                                     userMeState is UserMeLoaded &&
                                         !userMeState.entity.isResident
                                     ? () {
+                                        //! not resident
                                         AppRoute.go(ConfirmAccForeignUser());
                                       }
                                     : () async {
+                                        //! resident
                                         final success =
                                             await showModalBottomSheet<bool>(
                                               context: context,

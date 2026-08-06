@@ -6,6 +6,7 @@ import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
+import 'package:my_template/core/utils/general_widgets/glass_badge/glass_badge_wg.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart'
     as my_template_book;
 
@@ -126,7 +127,7 @@ class BookGridItem extends StatelessWidget {
             Positioned(
               top: 8,
               left: 8,
-              child: _buildGlassBadge(
+              child: GlassBadgeWg(
                 child: Row(
                   children: [
                     Icon(Icons.star_rounded, size: 16, color: AppColors.orange),
@@ -145,7 +146,7 @@ class BookGridItem extends StatelessWidget {
             Positioned(
               top: 8,
               right: 8,
-              child: _buildGlassBadge(
+              child: GlassBadgeWg(
                 isCircle: true,
                 child:
                     BlocBuilder<
@@ -190,7 +191,7 @@ class BookGridItem extends StatelessWidget {
             Positioned(
               bottom: 5,
               right: 5,
-              child: _buildGlassBadge(
+              child: GlassBadgeWg(
                 child: Text(
                   price ?? '',
                   style: AppTextStyles.source.regular(
@@ -318,24 +319,5 @@ class BookGridItem extends StatelessWidget {
     return AppTextStyles.source
         .regular(fontSize: 14, color: color ?? AppColors.greyScale.grey600)
         .copyWith(fontWeight: isValue ? FontWeight.w500 : FontWeight.w300);
-  }
-
-  Widget _buildGlassBadge({required Widget child, bool isCircle = false}) {
-    return Container(
-      padding: EdgeInsets.all(isCircle ? 8 : 6).copyWith(left: 10, right: 10),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.95),
-        shape: isCircle ? BoxShape.circle : BoxShape.rectangle,
-        borderRadius: isCircle ? null : BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-            color: Colors.black.withValues(alpha: 0.08),
-          ),
-        ],
-      ),
-      child: child,
-    );
   }
 }

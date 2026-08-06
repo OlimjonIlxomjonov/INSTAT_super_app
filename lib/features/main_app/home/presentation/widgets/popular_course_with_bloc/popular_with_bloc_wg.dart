@@ -43,7 +43,7 @@ class PopularWithBlocWg extends StatelessWidget {
           final metaRowHeight = _measureLineHeight(
             context,
             AppTextStyles.source.regular(fontSize: 13),
-          ).clamp(18.0, double.infinity); // row also has 18px icons
+          ).clamp(18.0, double.infinity); // row 18px icons
 
           final listHeight =
               imageHeight +

@@ -3,6 +3,7 @@ import 'package:iconly/iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/reports/widgets/reports_card_wg.dart';
 
 import '../../../../../core/utils/widgets/edu_categories/edu_categories_wg.dart';
@@ -24,9 +25,17 @@ class ReportsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: CustomAppBarWg(myTitle: localization.reports),
       body: CustomScrollView(
         slivers: [
+          //! app bar
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            titleSpacing: 0,
+            title: SheetDragAreaWg(
+              child: CustomAppBarWg(myTitle: localization.reports),
+            ),
+          ),
+
           //! SEARCH BAR
           SliverAppBar(
             toolbarHeight: 56 + 24,

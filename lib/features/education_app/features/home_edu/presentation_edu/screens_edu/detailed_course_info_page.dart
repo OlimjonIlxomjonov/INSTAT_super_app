@@ -239,7 +239,7 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
       case PaymentStatusEnum.pending:
         return localization.pendingReview;
       case PaymentStatusEnum.notBought:
-        return localization.buyForPrice(widget.data.price);
+        return localization.buyForPrice(formatPrice(widget.data.price));
     }
   }
 

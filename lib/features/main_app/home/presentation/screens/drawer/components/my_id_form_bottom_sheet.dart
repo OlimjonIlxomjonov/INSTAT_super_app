@@ -97,8 +97,6 @@ class _MyIdFormBottomSheetState extends State<MyIdFormBottomSheet> {
     super.dispose();
   }
 
-  /// Converts "dd.mm.yyyy" entered by the user to "yyyy-mm-dd" expected by
-  /// the backend. Returns null if the input isn't a complete valid date.
   String? _toBackendDate(String input) {
     final parts = input.split('.');
     if (parts.length != 3) return null;
@@ -130,12 +128,8 @@ class _MyIdFormBottomSheetState extends State<MyIdFormBottomSheet> {
     return BlocConsumer<FaceRecBloc, FaceRecState>(
       listener: (context, state) async {
         if (state is FaceRecSessionLoaded) {
-          // Make sure the keyboard is fully dismissed before handing off
-          // to the native SDK / popping the sheet — otherwise it can get
-          // stuck showing after the sheet closes.
           FocusManager.instance.primaryFocus?.unfocus();
 
-          // Dynamic session obtained from backend, launch SDK
           final myIdConf = MyIdConf();
           final success = await myIdConf.startFaceVerification(
             context,
@@ -148,7 +142,6 @@ class _MyIdFormBottomSheetState extends State<MyIdFormBottomSheet> {
             }
           } else {
             if (context.mounted) {
-              // Reset loading spinner on cancel/fail so they can try again
               context.read<FaceRecBloc>().add(ResetFaceRecEvent());
             }
           }
@@ -162,125 +155,129 @@ class _MyIdFormBottomSheetState extends State<MyIdFormBottomSheet> {
       builder: (context, state) {
         final isLoading = state is FaceRecSessionLoading;
 
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            left: 20,
-            right: 20,
-            top: 20,
-          ),
-          child: SafeArea(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Center(
-                    child: Container(
-                      width: 40,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: AppColors.greyScale.grey300,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  Text(
-                    titleText,
-                    textAlign: TextAlign.center,
-                    style: AppTextStyles.source.bold(fontSize: 18),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Passport series and number
-                  AuthTextFieldWg(
-                    label: "AA1234567",
-                    title: passportLabel,
-                    controller: _passportController,
-                    leadingIcon: IconlyLight.document,
-                    inputFormatter: [PassportInputFormatter()],
-                  ),
-                  const SizedBox(height: 15),
-
-                  // Birth Date (typed, auto-inserts dots as dd.mm.yyyy)
-                  AuthTextFieldWg(
-                    label: "01.02.2000",
-                    title: birthDateLabel,
-                    controller: _birthDateController,
-                    leadingIcon: IconlyLight.calendar,
-                    isTypeNum: true,
-                    inputFormatter: [DateInputFormatter()],
-                  ),
-                  const SizedBox(height: 25),
-
-                  // Submit button
-                  SizedBox(
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: isLoading
-                          ? null
-                          : () {
-                              // Unfocus first — this both dismisses the
-                              // keyboard immediately and avoids the stuck
-                              // keyboard issue seen when navigating away
-                              // later in the flow.
-                              FocusManager.instance.primaryFocus?.unfocus();
-
-                              final passport = _passportController.text.trim();
-                              final birthDateInput = _birthDateController.text
-                                  .trim();
-
-                              if (passport.isEmpty || birthDateInput.isEmpty) {
-                                errorFlushBar(context, fillAllFieldsError);
-                                return;
-                              }
-
-                              final passportRegex = RegExp(
-                                r'^[a-zA-Z]{2}[0-9]{7}$',
-                              );
-                              if (!passportRegex.hasMatch(passport)) {
-                                errorFlushBar(context, invalidPassportError);
-                                return;
-                              }
-
-                              final birthDate = _toBackendDate(
-                                birthDateInput,
-                              );
-                              if (birthDate == null) {
-                                errorFlushBar(context, invalidBirthDateError);
-                                return;
-                              }
-
-                              context.read<FaceRecBloc>().add(
-                                GetMyIdSessionEvent(
-                                  birthDate: birthDate,
-                                  passportData: passport.toUpperCase(),
-                                ),
-                              );
-                            },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryColor,
-                        foregroundColor: AppColors.white,
-                        shape: RoundedRectangleBorder(
+        return GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+              left: 20,
+              right: 20,
+              top: 20,
+            ),
+            child: SafeArea(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Center(
+                      child: Container(
+                        width: 40,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: AppColors.greyScale.grey300,
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: isLoading
-                          ? const Center(
-                              child: CircularProgressIndicator(
-                                color: AppColors.white,
-                              ),
-                            )
-                          : Text(
-                              submitButtonText,
-                              style: AppTextStyles.source.medium(fontSize: 15),
-                            ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                ],
+                    const SizedBox(height: 15),
+                    Text(
+                      titleText,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.source.bold(fontSize: 18),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Passport series and number
+                    AuthTextFieldWg(
+                      label: "AA1234567",
+                      title: passportLabel,
+                      controller: _passportController,
+                      leadingIcon: IconlyLight.document,
+                      inputFormatter: [PassportInputFormatter()],
+                    ),
+                    const SizedBox(height: 15),
+
+                    // Birth Date (typed, auto-inserts dots as dd.mm.yyyy)
+                    AuthTextFieldWg(
+                      label: "01.02.2000",
+                      title: birthDateLabel,
+                      controller: _birthDateController,
+                      leadingIcon: IconlyLight.calendar,
+                      isTypeNum: true,
+                      inputFormatter: [DateInputFormatter()],
+                    ),
+                    const SizedBox(height: 25),
+
+                    // Submit button
+                    SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: isLoading
+                            ? null
+                            : () {
+                                FocusManager.instance.primaryFocus?.unfocus();
+
+                                final passport = _passportController.text
+                                    .trim();
+                                final birthDateInput = _birthDateController.text
+                                    .trim();
+
+                                if (passport.isEmpty ||
+                                    birthDateInput.isEmpty) {
+                                  errorFlushBar(context, fillAllFieldsError);
+                                  return;
+                                }
+
+                                final passportRegex = RegExp(
+                                  r'^[a-zA-Z]{2}[0-9]{7}$',
+                                );
+                                if (!passportRegex.hasMatch(passport)) {
+                                  errorFlushBar(context, invalidPassportError);
+                                  return;
+                                }
+
+                                final birthDate = _toBackendDate(
+                                  birthDateInput,
+                                );
+                                if (birthDate == null) {
+                                  errorFlushBar(context, invalidBirthDateError);
+                                  return;
+                                }
+
+                                context.read<FaceRecBloc>().add(
+                                  GetMyIdSessionEvent(
+                                    birthDate: birthDate,
+                                    passportData: passport.toUpperCase(),
+                                  ),
+                                );
+                              },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primaryColor,
+                          foregroundColor: AppColors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: isLoading
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: AppColors.white,
+                                ),
+                              )
+                            : Text(
+                                submitButtonText,
+                                style: AppTextStyles.source.medium(
+                                  fontSize: 15,
+                                ),
+                              ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ),
             ),
           ),

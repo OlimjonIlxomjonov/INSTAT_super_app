@@ -52,7 +52,7 @@ class PopularBooksWithBlocWg extends StatelessWidget {
                   author: book.author.name,
                   // oldPrice: '999 UZS',
                   rating: average,
-                  price: "\u{00A0}${book.price} UZS",
+                  price: "\u{00A0}${formatPrice(book.price)} UZS",
                   imagePath: thumbnail.isNotEmpty
                       ? thumbnail
                       : 'assets/images/temp_book.jpg',

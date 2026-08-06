@@ -88,6 +88,18 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
     }
   }
 
+  void _seekBy(Duration offset) {
+    final controller = widget.controller;
+    final target = controller.value.position + offset;
+    final duration = controller.value.duration;
+    controller.seekTo(
+      target < Duration.zero
+          ? Duration.zero
+          : (target > duration ? duration : target),
+    );
+    _startHideTimer();
+  }
+
   void _togglePlayPause() {
     if (widget.controller.value.isPlaying) {
       widget.controller.pause();
@@ -362,22 +374,57 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
   // ---------------------------------------------------------------------------
   Widget _buildPlayPauseButton() {
     return Center(
-      child: GestureDetector(
-        onTap: _togglePlayPause,
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.black38,
-            shape: BoxShape.circle,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildCircleButton(
+            icon: Icons.replay_10_rounded,
+            size: 30,
+            onTap: () => _seekBy(const Duration(seconds: -10)),
           ),
-          padding: const EdgeInsets.all(12),
-          child: Icon(
-            widget.controller.value.isPlaying
-                ? Icons.pause_rounded
-                : Icons.play_arrow_rounded,
-            color: Colors.white,
-            size: 44,
+          const SizedBox(width: 24),
+          GestureDetector(
+            onTap: _togglePlayPause,
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.black38,
+                shape: BoxShape.circle,
+              ),
+              padding: const EdgeInsets.all(12),
+              child: Icon(
+                widget.controller.value.isPlaying
+                    ? Icons.pause_rounded
+                    : Icons.play_arrow_rounded,
+                color: Colors.white,
+                size: 44,
+              ),
+            ),
           ),
+          const SizedBox(width: 24),
+          _buildCircleButton(
+            icon: Icons.forward_10_rounded,
+            size: 30,
+            onTap: () => _seekBy(const Duration(seconds: 10)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCircleButton({
+    required IconData icon,
+    required double size,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.black38,
+          shape: BoxShape.circle,
         ),
+        padding: const EdgeInsets.all(8),
+        child: Icon(icon, color: Colors.white, size: size),
       ),
     );
   }
