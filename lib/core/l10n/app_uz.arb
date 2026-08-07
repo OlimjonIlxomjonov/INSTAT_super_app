@@ -82,6 +82,7 @@
   "statusCompleted": "Bajarildi",
   "statusCancelled": "Bekor qilindi",
   "statusPending": "Kutilmoqda",
+  "statusWaitingForPayment": "To'lov kutilmoqda",
   "statusNew": "Yangi",
   "statusProcessed": "Qayta ishlangan",
   "selectDate": "Sana tanlang",
@@ -96,6 +97,14 @@
   "searchBooksHint": "Kitob qidiring...",
   "buyForPrice": "Sotib olish - {price} UZS",
   "@buyForPrice": {
+    "placeholders": {
+      "price": {
+        "type": "Object"
+      }
+    }
+  },
+  "reviewPrice": "Taqriz narxi: {price} UZS",
+  "@reviewPrice": {
     "placeholders": {
       "price": {
         "type": "Object"
@@ -257,6 +266,8 @@
   "approvedByExpert": "Ekspert tomonidan tasdiqlandi",
   "emptyMagazineShelfTitle": "Mutolaa javonida sukunat!",
   "emptyMagazineShelfSubtitle": "Jurnallarni shu yerda ko'rish uchun ularni saqlang yoki yangisini yarating.",
+  "emptyEditionArticlesTitle": "Bu sonda hali maqola yo'q",
+  "emptyEditionArticlesSubtitle": "Maqolalar chop etilgach shu yerda ko'rinadi.",
   "addMagazine": "Jurnal qo'shish",
   "yearIssue": "{year}-yil {number}-son",
   "@yearIssue": {

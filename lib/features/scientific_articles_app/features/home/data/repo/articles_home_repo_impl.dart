@@ -3,7 +3,9 @@ import 'package:my_template/features/scientific_articles_app/features/home/data/
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/add_article/drop_down/drop_down_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/add_article/udk/udk_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_editions/article_editions_response.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_order_payment/article_order_payment_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_process/article_process_entity.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/edition_articles/edition_article_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/review_files/review_files_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/user_articles/user_articles_response.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/review_authors/review_author_entity.dart';
@@ -65,6 +67,13 @@ class ArticlesHomeRepoImpl implements ArticlesHomeRepository {
   }
 
   @override
+  Future<List<EditionArticleEntity>> getEditionArticles({
+    required int editionId,
+  }) {
+    return remoteDataSource.fetchEditionArticles(editionId: editionId);
+  }
+
+  @override
   Future<ReviewDetailEntity> createReview(ReviewParams params) {
     return remoteDataSource.createReview(params);
   }
@@ -75,8 +84,15 @@ class ArticlesHomeRepoImpl implements ArticlesHomeRepository {
   }
 
   @override
-  Future<void> createArticleOrder({required CreateArticleOrderParams params}) {
+  Future<ArticleOrderPaymentEntity> createArticleOrder({
+    required CreateArticleOrderParams params,
+  }) {
     return remoteDataSource.createArticleOrder(params: params);
+  }
+
+  @override
+  Future<String?> getSiteDataValue({required String key}) {
+    return remoteDataSource.fetchSiteDataValue(key: key);
   }
 
   @override
@@ -117,7 +133,9 @@ class ArticlesHomeRepoImpl implements ArticlesHomeRepository {
   }
 
   @override
-  Future<ReviewFilesEntity> postReviewFile({required AddReviewFileParams params}) {
+  Future<ReviewFilesEntity> postReviewFile({
+    required AddReviewFileParams params,
+  }) {
     return remoteDataSource.postReviewFile(params: params);
   }
 }

@@ -60,9 +60,12 @@ class ReviewDetailEntity {
       case 'published':
       case 'confirmed':
       case 'approved':
+      case 'accepted':
         return ArticleStatus.confirmed;
       case 'in_review':
         return ArticleStatus.inReview;
+      case 'waiting_for_payment':
+        return ArticleStatus.waitingForPayment;
       default:
         return ArticleStatus.draft;
     }

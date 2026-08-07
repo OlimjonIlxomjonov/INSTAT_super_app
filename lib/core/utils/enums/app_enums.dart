@@ -6,7 +6,14 @@ enum TicketStatus { approved, rejected, pending }
 
 enum BookCardType { bought, market, library }
 
-enum ArticleStatus { confirmed, pending, rejected, draft, inReview }
+enum ArticleStatus {
+  confirmed,
+  pending,
+  rejected,
+  draft,
+  inReview,
+  waitingForPayment,
+}
 
 enum MicroDataRequestStatus {
   accepted,
@@ -16,7 +23,13 @@ enum MicroDataRequestStatus {
   draft,
 }
 
-enum LastActionsStatus { inReview, accepted, addedExpert, rejected }
+enum LastActionsStatus {
+  inReview,
+  accepted,
+  addedExpert,
+  rejected,
+  waitingForPayment,
+}
 
 extension LastActionsStatusX on LastActionsStatus {
   static LastActionsStatus fromString(String value) {
@@ -27,6 +40,8 @@ extension LastActionsStatusX on LastActionsStatus {
         return LastActionsStatus.addedExpert;
       case 'rejected':
         return LastActionsStatus.rejected;
+      case 'waiting_for_payment':
+        return LastActionsStatus.waitingForPayment;
       case 'accepted':
       default:
         return LastActionsStatus.accepted;

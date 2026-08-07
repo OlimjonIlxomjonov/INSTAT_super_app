@@ -102,23 +102,25 @@ class _AboutThisCourseTabState extends State<AboutThisCourseTab>
             onTap: () => _openSimilarCourses(context),
           ),
         ),
-        const SizedBox(height: 16),
         SizedBox(
-          height: 300,
+          height: popularCoursesCardHeight(context),
           child: BlocBuilder<SimilarCoursesBloc, SimilarCoursesState>(
             builder: (context, state) {
               if (state is SimilarCoursesLoaded) {
                 final courses = state.listEntity;
+                //! If empty
                 if (courses.isEmpty) {
                   return Center(
                     child: AppEmptyState(
                       title: "O‘xshash kurslar topilmadi.",
                       subtitle:
                           "Hozircha ushbu mavzuga mos keladigan boshqa kurslar mavjud emas.",
+                      illustrationSize: 100,
                     ),
                   );
                 }
 
+                //! Data
                 return ListView.builder(
                   scrollDirection: Axis.horizontal,
                   padding: EdgeInsets.symmetric(horizontal: 20),
@@ -156,6 +158,7 @@ class _AboutThisCourseTabState extends State<AboutThisCourseTab>
 
               if (state is SimilarCoursesError) return const SizedBox.shrink();
 
+              //! Loading
               return ListView.builder(
                 scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.symmetric(horizontal: 20),

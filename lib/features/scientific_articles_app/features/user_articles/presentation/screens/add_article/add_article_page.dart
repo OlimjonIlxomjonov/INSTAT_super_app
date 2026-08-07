@@ -17,6 +17,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_process/article_process_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_detail/review_detail_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_files/review_files_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/add_article/page_view_screens/article_add_author_view.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/add_article/page_view_screens/article_annotation_view.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/add_article/page_view_screens/article_info_summerize_view.dart';
@@ -141,7 +142,10 @@ class _AddArticlePageState extends State<AddArticlePage> {
         FocusScope.of(context).unfocus();
       },
       child: BlocProvider<AddArticleBloc>(
-        create: (_) {
+        create: (context) {
+          // Stale files reset
+          context.read<ReviewFilesBloc>().add(const ResetReviewFilesEvent());
+
           final bloc = sl<AddArticleBloc>();
           if (widget.editReviewId != null) {
             bloc.add(LoadArticleForEditEvent(reviewId: widget.editReviewId!));

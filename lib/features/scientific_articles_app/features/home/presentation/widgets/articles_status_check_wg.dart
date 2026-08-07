@@ -48,6 +48,13 @@ class ArticlesStatusCheckWg extends StatelessWidget {
           iconColor: AppColors.orange500,
           backgroundColor: AppColors.orange50,
         );
+      case ArticleStatus.waitingForPayment:
+        return StatusContainerWg(
+          icon: IconlyLight.wallet,
+          statusTitle: ' ${localization.statusWaitingForPayment}',
+          iconColor: AppColors.orange500,
+          backgroundColor: AppColors.orange50,
+        );
     }
   }
 }

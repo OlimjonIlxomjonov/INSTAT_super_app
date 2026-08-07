@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/constants/assets/app_images.dart';
@@ -45,6 +46,9 @@ class _PaymentOpenBottomSheetWgState extends State<PaymentOpenBottomSheetWg> {
         if (state is BuyCourseLoaded) {
           AppRoute.close();
           // successFlushBar(context, 'Kurs sotip olindi!');
+        } else if (state is BuyCourseError) {
+          setState(() => _selectedPaymentMethod = null);
+          errorFlushBar(context, state.message);
         }
       },
       child: SafeArea(

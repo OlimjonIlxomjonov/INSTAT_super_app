@@ -60,6 +60,7 @@ class _MagazinesPageState extends State<MagazinesPage> {
                 child: Text(localization.journals, style: CustomTextStyles.h2),
               ),
             ),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
             /// MAGAZINE  CONTENT GRID
             BlocBuilder<ArticleEditionsBloc, ArticleEditionsState>(
@@ -70,13 +71,6 @@ class _MagazinesPageState extends State<MagazinesPage> {
                       child: AppEmptyState(
                         title: localization.emptyMagazineShelfTitle,
                         subtitle: localization.emptyMagazineShelfSubtitle,
-                        // buttonLabel: localization.addMagazine,
-                        // onAction: () {
-                        //   technicalWorkFlushBar(
-                        //     context,
-                        //     localization.comingSoon,
-                        //   );
-                        // },
                       ),
                     );
                   }

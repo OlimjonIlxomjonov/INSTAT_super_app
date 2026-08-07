@@ -6,7 +6,9 @@ import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/add_article/drop_down/drop_down_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/add_article/udk/udk_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_editions/article_editions_response_model.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_order_payment/article_order_payment_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_process/article_process_model.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/data/model/edition_articles/edition_article_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/review_files/review_files_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/user_articles/user_articles_response_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/review_authors/review_author_model.dart';
@@ -26,11 +28,7 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
     try {
       final response = await _dioClient.get(
         ApiUrls.userArticles,
-        queryParams: {
-          'status': status,
-          'search': search,
-          'page': page,
-        },
+        queryParams: {'status': status, 'search': search, 'page': page},
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
@@ -145,6 +143,27 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
   }
 
   @override
+  Future<List<EditionArticleModel>> fetchEditionArticles({
+    required int editionId,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        '${ApiUrls.editions}$editionId/articles/',
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        final data = response.data as List;
+        return data.map((e) => EditionArticleModel.fromJson(e)).toList();
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
   Future<UdkModel> fetchUdk({required UdkParams params}) async {
     try {
       final response = await _dioClient.get('${ApiUrls.udk}${params.udkCode}');
@@ -199,7 +218,7 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
   }
 
   @override
-  Future<void> createArticleOrder({
+  Future<ArticleOrderPaymentModel> createArticleOrder({
     required CreateArticleOrderParams params,
   }) async {
     try {
@@ -209,6 +228,33 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
+        return ArticleOrderPaymentModel.fromJson(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String?> fetchSiteDataValue({required String key}) async {
+    try {
+      final response = await _dioClient.get(
+        ApiUrls.siteData,
+        queryParams: {'module': 'all', 'key': key},
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data;
+        if (data is List) {
+          for (final item in data) {
+            if (item is Map && item['key'] == key) {
+              return item['value']?.toString();
+            }
+          }
+        }
+        return null;
       } else {
         throw Exception('THROW EXCEPTION! ${response.statusCode}');
       }

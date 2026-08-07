@@ -6,6 +6,43 @@ import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/glass_badge/glass_badge_wg.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
 
+// Card height
+double _measureLineHeight(BuildContext context, TextStyle style) {
+  final painter = TextPainter(
+    text: TextSpan(text: 'Ag', style: style),
+    textDirection: TextDirection.ltr,
+    textScaler: MediaQuery.textScalerOf(context),
+  )..layout();
+  return painter.height;
+}
+
+double popularCoursesCardHeight(BuildContext context) {
+  final cardWidth = appW(312);
+  final imageHeight = cardWidth / 2;
+
+  final categoryLineHeight = _measureLineHeight(
+    context,
+    AppTextStyles.source.medium(fontSize: 12),
+  );
+  final nameLineHeight = _measureLineHeight(
+    context,
+    AppTextStyles.source.medium(fontSize: 15),
+  );
+  final metaRowHeight = _measureLineHeight(
+    context,
+    AppTextStyles.source.regular(fontSize: 13),
+  ).clamp(18.0, double.infinity);
+
+  return imageHeight +
+      appH(12) +
+      categoryLineHeight +
+      appH(4) +
+      (nameLineHeight * 2) +
+      appH(8) +
+      metaRowHeight +
+      16;
+}
+
 class PopularCoursesCardWg extends StatefulWidget {
   final VoidCallback onTap;
   final CourseEntity data;

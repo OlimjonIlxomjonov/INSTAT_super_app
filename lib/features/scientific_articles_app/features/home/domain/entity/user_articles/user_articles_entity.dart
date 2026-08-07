@@ -10,7 +10,6 @@ class UserArticlesEntity {
   final DateTime? updatedAt;
   final DateTime? createdAt;
 
-
   const UserArticlesEntity({
     required this.id,
     required this.userId,
@@ -31,9 +30,14 @@ class UserArticlesEntity {
       case 'draft':
         return ArticleStatus.draft;
       case 'published':
+      case 'confirmed':
+      case 'approved':
+      case 'accepted':
         return ArticleStatus.confirmed;
       case 'in_review':
         return ArticleStatus.inReview;
+      case 'waiting_for_payment':
+        return ArticleStatus.waitingForPayment;
       default:
         return ArticleStatus.draft;
     }

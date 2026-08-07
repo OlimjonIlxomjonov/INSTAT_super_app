@@ -14,49 +14,15 @@ import 'package:my_template/features/main_app/home/presentation/bloc/home_event.
 class PopularWithBlocWg extends StatelessWidget {
   const PopularWithBlocWg({super.key});
 
-  double _measureLineHeight(BuildContext context, TextStyle style) {
-    final painter = TextPainter(
-      text: TextSpan(text: 'Ag', style: style),
-      textDirection: TextDirection.ltr,
-      textScaler: MediaQuery.textScalerOf(context),
-    )..layout();
-    return painter.height;
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CoursesBloc, CoursesState>(
       builder: (context, state) {
         if (state is CoursesLoaded) {
           final data = state.response.data;
-          final cardWidth = appW(312);
-
-          final imageHeight = cardWidth / 2; // AspectRatio 12/6 in the card
-          final categoryLineHeight = _measureLineHeight(
-            context,
-            AppTextStyles.source.medium(fontSize: 12),
-          );
-          final nameLineHeight = _measureLineHeight(
-            context,
-            AppTextStyles.source.medium(fontSize: 15),
-          );
-          final metaRowHeight = _measureLineHeight(
-            context,
-            AppTextStyles.source.regular(fontSize: 13),
-          ).clamp(18.0, double.infinity); // row 18px icons
-
-          final listHeight =
-              imageHeight +
-              appH(12) +
-              categoryLineHeight +
-              appH(4) +
-              (nameLineHeight * 2) +
-              appH(8) +
-              metaRowHeight +
-              16;
 
           return SizedBox(
-            height: listHeight,
+            height: popularCoursesCardHeight(context),
             child: LoadMoreOnScroll(
               canLoadMore: state.hasMore && !state.isLoadingMore,
               onLoadMore: () =>

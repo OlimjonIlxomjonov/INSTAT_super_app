@@ -16,5 +16,9 @@ class ReviewFilesBloc extends Bloc<ArticlesHomeEvent, ReviewFilesState> {
         emit(ReviewFilesError());
       }
     });
+
+    on<ResetReviewFilesEvent>((event, emit) {
+      emit(ReviewFilesInitial());
+    });
   }
 }

@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
+import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/constants/assets/app_images.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
+import 'package:my_template/core/utils/devices/device_unitlity.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/get_site_data_value_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/add_article_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/add_article_state.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
 
 const String _paymentMethodClick = 'click';
 const String _paymentMethodPayme = 'payme';
+const String _reviewPriceKey = 'review_price';
 
 class ArticlePaymentOptionsWg extends StatefulWidget {
   final VoidCallback onSuccess;
@@ -26,6 +30,20 @@ class _ArticlePaymentOptionsWgState extends State<ArticlePaymentOptionsWg> {
   /// Tracks which button was tapped so the loading spinner only shows on
   /// that one, mirroring BuyBookOptions/PaymentOpenBottomSheetWg.
   String? _selectedPaymentMethod;
+
+  // Review price
+  String? _reviewPrice;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchReviewPrice();
+  }
+
+  Future<void> _fetchReviewPrice() async {
+    final price = await sl<GetSiteDataValueUseCase>()(key: _reviewPriceKey);
+    if (mounted) setState(() => _reviewPrice = price);
+  }
 
   void _submit(BuildContext context, String paymentMethod) {
     setState(() => _selectedPaymentMethod = paymentMethod);
@@ -48,22 +66,40 @@ class _ArticlePaymentOptionsWgState extends State<ArticlePaymentOptionsWg> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Row(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(
-            child: _buildPaymentMethod(
-              AppImages.clickPayment,
-              _paymentMethodClick,
-              context,
+          if (_reviewPrice != null) ...[
+            Text(
+              AppLocalizations.of(
+                context,
+              )!.reviewPrice(formatPrice(_reviewPrice!)),
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: AppColors.black,
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: _buildPaymentMethod(
-              AppImages.paymePayment,
-              _paymentMethodPayme,
-              context,
-            ),
+            const SizedBox(height: 12),
+          ],
+          Row(
+            children: [
+              Expanded(
+                child: _buildPaymentMethod(
+                  AppImages.clickPayment,
+                  _paymentMethodClick,
+                  context,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildPaymentMethod(
+                  AppImages.paymePayment,
+                  _paymentMethodPayme,
+                  context,
+                ),
+              ),
+            ],
           ),
         ],
       ),

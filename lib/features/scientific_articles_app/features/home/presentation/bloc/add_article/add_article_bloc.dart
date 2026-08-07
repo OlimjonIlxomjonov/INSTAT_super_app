@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/article_params/article_params.dart';
+import 'package:my_template/core/utils/logger/logger.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/create_article_order_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/create_review_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/update_review_use_case.dart';
@@ -90,17 +92,19 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
     });
 
     on<UpdateAddArticleFieldEvent>((event, emit) {
-      emit(state.copyWith(
-        title: event.title,
-        articleType: event.articleType,
-        language: event.language,
-        journalSection: event.journalSection,
-        annotationUz: event.annotationUz,
-        annotationRu: event.annotationRu,
-        annotationEn: event.annotationEn,
-        udkCode: event.udkCode,
-        keywords: event.keywords,
-      ));
+      emit(
+        state.copyWith(
+          title: event.title,
+          articleType: event.articleType,
+          language: event.language,
+          journalSection: event.journalSection,
+          annotationUz: event.annotationUz,
+          annotationRu: event.annotationRu,
+          annotationEn: event.annotationEn,
+          udkCode: event.udkCode,
+          keywords: event.keywords,
+        ),
+      );
     });
 
     on<AddLocalAuthorEvent>((event, emit) {
@@ -116,17 +120,17 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
     });
 
     on<CreateReviewAuthorEvent>((event, emit) async {
-      emit(state.copyWith(isSaving: true, isSuccess: false, errorMessage: null));
+      emit(
+        state.copyWith(isSaving: true, isSuccess: false, errorMessage: null),
+      );
       try {
         await createReviewAuthorUseCase(event.author);
 
         final saved = await getReviewAuthorsUseCase(event.author.review);
 
-        emit(state.copyWith(
-          savedAuthors: saved,
-          isSaving: false,
-          isSuccess: true,
-        ));
+        emit(
+          state.copyWith(savedAuthors: saved, isSaving: false, isSuccess: true),
+        );
         event.onSuccess?.call();
       } catch (e) {
         emit(state.copyWith(isSaving: false, errorMessage: e.toString()));
@@ -135,17 +139,17 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
     });
 
     on<UpdateReviewAuthorEvent>((event, emit) async {
-      emit(state.copyWith(isSaving: true, isSuccess: false, errorMessage: null));
+      emit(
+        state.copyWith(isSaving: true, isSuccess: false, errorMessage: null),
+      );
       try {
         await updateReviewAuthorUseCase(event.author);
 
         final saved = await getReviewAuthorsUseCase(event.author.review);
 
-        emit(state.copyWith(
-          savedAuthors: saved,
-          isSaving: false,
-          isSuccess: true,
-        ));
+        emit(
+          state.copyWith(savedAuthors: saved, isSaving: false, isSuccess: true),
+        );
         event.onSuccess?.call();
       } catch (e) {
         emit(state.copyWith(isSaving: false, errorMessage: e.toString()));
@@ -176,9 +180,10 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
             existingMainFileSize: detail.mainFileSize,
             existingAntiplagiatFileUrl: detail.antiplagiatFile,
             existingAntiplagiatFileSize: detail.antiplagiatFileSize,
-            clearUploadedMainFile: detail.mainFile != null &&
-                detail.mainFile!.isNotEmpty,
-            clearUploadedAntiplagiatFile: detail.antiplagiatFile != null &&
+            clearUploadedMainFile:
+                detail.mainFile != null && detail.mainFile!.isNotEmpty,
+            clearUploadedAntiplagiatFile:
+                detail.antiplagiatFile != null &&
                 detail.antiplagiatFile!.isNotEmpty,
           ),
         );
@@ -186,19 +191,23 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
     });
 
     on<SaveArticleDraftEvent>((event, emit) async {
-      emit(state.copyWith(isSaving: true, isSuccess: false, errorMessage: null));
+      emit(
+        state.copyWith(isSaving: true, isSuccess: false, errorMessage: null),
+      );
       try {
         final finalReviewId = await _saveReviewFields(state);
         final saved = await getReviewAuthorsUseCase(finalReviewId);
 
-        emit(state.copyWith(
-          reviewId: finalReviewId,
-          localAuthors: const [],
-          savedAuthors: saved,
-          isSaving: false,
-          isSuccess: true,
-          isEditMode: state.isEditMode || finalReviewId > 0,
-        ));
+        emit(
+          state.copyWith(
+            reviewId: finalReviewId,
+            localAuthors: const [],
+            savedAuthors: saved,
+            isSaving: false,
+            isSuccess: true,
+            isEditMode: state.isEditMode || finalReviewId > 0,
+          ),
+        );
         event.onSuccess?.call();
       } catch (e) {
         emit(state.copyWith(isSaving: false, errorMessage: e.toString()));
@@ -207,7 +216,9 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
     });
 
     on<SubmitArticleForReviewEvent>((event, emit) async {
-      emit(state.copyWith(isSaving: true, isSuccess: false, errorMessage: null));
+      emit(
+        state.copyWith(isSaving: true, isSuccess: false, errorMessage: null),
+      );
       try {
         final finalReviewId = await _saveReviewFields(state);
 
@@ -216,23 +227,37 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
         // entry server-side, matching exactly what the website does.
         // Sending `status: 'in_review'` directly on the plain update call
         // above would just silently set the field with no side effects.
-        await createArticleOrderUseCase(
+        final order = await createArticleOrderUseCase(
           CreateArticleOrderParams(
             reviewId: finalReviewId,
             paymentMethod: event.paymentMethod,
           ),
         );
 
+        // Payment redirect
+        if (order.redirectUrl.isNotEmpty) {
+          try {
+            await launchUrl(
+              Uri.parse(order.redirectUrl),
+              mode: LaunchMode.externalApplication,
+            );
+          } catch (e) {
+            logger.e('Failed to open payment URL: $e');
+          }
+        }
+
         final saved = await getReviewAuthorsUseCase(finalReviewId);
 
-        emit(state.copyWith(
-          reviewId: finalReviewId,
-          localAuthors: const [],
-          savedAuthors: saved,
-          isSaving: false,
-          isSuccess: true,
-          isEditMode: state.isEditMode || finalReviewId > 0,
-        ));
+        emit(
+          state.copyWith(
+            reviewId: finalReviewId,
+            localAuthors: const [],
+            savedAuthors: saved,
+            isSaving: false,
+            isSuccess: true,
+            isEditMode: state.isEditMode || finalReviewId > 0,
+          ),
+        );
         event.onSuccess?.call();
       } catch (e) {
         emit(state.copyWith(isSaving: false, errorMessage: e.toString()));

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -131,12 +130,9 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
         ),
         bottomNavigationBar: Skeletonizer(
           enabled: isLoading,
-          child: Opacity(
-            opacity: status == PaymentStatusEnum.pending ? 0.6 : 1.0,
-            child: CustomBottomNavContainerWg(
-              onTap: () => _handleBottomNavTap(context, status),
-              buttonText: _buttonTextFor(context, status),
-            ),
+          child: CustomBottomNavContainerWg(
+            onTap: () => _handleBottomNavTap(context, status),
+            buttonText: _buttonTextFor(context, status),
           ),
         ),
       ),
@@ -192,6 +188,14 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
     }
   }
 
+  void _openPaymentSheet(BuildContext context) {
+    onlineLibStyleCustomBottomSheetWg(
+      context,
+      headerTitle: AppLocalizations.of(context)!.paymentTypeTitle,
+      child: PaymentOpenBottomSheetWg(courseId: widget.data.id),
+    );
+  }
+
   void _handleBottomNavTap(BuildContext context, PaymentStatusEnum status) {
     switch (status) {
       case PaymentStatusEnum.paid:
@@ -213,20 +217,8 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
         );
         break;
       case PaymentStatusEnum.pending:
-        context.read<PerCourseBloc>().add(
-          PerCourseEvent(params: PerCourseParams(courseId: widget.data.id)),
-        );
-        technicalWorkFlushBar(
-          context,
-          AppLocalizations.of(context)!.checkingPaymentStatus,
-        );
-        break;
       case PaymentStatusEnum.notBought:
-        onlineLibStyleCustomBottomSheetWg(
-          context,
-          headerTitle: AppLocalizations.of(context)!.paymentTypeTitle,
-          child: PaymentOpenBottomSheetWg(courseId: widget.data.id),
-        );
+        _openPaymentSheet(context);
         break;
     }
   }
@@ -237,7 +229,6 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
       case PaymentStatusEnum.paid:
         return localization.continueButton;
       case PaymentStatusEnum.pending:
-        return localization.pendingReview;
       case PaymentStatusEnum.notBought:
         return localization.buyForPrice(formatPrice(widget.data.price));
     }

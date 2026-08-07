@@ -47,11 +47,21 @@ class ReviewFilesEvent extends ArticlesHomeEvent {
   ReviewFilesEvent({required this.params});
 }
 
+class ResetReviewFilesEvent extends ArticlesHomeEvent {
+  const ResetReviewFilesEvent();
+}
+
 /// editions / magazines
 class ArticlesEditionsEvent extends ArticlesHomeEvent {
   final ArticleEditionsParams params;
 
   ArticlesEditionsEvent({required this.params});
+}
+
+class EditionArticlesEvent extends ArticlesHomeEvent {
+  final int editionId;
+
+  EditionArticlesEvent({required this.editionId});
 }
 
 /// add article

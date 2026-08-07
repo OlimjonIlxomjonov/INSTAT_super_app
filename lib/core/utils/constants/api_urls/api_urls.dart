@@ -75,6 +75,7 @@ class ApiUrls {
   static const userArticles = 'reviews/';
   static const reviewAuthors = 'review-authors/';
   static const editions = 'editions/';
+  static const siteData = 'site-data/items/all/';
 
   //? add article
   static const udk = 'udk-codes/items/find/?code=';

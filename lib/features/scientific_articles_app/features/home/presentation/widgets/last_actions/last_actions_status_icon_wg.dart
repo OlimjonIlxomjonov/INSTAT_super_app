@@ -20,8 +20,8 @@ class LastActionsStatusIconWg extends StatelessWidget {
         return Icon(IconlyBold.tick_square, color: AppColors.yellow500);
       case LastActionsStatus.rejected:
         return Icon(IconlyBold.info_circle, color: AppColors.red);
-      default:
-        return Icon(IconlyBold.tick_square, color: AppColors.greenDoneTaskCard);
+      case LastActionsStatus.waitingForPayment:
+        return Icon(IconlyBold.wallet, color: AppColors.orange500);
     }
   }
 }
@@ -39,7 +39,7 @@ String processTitleSwitch(
       return localization.rejectedByExpert;
     case LastActionsStatus.accepted:
       return localization.approvedByExpert;
-    default:
-      return '';
+    case LastActionsStatus.waitingForPayment:
+      return localization.statusWaitingForPayment;
   }
 }
