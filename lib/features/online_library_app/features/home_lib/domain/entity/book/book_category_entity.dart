@@ -1,3 +1,5 @@
+import 'package:my_template/core/utils/localization/localized_text.dart';
+
 class BookCategoryEntity {
   final int id;
   final String name;
@@ -24,4 +26,21 @@ class BookCategoryEntity {
     required this.type,
     required this.createdAt,
   });
+
+  // Localized name
+  String displayName(String localeCode) => localizedText(
+    localeCode: localeCode,
+    fallback: name,
+    uz: nameUz,
+    ru: nameRu,
+    en: nameEn,
+  );
+
+  // Localized description
+  String? localizedDescription(String localeCode) => localizedTextOrNull(
+    localeCode: localeCode,
+    uz: descriptionUz,
+    ru: descriptionRu,
+    en: descriptionEn,
+  );
 }

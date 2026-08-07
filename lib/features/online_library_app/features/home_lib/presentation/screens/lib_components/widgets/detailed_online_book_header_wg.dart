@@ -17,9 +17,6 @@ class DetailedOnlineBookHeaderWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    logger.f("Orders Count: ${data.orderCount}");
-    logger.f("Pages Count:  ${data.pagesCount}");
-
     final localization = AppLocalizations.of(context)!;
     final average = data.commentCount == 0
         ? 0.0
@@ -78,7 +75,9 @@ class DetailedOnlineBookHeaderWg extends StatelessWidget {
               color: AppColors.greyScale.grey200,
             ),
             child: Text(
-              data.category.name,
+              data.category.displayName(
+                Localizations.localeOf(context).languageCode,
+              ),
               style: AppTextStyles.source.medium(fontSize: 13),
             ),
           ),

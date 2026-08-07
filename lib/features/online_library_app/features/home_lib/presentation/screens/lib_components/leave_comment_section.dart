@@ -60,7 +60,9 @@ class _LeaveCommentSectionState extends State<LeaveCommentSection> {
             imagePath: thumbnail,
             bookName: widget.data.name,
             bookAuthor: widget.data.author.name,
-            bookType: widget.data.category.name,
+            bookType: widget.data.category.displayName(
+              Localizations.localeOf(context).languageCode,
+            ),
           ),
           SizedBox(height: 16),
           Text(
