@@ -24,4 +24,11 @@ class ReportsCategoryEntity {
     required this.type,
     required this.createdAt,
   });
+
+  String localizedName(String localeCode) {
+    if (localeCode == 'ru' && nameRu.isNotEmpty) return nameRu;
+    if (localeCode == 'en' && nameEn.isNotEmpty) return nameEn;
+    if (nameUz.isNotEmpty) return nameUz;
+    return name;
+  }
 }

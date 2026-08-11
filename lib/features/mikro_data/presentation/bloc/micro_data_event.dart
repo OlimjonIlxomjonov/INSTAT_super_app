@@ -89,6 +89,12 @@ class SubmitDataRequestEvent extends MicroDataEvent {
 //! reports
 class ReportsEvent extends MicroDataEvent {}
 
+class FetchReportOptionsEvent extends MicroDataEvent {
+  final int reportId;
+
+  const FetchReportOptionsEvent({required this.reportId});
+}
+
 //! add request — dropdown ma'lumotlari
 class MicroDataCategoriesEvent extends MicroDataEvent {
   const MicroDataCategoriesEvent();

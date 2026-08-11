@@ -23,8 +23,6 @@ class PaymentOpenBottomSheetWg extends StatefulWidget {
 }
 
 class _PaymentOpenBottomSheetWgState extends State<PaymentOpenBottomSheetWg> {
-  /// Tracks which button was tapped so the loading spinner only shows on
-  /// that one, and so the created order carries the method the user chose.
   String? _selectedPaymentMethod;
 
   void _buyCourse(BuildContext context, String paymentMethod) {

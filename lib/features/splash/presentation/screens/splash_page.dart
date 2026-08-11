@@ -80,25 +80,25 @@ class _SplashPageState extends State<SplashPage>
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          Positioned.fill(
-            child: AnimatedBuilder(
-              animation: _gridController,
-              builder: (context, _) {
-                return CustomPaint(
-                  painter: GridBackgroundPainter(
-                    backgroundColor: AppColors.splashBackgroundColor,
-                    lineColor: Colors.white,
-                    cellSize: appW(100),
-                    majorEvery: 4,
-                    minorOpacity: 0.06,
-                    majorOpacity: 0.12,
-                    strokeWidth: 1,
-                    progress: _gridController.value,
-                  ),
-                );
-              },
-            ),
-          ),
+          // Positioned.fill(
+          //   child: AnimatedBuilder(
+          //     animation: _gridController,
+          //     builder: (context, _) {
+          //       return CustomPaint(
+          //         painter: GridBackgroundPainter(
+          //           backgroundColor: AppColors.splashBackgroundColor,
+          //           lineColor: Colors.white,
+          //           cellSize: appW(100),
+          //           majorEvery: 4,
+          //           minorOpacity: 0.06,
+          //           majorOpacity: 0.12,
+          //           strokeWidth: 1,
+          //           progress: _gridController.value,
+          //         ),
+          //       );
+          //     },
+          //   ),
+          // ),
           //  logo with smooth fade and zoom
           Center(
             child: TweenAnimationBuilder<double>(

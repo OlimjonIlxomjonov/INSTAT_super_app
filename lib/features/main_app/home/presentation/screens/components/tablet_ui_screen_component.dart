@@ -43,11 +43,6 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/user_articles_page.dart';
 
-/// Tablet layout: a static-ish left column (mini-app grid, search, banner)
-/// next to a scrolling content column (active/popular courses, books,
-/// articles) — same underlying data/blocs as MobileUiScreenComponent, just
-/// arranged side by side instead of stacked, since a single narrow column
-/// wastes most of a tablet-width screen.
 class TabletUiScreenComponent extends StatefulWidget {
   final List<MiniAppModel> sections;
 
@@ -134,11 +129,9 @@ class _TabletUiScreenComponentState extends State<TabletUiScreenComponent> {
       physics: const NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.symmetric(horizontal: 20),
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 220,
+        maxCrossAxisExtent: 320,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
-        // Higher aspect ratio = shorter cards for the same width. Phone
-        // keeps its own separate value in MobileUiScreenComponent.
         childAspectRatio: 1.8,
       ),
       itemCount: widget.sections.length,
@@ -155,8 +148,6 @@ class _TabletUiScreenComponentState extends State<TabletUiScreenComponent> {
     );
   }
 
-  /// Same content as MobileUiScreenComponent's sliver list, minus the mini
-  /// app grid/search bar/banner (those live in the left column here).
   List<Widget> _buildContentSlivers(
     BuildContext context,
     AppLocalizations localization,
@@ -412,14 +403,6 @@ class _TabletUiScreenComponentState extends State<TabletUiScreenComponent> {
           Expanded(
             child: OrientationBuilder(
               builder: (context, orientation) {
-                // Portrait tablet width isn't that different from a big
-                // phone — splitting it into two columns left huge dead gaps
-                // wherever a right-column section had less content than the
-                // left column's grid (they scroll independently, so nothing
-                // lines up). Portrait now flows everything top-to-bottom in
-                // one column, same as phone. Landscape keeps the
-                // side-by-side split, where the extra width is actually put
-                // to use.
                 if (orientation == Orientation.portrait) {
                   return _buildPortrait(context);
                 }
@@ -481,11 +464,6 @@ class _TabletUiScreenComponentState extends State<TabletUiScreenComponent> {
                         );
                       }
 
-                      // Any other error (bad TLS/certificate handshake
-                      // reaching the server, unexpected 5xx, malformed
-                      // response, etc.) is NOT "no internet" — show a real
-                      // server-error state instead of silently falling
-                      // through to empty-looking sections.
                       final hasServerError =
                           (coursesState is CoursesError &&
                               !coursesState.isConnectionError) ||
@@ -528,7 +506,6 @@ class _TabletUiScreenComponentState extends State<TabletUiScreenComponent> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        /// LEFT — mini apps, search, banner (static, own scroll)
         Expanded(
           flex: 2,
           child: SingleChildScrollView(
@@ -549,10 +526,6 @@ class _TabletUiScreenComponentState extends State<TabletUiScreenComponent> {
           ),
         ),
 
-        /// RIGHT — real content: active/popular courses, books,
-        /// articles. Its own CustomScrollView so the existing
-        /// sliver-based bloc widgets (ActiveCoursesWithBlocWg,
-        /// UserArticlesWithBlocWg) can be reused as-is.
         Expanded(flex: 3, child: _buildContentColumn(context)),
       ],
     );

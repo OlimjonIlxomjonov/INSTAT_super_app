@@ -64,8 +64,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
   final ValueNotifier<bool> _hasVideoErrorNotifier = ValueNotifier(false);
   final ValueNotifier<bool> _isDownloadingNotifier = ValueNotifier(false);
   final ValueNotifier<String> _currentResolutionNotifier = ValueNotifier('720');
-  // Drives only the small spinner in BasicOverlayWidget — nothing else reads
-  // this, so it can't hide the back button / resolution menu / progress bar.
+
   final ValueNotifier<bool> _isSwitchingResolutionNotifier = ValueNotifier(
     false,
   );

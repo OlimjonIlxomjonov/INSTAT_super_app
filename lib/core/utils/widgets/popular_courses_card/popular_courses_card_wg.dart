@@ -17,7 +17,9 @@ double _measureLineHeight(BuildContext context, TextStyle style) {
 }
 
 double popularCoursesCardHeight(BuildContext context) {
-  final cardWidth = appW(312);
+  final orientation = MediaQuery.orientationOf(context);
+  final isLandscape = orientation == Orientation.landscape;
+  final cardWidth = !isLandscape ? appW(312) : appW(180);
   final imageHeight = cardWidth / 2;
 
   final categoryLineHeight = _measureLineHeight(
@@ -73,7 +75,7 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
           Stack(
             children: [
               AspectRatio(
-                aspectRatio: 12 / 6,
+                aspectRatio: 12 / 6, //? 12 / 6 default
                 child: ClipRRect(
                   borderRadius: .circular(12),
                   child: Image.network(
@@ -93,7 +95,7 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
                         color: AppColors.orange500,
                         size: 16,
                       ),
-                      SizedBox(width: 4),
+                      const SizedBox(width: 4),
                       Text(
                         widget.data.ratingsCount.toString(),
                         style: AppTextStyles.source.medium(fontSize: 12),
@@ -119,7 +121,7 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
               ),
             ],
           ),
-          SizedBox(height: appH(12)),
+          const SizedBox(height: 12),
 
           AutoSizeText(
             widget.categoryName,
@@ -128,7 +130,7 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
               color: AppColors.primaryColor,
             ),
           ),
-          SizedBox(height: appH(4)),
+          const SizedBox(height: 4),
           Text(
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -137,7 +139,7 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
             ),
             style: AppTextStyles.source.medium(fontSize: 15),
           ),
-          SizedBox(height: appH(8)),
+          const SizedBox(height: 8),
           Spacer(),
           Row(
             spacing: 5,
@@ -147,7 +149,7 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
                 formatDuration(widget.data.totalDuration),
                 style: AppTextStyles.source.regular(fontSize: 13),
               ),
-              SizedBox(width: appW(12)),
+              const SizedBox(width: 12),
               Icon(IconlyLight.document, size: 18),
               AutoSizeText(
                 "${widget.data.lessonsCount} ta dars",

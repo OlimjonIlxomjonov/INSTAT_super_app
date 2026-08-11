@@ -37,6 +37,7 @@ class LogInOptionsComponent extends StatefulWidget {
 
 class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
   late final double screenHeight;
+  bool _isGoogleLoading = false;
 
   @override
   void initState() {
@@ -83,6 +84,12 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
   }
 
   Future<void> googleLogin() async {
+    if (_isGoogleLoading) return;
+
+    setState(() {
+      _isGoogleLoading = true;
+    });
+
     try {
       await GoogleAuthServiceImpl(
         tokenStorage: TokenStorageServiceImpl(),
@@ -90,6 +97,7 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
       ).signIn();
 
       if (!mounted) return;
+
       AppRoute.open(const HomePage());
     } on GoogleSignInException catch (e, stackTrace) {
       if (e.code == GoogleSignInExceptionCode.canceled) return;
@@ -99,7 +107,10 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
         error: e,
         stackTrace: stackTrace,
       );
-      if (mounted) errorFlushBar(context, e.description ?? e.toString());
+
+      if (mounted) {
+        errorFlushBar(context, e.description ?? e.toString());
+      }
     } catch (e, stackTrace) {
       if (e is DioException) {
         logger.e(
@@ -107,8 +118,10 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
           error: e.response?.data ?? e,
           stackTrace: stackTrace,
         );
+
         if (mounted) {
           final statusCode = e.response?.statusCode;
+
           errorFlushBar(
             context,
             AppLocalizations.of(
@@ -118,7 +131,16 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
         }
       } else {
         logger.e('Google sign-in failed', error: e, stackTrace: stackTrace);
-        if (mounted) errorFlushBar(context, e.toString());
+
+        if (mounted) {
+          errorFlushBar(context, e.toString());
+        }
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isGoogleLoading = false;
+        });
       }
     }
   }
@@ -315,17 +337,19 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
         ),
         SizedBox(height: appH(20)),
 
-        // Apple sign-in disabled — backend confirmed auth/apple/ isn't
+        //! Apple sign-in
         if (Platform.isIOS)
           ContinueWithOptions(
             iconPath: AppVectors.appleLogo,
             onTap: () {},
             continueWithText: localization.continueWithApple,
           ),
+        //! google sign in
         ContinueWithOptions(
           iconPath: AppVectors.googleLogo,
           onTap: googleLogin,
           continueWithText: localization.continueWithGoogle,
+          isLoading: _isGoogleLoading,
         ),
         SafeArea(
           top: false,

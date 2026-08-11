@@ -87,8 +87,10 @@ import 'package:my_template/features/mikro_data/presentation/bloc/add_data_reque
 import 'package:my_template/features/mikro_data/presentation/bloc/data_request_processes/data_request_processes_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_categories/micro_data_categories_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/regions/regions_bloc.dart';
+import 'package:my_template/features/mikro_data/domain/usecase/reports/get_report_options_use_case.dart';
 import 'package:my_template/features/mikro_data/domain/usecase/reports/reports_use_case.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/data_requests/data_requests_bloc.dart';
+import 'package:my_template/features/mikro_data/presentation/bloc/reports/report_options_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/add_comment/add_comment_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/book_comments/book_comments_use_case.dart';
@@ -339,6 +341,7 @@ Future<void> setup() async {
   //? Micro Data
   //? Reports
   sl.registerLazySingleton(() => ReportsUseCase(repository: sl()));
+  sl.registerLazySingleton(() => GetReportOptionsUseCase(repository: sl()));
   //? User data requests
   sl.registerLazySingleton(() => DataRequestsUseCase(repository: sl()));
   //? Add data request
@@ -458,6 +461,7 @@ Future<void> setup() async {
   //? Micro Data
   //? Reports
   sl.registerLazySingleton(() => ReportsBloc(useCase: sl()));
+  sl.registerFactory(() => ReportOptionsBloc(useCase: sl()));
   //? User data requests — sahifa uni lokal BlocProvider bilan yaratadi,
   //? shuning uchun factory (har ochilishda yangi instance kerak).
   sl.registerFactory(() => DataRequestsBloc(useCase: sl()));

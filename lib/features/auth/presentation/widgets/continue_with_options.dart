@@ -8,12 +8,14 @@ class ContinueWithOptions extends StatelessWidget {
   final VoidCallback onTap;
   final String iconPath;
   final String continueWithText;
+  final bool isLoading;
 
   const ContinueWithOptions({
     super.key,
     required this.onTap,
     required this.iconPath,
     required this.continueWithText,
+    this.isLoading = false,
   });
 
   @override
@@ -27,7 +29,16 @@ class ContinueWithOptions extends StatelessWidget {
           foregroundColor: AppColors.greyScale.grey500,
         ),
         onPressed: onTap,
-        label: AutoSizeText(continueWithText),
+        label: isLoading
+            ? SizedBox(
+                height: 22,
+                width: 22,
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryColor,
+                  strokeWidth: 1,
+                ),
+              )
+            : AutoSizeText(continueWithText),
         icon: SvgPicture.asset(iconPath),
       ),
     );

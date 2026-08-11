@@ -4,11 +4,14 @@ import 'package:my_template/features/mikro_data/domain/entity/data_requests/data
 import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_request_process_entity.dart';
 import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_requests_response.dart';
 import 'package:my_template/features/mikro_data/domain/entity/regions/region_entity.dart';
+import 'package:my_template/features/mikro_data/domain/entity/reports/reports_options_entity.dart';
 import 'package:my_template/features/mikro_data/domain/entity/reports/reports_response.dart';
 
 abstract class MicroRepository {
   //! Reports cards
   Future<ReportsResponse> getReportsCard();
+
+  Future<List<ReportsOptionsEntity>> getReportOptions(int reportId);
 
   //! User data requests
   Future<DataRequestsResponse> getDataRequests({

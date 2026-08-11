@@ -30,6 +30,8 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
+
 class DetailedCourseInfoPage extends StatefulWidget {
   final CourseEntity data;
   final String courseCategory;
@@ -50,6 +52,8 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late TabController _tabController;
   bool _awaitingPaymentReturn = false;
+
+  bool get _isFree => widget.data.price == '0';
 
   @override
   void initState() {
@@ -116,8 +120,18 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
     return BlocListener<BuyCourseBloc, BuyCourseState>(
       listener: (context, state) {
         if (state is BuyCourseLoaded) {
-          _awaitingPaymentReturn = true;
-          _openPaymentUrl(state.payment.redirectUrl, context);
+          if (state.payment.redirectUrl.isNotEmpty) {
+            _awaitingPaymentReturn = true;
+            _openPaymentUrl(state.payment.redirectUrl, context);
+          } else {
+            //! free kurs
+            context.read<PerCourseBloc>().add(
+              PerCourseEvent(params: PerCourseParams(courseId: widget.data.id)),
+            );
+            context.read<UserCoursesBloc>().add(
+              UserCoursesEvent(params: UserCoursesParams(state: 'in_progress')),
+            );
+          }
         }
       },
       child: Scaffold(
@@ -218,7 +232,16 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
         break;
       case PaymentStatusEnum.pending:
       case PaymentStatusEnum.notBought:
-        _openPaymentSheet(context);
+        _isFree
+            ? context.read<BuyCourseBloc>().add(
+                BuyCourseEvent(
+                  params: BuyCourseParams(
+                    courseId: widget.data.id,
+                    paymentMethod: 'free',
+                  ),
+                ),
+              )
+            : _openPaymentSheet(context);
         break;
     }
   }
@@ -230,7 +253,9 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
         return localization.continueButton;
       case PaymentStatusEnum.pending:
       case PaymentStatusEnum.notBought:
-        return localization.buyForPrice(formatPrice(widget.data.price));
+        return _isFree
+            ? localization.freePrice
+            : localization.buyForPrice(formatPrice(widget.data.price));
     }
   }
 

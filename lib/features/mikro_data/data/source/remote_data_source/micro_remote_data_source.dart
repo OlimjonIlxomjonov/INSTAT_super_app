@@ -4,11 +4,14 @@ import 'package:my_template/features/mikro_data/data/model/data_requests/data_re
 import 'package:my_template/features/mikro_data/data/model/data_requests/data_request_process_model.dart';
 import 'package:my_template/features/mikro_data/data/model/data_requests/data_requests_response_model.dart';
 import 'package:my_template/features/mikro_data/data/model/regions/region_model.dart';
+import 'package:my_template/features/mikro_data/data/model/reports/reports_options_model.dart';
 import 'package:my_template/features/mikro_data/data/model/reports/reports_response_model.dart';
 
 abstract class MicroRemoteDataSource {
   //! Reports
   Future<ReportsResponseModel> fetchReportsCard();
+
+  Future<List<ReportsOptionsModel>> fetchReportOptions(int reportId);
 
   //! User data requests
   Future<DataRequestsResponseModel> fetchDataRequests({

@@ -30,7 +30,7 @@ class ActiveCoursesWg extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        constraints: const BoxConstraints(minHeight: 80, maxHeight: 80),
+        constraints: const BoxConstraints(minHeight: 80),
         margin: .only(bottom: 12, right: isTablet ? 20 : 0),
         padding: .symmetric(horizontal: 8, vertical: isTablet ? 8 : 5),
         decoration: BoxDecoration(
@@ -39,19 +39,22 @@ class ActiveCoursesWg extends StatelessWidget {
         ),
         child: Row(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: AspectRatio(
-                aspectRatio: 16 / 9,
-                child: Image.network(
-                  data.thumbnail,
-                  fit: BoxFit.cover,
-                  loadingBuilder: (context, child, progress) => progress == null
-                      ? child
-                      : const Center(
-                          child: CircularProgressIndicator.adaptive(),
-                        ),
-                  errorBuilder: (_, obj, t) => const Icon(Icons.broken_image),
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: AspectRatio(
+                  aspectRatio: 16 / 9, //? 16 / 9 default
+                  child: Image.network(
+                    data.thumbnail,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context, child, progress) =>
+                        progress == null
+                        ? child
+                        : const Center(
+                            child: CircularProgressIndicator.adaptive(),
+                          ),
+                    errorBuilder: (_, obj, t) => const Icon(Icons.broken_image),
+                  ),
                 ),
               ),
             ),
@@ -87,7 +90,7 @@ class ActiveCoursesWg extends StatelessWidget {
                       Text('7/24 Mavzu', style: CustomTextStyles.h4),
                       if (!showCircularProgBar)
                         AutoSizeText(
-                          '25%',
+                          '0%',
                           style: AppTextStyles.source.regular(
                             fontSize: 12,
                             color: AppColors.greyScale.grey600,
@@ -96,7 +99,7 @@ class ActiveCoursesWg extends StatelessWidget {
                     ],
                   ),
                   if (!showCircularProgBar)
-                    CustomLinearIndicatorWg(progressIndicator: 0.25),
+                    CustomLinearIndicatorWg(progressIndicator: 0.0),
                 ],
               ),
             ),

@@ -34,13 +34,16 @@ class PromoBannersCarouselWg extends StatelessWidget {
     return BlocBuilder<BannerBloc, BannerState>(
       builder: (context, state) {
         if (state is BannerLoading || state is BannerInitial) {
-          return Skeletonizer(
-            enabled: true,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: AspectRatio(
-                aspectRatio: _bannerAspectRatio,
-                child: ColoredBox(color: AppColors.greyScale.grey200),
+          return Padding(
+            padding: const .symmetric(horizontal: 20),
+            child: Skeletonizer(
+              enabled: true,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: AspectRatio(
+                  aspectRatio: _bannerAspectRatio,
+                  child: ColoredBox(color: AppColors.greyScale.grey200),
+                ),
               ),
             ),
           );

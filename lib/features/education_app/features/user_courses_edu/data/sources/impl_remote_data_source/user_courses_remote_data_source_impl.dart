@@ -164,9 +164,13 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
         data: {"payment_method": params.paymentMethod},
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
-        final data = response.data;
-        logger.i(data);
-        return OrderPaymentModel.fromJson(data);
+        final responseBody = response.data;
+        final orderJson =
+            responseBody is Map<String, dynamic> && responseBody['data'] is Map
+            ? responseBody['data'] as Map<String, dynamic>
+            : responseBody as Map<String, dynamic>;
+        logger.i(orderJson);
+        return OrderPaymentModel.fromJson(orderJson);
       } else {
         throw Exception('ERROR ${response.statusCode}');
       }
@@ -249,7 +253,9 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
     required SubmitLessonTestAnswerParams params,
   }) async {
     try {
-      final requestData = <String, dynamic>{"lesson_test_option": params.optionId};
+      final requestData = <String, dynamic>{
+        "lesson_test_option": params.optionId,
+      };
       final image = params.image;
       if (image != null) {
         requestData["image"] = image;

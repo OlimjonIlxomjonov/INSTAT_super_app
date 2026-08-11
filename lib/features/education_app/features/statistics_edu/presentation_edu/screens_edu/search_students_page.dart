@@ -7,6 +7,7 @@ import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/pagination/load_more_on_scroll.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
+import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/domain/entity/leader_board/leader_board_entity.dart';
@@ -58,7 +59,7 @@ class _SearchStudentsPageState extends State<SearchStudentsPage> {
 
   void _openDetail(String? avatar, String fullName) {
     final String? thumb = avatar != null
-        ? 'https://test.avacoder.uz$avatar'
+        ? '${ApiUrls.imageUrlBase2}$avatar'
         : null;
     openMiniAppSheetFamily(
       context,
@@ -220,7 +221,7 @@ class _SearchStudentsPageState extends State<SearchStudentsPage> {
                         }
                         final item = students[index];
                         final thumbnail = item?.avatar != null
-                            ? 'https://test.avacoder.uz${item!.avatar}'
+                            ? '${ApiUrls.imageUrlBase2}${item!.avatar}'
                             : null;
                         final fullName = item?.displayName ?? '';
 

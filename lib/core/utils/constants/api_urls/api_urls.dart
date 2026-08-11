@@ -12,6 +12,7 @@ class ApiUrls {
   //! image base url
   // static const imageUrlBase = 'https://test.avacoder.uz/media/';
   static const imageUrlBase = 'https://api1.instat.uz/media/';
+  static const imageUrlBase2 = 'https://api1.instat.uz/';
 
   /// websocket
   //! library // debug

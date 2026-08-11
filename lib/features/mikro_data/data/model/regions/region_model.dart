@@ -41,12 +41,22 @@ class RegionModel extends RegionEntity {
       nameUz: json['name_uz'] ?? '',
       nameRu: json['name_ru'] ?? '',
       code: (json['code'] ?? json['region_code'])?.toString() ?? '',
-      districts:
-          (json['districts'] as List?)
-              ?.map((e) => DistrictModel.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const [],
+      districts: _parseDistricts(json['districts']),
     );
+  }
+
+  /// `districts` backend'dan ikki xil formatda kelishi mumkin:
+  /// — `List<Map>` (to'liq district ob'ektlari)
+  /// — `List<int>` (faqat id'lar, masalan reports options ichida)
+  /// Ikkinchi holatda parsing'ni o'tkazib yuboramiz.
+  static List<DistrictModel> _parseDistricts(dynamic raw) {
+    if (raw is! List || raw.isEmpty) return const [];
+    if (raw.first is Map<String, dynamic>) {
+      return raw
+          .map((e) => DistrictModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+    }
+    return const [];
   }
 
   static List<RegionModel> listFromJson(dynamic json) {

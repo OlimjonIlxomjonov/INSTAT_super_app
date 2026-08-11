@@ -28,14 +28,6 @@ class VideoPlayerWidget extends StatefulWidget {
 class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   late VideoPlayerController _controller;
 
-  // Once the player has shown a real frame + controls for the first time,
-  // it must never fall back to the bare "not initialized" spinner again —
-  // that fallback replaces the whole player (video, back button, resolution
-  // menu, progress bar, everything) with nothing but a spinner. A
-  // resolution switch always hands this widget an already-initialized
-  // controller, so this should never re-trigger in practice, but gating on
-  // "ever initialized" instead of "currently initialized" makes that a
-  // guarantee instead of an assumption.
   bool _everInitialized = false;
 
   @override

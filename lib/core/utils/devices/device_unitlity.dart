@@ -84,6 +84,11 @@ extension DateTimeFormatting on String {
     DateTime dateTime = DateTime.parse(this);
     return "${dateTime.day} ${_getMonth(dateTime.month)} ${dateTime.year}, ${dateTime.hour}:${dateTime.minute}";
   }
+
+  String toReadableDateWithoutTime() {
+    DateTime dateTime = DateTime.parse(this);
+    return "${dateTime.day} ${_getMonth(dateTime.month)} ${dateTime.year}";
+  }
 }
 
 String _getMonth(int month) {

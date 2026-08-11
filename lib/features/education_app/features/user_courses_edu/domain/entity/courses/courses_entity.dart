@@ -51,8 +51,6 @@ class CourseEntity {
     this.certificateObjects = const [],
   });
 
-  /// The course title in [localeCode], falling back to [name] (always
-  /// Uzbek) when the requested translation is missing.
   String displayName(String localeCode) => localizedText(
     localeCode: localeCode,
     fallback: name,
@@ -61,12 +59,6 @@ class CourseEntity {
     en: nameEn,
   );
 
-  /// The course description in [localeCode], or `null` if it was never
-  /// entered for that language. Unlike [displayName], this does not fall
-  /// back to a different language — there is no single "base" description
-  /// field to fall back to, and a whole paragraph in the wrong language
-  /// would read as broken rather than intentional. Callers should show an
-  /// explicit "not provided" message on `null`.
   String? localizedDescription(String localeCode) => localizedTextOrNull(
     localeCode: localeCode,
     uz: descriptionUz,

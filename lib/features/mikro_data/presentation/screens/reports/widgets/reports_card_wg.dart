@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
+import 'package:my_template/core/utils/widgets/app_widgets.dart';
+import 'package:my_template/features/mikro_data/domain/entity/regions/region_entity.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_event.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_state.dart';
+import 'package:my_template/features/mikro_data/presentation/screens/reports/detailed_reports_page.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../../../core/utils/app_utils.dart';
@@ -25,9 +29,41 @@ class _ReportsCardWgState extends State<ReportsCardWg> {
     context.read<ReportsBloc>().add(ReportsEvent());
   }
 
+  String _formatFileExtensions(List options) {
+    final extensions =
+        options
+            .map((opt) {
+              final ext = opt.fileExtension;
+              if (ext == null || ext.isEmpty) return null;
+              return ext.replaceAll('.', '').toUpperCase();
+            })
+            .whereType<String>()
+            .toSet()
+            .toList()
+          ..sort();
+
+    return extensions.join('/');
+  }
+
+  String formatRegionNames(List options, AppLocalizations localization) {
+    final localeCode = Localizations.localeOf(context).languageCode;
+    final regionNames = options
+        .map((opt) => opt.region)
+        .whereType<RegionEntity>()
+        .map((region) => region.localizedName(localeCode))
+        .where((name) => name.isNotEmpty)
+        .toSet()
+        .toList();
+
+    if (regionNames.isEmpty) return localization.republicOfUzbekistan;
+    return regionNames.join(', ');
+  }
+
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
+    final localeCode = Localizations.localeOf(context).languageCode;
+
     return SliverPadding(
       padding: AppPadding.horizontal20x(),
       sliver: SliverFillRemaining(
@@ -69,6 +105,7 @@ class _ReportsCardWgState extends State<ReportsCardWg> {
                 builder: (context, state) {
                   if (state is ReportsLoaded) {
                     final data = state.response.data;
+
                     if (data.isEmpty) {
                       return AppEmptyState(
                         title: 'Hozircha hisobotlar yaratilmagan.',
@@ -76,7 +113,7 @@ class _ReportsCardWgState extends State<ReportsCardWg> {
                             'Asosiy samaradorlik ko‘rsatkichlarini kuzatish va natijalarni tahlil qilish uchun birinchi hisobotingizni yarating.',
                       );
                     }
-
+                    //! Data
                     return GridView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -87,52 +124,71 @@ class _ReportsCardWgState extends State<ReportsCardWg> {
                       itemCount: data.length,
                       itemBuilder: (context, index) {
                         final item = data[index];
-                        return Container(
-                          padding: const .all(12),
-                          decoration: BoxDecoration(
-                            borderRadius: .circular(16),
-                            color: AppColors.greyScale.grey50,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: .start,
-                            children: [
-                              // A report can have no category at all
-                              // ("category": null), which would otherwise
-                              // render an empty line plus its spacing.
-                              if (item.category.nameUz.isNotEmpty) ...[
+                        final categoryName =
+                            item.category.localizedName(localeCode).isNotEmpty
+                            ? item.category.localizedName(localeCode)
+                            : item.category.name;
+                        return GestureDetector(
+                          onTap: () {
+                            openMiniAppSheetFamily(
+                              context,
+                              showHandler: false,
+                              child: DetailedReportsPage(
+                                item: item,
+                                formatLocation: formatRegionNames,
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: const .all(12),
+                            decoration: BoxDecoration(
+                              borderRadius: .circular(16),
+                              color: AppColors.greyScale.grey50,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: .start,
+                              children: [
+                                if (item.category.nameUz.isNotEmpty) ...[
+                                  Text(
+                                    categoryName,
+                                    style: AppTextStyles.source.medium(
+                                      fontSize: 12,
+                                      color: AppColors.splashBackgroundColor,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                ],
                                 Text(
-                                  item.category.nameUz,
+                                  item.name,
+                                  maxLines: 2,
+                                  overflow: .ellipsis,
                                   style: AppTextStyles.source.medium(
-                                    fontSize: 12,
-                                    color: AppColors.splashBackgroundColor,
+                                    fontSize: 14,
                                   ),
                                 ),
-                                const SizedBox(height: 8),
-                              ],
-                              Text(
-                                item.name,
-                                maxLines: 2,
-                                overflow: .ellipsis,
-                                style: AppTextStyles.source.medium(
-                                  fontSize: 14,
+                                Spacer(),
+                                _buildSectionRows(
+                                  icon: IconlyLight.location,
+                                  title: formatRegionNames(
+                                    item.options,
+                                    localization,
+                                  ),
                                 ),
-                              ),
-                              Spacer(),
-                              _buildSectionRows(
-                                icon: IconlyLight.location,
-                                title: localization.republicOfUzbekistan,
-                              ),
-                              const SizedBox(height: 4),
-                              _buildSectionRows(
-                                icon: IconlyLight.time_circle,
-                                title: '2021–2024',
-                              ),
-                              const SizedBox(height: 4),
-                              _buildSectionRows(
-                                icon: IconlyLight.document,
-                                title: 'Excel/PDF — 130MB',
-                              ),
-                            ],
+                                const SizedBox(height: 4),
+                                _buildSectionRows(
+                                  icon: IconlyLight.time_circle,
+                                  title: item.createdAt
+                                      .toString()
+                                      .toReadableDateWithoutTime(),
+                                ),
+                                const SizedBox(height: 4),
+                                _buildSectionRows(
+                                  icon: IconlyLight.document,
+                                  title:
+                                      "${_formatFileExtensions(item.options)} - ${formatFileSize((double.tryParse(item.fileSize ?? '0') ?? 0).round())}",
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       },

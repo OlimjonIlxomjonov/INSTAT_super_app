@@ -16,6 +16,10 @@ class PopularWithBlocWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final orientation = MediaQuery.orientationOf(context);
+    final isLandscape = orientation == Orientation.landscape;
+    final cardWidth = isLandscape ? appW(180) : appW(312);
+
     return BlocBuilder<CoursesBloc, CoursesState>(
       builder: (context, state) {
         if (state is CoursesLoaded) {
@@ -32,7 +36,7 @@ class PopularWithBlocWg extends StatelessWidget {
                 padding: AppPadding.horizontal20x(),
                 itemCount: data.length + (state.isLoadingMore ? 1 : 0),
                 cacheExtent: appW(300),
-                itemExtent: appW(312),
+                itemExtent: cardWidth,
                 itemBuilder: (context, index) {
                   if (index >= data.length) {
                     return const Center(

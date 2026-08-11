@@ -9,6 +9,7 @@ import 'package:my_template/features/mikro_data/data/model/data_requests/data_re
 import 'package:my_template/features/mikro_data/data/model/data_requests/data_request_process_model.dart';
 import 'package:my_template/features/mikro_data/data/model/data_requests/data_requests_response_model.dart';
 import 'package:my_template/features/mikro_data/data/model/regions/region_model.dart';
+import 'package:my_template/features/mikro_data/data/model/reports/reports_options_model.dart';
 import 'package:my_template/features/mikro_data/data/model/reports/reports_response_model.dart';
 import 'package:my_template/features/mikro_data/data/source/remote_data_source/micro_remote_data_source.dart';
 
@@ -22,6 +23,33 @@ class MicroRemoteDataSourceImpl implements MicroRemoteDataSource {
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
         return ReportsResponseModel.fromJson(response.data);
+      } else {
+        throw Exception('ELSE ERROR: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      logger.e("CATCH: $e");
+      throw ApiValidationParser.tryParse(e.response?.data) ?? e;
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<ReportsOptionsModel>> fetchReportOptions(int reportId) async {
+    try {
+      final response = await _dioClient.get(
+        '${ApiUrls.reports}$reportId/options/',
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        final list = response.data['data'] as List?;
+        return list
+                ?.map(
+                  (e) => ReportsOptionsModel.fromJson(e as Map<String, dynamic>),
+                )
+                .toList() ??
+            [];
       } else {
         throw Exception('ELSE ERROR: ${response.statusCode}');
       }

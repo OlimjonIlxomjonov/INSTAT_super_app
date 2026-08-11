@@ -11,10 +11,6 @@ class BasicOverlayWidget extends StatefulWidget {
   final VoidCallback? onBack;
   final ValueNotifier<String>? currentResolutionNotifier;
   final ValueChanged<String>? onResolutionSelected;
-  // Purely cosmetic: only ever read to decide whether to paint the small
-  // spinner on top. Nothing else in this widget branches on it, so it can
-  // never hide the back button / resolution menu / progress bar the way the
-  // old switching-aware overlay logic used to.
   final ValueNotifier<bool>? isSwitchingResolutionNotifier;
 
   const BasicOverlayWidget({
@@ -52,9 +48,6 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
     }
   }
 
-  // Reveals controls when the video genuinely pauses (user action, end of
-  // stream) or starts buffering — a resolution switch never touches this
-  // controller directly, so it never needs to know about that separately.
   void _playbackListener() {
     if (!mounted) return;
     final isBuffering = widget.controller.value.isBuffering;
@@ -147,12 +140,6 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
 
         return Stack(
           children: [
-            // ----------------------------------------------------------------
-            // Controls overlay — shown/hidden by the visibility notifier.
-            // Never touched by resolution switching: that just swaps the
-            // controller in the background once it's ready, so from this
-            // widget's perspective nothing is happening while it loads.
-            // ----------------------------------------------------------------
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: _toggleVisibility,
