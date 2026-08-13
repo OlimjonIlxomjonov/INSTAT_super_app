@@ -1,5 +1,3 @@
-import 'package:dio/dio.dart';
-import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/logger/logger.dart';

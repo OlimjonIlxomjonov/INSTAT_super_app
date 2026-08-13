@@ -1,14 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:dashed_progress_bar/dashed_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
-import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/responsiveness/responsive.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
 
 import '../../../../features/online_library_app/features/offline_books_lib/domain/entity/offline_book_entity.dart';
 

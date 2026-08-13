@@ -120,7 +120,6 @@ class _AboutThisCourseTabState extends State<AboutThisCourseTab>
                   );
                 }
 
-                //! Data
                 return ListView.builder(
                   scrollDirection: Axis.horizontal,
                   padding: EdgeInsets.symmetric(horizontal: 20),
@@ -140,6 +139,7 @@ class _AboutThisCourseTabState extends State<AboutThisCourseTab>
                             categoryName: '',
                           ),
                         ),
+                        //! Data (Similar Courses)
                         builder: (context, categoryName) =>
                             PopularCoursesCardWg(
                               onTap: () => _openCourseDetail(

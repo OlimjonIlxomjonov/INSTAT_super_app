@@ -144,6 +144,7 @@ class CameraService extends ChangeNotifier {
   }
 
   Future<void> dispose() async {
+    super.dispose();
     await _controller?.dispose();
     _controller = null;
   }

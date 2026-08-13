@@ -6,9 +6,9 @@ import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
-import 'package:my_template/core/utils/logger/logger.dart';
-import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
+import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/layout_buttons/layout_buttons_wg.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/sub_bottom_sheet_opener.dart';
 import 'package:my_template/features/education_app/features/table_edu/presentation_edu/screens_edu/detailed_task_edu_child.dart';
 import 'package:my_template/features/education_app/features/table_edu/presentation_edu/widgets_edu/layout_grid_calendar_wg.dart';
@@ -28,7 +28,6 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../../../../../../../../core/common/flush_bar/flush_bars.dart';
 import '../../../../../table_edu/domain/entity/course_group_date_entity.dart';
 import '../../../../../user_courses_edu/domain/entity/offline_course/offline_course_teacher_entity.dart';
 import '../../../../../user_courses_edu/presentation_edu/screens_edu/qr_scan/qr_scan_configs.dart';
@@ -123,16 +122,25 @@ class _DetailedUserGroupComponentState
           // } else if (state is ScanQrError) {
           //   errorFlushBar(context, 'error');
           // }
+          //! Load lessons when success
         },
         child: Scaffold(
           body: CustomScrollView(
             slivers: [
-              SliverDefaultAppBarWg(
-                isFamily: true,
-                myTitle: widget.courseName,
-                customActions: [
-                  LayoutButtonsWg(layout: layout, onChanged: _onLayoutChanged),
-                ],
+              SliverAppBar(
+                titleSpacing: 0,
+                automaticallyImplyLeading: false,
+                title: SheetDragAreaWg(
+                  child: CustomAppBarWg(
+                    myTitle: widget.courseName,
+                    customActions: [
+                      LayoutButtonsWg(
+                        layout: layout,
+                        onChanged: _onLayoutChanged,
+                      ),
+                    ],
+                  ),
+                ),
               ),
 
               SliverToBoxAdapter(
@@ -203,9 +211,10 @@ class _DetailedUserGroupComponentState
 
                     return SliverFillRemaining(
                       child: Padding(
-                        padding: AppPadding.horizontal20x(),
+                        padding: const .symmetric(horizontal: 20),
                         child: Column(
                           children: [
+                            //! Title / Attendance scan
                             Row(
                               mainAxisAlignment: .spaceBetween,
                               children: [

@@ -35,6 +35,11 @@ class OnboardingWg extends StatelessWidget {
               child: Image.asset(
                 imagePath,
                 width: size.width / imageWidthDivider,
+                cacheWidth:
+                    (size.width /
+                            imageWidthDivider *
+                            MediaQuery.devicePixelRatioOf(context))
+                        .round(),
                 fit: BoxFit.contain,
               ),
             ),

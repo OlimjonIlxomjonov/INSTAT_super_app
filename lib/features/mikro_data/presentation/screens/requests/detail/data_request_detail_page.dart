@@ -12,7 +12,6 @@ import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/general_widgets/file_opening_overlay/file_opening_overlay_wg.dart';
 import 'package:my_template/core/utils/general_widgets/selected_file_container/selected_file_container_wg.dart';
-import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_request_process_entity.dart';

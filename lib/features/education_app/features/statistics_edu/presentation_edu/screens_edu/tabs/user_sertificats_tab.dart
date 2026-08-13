@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
-import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/user_certificate/certificate_bloc.dart';
-import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/user_certificate/certificate_state.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/widgets_edu/body_container.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class UserSertificatsTab extends StatelessWidget {
   const UserSertificatsTab({super.key});

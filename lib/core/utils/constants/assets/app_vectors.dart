@@ -14,11 +14,6 @@ abstract class AppVectors {
   /// main app logo
   static const String mainAppLogo = '${basePath}main_app_logo$format';
 
-  /// square icon-only brand mark (same art as the home-screen app icon) —
-  /// used where a compact icon is needed rather than the full wordmark,
-  /// e.g. the pull-to-refresh indicator.
-  static const String appIconMark = '${basePath}app_icon_mark.png';
-
   /// one id logo
   static const String oneIdLogo = 'assets/images/oneid_logo.svg';
 

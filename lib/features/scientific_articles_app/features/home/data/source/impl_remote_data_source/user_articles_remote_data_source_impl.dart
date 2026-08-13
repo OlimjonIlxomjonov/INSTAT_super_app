@@ -14,7 +14,6 @@ import 'package:my_template/features/scientific_articles_app/features/home/data/
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/review_authors/review_author_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/review_detail/review_detail_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/source/remote_data_source/user_articles_remote_data_source.dart';
-import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_process/article_process_entity.dart';
 
 class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
   final _dioClient = DioClient();

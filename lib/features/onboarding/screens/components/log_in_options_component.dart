@@ -1,6 +1,3 @@
-// Apple sign-in disabled — see appleLogin below. Restore this import too.
-// import 'dart:io';
-
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -16,17 +13,11 @@ import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-// import 'package:my_template/features/auth/presentation/auth_service/apple_auth_service.dart';
 import 'package:my_template/features/auth/presentation/auth_service/auth_service.dart';
 import 'package:my_template/features/auth/presentation/auth_service/google_auth_service.dart';
 import 'package:my_template/features/auth/presentation/data_source/one_id_log_in.dart';
 import 'package:my_template/features/auth/presentation/widgets/continue_with_options.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/home_page.dart';
-
-// import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:svg_image_provider/svg_image_provider.dart';
-
-import '../../../../core/utils/constants/assets/app_images.dart';
 
 class LogInOptionsComponent extends StatefulWidget {
   const LogInOptionsComponent({super.key});
@@ -145,9 +136,6 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
     }
   }
 
-  // Apple sign-in is implemented but disabled — backend confirmed the
-  // auth/apple/ endpoint isn't working yet. Re-enable this method and the
-  // button below (search "Apple sign-in disabled") once that's ready.
   // Future<void> appleLogin() async {
   //   try {
   //     await AppleAuthServiceImpl(

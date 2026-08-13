@@ -18,7 +18,6 @@ import 'package:my_template/features/main_app/home/presentation/bloc/home_event.
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_state.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/confirm_acc_foreign_user.dart';
-import 'package:my_template/features/main_app/home/presentation/screens/drawer/my_id_configs/my_id_conf.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/drawer/components/my_id_form_bottom_sheet.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';

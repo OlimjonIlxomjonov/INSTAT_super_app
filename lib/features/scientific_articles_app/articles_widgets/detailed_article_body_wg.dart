@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_template/core/common/ui_states/empty_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
@@ -16,8 +15,6 @@ class DetailedArticleBodyWg extends StatefulWidget {
   final ReviewDetailEntity? detail;
   final List<ReviewAuthorEntity>? authors;
 
-  /// Called with the file URL when the user taps the file card.
-  /// Null means there is nothing to open yet (e.g. while loading).
   final void Function(String? url)? onFileOpen;
 
   const DetailedArticleBodyWg({

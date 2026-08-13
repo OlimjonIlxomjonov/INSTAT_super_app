@@ -6,7 +6,6 @@ import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
-import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/common/ui_states/lost_internet_connection_state.dart';
 import 'package:my_template/core/common/ui_states/server_error_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -44,7 +43,6 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/similar_onilne_books_component.dart';
 import 'package:my_template/features/online_library_app/features/online_lib_bottom_nav_bar.dart';
 
-import '../../../../../../core/common/test_mode_banner/test_mode_banner.dart';
 import '../../../../../scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
 import '../../../../../scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
 import '../../../../../scientific_articles_app/features/user_articles/presentation/screens/user_articles_page.dart';

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
-import 'package:my_template/core/utils/responsiveness/responsive.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/drawer/components/user_avatar_component.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/drawer/components/user_settings_component.dart';
 
@@ -16,7 +15,6 @@ class _MainAppDrawerState extends State<MainAppDrawer> {
   Widget build(BuildContext context) {
     return OrientationBuilder(
       builder: (context, orientation) {
-        final isPortrait = orientation == Orientation.portrait;
         return Drawer(
           backgroundColor: AppColors.white,
           width: double.infinity,

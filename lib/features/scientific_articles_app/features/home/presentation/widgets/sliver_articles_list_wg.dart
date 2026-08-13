@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
@@ -7,8 +6,6 @@ import 'package:my_template/features/scientific_articles_app/features/home/domai
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/articles_status_check_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/detailed_article_page.dart';
 
-import '../bloc/articles_home_event.dart';
-import '../bloc/review_detail/review_detail_bloc.dart';
 
 class SliverArticlesListWg extends StatelessWidget {
   final List<UserArticlesEntity> items;

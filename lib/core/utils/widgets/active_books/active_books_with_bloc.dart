@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_template/core/common/ui_states/app_empty_state.dart';
-
 import '../../../../features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/course_category_builder.dart';
 import '../../../../features/online_library_app/features/home_lib/presentation/bloc/user_books/user_book_bloc.dart';
 import '../../../../features/online_library_app/features/home_lib/presentation/bloc/user_books/user_book_state.dart';

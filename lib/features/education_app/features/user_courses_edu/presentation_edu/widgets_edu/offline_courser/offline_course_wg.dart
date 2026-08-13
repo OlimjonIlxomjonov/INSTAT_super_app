@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
-import 'package:iconly/iconly.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/offline_course/offline_group_entity.dart';
 
 import '../../../../../../../core/utils/app_utils.dart';

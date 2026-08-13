@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -15,14 +14,7 @@ class CameraAccessDeniedOverlayWg extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
 
-    // This overlay is a *sibling* of TestLayout inside the test pages'
-    // Stack, so it sits outside that Scaffold's Material. The lesson test
-    // gets away with it because openMiniAppSheetFamily wraps its content in
-    // a Material, but the final test is pushed via a bare PageRouteBuilder
-    // with no Material ancestor at all — which made every Text here render
-    // with the debug "missing Material" yellow double underlines. Providing
-    // one here keeps the widget self-sufficient wherever it's dropped;
-    // MaterialType.transparency paints nothing, so it's visually a no-op.
+
     return Positioned.fill(
       child: Material(
         type: MaterialType.transparency,

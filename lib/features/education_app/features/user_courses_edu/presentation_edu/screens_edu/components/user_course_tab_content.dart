@@ -32,17 +32,11 @@ class UserCoursesTabContentState extends State<UserCoursesTabContent>
     super.build(context);
     return BlocProvider(
       create: (_) => GetIt.instance<UserCoursesBloc>(),
-      // The scrollable lives here while the slivers live inside
-      // CoursesInProgressComponent, so the load-more trigger has to wrap the
-      // CustomScrollView from this side. The Builder gets a context that
-      // sits below the BlocProvider above.
+
       child: Builder(
         builder: (context) {
           return BlocBuilder<UserCoursesBloc, UserCoursesState>(
             buildWhen: (prev, curr) {
-              // Only rebuild this wrapper when the paging flags actually
-              // change — the list content itself is rebuilt by the
-              // BlocConsumer inside CoursesInProgressComponent.
               final p = prev is UserCoursesLoaded ? prev : null;
               final c = curr is UserCoursesLoaded ? curr : null;
               return p?.hasMore != c?.hasMore ||

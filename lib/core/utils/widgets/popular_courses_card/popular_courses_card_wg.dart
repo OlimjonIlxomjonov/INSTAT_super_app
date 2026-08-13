@@ -19,7 +19,7 @@ double _measureLineHeight(BuildContext context, TextStyle style) {
 double popularCoursesCardHeight(BuildContext context) {
   final orientation = MediaQuery.orientationOf(context);
   final isLandscape = orientation == Orientation.landscape;
-  final cardWidth = !isLandscape ? appW(312) : appW(180);
+  final cardWidth = !isLandscape ? 312 : appW(180);
   final imageHeight = cardWidth / 2;
 
   final categoryLineHeight = _measureLineHeight(
@@ -74,6 +74,7 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
         children: [
           Stack(
             children: [
+              //! Thumbnail
               AspectRatio(
                 aspectRatio: 12 / 6, //? 12 / 6 default
                 child: ClipRRect(
@@ -84,6 +85,7 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
                   ),
                 ),
               ),
+              //! Star
               Positioned(
                 left: 8,
                 top: 8,
@@ -104,6 +106,7 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
                   ),
                 ),
               ),
+              //! Price
               Positioned(
                 left: 8,
                 bottom: 8,
@@ -123,6 +126,7 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
           ),
           const SizedBox(height: 12),
 
+          //! category
           AutoSizeText(
             widget.categoryName,
             style: AppTextStyles.source.medium(
@@ -131,6 +135,7 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
             ),
           ),
           const SizedBox(height: 4),
+          //! Title
           Text(
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -139,8 +144,8 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
             ),
             style: AppTextStyles.source.medium(fontSize: 15),
           ),
-          const SizedBox(height: 8),
-          Spacer(),
+          const Spacer(),
+          //! course duration / lesson count
           Row(
             spacing: 5,
             children: [

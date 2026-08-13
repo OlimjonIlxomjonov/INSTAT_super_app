@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
-import 'package:my_template/core/common/test_mode_banner/test_mode_banner.dart';
 import 'package:my_template/core/common/ui_states/lost_internet_connection_state.dart';
 import 'package:my_template/core/common/ui_states/server_error_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -349,12 +348,6 @@ class _TabletUiScreenComponentState extends State<TabletUiScreenComponent> {
                           ),
                         );
                       }
-
-                      // Any other error (bad TLS/certificate handshake
-                      // reaching the server, unexpected 5xx, malformed
-                      // response, etc.) is NOT "no internet" — show a real
-                      // server-error state instead of silently falling
-                      // through to empty-looking sections.
                       final hasServerError =
                           (coursesState is CoursesError &&
                               !coursesState.isConnectionError) ||
@@ -399,7 +392,6 @@ class _TabletUiScreenComponentState extends State<TabletUiScreenComponent> {
       bottom: false,
       child: Column(
         children: [
-          const TestModeBanner(),
           Expanded(
             child: OrientationBuilder(
               builder: (context, orientation) {

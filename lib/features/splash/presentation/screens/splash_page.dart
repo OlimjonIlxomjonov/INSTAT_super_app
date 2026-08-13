@@ -10,7 +10,6 @@ import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/home_page.dart';
 import 'package:my_template/features/onboarding/screens/onboarding_page.dart';
-import 'package:my_template/features/splash/presentation/screens/grid_background_painter.dart';
 import 'package:my_template/features/splash/presentation/screens/no_internet_page.dart';
 
 import '../../../../core/utils/constants/colors/app_colors.dart';
@@ -24,21 +23,21 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _gridController;
+  // late final AnimationController _gridController;
 
   @override
   void initState() {
     super.initState();
-    _gridController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1800),
-    )..forward();
+    // _gridController = AnimationController(
+    //   vsync: this,
+    //   duration: const Duration(milliseconds: 1800),
+    // )..forward();
     _timerDirection();
   }
 
   @override
   void dispose() {
-    _gridController.dispose();
+    // _gridController.dispose();
     super.dispose();
   }
 
@@ -107,7 +106,7 @@ class _SplashPageState extends State<SplashPage>
               curve: Curves.easeOutCubic,
               builder: (context, value, child) {
                 return Transform.scale(
-                  scale: 0.8 + (0.2 * value),
+                  scale: 0.8 + (0.3 * value),
                   child: Opacity(opacity: value, child: child),
                 );
               },

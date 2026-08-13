@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dashed_progress_bar/dashed_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
@@ -59,15 +58,14 @@ class ActiveCoursesWg extends StatelessWidget {
               ),
             ),
             SizedBox(width: appW(12)),
-
             Expanded(
-              flex: Responsive.isMobile(context) ? 2 : 3,
+              flex: Responsive.isMobile(context) ? 1 : 3,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   /// category name
-                  AutoSizeText(
+                  Text(
                     categoryName,
                     style: AppTextStyles.source.medium(
                       fontSize: 12,
@@ -78,7 +76,7 @@ class ActiveCoursesWg extends StatelessWidget {
                   /// course name
                   Text(
                     data.name,
-                    maxLines: 1,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: AppTextStyles.source.medium(fontSize: 14),
                   ),
@@ -89,7 +87,7 @@ class ActiveCoursesWg extends StatelessWidget {
                     children: [
                       Text('7/24 Mavzu', style: CustomTextStyles.h4),
                       if (!showCircularProgBar)
-                        AutoSizeText(
+                        Text(
                           '0%',
                           style: AppTextStyles.source.regular(
                             fontSize: 12,
@@ -103,7 +101,7 @@ class ActiveCoursesWg extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(width: appW(12)),
+            SizedBox(width: 12),
             if (showCircularProgBar)
               SizedBox(
                 width: 66,
@@ -122,7 +120,7 @@ class ActiveCoursesWg extends StatelessWidget {
                     width: 5,
                     height: 5,
                     child: Center(
-                      child: AutoSizeText(
+                      child: Text(
                         "${(data.userOrder?.progress ?? 0).toInt()} %",
                         style: AppTextStyles.source.medium(fontSize: 12),
                       ),

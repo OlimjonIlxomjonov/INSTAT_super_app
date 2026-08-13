@@ -178,8 +178,6 @@ class _CoursesInProgressComponentState
             );
           }
 
-          // Trailing spinner while the next page loads, appended below the
-          // existing items so the list never flashes or jumps.
           if (state.isLoadingMore) {
             return SliverMainAxisGroup(
               slivers: [

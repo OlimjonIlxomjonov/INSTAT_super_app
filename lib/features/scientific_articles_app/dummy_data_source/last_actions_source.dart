@@ -1,5 +1,3 @@
-import 'package:my_template/core/utils/app_utils.dart';
-import 'package:my_template/features/scientific_articles_app/dummy_models/last_actions_model.dart';
 
 //
 // final lastActions = [

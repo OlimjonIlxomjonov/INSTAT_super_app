@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
-import 'package:my_template/core/common/test_mode_banner/test_mode_banner.dart';
 import 'package:my_template/core/common/ui_states/lost_internet_connection_state.dart';
 import 'package:my_template/core/common/ui_states/server_error_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -43,11 +42,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/user_articles_page.dart';
 
-/// Desktop/laptop layout: same two-column idea as tablet (mini-app grid +
-/// search on the left, real content on the right), but the whole thing is
-/// constrained to a max width and centered — a full-bleed split row starts
-/// looking absurd once the window is 1600-1900px wide, especially the
-/// mini-app grid stretching out with huge gaps between cards.
+
 class DesktopUiScreenComponent extends StatefulWidget {
   final List<MiniAppModel> sections;
 
@@ -410,7 +405,6 @@ class _DesktopUiScreenComponentState extends State<DesktopUiScreenComponent> {
         bottom: false,
         child: Column(
           children: [
-            const TestModeBanner(),
             Expanded(
               child: Center(
                 child: ConstrainedBox(

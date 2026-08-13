@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/app_utils.dart';
-import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
-import 'package:my_template/core/utils/responsiveness/responsive.dart';
 import 'package:svg_image_provider/svg_image_provider.dart';
 
 class MiniAppSectionCard extends StatelessWidget {
@@ -22,7 +20,6 @@ class MiniAppSectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isMobile = Responsive.isMobile(context);
 
     return GestureDetector(
       onTap: () => onTap(context),

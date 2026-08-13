@@ -16,8 +16,8 @@ import 'package:path_provider/path_provider.dart';
 import '../../../../../../../core/utils/logger/logger.dart';
 
 class MyIdConf {
-  static const String _clientId =
-      'instat_sdk-rLwcdCa93hJmKPxRAFf9BSgQXaXuRQ8h4vv8fe5F';
+  // static const String _clientId =
+  //     'instat_sdk-rLwcdCa93hJmKPxRAFf9BSgQXaXuRQ8h4vv8fe5F';
   static const String _clientHashId = 'e07fd12c-7aee-445b-b512-51e2478d8916';
   static const String _clientHash =
       'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp64tPQLPNz+q9N6qc3ZFnJYRhFBhKsKc07bUT5aahz+QSny9u94+gcEIhMJeyFID8NeWCiUPAyntOWhWQl6JQfe+GyxAfyHPbfYNsCh+FxICwzdBo/P4q0wco8g6kQpbLxlrJO9MAC/JnG4itnOuD6tc1hDMi/pQjoJzd8eT8mWCmSxzcGKRy5uyBPtW19I9PZ2ZgPCvMbxfQULUSSPWDuTgFQAhCXOxja1dywORZkFVYFpi2+LeJ+bR+btk8wOeLJ6gm8/+E1QkxRLnH8cou8suaOa1aqJemXPLsdDkgjhIpbPgjGPW8Q3sVSxGsDZUi6dzbdRXRDHHYhpPlMvjFwIDAQAB';

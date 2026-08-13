@@ -65,9 +65,6 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
       setState(() {});
     });
 
-    logger.f("rating count: ${widget.data.ratingsCount}");
-    logger.f("desc: ${widget.data.descriptionUz}");
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       context.read<AboutCourseFeaturesBloc>().add(
@@ -187,6 +184,7 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
     ];
   }
 
+  //! TABS
   Widget _buildTabContent() {
     switch (_tabController.index) {
       case 0:
