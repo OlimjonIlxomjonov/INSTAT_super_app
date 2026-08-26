@@ -22,6 +22,7 @@ class ApiUrls {
 
   /// user
   static const me = 'me';
+  static const token = 'token/';
 
   /// courses
   static const courses = 'courses/';

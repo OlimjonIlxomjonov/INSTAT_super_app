@@ -127,7 +127,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     /// DEPENDING ON SCREEN SIZE & Orientation
     return Responsive(
       mobile: Scaffold(

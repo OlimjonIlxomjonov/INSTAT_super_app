@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
+import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/app_utils.dart';
-import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/mini_app_sheet_shell.dart';
 
 /*
@@ -18,9 +18,16 @@ Future<T?> openMiniAppSheetFamily<T>(
   BuildContext context, {
   required Widget child,
   bool showHandler = true,
-  isTransparent = true,
+  bool isTransparent = true,
   bool enableDrag = true,
+  bool forceBottomSheet = false,
 }) {
+  if (!forceBottomSheet &&
+      (Responsive.isTablet(context) || Responsive.isDesktop(context))) {
+    AppRoute.go(child);
+    return Future.value(null);
+  }
+
   return FamilyModalSheet.showMaterialDefault<T>(
     context: context,
     contentBackgroundColor: AppColors.transparent,

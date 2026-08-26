@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
-import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/features/auth/presentation/auth_service/auth_service.dart';
 import 'package:my_template/features/auth/presentation/data_source/auth_constatns.dart';
@@ -44,14 +42,8 @@ class _OneIdLoginPageState extends State<OneIdLoginPage> {
           onPageStarted: (_) => _setAuthState(_AuthState.loading),
           onPageFinished: (_) => _setAuthState(_AuthState.idle),
           onWebResourceError: (error) {
-            // logger.e('WebView error: ${error.description}');
-            // _setAuthState(_AuthState.error);
-            if (error.description.contains('ERR_CONNECTION_TIMED_OUT')) {
-              AppRoute.close();
-              errorFlushBar(
-                context,
-                AppLocalizations.of(context)!.somethingWentWrongTryAgain,
-              );
+            if (error.isForMainFrame ?? true) {
+              _setAuthState(_AuthState.error);
             }
           },
         ),
@@ -81,9 +73,9 @@ class _OneIdLoginPageState extends State<OneIdLoginPage> {
         try {
           await widget.authService.handleAuthSuccess(code);
           widget.onSuccess();
-        } on Exception catch (e) {
+        } catch (e) {
           logger.e('Auth handling failed: $e');
-          widget.onFailure?.call(e);
+          widget.onFailure?.call(e is Exception ? e : Exception(e.toString()));
         }
       } else {
         widget.onFailure?.call(

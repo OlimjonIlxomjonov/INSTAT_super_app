@@ -19,7 +19,7 @@ class UserLibInfoWg extends StatelessWidget {
           crossAxisSpacing: 5,
           mainAxisSpacing: 5,
           crossAxisCount: 2,
-          mainAxisExtent: 80,
+          mainAxisExtent: 90,
         ),
         itemCount: 4,
         itemBuilder: (context, index) {

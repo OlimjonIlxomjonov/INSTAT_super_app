@@ -13,6 +13,7 @@ import 'package:my_template/features/onboarding/screens/onboarding_page.dart';
 import 'package:my_template/features/splash/presentation/screens/no_internet_page.dart';
 
 import '../../../../core/utils/constants/colors/app_colors.dart';
+import 'grid_background_painter.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -23,15 +24,15 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage>
     with SingleTickerProviderStateMixin {
-  // late final AnimationController _gridController;
+  late final AnimationController _gridController;
 
   @override
   void initState() {
     super.initState();
-    // _gridController = AnimationController(
-    //   vsync: this,
-    //   duration: const Duration(milliseconds: 1800),
-    // )..forward();
+    _gridController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1800),
+    )..forward();
     _timerDirection();
   }
 
@@ -79,25 +80,25 @@ class _SplashPageState extends State<SplashPage>
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          // Positioned.fill(
-          //   child: AnimatedBuilder(
-          //     animation: _gridController,
-          //     builder: (context, _) {
-          //       return CustomPaint(
-          //         painter: GridBackgroundPainter(
-          //           backgroundColor: AppColors.splashBackgroundColor,
-          //           lineColor: Colors.white,
-          //           cellSize: appW(100),
-          //           majorEvery: 4,
-          //           minorOpacity: 0.06,
-          //           majorOpacity: 0.12,
-          //           strokeWidth: 1,
-          //           progress: _gridController.value,
-          //         ),
-          //       );
-          //     },
-          //   ),
-          // ),
+          Positioned.fill(
+            child: AnimatedBuilder(
+              animation: _gridController,
+              builder: (context, _) {
+                return CustomPaint(
+                  painter: GridBackgroundPainter(
+                    backgroundColor: AppColors.splashBackgroundColor,
+                    lineColor: Colors.white,
+                    cellSize: appW(100),
+                    majorEvery: 4,
+                    minorOpacity: 0.06,
+                    majorOpacity: 0.12,
+                    strokeWidth: 1,
+                    progress: _gridController.value,
+                  ),
+                );
+              },
+            ),
+          ),
           //  logo with smooth fade and zoom
           Center(
             child: TweenAnimationBuilder<double>(

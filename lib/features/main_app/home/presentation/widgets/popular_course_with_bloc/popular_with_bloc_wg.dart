@@ -18,8 +18,7 @@ class PopularWithBlocWg extends StatelessWidget {
   Widget build(BuildContext context) {
     final orientation = MediaQuery.orientationOf(context);
     final isLandscape = orientation == Orientation.landscape;
-    final cardWidth = isLandscape ? appW(180) : appW(312);
-
+    final cardWidth = isLandscape ? appW(180) : 312.0;
     return BlocBuilder<CoursesBloc, CoursesState>(
       builder: (context, state) {
         if (state is CoursesLoaded) {

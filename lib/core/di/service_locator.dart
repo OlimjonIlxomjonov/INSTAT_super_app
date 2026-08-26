@@ -1,5 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:my_template/features/auth/data/repo/reviewer_auth_repo_impl.dart';
+import 'package:my_template/features/auth/data/sources/impl_remote_data_source/reviewer_auth_remote_data_source_impl.dart';
+import 'package:my_template/features/auth/data/sources/remote_data_source/reviewer_auth_remote_data_source.dart';
+import 'package:my_template/features/auth/domain/repository/reviewer_auth_repository.dart';
+import 'package:my_template/features/auth/domain/usecase/reviewer_login_use_case.dart';
+import 'package:my_template/features/auth/presentation/bloc/reviewer_login/reviewer_login_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/data/repo/home_edu_repo_impl.dart';
 import 'package:my_template/features/education_app/features/home_edu/data/source/impl_remote_data_source/home_edu_remote_data_source_impl.dart';
 import 'package:my_template/features/education_app/features/home_edu/data/source/remote_data_source/home_edu_remote_data_source.dart';
@@ -217,6 +223,11 @@ Future<void> setup() async {
     () => MicroRemoteDataSourceImpl(),
   );
 
+  /// Reviewer Auth
+  sl.registerLazySingleton<ReviewerAuthRemoteDataSource>(
+    () => ReviewerAuthRemoteDataSourceImpl(),
+  );
+
   /// {REPO}
   sl.registerLazySingleton<HomeRepository>(
     () => HomeRepoImpl(remoteDataSource: sl()),
@@ -251,6 +262,11 @@ Future<void> setup() async {
   //? Micro data
   sl.registerLazySingleton<MicroRepository>(
     () => MicroRepoImpl(remoteDataSource: sl()),
+  );
+
+  /// Reviewer Auth
+  sl.registerLazySingleton<ReviewerAuthRepository>(
+    () => ReviewerAuthRepoImpl(remoteDataSource: sl()),
   );
 
   //! {USE CASE}
@@ -368,6 +384,9 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => UserBooksUseCase(repository: sl()));
   //? Saved (liked) books
   sl.registerLazySingleton(() => SavedBooksUseCase(repository: sl()));
+
+  /// Reviewer Auth
+  sl.registerLazySingleton(() => ReviewerLoginUseCase(repository: sl()));
 
   //! {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -489,4 +508,7 @@ Future<void> setup() async {
   //? User books
   sl.registerLazySingleton(() => UserBookBloc(useCase: sl()));
   sl.registerLazySingleton(() => SavedBooksBloc(useCase: sl()));
+
+  //? Reviewer Auth
+  sl.registerFactory(() => ReviewerLoginBloc(useCase: sl()));
 }

@@ -16,6 +16,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:my_template/features/auth/presentation/auth_service/auth_service.dart';
 import 'package:my_template/features/auth/presentation/auth_service/google_auth_service.dart';
 import 'package:my_template/features/auth/presentation/data_source/one_id_log_in.dart';
+import 'package:my_template/features/auth/presentation/screens/reviewer_screen/reviwer_log_in_page.dart';
 import 'package:my_template/features/auth/presentation/widgets/continue_with_options.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/home_page.dart';
 
@@ -51,22 +52,24 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
             logger.i(token);
           },
           onFailure: (error) {
-            Navigator.of(context).pop();
+            if (mounted && Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            }
 
+            final localization = AppLocalizations.of(context)!;
             if (error is DioException) {
               final statusCode = error.response?.statusCode;
-              // final data = error.response?.data;
 
               errorFlushBar(
                 context,
-                AppLocalizations.of(
-                  context,
-                )!.loginFailedWithStatus(statusCode ?? 'unknown'),
+                statusCode != null
+                    ? localization.loginFailedWithStatus(statusCode)
+                    : localization.somethingWentWrongTryAgain,
               );
 
               logger.e(error.response?.data);
             } else {
-              errorFlushBar(context, error.toString());
+              errorFlushBar(context, localization.somethingWentWrongTryAgain);
             }
           },
         ),
@@ -115,9 +118,11 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
 
           errorFlushBar(
             context,
-            AppLocalizations.of(
-              context,
-            )!.loginFailedWithStatus(statusCode ?? 'unknown'),
+            statusCode != null
+                ? AppLocalizations.of(
+                    context,
+                  )!.loginFailedWithStatus(statusCode)
+                : AppLocalizations.of(context)!.somethingWentWrongTryAgain,
           );
         }
       } else {
@@ -180,10 +185,13 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
+    Orientation orientation = MediaQuery.of(context).orientation;
 
     return Responsive(
       mobile: _buildMobile(localization),
-      tablet: _buildSplit(localization, isDesktop: false),
+      tablet: orientation == Orientation.landscape
+          ? _buildSplit(localization, isDesktop: false)
+          : _buildMobile(localization),
       desktop: _buildSplit(localization, isDesktop: true),
     );
   }
@@ -234,7 +242,7 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
       children: [
         Expanded(
           child: ColoredBox(
-            color: AppColors.primaryColor,
+            color: AppColors.splashBackgroundColor,
             child: Center(
               child: SvgPicture.asset(
                 AppVectors.mainAppLogo,
@@ -284,19 +292,19 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
         AutoSizeText(
           localization.getStart,
           maxFontSize: 35,
-          style: AppTextStyles.source.bold(fontSize: 22),
+          style: AppTextStyles.source.semiBold(fontSize: 22),
         ),
-        SizedBox(height: appH(8)),
+        const SizedBox(height: 8),
         AutoSizeText(
           localization.registerOrEnterTheSystem,
           maxLines: 2,
           maxFontSize: 22,
           style: AppTextStyles.source.regular(
-            fontSize: 15,
+            fontSize: 14,
             color: AppColors.greyScale.grey600,
           ),
         ),
-        SizedBox(height: appH(32)),
+        const SizedBox(height: 32),
 
         SizedBox(
           width: double.infinity,
@@ -312,24 +320,30 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
             Expanded(child: Divider(color: AppColors.greyScale.grey400)),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: appW(12)),
-              child: AutoSizeText(
-                localization.or,
-                style: AppTextStyles.source.regular(
-                  fontSize: 14,
-                  color: AppColors.greyScale.grey600,
+              child: GestureDetector(
+                onDoubleTap: () {
+                  AppRoute.go(ReviewerLogInPage());
+                  technicalWorkFlushBar(context, 'Developer Log in page');
+                },
+                child: AutoSizeText(
+                  localization.or,
+                  style: AppTextStyles.source.regular(
+                    fontSize: 14,
+                    color: AppColors.greyScale.grey600,
+                  ),
                 ),
               ),
             ),
             Expanded(child: Divider(color: AppColors.greyScale.grey400)),
           ],
         ),
-        SizedBox(height: appH(20)),
+        const SizedBox(height: 20),
 
         //! Apple sign-in
         if (Platform.isIOS)
           ContinueWithOptions(
             iconPath: AppVectors.appleLogo,
-            onTap: () {},
+            onTap: () => errorFlushBar(context, 'Tez orada!'),
             continueWithText: localization.continueWithApple,
           ),
         //! google sign in
@@ -343,7 +357,7 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
           top: false,
           child: ContinueWithOptions(
             iconPath: AppVectors.facebookLogo,
-            onTap: () {},
+            onTap: () => errorFlushBar(context, 'Tez orada!'),
             continueWithText: localization.continueWithFaceBook,
           ),
         ),

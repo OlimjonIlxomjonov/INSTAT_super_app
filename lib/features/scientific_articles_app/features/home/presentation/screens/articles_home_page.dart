@@ -14,6 +14,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/user_articles_page.dart';
 
 import '../../../../../../core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
+import '../widgets/last_actions/sliver_last_actions_wg.dart';
 
 class ArticlesHomePage extends StatelessWidget {
   final VoidCallback onProfileTap, toArticlesPage;

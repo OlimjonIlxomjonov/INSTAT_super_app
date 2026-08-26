@@ -18,7 +18,6 @@ class GoogleAuthServiceImpl implements GoogleAuthService {
   }) : _tokenStorage = tokenStorage,
        _dioClient = dioClient;
 
-  // initialize() must run exactly once for the lifetime of the app.
   static bool _initialized = false;
 
   Future<void> _ensureInitialized() async {
@@ -33,7 +32,6 @@ class GoogleAuthServiceImpl implements GoogleAuthService {
   Future<void> signIn() async {
     await _ensureInitialized();
 
-    // Identity step: who is this? Yields an ID token, not an access token.
     final account = await GoogleSignIn.instance.authenticate();
 
     final authorizationClient = account.authorizationClient;
