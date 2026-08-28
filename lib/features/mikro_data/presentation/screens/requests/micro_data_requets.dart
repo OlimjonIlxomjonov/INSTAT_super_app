@@ -11,11 +11,8 @@ import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
-import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
 import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
-import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
-import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/add_data_request_page.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/data_requests/data_requests_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/data_requests/data_requests_state.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_event.dart';
@@ -116,7 +113,7 @@ class _MicroDataRequestsViewState extends State<_MicroDataRequestsView> {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
-    final keyboardVisible = MediaQuery.viewInsetsOf(context).bottom > 0;
+    // final keyboardVisible = MediaQuery.viewInsetsOf(context).bottom > 0;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -127,6 +124,7 @@ class _MicroDataRequestsViewState extends State<_MicroDataRequestsView> {
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             //! HEADER
+
             // SliverToBoxAdapter(
             //   child: SheetDragAreaWg(
             //     child: CustomAppBarWg(
@@ -266,22 +264,22 @@ class _MicroDataRequestsViewState extends State<_MicroDataRequestsView> {
           ],
         ),
       ),
-      bottomNavigationBar: keyboardVisible
-          ? null
-          : CustomBottomNavContainerWg(
-              buttonText: localization.submitRequest,
-              leadingIcon: Icons.add,
-              onTap: () async {
-                await openMiniAppSheetFamily(
-                  context,
-                  child: const AddDataRequestPage(),
-                  enableDrag: false,
-                  showHandler: false,
-                );
-                if (!mounted) return;
-                _fetch();
-              },
-            ),
+      // bottomNavigationBar: keyboardVisible
+      ///     ? null
+      //     : CustomBottomNavContainerWg(
+      //         buttonText: localization.submitRequest,
+      //         leadingIcon: Icons.add,
+      //         onTap: () async {
+      //           await openMiniAppSheetFamily(
+      //             context,
+      //             child: const AddDataRequestPage(),
+      //             enableDrag: false,
+      //             showHandler: false,
+      //           );
+      //           if (!mounted) return;
+      //           _fetch();
+      //         },
+      //       ),
     );
   }
 }

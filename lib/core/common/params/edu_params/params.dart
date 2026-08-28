@@ -4,13 +4,7 @@ class NoParams {}
 
 class UserCoursesParams {
   final String state; // all or finished
-
-  /// 1-based page number.
   final int page;
-
-  /// Optional page size. Left null in production so the backend's own
-  /// default (16) applies; set it to a small number to exercise pagination
-  /// against a dataset that would otherwise fit on a single page.
   final int? perPage;
 
   UserCoursesParams({required this.state, this.page = 1, this.perPage});
@@ -196,4 +190,11 @@ class RegisterNotResidentParams {
     required this.countryId,
     required this.verifiedImage,
   });
+}
+
+//! Notifications
+class NotifParams {
+  final int? page;
+
+  const NotifParams({this.page = 1});
 }

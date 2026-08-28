@@ -23,6 +23,7 @@ class ApiUrls {
   /// user
   static const me = 'me';
   static const token = 'token/';
+  static const qrLogin = 'qr-login';
 
   /// courses
   static const courses = 'courses/';
@@ -133,4 +134,15 @@ class ApiUrls {
   //! Not-resident (foreign user) account confirmation
   static const countriesList = 'countries/items/all/';
   static const registerNotResident = 'register-not-resident';
+
+  //? Report files
+  static String reportFiles(int reportId) => 'data-reports/$reportId/files/';
+
+  //? Notifications
+  static String notif = 'notifications/?page=';
+
+  //? Active Devices // DELETE TOO
+  static String activeDevices = 'devices';
+  //? delete all active devices
+  // static String deleteAllActiveDevices ='';
 }

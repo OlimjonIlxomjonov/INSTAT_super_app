@@ -10,6 +10,7 @@ import 'package:my_template/features/education_app/features/user_profile_edu/pre
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/widgets_edu/dot_swtich_wg.dart';
 import "package:my_template/core/utils/app_utils.dart";
 import "package:my_template/core/utils/widgets/app_widgets.dart";
+import 'package:my_template/features/main_app/home/presentation/screens/drawer/components/active_devices_component.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/drawer/components/log_out_options_component.dart';
 
 class UserSettingsComponent extends StatefulWidget {
@@ -38,11 +39,13 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
           ),
         ),
         SizedBox(height: appH(5)),
+        //! User Profile
         ProfileSettingsTileWg(
           leadingIcon: FlutterRemix.user_line,
           title: localization.personalInfo,
           onTap: () {},
         ),
+        //! Settings
         ProfileSettingsTileWg(
           leadingIcon: FlutterRemix.notification_line,
           title: localization.notifications,
@@ -54,6 +57,7 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
             );
           },
         ),
+        //! Language
         ProfileSettingsTileWg(
           leadingIcon: FlutterRemix.earth_line,
           title: localization.appLanguage,
@@ -64,6 +68,7 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
             );
           },
         ),
+        //! Tickets
         ProfileSettingsTileWg(
           leadingIcon: FlutterRemix.message_2_line,
           title: localization.tickets,
@@ -75,24 +80,26 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
             );
           },
         ),
+        //! FAQ
         ProfileSettingsTileWg(
           leadingIcon: IconlyLight.info_square,
           title: localization.frQuestions,
           onTap: () {},
         ),
+
+        //! Active devices
         ProfileSettingsTileWg(
-          leadingIcon: FlutterRemix.fingerprint_line,
-          title: localization.bioAuth,
-          trailingIcon: DotSwitch(
-            value: biometrickSwitchState,
-            onChanged: (bool newSwitchState) {
-              setState(() {
-                biometrickSwitchState = newSwitchState;
-              });
-            },
-          ),
-          onTap: () {},
+          leadingIcon: FlutterRemix.device_line,
+          title: 'Aktiv qurilmalar',
+          onTap: () {
+            openMiniAppSheetFamily(
+              context,
+              child: ActiveDevicesComponent(),
+              showHandler: false,
+            );
+          },
         ),
+        //! Log out
         ProfileSettingsTileWg(
           leadingIcon: FlutterRemix.logout_box_r_line,
           title: localization.leaveAccount,

@@ -56,20 +56,26 @@ import 'package:my_template/features/main_app/home/data/repo/home_repo_impl.dart
 import 'package:my_template/features/main_app/home/data/source/impl_remote_data_source/home_remote_data_source_impl.dart';
 import 'package:my_template/features/main_app/home/data/source/remote_data_source/home_remote_data_source.dart';
 import 'package:my_template/features/main_app/home/domain/repository/home_repository.dart';
+import 'package:my_template/features/main_app/home/domain/usecase/active_devices/active_devices_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/avatar/avatar_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/courses/courses_use_case.dart';
+import 'package:my_template/features/main_app/home/domain/usecase/delete_devices/all_devices/delete_all_devices_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/face_rec/face_rec_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/face_rec/get_my_id_session_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/banner/get_active_banners_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/get_countries_use_case.dart';
+import 'package:my_template/features/main_app/home/domain/usecase/notifications/notif_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/register_not_resident_use_case.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/active_device/active_devices_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/banner/banner_bloc.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/user_me/user_me_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/search_courses/search_courses_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/search_courses/search_courses_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/avatar/avatar_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/delete_active_devices/all/delete_all_devices_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/notifications/notif_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/course_lesson_test/get_lesson_tests_usecase.dart';
@@ -89,6 +95,7 @@ import 'package:my_template/features/mikro_data/data/source/remote_data_source/m
 import 'package:my_template/features/mikro_data/domain/repository/micro_repository.dart';
 import 'package:my_template/features/mikro_data/domain/usecase/data_requests/add_request_use_cases.dart';
 import 'package:my_template/features/mikro_data/domain/usecase/data_requests/data_requests_use_case.dart';
+import 'package:my_template/features/mikro_data/domain/usecase/report_files/report_files_use_case.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/add_data_request/add_data_request_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/data_request_processes/data_request_processes_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_categories/micro_data_categories_bloc.dart';
@@ -96,6 +103,7 @@ import 'package:my_template/features/mikro_data/presentation/bloc/regions/region
 import 'package:my_template/features/mikro_data/domain/usecase/reports/get_report_options_use_case.dart';
 import 'package:my_template/features/mikro_data/domain/usecase/reports/reports_use_case.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/data_requests/data_requests_bloc.dart';
+import 'package:my_template/features/mikro_data/presentation/bloc/report_files/report_files_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/report_options_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/add_comment/add_comment_use_case.dart';
@@ -387,6 +395,14 @@ Future<void> setup() async {
 
   /// Reviewer Auth
   sl.registerLazySingleton(() => ReviewerLoginUseCase(repository: sl()));
+  //? Report Files
+  sl.registerLazySingleton(() => ReportFilesUseCase(repository: sl()));
+  //? Notifications
+  sl.registerLazySingleton(() => NotifUseCase(repository: sl()));
+  //? Active Devices
+  sl.registerLazySingleton(() => ActiveDevicesUseCase(repository: sl()));
+  //? Delete
+  sl.registerLazySingleton(() => DeleteAllDevicesUseCase(repository: sl()));
 
   //! {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -511,4 +527,12 @@ Future<void> setup() async {
 
   //? Reviewer Auth
   sl.registerFactory(() => ReviewerLoginBloc(useCase: sl()));
+  //? Report Files
+  sl.registerFactory(() => ReportFilesBloc(useCase: sl()));
+  //? Notifications
+  sl.registerFactory(() => NotifBloc(useCase: sl()));
+  //? Active Devices
+  sl.registerFactory(() => ActiveDevicesBloc(useCase: sl()));
+  //? Delete
+  sl.registerFactory(() => DeleteAllDevicesBloc(useCase: sl()));
 }

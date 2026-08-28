@@ -16,6 +16,7 @@ import 'package:my_template/core/utils/widgets/active_books/active_books_with_bl
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/core/utils/widgets/user_articles_with_bloc/user_articles_with_bloc_wg.dart';
 import 'package:my_template/core/utils/widgets/user_requests_with_bloc/user_requests_with_bloc_wg.dart';
+import 'package:my_template/features/main_app/home/presentation/screens/notifications/notifications_page.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/micro_data_requets.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/show_all_courses_bottom_sheet_page.dart';
@@ -431,7 +432,13 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
               centerTitle: true,
               actions: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    openMiniAppSheetFamily(
+                      context,
+                      child: NotificationsPage(),
+                      showHandler: false,
+                    );
+                  },
                   icon: Icon(FlutterRemix.notification_2_line),
                 ),
               ],

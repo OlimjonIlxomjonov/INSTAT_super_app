@@ -43,19 +43,10 @@ class _UserRequestsSliver extends StatelessWidget {
           final data = state.response.data;
 
           if (data.isEmpty) {
-            return SliverSafeArea(
-              sliver: SliverToBoxAdapter(
-                child: AppEmptyState(
-                  title: localization.noRequestsTitle,
-                  subtitle: localization.noRequestsSubtitle,
-                  buttonLabel: localization.submitRequest,
-                  onAction: () => openMiniAppSheetFamily(
-                    context,
-                    child: const AddDataRequestPage(),
-                    enableDrag: false,
-                    showHandler: false,
-                  ),
-                ),
+            return SliverToBoxAdapter(
+              child: AppEmptyState(
+                title: localization.noRequestsTitle,
+                subtitle: localization.noRequestsSubtitle,
               ),
             );
           }

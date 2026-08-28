@@ -18,11 +18,15 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_final_test/course_final_test_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/lesson_video_progress/lesson_video_progress_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/active_device/active_devices_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/avatar/avatar_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/banner/banner_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/delete_active_devices/all/delete_all_devices_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/notifications/notif_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
+import 'package:my_template/features/mikro_data/presentation/bloc/report_files/report_files_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/add_comment/add_comments_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart';
@@ -144,6 +148,16 @@ class MyBlocProvider extends StatelessWidget {
         BlocProvider<UserBookBloc>(create: (_) => sl<UserBookBloc>()),
         //! Saved (liked) books
         BlocProvider<SavedBooksBloc>(create: (_) => sl<SavedBooksBloc>()),
+        //! Report Files
+        BlocProvider<ReportFilesBloc>(create: (_) => sl<ReportFilesBloc>()),
+        //! Notifications
+        BlocProvider<NotifBloc>(create: (_) => sl<NotifBloc>()),
+        //! Active Devices
+        BlocProvider<ActiveDevicesBloc>(create: (_) => sl<ActiveDevicesBloc>()),
+        //! Delete
+        BlocProvider<DeleteAllDevicesBloc>(
+          create: (_) => sl<DeleteAllDevicesBloc>(),
+        ),
       ],
       child: child,
     );

@@ -2,12 +2,6 @@ import 'dart:io';
 
 import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_request_category_entity.dart';
 
-/// `POST data-requests/` va `PUT data-requests/{id}/` uchun payload.
-///
-/// Diqqat, backend ikkita noodatiy talab qo'yadi:
-///  * `region`/`district` — **kod** (string), id emas: "1703", "1703203";
-///  * `category` — **to'liq nested obyekt**. Faqat id yuborilsa
-///    `{"category": {"name": ["This field is required."]}}` qaytadi.
 class DataRequestParams {
   final int? id;
   final String fullName;
@@ -47,8 +41,6 @@ class DataRequestParams {
   }
 
   Map<String, dynamic> toJson() {
-    // `id` schema'da readOnly va PUT'da URL orqali beriladi — payload'ga
-    // qo'shilmaydi.
     return {
       'full_name': fullName,
       'company_name': companyName,
@@ -74,4 +66,11 @@ class UploadDataRequestFileParams {
     required this.requestId,
     required this.file,
   });
+}
+
+//! Report Data Params
+class ReportFilesParams {
+  final int reportId;
+
+  ReportFilesParams({required this.reportId});
 }

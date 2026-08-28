@@ -31,10 +31,10 @@ class _MainAppDrawerState extends State<MainAppDrawer> {
           // child: Responsive(
           //   mobile: CustomScrollView(
           //     slivers: [
-          //       /// USER AVATAR
+          ///       /// USER AVATAR
           //       SliverToBoxAdapter(child: UserAvatarComponent()),
           //
-          //       /// SETTINGS
+          ///      /// SETTINGS
           //       SliverToBoxAdapter(child: UserSettingsComponent()),
           //     ],
           //   ),

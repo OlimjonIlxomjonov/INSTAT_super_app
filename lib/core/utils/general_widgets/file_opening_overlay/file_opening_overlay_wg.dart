@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 
-/// A reusable full-screen overlay that blocks interaction while a file
-/// is being downloaded and opened. Works as a Stack child.
-///
-/// Usage: wrap your page body in a [Stack] and conditionally show this widget
 /// using a [ValueListenableBuilder] or [BlocBuilder].
 class FileOpeningOverlayWg extends StatelessWidget {
   final String title;
@@ -28,10 +24,7 @@ class FileOpeningOverlayWg extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 28,
-              vertical: 24,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

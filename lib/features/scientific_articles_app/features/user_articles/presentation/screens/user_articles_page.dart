@@ -109,9 +109,6 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
         },
         child: CustomScrollView(
           controller: _scrollController,
-          // Kontent ekranga sig'ib qolsa standart physics drag'ni qabul
-          // qilmaydi va u bottom sheet'ga o'tib, sheet yopilib ketadi.
-          // 1-2 ta element bo'lganda ham scroll o'ziniki bo'lishi kerak.
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             /// search bar

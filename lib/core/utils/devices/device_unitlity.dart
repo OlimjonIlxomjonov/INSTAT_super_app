@@ -115,3 +115,55 @@ extension StringExtension on String {
     return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
   }
 }
+
+extension NotificationDateExtension on String {
+  String toNotificationDateTime() {
+    final DateTime dateTime = DateTime.parse(this);
+    final String time =
+        '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+
+    final DateTime now = DateTime.now();
+    final DateTime dateOnly = DateTime(
+      dateTime.year,
+      dateTime.month,
+      dateTime.day,
+    );
+    final DateTime today = DateTime(now.year, now.month, now.day);
+    final DateTime yesterday = today.subtract(const Duration(days: 1));
+
+    if (dateOnly == today) {
+      return 'Bugun $time';
+    } else if (dateOnly == yesterday) {
+      return 'Kecha $time';
+    } else {
+      return '${toReadableDateWithoutTime()} $time';
+    }
+  }
+}
+
+extension LastSeenExtension on String {
+  String toLastSeenText() {
+    final DateTime dateTime = DateTime.parse(this);
+    final DateTime now = DateTime.now();
+    final Duration diff = now.difference(dateTime);
+
+    if (diff.inSeconds < 60) {
+      return 'Hozirgina';
+    } else if (diff.inMinutes < 60) {
+      return '${diff.inMinutes} daqiqa oldin';
+    } else if (diff.inHours < 24) {
+      return '${diff.inHours} soat oldin';
+    } else if (diff.inDays < 7) {
+      return '${diff.inDays} kun oldin';
+    } else if (diff.inDays < 30) {
+      final weeks = (diff.inDays / 7).floor();
+      return '$weeks hafta oldin';
+    } else if (diff.inDays < 365) {
+      final months = (diff.inDays / 30).floor();
+      return '$months oy oldin';
+    } else {
+      final years = (diff.inDays / 365).floor();
+      return '$years yil oldin';
+    }
+  }
+}

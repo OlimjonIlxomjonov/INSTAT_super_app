@@ -40,11 +40,11 @@ class _ReviewerLogInPageState extends State<ReviewerLogInPage> {
   void _onLoginPressed(BuildContext context) {
     if (_formKey.currentState?.validate() ?? false) {
       context.read<ReviewerLoginBloc>().add(
-            SubmitReviewerLoginEvent(
-              username: _usernameController.text.trim(),
-              password: _passwordController.text,
-            ),
-          );
+        SubmitReviewerLoginEvent(
+          username: _usernameController.text.trim(),
+          password: _passwordController.text,
+        ),
+      );
     }
   }
 
@@ -76,7 +76,10 @@ class _ReviewerLogInPageState extends State<ReviewerLogInPage> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CustomAppBarWg(myTitle: 'Reviewer Log in', showArrow: true),
+                          CustomAppBarWg(
+                            myTitle: 'Reviewer Log in',
+                            showArrow: true,
+                          ),
                           const SizedBox(height: 30),
                           TextFormField(
                             controller: _usernameController,
@@ -91,11 +94,15 @@ class _ReviewerLogInPageState extends State<ReviewerLogInPage> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(color: AppColors.primaryColor),
+                                borderSide: BorderSide(
+                                  color: AppColors.primaryColor,
+                                ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(color: AppColors.greyScale.grey400),
+                                borderSide: BorderSide(
+                                  color: AppColors.greyScale.grey400,
+                                ),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
@@ -141,11 +148,15 @@ class _ReviewerLogInPageState extends State<ReviewerLogInPage> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(color: AppColors.primaryColor),
+                                borderSide: BorderSide(
+                                  color: AppColors.primaryColor,
+                                ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(color: AppColors.greyScale.grey400),
+                                borderSide: BorderSide(
+                                  color: AppColors.greyScale.grey400,
+                                ),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
@@ -174,7 +185,9 @@ class _ReviewerLogInPageState extends State<ReviewerLogInPage> {
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
-                              onPressed: isLoading ? null : () => _onLoginPressed(context),
+                              onPressed: isLoading
+                                  ? null
+                                  : () => _onLoginPressed(context),
                               child: isLoading
                                   ? const SizedBox(
                                       height: 24,

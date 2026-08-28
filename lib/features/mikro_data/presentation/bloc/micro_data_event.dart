@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:my_template/core/common/params/micro_data_params/data_request_params.dart';
 import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_request_category_entity.dart';
 import 'package:my_template/features/mikro_data/domain/entity/regions/region_entity.dart';
 
@@ -125,4 +126,11 @@ class DataRequestsEvent extends MicroDataEvent {
     this.page = 1,
     this.isLoadMore = false,
   });
+}
+
+//! Report files
+class ReportFilesEvent extends MicroDataEvent {
+  final ReportFilesParams params;
+
+  ReportFilesEvent({required this.params});
 }

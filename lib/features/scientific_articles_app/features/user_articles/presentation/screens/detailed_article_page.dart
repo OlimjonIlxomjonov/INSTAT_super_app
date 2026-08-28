@@ -102,7 +102,6 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
 
     try {
       final tempDir = await getTemporaryDirectory();
-      // Extract the file name from the URL path
       final fileName = Uri.parse(url).pathSegments.last;
       final savePath = '${tempDir.path}/$fileName';
 

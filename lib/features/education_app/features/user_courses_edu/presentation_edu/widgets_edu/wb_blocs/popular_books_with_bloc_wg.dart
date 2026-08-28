@@ -36,7 +36,6 @@ class PopularBooksWithBlocWg extends StatelessWidget {
               itemCount: data.length,
               itemBuilder: (context, index) {
                 final book = data[index];
-                logger.f(book.orderCount);
                 final average = book.commentCount == 0
                     ? 0.0
                     : book.starsSum / book.commentCount;

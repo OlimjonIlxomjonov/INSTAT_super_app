@@ -4,6 +4,7 @@ import 'package:my_template/features/mikro_data/data/model/data_requests/data_re
 import 'package:my_template/features/mikro_data/data/model/data_requests/data_request_process_model.dart';
 import 'package:my_template/features/mikro_data/data/model/data_requests/data_requests_response_model.dart';
 import 'package:my_template/features/mikro_data/data/model/regions/region_model.dart';
+import 'package:my_template/features/mikro_data/data/model/report_files/report_files_model.dart';
 import 'package:my_template/features/mikro_data/data/model/reports/reports_options_model.dart';
 import 'package:my_template/features/mikro_data/data/model/reports/reports_response_model.dart';
 
@@ -26,8 +27,7 @@ abstract class MicroRemoteDataSource {
   Future<List<RegionModel>> fetchRegions();
 
   //! Add request — yozish amallari
-  /// `GET data-requests/{id}/` — flat shakl (category int, region kod).
-  /// Tahrirlash uchun aynan shu kerak, `/detail/` emas.
+
   Future<DataRequestDetailModel> fetchDataRequest(int requestId);
 
   Future<DataRequestDetailModel> createDataRequest(DataRequestParams params);
@@ -43,4 +43,8 @@ abstract class MicroRemoteDataSource {
   Future<List<DataRequestProcessModel>> fetchDataRequestProcesses(
     int requestId,
   );
+
+  Future<List<ReportFilesModel>> fetchReportFiles({
+    required ReportFilesParams params,
+  });
 }

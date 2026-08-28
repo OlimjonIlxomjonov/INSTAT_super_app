@@ -24,10 +24,7 @@ class LogOutOptionsComponent extends StatelessWidget {
             color: AppColors.redFailedTaskCard,
           ),
         ),
-        Text(
-          localization.logoutConfirmMessage,
-          style: CustomTextStyles.h4,
-        ),
+        Text(localization.logoutConfirmMessage, style: CustomTextStyles.h4),
         SizedBox(height: 25),
         SafeArea(
           child: Container(
@@ -78,8 +75,6 @@ class LogOutOptionsComponent extends StatelessWidget {
                     child: ElevatedButton.icon(
                       onPressed: () async {
                         await TokenStorageServiceImpl().deleteAccessToken();
-                        // Clear per-account cached lesson access so the
-                        // next logged-in user doesn't see stale data.
                         sl<CourseLessonItemsBloc>().add(
                           const ResetCourseLessonItemsEvent(),
                         );

@@ -69,7 +69,7 @@ class _SplashPageState extends State<SplashPage>
     } else {
       AppRoute.open(NoInternetPage(destination: destination));
     }
-    logger.f("Is internet connected: $hasInternet");
+    // logger.f("Is internet connected: $hasInternet");
   }
 
   @override

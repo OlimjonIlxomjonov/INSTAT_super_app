@@ -6,21 +6,12 @@ import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app
 import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/reports/widgets/reports_card_wg.dart';
 
-import '../../../../../core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import '../../../../../core/utils/widgets/search_bar/app_serachbar_wg.dart';
 import '../../bloc/micro_data_event.dart';
 import '../../bloc/reports/reports_bloc.dart';
 
 class ReportsPage extends StatelessWidget {
   const ReportsPage({super.key});
-
-  static const List<Widget> _categories = [
-    EduCategoriesWg(),
-    EduCategoriesWg(),
-    EduCategoriesWg(),
-    EduCategoriesWg(),
-    EduCategoriesWg(),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -49,14 +40,6 @@ class ReportsPage extends StatelessWidget {
               automaticallyImplyLeading: false,
               titleSpacing: 20,
               title: AppSearchbarWg(onTap: () {}),
-            ),
-            //! Categories
-            SliverToBoxAdapter(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.only(right: 20),
-                scrollDirection: Axis.horizontal,
-                child: Row(children: _categories),
-              ),
             ),
             //! Data
             const ReportsCardWg(),

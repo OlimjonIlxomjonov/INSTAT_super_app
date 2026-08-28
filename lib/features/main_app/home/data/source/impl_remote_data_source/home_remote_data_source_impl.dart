@@ -8,10 +8,13 @@ import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/courses/course_list_response_model.dart';
+import 'package:my_template/features/main_app/home/data/model/active_devices/active_devices_model.dart';
 import 'package:my_template/features/main_app/home/data/model/banner/banner_model.dart';
 import 'package:my_template/features/main_app/home/data/model/country/country_model.dart';
+import 'package:my_template/features/main_app/home/data/model/notifications/notif_response_model.dart';
 import 'package:my_template/features/main_app/home/data/model/user_me/user_model.dart';
 import 'package:my_template/features/main_app/home/data/source/remote_data_source/home_remote_data_source.dart';
+import 'package:my_template/features/main_app/home/domain/entity/active_devices/active_devices.dart';
 import 'package:path_provider/path_provider.dart';
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
@@ -268,9 +271,6 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
     } on DioException catch (e) {
       logger.e(e);
 
-      // Surfaces backend field-level validation errors (e.g. passport
-      // number already registered) as a typed exception so the UI can show
-      // the exact message under the right field instead of a generic one.
       final errorBody = e.response?.data;
       if (errorBody is Map && errorBody['error'] is Map) {
         final error = errorBody['error'] as Map;
@@ -294,6 +294,57 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       );
     } catch (e) {
       logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<NotifResponseModel> fetchNotif({required NotifParams params}) async {
+    try {
+      final response = await _dioClient.get("${ApiUrls.notif}${params.page}");
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return NotifResponseModel.fromJson(response.data);
+      } else {
+        throw Exception('EXCEPTION: ${response.statusCode}');
+      }
+    } catch (e, st) {
+      logger.e(e);
+      logger.e(st);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<ActiveDevicesModel>> fetchActiveDevices() async {
+    try {
+      final response = await _dioClient.get(ApiUrls.activeDevices);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        final data = response.data as List;
+        return data.map((e) => ActiveDevicesModel.fromJson(e)).toList();
+      } else {
+        throw Exception('EXCEPTION: ${response.statusCode}');
+      }
+    } catch (e, st) {
+      logger.e(e);
+      logger.e(st);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deleteAllDevices() async {
+    try {
+      final response = await _dioClient.delete(ApiUrls.activeDevices);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+      } else {
+        throw Exception('EXCEPTION: ${response.statusCode}');
+      }
+    } catch (e, st) {
+      logger.e(e);
+      logger.e(st);
       rethrow;
     }
   }

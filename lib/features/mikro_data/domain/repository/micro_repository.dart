@@ -4,6 +4,7 @@ import 'package:my_template/features/mikro_data/domain/entity/data_requests/data
 import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_request_process_entity.dart';
 import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_requests_response.dart';
 import 'package:my_template/features/mikro_data/domain/entity/regions/region_entity.dart';
+import 'package:my_template/features/mikro_data/domain/entity/report_files/report_files_entity.dart';
 import 'package:my_template/features/mikro_data/domain/entity/reports/reports_options_entity.dart';
 import 'package:my_template/features/mikro_data/domain/entity/reports/reports_response.dart';
 
@@ -39,4 +40,7 @@ abstract class MicroRepository {
   Future<void> sendDataRequest(int requestId);
 
   Future<List<DataRequestProcessEntity>> getDataRequestProcesses(int requestId);
+
+  //! Report files
+  Future<List<ReportFilesEntity>> getReportFiles({required ReportFilesParams params});
 }

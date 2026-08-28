@@ -6,3 +6,4 @@ export 'constants/textstyles/app_text_style.dart';
 export 'responsiveness/responsive.dart';
 export 'enums/app_enums.dart';
 export 'general_widgets/mini_app_home_header/mini_app_home_header_wg.dart';
+export 'package:flutter_remix/flutter_remix.dart';

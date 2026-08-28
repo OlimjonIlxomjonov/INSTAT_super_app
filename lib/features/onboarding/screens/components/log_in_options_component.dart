@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -12,10 +13,13 @@ import 'package:my_template/core/services/token_storage/token_storage_service_im
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:my_template/features/auth/presentation/auth_service/auth_service.dart';
 import 'package:my_template/features/auth/presentation/auth_service/google_auth_service.dart';
+import 'package:my_template/features/auth/presentation/auth_service/qr_auth_service.dart';
 import 'package:my_template/features/auth/presentation/data_source/one_id_log_in.dart';
+import 'package:my_template/features/auth/presentation/screens/qr_login_scanner_page.dart';
 import 'package:my_template/features/auth/presentation/screens/reviewer_screen/reviwer_log_in_page.dart';
 import 'package:my_template/features/auth/presentation/widgets/continue_with_options.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/home_page.dart';
@@ -30,6 +34,7 @@ class LogInOptionsComponent extends StatefulWidget {
 class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
   late final double screenHeight;
   bool _isGoogleLoading = false;
+  bool _isQrLoading = false;
 
   @override
   void initState() {
@@ -182,6 +187,56 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
   //   }
   // }
 
+  Future<void> _handleQrScan() async {
+    if (_isQrLoading) return;
+
+    final status = await Permission.camera.request();
+    if (status.isDenied || status.isPermanentlyDenied) {
+      if (mounted) {
+        errorFlushBar(context, 'Kameraga ruxsat berilmadi');
+      }
+      return;
+    }
+    if (!mounted) return;
+
+    final scannedCode = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(builder: (_) => const QrLoginScannerPage()),
+    );
+
+    if (scannedCode != null && scannedCode.isNotEmpty) {
+      await _performQrLogin(scannedCode);
+    }
+  }
+
+  Future<void> _performQrLogin(String rawQrData) async {
+    setState(() {
+      _isQrLoading = true;
+    });
+
+    try {
+      await QrAuthServiceImpl(
+        tokenStorage: TokenStorageServiceImpl(),
+        dioClient: DioClient(),
+      ).loginWithQr(rawQrData);
+
+      if (!mounted) return;
+      AppRoute.open(const HomePage());
+    } catch (e) {
+      logger.e('QR login failed', error: e);
+      if (mounted) {
+        final msg = e.toString().replaceAll('Exception: ', '');
+        errorFlushBar(context, msg);
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isQrLoading = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
@@ -199,7 +254,50 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
   Widget _buildMobile(AppLocalizations localization) {
     return Stack(
       children: [
-        /// CONTENT
+        //! TEMP QR BUTTON
+        Positioned(
+          right: 10,
+          top: 0,
+          child: SafeArea(
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.transparent,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.18),
+                    blurRadius: 12,
+                    spreadRadius: 1,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: IconButton(
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shape: const CircleBorder(),
+                ),
+                onPressed: _isQrLoading ? null : _handleQrScan,
+                icon: _isQrLoading
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Icon(
+                        FlutterRemix.qr_scan_2_line,
+                        size: 25,
+                        color: Colors.white,
+                      ),
+              ),
+            ),
+          ),
+        ),
+
+        /// image / content
         Align(
           alignment: .bottomCenter,
           child: Column(

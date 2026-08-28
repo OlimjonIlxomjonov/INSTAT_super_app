@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
@@ -11,6 +13,8 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import '../../../../../../../core/utils/constants/api_urls/api_urls.dart';
 import '../../../../../../../core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import '../../../../../../../core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
+import '../../bloc/popular_books/popular_books_bloc.dart';
+import '../../bloc/popular_books/popular_books_event.dart';
 
 class SimilarOnlineBooksComponent extends StatelessWidget {
   final List<BookEntity> data;
@@ -65,6 +69,9 @@ class SimilarOnlineBooksComponent extends StatelessWidget {
               itemCount: data.length,
               itemBuilder: (context, index) {
                 final book = data[index];
+                final average = book.commentCount == 0
+                    ? 0.0
+                    : book.starsSum / book.commentCount;
                 final thumbnail = book.bookThumbnails.isNotEmpty
                     ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${book.bookThumbnails.first.file}'
                     : '';
@@ -72,7 +79,7 @@ class SimilarOnlineBooksComponent extends StatelessWidget {
                   id: book.id,
                   isSaved: book.isSaved,
                   type: BookCardType.market,
-                  rating: 5,
+                  rating: average,
                   title: book.name,
                   author: book.author.name,
                   price: "${formatPrice(book.price)} UZS",

@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
@@ -115,6 +116,7 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
     return SafeArea(
       child: Stack(
         children: [
+          //! Close Button
           Padding(
             padding: const .only(left: 8.0),
             child: IconButton(
@@ -131,6 +133,23 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
               icon: Icon(IconlyLight.arrow_left_2, size: 20),
             ),
           ),
+          //! TEMP QR BUTTON
+
+          // Positioned(
+          //   right: 10,
+          //   top: 0,
+          //   child: IconButton(
+          //     style: IconButton.styleFrom(
+          //       backgroundColor: AppColors.white,
+          //       shape: RoundedRectangleBorder(
+          //         borderRadius: .circular(50),
+          //         side: BorderSide(color: AppColors.greyScale.grey200),
+          //       ),
+          //     ),
+          //     onPressed: () {},
+          //     icon: Icon(FlutterRemix.qr_scan_2_line, size: 20),
+          //   ),
+          // ),
           Center(
             child: Column(
               crossAxisAlignment: .center,
