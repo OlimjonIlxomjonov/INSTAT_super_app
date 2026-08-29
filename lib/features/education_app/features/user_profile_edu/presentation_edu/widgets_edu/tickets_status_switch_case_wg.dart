@@ -8,7 +8,7 @@ import 'package:my_template/core/utils/enums/app_enums.dart';
 Widget ticketsStatusSwitchCase(BuildContext context, TicketStatus status) {
   final localization = AppLocalizations.of(context)!;
   switch (status) {
-    case TicketStatus.approved:
+    case TicketStatus.open:
       return Container(
         padding: .symmetric(vertical: 4, horizontal: 8),
         decoration: BoxDecoration(
@@ -24,7 +24,7 @@ Widget ticketsStatusSwitchCase(BuildContext context, TicketStatus status) {
               color: AppColors.greenDoneTaskCard,
             ),
             Text(
-              ' ${localization.statusConfirmed}',
+              ' Ochiq',
               style: AppTextStyles.source.medium(
                 fontSize: 12,
                 color: AppColors.greenDoneTaskCard,
@@ -33,7 +33,7 @@ Widget ticketsStatusSwitchCase(BuildContext context, TicketStatus status) {
           ],
         ),
       );
-    case TicketStatus.pending:
+    case TicketStatus.inProgress:
       return Container(
         padding: .symmetric(vertical: 4, horizontal: 8),
         decoration: BoxDecoration(
@@ -45,7 +45,7 @@ Widget ticketsStatusSwitchCase(BuildContext context, TicketStatus status) {
           children: [
             Icon(IconlyBold.danger, size: 20, color: AppColors.orange),
             Text(
-              ' ${localization.statusPending}',
+              ' Jarayonda',
               style: AppTextStyles.source.medium(
                 fontSize: 12,
                 color: AppColors.orange,
@@ -54,7 +54,7 @@ Widget ticketsStatusSwitchCase(BuildContext context, TicketStatus status) {
           ],
         ),
       );
-    case TicketStatus.rejected:
+    case TicketStatus.closed:
       return Container(
         padding: .symmetric(vertical: 4, horizontal: 8),
         decoration: BoxDecoration(
@@ -66,7 +66,7 @@ Widget ticketsStatusSwitchCase(BuildContext context, TicketStatus status) {
           children: [
             Icon(Icons.dangerous, size: 20, color: AppColors.redFailedTaskCard),
             Text(
-              ' ${localization.cancelledBrief}',
+              ' Yopiq',
               style: AppTextStyles.source.medium(
                 fontSize: 12,
                 color: AppColors.redFailedTaskCard,

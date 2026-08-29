@@ -70,7 +70,7 @@ class ActiveDevicesWg extends StatelessWidget {
           ),
           const SizedBox(width: 10),
           //! Close
-          Icon(Icons.close, color: AppColors.greyScale.grey700, size: 20),
+          // Icon(Icons.close, color: AppColors.greyScale.grey700, size: 20),
         ],
       ),
     );

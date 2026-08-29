@@ -68,4 +68,6 @@ abstract class UserArticlesRemoteDataSource {
   Future<ReviewFilesModel> postReviewFile({
     required AddReviewFileParams params,
   });
+
+  Future<List<ArticleProcessModel>> fetchReviewProcess();
 }

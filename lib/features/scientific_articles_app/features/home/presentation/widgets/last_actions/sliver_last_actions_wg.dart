@@ -4,14 +4,17 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 
 class SliverLastActionsWg extends StatelessWidget {
   final List<ArticleProcessEntity> items;
+  final int? limit;
 
-  const SliverLastActionsWg({super.key, required this.items});
+  const SliverLastActionsWg({super.key, required this.items, this.limit});
 
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
       padding: .only(bottom: 20),
-      sliver: SliverToBoxAdapter(child: LastActionsCard(items: items)),
+      sliver: SliverToBoxAdapter(
+        child: LastActionsCard(items: items, limit: limit),
+      ),
     );
   }
 }

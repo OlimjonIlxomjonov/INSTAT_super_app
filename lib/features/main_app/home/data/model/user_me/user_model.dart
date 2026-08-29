@@ -28,8 +28,7 @@ class UserModel extends UserEntity {
           .toList(),
       isSuperuser: json['is_superuser'] ?? false,
       isVerified: json['is_verified'] ?? false,
-      // Defaults to true (not blocked) if the backend ever omits this field,
-      // so a missing field fails open rather than locking everyone out.
+
       isResident: json['is_resident'] ?? true,
     );
   }

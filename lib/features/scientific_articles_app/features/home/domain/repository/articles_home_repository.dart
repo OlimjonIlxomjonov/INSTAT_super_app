@@ -44,9 +44,6 @@ abstract class ArticlesHomeRepository {
 
   Future<ReviewDetailEntity> updateReview(ReviewParams params);
 
-  //! Submitting for review is a payment action on the backend — this is
-  //! what actually transitions status away from draft and creates the
-  //! process log entry (the plain create/update calls above never do).
   Future<ArticleOrderPaymentEntity> createArticleOrder({
     required CreateArticleOrderParams params,
   });
@@ -74,5 +71,5 @@ abstract class ArticlesHomeRepository {
     required AddReviewFileParams params,
   });
 
-  //! search articles
+  Future<List<ArticleProcessEntity>> getReviewProcess();
 }

@@ -198,3 +198,14 @@ class NotifParams {
 
   const NotifParams({this.page = 1});
 }
+
+//! Tickets
+class ShowTicketsParams {
+  final String status, search, page;
+
+  ShowTicketsParams({
+    required this.status,
+    required this.search,
+    required this.page,
+  });
+}

@@ -9,14 +9,18 @@ import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/core/utils/widgets/user_articles_with_bloc/user_articles_with_bloc_wg.dart';
 import 'package:my_template/features/scientific_articles_app/dummy_data_source/home_brief_info_card_source.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_process/review_process_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_process/review_process_state.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/screens/detailed_last_actions_page.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/sliver_brief_cards_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/user_articles_page.dart';
 
+import '../../../../../../core/common/ui_states/app_empty_state.dart';
 import '../../../../../../core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 import '../widgets/last_actions/sliver_last_actions_wg.dart';
 
-class ArticlesHomePage extends StatelessWidget {
+class ArticlesHomePage extends StatefulWidget {
   final VoidCallback onProfileTap, toArticlesPage;
 
   const ArticlesHomePage({
@@ -24,6 +28,17 @@ class ArticlesHomePage extends StatelessWidget {
     required this.onProfileTap,
     required this.toArticlesPage,
   });
+
+  @override
+  State<ArticlesHomePage> createState() => _ArticlesHomePageState();
+}
+
+class _ArticlesHomePageState extends State<ArticlesHomePage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ReviewProcessBloc>().add(ReviewProcessEvent());
+  }
 
   void _openUserArticlesPage(BuildContext context) {
     openMiniAppSheetFamily(
@@ -52,7 +67,7 @@ class ArticlesHomePage extends StatelessWidget {
               automaticallyImplyLeading: false,
               titleSpacing: 0,
               title: SheetDragAreaWg(
-                child: DraggableAppBarWg(onProfileTap: onProfileTap),
+                child: DraggableAppBarWg(onProfileTap: widget.onProfileTap),
               ),
             ),
 
@@ -89,17 +104,40 @@ class ArticlesHomePage extends StatelessWidget {
             const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
             /// SEE ALL LAST ACTIONS
-            // SliverPadding(
-            //   padding: AppPadding.horizontal20x(),
-            //   sliver: SliverToBoxAdapter(
-            //     child: ExtendSectionSeeAllWg(
-            //       title: 'Ohirgi harakatlar',
-            //       onTap: () {},
-            //     ),
-            //   ),
-            // ),
+            SliverPadding(
+              padding: AppPadding.horizontal20x(),
+              sliver: SliverToBoxAdapter(
+                child: ExtendSectionSeeAllWg(
+                  title: 'Ohirgi harakatlar',
+                  onTap: () {
+                    openMiniAppSheetFamily(
+                      showHandler: false,
+                      context,
+                      child: DetailedLastActionsPage(),
+                    );
+                  },
+                ),
+              ),
+            ),
 
             /// LAST ACTIONS
+            BlocBuilder<ReviewProcessBloc, ReviewProcessState>(
+              builder: (context, state) {
+                if (state is ReviewProcessLoaded) {
+                  if (state.listEntity.isEmpty) {
+                    return SliverToBoxAdapter(
+                      child: AppEmptyState(
+                        title: 'Navbat bo‘sh',
+                        subtitle:
+                            'Jarayonni boshlash uchun birinchi arizangizni yuboring.',
+                      ),
+                    );
+                  }
+                  return SliverLastActionsWg(items: state.listEntity, limit: 3);
+                }
+                return SliverToBoxAdapter(child: SizedBox.shrink());
+              },
+            ),
             // SliverLastActionsWg(items: lastActions),
           ],
         ),

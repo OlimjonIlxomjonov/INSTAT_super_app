@@ -5,11 +5,16 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 
 class LastActionsCard extends StatelessWidget {
   final List<ArticleProcessEntity> items;
+  final int? limit;
 
-  const LastActionsCard({super.key, required this.items});
+  const LastActionsCard({super.key, required this.items, this.limit});
 
   @override
   Widget build(BuildContext context) {
+    final displayItems = (limit != null && limit! < items.length)
+        ? items.sublist(0, limit)
+        : items;
+
     return Container(
       margin: AppPadding.horizontal20x(),
       decoration: BoxDecoration(
@@ -18,7 +23,7 @@ class LastActionsCard extends StatelessWidget {
       ),
       child: Column(
         children: List.generate(
-          items.length,
+          displayItems.length,
           (index) => LastActionItem(
             item: items[index],
             isLast: index == items.length - 1,

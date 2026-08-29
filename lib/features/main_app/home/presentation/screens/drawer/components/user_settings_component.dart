@@ -92,10 +92,11 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
           leadingIcon: FlutterRemix.device_line,
           title: 'Aktiv qurilmalar',
           onTap: () {
-            openMiniAppSheetFamily(
+            subBottomSheetOpener(
               context,
               child: ActiveDevicesComponent(),
-              showHandler: false,
+              isExpanded: true,
+              showContainer: false,
             );
           },
         ),

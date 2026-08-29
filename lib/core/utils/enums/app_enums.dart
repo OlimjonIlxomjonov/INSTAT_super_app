@@ -2,7 +2,7 @@ enum CoursesLayout { grid, list }
 
 enum CalendarLayout { month, week }
 
-enum TicketStatus { approved, rejected, pending }
+enum TicketStatus { open, inProgress, closed }
 
 enum BookCardType { bought, market, library }
 

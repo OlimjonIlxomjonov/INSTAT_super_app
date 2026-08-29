@@ -195,3 +195,5 @@ class UpdateReviewAuthorEvent extends ArticlesHomeEvent {
 
   UpdateReviewAuthorEvent({required this.author, this.onSuccess, this.onError});
 }
+
+class ReviewProcessEvent extends ArticlesHomeEvent {}

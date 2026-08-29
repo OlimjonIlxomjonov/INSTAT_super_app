@@ -27,3 +27,10 @@ class SimilarCoursesEvent extends HomeEduEvent {
 
   SimilarCoursesEvent({required this.params});
 }
+
+//! Tickets
+class ShowTicketsEvent extends HomeEduEvent {
+  final ShowTicketsParams params;
+
+  ShowTicketsEvent({required this.params});
+}

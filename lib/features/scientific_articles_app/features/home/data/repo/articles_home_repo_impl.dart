@@ -138,4 +138,9 @@ class ArticlesHomeRepoImpl implements ArticlesHomeRepository {
   }) {
     return remoteDataSource.postReviewFile(params: params);
   }
+
+  @override
+  Future<List<ArticleProcessEntity>> getReviewProcess() {
+    return remoteDataSource.fetchReviewProcess();
+  }
 }

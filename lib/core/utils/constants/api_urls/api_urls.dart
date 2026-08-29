@@ -139,10 +139,15 @@ class ApiUrls {
   static String reportFiles(int reportId) => 'data-reports/$reportId/files/';
 
   //? Notifications
-  static String notif = 'notifications/?page=';
+  static const String notif = 'notifications/?page=';
 
   //? Active Devices // DELETE TOO
-  static String activeDevices = 'devices';
-  //? delete all active devices
-  // static String deleteAllActiveDevices ='';
+  static const String activeDevices = 'devices';
+
+  //! Tickets
+  static String showTickets(String status, String search, String page) =>
+      'tickets/?status=$status&search=$search&page=$page';
+
+  //? Review process
+  static const String reviewProcess = 'reviews/items/all-processes';
 }

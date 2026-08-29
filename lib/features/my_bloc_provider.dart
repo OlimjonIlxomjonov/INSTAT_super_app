@@ -4,6 +4,7 @@ import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/comments/comments_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/per_course/per_course_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/similar_courses/similar_courses_bloc.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/tickets/show_ticktes/show_tickets_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/user_certificate/certificate_bloc.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/bloc/leader_board/leader_board_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/about_course_features/about_cours_features_bloc.dart';
@@ -46,6 +47,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_editions/article_editions_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_process/article_process_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_files/review_files_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_process/review_process_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_authors/review_authors_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_detail/review_detail_bloc.dart';
@@ -158,6 +160,10 @@ class MyBlocProvider extends StatelessWidget {
         BlocProvider<DeleteAllDevicesBloc>(
           create: (_) => sl<DeleteAllDevicesBloc>(),
         ),
+        //! Tickets
+        BlocProvider<ShowTicketsBloc>(create: (_) => sl<ShowTicketsBloc>()),
+        //! Reviews Process
+        BlocProvider<ReviewProcessBloc>(create: (_) => sl<ReviewProcessBloc>()),
       ],
       child: child,
     );

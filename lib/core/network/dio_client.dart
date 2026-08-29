@@ -37,6 +37,8 @@ class DioClient {
           final token = TokenStorageServiceImpl().getAccessToken();
           if (token != null && token.isNotEmpty) {
             options.headers['Authorization'] = 'Bearer $token';
+          } else {
+            options.headers.remove('Authorization');
           }
           return handler.next(options);
         },
@@ -47,18 +49,11 @@ class DioClient {
           final isUnauthorized = statusCode == 401;
           final hasToken = token != null && token.isNotEmpty;
 
-          // A single failed screen load can fire off several parallel
-          // requests that all 401 at once — only react to the first one.
           if (isUnauthorized && hasToken && !_isHandlingSessionExpiry) {
             _isHandlingSessionExpiry = true;
 
             await TokenStorageServiceImpl().deleteAccessToken();
 
-            // The redirect must happen no matter what — a 401 storm can
-            // land right as the app is transitioning off the splash screen,
-            // when the navigator's context doesn't have a mounted Overlay
-            // yet. errorFlushBar throwing there must never block the actual
-            // login redirect, so it's best-effort only.
             try {
               final context = AppRoute.navigatorKey.currentContext;
               if (context != null) {
@@ -67,9 +62,7 @@ class DioClient {
                   AppLocalizations.of(context)!.sessionExpiredMessage,
                 );
               }
-            } catch (_) {
-              // Overlay not ready yet — skip the toast, redirect still happens.
-            }
+            } catch (_) {}
 
             AppRoute.open(const LogInOptionsPage());
           }
@@ -79,6 +72,10 @@ class DioClient {
       ),
     );
   }
+  void clearToken() {
+    _dio.options.headers.remove('Authorization');
+    _isHandlingSessionExpiry = false;
+  }
 
   static final DioClient _instance = DioClient._internal();
 
@@ -87,8 +84,6 @@ class DioClient {
   ///
   void setToken(String token) {
     _dio.options.headers['Authorization'] = "Bearer $token";
-    // A fresh token means a new session — the next 401 (if any) is a new
-    // problem and should be handled again.
     _isHandlingSessionExpiry = false;
   }
 

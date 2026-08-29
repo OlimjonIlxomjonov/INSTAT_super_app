@@ -442,4 +442,21 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
       rethrow;
     }
   }
+
+  @override
+  Future<List<ArticleProcessModel>> fetchReviewProcess() async {
+    try {
+      final response = await _dioClient.get(ApiUrls.reviewProcess);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        final data = response.data as List;
+        return data.map((e) => ArticleProcessModel.fromJson(e)).toList();
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
 }

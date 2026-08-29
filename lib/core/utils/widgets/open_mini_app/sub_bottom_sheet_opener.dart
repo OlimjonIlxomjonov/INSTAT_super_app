@@ -13,6 +13,7 @@ Future<void> subBottomSheetOpener(
   BuildContext context, {
   required Widget child,
   required bool isExpanded,
+  bool showContainer = true,
 }) async {
   return showModalBottomSheet(
     context: context,
@@ -27,15 +28,16 @@ Future<void> subBottomSheetOpener(
         child: Column(
           mainAxisSize: .min,
           children: [
-            Container(
-              width: 40,
-              height: 4,
-              margin: .symmetric(vertical: 20),
-              decoration: BoxDecoration(
-                color: AppColors.greyScale.grey300,
-                borderRadius: .circular(30),
+            if (showContainer)
+              Container(
+                width: 40,
+                height: 4,
+                margin: .symmetric(vertical: 20),
+                decoration: BoxDecoration(
+                  color: AppColors.greyScale.grey300,
+                  borderRadius: .circular(30),
+                ),
               ),
-            ),
             if (isExpanded)
               Expanded(
                 child: ClipRRect(borderRadius: .circular(20), child: child),

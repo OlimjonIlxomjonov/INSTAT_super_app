@@ -62,16 +62,15 @@ class MicroDataHomePage extends StatelessWidget {
           const UserRequestsWithBlocWg(limit: 3),
 
           //! User last Actions
-
-          // SliverPadding(
-          //   padding: AppPadding.horizontal20x(),
-          //   sliver: SliverToBoxAdapter(
-          //     child: ExtendSectionSeeAllWg(
-          //       title: localization.recentActions,
-          //       onTap: () {},
-          //     ),
-          //   ),
-          // ),
+          SliverPadding(
+            padding: AppPadding.horizontal20x(),
+            sliver: SliverToBoxAdapter(
+              child: ExtendSectionSeeAllWg(
+                title: localization.recentActions,
+                onTap: () {},
+              ),
+            ),
+          ),
           // SliverToBoxAdapter(
           //   child: EmptyStateStaticText(
           //     message: localization.noRecentActionsAvailable,

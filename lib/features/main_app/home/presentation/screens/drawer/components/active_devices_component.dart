@@ -17,6 +17,8 @@ import 'package:my_template/features/main_app/home/presentation/bloc/home_event.
 import 'package:my_template/features/main_app/home/presentation/widgets/active_devices/active_devices_wg.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+import '../../../../../../../core/network/dio_client.dart';
+
 class ActiveDevicesComponent extends StatefulWidget {
   const ActiveDevicesComponent({super.key});
 
@@ -92,14 +94,14 @@ class _ActiveDevicesComponentState extends State<ActiveDevicesComponent> {
         ),
         floatingActionButton:
             BlocListener<DeleteAllDevicesBloc, DeleteAllDevicesState>(
-              listener: (context, state) {
+              listener: (context, state) async {
                 if (state is DeleteAllDevicesLoaded) {
-                  // await TokenStorageServiceImpl().deleteAccessToken();
-
+                  await TokenStorageServiceImpl().deleteAccessToken();
+                  DioClient().clearToken();
                   AppRoute.open(LogInOptionsPage());
                 }
               },
-              child: ElevatedButton(
+              child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.redFailedTaskCard,
                 ),
@@ -115,7 +117,8 @@ class _ActiveDevicesComponentState extends State<ActiveDevicesComponent> {
                     },
                   );
                 },
-                child: Icon(FlutterRemix.logout_box_r_line),
+                icon: Icon(FlutterRemix.logout_box_r_line),
+                label: Text('Chiqish'),
               ),
             ),
       ),

@@ -13,10 +13,12 @@ import 'package:my_template/features/education_app/features/home_edu/domain/repo
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/comments/comments_use_case.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/per_course/per_course_use_case.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/similar_courses/similar_courses_use_caase.dart';
+import 'package:my_template/features/education_app/features/home_edu/domain/usecase/tickets/show_tickets/show_tickets_use_case.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/user_certificates/user_certificate_use_case.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/comments/comments_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/per_course/per_course_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/similar_courses/similar_courses_bloc.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/tickets/show_ticktes/show_tickets_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/user_certificate/certificate_bloc.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/data/repo/leader_board_repo_impl.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/data/source/impl_remote_data_source/leader_board_remote_data_source_impl.dart';
@@ -165,6 +167,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/domai
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/article_process/article_process_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/edition_articles/edition_articles_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_file/review_file_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_process/review_process_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/user_articles/user_articles_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_authors/review_authors_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_detail/review_detail_use_case.dart';
@@ -179,6 +182,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/edition_articles/edition_articles_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_process/article_process_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_files/review_files_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_process/review_process_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_authors/review_authors_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_detail/review_detail_bloc.dart';
@@ -403,6 +407,10 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => ActiveDevicesUseCase(repository: sl()));
   //? Delete
   sl.registerLazySingleton(() => DeleteAllDevicesUseCase(repository: sl()));
+  //? Ticktes
+  sl.registerLazySingleton(() => ShowTicketsUseCase(repository: sl()));
+  //? Review process
+  sl.registerLazySingleton(() => ReviewProcessUseCase(repository: sl()));
 
   //! {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -535,4 +543,8 @@ Future<void> setup() async {
   sl.registerFactory(() => ActiveDevicesBloc(useCase: sl()));
   //? Delete
   sl.registerFactory(() => DeleteAllDevicesBloc(useCase: sl()));
+  //? Tickets
+  sl.registerFactory(() => ShowTicketsBloc(useCase: sl()));
+  //? Review Process
+  sl.registerFactory(() => ReviewProcessBloc(useCase: sl()));
 }
