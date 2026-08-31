@@ -6,6 +6,7 @@ import 'package:my_template/features/education_app/features/home_edu/data/model/
 import 'package:my_template/features/online_library_app/features/home_lib/data/models/book/book_list_response_model.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/data/models/book/book_page_model.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/data/models/book/book_pages_count_model.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/data/models/library_stats/library_stats_model.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/data/sources/remote_data_source/home_lib_remote_data_source.dart';
 
 class HomeLibRemoteDataSourceImpl implements HomeLibRemoteDataSource {
@@ -211,8 +212,6 @@ class HomeLibRemoteDataSourceImpl implements HomeLibRemoteDataSource {
     required UpdateBookCurrentPageParams params,
   }) async {
     try {
-      // book_id is sent as a string here to match the exact shape the
-      // website already sends — the backend may be strict about it.
       final response = await _dioClient.post(
         'books/${params.bookId}/current-page/',
         data: {
@@ -222,8 +221,24 @@ class HomeLibRemoteDataSourceImpl implements HomeLibRemoteDataSource {
       );
       logger.i(response.data);
     } catch (e) {
-      // Fire-and-forget: never let a failed progress update disrupt reading.
       logger.e(e);
+    }
+  }
+
+  @override
+  Future<LibraryStatsModel> fetchLibraryStats() async {
+    try {
+      final response = await _dioClient.get(ApiUrls.libraryStats);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        final data = response.data;
+        return LibraryStatsModel.fromJson(data);
+      } else {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
     }
   }
 }

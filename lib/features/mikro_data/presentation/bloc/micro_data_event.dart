@@ -134,3 +134,10 @@ class ReportFilesEvent extends MicroDataEvent {
 
   ReportFilesEvent({required this.params});
 }
+
+//! Report variables
+class ReportVariablesEvent extends MicroDataEvent {
+  final ReportVariablesParams params;
+
+  const ReportVariablesEvent({required this.params});
+}

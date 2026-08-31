@@ -15,7 +15,6 @@ import 'package:my_template/features/mikro_data/presentation/bloc/add_data_reque
 import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_categories/micro_data_categories_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_event.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/regions/regions_bloc.dart';
-import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/page_view_screens/request_details_view.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/page_view_screens/request_personal_info_view.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/page_view_screens/request_summary_view.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_error_messages.dart';
@@ -374,7 +373,7 @@ class _AddDataRequestViewState extends State<_AddDataRequestView> {
                                 setState(() => _currentPage = index),
                             children: const [
                               RequestPersonalInfoView(),
-                              RequestDetailsView(),
+                              // RequestDetailsView(),
                               RequestSummaryView(),
                             ],
                           ),

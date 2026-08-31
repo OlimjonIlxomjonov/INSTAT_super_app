@@ -25,13 +25,16 @@ import 'package:my_template/features/main_app/home/presentation/bloc/banner/bann
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/delete_active_devices/all/delete_all_devices_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/module_category/module_category_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/notifications/notif_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/report_files/report_files_bloc.dart';
+import 'package:my_template/features/mikro_data/presentation/bloc/report_variables/report_variables_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/add_comment/add_comments_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_actions/book_actions_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_comments/book_comments_bloc.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/library_stats/library_stats_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/user_books/user_book_bloc.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/presentation_lib/bloc/buy_book/buy_book_bloc.dart';
@@ -46,6 +49,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/udk/udk_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_editions/article_editions_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_process/article_process_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_stats/article_stats_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_files/review_files_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_process/review_process_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
@@ -152,6 +156,10 @@ class MyBlocProvider extends StatelessWidget {
         BlocProvider<SavedBooksBloc>(create: (_) => sl<SavedBooksBloc>()),
         //! Report Files
         BlocProvider<ReportFilesBloc>(create: (_) => sl<ReportFilesBloc>()),
+        //! Report Variables
+        BlocProvider<ReportVariablesBloc>(
+          create: (_) => sl<ReportVariablesBloc>(),
+        ),
         //! Notifications
         BlocProvider<NotifBloc>(create: (_) => sl<NotifBloc>()),
         //! Active Devices
@@ -164,6 +172,14 @@ class MyBlocProvider extends StatelessWidget {
         BlocProvider<ShowTicketsBloc>(create: (_) => sl<ShowTicketsBloc>()),
         //! Reviews Process
         BlocProvider<ReviewProcessBloc>(create: (_) => sl<ReviewProcessBloc>()),
+        //! Module Category
+        BlocProvider<ModuleCategoryBloc>(
+          create: (_) => sl<ModuleCategoryBloc>(),
+        ),
+        //! Library stats
+        BlocProvider<LibraryStatsBloc>(create: (_) => sl<LibraryStatsBloc>()),
+        //! Article stats
+        BlocProvider<ArticleStatsBloc>(create: (_) => sl<ArticleStatsBloc>()),
       ],
       child: child,
     );

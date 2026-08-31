@@ -74,3 +74,9 @@ class ReportFilesParams {
 
   ReportFilesParams({required this.reportId});
 }
+
+class ReportVariablesParams {
+  final int reportId;
+
+  ReportVariablesParams({required this.reportId});
+}

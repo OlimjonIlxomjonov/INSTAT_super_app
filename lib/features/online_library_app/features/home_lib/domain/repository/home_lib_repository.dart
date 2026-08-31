@@ -3,6 +3,7 @@ import 'package:my_template/features/education_app/features/home_edu/domain/enti
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_list_response.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_page_entity.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_pages_count_entity.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/library_stats/library_stats_entity.dart';
 
 abstract class HomeLibRepository {
   Future<BookListResponse> getPopularBooks({int page = 1});
@@ -35,4 +36,6 @@ abstract class HomeLibRepository {
   Future<void> updateBookCurrentPage({
     required UpdateBookCurrentPageParams params,
   });
+
+  Future<LibraryStatsEntity> getLibraryStats();
 }

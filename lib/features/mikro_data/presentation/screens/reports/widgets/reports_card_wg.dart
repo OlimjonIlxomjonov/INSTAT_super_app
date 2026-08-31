@@ -195,7 +195,7 @@ class _ReportsCardWgState extends State<ReportsCardWg> {
   ) {
     final collectionMethodTitle =
         item.collectionMethod?.localizedTitle(localeCode) ?? '';
-    final locationText = item.region ?? "Respublika bo'yicha";
+    final locationText = item.formattedLocation(localeCode);
     final dateRangeText = _formatDateRange(
       item.timeCoverageFrom,
       item.timeCoverageTo,

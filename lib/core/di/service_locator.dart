@@ -66,6 +66,7 @@ import 'package:my_template/features/main_app/home/domain/usecase/face_rec/face_
 import 'package:my_template/features/main_app/home/domain/usecase/face_rec/get_my_id_session_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/banner/get_active_banners_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/get_countries_use_case.dart';
+import 'package:my_template/features/main_app/home/domain/usecase/module_category/module_category_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/notifications/notif_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/register_not_resident_use_case.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/active_device/active_devices_bloc.dart';
@@ -77,6 +78,7 @@ import 'package:my_template/features/main_app/home/presentation/bloc/avatar/avat
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/delete_active_devices/all/delete_all_devices_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/module_category/module_category_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/notifications/notif_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 
@@ -98,6 +100,7 @@ import 'package:my_template/features/mikro_data/domain/repository/micro_reposito
 import 'package:my_template/features/mikro_data/domain/usecase/data_requests/add_request_use_cases.dart';
 import 'package:my_template/features/mikro_data/domain/usecase/data_requests/data_requests_use_case.dart';
 import 'package:my_template/features/mikro_data/domain/usecase/report_files/report_files_use_case.dart';
+import 'package:my_template/features/mikro_data/domain/usecase/report_variables/report_variables_use_case.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/add_data_request/add_data_request_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/data_request_processes/data_request_processes_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_categories/micro_data_categories_bloc.dart';
@@ -106,14 +109,17 @@ import 'package:my_template/features/mikro_data/domain/usecase/reports/get_repor
 import 'package:my_template/features/mikro_data/domain/usecase/reports/reports_use_case.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/data_requests/data_requests_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/report_files/report_files_bloc.dart';
+import 'package:my_template/features/mikro_data/presentation/bloc/report_variables/report_variables_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/report_options_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/add_comment/add_comment_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/book_comments/book_comments_use_case.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/library_stats/library_stats_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/saved_books/saved_books_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/user_books/user_books_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/add_comment/add_comments_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_comments/book_comments_bloc.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/library_stats/library_stats_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/user_books/user_book_bloc.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_profile_lib/presentation_lib/bloc/saved_books/saved_books_bloc.dart';
 import 'package:my_template/features/online_library_app/features/offline_books_lib/data/repo/offline_books_repo_impl.dart';
@@ -165,6 +171,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/domai
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/udk/udk_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/article_editions/article_editions_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/article_process/article_process_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/articles_stats/articles_stats_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/edition_articles/edition_articles_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_file/review_file_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_process/review_process_use_case.dart';
@@ -179,6 +186,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/upload_review_file/upload_review_file_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/udk/udk_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_editions/article_editions_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_stats/article_stats_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/edition_articles/edition_articles_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_process/article_process_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_files/review_files_bloc.dart';
@@ -401,6 +409,8 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => ReviewerLoginUseCase(repository: sl()));
   //? Report Files
   sl.registerLazySingleton(() => ReportFilesUseCase(repository: sl()));
+  //? Report Variables
+  sl.registerLazySingleton(() => ReportVariablesUseCase(repository: sl()));
   //? Notifications
   sl.registerLazySingleton(() => NotifUseCase(repository: sl()));
   //? Active Devices
@@ -411,6 +421,12 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => ShowTicketsUseCase(repository: sl()));
   //? Review process
   sl.registerLazySingleton(() => ReviewProcessUseCase(repository: sl()));
+  //? Module Category
+  sl.registerLazySingleton(() => ModuleCategoryUseCase(repository: sl()));
+  //? Library stats
+  sl.registerLazySingleton(() => LibraryStatsUseCase(repository: sl()));
+  //? Article stats
+  sl.registerLazySingleton(() => ArticlesStatsUseCase(repository: sl()));
 
   //! {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -537,6 +553,8 @@ Future<void> setup() async {
   sl.registerFactory(() => ReviewerLoginBloc(useCase: sl()));
   //? Report Files
   sl.registerFactory(() => ReportFilesBloc(useCase: sl()));
+  //? Report Variables
+  sl.registerFactory(() => ReportVariablesBloc(useCase: sl()));
   //? Notifications
   sl.registerFactory(() => NotifBloc(useCase: sl()));
   //? Active Devices
@@ -547,4 +565,10 @@ Future<void> setup() async {
   sl.registerFactory(() => ShowTicketsBloc(useCase: sl()));
   //? Review Process
   sl.registerFactory(() => ReviewProcessBloc(useCase: sl()));
+  //? Module Category
+  sl.registerFactory(() => ModuleCategoryBloc(useCase: sl()));
+  //? Library stats
+  sl.registerFactory(() => LibraryStatsBloc(useCase: sl()));
+  //? Article stats
+  sl.registerFactory(() => ArticleStatsBloc(useCase: sl()));
 }

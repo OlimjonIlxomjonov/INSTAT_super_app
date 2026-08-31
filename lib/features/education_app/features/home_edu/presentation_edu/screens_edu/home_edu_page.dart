@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconly/iconly.dart';
+import 'package:my_template/core/utils/widgets/module_categories/module_categories_with_bloc.dart';
 import 'package:my_template/core/utils/widgets/promo_banners/promo_banners_carousel_wg.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -16,7 +18,10 @@ import 'package:my_template/features/education_app/features/home_edu/presentatio
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/widgets_edu/home_achivements_wg.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/search_courses/search_courses_bloc.dart';
 import 'package:my_template/features/education_app/widgets/active_courses_with_bloc_wg.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/module_category/module_category_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/module_category/module_category_state.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/popular_course_with_bloc/popular_with_bloc_wg.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../../../core/common/params/edu_params/params.dart';
 import '../../../../../main_app/home/presentation/bloc/courses/courses_bloc.dart';
@@ -51,14 +56,6 @@ class HomeEduPage extends StatelessWidget {
       ),
     );
   }
-
-  static const List<Widget> _categories = [
-    EduCategoriesWg(),
-    EduCategoriesWg(),
-    EduCategoriesWg(),
-    EduCategoriesWg(),
-    EduCategoriesWg(),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -106,10 +103,8 @@ class HomeEduPage extends StatelessWidget {
 
             /// SELECT CATEGORIES
             SliverToBoxAdapter(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.only(right: 20),
-                scrollDirection: Axis.horizontal,
-                child: Row(children: _categories),
+              child: ModuleCategoriesWithBlocWg(
+                categoryType: 'online-education',
               ),
             ),
 

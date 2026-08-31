@@ -10,7 +10,7 @@ class ReviewProcessBloc extends Bloc<ArticlesHomeEvent, ReviewProcessState> {
     on<ReviewProcessEvent>((event, emit) async {
       emit(ReviewProcessLoading());
       try {
-        final listEntity = await useCase.call();
+        final listEntity = await useCase.call(params: event.params);
         emit(ReviewProcessLoaded(listEntity: listEntity));
       } catch (e) {
         emit(ReviewProcessError());

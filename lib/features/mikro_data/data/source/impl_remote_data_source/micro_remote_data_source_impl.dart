@@ -10,6 +10,7 @@ import 'package:my_template/features/mikro_data/data/model/data_requests/data_re
 import 'package:my_template/features/mikro_data/data/model/data_requests/data_requests_response_model.dart';
 import 'package:my_template/features/mikro_data/data/model/regions/region_model.dart';
 import 'package:my_template/features/mikro_data/data/model/report_files/report_files_model.dart';
+import 'package:my_template/features/mikro_data/data/model/report_variables/report_variables_model.dart';
 import 'package:my_template/features/mikro_data/data/model/reports/reports_options_model.dart';
 import 'package:my_template/features/mikro_data/data/model/reports/reports_response_model.dart';
 import 'package:my_template/features/mikro_data/data/source/remote_data_source/micro_remote_data_source.dart';
@@ -283,6 +284,29 @@ class MicroRemoteDataSourceImpl implements MicroRemoteDataSource {
         logger.i(response.data);
         final data = response.data as List;
         return data.map((e) => ReportFilesModel.fromJson(e)).toList();
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e, t) {
+      logger.e('CATCH: $e');
+      logger.e('TRACK: $t');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<ReportVariablesModel>> fetchReportVariables({
+    required ReportVariablesParams params,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        ApiUrls.reportVariables(params.reportId),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        final data = response.data as List;
+        return data.map((e) => ReportVariablesModel.fromJson(e)).toList();
       } else {
         throw Exception('THROW EXCEPTION! ${response.statusCode}');
       }

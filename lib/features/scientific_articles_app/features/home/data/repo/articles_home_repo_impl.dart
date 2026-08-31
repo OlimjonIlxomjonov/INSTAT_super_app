@@ -5,6 +5,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/domai
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_editions/article_editions_response.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_order_payment/article_order_payment_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_process/article_process_entity.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/articles_stats/articles_stats_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/edition_articles/edition_article_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/review_files/review_files_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/user_articles/user_articles_response.dart';
@@ -140,7 +141,14 @@ class ArticlesHomeRepoImpl implements ArticlesHomeRepository {
   }
 
   @override
-  Future<List<ArticleProcessEntity>> getReviewProcess() {
-    return remoteDataSource.fetchReviewProcess();
+  Future<List<ArticleProcessEntity>> getReviewProcess({
+    required ReviewProcessParams params,
+  }) {
+    return remoteDataSource.fetchReviewProcess(params: params);
+  }
+
+  @override
+  Future<ArticlesStatsEntity> getArticlesStats({required String countType}) {
+    return remoteDataSource.fetchArticlesStats(countType: countType);
   }
 }

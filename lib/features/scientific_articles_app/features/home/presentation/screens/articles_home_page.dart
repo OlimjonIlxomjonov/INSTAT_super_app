@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/common/params/article_params/article_params.dart';
 import 'package:my_template/core/utils/widgets/promo_banners/promo_banners_carousel_wg.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -8,11 +9,12 @@ import 'package:my_template/core/utils/general_widgets/dragble_app_bar/draggble_
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/core/utils/widgets/user_articles_with_bloc/user_articles_with_bloc_wg.dart';
 import 'package:my_template/features/scientific_articles_app/dummy_data_source/home_brief_info_card_source.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_stats/article_stats_bloc.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_stats/article_stats_state.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_process/review_process_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_process/review_process_state.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
-import 'package:my_template/features/scientific_articles_app/features/home/presentation/screens/detailed_last_actions_page.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/sliver_brief_cards_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/user_articles_page.dart';
 
@@ -37,7 +39,12 @@ class _ArticlesHomePageState extends State<ArticlesHomePage> {
   @override
   void initState() {
     super.initState();
-    context.read<ReviewProcessBloc>().add(ReviewProcessEvent());
+    context.read<ReviewProcessBloc>().add(
+      ReviewProcessEvent(params: ReviewProcessParams(processType: 'reviews')),
+    );
+    context.read<ArticleStatsBloc>().add(
+      ArticleStatsEvent(countType: 'reviews'),
+    );
   }
 
   void _openUserArticlesPage(BuildContext context) {
@@ -57,6 +64,9 @@ class _ArticlesHomePageState extends State<ArticlesHomePage> {
         onRefresh: () async {
           context.read<UserArticlesBloc>().add(
             UserArticlesEvent(status: 'all', search: ''),
+          );
+          context.read<ArticleStatsBloc>().add(
+            ArticleStatsEvent(countType: 'reviews'),
           );
         },
         child: CustomScrollView(
@@ -86,7 +96,16 @@ class _ArticlesHomePageState extends State<ArticlesHomePage> {
             const SliverToBoxAdapter(child: PromoBannersCarouselWg()),
 
             /// BRIEF CARD SECTIONS
-            SliverBriefCardsWg(items: getBriefInfoCardList(localization)),
+            BlocBuilder<ArticleStatsBloc, ArticleStatsState>(
+              builder: (context, state) {
+                final isLoading = state is! ArticleStatsLoaded;
+                return SliverBriefCardsWg(
+                  items: getBriefInfoCardList(localization),
+                  entity: state is ArticleStatsLoaded ? state.entity : null,
+                  isLoading: isLoading,
+                );
+              },
+            ),
 
             /// SEE ALL ARTICLES
             SliverPadding(
@@ -99,26 +118,9 @@ class _ArticlesHomePageState extends State<ArticlesHomePage> {
               ),
             ),
 
-            /// ARTICLES - Placed directly as a sliver widget
+            /// ARTICLES
             UserArticlesWithBlocWg(limit: 2),
             const SliverToBoxAdapter(child: SizedBox(height: 20)),
-
-            /// SEE ALL LAST ACTIONS
-            SliverPadding(
-              padding: AppPadding.horizontal20x(),
-              sliver: SliverToBoxAdapter(
-                child: ExtendSectionSeeAllWg(
-                  title: 'Ohirgi harakatlar',
-                  onTap: () {
-                    openMiniAppSheetFamily(
-                      showHandler: false,
-                      context,
-                      child: DetailedLastActionsPage(),
-                    );
-                  },
-                ),
-              ),
-            ),
 
             /// LAST ACTIONS
             BlocBuilder<ReviewProcessBloc, ReviewProcessState>(

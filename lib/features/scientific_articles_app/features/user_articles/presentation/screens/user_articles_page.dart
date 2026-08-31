@@ -179,7 +179,6 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
                         );
                       },
                       categoryIcon: categoriesIcon[index],
-                      // categoryColor: categoryColors[index],
                     );
                   }),
                 ),

@@ -3,6 +3,7 @@ import 'package:my_template/features/education_app/features/home_edu/data/model/
 import 'package:my_template/features/online_library_app/features/home_lib/data/models/book/book_list_response_model.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/data/models/book/book_page_model.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/data/models/book/book_pages_count_model.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/data/models/library_stats/library_stats_model.dart';
 
 abstract class HomeLibRemoteDataSource {
   Future<BookListResponseModel> fetchPopularBooks({int page = 1});
@@ -35,4 +36,6 @@ abstract class HomeLibRemoteDataSource {
   Future<void> updateBookCurrentPage({
     required UpdateBookCurrentPageParams params,
   });
+
+  Future<LibraryStatsModel> fetchLibraryStats();
 }

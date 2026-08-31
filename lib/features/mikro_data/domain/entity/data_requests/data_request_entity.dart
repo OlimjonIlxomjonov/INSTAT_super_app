@@ -36,7 +36,7 @@ class DataRequestEntity {
 
   MicroDataRequestStatus get requestStatus {
     switch (status) {
-      case 'accepted':
+      case 'paid':
         return MicroDataRequestStatus.accepted;
       case 'in_review':
         return MicroDataRequestStatus.inReview;

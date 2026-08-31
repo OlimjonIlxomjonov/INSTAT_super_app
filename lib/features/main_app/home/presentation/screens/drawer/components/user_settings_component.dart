@@ -21,8 +21,6 @@ class UserSettingsComponent extends StatefulWidget {
 }
 
 class _UserSettingsComponentState extends State<UserSettingsComponent> {
-  bool biometrickSwitchState = false;
-
   @override
   Widget build(BuildContext context) {
     final bool isMobile = Responsive.isMobile(context);

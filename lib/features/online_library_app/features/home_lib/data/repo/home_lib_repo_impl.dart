@@ -4,6 +4,7 @@ import 'package:my_template/features/online_library_app/features/home_lib/data/s
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_list_response.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_page_entity.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_pages_count_entity.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/library_stats/library_stats_entity.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/repository/home_lib_repository.dart';
 
 class HomeLibRepoImpl implements HomeLibRepository {
@@ -69,5 +70,10 @@ class HomeLibRepoImpl implements HomeLibRepository {
     required UpdateBookCurrentPageParams params,
   }) {
     return _remoteDataSource.updateBookCurrentPage(params: params);
+  }
+
+  @override
+  Future<LibraryStatsEntity> getLibraryStats() {
+    return _remoteDataSource.fetchLibraryStats();
   }
 }

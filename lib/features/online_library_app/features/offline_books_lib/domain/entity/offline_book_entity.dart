@@ -28,5 +28,6 @@ class OfflineBookEntity extends BookEntity {
     required super.commentCount,
     required super.starsSum,
     required super.currentPage,
+    required super.status,
   });
 }

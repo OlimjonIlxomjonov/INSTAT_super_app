@@ -357,12 +357,7 @@ class _DetailedOnlineBookComponentState
                         price: "300 000 UZS",
                         oldPrice: "330 000 UZS",
                         imagePath: 'assets/images/temp_book.jpg',
-                        onTap: () {
-                          // FamilyNavigation.familyPush(
-                          //   context,
-                          //   DetailedOnlineBookComponent(),
-                          // );
-                        },
+                        onTap: () {},
                       ),
                     ),
                   ),
@@ -387,13 +382,15 @@ class _DetailedOnlineBookComponentState
       return const SizedBox.shrink();
     }
 
+    final bool isPaid = widget.isBookBought || widget.data.status == 'paid';
+
     return BlocBuilder<
       my_template_book.BookActionsBloc,
       my_template_book.BookActionsState
     >(
       builder: (context, state) {
         final bool inCart =
-            !widget.isBookBought &&
+            !isPaid &&
             state.isBookInCart(
               widget.data.id,
               defaultValue: widget.data.isInCart,
@@ -411,7 +408,8 @@ class _DetailedOnlineBookComponentState
   }
 
   String _bottomBarButtonText(AppLocalizations localization, bool inCart) {
-    if (widget.isBookBought) return localization.continueReadingButton;
+    final bool isPaid = widget.isBookBought || widget.data.status == 'paid';
+    if (isPaid) return localization.continueReadingButton;
     if (inCart) return localization.goToCart;
     return localization.buyForPrice(formatPrice(widget.data.price));
   }
@@ -443,7 +441,9 @@ class _DetailedOnlineBookComponentState
     AppLocalizations localization,
     bool inCart,
   ) {
-    if (widget.isBookBought) {
+    final bool isPaid = widget.isBookBought || widget.data.status == 'paid';
+
+    if (isPaid) {
       AppRoute.go(BoughtBookOpenerWg(bookId: widget.data.id));
       return;
     }

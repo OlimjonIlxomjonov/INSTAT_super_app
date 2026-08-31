@@ -17,22 +17,22 @@ class UserLibInfo {
 
 List<UserLibInfo> getCardInfo(AppLocalizations localization) => [
   UserLibInfo(
-    cardName: localization.purchases,
+    cardName: 'Barcha kitoblarim',
     iconPath: AppVectors.cartBrief,
     backColors: [AppColors.linearLightGreen, AppColors.linearDarkGreen],
   ),
   UserLibInfo(
-    cardName: localization.currentlyReading,
+    cardName: 'Saqlangan',
     iconPath: AppVectors.bookOpenBrief,
     backColors: [AppColors.linearLightBlue, AppColors.linearDarkBlue],
   ),
   UserLibInfo(
-    cardName: localization.booksObtained,
+    cardName: 'Qarzga olingan',
     iconPath: AppVectors.bookShvBrief,
     backColors: [AppColors.linearLightOrange, AppColors.linearDarkOrange],
   ),
   UserLibInfo(
-    cardName: localization.finished,
+    cardName: 'Faol qarzga olingan',
     iconPath: AppVectors.trophyBrief,
     backColors: [AppColors.linearLightPurple, AppColors.linearDarkPurple],
   ),

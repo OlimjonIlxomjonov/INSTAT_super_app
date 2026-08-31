@@ -14,13 +14,6 @@ class BookListResponseModel extends BookListResponse {
     );
   }
 
-  /// Parses `meta` only when it actually carries pagination info.
-  ///
-  /// Some callers hand in an empty map (the cart builds
-  /// `{'data': ..., 'links': {}, 'meta': {}}`), so this must not assume the
-  /// keys exist. Only `current_page` and `last_page` are required, since
-  /// those are the two paging genuinely depends on; anything else missing
-  /// falls back to 0 rather than throwing.
   static Meta? _metaOrNull(dynamic raw) {
     if (raw is! Map) return null;
 

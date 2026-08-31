@@ -11,7 +11,10 @@ class CreateArticleOrderParams {
   final int reviewId;
   final String paymentMethod;
 
-  CreateArticleOrderParams({required this.reviewId, required this.paymentMethod});
+  CreateArticleOrderParams({
+    required this.reviewId,
+    required this.paymentMethod,
+  });
 }
 
 class ArticleEditionsParams {
@@ -142,4 +145,10 @@ class ReviewFileType {
 
   static const image = 'image';
   static const excel = 'excel';
+}
+
+class ReviewProcessParams {
+  final String processType;
+
+  ReviewProcessParams({required this.processType});
 }

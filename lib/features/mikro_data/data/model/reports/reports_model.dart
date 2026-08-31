@@ -1,3 +1,4 @@
+import 'package:my_template/features/mikro_data/data/model/regions/region_model.dart';
 import 'package:my_template/features/mikro_data/data/model/reports/analysis_unit_model.dart';
 import 'package:my_template/features/mikro_data/data/model/reports/collection_method_model.dart';
 import 'package:my_template/features/mikro_data/domain/entity/reports/reports_entity.dart';
@@ -35,11 +36,23 @@ class ReportsModel extends ReportsEntity {
     final collectionMethodJson =
         json['collection_method'] as Map<String, dynamic>?;
     final analysisUnitJson = json['analysis_unit'] as Map<String, dynamic>?;
+    final regionJson = json['region'];
+    final districtJson = json['district'];
 
     final topicsRaw = json['topics'];
     final topics = topicsRaw is List
         ? topicsRaw.map((e) => e?.toString() ?? '').toList()
         : <String>[];
+
+    RegionModel? regionModel;
+    if (regionJson is Map<String, dynamic>) {
+      regionModel = RegionModel.fromJson(regionJson);
+    }
+
+    DistrictModel? districtModel;
+    if (districtJson is Map<String, dynamic>) {
+      districtModel = DistrictModel.fromJson(districtJson);
+    }
 
     return ReportsModel(
       id: json['id'] as int? ?? 0,
@@ -56,8 +69,8 @@ class ReportsModel extends ReportsEntity {
       analysisUnit: analysisUnitJson != null
           ? AnalysisUnitModel.fromJson(analysisUnitJson)
           : null,
-      region: json['region']?.toString(),
-      district: json['district']?.toString(),
+      region: regionModel,
+      district: districtModel,
       timeCoverageFrom:
           DateTime.tryParse(json['time_coverage_from']?.toString() ?? ''),
       timeCoverageTo:

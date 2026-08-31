@@ -12,6 +12,7 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 
 import '../../../../../../../core/utils/constants/api_urls/api_urls.dart';
 import '../../../../../../../core/utils/widgets/edu_categories/edu_categories_wg.dart';
+import '../../../../../../../core/utils/widgets/module_categories/module_categories_with_bloc.dart';
 import '../../../../../../../core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import '../../bloc/popular_books/popular_books_bloc.dart';
 import '../../bloc/popular_books/popular_books_event.dart';
@@ -20,14 +21,6 @@ class SimilarOnlineBooksComponent extends StatelessWidget {
   final List<BookEntity> data;
 
   const SimilarOnlineBooksComponent({super.key, required this.data});
-
-  static const List<Widget> _categories = [
-    EduCategoriesWg(),
-    EduCategoriesWg(),
-    EduCategoriesWg(),
-    EduCategoriesWg(),
-    EduCategoriesWg(),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +35,9 @@ class SimilarOnlineBooksComponent extends StatelessWidget {
         slivers: [
           //! CATEGORIES
           SliverToBoxAdapter(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.only(right: 20, top: 10, bottom: 20),
-              scrollDirection: Axis.horizontal,
-              child: Row(children: _categories),
-            ),
+            child: ModuleCategoriesWithBlocWg(categoryType: 'library'),
           ),
+          SliverToBoxAdapter(child: SizedBox(height: 20)),
           SliverPadding(
             padding: const .only(left: 20, right: 20, bottom: 16),
             sliver: SliverToBoxAdapter(

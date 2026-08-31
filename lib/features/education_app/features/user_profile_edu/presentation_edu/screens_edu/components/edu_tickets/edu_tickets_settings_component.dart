@@ -169,6 +169,7 @@ class _EduTicketsSettingsComponentState
             onTap: () {
               openMiniAppSheetFamily(
                 context,
+                showHandler: false,
                 child: EduCreateTicketsComponent(),
               );
             },

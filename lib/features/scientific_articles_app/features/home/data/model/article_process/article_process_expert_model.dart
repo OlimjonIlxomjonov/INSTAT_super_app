@@ -12,7 +12,7 @@ class ArticleProcessExpertModel extends ArticleProcessExpertEntity {
 
   factory ArticleProcessExpertModel.fromJson(Map<String, dynamic> json) {
     return ArticleProcessExpertModel(
-      id: json['id'] as int,
+      id: json['id'] as int? ?? 0,
       username: json['username'] as String? ?? '',
       email: json['email'] as String? ?? '',
       avatar: json['avatar'] as String? ?? '',

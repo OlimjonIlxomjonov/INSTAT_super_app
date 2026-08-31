@@ -20,7 +20,8 @@ class ArticleProcessModel extends ArticleProcessEntity {
       status: json['status'] as String? ?? '',
       comment: json['comment'] as String? ?? '',
       expert: ArticleProcessExpertModel.fromJson(
-        json['expert'] as Map<String, dynamic>? ?? {},
+        (json['expert'] ?? json['user'] ?? <String, dynamic>{})
+            as Map<String, dynamic>,
       ),
       cycle: json['cycle'] as int? ?? 0,
       createdAt: DateTime.parse(

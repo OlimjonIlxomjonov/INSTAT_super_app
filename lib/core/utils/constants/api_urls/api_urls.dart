@@ -137,6 +137,8 @@ class ApiUrls {
 
   //? Report files
   static String reportFiles(int reportId) => 'data-reports/$reportId/files/';
+  static String reportVariables(int reportId) =>
+      'data-reports/$reportId/variables/';
 
   //? Notifications
   static const String notif = 'notifications/?page=';
@@ -149,5 +151,17 @@ class ApiUrls {
       'tickets/?status=$status&search=$search&page=$page';
 
   //? Review process
-  static const String reviewProcess = 'reviews/items/all-processes';
+  static String reviewProcess(String reviewType) =>
+      '$reviewType/items/all-processes';
+
+  //? Module Categories
+  static String moduleCategories(String type, String page) =>
+      'categories/?type=$type&page=$page';
+
+  //?  Stats Count
+  static const String itemCount = '/items/count/';
+
+  //library
+  static const String libraryStats = 'books$itemCount';
+
 }

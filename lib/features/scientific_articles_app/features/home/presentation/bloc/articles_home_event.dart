@@ -196,4 +196,14 @@ class UpdateReviewAuthorEvent extends ArticlesHomeEvent {
   UpdateReviewAuthorEvent({required this.author, this.onSuccess, this.onError});
 }
 
-class ReviewProcessEvent extends ArticlesHomeEvent {}
+class ReviewProcessEvent extends ArticlesHomeEvent {
+  final ReviewProcessParams params;
+
+  ReviewProcessEvent({required this.params});
+}
+
+class ArticleStatsEvent extends ArticlesHomeEvent {
+  final String countType;
+
+  const ArticleStatsEvent({required this.countType});
+}

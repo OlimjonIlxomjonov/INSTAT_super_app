@@ -24,6 +24,7 @@ class BookModel extends BookEntity {
     required super.commentCount,
     required super.starsSum,
     required super.currentPage,
+    required super.status,
   });
 
   factory BookModel.fromJson(Map<String, dynamic> json) {
@@ -51,6 +52,7 @@ class BookModel extends BookEntity {
       commentCount: json['comments_count'] ?? 0,
       starsSum: json['stars_sum'] ?? 0,
       currentPage: json['current_page'] ?? 0,
+      status: json['status'] ?? '',
     );
   }
 }

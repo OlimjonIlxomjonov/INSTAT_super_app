@@ -28,33 +28,6 @@ class _MainAppDrawerState extends State<MainAppDrawer> {
               SliverToBoxAdapter(child: UserSettingsComponent()),
             ],
           ),
-          // child: Responsive(
-          //   mobile: CustomScrollView(
-          //     slivers: [
-          ///       /// USER AVATAR
-          //       SliverToBoxAdapter(child: UserAvatarComponent()),
-          //
-          ///      /// SETTINGS
-          //       SliverToBoxAdapter(child: UserSettingsComponent()),
-          //     ],
-          //   ),
-          //   tablet: isPortrait
-          //       ? Column(
-          //           children: [UserAvatarComponent(), UserSettingsComponent()],
-          //         )
-          //       : Row(
-          //           crossAxisAlignment: .start,
-          //           children: [
-          //             Expanded(child: UserAvatarComponent()),
-          //             Expanded(
-          //               flex: 2,
-          //               child: SingleChildScrollView(
-          //                 child: UserSettingsComponent(),
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          // ),
         );
       },
     );

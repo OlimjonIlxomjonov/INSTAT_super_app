@@ -16,6 +16,8 @@ import 'package:my_template/features/main_app/home/presentation/bloc/courses/cou
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_state.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/home_event.dart';
 
+import '../../../../../../core/utils/widgets/module_categories/module_categories_with_bloc.dart';
+
 class ShowAllCoursesBottomSheetPage extends StatefulWidget {
   const ShowAllCoursesBottomSheetPage({super.key});
 
@@ -66,14 +68,8 @@ class _ShowAllCoursesBottomSheetPageState
               slivers: [
                 /// CATEGORIES
                 SliverToBoxAdapter(
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.only(right: 20),
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: List.generate(5, (index) {
-                        return EduCategoriesWg();
-                      }),
-                    ),
+                  child: ModuleCategoriesWithBlocWg(
+                    categoryType: 'online-education',
                   ),
                 ),
 

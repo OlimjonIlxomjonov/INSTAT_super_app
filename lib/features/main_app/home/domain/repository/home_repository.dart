@@ -3,6 +3,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dom
 import 'package:my_template/features/main_app/home/domain/entity/active_devices/active_devices.dart';
 import 'package:my_template/features/main_app/home/domain/entity/banner/banner_entity.dart';
 import 'package:my_template/features/main_app/home/domain/entity/country/country_entity.dart';
+import 'package:my_template/features/main_app/home/domain/entity/module_category/module_category_response.dart';
 import 'package:my_template/features/main_app/home/domain/entity/notifications/notif_response.dart';
 import 'package:my_template/features/main_app/home/domain/entity/user_me/user_entity.dart';
 
@@ -35,4 +36,8 @@ abstract class HomeRepository {
   Future<List<ActiveDevicesEntity>> getActiveDevices();
 
   Future<void> deleteAllDevices();
+
+  Future<ModuleCategoryResponse> getModuleCategory({
+    required ModuleCategoryParams params,
+  });
 }

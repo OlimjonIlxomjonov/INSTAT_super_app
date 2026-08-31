@@ -9,14 +9,13 @@ import 'package:my_template/core/common/params/micro_data_params/data_request_pa
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
-import 'package:my_template/core/utils/logger/logger.dart';
-import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 import 'package:my_template/features/mikro_data/domain/entity/reports/reports_entity.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_event.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/report_files/report_files_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/report_files/report_files_stat.dart';
-import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/add_data_request_page.dart';
+import 'package:my_template/features/mikro_data/presentation/bloc/report_variables/report_variables_bloc.dart';
+import 'package:my_template/features/mikro_data/presentation/bloc/report_variables/report_variables_state.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -87,7 +86,7 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
           AppLocalizations.of(context)!.fileOpenError(result.message),
         );
       }
-    } catch (e, st) {
+    } catch (e) {
       debugPrint(' File error: $e');
       if (mounted) {
         errorFlushBar(context, AppLocalizations.of(context)!.fileDownloadError);
@@ -136,6 +135,11 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
     super.initState();
     context.read<ReportFilesBloc>().add(
       ReportFilesEvent(params: ReportFilesParams(reportId: widget.item.id)),
+    );
+    context.read<ReportVariablesBloc>().add(
+      ReportVariablesEvent(
+        params: ReportVariablesParams(reportId: widget.item.id),
+      ),
     );
   }
 
@@ -319,8 +323,7 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
                           Expanded(
                             child: _buildGridField(
                               label: 'Hududiy qamrovi',
-                              value:
-                                  widget.item.region ?? 'Respublika bo‘yicha',
+                              value: widget.item.formattedLocation(localeCode),
                             ),
                           ),
                         ],
@@ -360,23 +363,9 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
                             'Oddiy tasodifiy tanlash (SRS); bosh to‘plamdagi har bir birlik teng va mustaqil tanlanish imkoniyatiga ega',
                       ),
                       const SizedBox(height: 16),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: _buildGridField(
-                              label: 'Kuzatuv yozuvlari soni',
-                              value: _formatCoverage(widget.item.coverage),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: _buildGridField(
-                              label: 'Tanlanma doirasi',
-                              value: 'Kiritilmagan',
-                            ),
-                          ),
-                        ],
+                      _buildGridField(
+                        label: 'Kuzatuv yozuvlari soni',
+                        value: _formatCoverage(widget.item.coverage),
                       ),
                       const SizedBox(height: 16),
                       Row(
@@ -516,106 +505,264 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
 
   //! Card 4: Variables Dictionary Table Widget
   Widget _buildVariablesTable() {
-    final rows = [
-      {'key': 'UX_TR', 'value': 'Uy xo‘jaligi tartib raqami (id)si'},
-      {
-        'key': 'Hudud',
-        'value': 'Qoraqalpog‘iston Respublikasi, viloyat, Toshkent shahri:',
-      },
-      {'key': 'Vazn', 'value': 'Uy xo‘jaligi vazni'},
-      {
-        'key': 'Maqom',
-        'value': 'Uy xo‘jaligi joylashgan hudud maqomi, 1 - shahar/2 - qishloq',
-      },
-      {'key': 'Yosh', 'value': 'Uy xo‘jalik a’zolari yosh toifasi'},
-    ];
+    return BlocBuilder<ReportVariablesBloc, ReportVariablesState>(
+      builder: (context, state) {
+        if (state is ReportVariablesLoaded) {
+          final variables = state.listEntity;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.greyScale.grey200),
-      ),
-      child: Column(
-        children: [
-          //! Table Header
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(
-              color: AppColors.greyScale.grey100,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(12),
-                topRight: Radius.circular(12),
-              ),
-            ),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 80,
-                  child: Text(
-                    'Nomi',
-                    style: AppTextStyles.source.semiBold(
-                      fontSize: 13,
-                      color: AppColors.greyScale.grey700,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    'Qiymati',
-                    style: AppTextStyles.source.semiBold(
-                      fontSize: 13,
-                      color: AppColors.greyScale.grey700,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          //! Table Body Rows
-          ...List.generate(rows.length, (index) {
-            final row = rows[index];
-            final isLast = index == rows.length - 1;
+          if (variables.isEmpty) {
             return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
-                border: isLast
-                    ? null
-                    : Border(
-                        bottom: BorderSide(
-                          color: AppColors.greyScale.grey200,
-                          width: 0.8,
-                        ),
-                      ),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.greyScale.grey200),
               ),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: 80,
-                    child: Text(
-                      row['key']!,
-                      style: AppTextStyles.source.medium(
-                        fontSize: 13,
-                        color: AppColors.greyScale.grey900,
-                      ),
-                    ),
+                  Icon(
+                    IconlyLight.paper,
+                    size: 20,
+                    color: AppColors.greyScale.grey400,
                   ),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      row['value']!,
+                      'O‘zgaruvchilar lug‘ati mavjud emas',
                       style: AppTextStyles.source.regular(
-                        fontSize: 12.5,
-                        color: AppColors.greyScale.grey700,
+                        fontSize: 13,
+                        color: AppColors.greyScale.grey600,
                       ),
                     ),
                   ),
                 ],
               ),
             );
-          }),
-        ],
-      ),
+          }
+
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.greyScale.grey200),
+            ),
+            child: Column(
+              children: [
+                //! Table Header
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.greyScale.grey100,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 80,
+                        child: Text(
+                          'Nomi',
+                          style: AppTextStyles.source.semiBold(
+                            fontSize: 13,
+                            color: AppColors.greyScale.grey700,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Qiymati',
+                          style: AppTextStyles.source.semiBold(
+                            fontSize: 13,
+                            color: AppColors.greyScale.grey700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                //! Table Body Rows
+                ...List.generate(variables.length, (index) {
+                  final row = variables[index];
+                  final isLast = index == variables.length - 1;
+                  return Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      border: isLast
+                          ? null
+                          : Border(
+                              bottom: BorderSide(
+                                color: AppColors.greyScale.grey200,
+                                width: 0.8,
+                              ),
+                            ),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 80,
+                          child: Text(
+                            row.label,
+                            style: AppTextStyles.source.medium(
+                              fontSize: 13,
+                              color: AppColors.greyScale.grey900,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            row.value,
+                            style: AppTextStyles.source.regular(
+                              fontSize: 12.5,
+                              color: AppColors.greyScale.grey700,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              ],
+            ),
+          );
+        }
+
+        if (state is ReportVariablesError) {
+          return Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.greyScale.grey200),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  IconlyLight.info_square,
+                  size: 20,
+                  color: AppColors.greyScale.grey400,
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'O‘zgaruvchilar lug‘atini yuklashda xatolik yuz berdi',
+                    style: AppTextStyles.source.regular(
+                      fontSize: 13,
+                      color: AppColors.greyScale.grey600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
+        //! Loading state (Skeletonizer)
+        return Skeletonizer(
+          enabled: true,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.greyScale.grey200),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.greyScale.grey100,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 80,
+                        child: Text(
+                          'Nomi',
+                          style: AppTextStyles.source.semiBold(
+                            fontSize: 13,
+                            color: AppColors.greyScale.grey700,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Qiymati',
+                          style: AppTextStyles.source.semiBold(
+                            fontSize: 13,
+                            color: AppColors.greyScale.grey700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                ...List.generate(4, (index) {
+                  final isLast = index == 3;
+                  return Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      border: isLast
+                          ? null
+                          : Border(
+                              bottom: BorderSide(
+                                color: AppColors.greyScale.grey200,
+                                width: 0.8,
+                              ),
+                            ),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 80,
+                          child: Text(
+                            'UX_TR',
+                            style: AppTextStyles.source.medium(
+                              fontSize: 13,
+                              color: AppColors.greyScale.grey900,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Uy xo‘jaligi tartib raqami (id)si',
+                            style: AppTextStyles.source.regular(
+                              fontSize: 12.5,
+                              color: AppColors.greyScale.grey700,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -625,12 +772,47 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
       builder: (context, state) {
         if (state is ReportFilesLoaded) {
           final data = state.listEntity;
+
+          if (data.isEmpty) {
+            return Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.greyScale.grey200),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    IconlyLight.document,
+                    size: 20,
+                    color: AppColors.greyScale.grey400,
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      'Fayllar mavjud emas',
+                      style: AppTextStyles.source.regular(
+                        fontSize: 13,
+                        color: AppColors.greyScale.grey600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+
           //! Data
           return Column(
             children: List.generate(data.length, (index) {
               final item = data[index];
               return Container(
                 padding: const EdgeInsets.all(12),
+                margin: EdgeInsets.only(
+                  bottom: index == data.length - 1 ? 0 : 8,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
@@ -704,6 +886,38 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
             }),
           );
         }
+
+        if (state is ReportFilesError) {
+          return Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.greyScale.grey200),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  IconlyLight.info_square,
+                  size: 20,
+                  color: AppColors.greyScale.grey400,
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Fayllarni yuklashda xatolik yuz berdi',
+                    style: AppTextStyles.source.regular(
+                      fontSize: 13,
+                      color: AppColors.greyScale.grey600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
         //! Loading state (Skeletonizer)
         return Skeletonizer(
           enabled: true,

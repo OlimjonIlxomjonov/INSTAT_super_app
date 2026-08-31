@@ -4,8 +4,6 @@ import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/status_container_wg.dart';
 
-/// Maqolalardagi status badge'ining data-requests uchun varianti.
-/// Ko'rinish bir xil bo'lishi uchun StatusContainerWg qayta ishlatilgan.
 class RequestStatusCheckWg extends StatelessWidget {
   final MicroDataRequestStatus status;
 
@@ -25,7 +23,7 @@ class RequestStatusCheckWg extends StatelessWidget {
       case MicroDataRequestStatus.accepted:
         return StatusContainerWg(
           icon: Icons.check_circle,
-          statusTitle: ' ${localization.statusConfirmed}',
+          statusTitle: " To'landi",
           iconColor: AppColors.greenDoneTaskCard,
           backgroundColor: AppColors.greenBackground,
         );

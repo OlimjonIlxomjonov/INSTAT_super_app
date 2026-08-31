@@ -209,3 +209,9 @@ class ShowTicketsParams {
     required this.page,
   });
 }
+
+class ModuleCategoryParams {
+  final String type, page;
+
+  ModuleCategoryParams({required this.type, required this.page});
+}

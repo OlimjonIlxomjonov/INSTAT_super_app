@@ -11,6 +11,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dat
 import 'package:my_template/features/main_app/home/data/model/active_devices/active_devices_model.dart';
 import 'package:my_template/features/main_app/home/data/model/banner/banner_model.dart';
 import 'package:my_template/features/main_app/home/data/model/country/country_model.dart';
+import 'package:my_template/features/main_app/home/data/model/module_category/module_category_response_model.dart';
 import 'package:my_template/features/main_app/home/data/model/notifications/notif_response_model.dart';
 import 'package:my_template/features/main_app/home/data/model/user_me/user_model.dart';
 import 'package:my_template/features/main_app/home/data/source/remote_data_source/home_remote_data_source.dart';
@@ -339,6 +340,27 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       final response = await _dioClient.delete(ApiUrls.activeDevices);
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
+      } else {
+        throw Exception('EXCEPTION: ${response.statusCode}');
+      }
+    } catch (e, st) {
+      logger.e(e);
+      logger.e(st);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ModuleCategoryResponseModel> fetchModuleCategory({
+    required ModuleCategoryParams params,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        ApiUrls.moduleCategories(params.type, params.page),
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return ModuleCategoryResponseModel.fromJson(response.data);
       } else {
         throw Exception('EXCEPTION: ${response.statusCode}');
       }

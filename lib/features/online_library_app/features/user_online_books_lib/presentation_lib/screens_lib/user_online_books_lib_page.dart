@@ -37,15 +37,16 @@ class _UserOnlineBooksLibPageState extends State<UserOnlineBooksLibPage> {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(90),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
             child: CustomTabBarWg(
-              firstTab: localization.statusInProgress,
-              secondTab: localization.finished,
+              firstTab: 'Barchasi',
+              secondTab: 'Online kitoblar',
+              thirdTab: 'Qog\'oz kitoblar',
             ),
           ),
         ),
@@ -67,6 +68,7 @@ class _UserOnlineBooksLibPageState extends State<UserOnlineBooksLibPage> {
               ),
               child: CustomScrollView(
                 slivers: [
+                  //! Serach
                   SliverAppBar(
                     primary: false,
                     floating: true,
@@ -74,18 +76,7 @@ class _UserOnlineBooksLibPageState extends State<UserOnlineBooksLibPage> {
                     automaticallyImplyLeading: false,
                     title: AppSearchbarWg(),
                   ),
-                  SliverToBoxAdapter(
-                    child: SingleChildScrollView(
-                      padding: EdgeInsets.only(right: 20, top: 20),
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: List.generate(5, (index) {
-                          return EduCategoriesWg();
-                        }),
-                      ),
-                    ),
-                  ),
-
+                  //! Title
                   SliverPadding(
                     padding: .only(left: 20, top: 20),
                     sliver: SliverToBoxAdapter(
@@ -99,6 +90,7 @@ class _UserOnlineBooksLibPageState extends State<UserOnlineBooksLibPage> {
                     builder: (context, state) {
                       if (state is UserBookLoaded) {
                         final data = state.response.data;
+                        //! Empty State
                         if (data.isEmpty) {
                           return SliverToBoxAdapter(
                             child: AppEmptyState(
@@ -129,6 +121,7 @@ class _UserOnlineBooksLibPageState extends State<UserOnlineBooksLibPage> {
                                       1.0,
                                     )
                                   : 0.0;
+                              //! Data
                               return BookGridItem(
                                 type: BookCardType.bought,
                                 title: item.name,

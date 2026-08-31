@@ -4,6 +4,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/data/
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_editions/article_editions_response_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_order_payment/article_order_payment_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_process/article_process_model.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/data/model/articles_stats/articles_stats_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/edition_articles/edition_article_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/review_files/review_files_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/user_articles/user_articles_response_model.dart';
@@ -69,5 +70,9 @@ abstract class UserArticlesRemoteDataSource {
     required AddReviewFileParams params,
   });
 
-  Future<List<ArticleProcessModel>> fetchReviewProcess();
+  Future<List<ArticleProcessModel>> fetchReviewProcess({
+    required ReviewProcessParams params,
+  });
+
+  Future<ArticlesStatsModel> fetchArticlesStats({required String countType});
 }

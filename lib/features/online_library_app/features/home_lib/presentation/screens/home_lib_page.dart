@@ -13,11 +13,17 @@ import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/wb_blocs/popular_books_with_bloc_wg.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/library_stats/library_stats_entity.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/library_stats/library_stats_bloc.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/library_stats/library_stats_event.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/library_stats/library_stats_state.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/search_books/search_books_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/see_all_online_books_component.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/search_books_page.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/widgets/user_lib_info_wg.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
+import '../../../../../../core/utils/widgets/module_categories/module_categories_with_bloc.dart';
 import '../bloc/popular_books/popular_books_bloc.dart';
 import '../bloc/popular_books/popular_books_event.dart';
 
@@ -36,6 +42,12 @@ class HomeLibPage extends StatefulWidget {
 }
 
 class _HomeLibPageState extends State<HomeLibPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<LibraryStatsBloc>().add(LibraryStatsEvent());
+  }
+
   void _openSearch(BuildContext context) {
     FamilyNavigation.familyPush(
       showHandle: false,
@@ -54,6 +66,7 @@ class _HomeLibPageState extends State<HomeLibPage> {
       body: RefreshIndicator(
         onRefresh: () async {
           context.read<PopularBooksBloc>().add(FetchPopularBooksEvent());
+          context.read<LibraryStatsBloc>().add(LibraryStatsEvent());
         },
         child: CustomScrollView(
           slivers: [
@@ -84,7 +97,59 @@ class _HomeLibPageState extends State<HomeLibPage> {
             const SliverToBoxAdapter(child: SizedBox(height: 15)),
 
             /// user book model info
-            UserLibInfoWg(),
+            BlocBuilder<LibraryStatsBloc, LibraryStatsState>(
+              builder: (context, state) {
+                if (state is LibraryStatsLoaded) {
+                  final item = state.entity;
+                  return SliverPadding(
+                    padding: AppPadding.horizontal20x(),
+                    sliver: SliverGrid.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisSpacing: 5,
+                            mainAxisSpacing: 5,
+                            crossAxisCount: 2,
+                            mainAxisExtent: 80,
+                          ),
+                      itemCount: 4,
+                      itemBuilder: (context, index) {
+                        //! Loaded Data
+                        return UserLibInfoWg(index: index, item: item);
+                      },
+                    ),
+                  );
+                }
+                //! Loading state
+                return SliverPadding(
+                  padding: AppPadding.horizontal20x(),
+                  sliver: SliverGrid.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisSpacing: 5,
+                          mainAxisSpacing: 5,
+                          crossAxisCount: 2,
+                          mainAxisExtent: 80,
+                        ),
+                    itemCount: 4,
+                    itemBuilder: (context, index) {
+                      return Skeletonizer(
+                        enabled: true,
+                        child: UserLibInfoWg(
+                          index: index,
+                          item: LibraryStatsEntity(
+                            allOnline: 0,
+                            saved: 0,
+                            loans: 0,
+                            activeLoans: 0,
+                            ok: true,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
 
             //! Active user books
             SliverPadding(
@@ -93,19 +158,10 @@ class _HomeLibPageState extends State<HomeLibPage> {
                 child: ActiveBooksWithBloc(onTap: widget.onTap),
               ),
             ),
-            const SliverToBoxAdapter(child: SizedBox(height: 15)),
 
             /// CATEGORIES
             SliverToBoxAdapter(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.only(right: 20, bottom: 20),
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: List.generate(5, (index) {
-                    return EduCategoriesWg();
-                  }),
-                ),
-              ),
+              child: ModuleCategoriesWithBlocWg(categoryType: 'library'),
             ),
 
             SliverPadding(

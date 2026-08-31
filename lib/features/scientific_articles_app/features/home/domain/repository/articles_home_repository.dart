@@ -4,6 +4,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/domai
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/add_article/udk/udk_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_editions/article_editions_response.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_process/article_process_entity.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/articles_stats/articles_stats_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/edition_articles/edition_article_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/review_files/review_files_entity.dart';
 
@@ -71,5 +72,9 @@ abstract class ArticlesHomeRepository {
     required AddReviewFileParams params,
   });
 
-  Future<List<ArticleProcessEntity>> getReviewProcess();
+  Future<List<ArticleProcessEntity>> getReviewProcess({
+    required ReviewProcessParams params,
+  });
+
+  Future<ArticlesStatsEntity> getArticlesStats({required String countType});
 }

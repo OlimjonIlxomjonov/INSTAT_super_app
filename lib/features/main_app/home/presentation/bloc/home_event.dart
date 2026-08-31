@@ -41,3 +41,9 @@ class NotifEvent extends HomeEvent {
 class ActiveDevicesEvent extends HomeEvent {}
 
 class DeleteActiveDevicesEvent extends HomeEvent {}
+
+class ModuleCategoryEvent extends HomeEvent {
+  final ModuleCategoryParams params;
+
+  ModuleCategoryEvent({required this.params});
+}

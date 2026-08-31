@@ -8,6 +8,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/data/
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_editions/article_editions_response_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_order_payment/article_order_payment_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_process/article_process_model.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/data/model/articles_stats/articles_stats_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/edition_articles/edition_article_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/review_files/review_files_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/user_articles/user_articles_response_model.dart';
@@ -444,13 +445,36 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
   }
 
   @override
-  Future<List<ArticleProcessModel>> fetchReviewProcess() async {
+  Future<List<ArticleProcessModel>> fetchReviewProcess({
+    required ReviewProcessParams params,
+  }) async {
     try {
-      final response = await _dioClient.get(ApiUrls.reviewProcess);
+      final response = await _dioClient.get(
+        ApiUrls.reviewProcess(params.processType),
+      );
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
         final data = response.data as List;
         return data.map((e) => ArticleProcessModel.fromJson(e)).toList();
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ArticlesStatsModel> fetchArticlesStats({
+    required String countType,
+  }) async {
+    try {
+      final response = await _dioClient.get("$countType${ApiUrls.itemCount}");
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        final data = response.data;
+        return ArticlesStatsModel.fromJson(data);
       } else {
         throw Exception('THROW EXCEPTION! ${response.statusCode}');
       }

@@ -13,6 +13,8 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_event.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_state.dart';
 
+import '../../../../../../../core/utils/widgets/module_categories/module_categories_with_bloc.dart';
+
 class SeeAllOnlineBooksComponent extends StatelessWidget {
   const SeeAllOnlineBooksComponent({super.key});
 
@@ -20,8 +22,6 @@ class SeeAllOnlineBooksComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      // PopularBooksWithBlocWg builds slivers, so the load-more trigger has
-      // to wrap the CustomScrollView from out here.
       body: BlocBuilder<PopularBooksBloc, PopularBooksState>(
         buildWhen: (prev, curr) {
           final p = prev is PopularBooksLoaded ? prev : null;
@@ -56,16 +56,9 @@ class SeeAllOnlineBooksComponent extends StatelessWidget {
 
                 /// CATEGORIES
                 SliverToBoxAdapter(
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.only(right: 20, bottom: 20),
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: List.generate(5, (index) {
-                        return EduCategoriesWg();
-                      }),
-                    ),
-                  ),
+                  child: ModuleCategoriesWithBlocWg(categoryType: 'library'),
                 ),
+                SliverToBoxAdapter(child: SizedBox(height: 20)),
 
                 SliverPadding(
                   padding: AppPadding.horizontal20x(),
