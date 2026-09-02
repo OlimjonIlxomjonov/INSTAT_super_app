@@ -13,12 +13,20 @@ import 'package:my_template/features/education_app/features/home_edu/domain/repo
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/comments/comments_use_case.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/per_course/per_course_use_case.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/similar_courses/similar_courses_use_caase.dart';
+import 'package:my_template/features/education_app/features/home_edu/domain/usecase/tickets/create_ticket/create_ticket_use_case.dart';
+import 'package:my_template/features/education_app/features/home_edu/domain/usecase/tickets/delete_ticket/delete_ticket_use_case.dart';
+import 'package:my_template/features/education_app/features/home_edu/domain/usecase/tickets/send_message/send_message_use_case.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/tickets/show_tickets/show_tickets_use_case.dart';
+import 'package:my_template/features/education_app/features/home_edu/domain/usecase/tickets/tickets_chat/tickets_chat_use_case.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/user_certificates/user_certificate_use_case.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/comments/comments_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/per_course/per_course_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/similar_courses/similar_courses_bloc.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/tickets/create_tickets/create_tickets_bloc.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/tickets/delete_tickets/delete_tickets_bloc.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/tickets/send_message/send_message_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/tickets/show_ticktes/show_tickets_bloc.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/tickets/tickets_chat/tickets_chat_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/user_certificate/certificate_bloc.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/data/repo/leader_board_repo_impl.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/data/source/impl_remote_data_source/leader_board_remote_data_source_impl.dart';
@@ -419,6 +427,10 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => DeleteAllDevicesUseCase(repository: sl()));
   //? Ticktes
   sl.registerLazySingleton(() => ShowTicketsUseCase(repository: sl()));
+  sl.registerLazySingleton(() => TicketsChatUseCase(repository: sl()));
+  sl.registerLazySingleton(() => SendMessageUseCase(repository: sl()));
+  sl.registerLazySingleton(() => CreateTicketUseCase(repository: sl()));
+  sl.registerLazySingleton(() => DeleteTicketUseCase(repository: sl()));
   //? Review process
   sl.registerLazySingleton(() => ReviewProcessUseCase(repository: sl()));
   //? Module Category
@@ -427,6 +439,7 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => LibraryStatsUseCase(repository: sl()));
   //? Article stats
   sl.registerLazySingleton(() => ArticlesStatsUseCase(repository: sl()));
+
 
   //! {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -563,6 +576,10 @@ Future<void> setup() async {
   sl.registerFactory(() => DeleteAllDevicesBloc(useCase: sl()));
   //? Tickets
   sl.registerFactory(() => ShowTicketsBloc(useCase: sl()));
+  sl.registerFactory(() => TicketsChatBloc(useCase: sl()));
+  sl.registerFactory(() => SendMessageBloc(useCase: sl()));
+  sl.registerFactory(() => CreateTicketsBloc(useCase: sl()));
+  sl.registerFactory(() => DeleteTicketsBloc(useCase: sl()));
   //? Review Process
   sl.registerFactory(() => ReviewProcessBloc(useCase: sl()));
   //? Module Category

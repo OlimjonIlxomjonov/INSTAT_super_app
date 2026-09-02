@@ -4,7 +4,11 @@ import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/comments/comments_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/per_course/per_course_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/similar_courses/similar_courses_bloc.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/tickets/create_tickets/create_tickets_bloc.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/tickets/delete_tickets/delete_tickets_bloc.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/tickets/send_message/send_message_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/tickets/show_ticktes/show_tickets_bloc.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/tickets/tickets_chat/tickets_chat_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/user_certificate/certificate_bloc.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/bloc/leader_board/leader_board_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/about_course_features/about_cours_features_bloc.dart';
@@ -109,8 +113,7 @@ class MyBlocProvider extends StatelessWidget {
         ),
         // add article
         BlocProvider<UdkBloc>(create: (_) => sl<UdkBloc>()),
-        // AddArticleBloc is provided locally in AddArticlePage (not globally)
-        // so that it resets on every new article creation session.
+
         //! Drop downs
         BlocProvider<ArticleTypeBloc>(create: (_) => sl<ArticleTypeBloc>()),
         BlocProvider<JournalSectionBloc>(
@@ -170,6 +173,10 @@ class MyBlocProvider extends StatelessWidget {
         ),
         //! Tickets
         BlocProvider<ShowTicketsBloc>(create: (_) => sl<ShowTicketsBloc>()),
+        BlocProvider<TicketsChatBloc>(create: (_) => sl<TicketsChatBloc>()),
+        BlocProvider<SendMessageBloc>(create: (_) => sl<SendMessageBloc>()),
+        BlocProvider<CreateTicketsBloc>(create: (_) => sl<CreateTicketsBloc>()),
+        BlocProvider<DeleteTicketsBloc>(create: (_) => sl<DeleteTicketsBloc>()),
         //! Reviews Process
         BlocProvider<ReviewProcessBloc>(create: (_) => sl<ReviewProcessBloc>()),
         //! Module Category

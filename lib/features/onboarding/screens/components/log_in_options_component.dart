@@ -418,17 +418,11 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
             Expanded(child: Divider(color: AppColors.greyScale.grey400)),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: appW(12)),
-              child: GestureDetector(
-                onDoubleTap: () {
-                  AppRoute.go(ReviewerLogInPage());
-                  technicalWorkFlushBar(context, 'Developer Log in page');
-                },
-                child: AutoSizeText(
-                  localization.or,
-                  style: AppTextStyles.source.regular(
-                    fontSize: 14,
-                    color: AppColors.greyScale.grey600,
-                  ),
+              child: AutoSizeText(
+                localization.or,
+                style: AppTextStyles.source.regular(
+                  fontSize: 14,
+                  color: AppColors.greyScale.grey600,
                 ),
               ),
             ),

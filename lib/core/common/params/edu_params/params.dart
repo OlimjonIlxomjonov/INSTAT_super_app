@@ -215,3 +215,35 @@ class ModuleCategoryParams {
 
   ModuleCategoryParams({required this.type, required this.page});
 }
+
+class TicketsChatParams {
+  final int ticketId;
+
+  TicketsChatParams({required this.ticketId});
+}
+
+class SendMessageParams {
+  final int ticketId;
+  final String message;
+  final File? file;
+
+  SendMessageParams({required this.ticketId, required this.message, this.file});
+}
+
+class CreateTicketParams {
+  final String title;
+  final String? desc;
+  final File file;
+
+  CreateTicketParams({
+    required this.title,
+    required this.desc,
+    required this.file,
+  });
+}
+
+class DeleteTicketParams {
+  final int ticketId;
+
+  DeleteTicketParams({required this.ticketId});
+}

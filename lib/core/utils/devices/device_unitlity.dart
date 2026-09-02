@@ -167,3 +167,12 @@ extension LastSeenExtension on String {
     }
   }
 }
+
+extension DateTimeStringX on String {
+  String toReadableTime() {
+    final dt = DateTime.parse(this);
+    final hh = dt.hour.toString().padLeft(2, '0');
+    final mm = dt.minute.toString().padLeft(2, '0');
+    return '$hh:$mm';
+  }
+}

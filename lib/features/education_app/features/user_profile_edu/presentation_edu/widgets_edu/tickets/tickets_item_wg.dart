@@ -15,7 +15,11 @@ class TicketsItemWg extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        openMiniAppSheetFamily(context, child: EduTicketsChatComponent());
+        openMiniAppSheetFamily(
+          context,
+          showHandler: false,
+          child: EduTicketsChatComponent(ticketId: item.id),
+        );
       },
       minVerticalPadding: 10,
       shape: UnderlineInputBorder(

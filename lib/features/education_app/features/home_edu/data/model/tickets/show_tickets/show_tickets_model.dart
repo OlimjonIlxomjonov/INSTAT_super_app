@@ -23,7 +23,7 @@ class ShowTicketsModel extends ShowTicketsEntity {
       user: UserModel.fromJson(json['user']),
       isUser: json['is_user'] ?? false,
       title: json['title'] ?? 'Unknown',
-      desc: json['description'] ?? 'Unknown',
+      desc: json['description'] ?? '',
       status: json['status'] ?? '',
       file: json['file'] ?? '',
       fileName: json['file_name'] ?? '',

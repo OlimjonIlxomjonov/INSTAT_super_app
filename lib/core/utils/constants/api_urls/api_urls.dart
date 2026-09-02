@@ -1,3 +1,5 @@
+import 'package:my_template/core/common/params/edu_params/params.dart';
+
 class ApiUrls {
   ApiUrls._();
 
@@ -137,6 +139,7 @@ class ApiUrls {
 
   //? Report files
   static String reportFiles(int reportId) => 'data-reports/$reportId/files/';
+
   static String reportVariables(int reportId) =>
       'data-reports/$reportId/variables/';
 
@@ -149,6 +152,14 @@ class ApiUrls {
   //! Tickets
   static String showTickets(String status, String search, String page) =>
       'tickets/?status=$status&search=$search&page=$page';
+
+  static String showTicketChat(TicketsChatParams params) =>
+      'tickets/${params.ticketId}/messages/';
+
+  static String sendMessage(SendMessageParams params) =>
+      'tickets/${params.ticketId}/send-message/';
+  static const String createTicket = 'tickets/';
+  static const String deleteTicket = 'tickets/';
 
   //? Review process
   static String reviewProcess(String reviewType) =>
@@ -163,5 +174,4 @@ class ApiUrls {
 
   //library
   static const String libraryStats = 'books$itemCount';
-
 }

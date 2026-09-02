@@ -8,7 +8,7 @@ class ShowTicketsBloc extends Bloc<HomeEduEvent, ShowTicketsState> {
 
   ShowTicketsBloc({required this.useCase}) : super(ShowTicketsInitial()) {
     on<ShowTicketsEvent>((event, emit) async {
-      emit(ShowTicketsLoading());
+      // emit(ShowTicketsLoading());
       try {
         final response = await useCase.call(params: event.params);
         emit(ShowTicketsLoaded(response: response));

@@ -34,3 +34,27 @@ class ShowTicketsEvent extends HomeEduEvent {
 
   ShowTicketsEvent({required this.params});
 }
+
+class TicketsChatEvent extends HomeEduEvent {
+  final TicketsChatParams params;
+
+  TicketsChatEvent({required this.params});
+}
+
+class SendMessageEvent extends HomeEduEvent {
+  final SendMessageParams params;
+
+  SendMessageEvent({required this.params});
+}
+
+class CreateTicketsEvent extends HomeEduEvent {
+  final CreateTicketParams params;
+
+  CreateTicketsEvent({required this.params});
+}
+
+class DeleteTicketEvent extends HomeEduEvent {
+  final DeleteTicketParams params;
+
+  DeleteTicketEvent({required this.params});
+}
