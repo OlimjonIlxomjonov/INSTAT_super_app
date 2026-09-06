@@ -8,6 +8,9 @@ import 'package:my_template/features/main_app/home/presentation/bloc/user/user_m
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_state.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/notifications/notifications_page.dart';
 
+import '../../../../features/main_app/home/presentation/bloc/notifications_count/notifications_count_bloc.dart';
+import '../../../../features/main_app/home/presentation/bloc/notifications_count/notifications_count_state.dart';
+
 class DraggableAppBarWg extends StatelessWidget implements PreferredSize {
   final VoidCallback onProfileTap;
 
@@ -70,15 +73,47 @@ class DraggableAppBarWg extends StatelessWidget implements PreferredSize {
         ),
       ),
       actions: [
-        IconButton(
-          onPressed: () {
-            openMiniAppSheetFamily(
-              context,
-              child: NotificationsPage(),
-              showHandler: false,
-            );
-          },
-          icon: Icon(FlutterRemix.notification_line),
+        Stack(
+          children: [
+            IconButton(
+              onPressed: () {
+                openMiniAppSheetFamily(
+                  context,
+                  child: NotificationsPage(),
+                  showHandler: false,
+                );
+              },
+              icon: Icon(FlutterRemix.notification_2_line),
+            ),
+            //! Notifications Count
+            BlocBuilder<NotifCountBloc, NotifCountState>(
+              builder: (context, state) {
+                if (state is NotifCountLoaded) {
+                  if (state.entity.count == 0) {
+                    return SizedBox.shrink();
+                  }
+                  return Positioned(
+                    right: 10,
+                    child: Container(
+                      padding: .all(5),
+                      decoration: BoxDecoration(
+                        color: AppColors.red,
+                        shape: .circle,
+                      ),
+                      child: Text(
+                        state.entity.count.toString(),
+                        style: AppTextStyles.source.regular(
+                          fontSize: 12,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                return SizedBox.shrink();
+              },
+            ),
+          ],
         ),
       ],
     );

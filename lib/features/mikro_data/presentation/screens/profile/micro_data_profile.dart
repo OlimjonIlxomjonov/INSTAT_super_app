@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
+import '../../../../../core/utils/general_widgets/site_faqs/site_faqs.dart';
+import '../../../../../core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import '../../../../../core/utils/widgets/profile_settings_tile/profile_settings_tile_wg.dart';
 
 class MicroDataProfile extends StatelessWidget {
@@ -28,7 +30,13 @@ class MicroDataProfile extends StatelessWidget {
           SliverToBoxAdapter(
             child: ProfileSettingsTileWg(
               title: localization.frQuestions,
-              onTap: () {},
+              onTap: () {
+                openMiniAppSheetFamily(
+                  showHandler: false,
+                  context,
+                  child: SiteFaqsWg(module: 'micro_data'),
+                );
+              },
               leadingIcon: FlutterRemix.message_2_line,
             ),
           ),

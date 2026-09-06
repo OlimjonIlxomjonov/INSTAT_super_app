@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
+import 'package:my_template/core/utils/general_widgets/site_faqs/site_faqs.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/profile_settings_tile/profile_settings_tile_wg.dart';
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/favourite_course_settings_component.dart';
@@ -56,7 +57,13 @@ class _UserProfileEduState extends State<UserProfileEdu> {
                 ProfileSettingsTileWg(
                   leadingIcon: FlutterRemix.message_2_line,
                   title: localization.frQuestions,
-                  onTap: () {},
+                  onTap: () {
+                    openMiniAppSheetFamily(
+                      showHandler: false,
+                      context,
+                      child: SiteFaqsWg(module: 'education'),
+                    );
+                  },
                 ),
               ],
             ),

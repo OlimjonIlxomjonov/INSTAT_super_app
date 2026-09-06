@@ -54,59 +54,68 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   );
                 }
                 //! Loading animation
-                return Skeletonizer(
-                  enabled: true,
-                  child: Container(
-                    margin: .symmetric(horizontal: 20),
-                    padding: .all(15),
-                    decoration: BoxDecoration(
-                      borderRadius: .circular(10),
-                      border: Border(
-                        left: BorderSide(
-                          width: 5,
-                          color: AppColors.greyScale.grey200,
-                        ),
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: .start,
-                      children: [
-                        Text(
-                          'Statistika (Tarmoqlar va sohalar bo’yicha)',
-                          style: AppTextStyles.source.medium(fontSize: 16),
-                          maxLines: 1,
-                          overflow: .ellipsis,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Ushbu topshiriq kurs davomida o‘rganilgan statistik ma’lumotlarni real tarmoqlar va sohalar kesimida tahlil qilishga qaratilgan.',
-                          maxLines: 1,
-                          overflow: .ellipsis,
-                          style: AppTextStyles.source.regular(
-                            fontSize: 14,
-                            color: AppColors.greyScale.grey600,
-                          ),
-                        ),
-                        Divider(color: AppColors.greyScale.grey200),
-                        Row(
-                          children: [
-                            Spacer(),
-                            Icon(
-                              FlutterRemix.calendar_line,
-                              size: 15,
-                              color: AppColors.greyScale.grey400,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              'Bugun  15:00',
-                              style: AppTextStyles.source.regular(
-                                fontSize: 12,
-                                color: AppColors.greyScale.grey400,
+                return Expanded(
+                  child: Skeletonizer(
+                    enabled: true,
+                    child: ListView.builder(
+                      itemCount: 5,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: .symmetric(horizontal: 20, vertical: 5),
+                          padding: .all(15),
+                          decoration: BoxDecoration(
+                            borderRadius: .circular(10),
+                            border: Border(
+                              left: BorderSide(
+                                width: 5,
+                                color: AppColors.greyScale.grey200,
                               ),
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: .start,
+                            children: [
+                              Text(
+                                'Statistika (Tarmoqlar va sohalar bo’yicha)',
+                                style: AppTextStyles.source.medium(
+                                  fontSize: 16,
+                                ),
+                                maxLines: 1,
+                                overflow: .ellipsis,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Ushbu topshiriq kurs davomida o‘rganilgan statistik ma’lumotlarni real tarmoqlar va sohalar kesimida tahlil qilishga qaratilgan.',
+                                maxLines: 1,
+                                overflow: .ellipsis,
+                                style: AppTextStyles.source.regular(
+                                  fontSize: 14,
+                                  color: AppColors.greyScale.grey600,
+                                ),
+                              ),
+                              Divider(color: AppColors.greyScale.grey200),
+                              Row(
+                                children: [
+                                  Spacer(),
+                                  Icon(
+                                    FlutterRemix.calendar_line,
+                                    size: 15,
+                                    color: AppColors.greyScale.grey400,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    'Bugun  15:00',
+                                    style: AppTextStyles.source.regular(
+                                      fontSize: 12,
+                                      color: AppColors.greyScale.grey400,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
                   ),
                 );

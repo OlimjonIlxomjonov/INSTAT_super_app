@@ -247,3 +247,9 @@ class DeleteTicketParams {
 
   DeleteTicketParams({required this.ticketId});
 }
+
+class SiteFaqsParams {
+  final String module;
+
+  SiteFaqsParams({required this.module});
+}

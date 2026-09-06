@@ -145,6 +145,7 @@ class ApiUrls {
 
   //? Notifications
   static const String notif = 'notifications/?page=';
+  static const String notifCount = 'notifications/items/unread-count/';
 
   //? Active Devices // DELETE TOO
   static const String activeDevices = 'devices';
@@ -174,4 +175,7 @@ class ApiUrls {
 
   //library
   static const String libraryStats = 'books$itemCount';
+
+  //! site FAQs
+  static const String siteFaqs = 'site-faqs/items/all/?module=';
 }

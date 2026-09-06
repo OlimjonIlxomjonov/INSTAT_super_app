@@ -31,6 +31,8 @@ import 'package:my_template/features/main_app/home/presentation/bloc/delete_acti
 import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/module_category/module_category_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/notifications/notif_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/notifications_count/notifications_count_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/site_faqs/site_faqs_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/report_files/report_files_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/report_variables/report_variables_bloc.dart';
@@ -187,6 +189,8 @@ class MyBlocProvider extends StatelessWidget {
         BlocProvider<LibraryStatsBloc>(create: (_) => sl<LibraryStatsBloc>()),
         //! Article stats
         BlocProvider<ArticleStatsBloc>(create: (_) => sl<ArticleStatsBloc>()),
+        BlocProvider<NotifCountBloc>(create: (_) => sl<NotifCountBloc>()),
+        BlocProvider<SiteFaqsBloc>(create: (_) => sl<SiteFaqsBloc>()),
       ],
       child: child,
     );

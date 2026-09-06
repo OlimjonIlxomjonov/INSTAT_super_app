@@ -4,6 +4,8 @@ import 'package:my_template/features/main_app/home/data/model/banner/banner_mode
 import 'package:my_template/features/main_app/home/data/model/country/country_model.dart';
 import 'package:my_template/features/main_app/home/data/model/module_category/module_category_response_model.dart';
 import 'package:my_template/features/main_app/home/data/model/notifications/notif_response_model.dart';
+import 'package:my_template/features/main_app/home/data/model/notifications_count/notifications_count_model.dart';
+import 'package:my_template/features/main_app/home/data/model/site_faqs/site_faqs_model.dart';
 import 'package:my_template/features/main_app/home/data/model/user_me/user_model.dart';
 import 'package:my_template/features/main_app/home/domain/entity/active_devices/active_devices.dart';
 
@@ -39,4 +41,8 @@ abstract class HomeRemoteDataSource {
   Future<ModuleCategoryResponseModel> fetchModuleCategory({
     required ModuleCategoryParams params,
   });
+
+  Future<NotificationsCountModel> fetchNotifCount();
+
+  Future<List<SiteFaqsModel>> fetchSiteFaqs({required SiteFaqsParams params});
 }

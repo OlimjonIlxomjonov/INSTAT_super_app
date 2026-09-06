@@ -16,6 +16,9 @@ import 'package:my_template/core/utils/widgets/active_books/active_books_with_bl
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/core/utils/widgets/user_articles_with_bloc/user_articles_with_bloc_wg.dart';
 import 'package:my_template/core/utils/widgets/user_requests_with_bloc/user_requests_with_bloc_wg.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/notifications/notif_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/notifications_count/notifications_count_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/notifications_count/notifications_count_state.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/notifications/notifications_page.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/micro_data_requets.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
@@ -109,6 +112,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
       UserArticlesEvent(status: 'all', search: ''),
     );
     context.read<UserBookBloc>().add(UserBooksEvent());
+    context.read<NotifCountBloc>().add(NotificationsCountEvent());
   }
 
   @override
@@ -347,9 +351,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
             );
           } else if (state is PopularBooksError) {
             if (state.isConnectionError) {
-              return const SliverToBoxAdapter(
-                child: SizedBox.shrink(),
-              ); // Handled at page level mostly, but prevent crash
+              return const SliverToBoxAdapter(child: SizedBox.shrink());
             }
             return const SliverToBoxAdapter(child: SizedBox.shrink());
           }
@@ -414,12 +416,6 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
 
         child: CustomScrollView(
           slivers: [
-            // const SliverAppBar(
-            //   title: TestModeBanner(),
-            //   automaticallyImplyLeading: false,
-            //   titleSpacing: 0,
-            // ),
-
             /// HEADER LOGO
             SliverAppBar(
               snap: true,
@@ -431,15 +427,47 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
               title: SvgPicture.asset(AppVectors.homeInstatLogo),
               centerTitle: true,
               actions: [
-                IconButton(
-                  onPressed: () {
-                    openMiniAppSheetFamily(
-                      context,
-                      child: NotificationsPage(),
-                      showHandler: false,
-                    );
-                  },
-                  icon: Icon(FlutterRemix.notification_2_line),
+                Stack(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        openMiniAppSheetFamily(
+                          context,
+                          child: NotificationsPage(),
+                          showHandler: false,
+                        );
+                      },
+                      icon: Icon(FlutterRemix.notification_2_line),
+                    ),
+                    //! Notifications Count
+                    BlocBuilder<NotifCountBloc, NotifCountState>(
+                      builder: (context, state) {
+                        if (state is NotifCountLoaded) {
+                          if (state.entity.count == 0) {
+                            return SizedBox.shrink();
+                          }
+                          return Positioned(
+                            right: 10,
+                            child: Container(
+                              padding: .all(5),
+                              decoration: BoxDecoration(
+                                color: AppColors.red,
+                                shape: .circle,
+                              ),
+                              child: Text(
+                                state.entity.count.toString(),
+                                style: AppTextStyles.source.regular(
+                                  fontSize: 12,
+                                  color: AppColors.white,
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                        return SizedBox.shrink();
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),

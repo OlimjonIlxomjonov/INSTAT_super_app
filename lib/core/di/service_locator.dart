@@ -76,7 +76,9 @@ import 'package:my_template/features/main_app/home/domain/usecase/banner/get_act
 import 'package:my_template/features/main_app/home/domain/usecase/get_countries_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/module_category/module_category_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/notifications/notif_use_case.dart';
+import 'package:my_template/features/main_app/home/domain/usecase/notifications_count/notifications_count_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/register_not_resident_use_case.dart';
+import 'package:my_template/features/main_app/home/domain/usecase/site_faqs/site_faqs_use_case.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/active_device/active_devices_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/banner/banner_bloc.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/user_me/user_me_use_case.dart';
@@ -88,6 +90,8 @@ import 'package:my_template/features/main_app/home/presentation/bloc/delete_acti
 import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/module_category/module_category_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/notifications/notif_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/notifications_count/notifications_count_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/site_faqs/site_faqs_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/course_lesson_test/get_lesson_tests_usecase.dart';
@@ -439,7 +443,8 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => LibraryStatsUseCase(repository: sl()));
   //? Article stats
   sl.registerLazySingleton(() => ArticlesStatsUseCase(repository: sl()));
-
+  sl.registerLazySingleton(() => NotificationsCountUseCase(repository: sl()));
+  sl.registerLazySingleton(() => SiteFaqsUseCase(repository: sl()));
 
   //! {BLOC}
   sl.registerLazySingleton(() => UserMeBloc(sl()));
@@ -588,4 +593,6 @@ Future<void> setup() async {
   sl.registerFactory(() => LibraryStatsBloc(useCase: sl()));
   //? Article stats
   sl.registerFactory(() => ArticleStatsBloc(useCase: sl()));
+  sl.registerFactory(() => NotifCountBloc(useCase: sl()));
+  sl.registerFactory(() => SiteFaqsBloc(useCase: sl()));
 }

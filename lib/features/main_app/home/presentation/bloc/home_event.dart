@@ -47,3 +47,11 @@ class ModuleCategoryEvent extends HomeEvent {
 
   ModuleCategoryEvent({required this.params});
 }
+
+class NotificationsCountEvent extends HomeEvent {}
+
+class SiteFaqsEvent extends HomeEvent {
+  final SiteFaqsParams params;
+
+  SiteFaqsEvent({required this.params});
+}

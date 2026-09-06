@@ -5,6 +5,8 @@ import 'package:my_template/features/main_app/home/domain/entity/banner/banner_e
 import 'package:my_template/features/main_app/home/domain/entity/country/country_entity.dart';
 import 'package:my_template/features/main_app/home/domain/entity/module_category/module_category_response.dart';
 import 'package:my_template/features/main_app/home/domain/entity/notifications/notif_response.dart';
+import 'package:my_template/features/main_app/home/domain/entity/notifications_count/notifications_count_entity.dart';
+import 'package:my_template/features/main_app/home/domain/entity/site_faqs/site_faqs_entity.dart';
 import 'package:my_template/features/main_app/home/domain/entity/user_me/user_entity.dart';
 
 abstract class HomeRepository {
@@ -40,4 +42,8 @@ abstract class HomeRepository {
   Future<ModuleCategoryResponse> getModuleCategory({
     required ModuleCategoryParams params,
   });
+
+  Future<NotificationsCountEntity> getNotifCount();
+
+  Future<List<SiteFaqsEntity>> getSiteFaqs({required SiteFaqsParams params});
 }

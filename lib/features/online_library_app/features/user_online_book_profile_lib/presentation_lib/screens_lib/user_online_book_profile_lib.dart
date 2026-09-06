@@ -10,6 +10,8 @@ import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_profile_lib/presentation_lib/screens_lib/components/saved_books_component.dart';
 
+import '../../../../../../core/utils/general_widgets/site_faqs/site_faqs.dart';
+
 class UserOnlineBookProfileLib extends StatefulWidget {
   const UserOnlineBookProfileLib({super.key});
 
@@ -95,6 +97,12 @@ class _UserOnlineBookProfileLibState extends State<UserOnlineBookProfileLib> {
           context,
           child: SavedBooksComponent(),
           showHandler: false,
+        );
+      case 1:
+        openMiniAppSheetFamily(
+          showHandler: false,
+          context,
+          child: SiteFaqsWg(module: 'library'),
         );
       default:
         technicalWorkFlushBar(

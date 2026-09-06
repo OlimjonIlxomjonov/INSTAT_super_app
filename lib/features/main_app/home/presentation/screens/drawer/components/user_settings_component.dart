@@ -79,11 +79,12 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
           },
         ),
         //! FAQ
-        ProfileSettingsTileWg(
-          leadingIcon: IconlyLight.info_square,
-          title: localization.frQuestions,
-          onTap: () {},
-        ),
+
+        // ProfileSettingsTileWg(
+        //   leadingIcon: IconlyLight.info_square,
+        //   title: localization.frQuestions,
+        //   onTap: () {},
+        // ),
 
         //! Active devices
         ProfileSettingsTileWg(

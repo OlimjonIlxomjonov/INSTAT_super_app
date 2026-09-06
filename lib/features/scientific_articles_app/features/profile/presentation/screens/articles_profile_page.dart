@@ -4,6 +4,8 @@ import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 
+import '../../../../../../core/utils/general_widgets/site_faqs/site_faqs.dart';
+
 class ArticlesProfilePage extends StatelessWidget {
   const ArticlesProfilePage({super.key});
 
@@ -28,7 +30,13 @@ class ArticlesProfilePage extends StatelessWidget {
           SliverToBoxAdapter(
             child: ProfileSettingsTileWg(
               title: localization.frQuestions,
-              onTap: () {},
+              onTap: () {
+                openMiniAppSheetFamily(
+                  showHandler: false,
+                  context,
+                  child: SiteFaqsWg(module: 'articles'),
+                );
+              },
               leadingIcon: FlutterRemix.message_2_line,
             ),
           ),

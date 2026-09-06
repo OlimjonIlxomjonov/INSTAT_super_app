@@ -13,6 +13,8 @@ import 'package:my_template/features/main_app/home/data/model/banner/banner_mode
 import 'package:my_template/features/main_app/home/data/model/country/country_model.dart';
 import 'package:my_template/features/main_app/home/data/model/module_category/module_category_response_model.dart';
 import 'package:my_template/features/main_app/home/data/model/notifications/notif_response_model.dart';
+import 'package:my_template/features/main_app/home/data/model/notifications_count/notifications_count_model.dart';
+import 'package:my_template/features/main_app/home/data/model/site_faqs/site_faqs_model.dart';
 import 'package:my_template/features/main_app/home/data/model/user_me/user_model.dart';
 import 'package:my_template/features/main_app/home/data/source/remote_data_source/home_remote_data_source.dart';
 import 'package:my_template/features/main_app/home/domain/entity/active_devices/active_devices.dart';
@@ -361,6 +363,45 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
         return ModuleCategoryResponseModel.fromJson(response.data);
+      } else {
+        throw Exception('EXCEPTION: ${response.statusCode}');
+      }
+    } catch (e, st) {
+      logger.e(e);
+      logger.e(st);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<NotificationsCountModel> fetchNotifCount() async {
+    try {
+      final response = await _dioClient.get(ApiUrls.notifCount);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return NotificationsCountModel.fromJson(response.data);
+      } else {
+        throw Exception('EXCEPTION: ${response.statusCode}');
+      }
+    } catch (e, st) {
+      logger.e(e);
+      logger.e(st);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<SiteFaqsModel>> fetchSiteFaqs({
+    required SiteFaqsParams params,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        "${ApiUrls.siteFaqs}${params.module}",
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data as List;
+        logger.i(data);
+        return data.map((e) => SiteFaqsModel.fromJson(e)).toList();
       } else {
         throw Exception('EXCEPTION: ${response.statusCode}');
       }
