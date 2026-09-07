@@ -16,9 +16,12 @@ import 'package:my_template/core/utils/widgets/active_books/active_books_with_bl
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/core/utils/widgets/user_articles_with_bloc/user_articles_with_bloc_wg.dart';
 import 'package:my_template/core/utils/widgets/user_requests_with_bloc/user_requests_with_bloc_wg.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/home_layout/home_layout_cubit.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/home_layout/home_layout_state.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/notifications/notif_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/notifications_count/notifications_count_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/notifications_count/notifications_count_state.dart';
+import 'package:my_template/features/main_app/home/presentation/screens/components/home_arrange_component.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/notifications/notifications_page.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/micro_data_requets.dart';
 import 'package:my_template/features/education_app/features/edu_bottom_nav_bar.dart';
@@ -199,17 +202,27 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
     );
   }
 
-  /// Builds all content slivers shown below the search bar when online.
-  List<Widget> _buildContentSlivers(
+  void _openArrangeSheet(BuildContext context) {
+    openMiniAppSheetFamily(
+      context,
+      showHandler: false,
+      child: const HomeArrangeComponent(),
+    );
+  }
+
+  /// Har bir bo'lim o'z sliverlari bilan — tartibi [HomeLayoutCubit] dan.
+  Map<HomeSectionId, Widget> _sectionSlivers(
     BuildContext context,
     AppLocalizations localization,
   ) {
-    return [
+    return {
       /// BANNERS
-      SliverToBoxAdapter(child: PromoBannersCarouselWg()),
+      HomeSectionId.banners: SliverToBoxAdapter(
+        child: PromoBannersCarouselWg(),
+      ),
 
       //! ACTIVE COURSES
-      ActiveCoursesWithBlocWg(
+      HomeSectionId.activeCourses: ActiveCoursesWithBlocWg(
         onSeeAll: () => openMiniAppSheetFamily(
           isTransparent: false,
           showHandler: false,
@@ -218,23 +231,26 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
         ),
       ),
 
-      SliverPadding(
-        padding: AppPadding.horizontal20x(),
-        sliver: SliverToBoxAdapter(
-          child: ExtendSectionSeeAllWg(
-            title: localization.popularCourses,
-            onTap: () {
-              _goToAllCourses(context);
-            },
+      //! EDU POPULAR COURSES
+      HomeSectionId.popularCourses: SliverMainAxisGroup(
+        slivers: [
+          SliverPadding(
+            padding: AppPadding.horizontal20x(),
+            sliver: SliverToBoxAdapter(
+              child: ExtendSectionSeeAllWg(
+                title: localization.popularCourses,
+                onTap: () {
+                  _goToAllCourses(context);
+                },
+              ),
+            ),
           ),
-        ),
+          SliverToBoxAdapter(child: PopularWithBlocWg()),
+        ],
       ),
 
-      //! EDU POPULAR COURSES
-      SliverToBoxAdapter(child: PopularWithBlocWg()),
-
       //! Active Books
-      SliverPadding(
+      HomeSectionId.activeBooks: SliverPadding(
         padding: const .symmetric(horizontal: 20),
         sliver: SliverToBoxAdapter(
           child: ActiveBooksWithBloc(
@@ -248,7 +264,8 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
       ),
 
       /// LIBRARY POPULAR BOOKS
-      BlocBuilder<PopularBooksBloc, PopularBooksState>(
+      HomeSectionId
+          .popularBooks: BlocBuilder<PopularBooksBloc, PopularBooksState>(
         builder: (context, state) {
           final cardWidth = MediaQuery.sizeOf(context).width * 0.46;
 
@@ -293,7 +310,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                           openMiniAppSheetFamily(
                             context,
                             showHandler: false,
-                            child: SimilarOnlineBooksComponent(data: books),
+                            child: SimilarOnlineBooksComponent(),
                           );
                         },
                       ),
@@ -360,47 +377,79 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
         },
       ),
 
-      SliverPadding(
-        padding: const .only(left: 20, right: 20, top: 15),
-        sliver: SliverToBoxAdapter(
-          child: ExtendSectionSeeAllWg(
-            title: localization.yourArticles,
-            onTap: () {
-              openMiniAppSheetFamily(
-                showHandler: false,
-                enableDrag: true,
-                context,
-                child: const UserArticlesPage(),
-              );
-            },
-          ),
-        ),
-      ),
-
       //! ARTICLES
-      const UserArticlesWithBlocWg(limit: 2),
-
-      //! See all requests
-      SliverPadding(
-        padding: const .only(left: 20, right: 20, top: 24),
-        sliver: SliverToBoxAdapter(
-          child: ExtendSectionSeeAllWg(
-            title: localization.myRequests,
-            onTap: () {
-              openMiniAppSheetFamily(
-                showHandler: false,
-                enableDrag: true,
-                context,
-                child: const MicroDataRequests(),
-              );
-            },
+      HomeSectionId.userArticles: SliverMainAxisGroup(
+        slivers: [
+          SliverPadding(
+            padding: const .only(left: 20, right: 20, top: 15),
+            sliver: SliverToBoxAdapter(
+              child: ExtendSectionSeeAllWg(
+                title: localization.yourArticles,
+                onTap: () {
+                  openMiniAppSheetFamily(
+                    showHandler: false,
+                    enableDrag: true,
+                    context,
+                    child: const UserArticlesPage(),
+                  );
+                },
+              ),
+            ),
           ),
-        ),
+          const UserArticlesWithBlocWg(limit: 2),
+        ],
       ),
 
       //! REQUESTS
-      SliverSafeArea(sliver: const UserRequestsWithBlocWg(limit: 3)),
-    ];
+      HomeSectionId.userRequests: SliverMainAxisGroup(
+        slivers: [
+          SliverPadding(
+            padding: const .only(left: 20, right: 20, top: 24),
+            sliver: SliverToBoxAdapter(
+              child: ExtendSectionSeeAllWg(
+                title: localization.myRequests,
+                onTap: () {
+                  openMiniAppSheetFamily(
+                    showHandler: false,
+                    enableDrag: true,
+                    context,
+                    child: const MicroDataRequests(),
+                  );
+                },
+              ),
+            ),
+          ),
+          const UserRequestsWithBlocWg(limit: 3),
+        ],
+      ),
+    };
+  }
+
+  /// TARTIBLASH TUGMASI
+  Widget _buildArrangeButton(
+    BuildContext context,
+    AppLocalizations localization,
+  ) {
+    return SliverSafeArea(
+      sliver: SliverPadding(
+        padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
+        sliver: SliverToBoxAdapter(
+          child: OutlinedButton.icon(
+            onPressed: () => _openArrangeSheet(context),
+            icon: const Icon(FlutterRemix.drag_move_2_line, size: 18),
+            label: Text(localization.arrangeSections),
+            style: OutlinedButton.styleFrom(
+              minimumSize: const Size.fromHeight(48),
+              foregroundColor: AppColors.greyScale.grey700,
+              side: BorderSide(color: AppColors.greyScale.grey300),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -542,8 +591,24 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                           );
                         }
 
-                        return SliverMainAxisGroup(
-                          slivers: _buildContentSlivers(context, localization),
+                        return BlocBuilder<HomeLayoutCubit, HomeLayoutState>(
+                          builder: (context, layout) {
+                            final sections = _sectionSlivers(
+                              context,
+                              localization,
+                            );
+                            return SliverMainAxisGroup(
+                              slivers: [
+                                for (final id in layout.visibleOrder)
+                                  if (sections[id] != null)
+                                    SliverMainAxisGroup(
+                                      key: ValueKey(id),
+                                      slivers: [sections[id]!],
+                                    ),
+                                _buildArrangeButton(context, localization),
+                              ],
+                            );
+                          },
                         );
                       },
                     );

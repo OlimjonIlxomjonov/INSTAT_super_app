@@ -1,3 +1,5 @@
+import 'package:my_template/core/utils/localization/localized_text.dart';
+
 class ModuleCategoryEntity {
   final int id;
   final String name,
@@ -24,4 +26,13 @@ class ModuleCategoryEntity {
     required this.type,
     required this.createdAt,
   });
+
+  // Localized name
+  String displayName(String localeCode) => localizedText(
+    localeCode: localeCode,
+    fallback: name,
+    uz: nameUz,
+    ru: nameRu,
+    en: nameEn,
+  );
 }

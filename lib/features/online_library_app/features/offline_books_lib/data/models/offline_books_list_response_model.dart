@@ -6,7 +6,9 @@ class OfflineBooksListResponseModel extends BookListResponse {
 
   factory OfflineBooksListResponseModel.fromJson(Map<String, dynamic> json) {
     return OfflineBooksListResponseModel(
-      data: (json['data'] as List).map((e) => OfflineBookModel.fromJson(e)).toList(),
+      data: (json['data'] as List)
+          .map((e) => OfflineBookModel.fromJson(e))
+          .toList(),
     );
   }
 }

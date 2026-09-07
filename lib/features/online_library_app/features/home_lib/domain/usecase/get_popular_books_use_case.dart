@@ -6,7 +6,15 @@ class GetPopularBooksUseCase {
 
   GetPopularBooksUseCase({required this.repository});
 
-  Future<BookListResponse> call({int page = 1}) {
-    return repository.getPopularBooks(page: page);
+  Future<BookListResponse> call({
+    int page = 1,
+    int? categoryId,
+    String search = '',
+  }) {
+    return repository.getPopularBooks(
+      page: page,
+      categoryId: categoryId,
+      search: search,
+    );
   }
 }

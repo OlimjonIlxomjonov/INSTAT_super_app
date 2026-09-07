@@ -6,13 +6,21 @@ import 'package:my_template/features/online_library_app/features/home_lib/data/m
 import 'package:my_template/features/online_library_app/features/home_lib/data/models/library_stats/library_stats_model.dart';
 
 abstract class HomeLibRemoteDataSource {
-  Future<BookListResponseModel> fetchPopularBooks({int page = 1});
+  Future<BookListResponseModel> fetchPopularBooks({
+    int page = 1,
+    int? categoryId,
+    String search = '',
+  });
 
   Future<void> saveDeleteBook(int id);
 
   Future<void> addToCart(int id);
 
-  Future<BookListResponseModel> searchBooks(String search, int page);
+  Future<BookListResponseModel> searchBooks(
+    String search,
+    int page, {
+    int? categoryId,
+  });
 
   //! Book comments
   Future<CommentsResponseModel> fetchBookComments({

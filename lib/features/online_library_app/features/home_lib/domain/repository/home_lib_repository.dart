@@ -6,13 +6,21 @@ import 'package:my_template/features/online_library_app/features/home_lib/domain
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/library_stats/library_stats_entity.dart';
 
 abstract class HomeLibRepository {
-  Future<BookListResponse> getPopularBooks({int page = 1});
+  Future<BookListResponse> getPopularBooks({
+    int page = 1,
+    int? categoryId,
+    String search = '',
+  });
 
   Future<void> saveDeleteBook(int id);
 
   Future<void> addToCart(int id);
 
-  Future<BookListResponse> searchBooks(String search, int page);
+  Future<BookListResponse> searchBooks(
+    String search,
+    int page, {
+    int? categoryId,
+  });
 
   //! Online Book comments
   Future<CommentsResponse> bookComments({

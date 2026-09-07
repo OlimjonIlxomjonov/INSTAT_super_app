@@ -49,6 +49,27 @@ extension LastActionsStatusX on LastActionsStatus {
   }
 }
 
+/// Bosh sahifadagi almashtirsa bo'ladigan bo'limlar.
+/// Tartibi shu ro'yxatdagidek — default holat shu.
+enum HomeSectionId {
+  banners,
+  activeCourses,
+  popularCourses,
+  activeBooks,
+  popularBooks,
+  userArticles,
+  userRequests,
+}
+
+extension HomeSectionIdX on HomeSectionId {
+  static HomeSectionId? fromName(String value) {
+    for (final id in HomeSectionId.values) {
+      if (id.name == value) return id;
+    }
+    return null;
+  }
+}
+
 enum AnnotationLanguageEnum { uz, en, ru }
 
 enum PaymentStatusEnum { paid, pending, notBought }

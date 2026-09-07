@@ -14,11 +14,25 @@ class ArticleEditionsLoading extends ArticleEditionsState {}
 
 class ArticleEditionsLoaded extends ArticleEditionsState {
   final ArticleEditionsResponse response;
+  final bool isRefreshing;
 
-  const ArticleEditionsLoaded({required this.response});
+  const ArticleEditionsLoaded({
+    required this.response,
+    this.isRefreshing = false,
+  });
+
+  ArticleEditionsLoaded copyWith({
+    ArticleEditionsResponse? response,
+    bool? isRefreshing,
+  }) {
+    return ArticleEditionsLoaded(
+      response: response ?? this.response,
+      isRefreshing: isRefreshing ?? this.isRefreshing,
+    );
+  }
 
   @override
-  List<Object?> get props => [response];
+  List<Object?> get props => [response, isRefreshing];
 }
 
 class ArticleEditionsError extends ArticleEditionsState {}

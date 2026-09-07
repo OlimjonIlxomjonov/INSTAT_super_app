@@ -42,7 +42,6 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/user_articles_page.dart';
 
-
 class DesktopUiScreenComponent extends StatefulWidget {
   final List<MiniAppModel> sections;
 
@@ -229,7 +228,7 @@ class _DesktopUiScreenComponentState extends State<DesktopUiScreenComponent> {
                         openMiniAppSheetFamily(
                           context,
                           showHandler: false,
-                          child: SimilarOnlineBooksComponent(data: books),
+                          child: SimilarOnlineBooksComponent(),
                         );
                       },
                     ),

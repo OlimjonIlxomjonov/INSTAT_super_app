@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:my_template/core/services/layout/home_layout_prefs_service.dart';
 import 'package:my_template/core/utils/responsiveness/responsive.dart';
 import 'package:my_template/features/my_bloc_provider.dart';
 
@@ -24,6 +25,7 @@ Future<void> main() async {
   );
 
   await setup();
+  await HomeLayoutPrefsService.init();
   runApp(MyBlocProvider(child: MyApp()));
   // logger.f(TokenStorageServiceImpl().getAccessToken());
 }

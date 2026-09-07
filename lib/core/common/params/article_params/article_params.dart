@@ -19,8 +19,9 @@ class CreateArticleOrderParams {
 
 class ArticleEditionsParams {
   final String status;
+  final String search;
 
-  ArticleEditionsParams({required this.status});
+  ArticleEditionsParams({required this.status, this.search = ''});
 }
 
 class UdkParams {

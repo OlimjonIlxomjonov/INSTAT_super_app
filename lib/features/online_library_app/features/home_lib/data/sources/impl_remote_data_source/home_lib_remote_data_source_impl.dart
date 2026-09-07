@@ -13,11 +13,19 @@ class HomeLibRemoteDataSourceImpl implements HomeLibRemoteDataSource {
   final _dioClient = DioClient();
 
   @override
-  Future<BookListResponseModel> fetchPopularBooks({int page = 1}) async {
+  Future<BookListResponseModel> fetchPopularBooks({
+    int page = 1,
+    int? categoryId,
+    String search = '',
+  }) async {
     try {
       final response = await _dioClient.get(
         ApiUrls.activeBooks,
-        queryParams: {'page': page},
+        queryParams: {
+          'page': page,
+          if (categoryId != null) 'category': categoryId,
+          if (search.isNotEmpty) 'search': search,
+        },
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;
@@ -63,11 +71,19 @@ class HomeLibRemoteDataSourceImpl implements HomeLibRemoteDataSource {
   }
 
   @override
-  Future<BookListResponseModel> searchBooks(String search, int page) async {
+  Future<BookListResponseModel> searchBooks(
+    String search,
+    int page, {
+    int? categoryId,
+  }) async {
     try {
       final response = await _dioClient.get(
         ApiUrls.activeBooks,
-        queryParams: {'search': search, 'page': page},
+        queryParams: {
+          'search': search,
+          'page': page,
+          if (categoryId != null) 'category': categoryId,
+        },
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;

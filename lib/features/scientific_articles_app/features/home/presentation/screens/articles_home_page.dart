@@ -16,6 +16,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_process/review_process_state.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/sliver_brief_cards_wg.dart';
+import 'package:my_template/features/scientific_articles_app/features/magazines/presentation/screens/magazine_search_page.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/user_articles_page.dart';
 
 import '../../../../../../core/common/ui_states/app_empty_state.dart';
@@ -56,6 +57,14 @@ class _ArticlesHomePageState extends State<ArticlesHomePage> {
     );
   }
 
+  void _openSearch(BuildContext context) {
+    openMiniAppSheetFamily(
+      showHandler: false,
+      context,
+      child: const MagazineSearchPage(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
@@ -89,7 +98,7 @@ class _ArticlesHomePageState extends State<ArticlesHomePage> {
               pinned: true,
               automaticallyImplyLeading: false,
               titleSpacing: 20,
-              title: const AppSearchbarWg(),
+              title: AppSearchbarWg(onTap: () => _openSearch(context)),
             ),
 
             /// AD BANNERS

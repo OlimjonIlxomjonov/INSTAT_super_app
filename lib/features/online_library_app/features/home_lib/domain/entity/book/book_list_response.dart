@@ -4,7 +4,6 @@ import 'package:my_template/features/online_library_app/features/offline_books_l
 class BookListResponse {
   final List<OfflineBookEntity> data;
 
-
   final Meta? meta;
 
   BookListResponse({required this.data, this.meta});

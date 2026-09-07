@@ -25,7 +25,11 @@ class UpdateBookStateFromSocketEvent extends BookActionsEvent {
   final int bookId;
   final bool? isSaved;
   final bool? isInCart;
-  UpdateBookStateFromSocketEvent({required this.bookId, this.isSaved, this.isInCart});
+  UpdateBookStateFromSocketEvent({
+    required this.bookId,
+    this.isSaved,
+    this.isInCart,
+  });
 }
 
 class _CartSyncedFromServerEvent extends BookActionsEvent {
@@ -38,10 +42,7 @@ class BookActionsState {
   final Map<int, bool> savedBooks;
   final Map<int, bool> cartBooks;
 
-  BookActionsState({
-    this.savedBooks = const {},
-    this.cartBooks = const {},
-  });
+  BookActionsState({this.savedBooks = const {}, this.cartBooks = const {}});
 
   BookActionsState copyWith({
     Map<int, bool>? savedBooks,
@@ -76,7 +77,6 @@ class BookActionsBloc extends Bloc<BookActionsEvent, BookActionsState> {
     required this.cartUseCase,
     required this.webSocketService,
   }) : super(BookActionsState()) {
-    
     on<ToggleSaveBookEvent>((event, emit) async {
       final updatedMap = Map<int, bool>.from(state.savedBooks);
       updatedMap[event.bookId] = event.isSaved;
@@ -117,8 +117,10 @@ class BookActionsBloc extends Bloc<BookActionsEvent, BookActionsState> {
         updatedCartMap = Map<int, bool>.from(state.cartBooks);
         updatedCartMap[event.bookId] = event.isInCart!;
       }
-      
-      emit(state.copyWith(savedBooks: updatedSavedMap, cartBooks: updatedCartMap));
+
+      emit(
+        state.copyWith(savedBooks: updatedSavedMap, cartBooks: updatedCartMap),
+      );
     });
 
     on<_CartSyncedFromServerEvent>((event, emit) {
@@ -161,7 +163,7 @@ class BookActionsBloc extends Bloc<BookActionsEvent, BookActionsState> {
             final msg = data['message'];
             if (msg['id'] != null) {
               final int bId = msg['id'];
-              
+
               bool? bSaved;
               if (msg.containsKey('user_book_count')) {
                 bSaved = (msg['user_book_count'] ?? 0) >= 1;
@@ -173,7 +175,13 @@ class BookActionsBloc extends Bloc<BookActionsEvent, BookActionsState> {
               }
 
               if (!isClosed && (bSaved != null || bInCart != null)) {
-                add(UpdateBookStateFromSocketEvent(bookId: bId, isSaved: bSaved, isInCart: bInCart));
+                add(
+                  UpdateBookStateFromSocketEvent(
+                    bookId: bId,
+                    isSaved: bSaved,
+                    isInCart: bInCart,
+                  ),
+                );
               }
             }
           }

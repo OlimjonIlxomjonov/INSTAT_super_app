@@ -27,9 +27,7 @@ class SearchBooksBloc extends Bloc<SearchBooksBaseEvent, SearchBooksState> {
       final response = await _useCase.call(
         SearchBooksParams(search: event.params.search, page: 1),
       );
-      emit(
-        SearchBooksLoaded(response: response, query: event.params.search),
-      );
+      emit(SearchBooksLoaded(response: response, query: event.params.search));
     } on DioException catch (e) {
       emit(
         SearchBooksError(

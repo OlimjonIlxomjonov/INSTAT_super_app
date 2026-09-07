@@ -20,7 +20,11 @@ class OfflineBooksBloc extends Bloc<OfflineBooksEvent, OfflineBooksState> {
     emit(OfflineBooksLoading());
     try {
       final response = await _getOfflineBooksUseCase(
-        SearchBooksParams(search: event.search, page: event.page),
+        SearchBooksParams(
+          search: event.search,
+          page: event.page,
+          categoryId: event.categoryId,
+        ),
       );
       emit(OfflineBooksLoaded(response: response));
     } catch (e) {

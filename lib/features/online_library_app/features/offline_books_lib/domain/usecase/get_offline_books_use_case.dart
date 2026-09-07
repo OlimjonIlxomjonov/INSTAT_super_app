@@ -6,9 +6,13 @@ class GetOfflineBooksUseCase {
   final OfflineBooksRepository _repository;
 
   GetOfflineBooksUseCase({required OfflineBooksRepository repository})
-      : _repository = repository;
+    : _repository = repository;
 
   Future<BookListResponse> call(SearchBooksParams params) {
-    return _repository.fetchOfflineBooks(search: params.search, page: params.page);
+    return _repository.fetchOfflineBooks(
+      search: params.search,
+      page: params.page,
+      categoryId: params.categoryId,
+    );
   }
 }

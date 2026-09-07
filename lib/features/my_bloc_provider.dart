@@ -29,6 +29,7 @@ import 'package:my_template/features/main_app/home/presentation/bloc/banner/bann
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/delete_active_devices/all/delete_all_devices_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/home_layout/home_layout_cubit.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/module_category/module_category_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/notifications/notif_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/notifications_count/notifications_count_bloc.dart';
@@ -71,6 +72,7 @@ class MyBlocProvider extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider<HomeLayoutCubit>(create: (_) => sl<HomeLayoutCubit>()),
         BlocProvider<UserMeBloc>(create: (_) => sl<UserMeBloc>()),
         BlocProvider<UserCoursesBloc>(create: (_) => sl<UserCoursesBloc>()),
         BlocProvider<UserCategoryByIdBloc>(

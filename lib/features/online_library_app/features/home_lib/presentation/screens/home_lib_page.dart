@@ -42,6 +42,8 @@ class HomeLibPage extends StatefulWidget {
 }
 
 class _HomeLibPageState extends State<HomeLibPage> {
+  int? _categoryId;
+
   @override
   void initState() {
     super.initState();
@@ -65,7 +67,9 @@ class _HomeLibPageState extends State<HomeLibPage> {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
-          context.read<PopularBooksBloc>().add(FetchPopularBooksEvent());
+          context.read<PopularBooksBloc>().add(
+            FetchPopularBooksEvent(categoryId: _categoryId),
+          );
           context.read<LibraryStatsBloc>().add(LibraryStatsEvent());
         },
         child: CustomScrollView(
@@ -161,7 +165,15 @@ class _HomeLibPageState extends State<HomeLibPage> {
 
             /// CATEGORIES
             SliverToBoxAdapter(
-              child: ModuleCategoriesWithBlocWg(categoryType: 'library'),
+              child: ModuleCategoriesWithBlocWg(
+                categoryType: 'library',
+                onCategorySelected: (categoryId) {
+                  setState(() => _categoryId = categoryId);
+                  context.read<PopularBooksBloc>().add(
+                    FetchPopularBooksEvent(categoryId: categoryId),
+                  );
+                },
+              ),
             ),
 
             SliverPadding(

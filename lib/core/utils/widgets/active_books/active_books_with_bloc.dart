@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import '../../../../features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/course_category_builder.dart';
 import '../../../../features/online_library_app/features/home_lib/presentation/bloc/user_books/user_book_bloc.dart';
 import '../../../../features/online_library_app/features/home_lib/presentation/bloc/user_books/user_book_state.dart';
@@ -19,14 +20,14 @@ class ActiveBooksWithBloc extends StatelessWidget {
         if (state is UserBookLoaded) {
           final data = state.response.data;
           if (data.isEmpty) {
-            return SizedBox.shrink();
+            return SizedBox(height: 20);
           }
 
           return Column(
             children: [
               const SizedBox(height: 20),
               ExtendSectionSeeAllWg(
-                title: 'O’qilayotgan kitoblar',
+                title: AppLocalizations.of(context)!.readingBooks,
                 onTap: onTap,
               ),
               Column(

@@ -6,10 +6,18 @@ class OfflineBooksRepoImpl implements OfflineBooksRepository {
   final OfflineBooksRemoteDataSource _remoteDataSource;
 
   OfflineBooksRepoImpl({required OfflineBooksRemoteDataSource remoteDataSource})
-      : _remoteDataSource = remoteDataSource;
+    : _remoteDataSource = remoteDataSource;
 
   @override
-  Future<BookListResponse> fetchOfflineBooks({String search = '', int page = 1}) {
-    return _remoteDataSource.fetchOfflineBooks(search: search, page: page);
+  Future<BookListResponse> fetchOfflineBooks({
+    String search = '',
+    int page = 1,
+    int? categoryId,
+  }) {
+    return _remoteDataSource.fetchOfflineBooks(
+      search: search,
+      page: page,
+      categoryId: categoryId,
+    );
   }
 }

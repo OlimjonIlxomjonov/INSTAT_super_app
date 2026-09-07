@@ -10,7 +10,7 @@ class CartBloc extends Bloc<UserCartMainEvent, CartState> {
   final AddToCartUseCase addToCartUseCase;
 
   CartBloc({required this.useCase, required this.addToCartUseCase})
-      : super(CartInitial()) {
+    : super(CartInitial()) {
     on<CartEvent>((event, emit) async {
       emit(CartLoading());
       try {
@@ -25,8 +25,9 @@ class CartBloc extends Bloc<UserCartMainEvent, CartState> {
       // Optimistic: immediately remove the item from the current list
       if (state is CartLoaded) {
         final current = (state as CartLoaded).response;
-        final updatedList =
-            current.data.where((b) => b.id != event.bookId).toList();
+        final updatedList = current.data
+            .where((b) => b.id != event.bookId)
+            .toList();
         emit(CartLoaded(response: BookListResponse(data: updatedList)));
       }
 

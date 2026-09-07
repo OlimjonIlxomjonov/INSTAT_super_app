@@ -92,6 +92,7 @@ import 'package:my_template/features/main_app/home/presentation/bloc/module_cate
 import 'package:my_template/features/main_app/home/presentation/bloc/notifications/notif_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/notifications_count/notifications_count_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/site_faqs/site_faqs_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/home_layout/home_layout_cubit.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/course_lesson_test/get_lesson_tests_usecase.dart';
@@ -450,6 +451,7 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => SiteFaqsUseCase(repository: sl()));
 
   //! {BLOC}
+  sl.registerLazySingleton(() => HomeLayoutCubit());
   sl.registerLazySingleton(() => UserMeBloc(sl()));
   sl.registerFactory(() => UserCoursesBloc(sl()));
   sl.registerLazySingleton(() => UserCategoryByIdBloc(sl()));

@@ -95,6 +95,7 @@
   "republicOfUzbekistan": "O'zbekiston Respublikasi",
   "books": "Kitoblar",
   "searchBooksHint": "Kitob qidiring...",
+  "searchMagazinesHint": "Jurnal qidiring...",
   "buyForPrice": "Sotib olish - {price} UZS",
   "@buyForPrice": {
     "placeholders": {
@@ -213,7 +214,16 @@
   "requestEditTitle": "So'rovni tahrirlash",
   "requestCategoryRequired": "Avval kategoriyani tanlang (2-bosqich)",
   "requestStepLabel": "{step}-bosqich: {title}",
-  "@requestStepLabel": {"placeholders": {"step": {"type": "int"}, "title": {"type": "String"}}},
+  "@requestStepLabel": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
   "requestStepBasicInfo": "Asosiy ma'lumot",
   "requestStepDataDescription": "Ma'lumot tavsifi",
   "requestStepConfirmation": "Tasdiqlash",
@@ -605,5 +615,11 @@
   "requestSaveDraftFirst": "Avval qoralamani saqlang",
   "deleteAction": "O'chirish",
   "requestSaveToUploadFile": "Fayl yuklash uchun avval arizani saqlang",
-  "requestPeriodSummary": "Davri"
+  "requestPeriodSummary": "Davri",
+  "categoryAll": "Barchasi",
+  "promoBanners": "Reklama bannerlari",
+  "readingBooks": "O’qilayotgan kitoblar",
+  "arrangeSections": "Bo'limlarni tartiblash",
+  "arrangeSectionsSubtitle": "Ushlab turib joyini o'zgartiring yoki bo'limni yashiring",
+  "resetToDefaultOrder": "Standart tartibga qaytarish"
 }

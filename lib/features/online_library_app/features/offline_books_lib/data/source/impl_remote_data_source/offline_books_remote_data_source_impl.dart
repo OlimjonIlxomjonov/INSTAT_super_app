@@ -11,11 +11,16 @@ class OfflineBooksRemoteDataSourceImpl implements OfflineBooksRemoteDataSource {
   Future<OfflineBooksListResponseModel> fetchOfflineBooks({
     String search = '',
     int page = 1,
+    int? categoryId,
   }) async {
     try {
       final response = await _dioClient.get(
         '${ApiUrls.baseUrl}${ApiUrls.offlineBooks}',
-        queryParams: {'search': search, 'page': page},
+        queryParams: {
+          'search': search,
+          'page': page,
+          if (categoryId != null) 'category': categoryId,
+        },
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);

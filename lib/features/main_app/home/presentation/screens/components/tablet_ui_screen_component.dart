@@ -224,7 +224,7 @@ class _TabletUiScreenComponentState extends State<TabletUiScreenComponent> {
                         openMiniAppSheetFamily(
                           context,
                           showHandler: false,
-                          child: SimilarOnlineBooksComponent(data: books),
+                          child: SimilarOnlineBooksComponent(),
                         );
                       },
                     ),

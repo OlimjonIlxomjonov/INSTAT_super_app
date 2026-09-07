@@ -128,7 +128,11 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
   }) async {
     try {
       final response = await _dioClient.get(
-        '${ApiUrls.editions}?status=${params.status}',
+        ApiUrls.editions,
+        queryParams: {
+          'status': params.status,
+          if (params.search.isNotEmpty) 'search': params.search,
+        },
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);

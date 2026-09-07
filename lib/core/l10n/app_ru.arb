@@ -88,6 +88,7 @@
   "republicOfUzbekistan": "Республика Узбекистан",
   "books": "Книги",
   "searchBooksHint": "Найдите книгу...",
+  "searchMagazinesHint": "Поиск журнала...",
   "buyForPrice": "Купить - {price} UZS",
   "reviewPrice": "Стоимость рецензии: {price} UZS",
   "aboutBook": "О книге",
@@ -178,7 +179,16 @@
   "requestEditTitle": "Редактировать запрос",
   "requestCategoryRequired": "Сначала выберите категорию (этап 2)",
   "requestStepLabel": "Этап {step}: {title}",
-  "@requestStepLabel": {"placeholders": {"step": {"type": "int"}, "title": {"type": "String"}}},
+  "@requestStepLabel": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
   "requestStepBasicInfo": "Основная информация",
   "requestStepDataDescription": "Описание данных",
   "requestStepConfirmation": "Подтверждение",
@@ -511,5 +521,11 @@
   "requestSaveDraftFirst": "Сначала сохраните черновик",
   "deleteAction": "Удалить",
   "requestSaveToUploadFile": "Сначала сохраните заявку, чтобы загрузить файл",
-  "requestPeriodSummary": "Период"
+  "requestPeriodSummary": "Период",
+  "categoryAll": "Все",
+  "promoBanners": "Рекламные баннеры",
+  "readingBooks": "Читаемые книги",
+  "arrangeSections": "Порядок разделов",
+  "arrangeSectionsSubtitle": "Перетащите, чтобы изменить порядок, или скройте раздел",
+  "resetToDefaultOrder": "Вернуть порядок по умолчанию"
 }

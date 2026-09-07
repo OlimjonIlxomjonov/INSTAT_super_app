@@ -88,6 +88,7 @@
   "republicOfUzbekistan": "Republic of Uzbekistan",
   "books": "Books",
   "searchBooksHint": "Search for a book...",
+  "searchMagazinesHint": "Search magazines...",
   "buyForPrice": "Buy – {price} UZS",
   "reviewPrice": "Review price: {price} UZS",
   "aboutBook": "About the book",
@@ -178,7 +179,16 @@
   "requestEditTitle": "Edit request",
   "requestCategoryRequired": "Select a category first (step 2)",
   "requestStepLabel": "Step {step}: {title}",
-  "@requestStepLabel": {"placeholders": {"step": {"type": "int"}, "title": {"type": "String"}}},
+  "@requestStepLabel": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
   "requestStepBasicInfo": "Basic information",
   "requestStepDataDescription": "Data description",
   "requestStepConfirmation": "Confirmation",
@@ -511,5 +521,11 @@
   "requestSaveDraftFirst": "Save the draft first",
   "deleteAction": "Delete",
   "requestSaveToUploadFile": "Save the request first to upload a file",
-  "requestPeriodSummary": "Period"
+  "requestPeriodSummary": "Period",
+  "categoryAll": "All",
+  "promoBanners": "Promo banners",
+  "readingBooks": "Books in progress",
+  "arrangeSections": "Arrange sections",
+  "arrangeSectionsSubtitle": "Drag to reorder, or hide a section",
+  "resetToDefaultOrder": "Reset to default order"
 }

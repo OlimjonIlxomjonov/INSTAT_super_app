@@ -9,6 +9,10 @@ class GetSearchBooksUseCase {
     : _homeLibRepository = homeLibRepository;
 
   Future<BookListResponse> call(SearchBooksParams params) {
-    return _homeLibRepository.searchBooks(params.search, params.page);
+    return _homeLibRepository.searchBooks(
+      params.search,
+      params.page,
+      categoryId: params.categoryId,
+    );
   }
 }

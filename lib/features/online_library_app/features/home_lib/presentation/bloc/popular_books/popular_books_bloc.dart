@@ -11,27 +11,54 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 class PopularBooksBloc extends Bloc<PopularBooksEvent, PopularBooksState> {
   final GetPopularBooksUseCase useCase;
 
+  /// Tanlangan filtrlar — keyingi sahifalar ham shular bo'yicha olinadi.
+  int? _categoryId;
+  String _search = '';
+
   PopularBooksBloc({required this.useCase}) : super(PopularBooksInitial()) {
     on<FetchPopularBooksEvent>((event, emit) async {
-      if (state is PopularBooksLoading) return;
-      emit(PopularBooksLoading());
+      final current = state;
+      if (current is PopularBooksLoading) return;
+      if (current is PopularBooksLoaded && current.isRefreshing) return;
+
+      _categoryId = event.categoryId;
+      _search = event.search;
+
+      // Ro'yxatda kitob bo'lsa uni o'chirmaymiz — aks holda sliver qisqarib
+      // sahifa tepaga sakraydi.
+      final previous =
+          current is PopularBooksLoaded && current.response.data.isNotEmpty
+          ? current
+          : null;
+      emit(
+        previous != null
+            ? previous.copyWith(isRefreshing: true)
+            : PopularBooksLoading(),
+      );
+
       try {
-        final response = await useCase.call(page: 1);
+        final response = await useCase.call(
+          page: 1,
+          categoryId: _categoryId,
+          search: _search,
+        );
         emit(PopularBooksLoaded(response: response));
       } on DioException catch (e) {
         emit(
-          PopularBooksError(
-            isConnectionError: isNoInternetError(e),
-            message: e.message ?? 'Unknown error',
-          ),
+          previous?.copyWith(isRefreshing: false) ??
+              PopularBooksError(
+                isConnectionError: isNoInternetError(e),
+                message: e.message ?? 'Unknown error',
+              ),
         );
       } catch (e) {
         final isSocketError = e is SocketException;
         emit(
-          PopularBooksError(
-            isConnectionError: isSocketError,
-            message: e.toString(),
-          ),
+          previous?.copyWith(isRefreshing: false) ??
+              PopularBooksError(
+                isConnectionError: isSocketError,
+                message: e.toString(),
+              ),
         );
       }
     });
@@ -48,6 +75,8 @@ class PopularBooksBloc extends Bloc<PopularBooksEvent, PopularBooksState> {
       try {
         final next = await useCase.call(
           page: current.response.meta!.currentPage + 1,
+          categoryId: _categoryId,
+          search: _search,
         );
 
         emit(

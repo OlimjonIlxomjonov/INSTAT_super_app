@@ -4,24 +4,49 @@ import 'package:my_template/core/common/pagination/load_more_on_scroll.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
-import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
-import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
-import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
+import 'package:my_template/core/utils/widgets/module_categories/module_categories_with_bloc.dart';
+import 'package:my_template/core/utils/widgets/search_bar/app_search_field_wg.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/wb_blocs/popular_books_with_bloc_wg.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_event.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_state.dart';
 
-import '../../../../../../../core/utils/widgets/module_categories/module_categories_with_bloc.dart';
-
-class SeeAllOnlineBooksComponent extends StatelessWidget {
+class SeeAllOnlineBooksComponent extends StatefulWidget {
   const SeeAllOnlineBooksComponent({super.key});
+
+  @override
+  State<SeeAllOnlineBooksComponent> createState() =>
+      _SeeAllOnlineBooksComponentState();
+}
+
+class _SeeAllOnlineBooksComponentState
+    extends State<SeeAllOnlineBooksComponent> {
+  String _search = '';
+  int? _categoryId;
+
+  @override
+  void initState() {
+    super.initState();
+    if (context.read<PopularBooksBloc>().state is PopularBooksInitial) {
+      _fetch();
+    }
+  }
+
+  void _fetch() {
+    context.read<PopularBooksBloc>().add(
+      FetchPopularBooksEvent(categoryId: _categoryId, search: _search),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
+
     return Scaffold(
+      // Klaviatura ochilganda Scaffold qisqarib, oq fon kitoblarni yopib
+      // qo'yadi — offline kutubxona sahifasidagi kabi o'chirilgan.
+      resizeToAvoidBottomInset: false,
       body: BlocBuilder<PopularBooksBloc, PopularBooksState>(
         buildWhen: (prev, curr) {
           final p = prev is PopularBooksLoaded ? prev : null;
@@ -38,27 +63,39 @@ class SeeAllOnlineBooksComponent extends StatelessWidget {
               LoadMorePopularBooksEvent(),
             ),
             child: CustomScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               slivers: [
                 SliverDefaultAppBarWg(
                   myTitle: localization.books,
                   isFamily: true,
                 ),
-                SliverPadding(
-                  padding: .symmetric(horizontal: appW(20)),
-                  sliver: SliverAppBar(
-                    toolbarHeight: 56 + 24,
-                    pinned: true,
-                    automaticallyImplyLeading: false,
-                    titleSpacing: 0,
-                    title: AppSearchbarWg(),
+
+                /// SEARCH
+                SliverAppBar(
+                  primary: false,
+                  pinned: true,
+                  automaticallyImplyLeading: false,
+                  toolbarHeight: 80,
+                  titleSpacing: 20,
+                  title: AppSearchFieldWg(
+                    onChanged: (value) {
+                      _search = value;
+                      _fetch();
+                    },
                   ),
                 ),
 
                 /// CATEGORIES
                 SliverToBoxAdapter(
-                  child: ModuleCategoriesWithBlocWg(categoryType: 'library'),
+                  child: ModuleCategoriesWithBlocWg(
+                    categoryType: 'library',
+                    onCategorySelected: (categoryId) {
+                      _categoryId = categoryId;
+                      _fetch();
+                    },
+                  ),
                 ),
-                SliverToBoxAdapter(child: SizedBox(height: 20)),
+                const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
                 SliverPadding(
                   padding: AppPadding.horizontal20x(),
@@ -71,7 +108,7 @@ class SeeAllOnlineBooksComponent extends StatelessWidget {
                 ),
 
                 /// BODY
-                PopularBooksWithBlocWg(),
+                const PopularBooksWithBlocWg(),
               ],
             ),
           );

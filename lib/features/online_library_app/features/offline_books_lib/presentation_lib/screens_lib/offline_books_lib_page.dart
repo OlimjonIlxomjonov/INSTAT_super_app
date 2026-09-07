@@ -10,6 +10,7 @@ import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/general_widgets/online_book_wg/online_book_wg.dart';
+import 'package:my_template/core/utils/widgets/module_categories/module_categories_with_bloc.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/detailed_online_book_component.dart';
@@ -30,11 +31,19 @@ class _OfflineBooksLibPageState extends State<OfflineBooksLibPage> {
   Timer? _debounce;
   late final OfflineBooksBloc _bloc;
 
+  String _search = '';
+  int? _categoryId;
+
   @override
   void initState() {
     super.initState();
     _bloc = sl<OfflineBooksBloc>();
-    _bloc.add(const FetchOfflineBooks());
+    _fetch();
+  }
+
+  /// Qidiruv va kategoriya birga qo'llanadi.
+  void _fetch() {
+    _bloc.add(FetchOfflineBooks(search: _search, categoryId: _categoryId));
   }
 
   @override
@@ -47,7 +56,8 @@ class _OfflineBooksLibPageState extends State<OfflineBooksLibPage> {
   void _onSearchChanged(String query) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
-      _bloc.add(FetchOfflineBooks(search: query));
+      _search = query;
+      _fetch();
     });
   }
 
@@ -59,12 +69,7 @@ class _OfflineBooksLibPageState extends State<OfflineBooksLibPage> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: RefreshIndicator(
-          onRefresh: () async {
-            // _bloc = sl<OfflineBooksBloc>();
-            // _bloc.add(const FetchOfflineBooks());
-            // context.read<OfflineBooksBloc>().add(FetchOfflineBooks());
-            _bloc.add(FetchOfflineBooks());
-          },
+          onRefresh: () async => _fetch(),
           child: CustomScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             slivers: [
@@ -123,6 +128,17 @@ class _OfflineBooksLibPageState extends State<OfflineBooksLibPage> {
                   ),
                 ),
                 toolbarHeight: 80,
+              ),
+
+              /// CATEGORIES
+              SliverToBoxAdapter(
+                child: ModuleCategoriesWithBlocWg(
+                  categoryType: 'library',
+                  onCategorySelected: (categoryId) {
+                    _categoryId = categoryId;
+                    _fetch();
+                  },
+                ),
               ),
 
               SliverPadding(

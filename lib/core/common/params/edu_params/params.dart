@@ -54,8 +54,9 @@ class SearchCoursesParams {
 class SearchBooksParams {
   final String search;
   final int page;
+  final int? categoryId;
 
-  SearchBooksParams({required this.search, this.page = 1});
+  SearchBooksParams({required this.search, this.page = 1, this.categoryId});
 }
 
 class SearchStudentsParams {

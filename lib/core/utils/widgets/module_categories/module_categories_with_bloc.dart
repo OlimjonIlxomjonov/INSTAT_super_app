@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/module_category/module_category_bloc.dart';
@@ -12,12 +12,14 @@ import '../../../../features/main_app/home/presentation/bloc/home_event.dart';
 
 class ModuleCategoriesWithBlocWg extends StatefulWidget {
   final String categoryType;
-  final ValueChanged<int>? onCategoryTap;
+
+  /// Tanlangan kategoriya id'si. "Barchasi" uchun `null` keladi.
+  final ValueChanged<int?>? onCategorySelected;
 
   const ModuleCategoriesWithBlocWg({
     super.key,
     required this.categoryType,
-    this.onCategoryTap,
+    this.onCategorySelected,
   });
 
   @override
@@ -27,7 +29,7 @@ class ModuleCategoriesWithBlocWg extends StatefulWidget {
 
 class _ModuleCategoriesWithBlocWgState
     extends State<ModuleCategoriesWithBlocWg> {
-  int _selectedIndex = 0;
+  int? _selectedId;
 
   @override
   void initState() {
@@ -39,46 +41,46 @@ class _ModuleCategoriesWithBlocWgState
     );
   }
 
-  void _onTap(int index) {
-    setState(() => _selectedIndex = index);
-    widget.onCategoryTap?.call(index);
+  void _onTap(int? categoryId) {
+    if (_selectedId == categoryId) return;
+    setState(() => _selectedId = categoryId);
+    widget.onCategorySelected?.call(categoryId);
   }
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+    final localeCode = Localizations.localeOf(context).languageCode;
+
     return BlocBuilder<ModuleCategoryBloc, ModuleCategoryState>(
       builder: (context, state) {
         if (state is ModuleCategoryLoaded) {
           final categories = state.response.data;
 
-          final itemCount = categories.length + 1;
-
           if (categories.isEmpty) {
-            return SizedBox.shrink();
+            return const SizedBox.shrink();
           }
 
           return SingleChildScrollView(
             padding: const EdgeInsets.only(right: 20),
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: List.generate(itemCount, (index) {
-                if (index == 0) {
-                  return EduCategoriesWg(
-                    categoryIcon: IconlyLight.discovery,
-                    isSelected: _selectedIndex == 0,
-                    categoryName: 'Barchasi',
-                    onTap: () => _onTap(0),
-                  );
-                }
-
-                final category = categories[index - 1];
-                return EduCategoriesWg(
-                  categoryIcon: IconlyLight.category,
-                  isSelected: _selectedIndex == index,
-                  categoryName: category.nameUz,
-                  onTap: () => _onTap(index),
-                );
-              }),
+              children: [
+                EduCategoriesWg(
+                  categoryIcon: IconlyLight.discovery,
+                  isSelected: _selectedId == null,
+                  categoryName: localization.categoryAll,
+                  onTap: () => _onTap(null),
+                ),
+                ...categories.map(
+                  (category) => EduCategoriesWg(
+                    categoryIcon: IconlyLight.category,
+                    isSelected: _selectedId == category.id,
+                    categoryName: category.displayName(localeCode),
+                    onTap: () => _onTap(category.id),
+                  ),
+                ),
+              ],
             ),
           );
         }

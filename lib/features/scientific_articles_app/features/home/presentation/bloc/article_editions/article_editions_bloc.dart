@@ -10,12 +10,27 @@ class ArticleEditionsBloc
   ArticleEditionsBloc({required this.useCase})
     : super(ArticleEditionsInitial()) {
     on<ArticlesEditionsEvent>((event, emit) async {
-      emit(ArticleEditionsLoading());
+      /// KEEP OLD LIST
+      final current = state;
+      final previous =
+          current is ArticleEditionsLoaded && current.response.data.isNotEmpty
+          ? current
+          : null;
+
+      emit(
+        previous != null
+            ? previous.copyWith(isRefreshing: true)
+            : ArticleEditionsLoading(),
+      );
       try {
         final response = await useCase.call(params: event.params);
         emit(ArticleEditionsLoaded(response: response));
       } catch (e) {
-        emit(ArticleEditionsError());
+        emit(
+          previous != null
+              ? previous.copyWith(isRefreshing: false)
+              : ArticleEditionsError(),
+        );
       }
     });
   }

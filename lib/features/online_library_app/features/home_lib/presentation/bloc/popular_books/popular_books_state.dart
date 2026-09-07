@@ -14,7 +14,15 @@ class PopularBooksLoaded extends PopularBooksState {
   /// True while an additional page is in flight; loaded books stay visible.
   final bool isLoadingMore;
 
-  PopularBooksLoaded({required this.response, this.isLoadingMore = false});
+  /// True while the list is being replaced (kategoriya almashtirish, refresh).
+  /// Eski kitoblar ko'rinib turadi — sahifa qisqarib tepaga sakramaydi.
+  final bool isRefreshing;
+
+  PopularBooksLoaded({
+    required this.response,
+    this.isLoadingMore = false,
+    this.isRefreshing = false,
+  });
 
   /// A null `meta` means the endpoint isn't paginated, which is treated as
   /// "nothing more to load" rather than paging blindly.
@@ -27,10 +35,12 @@ class PopularBooksLoaded extends PopularBooksState {
   PopularBooksLoaded copyWith({
     BookListResponse? response,
     bool? isLoadingMore,
+    bool? isRefreshing,
   }) {
     return PopularBooksLoaded(
       response: response ?? this.response,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      isRefreshing: isRefreshing ?? this.isRefreshing,
     );
   }
 }

@@ -10,6 +10,7 @@ import 'package:my_template/features/education_app/features/user_profile_edu/pre
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/widgets_edu/dot_swtich_wg.dart';
 import "package:my_template/core/utils/app_utils.dart";
 import "package:my_template/core/utils/widgets/app_widgets.dart";
+import 'package:my_template/features/main_app/home/presentation/screens/components/home_arrange_component.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/drawer/components/active_devices_component.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/drawer/components/log_out_options_component.dart';
 
@@ -66,6 +67,19 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
             );
           },
         ),
+        //! Home sections order
+        if (isMobile)
+          ProfileSettingsTileWg(
+            leadingIcon: FlutterRemix.layout_row_line,
+            title: localization.arrangeSections,
+            onTap: () {
+              openMiniAppSheetFamily(
+                context,
+                showHandler: false,
+                child: const HomeArrangeComponent(),
+              );
+            },
+          ),
         //! Tickets
         ProfileSettingsTileWg(
           leadingIcon: FlutterRemix.message_2_line,

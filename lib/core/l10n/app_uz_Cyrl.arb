@@ -88,6 +88,7 @@
   "republicOfUzbekistan": "Ўзбекистон Республикаси",
   "books": "Китоблар",
   "searchBooksHint": "Китоб қидиринг...",
+  "searchMagazinesHint": "Журнал қидиринг...",
   "buyForPrice": "Сотиб олиш – {price} UZS",
   "reviewPrice": "Тақриз нархи: {price} UZS",
   "aboutBook": "Китоб ҳақида",
@@ -178,7 +179,16 @@
   "requestEditTitle": "Сўровни таҳрирлаш",
   "requestCategoryRequired": "Аввал категорияни танланг (2-босқич)",
   "requestStepLabel": "{step}-босқич: {title}",
-  "@requestStepLabel": {"placeholders": {"step": {"type": "int"}, "title": {"type": "String"}}},
+  "@requestStepLabel": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
   "requestStepBasicInfo": "Асосий маълумот",
   "requestStepDataDescription": "Маълумот тавсифи",
   "requestStepConfirmation": "Тасдиқлаш",
@@ -511,5 +521,11 @@
   "requestSaveDraftFirst": "Аввал қоралмани сақланг",
   "deleteAction": "Ўчириш",
   "requestSaveToUploadFile": "Файл юклаш учун аввал аризани сақланг",
-  "requestPeriodSummary": "Даври"
+  "requestPeriodSummary": "Даври",
+  "categoryAll": "Барчаси",
+  "promoBanners": "Реклама баннерлари",
+  "readingBooks": "Ўқилаётган китоблар",
+  "arrangeSections": "Бўлимларни тартиблаш",
+  "arrangeSectionsSubtitle": "Ушлаб туриб жойини ўзгартиринг ёки бўлимни яширинг",
+  "resetToDefaultOrder": "Стандарт тартибга қайтариш"
 }
