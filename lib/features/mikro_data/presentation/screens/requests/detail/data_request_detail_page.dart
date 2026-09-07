@@ -1,9 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_remix/flutter_remix.dart';
-import 'package:iconly/iconly.dart';
-import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -18,15 +15,13 @@ import 'package:my_template/features/mikro_data/domain/entity/data_requests/data
 import 'package:my_template/features/mikro_data/presentation/bloc/add_data_request/add_data_request_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/add_data_request/add_data_request_state.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/data_request_processes/data_request_processes_bloc.dart';
-import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_categories/micro_data_categories_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_event.dart';
-import 'package:my_template/features/mikro_data/presentation/bloc/regions/regions_bloc.dart';
+import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/page_view_screens/request_summary_view.dart';
+import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_file_opener.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_formatters.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/widgets/request_process_item_wg.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/widgets/request_status_check_wg.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/widgets/request_summary_body_wg.dart';
-import 'package:open_filex/open_filex.dart';
-import 'package:path_provider/path_provider.dart';
 
 class DataRequestDetailPage extends StatelessWidget {
   const DataRequestDetailPage({
@@ -43,8 +38,6 @@ class DataRequestDetailPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => sl<AddDataRequestBloc>()),
-        BlocProvider(create: (_) => sl<MicroDataCategoriesBloc>()),
-        BlocProvider(create: (_) => sl<RegionsBloc>()),
         BlocProvider(create: (_) => sl<DataRequestProcessesBloc>()),
       ],
       child: _DataRequestDetailView(requestId: requestId, status: status),
@@ -70,10 +63,6 @@ class _DataRequestDetailViewState extends State<_DataRequestDetailView> {
   @override
   void initState() {
     super.initState();
-    context.read<MicroDataCategoriesBloc>().add(
-      const MicroDataCategoriesEvent(),
-    );
-    context.read<RegionsBloc>().add(const RegionsEvent());
     context.read<AddDataRequestBloc>().add(
       LoadDataRequestForEditEvent(requestId: widget.requestId),
     );
@@ -88,49 +77,13 @@ class _DataRequestDetailViewState extends State<_DataRequestDetailView> {
     super.dispose();
   }
 
-  /// Kategoriya id va hudud kodlarini obyektlarga bog'laydi — ikkala
-  /// ro'yxat ham kelgandagina ishlaydi.
-  void _resolveReferences() {
-    final categoriesState = context.read<MicroDataCategoriesBloc>().state;
-    final regionsState = context.read<RegionsBloc>().state;
-    if (categoriesState is! MicroDataCategoriesLoaded) return;
-    if (regionsState is! RegionsLoaded) return;
-    if (!context.read<AddDataRequestBloc>().state.hasPendingReferences) return;
-
-    context.read<AddDataRequestBloc>().add(
-      ResolveDataRequestReferencesEvent(
-        categories: categoriesState.items,
-        regions: regionsState.items,
-      ),
-    );
-  }
-
-  /// Article'dagi bilan bir xil: faylni vaqtinchalik papkaga yuklab, tizim
-  /// ilovasida ochadi.
-  Future<void> _openFile(String? url) async {
-    final localization = AppLocalizations.of(context)!;
-    if (url == null || url.isEmpty) {
-      errorFlushBar(context, localization.fileUrlNotFound);
-      return;
-    }
+  Future<void> _openFile(String? url, {String? fileName}) async {
     if (_isOpeningFile.value) return;
     _isOpeningFile.value = true;
-
     try {
-      final tempDir = await getTemporaryDirectory();
-      final fileName = Uri.parse(url).pathSegments.last;
-      final savePath = '${tempDir.path}/$fileName';
-
-      await Dio().download(url, savePath);
-
-      final result = await OpenFilex.open(savePath);
-      if (result.type != ResultType.done && mounted) {
-        errorFlushBar(context, localization.fileOpenError(result.message));
-      }
-    } catch (_) {
-      if (mounted) errorFlushBar(context, localization.savingError);
+      await openRequestFile(context, url: url, fileName: fileName);
     } finally {
-      _isOpeningFile.value = false;
+      if (mounted) _isOpeningFile.value = false;
     }
   }
 
@@ -143,71 +96,52 @@ class _DataRequestDetailViewState extends State<_DataRequestDetailView> {
     ];
 
     return Scaffold(
-      body: MultiBlocListener(
-        listeners: [
-          BlocListener<MicroDataCategoriesBloc, MicroDataCategoriesState>(
-            listener: (_, _) => _resolveReferences(),
+      body: Stack(
+        children: [
+          CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: SheetDragAreaWg(
+                  child: CustomAppBarWg(
+                    myTitle: localization.requestDetailPageTitle,
+                  ),
+                ),
+              ),
+
+              /// TABS
+              SliverToBoxAdapter(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.only(right: 20, bottom: 20),
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: List.generate(tabs.length, (index) {
+                      return EduCategoriesWg(
+                        categoryIcon: FlutterRemix.layout_grid_line,
+                        categoryName: tabs[index],
+                        isSelected: _selectedTab == index,
+                        onTap: () => setState(() => _selectedTab = index),
+                      );
+                    }),
+                  ),
+                ),
+              ),
+
+              if (_selectedTab == 0) _buildInfoTab(localization),
+              if (_selectedTab == 1) _buildProcessesTab(localization),
+
+              const SliverToBoxAdapter(child: SizedBox(height: 30)),
+            ],
           ),
-          BlocListener<RegionsBloc, RegionsState>(
-            listener: (_, _) => _resolveReferences(),
-          ),
-          BlocListener<AddDataRequestBloc, AddDataRequestState>(
-            listenWhen: (prev, curr) =>
-                prev.hasPendingReferences != curr.hasPendingReferences,
-            listener: (_, _) => _resolveReferences(),
+
+          /// Fayl yuklanayotganda butun ekranni yopadigan overlay
+          ValueListenableBuilder<bool>(
+            valueListenable: _isOpeningFile,
+            builder: (context, isOpening, _) {
+              if (!isOpening) return const SizedBox.shrink();
+              return const FileOpeningOverlayWg();
+            },
           ),
         ],
-        child: Stack(
-          children: [
-            CustomScrollView(
-              slivers: [
-                // SliverDefaultAppBarWg(
-                //   myTitle: localization.requestDetailPageTitle,
-                //   isFamily: true,
-                // ),
-                SliverToBoxAdapter(
-                  child: SheetDragAreaWg(
-                    child: CustomAppBarWg(
-                      myTitle: localization.requestDetailPageTitle,
-                    ),
-                  ),
-                ),
-
-                /// TABS
-                SliverToBoxAdapter(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.only(right: 20, bottom: 20),
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: List.generate(tabs.length, (index) {
-                        return EduCategoriesWg(
-                          categoryIcon: FlutterRemix.layout_grid_line,
-                          categoryName: tabs[index],
-                          isSelected: _selectedTab == index,
-                          onTap: () => setState(() => _selectedTab = index),
-                        );
-                      }),
-                    ),
-                  ),
-                ),
-
-                if (_selectedTab == 0) _buildInfoTab(localization),
-                if (_selectedTab == 1) _buildProcessesTab(localization),
-
-                const SliverToBoxAdapter(child: SizedBox(height: 30)),
-              ],
-            ),
-
-            /// Fayl yuklanayotganda butun ekranni yopadigan overlay
-            ValueListenableBuilder<bool>(
-              valueListenable: _isOpeningFile,
-              builder: (context, isOpening, _) {
-                if (!isOpening) return const SizedBox.shrink();
-                return const FileOpeningOverlayWg();
-              },
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -239,55 +173,15 @@ class _DataRequestDetailViewState extends State<_DataRequestDetailView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /// SANA + STATUS
-                Row(
-                  children: [
-                    Icon(
-                      IconlyLight.calendar,
-                      color: AppColors.greyScale.grey600,
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      formatRequestDate(state.dateFrom),
-                      style: AppTextStyles.source.regular(
-                        fontSize: 12,
-                        color: AppColors.greyScale.grey600,
-                      ),
-                    ),
-                    const Spacer(),
-                    RequestStatusCheckWg(status: widget.status),
-                  ],
-                ),
-                const SizedBox(height: 8),
-
-                /// ID
-                Text(
-                  '#${state.requestId ?? widget.requestId}',
-                  style: AppTextStyles.source.regular(
-                    fontSize: 16,
-                    color: AppColors.greyScale.grey600,
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                /// ASOSIY MA'LUMOT — wizard'ning 3-bosqichi bilan bir xil
                 RequestSummaryBodyWg(
-                  data: DataRequestSummaryData(
-                    fullName: state.fullName,
-                    email: state.email,
-                    phoneNumber: state.phoneNumber,
-                    companyName: state.companyName,
-                    category: state.category,
-                    area: state.area,
-                    dateFrom: state.dateFrom,
-                    dateTo: state.dateTo,
-                    description: state.description,
-                    aim: state.aim,
-                    hasFile: state.hasFile,
-                    fileName: state.fileName,
-                    fileSize: state.fileSize,
+                  data: state.toSummaryData(),
+                  trailing: RequestStatusCheckWg(status: widget.status),
+                  onFileTap: () =>
+                      _openFile(state.fileUrl, fileName: state.fileName),
+                  onCompanyFileTap: () => _openFile(
+                    state.companyFileUrl,
+                    fileName: state.companyFileName,
                   ),
-                  onFileTap: () => _openFile(state.fileUrl),
                 ),
 
                 /// EKSPERT JAVOBI
@@ -314,12 +208,12 @@ class _DataRequestDetailViewState extends State<_DataRequestDetailView> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 20),
+            const SizedBox(height: 4),
             Text(localization.requestExpertAnswer, style: CustomTextStyles.h2),
             const SizedBox(height: 16),
             if (comment.isNotEmpty) ...[
               Text(
-                localization.requestDescriptionSummaryLabel,
+                localization.requestNotEnoughCommentLabel,
                 style: CustomTextStyles.h3half,
               ),
               const SizedBox(height: 4),
@@ -340,7 +234,7 @@ class _DataRequestDetailViewState extends State<_DataRequestDetailView> {
                 child: SelectedFileContainerWg(
                   fileName: item.fileName,
                   fileSize: formatRequestFileSize(item.fileSize),
-                  onTap: () => _openFile(item.file),
+                  onTap: () => _openFile(item.file, fileName: item.fileName),
                 ),
               ),
             ),

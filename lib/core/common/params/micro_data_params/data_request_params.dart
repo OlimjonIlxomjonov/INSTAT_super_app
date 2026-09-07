@@ -1,36 +1,58 @@
 import 'dart:io';
 
-import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_request_category_entity.dart';
-
 class DataRequestParams {
   final int? id;
-  final String fullName;
+
+  //! Shaxsiy ma'lumot
   final String? companyName;
-  final DataRequestCategoryEntity? category;
-  final String? description;
-  final String? aim;
-  final String? regionCode;
-  final String? districtCode;
+  final String? fullName;
+  final String? email;
+  final String? phoneNumber;
+  final String? teamMembers;
+
+  //! Tadqiqot loyihasi
+  final String? projectName;
+  final String? projectAim;
+  final String? benefit;
+  final String? aimToUse;
+
+  //! So'raladigan ma'lumot
+  final int? dataReportId;
   final DateTime? dateFrom;
   final DateTime? dateTo;
-  final String? phoneNumber;
-  final String? email;
-  final String status;
+  final String? whyNotEnough;
+  final String? notEnoughComment;
+
+  //! Xavfsizlik, muhit va muddat
+  final int? processingEnvironmentId;
+  final DateTime? entryDateFrom;
+  final DateTime? entryDateTo;
+
+  //! Natijalar va yakun
+  final String? expectation;
+  final String? plan;
 
   const DataRequestParams({
     this.id,
-    required this.fullName,
     this.companyName,
-    this.category,
-    this.description,
-    this.aim,
-    this.regionCode,
-    this.districtCode,
+    this.fullName,
+    this.email,
+    this.phoneNumber,
+    this.teamMembers,
+    this.projectName,
+    this.projectAim,
+    this.benefit,
+    this.aimToUse,
+    this.dataReportId,
     this.dateFrom,
     this.dateTo,
-    this.phoneNumber,
-    this.email,
-    this.status = 'draft',
+    this.whyNotEnough,
+    this.notEnoughComment,
+    this.processingEnvironmentId,
+    this.entryDateFrom,
+    this.entryDateTo,
+    this.expectation,
+    this.plan,
   });
 
   static String? _formatDate(DateTime? date) {
@@ -42,18 +64,25 @@ class DataRequestParams {
 
   Map<String, dynamic> toJson() {
     return {
-      'full_name': fullName,
       'company_name': companyName,
-      'category': category?.id,
-      'description': description,
-      'aim': aim,
-      'region': regionCode,
-      'district': districtCode,
+      'full_name': fullName,
+      'email': email,
+      'phone_number': phoneNumber,
+      'team_members': teamMembers,
+      'project_name': projectName,
+      'project_aim': projectAim,
+      'benefit': benefit,
+      'aimtouse': aimToUse,
+      'data_report': dataReportId,
       'date_from': _formatDate(dateFrom),
       'date_to': _formatDate(dateTo),
-      'phone_number': phoneNumber,
-      'email': email,
-      'status': status,
+      'why_not_enough': whyNotEnough,
+      'not_enough_comment': notEnoughComment,
+      'processing_environment': processingEnvironmentId,
+      'entry_date_from': _formatDate(entryDateFrom),
+      'entry_date_to': _formatDate(entryDateTo),
+      'expectation': expectation,
+      'plan': plan,
     };
   }
 }
@@ -62,9 +91,23 @@ class UploadDataRequestFileParams {
   final int requestId;
   final File file;
 
+  /// `true` — OTM/tashkilot hujjati (`company_file`).
+  final bool isCompanyFile;
+
   const UploadDataRequestFileParams({
     required this.requestId,
     required this.file,
+    this.isCompanyFile = false,
+  });
+}
+
+class DeleteDataRequestFileParams {
+  final int requestId;
+  final bool isCompanyFile;
+
+  const DeleteDataRequestFileParams({
+    required this.requestId,
+    this.isCompanyFile = false,
   });
 }
 

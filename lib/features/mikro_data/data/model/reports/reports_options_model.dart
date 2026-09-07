@@ -41,8 +41,9 @@ class ReportsOptionsModel extends ReportsOptionsEntity {
       dateTo: DateTime.tryParse(json['date_to']?.toString() ?? '') ?? epoch,
       fileExtension: ext,
       region: regionJson != null ? RegionModel.fromJson(regionJson) : null,
-      district:
-          districtJson != null ? DistrictModel.fromJson(districtJson) : null,
+      district: districtJson != null
+          ? DistrictModel.fromJson(districtJson)
+          : null,
       dataReport: json['data_report'] as int?,
       file: json['file'] as String?,
       fileSize: json['file_size'],
@@ -59,4 +60,3 @@ class ReportsOptionsModel extends ReportsOptionsEntity {
         .toList();
   }
 }
-

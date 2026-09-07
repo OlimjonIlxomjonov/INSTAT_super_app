@@ -400,6 +400,9 @@ Future<void> setup() async {
   sl.registerLazySingleton(
     () => UploadDataRequestFileUseCase(repository: sl()),
   );
+  sl.registerLazySingleton(
+    () => DeleteDataRequestFileUseCase(repository: sl()),
+  );
   sl.registerLazySingleton(() => SendDataRequestUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetDataRequestUseCase(repository: sl()));
   sl.registerLazySingleton(() => DataRequestProcessesUseCase(repository: sl()));
@@ -551,6 +554,7 @@ Future<void> setup() async {
       createUseCase: sl(),
       updateUseCase: sl(),
       uploadFileUseCase: sl(),
+      deleteFileUseCase: sl(),
       sendUseCase: sl(),
       getUseCase: sl(),
     ),

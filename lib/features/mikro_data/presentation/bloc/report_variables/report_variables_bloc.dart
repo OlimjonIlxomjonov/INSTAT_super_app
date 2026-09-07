@@ -3,8 +3,7 @@ import 'package:my_template/features/mikro_data/domain/usecase/report_variables/
 import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_event.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/report_variables/report_variables_state.dart';
 
-class ReportVariablesBloc
-    extends Bloc<MicroDataEvent, ReportVariablesState> {
+class ReportVariablesBloc extends Bloc<MicroDataEvent, ReportVariablesState> {
   final ReportVariablesUseCase useCase;
 
   ReportVariablesBloc({required this.useCase})

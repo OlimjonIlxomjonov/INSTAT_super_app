@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:my_template/core/common/params/micro_data_params/data_request_params.dart';
+import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_report_ref_entity.dart';
 import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_request_category_entity.dart';
 import 'package:my_template/features/mikro_data/domain/entity/regions/region_entity.dart';
 
@@ -32,28 +33,48 @@ class ResolveDataRequestReferencesEvent extends MicroDataEvent {
 }
 
 class UpdateDataRequestFieldEvent extends MicroDataEvent {
-  final String? fullName;
   final String? companyName;
+  final String? fullName;
   final String? email;
   final String? phoneNumber;
-  final DataRequestCategoryEntity? category;
-  final SelectedArea? area;
-  final String? description;
-  final String? aim;
+  final String? teamMembers;
+  final String? projectName;
+  final String? projectAim;
+  final String? benefit;
+  final String? aimToUse;
+  final DataReportRefEntity? dataReport;
   final DateTime? dateFrom;
   final DateTime? dateTo;
+  final String? whyNotEnough;
+  final String? notEnoughComment;
+  final int? processingEnvironmentId;
+  final String? processingEnvironmentName;
+  final DateTime? entryDateFrom;
+  final DateTime? entryDateTo;
+  final String? expectation;
+  final String? plan;
 
   const UpdateDataRequestFieldEvent({
-    this.fullName,
     this.companyName,
+    this.fullName,
     this.email,
     this.phoneNumber,
-    this.category,
-    this.area,
-    this.description,
-    this.aim,
+    this.teamMembers,
+    this.projectName,
+    this.projectAim,
+    this.benefit,
+    this.aimToUse,
+    this.dataReport,
     this.dateFrom,
     this.dateTo,
+    this.whyNotEnough,
+    this.notEnoughComment,
+    this.processingEnvironmentId,
+    this.processingEnvironmentName,
+    this.entryDateFrom,
+    this.entryDateTo,
+    this.expectation,
+    this.plan,
   });
 }
 
@@ -68,6 +89,7 @@ class UploadDataRequestFileEvent extends MicroDataEvent {
   final File file;
   final String fileName;
   final int fileSize;
+  final bool isCompanyFile;
   final VoidCallback? onSuccess;
   final void Function(Object error)? onError;
 
@@ -75,6 +97,19 @@ class UploadDataRequestFileEvent extends MicroDataEvent {
     required this.file,
     required this.fileName,
     required this.fileSize,
+    this.isCompanyFile = false,
+    this.onSuccess,
+    this.onError,
+  });
+}
+
+class DeleteDataRequestFileEvent extends MicroDataEvent {
+  final bool isCompanyFile;
+  final VoidCallback? onSuccess;
+  final void Function(Object error)? onError;
+
+  const DeleteDataRequestFileEvent({
+    this.isCompanyFile = false,
     this.onSuccess,
     this.onError,
   });

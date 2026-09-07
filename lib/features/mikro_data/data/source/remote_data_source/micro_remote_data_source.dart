@@ -39,6 +39,10 @@ abstract class MicroRemoteDataSource {
     UploadDataRequestFileParams params,
   );
 
+  Future<DataRequestDetailModel> deleteDataRequestFile(
+    DeleteDataRequestFileParams params,
+  );
+
   Future<void> sendDataRequest(int requestId);
 
   Future<List<DataRequestProcessModel>> fetchDataRequestProcesses(

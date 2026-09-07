@@ -10,45 +10,46 @@ import 'package:my_template/core/utils/general_widgets/confirm_dialog/confirm_di
 import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
 import 'package:my_template/core/utils/general_widgets/simple_btn_container_wg/simple_btn_container_wg.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
+import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_report_ref_entity.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/add_data_request/add_data_request_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/add_data_request/add_data_request_state.dart';
-import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_categories/micro_data_categories_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_event.dart';
-import 'package:my_template/features/mikro_data/presentation/bloc/regions/regions_bloc.dart';
+import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/page_view_screens/request_documents_view.dart';
+import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/page_view_screens/request_environment_view.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/page_view_screens/request_personal_info_view.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/page_view_screens/request_summary_view.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_error_messages.dart';
 
 class AddDataRequestPage extends StatelessWidget {
-  /// Berilsa, mavjud qoralama yuklanib tahrirlash rejimida ochiladi.
   final int? editRequestId;
+  final DataReportRefEntity? initialReport;
 
-  const AddDataRequestPage({super.key, this.editRequestId});
+  const AddDataRequestPage({super.key, this.editRequestId, this.initialReport});
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => sl<AddDataRequestBloc>()),
-        BlocProvider(create: (_) => sl<MicroDataCategoriesBloc>()),
-        BlocProvider(create: (_) => sl<RegionsBloc>()),
-      ],
-      child: _AddDataRequestView(editRequestId: editRequestId),
+    return BlocProvider(
+      create: (_) => sl<AddDataRequestBloc>(),
+      child: _AddDataRequestView(
+        editRequestId: editRequestId,
+        initialReport: initialReport,
+      ),
     );
   }
 }
 
 class _AddDataRequestView extends StatefulWidget {
-  const _AddDataRequestView({this.editRequestId});
+  const _AddDataRequestView({this.editRequestId, this.initialReport});
 
   final int? editRequestId;
+  final DataReportRefEntity? initialReport;
 
   @override
   State<_AddDataRequestView> createState() => _AddDataRequestViewState();
 }
 
 class _AddDataRequestViewState extends State<_AddDataRequestView> {
-  static const int _stepCount = 3;
+  static const int _stepCount = 4;
 
   final _pageController = PageController();
 
@@ -56,6 +57,8 @@ class _AddDataRequestViewState extends State<_AddDataRequestView> {
   double _progress = 1 / _stepCount;
 
   bool get _isLastPage => _currentPage == _stepCount - 1;
+
+  bool get _isEditMode => widget.editRequestId != null;
 
   @override
   void initState() {
@@ -66,38 +69,20 @@ class _AddDataRequestViewState extends State<_AddDataRequestView> {
       setState(() => _progress = (page + 1) / _stepCount);
     });
 
-    // Statik ma'lumotlar — wizard ochilganda bir marta.
-    context.read<MicroDataCategoriesBloc>().add(
-      const MicroDataCategoriesEvent(),
-    );
-    context.read<RegionsBloc>().add(const RegionsEvent());
-
     final editId = widget.editRequestId;
     if (editId != null) {
       context.read<AddDataRequestBloc>().add(
         LoadDataRequestForEditEvent(requestId: editId),
       );
+      return;
     }
-  }
 
-  bool get _isEditMode => widget.editRequestId != null;
-
-  /// Serverdan kelgan kategoriya id va hudud kodlarini obyektlarga bog'laydi.
-  /// Ikkala ro'yxat ham yuklangandagina ishlaydi, shuning uchun har bir
-  /// tegishli state o'zgarishida qayta chaqiriladi.
-  void _resolveReferences() {
-    final categoriesState = context.read<MicroDataCategoriesBloc>().state;
-    final regionsState = context.read<RegionsBloc>().state;
-    if (categoriesState is! MicroDataCategoriesLoaded) return;
-    if (regionsState is! RegionsLoaded) return;
-    if (!context.read<AddDataRequestBloc>().state.hasPendingReferences) return;
-
-    context.read<AddDataRequestBloc>().add(
-      ResolveDataRequestReferencesEvent(
-        categories: categoriesState.items,
-        regions: regionsState.items,
-      ),
-    );
+    final report = widget.initialReport;
+    if (report != null) {
+      context.read<AddDataRequestBloc>().add(
+        UpdateDataRequestFieldEvent(dataReport: report),
+      );
+    }
   }
 
   @override
@@ -108,13 +93,8 @@ class _AddDataRequestViewState extends State<_AddDataRequestView> {
 
   List<String> _stepTitles(AppLocalizations localization) => [
     localization.requestStepBasicInfo,
-    localization.requestStepDataDescription,
-    localization.requestStepConfirmation,
-  ];
-
-  List<String> _sectionTitles(AppLocalizations localization) => [
-    localization.requestPersonalInfoTitle,
-    localization.requestStatTemplateTitle,
+    localization.requestStepLegalBasis,
+    localization.requestStepSecurityEnv,
     localization.requestStepConfirmation,
   ];
 
@@ -122,8 +102,7 @@ class _AddDataRequestViewState extends State<_AddDataRequestView> {
     final localization = AppLocalizations.of(context)!;
     final bloc = context.read<AddDataRequestBloc>();
 
-    // Article'dagidek: bosqichlar orasida erkin yurish mumkin, tekshiruv
-    // faqat yakuniy yuborishda.
+    // Bosqichlar orasida erkin yurish mumkin, tekshiruv yuborishda.
     if (!_isLastPage) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
@@ -159,10 +138,15 @@ class _AddDataRequestViewState extends State<_AddDataRequestView> {
 
   void _saveDraft() {
     final localization = AppLocalizations.of(context)!;
+    final bloc = context.read<AddDataRequestBloc>();
 
-    // Qoralama istalgan bosqichda, to'ldirilgan maydonlar bilan saqlanadi —
-    // backend `category` siz ham 201 qaytaradi.
-    context.read<AddDataRequestBloc>().add(
+    // Backend POST'da 1-bosqich maydonlarini majburiy qiladi.
+    if (!bloc.state.canSaveDraft) {
+      errorFlushBar(context, localization.requestDraftNeedsStepOne);
+      return;
+    }
+
+    bloc.add(
       SaveDataRequestDraftEvent(
         onSuccess: () {
           if (mounted) {
@@ -194,7 +178,6 @@ class _AddDataRequestViewState extends State<_AddDataRequestView> {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     final stepTitles = _stepTitles(localization);
-    final sectionTitles = _sectionTitles(localization);
     final keyboardVisible = MediaQuery.viewInsetsOf(context).bottom > 0;
 
     return GestureDetector(
@@ -205,209 +188,193 @@ class _AddDataRequestViewState extends State<_AddDataRequestView> {
           if (didPop) return;
           _showExitDialog();
         },
-        child: MultiBlocListener(
-          listeners: [
-            // Ro'yxatlar qaysi biri oldin kelishi noma'lum — uchalasini ham
-            // tinglab, ikkalasi tayyor bo'lgan zahoti bog'laymiz.
-            BlocListener<MicroDataCategoriesBloc, MicroDataCategoriesState>(
-              listener: (_, _) => _resolveReferences(),
-            ),
-            BlocListener<RegionsBloc, RegionsState>(
-              listener: (_, _) => _resolveReferences(),
-            ),
-            BlocListener<AddDataRequestBloc, AddDataRequestState>(
-              listenWhen: (prev, curr) =>
-                  prev.hasPendingReferences != curr.hasPendingReferences,
-              listener: (_, _) => _resolveReferences(),
-            ),
-          ],
-          child: BlocBuilder<AddDataRequestBloc, AddDataRequestState>(
-            builder: (context, state) {
-              if (_isEditMode && state.isLoadingInitialData) {
-                return _EditModeScaffold(
-                  title: localization.requestEditTitle,
-                  child: const Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  ),
-                );
-              }
+        child: BlocBuilder<AddDataRequestBloc, AddDataRequestState>(
+          builder: (context, state) {
+            if (_isEditMode && state.isLoadingInitialData) {
+              return _EditModeScaffold(
+                title: localization.requestEditTitle,
+                child: const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                ),
+              );
+            }
 
-              if (_isEditMode && state.initialLoadError != null) {
-                return _EditModeScaffold(
-                  title: localization.requestEditTitle,
-                  child: Center(
-                    child: Padding(
-                      padding: AppPadding.horizontal20x(),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            localization.somethingWentWrongTitle,
-                            textAlign: TextAlign.center,
-                            style: CustomTextStyles.h3half,
-                          ),
-                          const SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: () =>
-                                FamilyNavigation.familyClose(context),
-                            child: Text(localization.back),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              }
-
-              return Stack(
-                children: [
-                  Scaffold(
-                    resizeToAvoidBottomInset: false,
-                    appBar: AppBar(
-                      automaticallyImplyLeading: false,
-                      centerTitle: true,
-                      title: Text(
-                        _isEditMode
-                            ? localization.requestEditTitle
-                            : localization.submitRequest,
-                        style: CustomTextStyles.h2,
-                      ),
-                    ),
-                    bottomNavigationBar: keyboardVisible
-                        ? null
-                        : SimpleBtnContainerWg(
-                            onFirstTap: _showExitDialog,
-                            onSecondTap: state.isSaving
-                                ? null
-                                : _moveNextOrSubmit,
-                            onSecondText: _isLastPage
-                                ? localization.requestSubmitButton
-                                : localization.nextStep,
-                          ),
-                    body: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+            if (_isEditMode && state.initialLoadError != null) {
+              return _EditModeScaffold(
+                title: localization.requestEditTitle,
+                child: Center(
+                  child: Padding(
+                    padding: AppPadding.horizontal20x(),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        /// STEP LABEL + COUNTER
-                        Padding(
-                          padding: AppPadding.horizontal20x(),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  localization.requestStepLabel(
-                                    _currentPage + 1,
-                                    stepTitles[_currentPage],
-                                  ),
-                                  style: CustomTextStyles.h4,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Text(
-                                '${_currentPage + 1} / $_stepCount',
-                                style: CustomTextStyles.h4,
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-
-                        /// PROGRESS
-                        Padding(
-                          padding: AppPadding.horizontal20x(),
-                          child: CustomLinearIndicatorWg(
-                            progressIndicator: _progress * 100,
-                          ),
+                        Text(
+                          localization.somethingWentWrongTitle,
+                          textAlign: TextAlign.center,
+                          style: CustomTextStyles.h3half,
                         ),
                         const SizedBox(height: 20),
-
-                        /// SECTION TITLE + SAVE DRAFT
-                        Padding(
-                          padding: AppPadding.horizontal20x(),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  sectionTitles[_currentPage],
-                                  style: CustomTextStyles.h2,
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: state.isSaving ? null : _saveDraft,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 5,
-                                    horizontal: 10,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.greyScale.grey50,
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        IconlyLight.document,
-                                        color: AppColors.greyScale.grey600,
-                                      ),
-                                      Text(
-                                        ' ${localization.save}',
-                                        style: AppTextStyles.source.medium(
-                                          fontSize: 12,
-                                          color: AppColors.greyScale.grey600,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-
-                        Expanded(
-                          child: PageView(
-                            controller: _pageController,
-                            onPageChanged: (index) =>
-                                setState(() => _currentPage = index),
-                            children: const [
-                              RequestPersonalInfoView(),
-                              // RequestDetailsView(),
-                              RequestSummaryView(),
-                            ],
-                          ),
+                        ElevatedButton(
+                          onPressed: () =>
+                              FamilyNavigation.familyClose(context),
+                          child: Text(localization.back),
                         ),
                       ],
                     ),
                   ),
+                ),
+              );
+            }
 
-                  if (state.isSaving)
-                    Container(
-                      color: Colors.black.withValues(alpha: 0.4),
-                      child: Center(
-                        child: Card(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 28,
-                              horizontal: 36,
+            return Stack(
+              children: [
+                Scaffold(
+                  resizeToAvoidBottomInset: false,
+                  appBar: AppBar(
+                    automaticallyImplyLeading: false,
+                    centerTitle: true,
+                    title: Text(
+                      _isEditMode
+                          ? localization.requestEditTitle
+                          : localization.submitRequest,
+                      style: CustomTextStyles.h2,
+                    ),
+                  ),
+                  bottomNavigationBar: keyboardVisible
+                      ? null
+                      : SimpleBtnContainerWg(
+                          onFirstTap: _showExitDialog,
+                          onSecondTap: state.isSaving
+                              ? null
+                              : _moveNextOrSubmit,
+                          onSecondText: _isLastPage
+                              ? localization.requestSubmitButton
+                              : localization.nextStep,
+                        ),
+                  body: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      /// STEP LABEL + COUNTER
+                      Padding(
+                        padding: AppPadding.horizontal20x(),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                localization.requestStepLabel(
+                                  _currentPage + 1,
+                                  stepTitles[_currentPage],
+                                ),
+                                style: CustomTextStyles.h4,
+                              ),
                             ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const CircularProgressIndicator.adaptive(),
-                                const SizedBox(height: 16),
-                                Text(localization.savingEllipsis),
-                              ],
+                            const SizedBox(width: 10),
+                            Text(
+                              '${_currentPage + 1} / $_stepCount',
+                              style: CustomTextStyles.h4,
                             ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+
+                      /// PROGRESS
+                      Padding(
+                        padding: AppPadding.horizontal20x(),
+                        child: CustomLinearIndicatorWg(
+                          progressIndicator: _progress * 100,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+
+                      /// SECTION TITLE + SAVE DRAFT
+                      Padding(
+                        padding: AppPadding.horizontal20x(),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                stepTitles[_currentPage],
+                                style: CustomTextStyles.h2,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: state.isSaving ? null : _saveDraft,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 5,
+                                  horizontal: 10,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.greyScale.grey50,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      IconlyLight.document,
+                                      color: AppColors.greyScale.grey600,
+                                    ),
+                                    Text(
+                                      ' ${localization.save}',
+                                      style: AppTextStyles.source.medium(
+                                        fontSize: 12,
+                                        color: AppColors.greyScale.grey600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      Expanded(
+                        child: PageView(
+                          controller: _pageController,
+                          onPageChanged: (index) =>
+                              setState(() => _currentPage = index),
+                          children: const [
+                            RequestPersonalInfoView(),
+                            RequestDocumentsView(),
+                            RequestEnvironmentView(),
+                            RequestSummaryView(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                if (state.isSaving)
+                  Container(
+                    color: Colors.black.withValues(alpha: 0.4),
+                    child: Center(
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 28,
+                            horizontal: 36,
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const CircularProgressIndicator.adaptive(),
+                              const SizedBox(height: 16),
+                              Text(localization.savingEllipsis),
+                            ],
                           ),
                         ),
                       ),
                     ),
-                ],
-              );
-            },
-          ),
+                  ),
+              ],
+            );
+          },
         ),
       ),
     );

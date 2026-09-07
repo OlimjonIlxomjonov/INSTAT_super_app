@@ -53,6 +53,16 @@ class UploadDataRequestFileUseCase {
   }
 }
 
+class DeleteDataRequestFileUseCase {
+  final MicroRepository repository;
+
+  DeleteDataRequestFileUseCase({required this.repository});
+
+  Future<DataRequestDetailEntity> call(DeleteDataRequestFileParams params) {
+    return repository.deleteDataRequestFile(params);
+  }
+}
+
 class SendDataRequestUseCase {
   final MicroRepository repository;
 

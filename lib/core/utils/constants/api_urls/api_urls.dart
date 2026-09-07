@@ -107,6 +107,11 @@ class ApiUrls {
 
   /// `data-requests/{id}/` ga qo'shiladi
   static const dataRequestUploadFile = 'upload-file/';
+  static const dataRequestUploadCompanyFile = 'upload-company-file/';
+  static const dataRequestDestroyFile = 'destroy-file/';
+  static const dataRequestDestroyCompanyFile = 'destroy-company-file/';
+  static const dataRequestDownloadFile = 'download-file/';
+  static const dataRequestDownloadCompanyFile = 'download-company-file/';
   static const dataRequestSend = 'send/';
   static const dataRequestProcesses = 'processes/';
 

@@ -38,6 +38,10 @@ abstract class MicroRepository {
     UploadDataRequestFileParams params,
   );
 
+  Future<DataRequestDetailEntity> deleteDataRequestFile(
+    DeleteDataRequestFileParams params,
+  );
+
   Future<void> sendDataRequest(int requestId);
 
   Future<List<DataRequestProcessEntity>> getDataRequestProcesses(int requestId);

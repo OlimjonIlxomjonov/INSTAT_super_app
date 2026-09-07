@@ -29,4 +29,3 @@ class ReportsOptionsEntity {
     this.createdAt,
   });
 }
-

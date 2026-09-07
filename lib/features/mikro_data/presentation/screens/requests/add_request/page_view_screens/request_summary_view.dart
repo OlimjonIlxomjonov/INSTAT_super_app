@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/add_data_request/add_data_request_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/add_data_request/add_data_request_state.dart';
+import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_file_opener.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/widgets/request_summary_body_wg.dart';
 
 class RequestSummaryView extends StatelessWidget {
@@ -18,7 +19,19 @@ class RequestSummaryView extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                RequestSummaryBodyWg(data: state.toSummaryData()),
+                RequestSummaryBodyWg(
+                  data: state.toSummaryData(),
+                  onFileTap: () => openRequestFile(
+                    context,
+                    url: state.fileUrl,
+                    fileName: state.fileName,
+                  ),
+                  onCompanyFileTap: () => openRequestFile(
+                    context,
+                    url: state.companyFileUrl,
+                    fileName: state.companyFileName,
+                  ),
+                ),
                 const SizedBox(height: 30),
               ],
             );
@@ -29,23 +42,35 @@ class RequestSummaryView extends StatelessWidget {
   }
 }
 
-extension _SummaryMapping on AddDataRequestState {
+extension SummaryMapping on AddDataRequestState {
   DataRequestSummaryData toSummaryData() {
     return DataRequestSummaryData(
       id: requestId,
-      fullName: fullName,
-      email: email,
-      phoneNumber: phoneNumber,
       companyName: companyName,
-      category: category,
-      area: area,
+      fullName: fullName,
+      phoneNumber: phoneNumber,
+      email: email,
+      teamMembers: teamMembers,
+      projectName: projectName,
+      projectAim: projectAim,
+      benefit: benefit,
+      aimToUse: aimToUse,
+      dataReportName: dataReport?.name ?? '',
       dateFrom: dateFrom,
       dateTo: dateTo,
-      description: description,
-      aim: aim,
+      whyNotEnough: whyNotEnough,
+      notEnoughComment: notEnoughComment,
+      processingEnvironment: processingEnvironmentName,
+      entryDateFrom: entryDateFrom,
+      entryDateTo: entryDateTo,
+      expectation: expectation,
+      plan: plan,
       hasFile: hasFile,
       fileName: fileName,
       fileSize: fileSize,
+      hasCompanyFile: hasCompanyFile,
+      companyFileName: companyFileName,
+      companyFileSize: companyFileSize,
     );
   }
 }

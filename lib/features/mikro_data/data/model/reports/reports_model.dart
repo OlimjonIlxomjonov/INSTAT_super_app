@@ -71,15 +71,17 @@ class ReportsModel extends ReportsEntity {
           : null,
       region: regionModel,
       district: districtModel,
-      timeCoverageFrom:
-          DateTime.tryParse(json['time_coverage_from']?.toString() ?? ''),
-      timeCoverageTo:
-          DateTime.tryParse(json['time_coverage_to']?.toString() ?? ''),
+      timeCoverageFrom: DateTime.tryParse(
+        json['time_coverage_from']?.toString() ?? '',
+      ),
+      timeCoverageTo: DateTime.tryParse(
+        json['time_coverage_to']?.toString() ?? '',
+      ),
       coverage: (json['coverage'] as num?)?.toDouble(),
-      dataPeriodFrom:
-          DateTime.tryParse(json['data_period_from']?.toString() ?? ''),
-      dataPeriodTo:
-          DateTime.tryParse(json['data_period_to']?.toString() ?? ''),
+      dataPeriodFrom: DateTime.tryParse(
+        json['data_period_from']?.toString() ?? '',
+      ),
+      dataPeriodTo: DateTime.tryParse(json['data_period_to']?.toString() ?? ''),
       samplingMethod: json['sampling_method'] as String?,
       accessPolicy: json['access_policy'] as String? ?? '',
       dataOwner: json['data_owner'] as String?,

@@ -73,6 +73,13 @@ class MicroRepoImpl implements MicroRepository {
   }
 
   @override
+  Future<DataRequestDetailEntity> deleteDataRequestFile(
+    DeleteDataRequestFileParams params,
+  ) {
+    return _remoteDataSource.deleteDataRequestFile(params);
+  }
+
+  @override
   Future<void> sendDataRequest(int requestId) {
     return _remoteDataSource.sendDataRequest(requestId);
   }

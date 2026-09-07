@@ -202,16 +202,45 @@ class MicroRemoteDataSourceImpl implements MicroRemoteDataSource {
     UploadDataRequestFileParams params,
   ) async {
     try {
+      // Endpoint qaysi fayl ekanini o'zi ajratadi — maydon nomi doim `file`.
       final formData = FormData.fromMap({
         'file': await MultipartFile.fromFile(
           params.file.path,
           filename: params.file.path.split('/').last,
         ),
       });
+      final endpoint = params.isCompanyFile
+          ? ApiUrls.dataRequestUploadCompanyFile
+          : ApiUrls.dataRequestUploadFile;
       final response = await _dioClient.post(
-        '${ApiUrls.dataRequests}${params.requestId}/'
-        '${ApiUrls.dataRequestUploadFile}',
+        '${ApiUrls.dataRequests}${params.requestId}/$endpoint',
         data: formData,
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return DataRequestDetailModel.fromJson(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      logger.e("CATCH: $e");
+      throw ApiValidationParser.tryParse(e.response?.data) ?? e;
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<DataRequestDetailModel> deleteDataRequestFile(
+    DeleteDataRequestFileParams params,
+  ) async {
+    try {
+      final endpoint = params.isCompanyFile
+          ? ApiUrls.dataRequestDestroyCompanyFile
+          : ApiUrls.dataRequestDestroyFile;
+      final response = await _dioClient.post(
+        '${ApiUrls.dataRequests}${params.requestId}/$endpoint',
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);

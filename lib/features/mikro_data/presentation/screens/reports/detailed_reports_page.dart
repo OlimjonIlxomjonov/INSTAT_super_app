@@ -10,6 +10,7 @@ import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
+import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_report_ref_entity.dart';
 import 'package:my_template/features/mikro_data/domain/entity/reports/reports_entity.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_event.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/report_files/report_files_bloc.dart';
@@ -21,6 +22,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../../core/l10n/app_localizations.dart';
+import '../../../../../core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
+import '../requests/add_request/add_data_request_page.dart';
 
 class DetailedReportsPage extends StatefulWidget {
   final ReportsEntity item;
@@ -121,13 +124,17 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
   }
 
   void _openApplication(BuildContext context) {
-    technicalWorkFlushBar(context, 'Tez orada');
-    // openMiniAppSheetFamily(
-    //   context,
-    //   child: const AddDataRequestPage(),
-    //   enableDrag: false,
-    //   showHandler: false,
-    // );
+    openMiniAppSheetFamily(
+      context,
+      child: AddDataRequestPage(
+        initialReport: DataReportRefEntity(
+          id: widget.item.id,
+          name: widget.item.name,
+        ),
+      ),
+      enableDrag: false,
+      showHandler: false,
+    );
   }
 
   @override
