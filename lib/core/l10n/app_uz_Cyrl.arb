@@ -89,6 +89,7 @@
   "books": "Китоблар",
   "searchBooksHint": "Китоб қидиринг...",
   "searchMagazinesHint": "Журнал қидиринг...",
+  "searchTicketsHint": "Тиккет қидиринг...",
   "buyForPrice": "Сотиб олиш – {price} UZS",
   "reviewPrice": "Тақриз нархи: {price} UZS",
   "aboutBook": "Китоб ҳақида",

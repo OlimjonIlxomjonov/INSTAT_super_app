@@ -43,7 +43,6 @@ class _MagazinesPageState extends State<MagazinesPage> {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      // Klaviatura ochilganda oq fon jurnallarni yopib qo'ymasligi uchun.
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: AppSearchFieldWg(

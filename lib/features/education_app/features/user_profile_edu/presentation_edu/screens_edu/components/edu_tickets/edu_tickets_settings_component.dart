@@ -4,6 +4,7 @@ import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
+import 'package:my_template/core/common/ui_states/error_page.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
@@ -11,8 +12,8 @@ import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
-import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
+import 'package:my_template/core/utils/widgets/search_bar/app_search_field_wg.dart';
 import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
 import 'package:my_template/core/utils/widgets/custom_tab_bar/custom_tab_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
@@ -41,6 +42,7 @@ class _EduTicketsSettingsComponentState
     extends State<EduTicketsSettingsComponent>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
+  String _search = '';
 
   static const _statuses = ['open', 'in_progress', 'closed'];
 
@@ -59,9 +61,14 @@ class _EduTicketsSettingsComponentState
   void _fetchTickets(String status) {
     context.read<ShowTicketsBloc>().add(
       ShowTicketsEvent(
-        params: ShowTicketsParams(status: status, search: '', page: '1'),
+        params: ShowTicketsParams(status: status, search: _search, page: '1'),
       ),
     );
+  }
+
+  void _onSearchChanged(String value) {
+    _search = value;
+    _fetchTickets(_statuses[_tabController.index]);
   }
 
   @override
@@ -74,6 +81,11 @@ class _EduTicketsSettingsComponentState
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
 
+    /// family_bottom_sheet butun sheet'ni klaviatura balandligiga ko'taradi,
+    /// shuning uchun pastki tugma klaviatura ustida qolib ketadi — ochilganda
+    /// uni ko'rsatmaymiz.
+    final isKeyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
+
     return DefaultTabController(
       length: 3,
       child: CustomRefreshIndicator(
@@ -81,7 +93,10 @@ class _EduTicketsSettingsComponentState
           _fetchTickets(_statuses[_tabController.index]);
         },
         child: Scaffold(
+          // Klaviatura ochilganda oq fon ro'yxatni yopib qo'ymasligi uchun.
+          resizeToAvoidBottomInset: false,
           body: CustomScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             slivers: [
               SliverAppBar(
                 automaticallyImplyLeading: false,
@@ -104,7 +119,10 @@ class _EduTicketsSettingsComponentState
                       const SizedBox(height: 20),
 
                       /// SEARCH BAR
-                      AppSearchbarWg(),
+                      AppSearchFieldWg(
+                        hintText: localization.searchTicketsHint,
+                        onChanged: _onSearchChanged,
+                      ),
                       const SizedBox(height: 10),
                     ],
                   ),
@@ -119,11 +137,16 @@ class _EduTicketsSettingsComponentState
                     //! Empty State
                     if (data.isEmpty) {
                       return SliverToBoxAdapter(
-                        child: AppEmptyState(
-                          title: 'Tikketlar bosh!',
-                          subtitle:
-                              'Birinchi tikketni yaratish va ishni boshlash uchun quyidagi tugmani bosing.',
-                        ),
+                        child: _search.isEmpty
+                            ? AppEmptyState(
+                                title: 'Tikketlar bosh!',
+                                subtitle:
+                                    'Birinchi tikketni yaratish va ishni boshlash uchun quyidagi tugmani bosing.',
+                              )
+                            : AppEmptyState(
+                                title: localization.nothingFound,
+                                subtitle: '',
+                              ),
                       );
                     }
 
@@ -206,6 +229,10 @@ class _EduTicketsSettingsComponentState
                       },
                     );
                   }
+                  if (state is ShowTicketsError) {
+                    return SliverToBoxAdapter(child: ErrorPage());
+                  }
+
                   return SliverList.builder(
                     itemCount: 4,
                     itemBuilder: (context, index) {
@@ -246,16 +273,18 @@ class _EduTicketsSettingsComponentState
               ),
             ],
           ),
-          bottomNavigationBar: CustomBottomNavContainerWg(
-            buttonText: localization.newTicketButton,
-            onTap: () {
-              FamilyNavigation.familyPush(
-                context,
-                EduCreateTicketsComponent(),
-                showHandle: false,
-              );
-            },
-          ),
+          bottomNavigationBar: isKeyboardOpen
+              ? null
+              : CustomBottomNavContainerWg(
+                  buttonText: localization.newTicketButton,
+                  onTap: () {
+                    FamilyNavigation.familyPush(
+                      context,
+                      EduCreateTicketsComponent(),
+                      showHandle: false,
+                    );
+                  },
+                ),
         ),
       ),
     );

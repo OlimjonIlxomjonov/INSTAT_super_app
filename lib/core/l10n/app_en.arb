@@ -89,6 +89,7 @@
   "books": "Books",
   "searchBooksHint": "Search for a book...",
   "searchMagazinesHint": "Search magazines...",
+  "searchTicketsHint": "Search tickets...",
   "buyForPrice": "Buy – {price} UZS",
   "reviewPrice": "Review price: {price} UZS",
   "aboutBook": "About the book",

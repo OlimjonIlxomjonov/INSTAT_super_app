@@ -89,6 +89,7 @@
   "books": "Книги",
   "searchBooksHint": "Найдите книгу...",
   "searchMagazinesHint": "Поиск журнала...",
+  "searchTicketsHint": "Поиск тикета...",
   "buyForPrice": "Купить - {price} UZS",
   "reviewPrice": "Стоимость рецензии: {price} UZS",
   "aboutBook": "О книге",

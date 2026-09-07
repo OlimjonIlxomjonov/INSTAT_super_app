@@ -96,6 +96,7 @@
   "books": "Kitoblar",
   "searchBooksHint": "Kitob qidiring...",
   "searchMagazinesHint": "Jurnal qidiring...",
+  "searchTicketsHint": "Tikket qidiring...",
   "buyForPrice": "Sotib olish - {price} UZS",
   "@buyForPrice": {
     "placeholders": {
