@@ -31,7 +31,7 @@ class ApiUrls {
   static const courses = 'courses/';
   static const userCourses = 'courses/items/my/?status=';
   static const userCategoryById = 'categories/';
-  static const availableCourses = 'courses/items/active/';
+  static const availableCourses = 'courses/items/active/?course_type=online';
 
   /// banners
   static const activeBanners = 'banners/items/active/';

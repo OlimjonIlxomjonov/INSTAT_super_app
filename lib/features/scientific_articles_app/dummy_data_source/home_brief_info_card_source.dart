@@ -70,3 +70,35 @@ List<HomeBriefInfoCardModel> getMicroDataBrief(AppLocalizations localization) =>
         value: '8',
       ),
     ];
+
+//! Vacancy DATA
+List<HomeBriefInfoCardModel> getVacancyData(AppLocalizations localization) => [
+  HomeBriefInfoCardModel(
+    iconColor: AppColors.iconBlue,
+    iconBackgroundColor: AppColors.iconBlueBackground,
+    icon: FlutterRemix.file_list_line,
+    title: localization.allRequestsBrief,
+    value: '12',
+  ),
+  HomeBriefInfoCardModel(
+    iconColor: AppColors.orange500,
+    iconBackgroundColor: AppColors.orange50,
+    icon: FlutterRemix.pie_chart_line,
+    title: localization.statusInProgress,
+    value: '3',
+  ),
+  HomeBriefInfoCardModel(
+    iconColor: AppColors.iconRed,
+    iconBackgroundColor: AppColors.iconRedBackground,
+    icon: FlutterRemix.close_circle_line,
+    title: localization.cancelledBrief,
+    value: '2',
+  ),
+  HomeBriefInfoCardModel(
+    iconColor: AppColors.iconGreen,
+    iconBackgroundColor: AppColors.iconGreenBackground,
+    icon: Icons.check_circle_outline,
+    title: localization.statusConfirmed,
+    value: '8',
+  ),
+];

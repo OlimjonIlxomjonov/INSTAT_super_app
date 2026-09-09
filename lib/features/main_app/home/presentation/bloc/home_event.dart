@@ -6,7 +6,12 @@ class HomeEvent {
 
 class UserMeEvent extends HomeEvent {}
 
-class AvailableCoursesEvent extends HomeEvent {}
+class AvailableCoursesEvent extends HomeEvent {
+  final int? categoryId;
+  final String search;
+
+  AvailableCoursesEvent({this.categoryId, this.search = ''});
+}
 
 class LoadMoreCoursesEvent extends HomeEvent {}
 

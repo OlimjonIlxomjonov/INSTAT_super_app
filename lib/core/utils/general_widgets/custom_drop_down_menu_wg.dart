@@ -64,12 +64,12 @@ class CustomDropDownMenuWg extends StatelessWidget {
             ),
             dropdownColor: AppColors.greyScale.grey50,
             elevation: 3,
-            items: options?.map(
-              (e) => DropdownMenuItem<int>(
-                value: e.id,
-                child: Text(e.name),
-              ),
-            ).toList(),
+            items: options
+                ?.map(
+                  (e) =>
+                      DropdownMenuItem<int>(value: e.id, child: Text(e.name)),
+                )
+                .toList(),
             onChanged: onChanged ?? (val) {},
           ),
         ),

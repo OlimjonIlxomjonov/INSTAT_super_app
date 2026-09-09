@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
+import 'package:my_template/core/utils/general_widgets/process_timeline/process_timeline_item_wg.dart';
 import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_request_process_entity.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_formatters.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/last_actions/last_actions_status_icon_wg.dart';
 
-/// Jarayon qatori — article'dagi LastActionItem bilan bir xil ko'rinishda.
 class RequestProcessItemWg extends StatelessWidget {
   const RequestProcessItemWg({
     super.key,
@@ -34,83 +34,19 @@ class RequestProcessItemWg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
-    final user = item.user;
 
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: !isLast
-              ? BorderSide(color: AppColors.greyScale.grey200)
-              : BorderSide.none,
-        ),
+    return ProcessTimelineItemWg(
+      icon: LastActionsStatusIconWg(
+        status: _timelineStatus(item.processStatus),
       ),
-      child: Row(
-        spacing: 10,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          /// TIMELINE
-          Column(
-            children: [
-              LastActionsStatusIconWg(
-                status: _timelineStatus(item.processStatus),
-              ),
-              if (!isLast)
-                Container(
-                  margin: const EdgeInsets.only(top: 5),
-                  width: 1,
-                  height: 60,
-                  color: AppColors.greyScale.grey400,
-                ),
-            ],
-          ),
-
-          /// CONTENT
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  _statusTitle(localization),
-                  style: AppTextStyles.source.medium(fontSize: 16),
-                ),
-                if (item.comment.isNotEmpty) ...[
-                  const SizedBox(height: 4),
-                  Text(
-                    item.comment,
-                    style: AppTextStyles.source.regular(
-                      fontSize: 13,
-                      color: AppColors.greyScale.grey600,
-                    ),
-                  ),
-                ],
-                if (user != null && user.fullName.isNotEmpty) ...[
-                  const SizedBox(height: 4),
-                  Text(
-                    user.fullName,
-                    style: AppTextStyles.source.regular(
-                      fontSize: 13,
-                      color: AppColors.greyScale.grey500,
-                    ),
-                  ),
-                ],
-                const SizedBox(height: 6),
-                Text(
-                  formatRequestDate(item.createdAt),
-                  style: AppTextStyles.source.regular(
-                    fontSize: 14,
-                    color: AppColors.greyScale.grey600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+      title: _statusTitle(localization),
+      subtitle: item.comment,
+      caption: item.user?.fullName,
+      date: formatRequestDate(item.createdAt),
+      isLast: isLast,
     );
   }
 
-  /// Article'ning ikonka widgeti o'z enum'i bilan ishlaydi — moslashtiramiz.
   LastActionsStatus _timelineStatus(MicroDataRequestStatus status) {
     switch (status) {
       case MicroDataRequestStatus.accepted:

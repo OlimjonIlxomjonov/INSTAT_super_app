@@ -158,7 +158,10 @@ class _DialogButton extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: Text(text, style: CustomTextStyles.h3.copyWith(color: textColor)),
+              child: Text(
+                text,
+                style: CustomTextStyles.h3.copyWith(color: textColor),
+              ),
             )
           : TextButton(
               onPressed: onPressed,

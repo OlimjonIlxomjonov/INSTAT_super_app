@@ -113,7 +113,11 @@ class _BoughtBookOpenerWgState extends State<BoughtBookOpenerWg> {
       _showOverlayBriefly();
     } catch (e) {
       logger.e(e);
-      if (mounted) setState(() { _isLoading = false; _hasError = true; });
+      if (mounted)
+        setState(() {
+          _isLoading = false;
+          _hasError = true;
+        });
     }
   }
 

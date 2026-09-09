@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/utils/general_widgets/form_fields/app_form_field_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
@@ -8,9 +9,9 @@ import 'package:my_template/features/mikro_data/presentation/bloc/add_data_reque
 import 'package:my_template/features/mikro_data/presentation/bloc/add_data_request/add_data_request_state.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_event.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_formatters.dart';
-import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/widgets/date_picker_sheet.dart';
-import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/widgets/picker_field_wg.dart';
-import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/widgets/request_input_wg.dart';
+import 'package:my_template/core/utils/general_widgets/date_picker_sheet/date_picker_sheet.dart';
+import 'package:my_template/core/utils/general_widgets/form_fields/app_picker_field_wg.dart';
+import 'package:my_template/core/utils/general_widgets/form_fields/app_input_wg.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/widgets/request_section_card_wg.dart';
 
 class RequestEnvironmentView extends StatefulWidget {
@@ -84,9 +85,9 @@ class _RequestEnvironmentViewState extends State<RequestEnvironmentView> {
                   title: localization.requestStepSecurityEnv,
                   children: [
                     // Muhitlar endpointi kelgach ulanadi
-                    RequestFieldWg(
+                    AppFormFieldWg(
                       label: localization.requestProcessingEnvLabel,
-                      child: PickerFieldWg(
+                      child: AppPickerFieldWg(
                         hintText: localization.requestProcessingEnvHint,
                         value: state.processingEnvironmentName.isEmpty
                             ? null
@@ -97,12 +98,12 @@ class _RequestEnvironmentViewState extends State<RequestEnvironmentView> {
                         ),
                       ),
                     ),
-                    RequestFieldWg(
+                    AppFormFieldWg(
                       label: localization.requestEntryPeriodLabel,
                       child: Row(
                         children: [
                           Expanded(
-                            child: PickerFieldWg(
+                            child: AppPickerFieldWg(
                               hintText: localization.requestDateFromHint,
                               value: formatRequestDate(state.entryDateFrom),
                               leadingIcon: IconlyLight.calendar,
@@ -112,7 +113,7 @@ class _RequestEnvironmentViewState extends State<RequestEnvironmentView> {
                           ),
                           const SizedBox(width: 10),
                           Expanded(
-                            child: PickerFieldWg(
+                            child: AppPickerFieldWg(
                               hintText: localization.requestDateToHint,
                               value: formatRequestDate(state.entryDateTo),
                               leadingIcon: IconlyLight.calendar,
@@ -132,9 +133,9 @@ class _RequestEnvironmentViewState extends State<RequestEnvironmentView> {
             RequestSectionCardWg(
               title: localization.requestResultsSectionTitle,
               children: [
-                RequestFieldWg(
+                AppFormFieldWg(
                   label: localization.requestExpectationLabel,
-                  child: RequestInputWg(
+                  child: AppInputWg(
                     controller: _expectationController,
                     hintText: localization.requestExpectationHint,
                     minLines: 3,
@@ -143,9 +144,9 @@ class _RequestEnvironmentViewState extends State<RequestEnvironmentView> {
                     ),
                   ),
                 ),
-                RequestFieldWg(
+                AppFormFieldWg(
                   label: localization.requestPlanLabel,
-                  child: RequestInputWg(
+                  child: AppInputWg(
                     controller: _planController,
                     hintText: localization.requestPlanHint,
                     minLines: 3,

@@ -12,7 +12,11 @@ import 'package:my_template/features/main_app/home/domain/entity/active_devices/
 abstract class HomeRemoteDataSource {
   Future<UserModel> fetchUserMe();
 
-  Future<CourseListResponseModel> fetchCourses({int page = 1});
+  Future<CourseListResponseModel> fetchCourses({
+    int page = 1,
+    int? categoryId,
+    String search = '',
+  });
 
   Future<List<BannerModel>> fetchActiveBanners();
 

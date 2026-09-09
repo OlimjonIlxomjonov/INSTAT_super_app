@@ -3,8 +3,6 @@ import 'package:my_template/core/services/layout/home_layout_prefs_service.dart'
 import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/home_layout/home_layout_state.dart';
 
-/// Bosh sahifa bo'limlarining tartibini saqlaydi.
-/// Drawer'dagi sozlama ham, home tagidagi tugma ham shu bitta manbaga yozadi.
 class HomeLayoutCubit extends Cubit<HomeLayoutState> {
   HomeLayoutCubit()
     : super(

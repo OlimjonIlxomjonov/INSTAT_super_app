@@ -622,5 +622,6 @@
   "readingBooks": "O’qilayotgan kitoblar",
   "arrangeSections": "Bo'limlarni tartiblash",
   "arrangeSectionsSubtitle": "Ushlab turib joyini o'zgartiring yoki bo'limni yashiring",
-  "resetToDefaultOrder": "Standart tartibga qaytarish"
+  "resetToDefaultOrder": "Standart tartibga qaytarish",
+  "jobVacancies": "Bo‘sh ish o‘rinlari"
 }

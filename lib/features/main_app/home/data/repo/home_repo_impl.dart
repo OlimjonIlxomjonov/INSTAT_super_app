@@ -23,8 +23,16 @@ class HomeRepoImpl implements HomeRepository {
   }
 
   @override
-  Future<CourseListResponse> getActiveCourses({int page = 1}) {
-    return _remoteDataSource.fetchCourses(page: page);
+  Future<CourseListResponse> getActiveCourses({
+    int page = 1,
+    int? categoryId,
+    String search = '',
+  }) {
+    return _remoteDataSource.fetchCourses(
+      page: page,
+      categoryId: categoryId,
+      search: search,
+    );
   }
 
   @override

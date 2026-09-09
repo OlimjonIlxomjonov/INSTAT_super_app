@@ -5,8 +5,8 @@ import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_
 /// Dropdown ko'rinishidagi maydon, lekin bosilganda bottom sheet ochadi.
 /// `CustomDropDownMenuWg` bilan bir xil ko'rinishda bo'lishi uchun shu
 /// uslubda yozilgan.
-class PickerFieldWg extends StatelessWidget {
-  const PickerFieldWg({
+class AppPickerFieldWg extends StatelessWidget {
+  const AppPickerFieldWg({
     super.key,
     this.title,
     required this.hintText,

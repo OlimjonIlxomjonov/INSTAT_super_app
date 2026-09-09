@@ -50,11 +50,19 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
-  Future<CourseListResponseModel> fetchCourses({int page = 1}) async {
+  Future<CourseListResponseModel> fetchCourses({
+    int page = 1,
+    int? categoryId,
+    String search = '',
+  }) async {
     try {
       final response = await _dioClient.get(
         ApiUrls.availableCourses,
-        queryParams: {'page': page},
+        queryParams: {
+          'page': page,
+          if (categoryId != null) 'category': categoryId,
+          if (search.isNotEmpty) 'search': search,
+        },
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;

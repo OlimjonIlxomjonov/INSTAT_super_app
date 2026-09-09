@@ -59,6 +59,7 @@ enum HomeSectionId {
   popularBooks,
   userArticles,
   userRequests,
+  vacancies,
 }
 
 extension HomeSectionIdX on HomeSectionId {

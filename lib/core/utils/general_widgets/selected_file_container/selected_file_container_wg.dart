@@ -6,12 +6,14 @@ class SelectedFileContainerWg extends StatelessWidget {
   final String? fileName;
   final String? fileSize;
   final VoidCallback? onTap;
+  final VoidCallback? onRemove;
 
   const SelectedFileContainerWg({
     super.key,
     this.fileName,
     this.fileSize,
     this.onTap,
+    this.onRemove,
   });
 
   @override
@@ -49,6 +51,16 @@ class SelectedFileContainerWg extends StatelessWidget {
                 ],
               ),
             ),
+            if (onRemove != null)
+              GestureDetector(
+                onTap: onRemove,
+                behavior: HitTestBehavior.opaque,
+                child: Icon(
+                  Icons.close,
+                  size: 20,
+                  color: AppColors.greyScale.grey600,
+                ),
+              ),
           ],
         ),
       ),

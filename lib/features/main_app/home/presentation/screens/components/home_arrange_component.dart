@@ -7,8 +7,6 @@ import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.
 import 'package:my_template/features/main_app/home/presentation/bloc/home_layout/home_layout_cubit.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/home_layout/home_layout_state.dart';
 
-/// Bosh sahifa bo'limlarini tartiblash va yashirish oynasi.
-/// Drawer'dan ham, home tagidagi tugmadan ham shu ochiladi.
 class HomeArrangeComponent extends StatelessWidget {
   const HomeArrangeComponent({super.key});
 
@@ -28,10 +26,11 @@ class HomeArrangeComponent extends StatelessWidget {
         return localization.yourArticles;
       case HomeSectionId.userRequests:
         return localization.myRequests;
+      case HomeSectionId.vacancies:
+        return localization.jobVacancies;
     }
   }
 
-  /// KO'TARILGAN ELEMENT
   static Widget _proxyDecorator(
     Widget child,
     int index,

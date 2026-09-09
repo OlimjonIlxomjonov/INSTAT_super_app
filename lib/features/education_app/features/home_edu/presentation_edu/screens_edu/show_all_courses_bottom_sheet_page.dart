@@ -8,7 +8,8 @@ import 'package:my_template/core/utils/widgets/extend_section/title_with_layout_
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/core/utils/widgets/popular_courses_card/expanded_courses_card_wg.dart';
 import 'package:my_template/core/utils/widgets/popular_courses_card/minimal_courses_card_wg.dart';
-import 'package:my_template/core/utils/widgets/search_bar/app_serachbar_wg.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
+import 'package:my_template/core/utils/widgets/search_bar/app_search_field_wg.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/detailed_course_info_page.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/course_category_builder.dart';
@@ -29,6 +30,14 @@ class ShowAllCoursesBottomSheetPage extends StatefulWidget {
 class _ShowAllCoursesBottomSheetPageState
     extends State<ShowAllCoursesBottomSheetPage> {
   CoursesLayout layout = CoursesLayout.grid;
+  String _search = '';
+  int? _categoryId;
+
+  void _fetch() {
+    context.read<CoursesBloc>().add(
+      AvailableCoursesEvent(categoryId: _categoryId, search: _search),
+    );
+  }
 
   void _goToPage({
     required CourseEntity data,
@@ -48,11 +57,22 @@ class _ShowAllCoursesBottomSheetPageState
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+
     return Scaffold(
+      // Klaviatura ochilganda oq fon kurslarni yopib qo'ymasligi uchun.
+      resizeToAvoidBottomInset: false,
+
       /// HEADER OF THE COURSES
       appBar: AppBar(
         toolbarHeight: 80,
-        title: AppSearchbarWg(),
+        title: AppSearchFieldWg(
+          hintText: localization.searchCoursesHint,
+          onChanged: (value) {
+            _search = value;
+            _fetch();
+          },
+        ),
         automaticallyImplyLeading: false,
       ),
       body: BlocBuilder<CoursesBloc, CoursesState>(
@@ -65,11 +85,16 @@ class _ShowAllCoursesBottomSheetPageState
             onLoadMore: () =>
                 context.read<CoursesBloc>().add(LoadMoreCoursesEvent()),
             child: CustomScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               slivers: [
                 /// CATEGORIES
                 SliverToBoxAdapter(
                   child: ModuleCategoriesWithBlocWg(
                     categoryType: 'online-education',
+                    onCategorySelected: (categoryId) {
+                      _categoryId = categoryId;
+                      _fetch();
+                    },
                   ),
                 ),
 

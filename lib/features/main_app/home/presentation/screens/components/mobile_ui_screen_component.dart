@@ -49,6 +49,8 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/detailed_online_book_component.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/similar_onilne_books_component.dart';
 import 'package:my_template/features/online_library_app/features/online_lib_bottom_nav_bar.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancy_card_wg.dart';
+import 'package:my_template/features/vacancy_app/features/vacancy_bottom_nav_bar.dart';
 
 import '../../../../../scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
 import '../../../../../scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
@@ -70,6 +72,8 @@ class MobileUiScreenComponent extends StatefulWidget {
 }
 
 class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
+  static const int _vacanciesLimit = 3;
+
   StreamSubscription<List<ConnectivityResult>>? _connectivitySub;
   bool _wasDisconnected = false;
   bool isCollapsed = false;
@@ -210,7 +214,6 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
     );
   }
 
-  /// Har bir bo'lim o'z sliverlari bilan — tartibi [HomeLayoutCubit] dan.
   Map<HomeSectionId, Widget> _sectionSlivers(
     BuildContext context,
     AppLocalizations localization,
@@ -420,6 +423,31 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
             ),
           ),
           const UserRequestsWithBlocWg(limit: 3),
+        ],
+      ),
+
+      //! VACANCIES
+      HomeSectionId.vacancies: SliverMainAxisGroup(
+        slivers: [
+          SliverPadding(
+            padding: const .only(left: 20, right: 20, top: 24),
+            sliver: SliverToBoxAdapter(
+              child: ExtendSectionSeeAllWg(
+                title: localization.jobVacancies,
+                onTap: () => openMiniAppSheetFamily(
+                  context,
+                  showHandler: false,
+                  isTransparent: false,
+                  child: const VacancyBottomNavBar(openPageByIndex: 1),
+                ),
+              ),
+            ),
+          ),
+          SliverList.separated(
+            itemCount: _vacanciesLimit,
+            separatorBuilder: (_, _) => const SizedBox(height: 12),
+            itemBuilder: (_, _) => const VacancyCardWg(),
+          ),
         ],
       ),
     };

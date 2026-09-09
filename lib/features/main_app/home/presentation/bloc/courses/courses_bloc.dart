@@ -11,23 +11,52 @@ import 'package:my_template/features/main_app/home/presentation/bloc/home_event.
 class CoursesBloc extends Bloc<HomeEvent, CoursesState> {
   final ActiveCoursesUseCase useCase;
 
+  /// Load-more paginates the *current* filter, so the last applied
+  /// category/search are remembered here.
+  int? _categoryId;
+  String _search = '';
+
   CoursesBloc(this.useCase) : super(CoursesInitial()) {
     on<AvailableCoursesEvent>((event, emit) async {
-      emit(CoursesLoading());
+      _categoryId = event.categoryId;
+      _search = event.search;
+
+      /// KEEP OLD LIST
+      final current = state;
+      final previous =
+          current is CoursesLoaded && current.response.data.isNotEmpty
+          ? current
+          : null;
+
+      emit(
+        previous != null
+            ? previous.copyWith(isRefreshing: true)
+            : CoursesLoading(),
+      );
+
       try {
-        final response = await useCase.call(page: 1);
+        final response = await useCase.call(
+          page: 1,
+          categoryId: _categoryId,
+          search: _search,
+        );
         emit(CoursesLoaded(response: response));
       } on DioException catch (e) {
         emit(
-          CoursesError(
-            isConnectionError: isNoInternetError(e),
-            message: e.message ?? 'Unknown error',
-          ),
+          previous?.copyWith(isRefreshing: false) ??
+              CoursesError(
+                isConnectionError: isNoInternetError(e),
+                message: e.message ?? 'Unknown error',
+              ),
         );
       } catch (e) {
         final isSocketError = e is SocketException;
         emit(
-          CoursesError(isConnectionError: isSocketError, message: e.toString()),
+          previous?.copyWith(isRefreshing: false) ??
+              CoursesError(
+                isConnectionError: isSocketError,
+                message: e.toString(),
+              ),
         );
       }
     });
@@ -50,7 +79,11 @@ class CoursesBloc extends Bloc<HomeEvent, CoursesState> {
       final nextPage = current.response.meta.currentPage + 1;
 
       try {
-        final next = await useCase.call(page: nextPage);
+        final next = await useCase.call(
+          page: nextPage,
+          categoryId: _categoryId,
+          search: _search,
+        );
 
         emit(
           CoursesLoaded(

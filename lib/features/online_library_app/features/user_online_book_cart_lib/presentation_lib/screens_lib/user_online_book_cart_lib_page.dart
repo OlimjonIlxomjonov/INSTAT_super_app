@@ -193,19 +193,6 @@ class _UserOnlineBookCartLibPageState extends State<UserOnlineBookCartLibPage> {
                     AppEmptyState(
                       title: localization.cartEmpty,
                       subtitle: localization.cartEmptySubtitle,
-                      buttonLabel: localization.continueButton,
-                      onAction: () {
-                        // openMiniAppSheetFamily(
-                        //   context,
-                        //   showHandler: false,
-                        //   child: SeeAllOnlineBooksComponent(),
-                        // );
-                        FamilyNavigation.familyPush(
-                          showHandle: false,
-                          context,
-                          SeeAllOnlineBooksComponent(),
-                        );
-                      },
                     ),
                   SizedBox(height: appH(30)),
                   if (!isEmpty)

@@ -528,5 +528,6 @@
   "readingBooks": "Читаемые книги",
   "arrangeSections": "Порядок разделов",
   "arrangeSectionsSubtitle": "Перетащите, чтобы изменить порядок, или скройте раздел",
-  "resetToDefaultOrder": "Вернуть порядок по умолчанию"
+  "resetToDefaultOrder": "Вернуть порядок по умолчанию",
+  "jobVacancies": "Вакансии"
 }

@@ -29,7 +29,7 @@ import '../../../../../main_app/home/presentation/bloc/home_event.dart';
 import '../../../user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
 import '../../../user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
 
-class HomeEduPage extends StatelessWidget {
+class HomeEduPage extends StatefulWidget {
   final VoidCallback onTap, onProfileTap;
 
   const HomeEduPage({
@@ -37,6 +37,13 @@ class HomeEduPage extends StatelessWidget {
     required this.onTap,
     required this.onProfileTap,
   });
+
+  @override
+  State<HomeEduPage> createState() => _HomeEduPageState();
+}
+
+class _HomeEduPageState extends State<HomeEduPage> {
+  int? _categoryId;
 
   void _goToAllCourses(BuildContext context) {
     openMiniAppSheetFamily(
@@ -63,7 +70,9 @@ class HomeEduPage extends StatelessWidget {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
-          context.read<CoursesBloc>().add(AvailableCoursesEvent());
+          context.read<CoursesBloc>().add(
+            AvailableCoursesEvent(categoryId: _categoryId),
+          );
           context.read<UserCoursesBloc>().add(
             UserCoursesEvent(params: UserCoursesParams(state: 'in_progress')),
           );
@@ -74,7 +83,7 @@ class HomeEduPage extends StatelessWidget {
             SliverAppBar(
               toolbarHeight: 70,
               title: SheetDragAreaWg(
-                child: DraggableAppBarWg(onProfileTap: onProfileTap),
+                child: DraggableAppBarWg(onProfileTap: widget.onProfileTap),
               ),
               automaticallyImplyLeading: false,
               titleSpacing: 0,
@@ -99,12 +108,18 @@ class HomeEduPage extends StatelessWidget {
             ),
 
             /// Active User Courses
-            ActiveCoursesWithBlocWg(onSeeAll: onTap),
+            ActiveCoursesWithBlocWg(onSeeAll: widget.onTap),
 
             /// SELECT CATEGORIES
             SliverToBoxAdapter(
               child: ModuleCategoriesWithBlocWg(
                 categoryType: 'online-education',
+                onCategorySelected: (categoryId) {
+                  setState(() => _categoryId = categoryId);
+                  context.read<CoursesBloc>().add(
+                    AvailableCoursesEvent(categoryId: categoryId),
+                  );
+                },
               ),
             ),
 

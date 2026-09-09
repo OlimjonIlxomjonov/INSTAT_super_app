@@ -17,6 +17,7 @@ import 'package:my_template/features/main_app/home/presentation/screens/componen
 import 'package:my_template/features/main_app/home/presentation/screens/drawer/main_app_drawer.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/model/mini_app_model.dart';
 import 'package:my_template/features/online_library_app/features/online_lib_bottom_nav_bar.dart';
+import 'package:my_template/features/vacancy_app/features/vacancy_bottom_nav_bar.dart';
 
 import '../../../../../core/common/flush_bar/flush_bars.dart';
 
@@ -73,6 +74,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _openVacancyApp(BuildContext context) {
+    openMiniAppSheetFamily(
+      context,
+      showHandler: false,
+      isTransparent: false,
+      child: const VacancyBottomNavBar(),
+    );
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -103,9 +113,7 @@ class _HomePageState extends State<HomePage> {
         mainImage: AppImages.mikroMalumotlar,
         backgroundImage: AppVectors.mikroMalumotlarBack,
         title: localization.scientificArticles,
-        onTap: (context) {
-          technicalWorkFlushBar(context, 'Tez orada!');
-        },
+        onTap: (context) => _openVacancyApp(context),
         colors: [Color(0xff51D7D4), Color(0xff2EC4B6)],
       ),
       MiniAppModel(

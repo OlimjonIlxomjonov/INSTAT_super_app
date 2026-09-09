@@ -528,5 +528,6 @@
   "readingBooks": "Books in progress",
   "arrangeSections": "Arrange sections",
   "arrangeSectionsSubtitle": "Drag to reorder, or hide a section",
-  "resetToDefaultOrder": "Reset to default order"
+  "resetToDefaultOrder": "Reset to default order",
+  "jobVacancies": "Job openings"
 }

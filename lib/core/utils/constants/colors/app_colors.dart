@@ -6,6 +6,7 @@ class AppColors {
   static const greyScale = _GreyScale();
 
   static const Color userChatBackground = Color(0xffF2F8FE);
+  static const Color requestBackgroundColorBtn = Color(0xffE3F0FC);
 
   /// Online Books brief background colors
   // green

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_remix/flutter_remix.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -9,7 +9,7 @@ import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/general_widgets/file_opening_overlay/file_opening_overlay_wg.dart';
 import 'package:my_template/core/utils/general_widgets/selected_file_container/selected_file_container_wg.dart';
-import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
+import 'package:my_template/core/utils/widgets/detail_tabs/detail_tabs_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_request_process_entity.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/add_data_request/add_data_request_bloc.dart';
@@ -91,8 +91,14 @@ class _DataRequestDetailViewState extends State<_DataRequestDetailView> {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     final tabs = [
-      localization.requestTabInfo,
-      localization.requestTabProcesses,
+      DetailTabItem(
+        label: localization.requestTabInfo,
+        icon: FlutterRemix.file_list_2_line,
+      ),
+      DetailTabItem(
+        label: localization.requestTabProcesses,
+        icon: FlutterRemix.list_check_2,
+      ),
     ];
 
     return Scaffold(
@@ -110,19 +116,10 @@ class _DataRequestDetailViewState extends State<_DataRequestDetailView> {
 
               /// TABS
               SliverToBoxAdapter(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.only(right: 20, bottom: 20),
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: List.generate(tabs.length, (index) {
-                      return EduCategoriesWg(
-                        categoryIcon: FlutterRemix.layout_grid_line,
-                        categoryName: tabs[index],
-                        isSelected: _selectedTab == index,
-                        onTap: () => setState(() => _selectedTab = index),
-                      );
-                    }),
-                  ),
+                child: DetailTabsWg(
+                  tabs: tabs,
+                  selectedIndex: _selectedTab,
+                  onChanged: (index) => setState(() => _selectedTab = index),
                 ),
               ),
 

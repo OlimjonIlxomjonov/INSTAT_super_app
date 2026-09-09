@@ -23,7 +23,15 @@ class CoursesLoaded extends CoursesState {
   /// visible throughout, so the list never flashes empty.
   final bool isLoadingMore;
 
-  CoursesLoaded({required this.response, this.isLoadingMore = false});
+  /// True while a category/search refetch is in flight. The previous list
+  /// stays mounted so the page never collapses and jumps.
+  final bool isRefreshing;
+
+  CoursesLoaded({
+    required this.response,
+    this.isLoadingMore = false,
+    this.isRefreshing = false,
+  });
 
   /// Whether the backend reports at least one more page after the last one
   /// that was loaded.
@@ -32,10 +40,12 @@ class CoursesLoaded extends CoursesState {
   CoursesLoaded copyWith({
     CourseListResponse? response,
     bool? isLoadingMore,
+    bool? isRefreshing,
   }) {
     return CoursesLoaded(
       response: response ?? this.response,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      isRefreshing: isRefreshing ?? this.isRefreshing,
     );
   }
 }

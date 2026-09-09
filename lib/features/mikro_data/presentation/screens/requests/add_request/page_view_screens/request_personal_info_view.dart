@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/utils/general_widgets/form_fields/app_form_field_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
@@ -10,10 +11,10 @@ import 'package:my_template/features/mikro_data/presentation/bloc/add_data_reque
 import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_event.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/reports/reports_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_formatters.dart';
-import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/widgets/date_picker_sheet.dart';
-import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/widgets/picker_field_wg.dart';
+import 'package:my_template/core/utils/general_widgets/date_picker_sheet/date_picker_sheet.dart';
+import 'package:my_template/core/utils/general_widgets/form_fields/app_picker_field_wg.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/widgets/report_picker_sheet.dart';
-import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/widgets/request_input_wg.dart';
+import 'package:my_template/core/utils/general_widgets/form_fields/app_input_wg.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/widgets/request_section_card_wg.dart';
 
 class RequestPersonalInfoView extends StatefulWidget {
@@ -132,10 +133,10 @@ class _RequestPersonalInfoViewState extends State<RequestPersonalInfoView> {
             RequestSectionCardWg(
               title: localization.requestPersonalInfoTitle,
               children: [
-                RequestFieldWg(
+                AppFormFieldWg(
                   label: localization.requestOrganizationLabel,
                   isRequired: true,
-                  child: RequestInputWg(
+                  child: AppInputWg(
                     controller: _companyController,
                     hintText: localization.requestOrganizationHint,
                     onChanged: (value) => _update(
@@ -143,17 +144,17 @@ class _RequestPersonalInfoViewState extends State<RequestPersonalInfoView> {
                     ),
                   ),
                 ),
-                RequestFieldWg(
+                AppFormFieldWg(
                   label: localization.requestResearcherLabel,
                   isRequired: true,
-                  child: RequestInputWg(
+                  child: AppInputWg(
                     controller: _fullNameController,
                     hintText: localization.requestResearcherHint,
                     onChanged: (value) =>
                         _update(UpdateDataRequestFieldEvent(fullName: value)),
                   ),
                 ),
-                RequestFieldWg(
+                AppFormFieldWg(
                   label: localization.requestContactLabel,
                   isRequired: true,
                   child: IntlPhoneField(
@@ -188,10 +189,10 @@ class _RequestPersonalInfoViewState extends State<RequestPersonalInfoView> {
                     ),
                   ),
                 ),
-                RequestFieldWg(
+                AppFormFieldWg(
                   label: localization.emailLabel,
                   isRequired: true,
-                  child: RequestInputWg(
+                  child: AppInputWg(
                     controller: _emailController,
                     hintText: localization.requestEmailHint,
                     keyboardType: TextInputType.emailAddress,
@@ -199,9 +200,9 @@ class _RequestPersonalInfoViewState extends State<RequestPersonalInfoView> {
                         _update(UpdateDataRequestFieldEvent(email: value)),
                   ),
                 ),
-                RequestFieldWg(
+                AppFormFieldWg(
                   label: localization.requestTeamMembersLabel,
-                  child: RequestInputWg(
+                  child: AppInputWg(
                     controller: _teamMembersController,
                     hintText: localization.requestTeamMembersHint,
                     minLines: 3,
@@ -217,10 +218,10 @@ class _RequestPersonalInfoViewState extends State<RequestPersonalInfoView> {
             RequestSectionCardWg(
               title: localization.requestProjectSectionTitle,
               children: [
-                RequestFieldWg(
+                AppFormFieldWg(
                   label: localization.requestProjectNameLabel,
                   isRequired: true,
-                  child: RequestInputWg(
+                  child: AppInputWg(
                     controller: _projectNameController,
                     hintText: localization.requestProjectNameHint,
                     onChanged: (value) => _update(
@@ -228,10 +229,10 @@ class _RequestPersonalInfoViewState extends State<RequestPersonalInfoView> {
                     ),
                   ),
                 ),
-                RequestFieldWg(
+                AppFormFieldWg(
                   label: localization.requestProjectAimLabel,
                   isRequired: true,
-                  child: RequestInputWg(
+                  child: AppInputWg(
                     controller: _projectAimController,
                     hintText: localization.requestProjectAimHint,
                     minLines: 3,
@@ -239,10 +240,10 @@ class _RequestPersonalInfoViewState extends State<RequestPersonalInfoView> {
                         _update(UpdateDataRequestFieldEvent(projectAim: value)),
                   ),
                 ),
-                RequestFieldWg(
+                AppFormFieldWg(
                   label: localization.requestBenefitLabel,
                   isRequired: true,
-                  child: RequestInputWg(
+                  child: AppInputWg(
                     controller: _benefitController,
                     hintText: localization.requestBenefitHint,
                     minLines: 3,
@@ -250,10 +251,10 @@ class _RequestPersonalInfoViewState extends State<RequestPersonalInfoView> {
                         _update(UpdateDataRequestFieldEvent(benefit: value)),
                   ),
                 ),
-                RequestFieldWg(
+                AppFormFieldWg(
                   label: localization.requestAimToUseLabel,
                   isRequired: true,
-                  child: RequestInputWg(
+                  child: AppInputWg(
                     controller: _aimToUseController,
                     hintText: localization.requestAimToUseHint,
                     minLines: 3,
@@ -274,19 +275,19 @@ class _RequestPersonalInfoViewState extends State<RequestPersonalInfoView> {
                 return RequestSectionCardWg(
                   title: localization.requestRequestedDataTitle,
                   children: [
-                    RequestFieldWg(
+                    AppFormFieldWg(
                       label: localization.requestDataReportLabel,
                       isRequired: true,
-                      child: PickerFieldWg(
+                      child: AppPickerFieldWg(
                         hintText: localization.requestDataReportHint,
                         value: state.dataReport?.name,
                         onTap: _pickReport,
                       ),
                     ),
-                    RequestFieldWg(
+                    AppFormFieldWg(
                       label: localization.requestPeriodFromLabel,
                       isRequired: true,
-                      child: PickerFieldWg(
+                      child: AppPickerFieldWg(
                         hintText: localization.requestSelectDateHint,
                         value: formatRequestDate(state.dateFrom),
                         leadingIcon: IconlyLight.calendar,
@@ -294,10 +295,10 @@ class _RequestPersonalInfoViewState extends State<RequestPersonalInfoView> {
                         onTap: () => _pickDate(isFrom: true),
                       ),
                     ),
-                    RequestFieldWg(
+                    AppFormFieldWg(
                       label: localization.requestPeriodToLabel,
                       isRequired: true,
-                      child: PickerFieldWg(
+                      child: AppPickerFieldWg(
                         hintText: localization.requestSelectDateHint,
                         value: formatRequestDate(state.dateTo),
                         leadingIcon: IconlyLight.calendar,
@@ -308,10 +309,10 @@ class _RequestPersonalInfoViewState extends State<RequestPersonalInfoView> {
 
                     // Saytdagi "Tashqi manbalar" toggle'i backendda alohida
                     // maydon emas — ikkala izoh ham majburiy matn.
-                    RequestFieldWg(
+                    AppFormFieldWg(
                       label: localization.requestWhyNotEnoughLabel,
                       isRequired: true,
-                      child: RequestInputWg(
+                      child: AppInputWg(
                         controller: _whyNotEnoughController,
                         hintText: localization.requestWhyNotEnoughHint,
                         minLines: 3,
@@ -320,10 +321,10 @@ class _RequestPersonalInfoViewState extends State<RequestPersonalInfoView> {
                         ),
                       ),
                     ),
-                    RequestFieldWg(
+                    AppFormFieldWg(
                       label: localization.requestNotEnoughCommentLabel,
                       isRequired: true,
-                      child: RequestInputWg(
+                      child: AppInputWg(
                         controller: _notEnoughCommentController,
                         hintText: localization.requestNotEnoughCommentHint,
                         minLines: 3,

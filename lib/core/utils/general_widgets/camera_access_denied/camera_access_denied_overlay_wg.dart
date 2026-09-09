@@ -14,7 +14,6 @@ class CameraAccessDeniedOverlayWg extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
 
-
     return Positioned.fill(
       child: Material(
         type: MaterialType.transparency,

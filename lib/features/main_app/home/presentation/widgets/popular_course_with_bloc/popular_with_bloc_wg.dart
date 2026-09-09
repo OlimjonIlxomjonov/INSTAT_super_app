@@ -22,57 +22,62 @@ class PopularWithBlocWg extends StatelessWidget {
     return BlocBuilder<CoursesBloc, CoursesState>(
       builder: (context, state) {
         if (state is CoursesLoaded) {
+          //! Kategoriya almashganda
+
           final data = state.response.data;
 
-          return SizedBox(
-            height: popularCoursesCardHeight(context),
-            child: LoadMoreOnScroll(
-              canLoadMore: state.hasMore && !state.isLoadingMore,
-              onLoadMore: () =>
-                  context.read<CoursesBloc>().add(LoadMoreCoursesEvent()),
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                padding: AppPadding.horizontal20x(),
-                itemCount: data.length + (state.isLoadingMore ? 1 : 0),
-                cacheExtent: appW(300),
-                itemExtent: cardWidth,
-                itemBuilder: (context, index) {
-                  if (index >= data.length) {
-                    return const Center(
-                      child: SizedBox(
-                        width: 28,
-                        height: 28,
-                        child: CircularProgressIndicator(strokeWidth: 2.5),
+          return Opacity(
+            opacity: state.isRefreshing ? 0.4 : 1,
+            child: SizedBox(
+              height: popularCoursesCardHeight(context),
+              child: LoadMoreOnScroll(
+                canLoadMore: state.hasMore && !state.isLoadingMore,
+                onLoadMore: () =>
+                    context.read<CoursesBloc>().add(LoadMoreCoursesEvent()),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: AppPadding.horizontal20x(),
+                  itemCount: data.length + (state.isLoadingMore ? 1 : 0),
+                  cacheExtent: appW(300),
+                  itemExtent: cardWidth,
+                  itemBuilder: (context, index) {
+                    if (index >= data.length) {
+                      return const Center(
+                        child: SizedBox(
+                          width: 28,
+                          height: 28,
+                          child: CircularProgressIndicator(strokeWidth: 2.5),
+                        ),
+                      );
+                    }
+                    final item = data[index];
+                    return Padding(
+                      padding: EdgeInsets.only(right: appW(12)),
+                      child: CourseCategoryBuilder(
+                        categoryId: item.category,
+                        loadingBuilder: (context) => const SizedBox.shrink(),
+                        builder: (context, categoryName) {
+                          return PopularCoursesCardWg(
+                            onTap: () {
+                              /// open new a family
+                              openMiniAppSheetFamily(
+                                showHandler: false,
+                                context,
+                                child: DetailedCourseInfoPage(
+                                  total: state.response.meta.total,
+                                  data: item,
+                                  courseCategory: categoryName,
+                                ),
+                              );
+                            },
+                            data: item,
+                            categoryName: categoryName,
+                          );
+                        },
                       ),
                     );
-                  }
-                  final item = data[index];
-                  return Padding(
-                    padding: EdgeInsets.only(right: appW(12)),
-                    child: CourseCategoryBuilder(
-                      categoryId: item.category,
-                      loadingBuilder: (context) => const SizedBox.shrink(),
-                      builder: (context, categoryName) {
-                        return PopularCoursesCardWg(
-                          onTap: () {
-                            /// open new a family
-                            openMiniAppSheetFamily(
-                              showHandler: false,
-                              context,
-                              child: DetailedCourseInfoPage(
-                                total: state.response.meta.total,
-                                data: item,
-                                courseCategory: categoryName,
-                              ),
-                            );
-                          },
-                          data: item,
-                          categoryName: categoryName,
-                        );
-                      },
-                    ),
-                  );
-                },
+                  },
+                ),
               ),
             ),
           );

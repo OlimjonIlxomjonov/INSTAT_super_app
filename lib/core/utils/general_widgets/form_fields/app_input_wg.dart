@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 
-class RequestInputWg extends StatelessWidget {
-  const RequestInputWg({
+class AppInputWg extends StatelessWidget {
+  const AppInputWg({
     super.key,
     required this.controller,
     required this.hintText,

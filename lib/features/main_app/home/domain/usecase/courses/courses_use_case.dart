@@ -6,7 +6,15 @@ class ActiveCoursesUseCase {
 
   ActiveCoursesUseCase({required this.repository});
 
-  Future<CourseListResponse> call({int page = 1}) {
-    return repository.getActiveCourses(page: page);
+  Future<CourseListResponse> call({
+    int page = 1,
+    int? categoryId,
+    String search = '',
+  }) {
+    return repository.getActiveCourses(
+      page: page,
+      categoryId: categoryId,
+      search: search,
+    );
   }
 }

@@ -12,7 +12,11 @@ import 'package:my_template/features/main_app/home/domain/entity/user_me/user_en
 abstract class HomeRepository {
   Future<UserEntity> getUserMe();
 
-  Future<CourseListResponse> getActiveCourses({int page = 1});
+  Future<CourseListResponse> getActiveCourses({
+    int page = 1,
+    int? categoryId,
+    String search = '',
+  });
 
   Future<List<BannerEntity>> getActiveBanners();
 
