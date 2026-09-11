@@ -16,6 +16,9 @@ class CoursesBloc extends Bloc<HomeEvent, CoursesState> {
   int? _categoryId;
   String _search = '';
 
+  /// Ro'yxat ayni damda qaysi filtr bilan turganini UI o'qiy olsin.
+  int? get categoryId => _categoryId;
+
   CoursesBloc(this.useCase) : super(CoursesInitial()) {
     on<AvailableCoursesEvent>((event, emit) async {
       _categoryId = event.categoryId;

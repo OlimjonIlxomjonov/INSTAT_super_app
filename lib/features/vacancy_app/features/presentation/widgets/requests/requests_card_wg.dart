@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 
 import '../../../../../../core/utils/app_utils.dart';
 import '../../../../../../core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
@@ -10,6 +11,7 @@ class RequestsCardWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Container(
       margin: const .symmetric(horizontal: 20),
       padding: const .all(12),
@@ -39,7 +41,7 @@ class RequestsCardWg extends StatelessWidget {
               const Spacer(),
               StatusContainerWg(
                 icon: FlutterRemix.loader_2_line,
-                statusTitle: ' Tekshirilmoqda',
+                statusTitle: ' ${localization.statusUnderReview}',
                 iconColor: AppColors.orange500,
                 backgroundColor: AppColors.orange50,
               ),
@@ -67,7 +69,7 @@ class RequestsCardWg extends StatelessWidget {
                     child: const VacancyApplicationDetailWg(),
                     showHandler: false,
                   ),
-                  child: Text('Vakansiyani ko’rish'),
+                  child: Text(localization.viewVacancy),
                 ),
               ),
             ],

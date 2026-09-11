@@ -21,7 +21,9 @@ class CourseGroupDatesRemoteDataSourceImpl
         final data = response.data as List;
         logger.i(data);
         return data
-            .map((e) => CourseGroupDateModel.fromJson(e as Map<String, dynamic>))
+            .map(
+              (e) => CourseGroupDateModel.fromJson(e as Map<String, dynamic>),
+            )
             .toList();
       } else {
         throw Exception('ERROR ${response.statusCode}');

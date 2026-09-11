@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class HomeBriefInfoCardModel {
   final IconData icon;
   final Color iconColor, iconBackgroundColor;
@@ -14,4 +13,3 @@ class HomeBriefInfoCardModel {
     required this.value,
   });
 }
-

@@ -7,7 +7,9 @@ class SubmitLessonTestAnswerUseCase {
 
   SubmitLessonTestAnswerUseCase({required this.repository});
 
-  Future<LessonTestAnswerResponseEntity> call(SubmitLessonTestAnswerParams params) {
+  Future<LessonTestAnswerResponseEntity> call(
+    SubmitLessonTestAnswerParams params,
+  ) {
     return repository.submitLessonTestAnswer(params: params);
   }
 }

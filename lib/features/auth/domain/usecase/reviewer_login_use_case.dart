@@ -5,10 +5,7 @@ class ReviewerLoginUseCase {
 
   ReviewerLoginUseCase({required this.repository});
 
-  Future<void> call({
-    required String username,
-    required String password,
-  }) {
+  Future<void> call({required String username, required String password}) {
     return repository.login(username: username, password: password);
   }
 }

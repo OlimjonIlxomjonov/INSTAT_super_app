@@ -12,6 +12,4 @@ class OfflineCourseResponse {
     required this.data,
     required this.meta,
   });
-
-
 }

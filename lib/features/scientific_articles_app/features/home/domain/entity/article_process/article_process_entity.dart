@@ -20,6 +20,4 @@ class ArticleProcessEntity {
     required this.id,
     required this.fileSize,
   });
-
-
 }

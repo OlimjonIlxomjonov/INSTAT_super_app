@@ -4,6 +4,4 @@ class CourseLessonTopicsResponse {
   final List<CourseLessonTopicsEntity> data;
 
   const CourseLessonTopicsResponse({required this.data});
-
-
 }

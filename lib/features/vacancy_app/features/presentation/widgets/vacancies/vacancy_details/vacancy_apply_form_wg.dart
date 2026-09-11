@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/date_picker_sheet/date_picker_sheet.dart';
 import 'package:my_template/core/utils/general_widgets/dotted_container/dotted_cotnainer_wg.dart';
@@ -42,7 +43,7 @@ class _VacancyApplyFormWgState extends State<VacancyApplyFormWg> {
   Future<void> _pickBirthDate() async {
     final picked = await showDatePickerSheet(
       context,
-      title: 'Tug’ilgan sana',
+      title: AppLocalizations.of(context)!.birthDateLabel,
       initialDate: _birthDate ?? DateTime(2001),
       lastDate: DateTime.now(),
     );
@@ -76,133 +77,145 @@ class _VacancyApplyFormWgState extends State<VacancyApplyFormWg> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+    // family_bottom_sheet sheet'ni klaviatura balandligiga ko'taradi —
+    // Scaffold ham qo'shsa, ikki marta qisqarib maydonlar yopilib qoladi.
     return Scaffold(
-      body: CustomScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        slivers: [
-          //! Header
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 12, 20),
-            sliver: SliverToBoxAdapter(
-              child: Row(
-                children: [
-                  Container(
-                    width: 44,
-                    height: 44,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.greyScale.grey200),
+      resizeToAvoidBottomInset: false,
+      body: GestureDetector(
+        //! Bo'sh joyga bosish
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        behavior: HitTestBehavior.opaque,
+        child: CustomScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          slivers: [
+            //! Header
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 12, 20),
+              sliver: SliverToBoxAdapter(
+                child: Row(
+                  children: [
+                    Container(
+                      width: 44,
+                      height: 44,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColors.greyScale.grey200),
+                      ),
+                      child: Icon(
+                        FlutterRemix.chat_1_line,
+                        size: 20,
+                        color: AppColors.greyScale.grey700,
+                      ),
                     ),
-                    child: Icon(
-                      FlutterRemix.chat_1_line,
-                      size: 20,
-                      color: AppColors.greyScale.grey700,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Ariza yuborish',
-                          style: AppTextStyles.source.semiBold(fontSize: 16),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          'Ma’lumotlaringizni kiriting',
-                          style: AppTextStyles.source.regular(
-                            fontSize: 13,
-                            color: AppColors.greyScale.grey600,
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            localization.submitApplication,
+                            style: AppTextStyles.source.semiBold(fontSize: 16),
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 2),
+                          Text(
+                            localization.enterYourInfo,
+                            style: AppTextStyles.source.regular(
+                              fontSize: 13,
+                              color: AppColors.greyScale.grey600,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.of(context).maybePop(),
-                    icon: Icon(Icons.close, color: AppColors.greyScale.grey700),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          //! Form
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
-            sliver: SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppFormFieldWg(
-                    label: 'F.I.SH',
-                    isRequired: true,
-                    child: AppInputWg(
-                      controller: _fullNameController,
-                      hintText: 'Karimov Azizbek Anvarovich',
-                    ),
-                  ),
-                  AppFormFieldWg(
-                    label: 'Tug’ilgan sana',
-                    isRequired: true,
-                    child: AppPickerFieldWg(
-                      hintText: '01.01.2001',
-                      value: _birthDate == null
-                          ? null
-                          : _formatDate(_birthDate!),
-                      trailingIcon: FlutterRemix.calendar_line,
-                      onTap: _pickBirthDate,
-                    ),
-                  ),
-                  AppFormFieldWg(
-                    label: 'Telefon raqam',
-                    isRequired: true,
-                    child: AppInputWg(
-                      controller: _phoneController,
-                      hintText: '+998 (--) --- -- -',
-                      keyboardType: TextInputType.phone,
-                    ),
-                  ),
-                  AppFormFieldWg(
-                    label: 'Email',
-                    isRequired: true,
-                    child: AppInputWg(
-                      controller: _emailController,
-                      hintText: 'azizbek.karimov@stat.uz',
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                  ),
-
-                  //! Fayl
-                  const SizedBox(height: 4),
-                  VacancySectionTitleWg(title: 'Fayl yuklash'),
-                  const SizedBox(height: 12),
-                  DottedContainerWg(
-                    onTap: _pickFile,
-                    formatsHint:
-                        'JPEG, PNG, PDF, and MP4 formats, up to 50 MB.',
-                  ),
-                  if (_file != null) ...[
-                    const SizedBox(height: 12),
-                    SelectedFileContainerWg(
-                      fileName: _fileName,
-                      fileSize: formatFileSize(_file!.lengthSync()),
-                      onRemove: () => setState(() {
-                        _file = null;
-                        _fileName = null;
-                      }),
+                    IconButton(
+                      onPressed: () => Navigator.of(context).maybePop(),
+                      icon: Icon(
+                        Icons.close,
+                        color: AppColors.greyScale.grey700,
+                      ),
                     ),
                   ],
-                ],
+                ),
               ),
             ),
-          ),
-        ],
+
+            //! Form
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
+              sliver: SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppFormFieldWg(
+                      label: 'F.I.SH',
+                      isRequired: true,
+                      child: AppInputWg(
+                        controller: _fullNameController,
+                        hintText: 'Karimov Azizbek Anvarovich',
+                      ),
+                    ),
+                    AppFormFieldWg(
+                      label: localization.birthDateLabel,
+                      isRequired: true,
+                      child: AppPickerFieldWg(
+                        hintText: '01.01.2001',
+                        value: _birthDate == null
+                            ? null
+                            : _formatDate(_birthDate!),
+                        trailingIcon: FlutterRemix.calendar_line,
+                        onTap: _pickBirthDate,
+                      ),
+                    ),
+                    AppFormFieldWg(
+                      label: localization.phoneNumberLabel,
+                      isRequired: true,
+                      child: AppInputWg(
+                        controller: _phoneController,
+                        hintText: '+998 (--) --- -- -',
+                        keyboardType: TextInputType.phone,
+                      ),
+                    ),
+                    AppFormFieldWg(
+                      label: localization.emailAddressLabel,
+                      isRequired: true,
+                      child: AppInputWg(
+                        controller: _emailController,
+                        hintText: 'azizbek.karimov@stat.uz',
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+                    ),
+
+                    //! Fayl
+                    const SizedBox(height: 4),
+                    VacancySectionTitleWg(title: localization.uploadFileTitle),
+                    const SizedBox(height: 12),
+                    DottedContainerWg(
+                      onTap: _pickFile,
+                      formatsHint:
+                          'JPEG, PNG, PDF, and MP4 formats, up to 50 MB.',
+                    ),
+                    if (_file != null) ...[
+                      const SizedBox(height: 12),
+                      SelectedFileContainerWg(
+                        fileName: _fileName,
+                        fileSize: formatFileSize(_file!.lengthSync()),
+                        onRemove: () => setState(() {
+                          _file = null;
+                          _fileName = null;
+                        }),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: CustomBottomNavContainerWg(
-        buttonText: 'Davom etish',
+        buttonText: localization.continueButton,
         onTap: () {},
       ),
     );

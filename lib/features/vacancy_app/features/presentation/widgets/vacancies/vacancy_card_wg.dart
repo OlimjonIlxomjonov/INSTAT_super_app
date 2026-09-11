@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancy_detailed_wg.dart';
 import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancy_row_item_wg.dart';
@@ -10,6 +11,7 @@ class VacancyCardWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Container(
       margin: const .symmetric(horizontal: 20),
       padding: const .all(12),
@@ -24,7 +26,7 @@ class VacancyCardWg extends StatelessWidget {
           Row(
             children: [
               Text(
-                'E’lon qilingan sana:',
+                localization.publishedDateLabel,
                 style: AppTextStyles.source.medium(
                   fontSize: 12,
                   color: AppColors.primaryColor,
@@ -51,17 +53,17 @@ class VacancyCardWg extends StatelessWidget {
           //! 3
           VacancyRowItemWg(
             leadingIcon: FlutterRemix.money_dollar_circle_line,
-            title: 'Maosh summasi:',
+            title: localization.salaryLabel,
             trailing: '25.000.000 so’m',
           ),
           VacancyRowItemWg(
             leadingIcon: FlutterRemix.map_pin_line,
-            title: 'Ish joyi',
+            title: localization.workplaceLabel,
             trailing: 'Toshkent shahri',
           ),
           VacancyRowItemWg(
             leadingIcon: FlutterRemix.team_line,
-            title: 'Vakant joylar',
+            title: localization.vacantPlacesLabel,
             trailing: '12',
           ),
           const SizedBox(height: 8),
@@ -86,7 +88,7 @@ class VacancyCardWg extends StatelessWidget {
                       showHandler: false,
                     );
                   },
-                  child: Text('Batafsil'),
+                  child: Text(localization.moreDetails),
                 ),
               ),
             ],

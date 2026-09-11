@@ -72,10 +72,7 @@ class _ArticlesMainFilesViewState extends State<ArticlesMainFilesView> {
   }
 
   void _showReviewIdRequiredError() {
-    errorFlushBar(
-      context,
-      AppLocalizations.of(context)!.saveArticleInfoFirst,
-    );
+    errorFlushBar(context, AppLocalizations.of(context)!.saveArticleInfoFirst);
   }
 
   bool _requireReviewId(int? reviewId) {
@@ -336,8 +333,10 @@ class _ArticlesMainFilesViewState extends State<ArticlesMainFilesView> {
             prev.reviewId != curr.reviewId ||
             prev.existingMainFileUrl != curr.existingMainFileUrl ||
             prev.uploadedMainFileName != curr.uploadedMainFileName ||
-            prev.existingAntiplagiatFileUrl != curr.existingAntiplagiatFileUrl ||
-            prev.uploadedAntiplagiatFileName != curr.uploadedAntiplagiatFileName,
+            prev.existingAntiplagiatFileUrl !=
+                curr.existingAntiplagiatFileUrl ||
+            prev.uploadedAntiplagiatFileName !=
+                curr.uploadedAntiplagiatFileName,
         builder: (context, articleState) {
           final reviewId = articleState.reviewId;
 
@@ -391,14 +390,16 @@ class _ArticlesMainFilesViewState extends State<ArticlesMainFilesView> {
 
                               ArticleSingleFileUploadSectionWg(
                                 title: localization.antiplagiarismFile,
-                                formatsHint: localization.antiplagiarismFormatsHint,
+                                formatsHint:
+                                    localization.antiplagiarismFormatsHint,
                                 isUploading: isAntiplagiatUploading,
                                 onPickTap: () {
                                   if (_requireReviewId(reviewId)) {
                                     _pickAndUploadAntiplagiatFile(reviewId!);
                                   }
                                 },
-                                selectedFileName: articleState.hasAntiplagiatFile
+                                selectedFileName:
+                                    articleState.hasAntiplagiatFile
                                     ? articleState.displayAntiplagiatFileName
                                     : null,
                                 selectedFileSize:

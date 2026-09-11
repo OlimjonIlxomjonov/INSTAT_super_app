@@ -13,8 +13,9 @@ class CourseGroupDatesLoaded extends CourseGroupDatesState {
 
   const CourseGroupDatesLoaded({required this.dates});
 
-  Set<DateTime> get markedDates =>
-      dates.map((e) => DateTime(e.dateTime.year, e.dateTime.month, e.dateTime.day)).toSet();
+  Set<DateTime> get markedDates => dates
+      .map((e) => DateTime(e.dateTime.year, e.dateTime.month, e.dateTime.day))
+      .toSet();
 }
 
 class CourseGroupDatesError extends CourseGroupDatesState {

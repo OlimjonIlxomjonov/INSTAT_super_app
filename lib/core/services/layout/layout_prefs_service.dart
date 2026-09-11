@@ -24,7 +24,10 @@ class LayoutPrefsService {
     return saved == 'week' ? CalendarLayout.week : CalendarLayout.month;
   }
 
-  static Future<void> saveCalendarLayout(String key, CalendarLayout layout) async {
+  static Future<void> saveCalendarLayout(
+    String key,
+    CalendarLayout layout,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(
       '$_prefix$key',

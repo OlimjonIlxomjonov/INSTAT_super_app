@@ -43,7 +43,7 @@ class HomeEduPage extends StatefulWidget {
 }
 
 class _HomeEduPageState extends State<HomeEduPage> {
-  int? _categoryId;
+  late int? _categoryId = context.read<CoursesBloc>().categoryId;
 
   void _goToAllCourses(BuildContext context) {
     openMiniAppSheetFamily(
@@ -114,6 +114,7 @@ class _HomeEduPageState extends State<HomeEduPage> {
             SliverToBoxAdapter(
               child: ModuleCategoriesWithBlocWg(
                 categoryType: 'online-education',
+                initialSelectedId: _categoryId,
                 onCategorySelected: (categoryId) {
                   setState(() => _categoryId = categoryId);
                   context.read<CoursesBloc>().add(

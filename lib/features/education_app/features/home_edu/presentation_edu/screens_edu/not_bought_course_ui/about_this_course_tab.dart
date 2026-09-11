@@ -112,7 +112,7 @@ class _AboutThisCourseTabState extends State<AboutThisCourseTab>
                 if (courses.isEmpty) {
                   return Center(
                     child: AppEmptyState(
-                      title: "O‘xshash kurslar topilmadi.",
+                      title: AppLocalizations.of(context)!.similarCoursesEmpty,
                       subtitle:
                           "Hozircha ushbu mavzuga mos keladigan boshqa kurslar mavjud emas.",
                       illustrationSize: 100,

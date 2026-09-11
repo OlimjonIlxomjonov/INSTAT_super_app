@@ -43,7 +43,7 @@ class _PaymentOpenBottomSheetWgState extends State<PaymentOpenBottomSheetWg> {
       listener: (context, state) {
         if (state is BuyCourseLoaded) {
           AppRoute.close();
-          // successFlushBar(context, 'Kurs sotip olindi!');
+          // successFlushBar(context, AppLocalizations.of(context)!.coursePurchased);
         } else if (state is BuyCourseError) {
           setState(() => _selectedPaymentMethod = null);
           errorFlushBar(context, state.message);

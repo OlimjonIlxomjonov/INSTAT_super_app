@@ -79,6 +79,16 @@ class HomeRepoImpl implements HomeRepository {
   }
 
   @override
+  Future<void> markNotifAsRead(int id) {
+    return _remoteDataSource.markNotifAsRead(id);
+  }
+
+  @override
+  Future<void> markAllNotifsAsRead() {
+    return _remoteDataSource.markAllNotifsAsRead();
+  }
+
+  @override
   Future<List<ActiveDevicesEntity>> getActiveDevices() {
     return _remoteDataSource.fetchActiveDevices();
   }

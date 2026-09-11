@@ -131,10 +131,7 @@ class _QrLoginScannerPageState extends State<QrLoginScannerPage> {
                     decoration: BoxDecoration(
                       color: Colors.black54,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: Colors.white24,
-                        width: 1,
-                      ),
+                      border: Border.all(color: Colors.white24, width: 1),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,

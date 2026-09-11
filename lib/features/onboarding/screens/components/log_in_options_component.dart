@@ -193,7 +193,10 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
     final status = await Permission.camera.request();
     if (status.isDenied || status.isPermanentlyDenied) {
       if (mounted) {
-        errorFlushBar(context, 'Kameraga ruxsat berilmadi');
+        errorFlushBar(
+          context,
+          AppLocalizations.of(context)!.cameraPermissionDenied,
+        );
       }
       return;
     }
@@ -435,7 +438,10 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
         if (Platform.isIOS)
           ContinueWithOptions(
             iconPath: AppVectors.appleLogo,
-            onTap: () => errorFlushBar(context, 'Tez orada!'),
+            onTap: () => errorFlushBar(
+              context,
+              AppLocalizations.of(context)!.comingSoon,
+            ),
             continueWithText: localization.continueWithApple,
           ),
         //! google sign in
@@ -449,7 +455,10 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
           top: false,
           child: ContinueWithOptions(
             iconPath: AppVectors.facebookLogo,
-            onTap: () => errorFlushBar(context, 'Tez orada!'),
+            onTap: () => errorFlushBar(
+              context,
+              AppLocalizations.of(context)!.comingSoon,
+            ),
             continueWithText: localization.continueWithFaceBook,
           ),
         ),

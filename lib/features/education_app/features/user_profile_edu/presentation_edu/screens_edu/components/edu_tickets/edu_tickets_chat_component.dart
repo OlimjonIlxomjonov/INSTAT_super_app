@@ -117,9 +117,11 @@ class _EduTicketsChatComponentState extends State<EduTicketsChatComponent> {
             ),
           );
         } else if (state is SendMessageError) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(const SnackBar(content: Text('Xabar yuborilmadi')));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppLocalizations.of(context)!.messageNotSent),
+            ),
+          );
         }
       },
       child: GestureDetector(
@@ -144,9 +146,10 @@ class _EduTicketsChatComponentState extends State<EduTicketsChatComponent> {
                     if (data.isEmpty) {
                       return SliverToBoxAdapter(
                         child: AppEmptyState(
-                          title: 'Hali xabarlar yo‘q',
-                          subtitle:
-                              'Birinchi xabarni yuboring va ushbu sahifani jonlantiring.',
+                          title: AppLocalizations.of(context)!.noMessagesTitle,
+                          subtitle: AppLocalizations.of(
+                            context,
+                          )!.noMessagesSubtitle,
                         ),
                       );
                     }
@@ -425,7 +428,7 @@ class _EduTicketsChatComponentState extends State<EduTicketsChatComponent> {
                           maxLines: 5,
                           minLines: 1,
                           decoration: InputDecoration(
-                            hintText: 'Сообщение',
+                            hintText: AppLocalizations.of(context)!.messageHint,
                             border: InputBorder.none,
                           ),
                         ),

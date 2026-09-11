@@ -103,11 +103,12 @@ class _ReportsCardWgState extends State<ReportsCardWg> {
                 final data = state.response.data;
 
                 if (data.isEmpty) {
-                  return const SliverToBoxAdapter(
+                  return SliverToBoxAdapter(
                     child: AppEmptyState(
-                      title: 'Hozircha hisobotlar yaratilmagan.',
-                      subtitle:
-                          'Asosiy samaradorlik ko‘rsatkichlarini kuzatish va natijalarni tahlil qilish uchun birinchi hisobotingizni yarating.',
+                      title: AppLocalizations.of(context)!.reportsEmptyTitle,
+                      subtitle: AppLocalizations.of(
+                        context,
+                      )!.reportsEmptySubtitle,
                     ),
                   );
                 }

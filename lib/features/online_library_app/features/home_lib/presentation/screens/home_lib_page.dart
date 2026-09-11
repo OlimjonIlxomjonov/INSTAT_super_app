@@ -42,7 +42,7 @@ class HomeLibPage extends StatefulWidget {
 }
 
 class _HomeLibPageState extends State<HomeLibPage> {
-  int? _categoryId;
+  late int? _categoryId = context.read<PopularBooksBloc>().categoryId;
 
   @override
   void initState() {
@@ -167,6 +167,7 @@ class _HomeLibPageState extends State<HomeLibPage> {
             SliverToBoxAdapter(
               child: ModuleCategoriesWithBlocWg(
                 categoryType: 'library',
+                initialSelectedId: _categoryId,
                 onCategorySelected: (categoryId) {
                   setState(() => _categoryId = categoryId);
                   context.read<PopularBooksBloc>().add(

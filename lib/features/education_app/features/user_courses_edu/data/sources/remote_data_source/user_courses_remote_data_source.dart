@@ -38,7 +38,9 @@ abstract class UserCoursesRemoteDataSource {
     required CourseFilesParams params,
   });
 
-  Future<OrderPaymentModel> postBoughtCourses({required BuyCourseParams params});
+  Future<OrderPaymentModel> postBoughtCourses({
+    required BuyCourseParams params,
+  });
 
   Future<CourseListResponseModel> fetchSearchCourses({
     required SearchCoursesParams params,

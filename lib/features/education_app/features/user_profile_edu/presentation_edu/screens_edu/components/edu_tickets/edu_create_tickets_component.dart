@@ -60,11 +60,14 @@ class _EduCreateTicketsComponentState extends State<EduCreateTicketsComponent> {
     final desc = _ticketDescController.text.trim();
 
     if (title.isEmpty) {
-      errorFlushBar(context, 'Ticket nomi va file majburiy!');
+      errorFlushBar(
+        context,
+        AppLocalizations.of(context)!.ticketNameAndFileRequired,
+      );
       return;
     }
     if (_selectedFile == null) {
-      errorFlushBar(context, 'Iltimos, fayl biriktiring');
+      errorFlushBar(context, AppLocalizations.of(context)!.attachFilePlease);
       return;
     }
 
@@ -94,9 +97,12 @@ class _EduCreateTicketsComponentState extends State<EduCreateTicketsComponent> {
             _selectedFile = null;
           });
 
-          successFlushBar(context, 'Tikket yaratildi');
+          successFlushBar(context, AppLocalizations.of(context)!.ticketCreated);
         } else if (state is CreateTicketsError) {
-          errorFlushBar(context, 'Ticket yaratilmadi');
+          errorFlushBar(
+            context,
+            AppLocalizations.of(context)!.ticketNotCreated,
+          );
         }
       },
       child: GestureDetector(

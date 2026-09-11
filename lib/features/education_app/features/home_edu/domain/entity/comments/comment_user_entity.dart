@@ -10,6 +10,4 @@ class CommentUserEntity {
     this.lastName,
     this.avatar,
   });
-
-
 }

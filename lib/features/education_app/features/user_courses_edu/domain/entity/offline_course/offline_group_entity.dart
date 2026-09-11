@@ -15,6 +15,4 @@ class OfflineGroupEntity {
     required this.studentsCount,
     required this.teachers,
   });
-
-
 }

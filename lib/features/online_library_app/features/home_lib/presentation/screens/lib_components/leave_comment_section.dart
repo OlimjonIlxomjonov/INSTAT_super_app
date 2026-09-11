@@ -45,7 +45,10 @@ class _LeaveCommentSectionState extends State<LeaveCommentSection> {
         ),
       );
     } else {
-      errorFlushBar(context, 'Cannot be empty!');
+      errorFlushBar(
+        context,
+        AppLocalizations.of(context)!.commentCannotBeEmpty,
+      );
     }
   }
 
@@ -110,7 +113,10 @@ class _LeaveCommentSectionState extends State<LeaveCommentSection> {
               BlocConsumer<AddCommentsBloc, AddCommentsState>(
                 listener: (context, state) {
                   if (state is AddCommentsLoaded) {
-                    successFlushBar(context, 'Comment Added!');
+                    successFlushBar(
+                      context,
+                      AppLocalizations.of(context)!.commentAdded,
+                    );
                     context.read<BookCommentsBloc>().add(
                       BookCommentsEvent(
                         params: OnlineBookCommentsParams(

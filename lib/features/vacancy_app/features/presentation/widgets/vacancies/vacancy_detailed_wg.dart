@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
@@ -12,6 +13,7 @@ class VacancyDetailedWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -21,7 +23,7 @@ class VacancyDetailedWg extends StatelessWidget {
             automaticallyImplyLeading: false,
             title: SheetDragAreaWg(
               child: CustomAppBarWg(
-                myTitle: "Vakansiya ma'lumotlari",
+                myTitle: localization.vacancyDetailsTitle,
                 customActions: [
                   IconButton(
                     style: IconButton.styleFrom(
@@ -53,7 +55,7 @@ class VacancyDetailedWg extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        'E’lon qilingan sana:',
+                        localization.publishedDateLabel,
                         style: AppTextStyles.source.medium(fontSize: 14),
                       ),
                       const SizedBox(width: 4),
@@ -76,7 +78,7 @@ class VacancyDetailedWg extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: CustomBottomNavContainerWg(
-        buttonText: 'Ariza yuborish',
+        buttonText: localization.submitApplication,
         onTap: () => openMiniAppSheetFamily(
           context,
           child: const VacancyApplyFormWg(),

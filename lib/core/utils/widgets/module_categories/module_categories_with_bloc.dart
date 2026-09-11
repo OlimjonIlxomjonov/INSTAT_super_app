@@ -16,10 +16,15 @@ class ModuleCategoriesWithBlocWg extends StatefulWidget {
   /// Tanlangan kategoriya id'si. "Barchasi" uchun `null` keladi.
   final ValueChanged<int?>? onCategorySelected;
 
+  /// Bloc global bo'lgani uchun modul yopilib qayta ochilganda ro'yxat eski
+  /// filtrda qoladi — chip ham o'sha filtrni ko'rsatsin.
+  final int? initialSelectedId;
+
   const ModuleCategoriesWithBlocWg({
     super.key,
     required this.categoryType,
     this.onCategorySelected,
+    this.initialSelectedId,
   });
 
   @override
@@ -29,7 +34,7 @@ class ModuleCategoriesWithBlocWg extends StatefulWidget {
 
 class _ModuleCategoriesWithBlocWgState
     extends State<ModuleCategoriesWithBlocWg> {
-  int? _selectedId;
+  late int? _selectedId = widget.initialSelectedId;
 
   @override
   void initState() {

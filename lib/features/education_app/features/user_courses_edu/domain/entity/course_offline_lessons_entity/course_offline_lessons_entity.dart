@@ -34,6 +34,4 @@ class CourseOfflineLessonsEntity {
     required this.progress,
     required this.courseBlock,
   });
-
-
 }

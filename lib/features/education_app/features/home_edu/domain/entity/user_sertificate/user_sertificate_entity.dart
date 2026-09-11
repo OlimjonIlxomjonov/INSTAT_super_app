@@ -6,6 +6,4 @@ class UserCertificateEntity {
   final String? certificateImage;
 
   const UserCertificateEntity({this.id, this.course, this.certificateImage});
-
-
 }

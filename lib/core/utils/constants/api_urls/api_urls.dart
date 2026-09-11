@@ -151,6 +151,9 @@ class ApiUrls {
   //? Notifications
   static const String notif = 'notifications/?page=';
   static const String notifCount = 'notifications/items/unread-count/';
+  static const String markAllNotifsRead = 'notifications/mark-all-as-read/';
+
+  static String markNotifRead(int id) => 'notifications/$id/mark-as-read/';
 
   //? Active Devices // DELETE TOO
   static const String activeDevices = 'devices';

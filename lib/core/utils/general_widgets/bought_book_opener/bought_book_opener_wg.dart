@@ -12,6 +12,8 @@ import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/fetch_book_pages_count_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/fetch_book_pages_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/update_book_current_page_use_case.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/user_books/user_book_bloc.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/user_books/user_books_event.dart';
 import 'package:turn_page_transition/turn_page_transition.dart';
 
 /// Opens a bought book for reading, page by page, using the real backend:
@@ -55,6 +57,7 @@ class _BoughtBookOpenerWgState extends State<BoughtBookOpenerWg> {
   // Debounced so rapidly flipping through several pages only reports
   // wherever the user actually settles, not every page passed through.
   Timer? _progressDebounce;
+  bool _finalized = false;
 
   // Immersive mode: the overlay (back/zoom/page count) shows briefly on
   // every page turn — so progress is visible right when it's useful — then
@@ -74,7 +77,8 @@ class _BoughtBookOpenerWgState extends State<BoughtBookOpenerWg> {
 
   @override
   void dispose() {
-    _progressDebounce?.cancel();
+    // Swipe-back ham shu yerdan o'tadi.
+    _finalizeProgress();
     _hideOverlayTimer?.cancel();
     _currentIndexNotifier.dispose();
     super.dispose();
@@ -119,6 +123,27 @@ class _BoughtBookOpenerWgState extends State<BoughtBookOpenerWg> {
           _hasError = true;
         });
     }
+  }
+
+  /// YOPISH
+  ///
+  /// Progress hisoboti debounce bilan yuborilardi — chiqishda u hali
+  /// yuborilmagan bo'lishi mumkin. Avval oxirgi sahifa yozib olinadi,
+  /// keyin ro'yxat qayta so'raladi, aks holda kartada eski sahifa qoladi.
+  void _finalizeProgress() {
+    if (_finalized) return;
+    _finalized = true;
+    _progressDebounce?.cancel();
+
+    final lastPage = _currentIndexNotifier.value + 1;
+    _updateCurrentPageUseCase(
+      UpdateBookCurrentPageParams(bookId: widget.bookId, currentPage: lastPage),
+    ).whenComplete(() => sl<UserBookBloc>().add(const UserBooksEvent()));
+  }
+
+  void _closeReader() {
+    _finalizeProgress();
+    AppRoute.close();
   }
 
   /// Resolves the book-page id for [pageNumber], using the cache first.
@@ -199,7 +224,7 @@ class _BoughtBookOpenerWgState extends State<BoughtBookOpenerWg> {
       return Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            onPressed: () => AppRoute.close(),
+            onPressed: _closeReader,
             icon: const Icon(Icons.arrow_back),
           ),
         ),
@@ -240,7 +265,7 @@ class _BoughtBookOpenerWgState extends State<BoughtBookOpenerWg> {
                       top: MediaQuery.of(context).padding.top + 10,
                       left: 12,
                       child: IconButton(
-                        onPressed: () => AppRoute.close(),
+                        onPressed: _closeReader,
                         style: IconButton.styleFrom(
                           backgroundColor: Colors.black38,
                           shape: const CircleBorder(),

@@ -3,7 +3,8 @@ import 'package:my_template/features/scientific_articles_app/features/home/domai
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/upload_review_file/upload_review_file_state.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
 
-class UploadReviewFileBloc extends Bloc<ArticlesHomeEvent, UploadReviewFileState> {
+class UploadReviewFileBloc
+    extends Bloc<ArticlesHomeEvent, UploadReviewFileState> {
   final AddReviewFileUseCase useCase;
 
   UploadReviewFileBloc({required this.useCase})

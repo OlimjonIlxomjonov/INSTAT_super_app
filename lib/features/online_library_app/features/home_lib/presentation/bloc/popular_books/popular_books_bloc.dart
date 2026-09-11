@@ -15,6 +15,9 @@ class PopularBooksBloc extends Bloc<PopularBooksEvent, PopularBooksState> {
   int? _categoryId;
   String _search = '';
 
+  /// Ro'yxat ayni damda qaysi filtr bilan turganini UI o'qiy olsin.
+  int? get categoryId => _categoryId;
+
   PopularBooksBloc({required this.useCase}) : super(PopularBooksInitial()) {
     on<FetchPopularBooksEvent>((event, emit) async {
       final current = state;

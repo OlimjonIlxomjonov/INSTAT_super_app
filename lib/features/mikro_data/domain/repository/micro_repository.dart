@@ -11,7 +11,7 @@ import 'package:my_template/features/mikro_data/domain/entity/reports/reports_re
 
 abstract class MicroRepository {
   //! Reports cards
-  Future<ReportsResponse> getReportsCard();
+  Future<ReportsResponse> getReportsCard({String search = '', int page = 1});
 
   Future<List<ReportsOptionsEntity>> getReportOptions(int reportId);
 

@@ -1,4 +1,3 @@
-
 class Links {
   final String? next;
   final String? previous;

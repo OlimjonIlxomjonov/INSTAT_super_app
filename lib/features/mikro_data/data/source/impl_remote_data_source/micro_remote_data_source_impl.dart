@@ -19,9 +19,19 @@ class MicroRemoteDataSourceImpl implements MicroRemoteDataSource {
   final _dioClient = DioClient();
 
   @override
-  Future<ReportsResponseModel> fetchReportsCard() async {
+  Future<ReportsResponseModel> fetchReportsCard({
+    String search = '',
+    int page = 1,
+  }) async {
     try {
-      final response = await _dioClient.get(ApiUrls.reports);
+      final response = await _dioClient.get(
+        ApiUrls.reports,
+        queryParams: {
+          'is_active': true,
+          'page': page,
+          if (search.isNotEmpty) 'search': search,
+        },
+      );
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
         return ReportsResponseModel.fromJson(response.data);

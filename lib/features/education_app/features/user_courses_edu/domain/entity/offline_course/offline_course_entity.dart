@@ -1,3 +1,4 @@
+import 'package:my_template/core/utils/localization/localized_text.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_category_entity.dart';
 
 class OfflineCourseEntity {
@@ -27,5 +28,11 @@ class OfflineCourseEntity {
     this.category,
   });
 
-
+  String displayName(String localeCode) => localizedText(
+    localeCode: localeCode,
+    fallback: name,
+    uz: nameUz,
+    ru: nameRu,
+    en: nameEn,
+  );
 }

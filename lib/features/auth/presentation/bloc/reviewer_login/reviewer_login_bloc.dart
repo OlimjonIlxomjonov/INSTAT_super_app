@@ -11,10 +11,7 @@ class ReviewerLoginBloc extends Bloc<ReviewerLoginEvent, ReviewerLoginState> {
     on<SubmitReviewerLoginEvent>((event, emit) async {
       emit(ReviewerLoginLoading());
       try {
-        await useCase.call(
-          username: event.username,
-          password: event.password,
-        );
+        await useCase.call(username: event.username, password: event.password);
         emit(ReviewerLoginSuccess());
       } on ServerException catch (e) {
         emit(

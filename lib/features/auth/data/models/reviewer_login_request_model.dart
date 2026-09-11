@@ -8,9 +8,6 @@ class ReviewerLoginRequestModel {
   });
 
   Map<String, dynamic> toJson() {
-    return {
-      'username': username,
-      'password': password,
-    };
+    return {'username': username, 'password': password};
   }
 }

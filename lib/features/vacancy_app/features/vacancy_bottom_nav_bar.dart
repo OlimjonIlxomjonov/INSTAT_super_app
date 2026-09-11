@@ -37,12 +37,12 @@ class VacancyBottomNavBar extends StatelessWidget {
         MiniAppBottomNavTabItem(
           icon: FlutterRemix.folder_3_line,
           activeIcon: FlutterRemix.folder_3_fill,
-          label: 'Vakansiyalar',
+          label: localization.vacanciesTitle,
         ),
         MiniAppBottomNavTabItem(
           icon: FlutterRemix.clipboard_line,
           activeIcon: FlutterRemix.clipboard_fill,
-          label: 'Arizalarim',
+          label: localization.applicationsTab,
         ),
         MiniAppBottomNavTabItem(
           icon: FlutterRemix.user_line,

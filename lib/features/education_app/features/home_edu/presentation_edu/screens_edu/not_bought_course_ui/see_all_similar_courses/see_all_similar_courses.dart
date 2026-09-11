@@ -84,7 +84,9 @@ class _SeeAllSimilarCoursesState extends State<SeeAllSimilarCourses> {
                     //! Empty State
                     if (data.isEmpty) {
                       return AppEmptyState(
-                        title: "O‘xshash kurslar topilmadi.",
+                        title: AppLocalizations.of(
+                          context,
+                        )!.similarCoursesEmpty,
                         subtitle:
                             "Hozircha ushbu mavzuga mos keladigan boshqa kurslar mavjud emas.",
                       );

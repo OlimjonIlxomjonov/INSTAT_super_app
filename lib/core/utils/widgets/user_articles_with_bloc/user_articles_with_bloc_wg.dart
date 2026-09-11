@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/skeletonizer_shimmer/user_articles/user_articles_skeletonizer.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
@@ -26,10 +27,9 @@ class UserArticlesWithBlocWg extends StatelessWidget {
           if (data.isEmpty) {
             return SliverToBoxAdapter(
               child: AppEmptyState(
-                title: 'Birinchi maqolangizni yozing!',
-                subtitle:
-                    'Hoziroq boshlang va g‘oyalaringizni dunyoga ulashing.',
-                buttonLabel: 'Maqola Qoshish',
+                title: AppLocalizations.of(context)!.articlesEmptyTitle,
+                subtitle: AppLocalizations.of(context)!.articlesEmptySubtitle,
+                buttonLabel: AppLocalizations.of(context)!.addArticleAction,
                 onAction: () {
                   openMiniAppSheetFamily(
                     context,

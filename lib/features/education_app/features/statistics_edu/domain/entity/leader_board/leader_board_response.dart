@@ -8,5 +8,4 @@ class LeaderBoardResponse {
   final Meta? meta;
 
   LeaderBoardResponse({required this.data, this.meta, this.links});
-
 }

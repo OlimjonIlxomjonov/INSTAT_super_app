@@ -24,7 +24,7 @@ Widget ticketsStatusSwitchCase(BuildContext context, TicketStatus status) {
               color: AppColors.greenDoneTaskCard,
             ),
             Text(
-              ' Ochiq',
+              ' ${localization.ticketStatusOpen}',
               style: AppTextStyles.source.medium(
                 fontSize: 12,
                 color: AppColors.greenDoneTaskCard,
@@ -45,7 +45,7 @@ Widget ticketsStatusSwitchCase(BuildContext context, TicketStatus status) {
           children: [
             Icon(IconlyBold.danger, size: 20, color: AppColors.orange),
             Text(
-              ' Jarayonda',
+              ' ${localization.ticketStatusInProgress}',
               style: AppTextStyles.source.medium(
                 fontSize: 12,
                 color: AppColors.orange,
@@ -66,7 +66,7 @@ Widget ticketsStatusSwitchCase(BuildContext context, TicketStatus status) {
           children: [
             Icon(Icons.dangerous, size: 20, color: AppColors.redFailedTaskCard),
             Text(
-              ' Yopiq',
+              ' ${localization.ticketStatusClosed}',
               style: AppTextStyles.source.medium(
                 fontSize: 12,
                 color: AppColors.redFailedTaskCard,

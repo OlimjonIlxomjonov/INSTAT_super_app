@@ -11,7 +11,10 @@ import 'package:my_template/features/mikro_data/data/model/reports/reports_respo
 
 abstract class MicroRemoteDataSource {
   //! Reports
-  Future<ReportsResponseModel> fetchReportsCard();
+  Future<ReportsResponseModel> fetchReportsCard({
+    String search = '',
+    int page = 1,
+  });
 
   Future<List<ReportsOptionsModel>> fetchReportOptions(int reportId);
 

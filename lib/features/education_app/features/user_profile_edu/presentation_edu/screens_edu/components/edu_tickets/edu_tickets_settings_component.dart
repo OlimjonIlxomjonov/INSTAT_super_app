@@ -112,9 +112,9 @@ class _EduTicketsSettingsComponentState
                     children: [
                       CustomTabBarWg(
                         controller: _tabController,
-                        firstTab: 'Ochiq',
-                        secondTab: 'Jarayonda',
-                        thirdTab: 'Yopilgan',
+                        firstTab: localization.ticketStatusOpen,
+                        secondTab: localization.ticketStatusInProgress,
+                        thirdTab: localization.ticketStatusClosed,
                       ),
                       const SizedBox(height: 20),
 
@@ -139,9 +139,8 @@ class _EduTicketsSettingsComponentState
                       return SliverToBoxAdapter(
                         child: _search.isEmpty
                             ? AppEmptyState(
-                                title: 'Tikketlar bosh!',
-                                subtitle:
-                                    'Birinchi tikketni yaratish va ishni boshlash uchun quyidagi tugmani bosing.',
+                                title: localization.ticketsEmptyTitle,
+                                subtitle: localization.ticketsEmptySubtitle,
                               )
                             : AppEmptyState(
                                 title: localization.nothingFound,
@@ -171,22 +170,24 @@ class _EduTicketsSettingsComponentState
                                 await showDialog<bool>(
                                   context: context,
                                   builder: (context) => AlertDialog(
-                                    title: const Text('Ticketni o\'chirish'),
-                                    content: const Text(
-                                      'Haqiqatan ham bu ticketni o\'chirmoqchimisiz?',
+                                    title: Text(localization.ticketDeleteTitle),
+                                    content: Text(
+                                      localization.ticketDeleteConfirm,
                                     ),
                                     actions: [
                                       TextButton(
                                         onPressed: () =>
                                             Navigator.of(context).pop(false),
-                                        child: const Text('Bekor qilish'),
+                                        child: Text(localization.cancel),
                                       ),
                                       TextButton(
                                         onPressed: () =>
                                             Navigator.of(context).pop(true),
-                                        child: const Text(
-                                          'O\'chirish',
-                                          style: TextStyle(color: Colors.red),
+                                        child: Text(
+                                          localization.deleteAction,
+                                          style: const TextStyle(
+                                            color: Colors.red,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -214,7 +215,7 @@ class _EduTicketsSettingsComponentState
                             if (result is DeleteTicketsError) {
                               errorFlushBar(
                                 context,
-                                'O\'chirishda xatolik yuz berdi',
+                                localization.ticketDeleteError,
                               );
                               return false;
                             }

@@ -33,7 +33,9 @@ class _ArticleInfoSummerizeViewState extends State<ArticleInfoSummerizeView> {
   }
 
   void _loadReviewFiles(int? reviewId) {
-    if (reviewId == null || reviewId == 0 || reviewId == _loadedReviewFilesForId) {
+    if (reviewId == null ||
+        reviewId == 0 ||
+        reviewId == _loadedReviewFilesForId) {
       return;
     }
     _loadedReviewFilesForId = reviewId;
@@ -114,72 +116,74 @@ class _ArticleInfoSummerizeViewState extends State<ArticleInfoSummerizeView> {
             prev.title != curr.title ||
             prev.existingMainFileUrl != curr.existingMainFileUrl ||
             prev.uploadedMainFileName != curr.uploadedMainFileName ||
-            prev.existingAntiplagiatFileUrl != curr.existingAntiplagiatFileUrl ||
-            prev.uploadedAntiplagiatFileName != curr.uploadedAntiplagiatFileName ||
+            prev.existingAntiplagiatFileUrl !=
+                curr.existingAntiplagiatFileUrl ||
+            prev.uploadedAntiplagiatFileName !=
+                curr.uploadedAntiplagiatFileName ||
             prev.savedAuthors != curr.savedAuthors ||
             prev.localAuthors != curr.localAuthors,
         builder: (context, state) {
-        final previewDetail = _buildPreviewDetail(state);
-        final previewAuthors = _buildPreviewAuthors(state);
+          final previewDetail = _buildPreviewDetail(state);
+          final previewAuthors = _buildPreviewAuthors(state);
 
-        return Padding(
-          padding: AppPadding.horizontal20x(),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /// ARTICLE BODY PREVIEW
-                DetailedArticleBodyWg(
-                  detail: previewDetail,
-                  authors: previewAuthors,
-                ),
-
-                /// CONFIRMATION CHECKBOX
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 14,
-                    horizontal: 12,
+          return Padding(
+            padding: AppPadding.horizontal20x(),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  /// ARTICLE BODY PREVIEW
+                  DetailedArticleBodyWg(
+                    detail: previewDetail,
+                    authors: previewAuthors,
                   ),
-                  decoration: BoxDecoration(
-                    color: AppColors.greyScale.grey50,
-                    border: Border.all(color: AppColors.greyScale.grey200),
-                    borderRadius: BorderRadius.circular(12),
+
+                  /// CONFIRMATION CHECKBOX
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 14,
+                      horizontal: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.greyScale.grey50,
+                      border: Border.all(color: AppColors.greyScale.grey200),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        /// Header
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.corporate_fare,
+                              color: AppColors.greyScale.grey600,
+                            ),
+                            Text(
+                              ' ${localization.finalConfirmationHeader}',
+                              style: CustomTextStyles.h3,
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        /// Checkbox + text
+                        _approveSection(localization.originalityStatement),
+                        _approveSection(
+                          localization.termsAndConditionsStatement,
+                        ),
+                        _approveSection(localization.ethicalStandardsStatement),
+                      ],
+                    ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      /// Header
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.corporate_fare,
-                            color: AppColors.greyScale.grey600,
-                          ),
-                          Text(
-                            ' ${localization.finalConfirmationHeader}',
-                            style: CustomTextStyles.h3,
-                          ),
-                        ],
-                      ),
 
-                      const SizedBox(height: 20),
-
-                      /// Checkbox + text
-                      _approveSection(localization.originalityStatement),
-                      _approveSection(
-                        localization.termsAndConditionsStatement,
-                      ),
-                      _approveSection(localization.ethicalStandardsStatement),
-                    ],
-                  ),
-                ),
-
-                /// FREE BOTTOM SPACE
-                const SizedBox(height: 30),
-              ],
+                  /// FREE BOTTOM SPACE
+                  const SizedBox(height: 30),
+                ],
+              ),
             ),
-          ),
-        );
+          );
         },
       ),
     );

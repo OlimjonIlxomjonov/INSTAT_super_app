@@ -6,7 +6,6 @@ import 'package:my_template/features/scientific_articles_app/features/home/domai
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/articles_status_check_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/detailed_article_page.dart';
 
-
 class SliverArticlesListWg extends StatelessWidget {
   final List<UserArticlesEntity> items;
 

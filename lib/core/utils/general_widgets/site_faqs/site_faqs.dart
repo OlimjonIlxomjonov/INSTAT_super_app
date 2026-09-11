@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
@@ -62,7 +63,9 @@ class _SiteFaqsWgState extends State<SiteFaqsWg> {
               titleSpacing: 0,
               automaticallyImplyLeading: false,
               title: SheetDragAreaWg(
-                child: CustomAppBarWg(myTitle: 'Ko’p beriladigan savollar'),
+                child: CustomAppBarWg(
+                  myTitle: AppLocalizations.of(context)!.faqTitle,
+                ),
               ),
             ),
             SliverPadding(
@@ -77,8 +80,8 @@ class _SiteFaqsWgState extends State<SiteFaqsWg> {
                 if (data.isEmpty) {
                   return SliverToBoxAdapter(
                     child: AppEmptyState(
-                      title: 'Savollar mavjud emas',
-                      subtitle: "Iltimos, keyinroq qayta urinib ko'ring",
+                      title: AppLocalizations.of(context)!.faqEmptyTitle,
+                      subtitle: AppLocalizations.of(context)!.faqEmptySubtitle,
                     ),
                   );
                 }

@@ -22,10 +22,7 @@ class SearchStudentsBloc
           params: SearchStudentsParams(search: event.params.search, page: 1),
         );
         emit(
-          SearchStudentsLoaded(
-            response: response,
-            query: event.params.search,
-          ),
+          SearchStudentsLoaded(response: response, query: event.params.search),
         );
       } on DioException catch (e) {
         emit(

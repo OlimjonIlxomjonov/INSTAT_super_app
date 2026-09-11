@@ -48,8 +48,5 @@ class SearchStudentsError extends SearchStudentsState {
   final bool isConnectionError;
   final String message;
 
-  SearchStudentsError({
-    required this.isConnectionError,
-    required this.message,
-  });
+  SearchStudentsError({required this.isConnectionError, required this.message});
 }

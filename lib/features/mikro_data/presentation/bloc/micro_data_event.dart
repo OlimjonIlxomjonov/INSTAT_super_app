@@ -123,7 +123,15 @@ class SubmitDataRequestEvent extends MicroDataEvent {
 }
 
 //! reports
-class ReportsEvent extends MicroDataEvent {}
+class ReportsEvent extends MicroDataEvent {
+  final String search;
+
+  const ReportsEvent({this.search = ''});
+}
+
+class LoadMoreReportsEvent extends MicroDataEvent {
+  const LoadMoreReportsEvent();
+}
 
 class FetchReportOptionsEvent extends MicroDataEvent {
   final int reportId;

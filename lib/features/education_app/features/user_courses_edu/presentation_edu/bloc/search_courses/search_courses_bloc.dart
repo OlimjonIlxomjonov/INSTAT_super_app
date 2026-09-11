@@ -22,10 +22,7 @@ class SearchCoursesBloc extends Bloc<CoursesEvent, SearchCoursesState> {
           params: SearchCoursesParams(search: event.params.search, page: 1),
         );
         emit(
-          SearchCoursesLoaded(
-            response: response,
-            query: event.params.search,
-          ),
+          SearchCoursesLoaded(response: response, query: event.params.search),
         );
       } on DioException catch (e) {
         emit(

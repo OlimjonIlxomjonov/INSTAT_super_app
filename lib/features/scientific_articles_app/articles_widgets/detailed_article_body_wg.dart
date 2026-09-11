@@ -236,7 +236,10 @@ class _DetailedArticleBodyWgState extends State<DetailedArticleBodyWg> {
         else
           Padding(
             padding: const EdgeInsets.only(bottom: 20.0),
-            child: Text(localization.noFileSelected, style: CustomTextStyles.h4),
+            child: Text(
+              localization.noFileSelected,
+              style: CustomTextStyles.h4,
+            ),
           ),
 
         /// IMAGES AND EXCELS

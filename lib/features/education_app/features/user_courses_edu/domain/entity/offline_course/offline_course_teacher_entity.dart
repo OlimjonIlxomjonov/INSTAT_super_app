@@ -15,7 +15,5 @@ class OfflineCourseTeacherEntity {
     required this.lastName,
   });
 
-
-
   String get fullName => '$firstName $lastName';
 }

@@ -16,6 +16,4 @@ class AboutCourseFeaturesEntity {
     required this.course,
     required this.createdAt,
   });
-
-
 }

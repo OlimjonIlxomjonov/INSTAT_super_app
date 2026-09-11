@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/general_widgets/selected_file_container/selected_file_container_wg.dart';
@@ -88,6 +89,8 @@ class _VacancyApplicationDetailWgState
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -95,7 +98,7 @@ class _VacancyApplicationDetailWgState
           SliverToBoxAdapter(
             child: SheetDragAreaWg(
               child: CustomAppBarWg(
-                myTitle: 'Ariza tafsilotlari',
+                myTitle: localization.applicationDetailsTitle,
                 isFamily: true,
               ),
             ),
@@ -104,13 +107,13 @@ class _VacancyApplicationDetailWgState
           //! Tabs
           SliverToBoxAdapter(
             child: DetailTabsWg(
-              tabs: const [
+              tabs: [
                 DetailTabItem(
-                  label: 'Ariza ma’lumotlari',
+                  label: localization.applicationInfoTab,
                   icon: FlutterRemix.file_list_2_line,
                 ),
                 DetailTabItem(
-                  label: 'Jarayonlar',
+                  label: localization.requestTabProcesses,
                   icon: FlutterRemix.list_check_2,
                 ),
               ],
@@ -127,7 +130,7 @@ class _VacancyApplicationDetailWgState
                   ? _buildInfoTab()
                   : VacancyProcessesTabWg(
                       items: _processes,
-                      emptyTitle: 'Jarayonlar hali boshlanmagan',
+                      emptyTitle: localization.noProcessesYet,
                       cycleLabel: (cycle) => '$cycle-tsikl',
                     ),
             ),
@@ -138,6 +141,8 @@ class _VacancyApplicationDetailWgState
   }
 
   Widget _buildInfoTab() {
+    final localization = AppLocalizations.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -160,7 +165,7 @@ class _VacancyApplicationDetailWgState
             const Spacer(),
             StatusContainerWg(
               icon: FlutterRemix.loader_2_line,
-              statusTitle: ' Tekshirilmoqda',
+              statusTitle: ' ${localization.statusUnderReview}',
               iconColor: AppColors.orange500,
               backgroundColor: AppColors.orange50,
             ),
@@ -173,7 +178,7 @@ class _VacancyApplicationDetailWgState
 
         //! Shaxsiy ma’lumotlar
         VacancySectionCardWg(
-          title: 'Shaxsiy ma’lumotlarim',
+          title: localization.myPersonalInfo,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -182,21 +187,24 @@ class _VacancyApplicationDetailWgState
                 value: 'Shoxruh Toshpo’latov',
               ),
               const SizedBox(height: 16),
-              VacancyInfoFieldWg(label: 'Tug’ilgan sana', value: '12.01.2001'),
+              VacancyInfoFieldWg(
+                label: localization.birthDateLabel,
+                value: '12.01.2001',
+              ),
               const SizedBox(height: 16),
               VacancyInfoFieldWg(
-                label: 'Email manzili',
+                label: localization.emailAddressLabel,
                 value: 's.toshpulatov@example.uz',
               ),
               const SizedBox(height: 16),
               VacancyInfoFieldWg(
-                label: 'Telefon raqam',
+                label: localization.phoneNumberLabel,
                 value: '+998 90 123 45 67',
               ),
               const SizedBox(height: 20),
 
               //! Hujjatlar
-              VacancySectionTitleWg(title: 'Briktirilgan hujjatlar'),
+              VacancySectionTitleWg(title: localization.attachedDocuments),
               const SizedBox(height: 12),
               SelectedFileContainerWg(
                 fileName: 'Tahlil, taqqoslash va prognozlash',

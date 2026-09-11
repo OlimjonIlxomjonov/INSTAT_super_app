@@ -18,8 +18,8 @@ class MicroRepoImpl implements MicroRepository {
     : _remoteDataSource = remoteDataSource;
 
   @override
-  Future<ReportsResponse> getReportsCard() {
-    return _remoteDataSource.fetchReportsCard();
+  Future<ReportsResponse> getReportsCard({String search = '', int page = 1}) {
+    return _remoteDataSource.fetchReportsCard(search: search, page: page);
   }
 
   @override

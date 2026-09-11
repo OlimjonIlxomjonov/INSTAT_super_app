@@ -6,7 +6,7 @@ class ReportsUseCase {
 
   ReportsUseCase({required this.repository});
 
-  Future<ReportsResponse> call() {
-    return repository.getReportsCard();
+  Future<ReportsResponse> call({String search = '', int page = 1}) {
+    return repository.getReportsCard(search: search, page: page);
   }
 }

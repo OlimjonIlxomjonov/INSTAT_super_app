@@ -16,6 +16,4 @@ class CertificateObject {
     required this.label,
     required this.content,
   });
-
-
 }

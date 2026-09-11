@@ -18,6 +18,4 @@ class CommentsEntity {
     required this.isActive,
     required this.createdAt,
   });
-
-
 }

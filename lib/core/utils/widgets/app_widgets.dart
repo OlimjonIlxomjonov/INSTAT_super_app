@@ -4,4 +4,3 @@ export 'open_mini_app/open_mini_app_package_family.dart';
 export 'popular_courses_card/popular_courses_card_wg.dart';
 export 'search_bar/app_serachbar_wg.dart';
 export 'profile_settings_tile/profile_settings_tile_wg.dart';
-

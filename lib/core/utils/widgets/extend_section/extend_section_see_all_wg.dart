@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
@@ -25,7 +26,7 @@ class ExtendSectionSeeAllWg extends StatelessWidget {
           TextButton(
             onPressed: onTap,
             child: AutoSizeText(
-              'BARCHASI',
+              AppLocalizations.of(context)!.seeAll.toUpperCase(),
               style: AppTextStyles.source.bold(
                 fontSize: 12,
                 color: AppColors.primaryColor,

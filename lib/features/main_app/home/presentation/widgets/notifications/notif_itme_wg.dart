@@ -2,99 +2,83 @@ import 'package:flutter/material.dart';
 import 'package:my_template/features/main_app/home/domain/entity/notifications/notif_enitty.dart';
 
 import '../../../../../../core/utils/app_utils.dart';
-import '../../../../../../core/utils/widgets/open_mini_app/sub_bottom_sheet_opener.dart';
 
 class NotifItemWg extends StatelessWidget {
   final NotifEntity item;
+  final String timeLabel;
+  final VoidCallback? onTap;
 
-  const NotifItemWg({super.key, required this.item});
-
-  void _openNotification(BuildContext context) {
-    subBottomSheetOpener(
-      context,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(minWidth: double.infinity, minHeight: 120),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: Column(
-            crossAxisAlignment: .start,
-            children: [
-              Text(
-                item.title,
-                style: AppTextStyles.source.medium(fontSize: 16),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                item.message ?? 'Xabar Bo\'sh',
-                style: AppTextStyles.source.regular(
-                  fontSize: 14,
-                  color: AppColors.greyScale.grey600,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      isExpanded: false,
-    );
-  }
+  const NotifItemWg({
+    super.key,
+    required this.item,
+    required this.timeLabel,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final isUnread = !item.isRead;
+
     return GestureDetector(
-      onTap: () => _openNotification(context),
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
       child: Container(
-        margin: .symmetric(horizontal: 20),
-        padding: .all(15),
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          borderRadius: .circular(10),
-          border: Border(
-            left: BorderSide(
-              width: 5,
-              color: item.isRead
-                  ? AppColors.greyScale.grey200
-                  : AppColors.primaryColor,
-            ),
-          ),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: AppColors.greyScale.grey200),
         ),
         child: Column(
-          crossAxisAlignment: .start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              item.title,
-              style: AppTextStyles.source.medium(fontSize: 16),
-              maxLines: 1,
-              overflow: .ellipsis,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              item.message ?? 'xabar bo\'sh',
-              maxLines: 1,
-              overflow: .ellipsis,
-              style: AppTextStyles.source.regular(
-                fontSize: 14,
-                color: AppColors.greyScale.grey600,
-              ),
-            ),
-            Divider(color: AppColors.greyScale.grey200),
+            //! Vaqt va o'qilmagan belgisi
             Row(
               children: [
-                Spacer(),
-                Icon(
-                  FlutterRemix.calendar_line,
-                  size: 15,
-                  color: AppColors.greyScale.grey400,
-                ),
-                const SizedBox(width: 4),
                 Text(
-                  item.createdAt.toNotificationDateTime(),
+                  timeLabel,
                   style: AppTextStyles.source.regular(
                     fontSize: 12,
-                    color: AppColors.greyScale.grey400,
+                    color: AppColors.greyScale.grey600,
                   ),
                 ),
+                const Spacer(),
+                if (isUnread)
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
               ],
             ),
+            const SizedBox(height: 10),
+
+            Text(
+              item.title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.source.medium(
+                fontSize: 16,
+                color: isUnread
+                    ? AppColors.primaryColor
+                    : AppColors.greyScale.grey900,
+              ),
+            ),
+            if (item.message != null && item.message!.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text(
+                item.message!,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyles.source.regular(
+                  fontSize: 14,
+                  color: AppColors.greyScale.grey700,
+                ),
+              ),
+            ],
           ],
         ),
       ),

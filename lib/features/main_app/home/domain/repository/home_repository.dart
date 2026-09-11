@@ -39,6 +39,10 @@ abstract class HomeRepository {
   //! Notifications
   Future<NotifResponse> getNotifs({required NotifParams params});
 
+  Future<void> markNotifAsRead(int id);
+
+  Future<void> markAllNotifsAsRead();
+
   Future<List<ActiveDevicesEntity>> getActiveDevices();
 
   Future<void> deleteAllDevices();

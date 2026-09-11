@@ -31,7 +31,7 @@ class _ShowAllCoursesBottomSheetPageState
     extends State<ShowAllCoursesBottomSheetPage> {
   CoursesLayout layout = CoursesLayout.grid;
   String _search = '';
-  int? _categoryId;
+  late int? _categoryId = context.read<CoursesBloc>().categoryId;
 
   void _fetch() {
     context.read<CoursesBloc>().add(
@@ -91,6 +91,7 @@ class _ShowAllCoursesBottomSheetPageState
                 SliverToBoxAdapter(
                   child: ModuleCategoriesWithBlocWg(
                     categoryType: 'online-education',
+                    initialSelectedId: _categoryId,
                     onCategorySelected: (categoryId) {
                       _categoryId = categoryId;
                       _fetch();

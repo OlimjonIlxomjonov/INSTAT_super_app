@@ -38,7 +38,9 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                 ),
                 SizedBox(height: appH(8)),
                 Text(
-                  data.name,
+                  data.displayName(
+                    Localizations.localeOf(context).languageCode,
+                  ),
                   style: AppTextStyles.source.semiBold(fontSize: 17),
                 ),
                 SizedBox(height: appH(12)),

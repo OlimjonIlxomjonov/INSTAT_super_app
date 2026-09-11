@@ -44,9 +44,9 @@ class _UserOnlineBooksLibPageState extends State<UserOnlineBooksLibPage> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
             child: CustomTabBarWg(
-              firstTab: 'Barchasi',
-              secondTab: 'Online kitoblar',
-              thirdTab: 'Qog\'oz kitoblar',
+              firstTab: AppLocalizations.of(context)!.categoryAll,
+              secondTab: AppLocalizations.of(context)!.onlineBooksTab,
+              thirdTab: AppLocalizations.of(context)!.paperBooksTab,
             ),
           ),
         ),
@@ -94,9 +94,12 @@ class _UserOnlineBooksLibPageState extends State<UserOnlineBooksLibPage> {
                         if (data.isEmpty) {
                           return SliverToBoxAdapter(
                             child: AppEmptyState(
-                              title: 'Javoningiz bo‘sh',
-                              subtitle:
-                                  'Xarid qilingan kitoblaringiz shu yerda ko‘rinadi.',
+                              title: AppLocalizations.of(
+                                context,
+                              )!.myShelfEmptyTitle,
+                              subtitle: AppLocalizations.of(
+                                context,
+                              )!.myShelfEmptySubtitle,
                             ),
                           );
                         }

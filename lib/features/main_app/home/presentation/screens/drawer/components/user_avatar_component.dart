@@ -53,7 +53,7 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
     final int fixedFileSize = await fixedFile.length();
 
     if (fixedFileSize > _maxImageSizeBytes) {
-      errorFlushBar(context, 'Image size must be less than 4 MB');
+      errorFlushBar(context, AppLocalizations.of(context)!.imageTooLarge);
       return;
     }
 
@@ -161,7 +161,10 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                     if (state is AvatarLoaded) {
                       context.read<UserMeBloc>().add(UserMeEvent());
                     } else if (state is AvatarError) {
-                      errorFlushBar(context, 'Only JPG and PNG allowed!');
+                      errorFlushBar(
+                        context,
+                        AppLocalizations.of(context)!.onlyJpgPngAllowed,
+                      );
                     }
                   },
                   child: BlocBuilder<UserMeBloc, UserMeState>(
@@ -311,7 +314,9 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                                           if (context.mounted) {
                                             successFlushBar(
                                               context,
-                                              'Siz muvaffaqiyatli shaxsingizni tasdiqladingiz!',
+                                              AppLocalizations.of(
+                                                context,
+                                              )!.identityConfirmed,
                                             );
                                             context.read<UserMeBloc>().add(
                                               UserMeEvent(),

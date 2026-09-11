@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/routes/route_generator.dart';
@@ -46,7 +47,9 @@ class _ActiveDevicesComponentState extends State<ActiveDevicesComponent> {
               automaticallyImplyLeading: false,
               titleSpacing: 0,
               title: SheetDragAreaWg(
-                child: CustomAppBarWg(myTitle: 'Aktiv qurilmalar'),
+                child: CustomAppBarWg(
+                  myTitle: AppLocalizations.of(context)!.activeDevices,
+                ),
               ),
             ),
             SliverPadding(

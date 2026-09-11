@@ -165,9 +165,12 @@ class _OfflineBooksLibPageState extends State<OfflineBooksLibPage> {
                     if (data.isEmpty) {
                       return SliverFillRemaining(
                         child: AppEmptyState(
-                          title: 'Oflayn kitoblar mavjud emas.',
-                          subtitle:
-                              'Oflayn o‘qish uchun qo‘shilgan kitoblar shu yerda ko‘rinadi.',
+                          title: AppLocalizations.of(
+                            context,
+                          )!.offlineBooksEmptyTitle,
+                          subtitle: AppLocalizations.of(
+                            context,
+                          )!.offlineBooksEmptySubtitle,
                         ),
                       );
                     }

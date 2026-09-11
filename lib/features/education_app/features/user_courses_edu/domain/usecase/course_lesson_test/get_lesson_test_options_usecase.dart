@@ -7,7 +7,9 @@ class GetLessonTestOptionsUseCase {
 
   GetLessonTestOptionsUseCase({required this.repository});
 
-  Future<List<LessonTestOptionEntity>> call(CourseLessonTestOptionsParams params) {
+  Future<List<LessonTestOptionEntity>> call(
+    CourseLessonTestOptionsParams params,
+  ) {
     return repository.getLessonTestOptions(params: params);
   }
 }

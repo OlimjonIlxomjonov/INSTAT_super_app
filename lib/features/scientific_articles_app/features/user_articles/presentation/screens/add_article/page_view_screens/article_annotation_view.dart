@@ -104,16 +104,16 @@ class _ArticleAnnotationViewState extends State<ArticleAnnotationView> {
               onChanged: (val) {
                 if (_selectedLang == AnnotationLanguageEnum.uz) {
                   context.read<AddArticleBloc>().add(
-                        UpdateAddArticleFieldEvent(annotationUz: val),
-                      );
+                    UpdateAddArticleFieldEvent(annotationUz: val),
+                  );
                 } else if (_selectedLang == AnnotationLanguageEnum.en) {
                   context.read<AddArticleBloc>().add(
-                        UpdateAddArticleFieldEvent(annotationEn: val),
-                      );
+                    UpdateAddArticleFieldEvent(annotationEn: val),
+                  );
                 } else {
                   context.read<AddArticleBloc>().add(
-                        UpdateAddArticleFieldEvent(annotationRu: val),
-                      );
+                    UpdateAddArticleFieldEvent(annotationRu: val),
+                  );
                 }
               },
             ),
@@ -131,7 +131,8 @@ class _ArticleAnnotationViewState extends State<ArticleAnnotationView> {
                   final addBloc = context.read<AddArticleBloc>();
                   final currentKeywords = addBloc.state.keywords;
                   if (!currentKeywords.contains(text)) {
-                    final updated = List<String>.from(currentKeywords)..add(text);
+                    final updated = List<String>.from(currentKeywords)
+                      ..add(text);
                     addBloc.add(UpdateAddArticleFieldEvent(keywords: updated));
                   }
                   keywordController.clear();
@@ -147,45 +148,58 @@ class _ArticleAnnotationViewState extends State<ArticleAnnotationView> {
                 return Wrap(
                   spacing: 8,
                   runSpacing: 8,
-                  children: addState.keywords.map(
-                    (keyword) => Container(
-                      padding: const EdgeInsets.only(left: 10, right: 4, top: 4, bottom: 4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: AppColors.greyScale.grey200),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            keyword,
-                            style: AppTextStyles.source.medium(
-                              fontSize: 13,
-                              color: AppColors.greyScale.grey600,
+                  children: addState.keywords
+                      .map(
+                        (keyword) => Container(
+                          padding: const EdgeInsets.only(
+                            left: 10,
+                            right: 4,
+                            top: 4,
+                            bottom: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                              color: AppColors.greyScale.grey200,
                             ),
                           ),
-                          const SizedBox(width: 4),
-                          InkWell(
-                            onTap: () {
-                              final updated = List<String>.from(addState.keywords)..remove(keyword);
-                              context.read<AddArticleBloc>().add(
-                                    UpdateAddArticleFieldEvent(keywords: updated),
-                                  );
-                            },
-                            borderRadius: BorderRadius.circular(50),
-                            child: Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: Icon(
-                                Icons.close,
-                                size: 18,
-                                color: AppColors.greyScale.grey600,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                keyword,
+                                style: AppTextStyles.source.medium(
+                                  fontSize: 13,
+                                  color: AppColors.greyScale.grey600,
+                                ),
                               ),
-                            ),
+                              const SizedBox(width: 4),
+                              InkWell(
+                                onTap: () {
+                                  final updated = List<String>.from(
+                                    addState.keywords,
+                                  )..remove(keyword);
+                                  context.read<AddArticleBloc>().add(
+                                    UpdateAddArticleFieldEvent(
+                                      keywords: updated,
+                                    ),
+                                  );
+                                },
+                                borderRadius: BorderRadius.circular(50),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Icon(
+                                    Icons.close,
+                                    size: 18,
+                                    color: AppColors.greyScale.grey600,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                  ).toList(),
+                        ),
+                      )
+                      .toList(),
                 );
               },
             ),

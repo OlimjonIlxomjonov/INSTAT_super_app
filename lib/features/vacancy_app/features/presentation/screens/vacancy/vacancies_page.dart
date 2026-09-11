@@ -22,7 +22,7 @@ class VacanciesPage extends StatelessWidget {
             titleSpacing: 0,
             automaticallyImplyLeading: false,
             title: SheetDragAreaWg(
-              child: CustomAppBarWg(myTitle: 'Vakansiyalar'),
+              child: CustomAppBarWg(myTitle: localization.vacanciesTitle),
             ),
           ),
           //! Search bar
@@ -41,7 +41,7 @@ class VacanciesPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Vakansiyalar',
+                    localization.vacanciesTitle,
                     style: AppTextStyles.source.semiBold(fontSize: 18),
                   ),
                   InkWell(

@@ -327,6 +327,26 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
+  Future<void> markNotifAsRead(int id) async {
+    try {
+      await _dioClient.post(ApiUrls.markNotifRead(id), data: {});
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> markAllNotifsAsRead() async {
+    try {
+      await _dioClient.post(ApiUrls.markAllNotifsRead, data: {});
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
   Future<List<ActiveDevicesModel>> fetchActiveDevices() async {
     try {
       final response = await _dioClient.get(ApiUrls.activeDevices);

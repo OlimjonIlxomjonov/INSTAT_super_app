@@ -12,8 +12,5 @@ class ReviewerLoginError extends ReviewerLoginState {
   final String message;
   final int? statusCode;
 
-  const ReviewerLoginError({
-    required this.message,
-    this.statusCode,
-  });
+  const ReviewerLoginError({required this.message, this.statusCode});
 }

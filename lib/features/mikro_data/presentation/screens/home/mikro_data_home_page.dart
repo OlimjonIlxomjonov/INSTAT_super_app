@@ -20,12 +20,13 @@ import '../../../../scientific_articles_app/features/home/presentation/widgets/l
 import '../../../../scientific_articles_app/features/home/presentation/widgets/sliver_brief_cards_wg.dart';
 
 class MicroDataHomePage extends StatefulWidget {
-  final VoidCallback onProfileTap, onSeeAllRequests;
+  final VoidCallback onProfileTap, onSeeAllRequests, onSearchTap;
 
   const MicroDataHomePage({
     super.key,
     required this.onProfileTap,
     required this.onSeeAllRequests,
+    required this.onSearchTap,
   });
 
   @override
@@ -82,7 +83,7 @@ class _MicroDataHomePageState extends State<MicroDataHomePage> {
               pinned: true,
               automaticallyImplyLeading: false,
               titleSpacing: 20,
-              title: AppSearchbarWg(onTap: () {}),
+              title: AppSearchbarWg(onTap: widget.onSearchTap),
             ),
             //! Placeholder TEMP Banner
             SliverToBoxAdapter(child: PromoBannersCarouselWg()),
@@ -126,9 +127,12 @@ class _MicroDataHomePageState extends State<MicroDataHomePage> {
                             ),
                           ),
                           AppEmptyState(
-                            title: 'Navbat bo‘sh',
-                            subtitle:
-                                'Jarayonni boshlash uchun birinchi arizangizni yuboring.',
+                            title: AppLocalizations.of(
+                              context,
+                            )!.queueEmptyTitle,
+                            subtitle: AppLocalizations.of(
+                              context,
+                            )!.queueEmptySubtitle,
                           ),
                         ],
                       ),

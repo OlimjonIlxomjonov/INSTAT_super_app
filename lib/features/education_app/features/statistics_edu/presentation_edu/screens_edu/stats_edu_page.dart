@@ -110,9 +110,12 @@ class _StatsEduPageState extends State<StatsEduPage> {
 
                         if (data.isEmpty) {
                           return AppEmptyState(
-                            title: "Heli hech kim ball to'plamadi!",
-                            subtitle:
-                                'Kurs testini yakunlang va o\'z bilimingizni isbotlang',
+                            title: AppLocalizations.of(
+                              context,
+                            )!.leaderboardEmptyTitle,
+                            subtitle: AppLocalizations.of(
+                              context,
+                            )!.leaderboardEmptySubtitle,
                           );
                         }
 

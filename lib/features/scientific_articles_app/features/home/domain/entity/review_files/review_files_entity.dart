@@ -18,6 +18,4 @@ class ReviewFilesEntity {
     this.filePath,
     this.fileSize,
   });
-
-
 }

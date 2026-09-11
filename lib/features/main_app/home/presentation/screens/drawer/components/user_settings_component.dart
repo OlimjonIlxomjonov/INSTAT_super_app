@@ -103,7 +103,7 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
         //! Active devices
         ProfileSettingsTileWg(
           leadingIcon: FlutterRemix.device_line,
-          title: 'Aktiv qurilmalar',
+          title: localization.activeDevices,
           onTap: () {
             subBottomSheetOpener(
               context,

@@ -11,5 +11,3 @@ class ArticlesModel {
     required this.status,
   });
 }
-
-

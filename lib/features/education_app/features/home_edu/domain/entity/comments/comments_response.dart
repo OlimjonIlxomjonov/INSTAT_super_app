@@ -4,6 +4,4 @@ class CommentsResponse {
   final List<CommentsEntity> reviews;
 
   CommentsResponse({required this.reviews});
-
-
 }

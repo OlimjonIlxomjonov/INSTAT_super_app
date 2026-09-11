@@ -45,6 +45,7 @@ class MikroDataBottomNavBar extends StatelessWidget {
         MicroDataHomePage(
           onProfileTap: () => goToTab(3),
           onSeeAllRequests: () => _openSeeAllRequests(context),
+          onSearchTap: () => goToTab(1),
         ),
         const ReportsPage(),
         const SizedBox(),

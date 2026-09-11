@@ -24,6 +24,4 @@ class UserCertificateCategoryEntity {
     this.type,
     this.createdAt,
   });
-
-
 }

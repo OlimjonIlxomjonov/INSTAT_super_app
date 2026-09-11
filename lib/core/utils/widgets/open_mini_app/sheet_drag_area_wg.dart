@@ -97,7 +97,8 @@ class _SheetDragAreaWgState extends State<SheetDragAreaWg> {
     sheet.handleDragEnd(details);
 
     final double velocity = details.primaryVelocity ?? 0; // > 0 => pastga
-    final bool isClosing = velocity > _minFlingVelocity ||
+    final bool isClosing =
+        velocity > _minFlingVelocity ||
         (velocity.abs() <= _minFlingVelocity &&
             controller.value < _closeProgressThreshold);
 
@@ -140,7 +141,9 @@ class _SheetDragAreaWgState extends State<SheetDragAreaWg> {
                   ..onUpdate = _handleUpdate
                   ..onEnd = _handleEnd
                   ..onCancel = _handleCancel
-                  ..gestureSettings = MediaQuery.maybeGestureSettingsOf(context);
+                  ..gestureSettings = MediaQuery.maybeGestureSettingsOf(
+                    context,
+                  );
               },
             ),
       },

@@ -131,9 +131,9 @@ class _ArticleAddAuthorViewState extends State<ArticleAddAuthorView> {
         AddLocalAuthorEvent(author: authorParams),
       );
       _clearFields();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(localization.authorAddedLocally)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(localization.authorAddedLocally)));
     } else {
       // Review exists on server, POST immediately
       context.read<AddArticleBloc>().add(

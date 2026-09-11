@@ -14,6 +14,4 @@ class ArticleProcessExpertEntity {
     required this.firstName,
     required this.lastName,
   });
-
-
 }

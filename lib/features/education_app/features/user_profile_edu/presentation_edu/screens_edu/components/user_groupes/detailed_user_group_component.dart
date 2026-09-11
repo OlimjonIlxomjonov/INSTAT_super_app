@@ -118,7 +118,7 @@ class _DetailedUserGroupComponentState
       child: BlocListener<ScanQrBloc, ScanQrState>(
         listener: (context, state) {
           // if (state is ScanQrLoaded) {
-          //   successFlushBar(context, 'Attendance marked successfully.');
+          //   successFlushBar(context, AppLocalizations.of(context)!.attendanceMarked);
           // } else if (state is ScanQrError) {
           //   errorFlushBar(context, 'error');
           // }

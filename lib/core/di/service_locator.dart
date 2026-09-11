@@ -75,6 +75,7 @@ import 'package:my_template/features/main_app/home/domain/usecase/face_rec/get_m
 import 'package:my_template/features/main_app/home/domain/usecase/banner/get_active_banners_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/get_countries_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/module_category/module_category_use_case.dart';
+import 'package:my_template/features/main_app/home/domain/usecase/notifications/mark_notif_read_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/notifications/notif_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/notifications_count/notifications_count_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/register_not_resident_use_case.dart';
@@ -429,6 +430,8 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => ReportVariablesUseCase(repository: sl()));
   //? Notifications
   sl.registerLazySingleton(() => NotifUseCase(repository: sl()));
+  sl.registerLazySingleton(() => MarkNotifReadUseCase(repository: sl()));
+  sl.registerLazySingleton(() => MarkAllNotifsReadUseCase(repository: sl()));
   //? Active Devices
   sl.registerLazySingleton(() => ActiveDevicesUseCase(repository: sl()));
   //? Delete
@@ -580,7 +583,13 @@ Future<void> setup() async {
   //? Report Variables
   sl.registerFactory(() => ReportVariablesBloc(useCase: sl()));
   //? Notifications
-  sl.registerFactory(() => NotifBloc(useCase: sl()));
+  sl.registerFactory(
+    () => NotifBloc(
+      useCase: sl(),
+      markReadUseCase: sl(),
+      markAllReadUseCase: sl(),
+    ),
+  );
   //? Active Devices
   sl.registerFactory(() => ActiveDevicesBloc(useCase: sl()));
   //? Delete

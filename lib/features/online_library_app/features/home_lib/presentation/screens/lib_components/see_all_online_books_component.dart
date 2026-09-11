@@ -23,7 +23,7 @@ class SeeAllOnlineBooksComponent extends StatefulWidget {
 class _SeeAllOnlineBooksComponentState
     extends State<SeeAllOnlineBooksComponent> {
   String _search = '';
-  int? _categoryId;
+  late int? _categoryId = context.read<PopularBooksBloc>().categoryId;
 
   @override
   void initState() {
@@ -89,6 +89,7 @@ class _SeeAllOnlineBooksComponentState
                 SliverToBoxAdapter(
                   child: ModuleCategoriesWithBlocWg(
                     categoryType: 'library',
+                    initialSelectedId: _categoryId,
                     onCategorySelected: (categoryId) {
                       _categoryId = categoryId;
                       _fetch();

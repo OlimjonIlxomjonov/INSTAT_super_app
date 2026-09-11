@@ -8,5 +8,4 @@ class UserGroupsEntity {
     required this.name,
     required this.permissions,
   });
-
 }

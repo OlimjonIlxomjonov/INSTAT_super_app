@@ -63,7 +63,7 @@ class VacancyHomePage extends StatelessWidget {
             padding: AppPadding.horizontal20x(),
             sliver: SliverToBoxAdapter(
               child: ExtendSectionSeeAllWg(
-                title: 'Vakansiyalar',
+                title: localization.vacanciesTitle,
                 onTap: onSeeAllVacancy,
               ),
             ),
@@ -77,7 +77,7 @@ class VacancyHomePage extends StatelessWidget {
             padding: AppPadding.horizontal20x(),
             sliver: SliverToBoxAdapter(
               child: ExtendSectionSeeAllWg(
-                title: 'Mening arizalarim',
+                title: localization.myApplications,
                 onTap: onSeeAllRequests,
               ),
             ),

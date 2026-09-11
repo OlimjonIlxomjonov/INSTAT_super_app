@@ -138,9 +138,10 @@ class _ArticlesHomePageState extends State<ArticlesHomePage> {
                   if (state.listEntity.isEmpty) {
                     return SliverToBoxAdapter(
                       child: AppEmptyState(
-                        title: 'Navbat bo‘sh',
-                        subtitle:
-                            'Jarayonni boshlash uchun birinchi arizangizni yuboring.',
+                        title: AppLocalizations.of(context)!.queueEmptyTitle,
+                        subtitle: AppLocalizations.of(
+                          context,
+                        )!.queueEmptySubtitle,
                       ),
                     );
                   }

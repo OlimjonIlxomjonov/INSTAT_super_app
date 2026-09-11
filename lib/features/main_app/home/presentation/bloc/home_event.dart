@@ -43,6 +43,14 @@ class NotifEvent extends HomeEvent {
   NotifEvent({required this.params});
 }
 
+class MarkNotifReadEvent extends HomeEvent {
+  final int id;
+
+  MarkNotifReadEvent({required this.id});
+}
+
+class MarkAllNotifsReadEvent extends HomeEvent {}
+
 class ActiveDevicesEvent extends HomeEvent {}
 
 class DeleteActiveDevicesEvent extends HomeEvent {}

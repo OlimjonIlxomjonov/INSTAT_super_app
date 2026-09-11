@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
@@ -21,7 +22,6 @@ import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../../../../../core/l10n/app_localizations.dart';
 import '../../../../../core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import '../requests/add_request/add_data_request_page.dart';
 
@@ -152,6 +152,7 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     final localeCode = Localizations.localeOf(context).languageCode;
     final collectionMethodName =
         widget.item.collectionMethod?.localizedTitle(localeCode) ??
@@ -185,7 +186,7 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
               elevation: 0,
             ),
             child: Text(
-              'Ariza qoldirish',
+              localization.reportApplyAction,
               style: AppTextStyles.source.semiBold(
                 fontSize: 15,
                 color: Colors.white,
@@ -197,12 +198,12 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
       body: CustomScrollView(
         slivers: [
           //! Header
-          const SliverAppBar(
+          SliverAppBar(
             titleSpacing: 0,
             automaticallyImplyLeading: false,
             backgroundColor: Colors.white,
             title: SheetDragAreaWg(
-              child: CustomAppBarWg(myTitle: "Hisobot ma'lumotlari"),
+              child: CustomAppBarWg(myTitle: localization.reportDetailsTitle),
             ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 12)),
@@ -237,21 +238,21 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
                 children: [
                   //! Card 1: To'plam identifikatsiyasi
                   _buildSectionCard(
-                    title: 'To\'plam identifikatsiyasi',
+                    title: localization.reportCollectionIdSection,
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
                             child: _buildGridField(
-                              label: 'Yagona ID',
+                              label: localization.reportUniqueId,
                               value: widget.item.uniqueId,
                             ),
                           ),
                           const SizedBox(width: 16),
                           Expanded(
                             child: _buildGridField(
-                              label: 'Davriylik',
+                              label: localization.reportPeriodicity,
                               value: _localizedPeriodicity(
                                 widget.item.periodicity,
                               ),
@@ -261,7 +262,7 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
                       ),
                       const SizedBox(height: 16),
                       _buildGridField(
-                        label: 'Ma\'lumot yig\'ish usuli',
+                        label: localization.reportCollectionMethod,
                         value: collectionMethodName,
                       ),
                     ],
@@ -271,11 +272,11 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
 
                   //! Card 2: Mazmuni va qamrovi
                   _buildSectionCard(
-                    title: 'Mazmuni va qamrovi',
+                    title: localization.reportContentScope,
                     children: [
                       if (widget.item.annotation.isNotEmpty) ...[
                         _buildGridField(
-                          label: 'Annotatsiya (Abstract)',
+                          label: localization.reportAbstract,
                           value: widget.item.annotation,
                           isDescription: true,
                         ),
@@ -283,7 +284,7 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
                       ],
                       if (widget.item.topics.isNotEmpty) ...[
                         Text(
-                          'Mavzular',
+                          localization.reportTopics,
                           style: AppTextStyles.source.regular(
                             fontSize: 12,
                             color: AppColors.greyScale.grey500,
@@ -322,14 +323,14 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
                         children: [
                           Expanded(
                             child: _buildGridField(
-                              label: 'Tahlil birligi',
+                              label: localization.reportAnalysisUnit,
                               value: analysisUnitName,
                             ),
                           ),
                           const SizedBox(width: 16),
                           Expanded(
                             child: _buildGridField(
-                              label: 'Hududiy qamrovi',
+                              label: localization.reportGeoCoverage,
                               value: widget.item.formattedLocation(localeCode),
                             ),
                           ),
@@ -341,14 +342,14 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
                         children: [
                           Expanded(
                             child: _buildGridField(
-                              label: 'Vaqt qamrovi (dan)',
+                              label: localization.reportTimeCoverageFrom,
                               value: _formatDate(widget.item.timeCoverageFrom),
                             ),
                           ),
                           const SizedBox(width: 16),
                           Expanded(
                             child: _buildGridField(
-                              label: 'Vaqt qamrovi (gacha)',
+                              label: localization.reportTimeCoverageTo,
                               value: _formatDate(widget.item.timeCoverageTo),
                             ),
                           ),
@@ -361,17 +362,17 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
 
                   //! Card 3: Metodologiya
                   _buildSectionCard(
-                    title: 'Metodologiya',
+                    title: localization.reportMethodology,
                     children: [
                       _buildGridField(
-                        label: 'Tanlanma tanlab olish usuli',
+                        label: localization.reportSamplingMethod,
                         value:
                             widget.item.samplingMethod ??
                             'Oddiy tasodifiy tanlash (SRS); bosh to‘plamdagi har bir birlik teng va mustaqil tanlanish imkoniyatiga ega',
                       ),
                       const SizedBox(height: 16),
                       _buildGridField(
-                        label: 'Kuzatuv yozuvlari soni',
+                        label: localization.reportObservationCount,
                         value: _formatCoverage(widget.item.coverage),
                       ),
                       const SizedBox(height: 16),
@@ -380,14 +381,14 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
                         children: [
                           Expanded(
                             child: _buildGridField(
-                              label: 'Ma\'lumot davri (dan)',
+                              label: localization.reportDataPeriodFrom,
                               value: _formatDate(widget.item.dataPeriodFrom),
                             ),
                           ),
                           const SizedBox(width: 16),
                           Expanded(
                             child: _buildGridField(
-                              label: 'Ma\'lumot davri (gacha)',
+                              label: localization.reportDataPeriodTo,
                               value: _formatDate(widget.item.dataPeriodTo),
                             ),
                           ),
@@ -400,7 +401,7 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
 
                   //! Card 4: O'zgaruvchilar lug'ati
                   _buildSectionCard(
-                    title: 'O\'zgaruvchilar lug\'ati',
+                    title: localization.reportVariablesDict,
                     children: [_buildVariablesTable()],
                   ),
 
@@ -408,7 +409,7 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
 
                   //! Card 5: Ma'lumot fayllari
                   _buildSectionCard(
-                    title: 'Ma\'lumot fayllari',
+                    title: localization.reportDataFiles,
                     children: [_buildDataFileTile(context)],
                   ),
 
@@ -416,22 +417,22 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
 
                   //! Card 6: Kirish va huquqiy shartlar
                   _buildSectionCard(
-                    title: 'Kirish va huquqiy shartlar',
+                    title: localization.reportAccessLegal,
                     children: [
                       _buildGridField(
-                        label: 'Kirish siyosati',
+                        label: localization.reportAccessPolicy,
                         value: _formatAccessPolicy(widget.item.accessPolicy),
                       ),
                       const SizedBox(height: 16),
                       _buildGridField(
-                        label: 'Ma\'lumot egasi',
+                        label: localization.reportDataOwner,
                         value:
                             widget.item.dataOwner ??
                             'Aholi turmush darajasi statistikasi va kambag‘allikni baholash boshqarmasi, O‘zbekiston Respublikasi Milliy statistika qo‘mitasi',
                       ),
                       const SizedBox(height: 16),
                       _buildGridField(
-                        label: 'Kontakt',
+                        label: localization.reportContact,
                         value: widget.item.contact ?? '+998 71 203 80 00',
                       ),
                     ],
@@ -512,6 +513,7 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
 
   //! Card 4: Variables Dictionary Table Widget
   Widget _buildVariablesTable() {
+    final localization = AppLocalizations.of(context)!;
     return BlocBuilder<ReportVariablesBloc, ReportVariablesState>(
       builder: (context, state) {
         if (state is ReportVariablesLoaded) {
@@ -536,7 +538,7 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      'O‘zgaruvchilar lug‘ati mavjud emas',
+                      localization.reportNoVariables,
                       style: AppTextStyles.source.regular(
                         fontSize: 13,
                         color: AppColors.greyScale.grey600,
@@ -574,7 +576,7 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
                       SizedBox(
                         width: 80,
                         child: Text(
-                          'Nomi',
+                          localization.reportVariableName,
                           style: AppTextStyles.source.semiBold(
                             fontSize: 13,
                             color: AppColors.greyScale.grey700,
@@ -583,7 +585,7 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
                       ),
                       Expanded(
                         child: Text(
-                          'Qiymati',
+                          localization.reportVariableValue,
                           style: AppTextStyles.source.semiBold(
                             fontSize: 13,
                             color: AppColors.greyScale.grey700,
@@ -663,7 +665,7 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    'O‘zgaruvchilar lug‘atini yuklashda xatolik yuz berdi',
+                    localization.reportVariablesLoadError,
                     style: AppTextStyles.source.regular(
                       fontSize: 13,
                       color: AppColors.greyScale.grey600,
@@ -703,7 +705,7 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
                       SizedBox(
                         width: 80,
                         child: Text(
-                          'Nomi',
+                          localization.reportVariableName,
                           style: AppTextStyles.source.semiBold(
                             fontSize: 13,
                             color: AppColors.greyScale.grey700,
@@ -712,7 +714,7 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
                       ),
                       Expanded(
                         child: Text(
-                          'Qiymati',
+                          localization.reportVariableValue,
                           style: AppTextStyles.source.semiBold(
                             fontSize: 13,
                             color: AppColors.greyScale.grey700,
@@ -775,6 +777,7 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
 
   //! Card 5: File item tile
   Widget _buildDataFileTile(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return BlocBuilder<ReportFilesBloc, ReportFilesState>(
       builder: (context, state) {
         if (state is ReportFilesLoaded) {
@@ -799,7 +802,7 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      'Fayllar mavjud emas',
+                      localization.reportNoFiles,
                       style: AppTextStyles.source.regular(
                         fontSize: 13,
                         color: AppColors.greyScale.grey600,
@@ -913,7 +916,7 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    'Fayllarni yuklashda xatolik yuz berdi',
+                    localization.reportFilesLoadError,
                     style: AppTextStyles.source.regular(
                       fontSize: 13,
                       color: AppColors.greyScale.grey600,

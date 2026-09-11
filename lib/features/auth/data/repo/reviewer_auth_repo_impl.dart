@@ -5,15 +5,11 @@ import 'package:my_template/features/auth/domain/repository/reviewer_auth_reposi
 class ReviewerAuthRepoImpl implements ReviewerAuthRepository {
   final ReviewerAuthRemoteDataSource _remoteDataSource;
 
-  ReviewerAuthRepoImpl({
-    required ReviewerAuthRemoteDataSource remoteDataSource,
-  }) : _remoteDataSource = remoteDataSource;
+  ReviewerAuthRepoImpl({required ReviewerAuthRemoteDataSource remoteDataSource})
+    : _remoteDataSource = remoteDataSource;
 
   @override
-  Future<void> login({
-    required String username,
-    required String password,
-  }) {
+  Future<void> login({required String username, required String password}) {
     final params = ReviewerLoginRequestModel(
       username: username,
       password: password,

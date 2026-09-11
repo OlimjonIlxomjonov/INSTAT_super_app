@@ -15,8 +15,8 @@ class ReviewerAuthRemoteDataSourceImpl implements ReviewerAuthRemoteDataSource {
   ReviewerAuthRemoteDataSourceImpl({
     DioClient? dioClient,
     TokenStorageService? tokenStorage,
-  })  : _dioClient = dioClient ?? DioClient(),
-        _tokenStorage = tokenStorage ?? TokenStorageServiceImpl();
+  }) : _dioClient = dioClient ?? DioClient(),
+       _tokenStorage = tokenStorage ?? TokenStorageServiceImpl();
 
   @override
   Future<void> login(ReviewerLoginRequestModel params) async {
@@ -32,11 +32,12 @@ class ReviewerAuthRemoteDataSourceImpl implements ReviewerAuthRemoteDataSource {
 
         String? token;
         if (data is Map) {
-          token = (data['access'] ??
-                  data['token'] ??
-                  data['data']?['access'] ??
-                  data['data']?['token'])
-              ?.toString();
+          token =
+              (data['access'] ??
+                      data['token'] ??
+                      data['data']?['access'] ??
+                      data['data']?['token'])
+                  ?.toString();
         }
 
         if (token == null || token.isEmpty) {

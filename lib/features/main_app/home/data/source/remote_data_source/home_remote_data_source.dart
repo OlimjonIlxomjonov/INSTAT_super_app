@@ -38,6 +38,10 @@ abstract class HomeRemoteDataSource {
   //! Notifications
   Future<NotifResponseModel> fetchNotif({required NotifParams params});
 
+  Future<void> markNotifAsRead(int id);
+
+  Future<void> markAllNotifsAsRead();
+
   Future<List<ActiveDevicesEntity>> fetchActiveDevices();
 
   Future<void> deleteAllDevices();

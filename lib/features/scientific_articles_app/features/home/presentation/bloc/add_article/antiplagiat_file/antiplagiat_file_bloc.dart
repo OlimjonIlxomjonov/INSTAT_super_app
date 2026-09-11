@@ -3,10 +3,12 @@ import 'package:my_template/features/scientific_articles_app/features/home/domai
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/add_article/antiplagiat_file/antiplagiat_file_state.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
 
-class AntiplagiatFileBloc extends Bloc<ArticlesHomeEvent, AntiplagiatFileState> {
+class AntiplagiatFileBloc
+    extends Bloc<ArticlesHomeEvent, AntiplagiatFileState> {
   final AddAntiplagiatFileUseCase useCase;
 
-  AntiplagiatFileBloc({required this.useCase}) : super(AntiplagiatFileInitial()) {
+  AntiplagiatFileBloc({required this.useCase})
+    : super(AntiplagiatFileInitial()) {
     on<AntiplagiatFileEvent>((event, emit) async {
       emit(AntiplagiatFileLoading());
       try {

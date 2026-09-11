@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancy_details/vacancy_bullet_section_wg.dart';
 import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancy_details/vacancy_provided_wg.dart';
@@ -10,6 +11,7 @@ class VacancyInfoBodyWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -28,7 +30,7 @@ class VacancyInfoBodyWg extends StatelessWidget {
 
         //! Talablar
         VacancyBulletSectionWg(
-          title: 'Talablar',
+          title: localization.requirementsTitle,
           items: const [
             'JavaScript, TypeScript va React yoki Vue bo’yicha kuchli bilim',
             'Frontend yo’nalishida kamida 3 yil ish tajribasi',
@@ -42,7 +44,7 @@ class VacancyInfoBodyWg extends StatelessWidget {
 
         //! Vazifalar
         VacancyBulletSectionWg(
-          title: 'Qanday ishlarni bajararishi',
+          title: localization.responsibilitiesTitle,
           items: const [
             'Web-platforma uchun yangi interfeyslarni ishlab chiqish',
             'Dizayn asosida sahifalarni sifatli va responsive holatda tayyorlash',
@@ -56,13 +58,13 @@ class VacancyInfoBodyWg extends StatelessWidget {
 
         //! Yo’nalishlar
         VacancySectionCardWg(
-          title: 'Test olinadiga yo’nalishlar',
+          title: localization.testDirectionsTitle,
           child: Column(
             children: [
               Row(
                 children: [
                   Text(
-                    'Yo’nalish nomi',
+                    localization.directionNameLabel,
                     style: AppTextStyles.source.regular(
                       fontSize: 13,
                       color: AppColors.greyScale.grey600,
@@ -70,7 +72,7 @@ class VacancyInfoBodyWg extends StatelessWidget {
                   ),
                   const Spacer(),
                   Text(
-                    'O’tish balli',
+                    localization.passingScoreLabel,
                     style: AppTextStyles.source.regular(
                       fontSize: 13,
                       color: AppColors.greyScale.grey600,

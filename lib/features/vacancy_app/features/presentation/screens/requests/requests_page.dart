@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
@@ -10,6 +11,8 @@ class RequestsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -18,7 +21,7 @@ class RequestsPage extends StatelessWidget {
             titleSpacing: 0,
             automaticallyImplyLeading: false,
             title: SheetDragAreaWg(
-              child: CustomAppBarWg(myTitle: 'Mening arizalarim'),
+              child: CustomAppBarWg(myTitle: localization.myApplications),
             ),
           ),
 
@@ -36,7 +39,7 @@ class RequestsPage extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(20, 8, 20, 18),
             sliver: SliverToBoxAdapter(
               child: Text(
-                'Arizalar',
+                localization.applicationsTitle,
                 style: AppTextStyles.source.semiBold(fontSize: 18),
               ),
             ),

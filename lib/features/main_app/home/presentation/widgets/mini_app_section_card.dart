@@ -20,7 +20,6 @@ class MiniAppSectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: () => onTap(context),
       child: DecoratedBox(
