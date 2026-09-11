@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/course_lesson_test/get_lesson_test_options_usecase.dart';
@@ -119,6 +120,16 @@ class CourseLessonTestBloc
 
         final response = await submitLessonTestAnswerUseCase(params);
 
+        //! Yuz tekshiruvi o'tmadi
+        if (!response.isRecorded) {
+          await _restoreAfterFailure(
+            emit,
+            currentState,
+            kind: LessonTestErrorKind.faceNotVerified,
+          );
+          return;
+        }
+
         if (response.isCorrect) {
           _correctAnswers++;
         }
@@ -135,30 +146,39 @@ class CourseLessonTestBloc
       } catch (e) {
         final isFaceError = e.toString().contains('no_face_found');
         final statusCode = e is DioException ? e.response?.statusCode : null;
-        final errorMessage = isFaceError
-            ? 'No Face Found'
-            : statusCode != null
-            ? 'Something went wrong. Status code: $statusCode'
-            : 'Something went wrong. Please try again.';
-
-        emit(CourseLessonTestError(message: errorMessage));
-
-        // Whatever the failure was (face detection, server error, network
-        // hiccup, etc.), the question and options must stay on screen so
-        // the user can just retry — only the error state briefly flashes
-        // by so the listener above can show it as a flushbar.
-        await Future.delayed(const Duration(milliseconds: 100));
-        emit(
-          CourseLessonTestLoaded(
-            tests: _tests,
-            currentTestIndex: currentState.currentTestIndex,
-            currentOptions: currentState.currentOptions,
-            selectedOptionId: currentState.selectedOptionId,
-            isSubmitting: false,
-          ),
+        await _restoreAfterFailure(
+          emit,
+          currentState,
+          kind: isFaceError
+              ? LessonTestErrorKind.faceNotFound
+              : statusCode != null
+              ? LessonTestErrorKind.server
+              : LessonTestErrorKind.unknown,
+          message: statusCode?.toString() ?? '',
         );
       }
     }
+  }
+
+  /// Xato qanday bo'lmasin savol va variantlar ekranda qoladi — foydalanuvchi
+  /// qayta urinadi. Error holati flushbar uchun bir lahza chiqadi, xolos.
+  Future<void> _restoreAfterFailure(
+    Emitter<CourseLessonTestState> emit,
+    CourseLessonTestLoaded currentState, {
+    required LessonTestErrorKind kind,
+    String message = '',
+  }) async {
+    emit(CourseLessonTestError(message: message, kind: kind));
+    await Future.delayed(const Duration(milliseconds: 100));
+    emit(
+      CourseLessonTestLoaded(
+        tests: _tests,
+        currentTestIndex: currentState.currentTestIndex,
+        currentOptions: currentState.currentOptions,
+        selectedOptionId: currentState.selectedOptionId,
+        isSubmitting: false,
+      ),
+    );
   }
 
   Future<void> _onNextQuestion(

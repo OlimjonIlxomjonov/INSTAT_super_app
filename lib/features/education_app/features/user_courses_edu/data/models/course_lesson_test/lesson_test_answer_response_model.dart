@@ -5,13 +5,25 @@ class LessonTestAnswerResponseModel extends LessonTestAnswerResponseEntity {
     required super.data,
     required super.isFinished,
     required super.isCorrect,
+    required super.ok,
+    required super.isRecorded,
+    super.matched,
+    super.confidenceScore,
   });
 
   factory LessonTestAnswerResponseModel.fromJson(Map<String, dynamic> json) {
+    final ok = json['ok'] as bool? ?? true;
+    final rawData = json['data'];
+    final hasData = rawData is Map<String, dynamic> && rawData.isNotEmpty;
+
     return LessonTestAnswerResponseModel(
-      data: LessonTestAnswerDataModel.fromJson(json['data'] ?? {}),
+      data: LessonTestAnswerDataModel.fromJson(hasData ? rawData : {}),
       isFinished: json['is_finished'] ?? false,
       isCorrect: json['is_correct'] ?? false,
+      ok: ok,
+      isRecorded: ok && hasData,
+      matched: json['matched'] as bool?,
+      confidenceScore: (json['confidence_score'] as num?)?.toDouble(),
     );
   }
 }

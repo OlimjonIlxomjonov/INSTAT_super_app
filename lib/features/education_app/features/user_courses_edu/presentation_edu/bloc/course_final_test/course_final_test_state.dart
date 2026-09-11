@@ -1,3 +1,4 @@
+import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_answer_response_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_option_entity.dart';
@@ -10,8 +11,12 @@ class CourseFinalTestLoading extends CourseFinalTestState {}
 
 class CourseFinalTestError extends CourseFinalTestState {
   final String message;
+  final LessonTestErrorKind kind;
 
-  const CourseFinalTestError({required this.message});
+  const CourseFinalTestError({
+    required this.message,
+    this.kind = LessonTestErrorKind.unknown,
+  });
 }
 
 class CourseFinalTestLoaded extends CourseFinalTestState {

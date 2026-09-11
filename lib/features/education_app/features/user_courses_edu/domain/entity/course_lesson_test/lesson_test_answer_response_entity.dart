@@ -3,10 +3,24 @@ class LessonTestAnswerResponseEntity {
   final bool isFinished;
   final bool isCorrect;
 
+  //! Yuz tekshiruvi
+  final bool ok;
+  final bool? matched;
+  final double? confidenceScore;
+
+  /// Backend javobni faqat yuz tekshiruvidan o'tganda yozadi. O'tmasa
+  /// `data` bo'lmaydi va `ok: false` keladi — bu noto'g'ri javob emas,
+  /// javob umuman qabul qilinmagan.
+  final bool isRecorded;
+
   LessonTestAnswerResponseEntity({
     required this.data,
     required this.isFinished,
     required this.isCorrect,
+    required this.ok,
+    required this.isRecorded,
+    this.matched,
+    this.confidenceScore,
   });
 }
 

@@ -641,5 +641,8 @@
   "seeAll": "See all",
   "activeDevices": "Active devices",
   "onlineBooksTab": "Online books",
-  "paperBooksTab": "Paper books"
+  "paperBooksTab": "Paper books",
+  "faceNotFoundError": "No face detected. Look at the camera and try again.",
+  "faceNotVerifiedError": "Identity not verified. Your answer was not saved — please try again.",
+  "serverErrorWithCode": "Something went wrong. Code: {code}"
 }

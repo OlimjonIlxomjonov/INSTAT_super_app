@@ -745,5 +745,15 @@
   "seeAll": "Barchasi",
   "activeDevices": "Aktiv qurilmalar",
   "onlineBooksTab": "Onlayn kitoblar",
-  "paperBooksTab": "Qog‘oz kitoblar"
+  "paperBooksTab": "Qog‘oz kitoblar",
+  "faceNotFoundError": "Yuz aniqlanmadi. Kameraga to‘g‘ri qarab qayta urinib ko‘ring.",
+  "faceNotVerifiedError": "Shaxsingiz tasdiqlanmadi. Javob qabul qilinmadi — qayta urinib ko‘ring.",
+  "serverErrorWithCode": "Xatolik yuz berdi. Kod: {code}",
+  "@serverErrorWithCode": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  }
 }

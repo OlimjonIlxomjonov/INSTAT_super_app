@@ -641,5 +641,8 @@
   "seeAll": "Барчаси",
   "activeDevices": "Актив қурилмалар",
   "onlineBooksTab": "Онлайн китоблар",
-  "paperBooksTab": "Қоғоз китоблар"
+  "paperBooksTab": "Қоғоз китоблар",
+  "faceNotFoundError": "Юз аниқланмади. Камерага тўғри қараб қайта уриниб кўринг.",
+  "faceNotVerifiedError": "Шахсингиз тасдиқланмади. Жавоб қабул қилинмади — қайта уриниб кўринг.",
+  "serverErrorWithCode": "Хатолик юз берди. Код: {code}"
 }

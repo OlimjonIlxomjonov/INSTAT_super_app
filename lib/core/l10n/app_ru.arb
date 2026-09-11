@@ -641,5 +641,8 @@
   "seeAll": "Все",
   "activeDevices": "Активные устройства",
   "onlineBooksTab": "Онлайн-книги",
-  "paperBooksTab": "Бумажные книги"
+  "paperBooksTab": "Бумажные книги",
+  "faceNotFoundError": "Лицо не обнаружено. Посмотрите в камеру и попробуйте снова.",
+  "faceNotVerifiedError": "Личность не подтверждена. Ответ не принят — попробуйте снова.",
+  "serverErrorWithCode": "Произошла ошибка. Код: {code}"
 }

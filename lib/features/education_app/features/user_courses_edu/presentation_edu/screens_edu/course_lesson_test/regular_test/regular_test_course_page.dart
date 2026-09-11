@@ -1,5 +1,6 @@
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/shared_widgets/lesson_test_error_text.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
@@ -124,8 +125,7 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage>
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildColumn(
               title: '$percentage%',
@@ -171,33 +171,38 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage>
     );
   }
 
-  Column _buildColumn({
+  Widget _buildColumn({
     required String title,
     required String subTitle,
     required String titleDesc,
     required String subTitleDesc,
   }) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(title, style: AppTextStyles.source.medium(fontSize: 20)),
-        Text(
-          subTitleDesc,
-          style: AppTextStyles.source.regular(
-            fontSize: 12,
-            color: AppColors.greyScale.grey600,
+    final descStyle = AppTextStyles.source.regular(
+      fontSize: 12,
+      color: AppColors.greyScale.grey600,
+    );
+
+    return Expanded(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(title, style: AppTextStyles.source.medium(fontSize: 20)),
+          Text(
+            subTitleDesc,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            style: descStyle,
           ),
-        ),
-        SizedBox(height: appH(12)),
-        Text(subTitle, style: AppTextStyles.source.medium(fontSize: 20)),
-        Text(
-          titleDesc,
-          style: AppTextStyles.source.regular(
-            fontSize: 12,
-            color: AppColors.greyScale.grey600,
+          SizedBox(height: appH(12)),
+          Text(subTitle, style: AppTextStyles.source.medium(fontSize: 20)),
+          Text(
+            titleDesc,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            style: descStyle,
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -210,7 +215,14 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage>
           if (state is CourseLessonTestFinished) {
             _showFinishDialog(context, state);
           } else if (state is CourseLessonTestError) {
-            errorFlushBar(context, state.message);
+            errorFlushBar(
+              context,
+              lessonTestErrorText(
+                AppLocalizations.of(context)!,
+                state.kind,
+                state.message,
+              ),
+            );
           }
         },
         builder: (context, state) {

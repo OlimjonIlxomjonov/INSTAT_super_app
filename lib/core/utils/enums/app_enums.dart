@@ -74,3 +74,5 @@ extension HomeSectionIdX on HomeSectionId {
 enum AnnotationLanguageEnum { uz, en, ru }
 
 enum PaymentStatusEnum { paid, pending, notBought }
+
+enum LessonTestErrorKind { faceNotFound, faceNotVerified, server, unknown }
