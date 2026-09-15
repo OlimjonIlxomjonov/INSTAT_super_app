@@ -755,5 +755,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "sectionLoadError": "Ma’lumotlarni yuklab bo‘lmadi",
+  "bannersLoadError": "Bannerlarni yuklab bo‘lmadi"
 }

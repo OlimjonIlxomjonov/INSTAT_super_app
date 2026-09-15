@@ -35,19 +35,14 @@ class UserCoursesBloc extends Bloc<CoursesEvent, UserCoursesState> {
         emit(
           UserCoursesError(
             isConnectionError: isNoInternetError(e),
-            message: e.message ?? 'Unknown error',
+            message: apiErrorMessage(e) ?? '',
           ),
         );
       } catch (e) {
         // Fallback for any non-Dio exception (e.g. SocketException not wrapped
         // by Dio, JSON parsing errors, etc.) — ensures the state is always updated.
         final isSocketError = e is SocketException;
-        emit(
-          UserCoursesError(
-            isConnectionError: isSocketError,
-            message: e.toString(),
-          ),
-        );
+        emit(UserCoursesError(isConnectionError: isSocketError, message: ''));
       }
     });
 

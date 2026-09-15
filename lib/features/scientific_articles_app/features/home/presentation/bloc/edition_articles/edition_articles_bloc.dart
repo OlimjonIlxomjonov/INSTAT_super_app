@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/network/dio_error_classifier.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/edition_articles/edition_articles_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/edition_articles/edition_articles_state.dart';
@@ -15,7 +16,7 @@ class EditionArticlesBloc
         final items = await useCase.call(editionId: event.editionId);
         emit(EditionArticlesLoaded(items: items));
       } catch (e) {
-        emit(EditionArticlesError());
+        emit(EditionArticlesError(message: apiErrorMessage(e)));
       }
     });
   }

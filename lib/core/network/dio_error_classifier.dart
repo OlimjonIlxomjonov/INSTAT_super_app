@@ -27,3 +27,39 @@ bool isNoInternetError(DioException error) {
       return false;
   }
 }
+
+/// Backend xatosidan foydalanuvchiga ko'rsatsa bo'ladigan matn.
+///
+/// Qo'llab-quvvatlanadigan shakllar:
+///   {"error": {"details": {"detail": "..."}}}
+///   {"error": {"details": ["...", ...]}}
+///   {"error": {"details": {"field": ["..."]}}}
+///   {"detail": "..."}  /  {"message": "..."}
+///
+/// Hech biri topilmasa `null` — chaqiruvchi umumiy matnni ko'rsatadi.
+String? apiErrorMessage(Object error) {
+  if (error is! DioException) return null;
+  if (isNoInternetError(error)) return null;
+
+  final data = error.response?.data;
+  if (data is! Map) return null;
+
+  String? pick(dynamic value) {
+    if (value is String) return value.trim().isEmpty ? null : value.trim();
+    if (value is List && value.isNotEmpty) return pick(value.first);
+    if (value is Map && value.isNotEmpty) {
+      return pick(value['detail']) ?? pick(value.values.first);
+    }
+    return null;
+  }
+
+  final err = data['error'];
+  if (err is Map) {
+    final fromDetails = pick(err['details']);
+    if (fromDetails != null) return fromDetails;
+    final fromMessage = pick(err['message']);
+    if (fromMessage != null) return fromMessage;
+  }
+
+  return pick(data['detail']) ?? pick(data['message']);
+}

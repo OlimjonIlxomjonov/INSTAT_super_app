@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
@@ -74,6 +75,22 @@ class _SiteFaqsWgState extends State<SiteFaqsWg> {
             ),
             BlocBuilder<SiteFaqsBloc, SiteFaqsState>(
               builder: (context, state) {
+                if (state is SiteFaqsError) {
+                  return SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 24),
+                      child: SectionErrorWg(
+                        title: state.message,
+                        onRetry: () => context.read<SiteFaqsBloc>().add(
+                          SiteFaqsEvent(
+                            params: SiteFaqsParams(module: widget.module),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+
                 final isLoading = state is! SiteFaqsLoaded;
                 final data = isLoading ? _fakeFaqItems : state.listEntity;
 

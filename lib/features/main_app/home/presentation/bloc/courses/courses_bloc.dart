@@ -49,17 +49,14 @@ class CoursesBloc extends Bloc<HomeEvent, CoursesState> {
           previous?.copyWith(isRefreshing: false) ??
               CoursesError(
                 isConnectionError: isNoInternetError(e),
-                message: e.message ?? 'Unknown error',
+                message: apiErrorMessage(e) ?? '',
               ),
         );
       } catch (e) {
         final isSocketError = e is SocketException;
         emit(
           previous?.copyWith(isRefreshing: false) ??
-              CoursesError(
-                isConnectionError: isSocketError,
-                message: e.toString(),
-              ),
+              CoursesError(isConnectionError: isSocketError, message: ''),
         );
       }
     });

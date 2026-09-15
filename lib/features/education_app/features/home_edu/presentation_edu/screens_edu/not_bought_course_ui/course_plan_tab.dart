@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
@@ -45,6 +46,9 @@ class _CoursePlanTabState extends State<CoursePlanTab>
                     );
                   }),
                 );
+              }
+              if (state is CourseLessonTopicsError) {
+                return SectionErrorWg(title: state.message);
               }
               return const SizedBox.shrink();
             },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/pagination/load_more_on_scroll.dart';
 import 'package:my_template/core/common/skeletonizer_shimmer/courses/course_shimmer.dart';
@@ -85,6 +86,12 @@ class PopularWithBlocWg extends StatelessWidget {
           return Padding(
             padding: AppPadding.horizontal20x(),
             child: SkeletonExpandedCourseCard(),
+          );
+        } else if (state is CoursesError) {
+          return SectionErrorWg(
+            title: state.message,
+            onRetry: () =>
+                context.read<CoursesBloc>().add(AvailableCoursesEvent()),
           );
         }
         return const SizedBox.shrink();

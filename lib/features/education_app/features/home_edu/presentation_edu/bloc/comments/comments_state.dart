@@ -14,4 +14,8 @@ class CommentsLoaded extends CommentsState {
   CommentsLoaded({required this.response});
 }
 
-class CommentsError extends CommentsState {}
+class CommentsError extends CommentsState {
+  final String? message;
+
+  const CommentsError({this.message});
+}

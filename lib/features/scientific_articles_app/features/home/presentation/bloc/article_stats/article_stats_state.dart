@@ -21,4 +21,11 @@ class ArticleStatsLoaded extends ArticleStatsState {
   List<Object?> get props => [entity];
 }
 
-class ArticleStatsError extends ArticleStatsState {}
+class ArticleStatsError extends ArticleStatsState {
+  final String? message;
+
+  const ArticleStatsError({this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

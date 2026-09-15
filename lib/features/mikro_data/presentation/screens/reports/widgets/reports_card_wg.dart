@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
@@ -124,6 +125,19 @@ class _ReportsCardWgState extends State<ReportsCardWg> {
                     final item = data[index];
                     return _buildReportItem(context, item, localeCode);
                   }, childCount: data.length),
+                );
+              }
+
+              if (state is ReportsError) {
+                return SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    child: SectionErrorWg(
+                      title: state.message,
+                      onRetry: () =>
+                          context.read<ReportsBloc>().add(ReportsEvent()),
+                    ),
+                  ),
                 );
               }
 

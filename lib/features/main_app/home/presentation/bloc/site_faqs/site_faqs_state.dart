@@ -21,4 +21,11 @@ class SiteFaqsLoaded extends SiteFaqsState {
   List<Object?> get props => [listEntity];
 }
 
-class SiteFaqsError extends SiteFaqsState {}
+class SiteFaqsError extends SiteFaqsState {
+  final String? message;
+
+  const SiteFaqsError({this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

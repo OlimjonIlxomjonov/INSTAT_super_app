@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/network/dio_error_classifier.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_list_response.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/user_books/user_books_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/user_books/user_book_state.dart';
@@ -15,7 +16,7 @@ class UserBookBloc extends Bloc<UserBooksBaseEvent, UserBookState> {
         final response = await useCase.call(page: 1);
         emit(UserBookLoaded(response: response));
       } catch (e) {
-        emit(UserBookError());
+        emit(UserBookError(message: apiErrorMessage(e)));
       }
     });
 

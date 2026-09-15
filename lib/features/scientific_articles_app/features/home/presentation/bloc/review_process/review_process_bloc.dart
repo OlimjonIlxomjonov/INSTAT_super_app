@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/network/dio_error_classifier.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_process/review_process_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_process/review_process_state.dart';
@@ -13,7 +14,7 @@ class ReviewProcessBloc extends Bloc<ArticlesHomeEvent, ReviewProcessState> {
         final listEntity = await useCase.call(params: event.params);
         emit(ReviewProcessLoaded(listEntity: listEntity));
       } catch (e) {
-        emit(ReviewProcessError());
+        emit(ReviewProcessError(message: apiErrorMessage(e)));
       }
     });
   }

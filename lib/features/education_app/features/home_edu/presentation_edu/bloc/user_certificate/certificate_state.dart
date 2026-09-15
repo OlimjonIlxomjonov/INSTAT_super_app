@@ -21,4 +21,11 @@ class CertificateLoaded extends CertificateState {
   List<Object?> get props => [response];
 }
 
-class CertificateError extends CertificateState {}
+class CertificateError extends CertificateState {
+  final String? message;
+
+  const CertificateError({this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

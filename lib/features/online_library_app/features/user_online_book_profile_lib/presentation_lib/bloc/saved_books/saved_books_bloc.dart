@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/network/dio_error_classifier.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_list_response.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/saved_books/saved_books_use_case.dart';
 import 'package:my_template/features/online_library_app/features/user_online_book_profile_lib/presentation_lib/bloc/saved_books/saved_books_event.dart';
@@ -15,7 +16,7 @@ class SavedBooksBloc extends Bloc<SavedBooksBaseEvent, SavedBooksState> {
         final response = await useCase.call(page: 1);
         emit(SavedBooksLoaded(response: response));
       } catch (e) {
-        emit(SavedBooksError());
+        emit(SavedBooksError(message: apiErrorMessage(e)));
       }
     });
 

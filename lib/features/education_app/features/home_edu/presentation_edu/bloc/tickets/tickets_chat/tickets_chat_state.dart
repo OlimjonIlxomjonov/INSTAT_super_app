@@ -21,4 +21,11 @@ class TicketsChatLoaded extends TicketsChatState {
   List<Object?> get props => [listEntity];
 }
 
-class TicketsChatError extends TicketsChatState {}
+class TicketsChatError extends TicketsChatState {
+  final String? message;
+
+  const TicketsChatError({this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

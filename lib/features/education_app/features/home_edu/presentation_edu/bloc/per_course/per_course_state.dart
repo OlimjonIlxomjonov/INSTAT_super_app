@@ -14,4 +14,8 @@ class PerCourseLoaded extends PerCourseState {
   PerCourseLoaded({required this.entity});
 }
 
-class PerCourseError extends PerCourseState {}
+class PerCourseError extends PerCourseState {
+  final String? message;
+
+  const PerCourseError({this.message});
+}

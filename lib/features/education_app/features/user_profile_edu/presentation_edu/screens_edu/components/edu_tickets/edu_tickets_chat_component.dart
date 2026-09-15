@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
@@ -286,6 +287,25 @@ class _EduTicketsChatComponentState extends State<EduTicketsChatComponent> {
                       },
                     );
                   }
+
+                  if (state is TicketsChatError) {
+                    return SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 24),
+                        child: SectionErrorWg(
+                          title: state.message,
+                          onRetry: () => context.read<TicketsChatBloc>().add(
+                            TicketsChatEvent(
+                              params: TicketsChatParams(
+                                ticketId: widget.ticketId,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+
                   //! Skeletonizer / loading
                   return SliverList.builder(
                     itemCount: 9,

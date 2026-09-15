@@ -51,17 +51,14 @@ class PopularBooksBloc extends Bloc<PopularBooksEvent, PopularBooksState> {
           previous?.copyWith(isRefreshing: false) ??
               PopularBooksError(
                 isConnectionError: isNoInternetError(e),
-                message: e.message ?? 'Unknown error',
+                message: apiErrorMessage(e) ?? '',
               ),
         );
       } catch (e) {
         final isSocketError = e is SocketException;
         emit(
           previous?.copyWith(isRefreshing: false) ??
-              PopularBooksError(
-                isConnectionError: isSocketError,
-                message: e.toString(),
-              ),
+              PopularBooksError(isConnectionError: isSocketError, message: ''),
         );
       }
     });

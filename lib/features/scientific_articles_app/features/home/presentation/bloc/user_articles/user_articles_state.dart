@@ -49,4 +49,11 @@ class UserArticlesLoaded extends UserArticlesState {
   List<Object?> get props => [response, status, search, isLoadingMore, hasMore];
 }
 
-class UserArticlesError extends UserArticlesState {}
+class UserArticlesError extends UserArticlesState {
+  final String? message;
+
+  const UserArticlesError({this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

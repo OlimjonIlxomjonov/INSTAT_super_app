@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
-import 'package:my_template/core/common/ui_states/error_page.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
@@ -169,7 +169,15 @@ class _NotificationsPageState extends State<NotificationsPage> {
             BlocBuilder<NotifBloc, NotifState>(
               builder: (context, state) {
                 if (state is NotifError) {
-                  return SliverToBoxAdapter(child: ErrorPage());
+                  return SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 24),
+                      child: SectionErrorWg(
+                        title: state.message,
+                        onRetry: _fetch,
+                      ),
+                    ),
+                  );
                 }
 
                 if (state is NotifLoaded) {

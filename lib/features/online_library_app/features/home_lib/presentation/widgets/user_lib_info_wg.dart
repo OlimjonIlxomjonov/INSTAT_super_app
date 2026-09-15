@@ -8,13 +8,24 @@ import '../../../../../../core/utils/app_utils.dart';
 
 class UserLibInfoWg extends StatelessWidget {
   final int index;
-  final LibraryStatsEntity item;
+  final LibraryStatsEntity? item;
+  final bool isError;
 
-  const UserLibInfoWg({super.key, required this.index, required this.item});
+  const UserLibInfoWg({
+    super.key,
+    required this.index,
+    required this.item,
+    this.isError = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final items = [item.allOnline, item.saved, item.loans, item.activeLoans];
+    final items = [
+      item?.allOnline ?? 0,
+      item?.saved ?? 0,
+      item?.loans ?? 0,
+      item?.activeLoans ?? 0,
+    ];
 
     final localization = AppLocalizations.of(context)!;
     final cardInfo = getCardInfo(localization);
@@ -48,20 +59,40 @@ class UserLibInfoWg extends StatelessWidget {
           ),
           Row(
             children: [
-              Text(
-                items[index].toString(),
-                style: AppTextStyles.source.medium(
-                  fontSize: 20,
-                  color: AppColors.white,
+              if (isError)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    'err',
+                    style: AppTextStyles.source.semiBold(
+                      fontSize: 16,
+                      color: AppColors.redFailedTaskCard,
+                    ),
+                  ),
+                )
+              else ...[
+                Text(
+                  items[index].toString(),
+                  style: AppTextStyles.source.medium(
+                    fontSize: 20,
+                    color: AppColors.white,
+                  ),
                 ),
-              ),
-              Text(
-                localization.unitsSuffix,
-                style: AppTextStyles.source.medium(
-                  fontSize: 14,
-                  color: AppColors.greyScale.grey300,
+                Text(
+                  localization.unitsSuffix,
+                  style: AppTextStyles.source.medium(
+                    fontSize: 14,
+                    color: AppColors.greyScale.grey300,
+                  ),
                 ),
-              ),
+              ],
               Spacer(),
               SvgPicture.asset(cardInfo[index].iconPath),
             ],

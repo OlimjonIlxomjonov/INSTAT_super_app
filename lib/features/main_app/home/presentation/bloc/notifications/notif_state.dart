@@ -21,4 +21,11 @@ class NotifLoaded extends NotifState {
   List<Object?> get props => [response];
 }
 
-class NotifError extends NotifState {}
+class NotifError extends NotifState {
+  final String? message;
+
+  const NotifError({this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

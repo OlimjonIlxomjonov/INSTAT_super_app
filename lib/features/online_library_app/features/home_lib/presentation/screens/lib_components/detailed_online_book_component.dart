@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/params/online_books/online_books_params.dart';
@@ -311,6 +312,21 @@ class _DetailedOnlineBookComponentState
                             .toList(),
                       ),
                     ],
+                  );
+                }
+                if (state is BookCommentsError) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: SectionErrorWg(
+                      title: state.message,
+                      onRetry: () => context.read<BookCommentsBloc>().add(
+                        BookCommentsEvent(
+                          params: OnlineBookCommentsParams(
+                            bookId: widget.data.id,
+                          ),
+                        ),
+                      ),
+                    ),
                   );
                 }
                 return const SizedBox.shrink();

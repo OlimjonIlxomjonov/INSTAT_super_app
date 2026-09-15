@@ -49,4 +49,11 @@ class DataRequestsLoaded extends DataRequestsState {
   List<Object?> get props => [response, status, search, isLoadingMore, hasMore];
 }
 
-class DataRequestsError extends DataRequestsState {}
+class DataRequestsError extends DataRequestsState {
+  final String? message;
+
+  const DataRequestsError({this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

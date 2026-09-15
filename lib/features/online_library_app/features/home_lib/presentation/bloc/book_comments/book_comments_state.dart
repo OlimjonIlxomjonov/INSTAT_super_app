@@ -21,4 +21,11 @@ class BookCommentsLoaded extends BookCommentsState {
   List<Object?> get props => [response];
 }
 
-class BookCommentsError extends BookCommentsState {}
+class BookCommentsError extends BookCommentsState {
+  final String? message;
+
+  const BookCommentsError({this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

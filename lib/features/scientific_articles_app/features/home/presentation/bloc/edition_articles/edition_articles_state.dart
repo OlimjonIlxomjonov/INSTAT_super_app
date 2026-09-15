@@ -21,4 +21,11 @@ class EditionArticlesLoaded extends EditionArticlesState {
   List<Object?> get props => [items];
 }
 
-class EditionArticlesError extends EditionArticlesState {}
+class EditionArticlesError extends EditionArticlesState {
+  final String? message;
+
+  const EditionArticlesError({this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

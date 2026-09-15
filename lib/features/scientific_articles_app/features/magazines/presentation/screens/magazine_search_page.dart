@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/article_params/article_params.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
-import 'package:my_template/core/common/ui_states/error_page.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
@@ -100,7 +100,15 @@ class _MagazineSearchViewState extends State<_MagazineSearchView> {
                   sliver: SliverMagazineGridWg(items: state.response.data),
                 );
               } else if (state is ArticleEditionsError) {
-                return SliverToBoxAdapter(child: ErrorPage());
+                return SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    child: SectionErrorWg(
+                      title: state.message,
+                      onRetry: _fetch,
+                    ),
+                  ),
+                );
               }
               return Skeletonizer.sliver(
                 child: SliverMagazineGridWg(

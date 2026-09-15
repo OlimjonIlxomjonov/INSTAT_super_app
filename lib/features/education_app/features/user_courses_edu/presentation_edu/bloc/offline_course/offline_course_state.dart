@@ -14,4 +14,8 @@ class OfflineCourseLoaded extends OfflineCourseState {
   OfflineCourseLoaded({required this.response});
 }
 
-class OfflineCourseError extends OfflineCourseState {}
+class OfflineCourseError extends OfflineCourseState {
+  final String? message;
+
+  const OfflineCourseError({this.message});
+}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/ui_states/empty_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -75,6 +76,12 @@ class _CourseCommentsTabState extends State<CourseCommentsTab>
                     );
                   },
                 ),
+              );
+            }
+            if (state is CommentsError) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: SectionErrorWg(title: state.message),
               );
             }
             return SizedBox.shrink();

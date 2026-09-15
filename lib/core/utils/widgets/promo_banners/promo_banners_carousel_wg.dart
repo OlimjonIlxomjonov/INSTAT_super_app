@@ -8,6 +8,7 @@ import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart'
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/features/main_app/home/domain/entity/banner/banner_entity.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/banner/banner_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/banner/banner_event.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/banner/banner_state.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -50,7 +51,11 @@ class PromoBannersCarouselWg extends StatelessWidget {
         }
 
         if (state is BannerError) {
-          return const SizedBox.shrink();
+          return _BannerErrorCard(
+            message: state.message,
+            onRetry: () =>
+                context.read<BannerBloc>().add(const FetchBannersEvent()),
+          );
         }
 
         if (state is! BannerLoaded || state.banners.isEmpty) {
@@ -141,6 +146,75 @@ class _NoBannersYetCard extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _BannerErrorCard extends StatelessWidget {
+  final VoidCallback onRetry;
+  final String? message;
+
+  const _BannerErrorCard({required this.onRetry, this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+
+    return Padding(
+      padding: AppPadding.horizontal20x(),
+      child: AspectRatio(
+        aspectRatio: _bannerAspectRatio,
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.redBackground,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: AppColors.redFailedTaskCard.withValues(alpha: 0.4),
+            ),
+          ),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.error_outline_rounded,
+                    size: 32,
+                    color: AppColors.redFailedTaskCard,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    (message != null && message!.trim().isNotEmpty)
+                        ? message!
+                        : localization.bannersLoadError,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.source.medium(
+                      fontSize: 14,
+                      color: AppColors.greyScale.grey800,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  TextButton.icon(
+                    onPressed: onRetry,
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppColors.redFailedTaskCard,
+                      visualDensity: VisualDensity.compact,
+                    ),
+                    icon: const Icon(Icons.refresh_rounded, size: 18),
+                    label: Text(
+                      localization.retry,
+                      style: AppTextStyles.source.medium(fontSize: 13),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

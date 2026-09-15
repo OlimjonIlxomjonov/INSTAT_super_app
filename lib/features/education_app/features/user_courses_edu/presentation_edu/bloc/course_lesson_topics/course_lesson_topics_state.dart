@@ -14,4 +14,8 @@ class CourseLessonTopicsLoaded extends CourseLessonTopicsState {
   CourseLessonTopicsLoaded({required this.response});
 }
 
-class CourseLessonTopicsError extends CourseLessonTopicsState {}
+class CourseLessonTopicsError extends CourseLessonTopicsState {
+  final String? message;
+
+  CourseLessonTopicsError({this.message});
+}

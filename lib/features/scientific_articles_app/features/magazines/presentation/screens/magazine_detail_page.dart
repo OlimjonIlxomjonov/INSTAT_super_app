@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
-import 'package:my_template/core/common/ui_states/error_page.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -104,7 +104,17 @@ class _MagazineDetailView extends StatelessWidget {
                   ),
                 );
               } else if (state is EditionArticlesError) {
-                return const SliverToBoxAdapter(child: ErrorPage());
+                return SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    child: SectionErrorWg(
+                      title: state.message,
+                      onRetry: () => context.read<EditionArticlesBloc>().add(
+                        EditionArticlesEvent(editionId: edition.id),
+                      ),
+                    ),
+                  ),
+                );
               }
 
               //! loading state

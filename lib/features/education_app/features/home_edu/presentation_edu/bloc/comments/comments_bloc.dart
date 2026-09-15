@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/network/dio_error_classifier.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/comments/comments_use_case.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/comments/comments_state.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/home_edu_event.dart';
@@ -13,7 +14,7 @@ class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
         final response = await useCase.call(params: event.params);
         emit(CommentsLoaded(response: response));
       } catch (e) {
-        emit(CommentsError());
+        emit(CommentsError(message: apiErrorMessage(e)));
       }
     });
   }

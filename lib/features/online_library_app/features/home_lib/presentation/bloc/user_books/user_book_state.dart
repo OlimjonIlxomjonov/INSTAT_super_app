@@ -40,4 +40,11 @@ class UserBookLoaded extends UserBookState {
   List<Object?> get props => [response, isLoadingMore];
 }
 
-class UserBookError extends UserBookState {}
+class UserBookError extends UserBookState {
+  final String? message;
+
+  const UserBookError({this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

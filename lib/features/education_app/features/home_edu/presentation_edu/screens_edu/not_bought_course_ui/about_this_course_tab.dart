@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/home_edu_event.dart';
+import 'package:my_template/core/common/params/edu_params/params.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -156,7 +159,16 @@ class _AboutThisCourseTabState extends State<AboutThisCourseTab>
                 );
               }
 
-              if (state is SimilarCoursesError) return const SizedBox.shrink();
+              if (state is SimilarCoursesError) {
+                return SectionErrorWg(
+                  title: state.message,
+                  onRetry: () => context.read<SimilarCoursesBloc>().add(
+                    SimilarCoursesEvent(
+                      params: PerCourseParams(courseId: widget.data.id),
+                    ),
+                  ),
+                );
+              }
 
               //! Loading
               return ListView.builder(

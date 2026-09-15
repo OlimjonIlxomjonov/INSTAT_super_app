@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/network/dio_error_classifier.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/domain/entity/leader_board/leader_board_response.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/domain/usecase/leader_board/leader_board_use_case.dart';
 import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/bloc/leader_board/leader_board_state.dart';
@@ -15,7 +16,7 @@ class LeaderBoardBloc extends Bloc<LeaderBoardMainEvents, LeaderBoardState> {
         final response = await useCase.call(page: 1);
         emit(LeaderBoardLoaded(response));
       } catch (e) {
-        emit(LeaderBoardError());
+        emit(LeaderBoardError(message: apiErrorMessage(e)));
       }
     });
 

@@ -1,5 +1,6 @@
 import 'package:dashed_progress_bar/dashed_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
@@ -46,16 +47,19 @@ class ActiveCoursesWg extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 child: AspectRatio(
                   aspectRatio: 16 / 9, //? 16 / 9 default
-                  child: Image.network(
-                    data.thumbnail,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (context, child, progress) =>
-                        progress == null
-                        ? child
-                        : const Center(
-                            child: CircularProgressIndicator.adaptive(),
-                          ),
-                    errorBuilder: (_, obj, t) => const Icon(Icons.broken_image),
+                  child: Skeleton.replace(
+                    child: Image.network(
+                      data.thumbnail,
+                      fit: BoxFit.cover,
+                      loadingBuilder: (context, child, progress) =>
+                          progress == null
+                          ? child
+                          : const Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            ),
+                      errorBuilder: (_, obj, t) =>
+                          const Icon(Icons.broken_image),
+                    ),
                   ),
                 ),
               ),
@@ -112,26 +116,35 @@ class ActiveCoursesWg extends StatelessWidget {
             ),
             SizedBox(width: 12),
             if (showCircularProgBar)
-              SizedBox(
+              Skeleton.replace(
                 width: 66,
                 height: 66,
-                child: Padding(
-                  padding: EdgeInsets.all(Responsive.isMobile(context) ? 4 : 0),
-                  child: DashedCircularProgressBar(
-                    progress: data.userOrder!.progress / 10,
-                    maxProgress: 10,
-                    corners: StrokeCap.butt,
-                    foregroundColor: AppColors.primaryColor,
-                    backgroundColor: Color(0xffeeeeee),
-                    foregroundStrokeWidth: 4,
-                    backgroundStrokeWidth: 4,
-                    animation: true,
-                    width: 5,
-                    height: 5,
-                    child: Center(
-                      child: Text(
-                        "${(data.userOrder?.progress ?? 0).toInt()} %",
-                        style: AppTextStyles.source.medium(fontSize: 12),
+                replacement: const DecoratedBox(
+                  decoration: BoxDecoration(shape: BoxShape.circle),
+                ),
+                child: SizedBox(
+                  width: 66,
+                  height: 66,
+                  child: Padding(
+                    padding: EdgeInsets.all(
+                      Responsive.isMobile(context) ? 4 : 0,
+                    ),
+                    child: DashedCircularProgressBar(
+                      progress: data.userOrder!.progress / 10,
+                      maxProgress: 10,
+                      corners: StrokeCap.butt,
+                      foregroundColor: AppColors.primaryColor,
+                      backgroundColor: Color(0xffeeeeee),
+                      foregroundStrokeWidth: 4,
+                      backgroundStrokeWidth: 4,
+                      animation: true,
+                      width: 5,
+                      height: 5,
+                      child: Center(
+                        child: Text(
+                          "${(data.userOrder?.progress ?? 0).toInt()} %",
+                          style: AppTextStyles.source.medium(fontSize: 12),
+                        ),
                       ),
                     ),
                   ),

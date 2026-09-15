@@ -21,4 +21,11 @@ class ReviewProcessLoaded extends ReviewProcessState {
   List<Object?> get props => [listEntity];
 }
 
-class ReviewProcessError extends ReviewProcessState {}
+class ReviewProcessError extends ReviewProcessState {
+  final String? message;
+
+  const ReviewProcessError({this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

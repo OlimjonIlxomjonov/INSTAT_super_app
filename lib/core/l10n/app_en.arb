@@ -644,5 +644,7 @@
   "paperBooksTab": "Paper books",
   "faceNotFoundError": "No face detected. Look at the camera and try again.",
   "faceNotVerifiedError": "Identity not verified. Your answer was not saved — please try again.",
-  "serverErrorWithCode": "Something went wrong. Code: {code}"
+  "serverErrorWithCode": "Something went wrong. Code: {code}",
+  "sectionLoadError": "Couldn’t load data",
+  "bannersLoadError": "Couldn’t load banners"
 }

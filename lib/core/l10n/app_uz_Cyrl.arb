@@ -644,5 +644,7 @@
   "paperBooksTab": "Қоғоз китоблар",
   "faceNotFoundError": "Юз аниқланмади. Камерага тўғри қараб қайта уриниб кўринг.",
   "faceNotVerifiedError": "Шахсингиз тасдиқланмади. Жавоб қабул қилинмади — қайта уриниб кўринг.",
-  "serverErrorWithCode": "Хатолик юз берди. Код: {code}"
+  "serverErrorWithCode": "Хатолик юз берди. Код: {code}",
+  "sectionLoadError": "Маълумотларни юклаб бўлмади",
+  "bannersLoadError": "Баннерларни юклаб бўлмади"
 }

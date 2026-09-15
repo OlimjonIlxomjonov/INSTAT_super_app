@@ -14,4 +14,8 @@ class CourseFilesLoaded extends CourseFilesState {
   CourseFilesLoaded({required this.entity});
 }
 
-class CourseFilesError extends CourseFilesState {}
+class CourseFilesError extends CourseFilesState {
+  final String? message;
+
+  CourseFilesError({this.message});
+}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/utils/widgets/promo_banners/promo_banners_carousel_wg.dart';
@@ -90,11 +91,12 @@ class _MicroDataHomePageState extends State<MicroDataHomePage> {
             //! Brief card lists
             BlocBuilder<ArticleStatsBloc, ArticleStatsState>(
               builder: (context, state) {
-                final isLoading = state is! ArticleStatsLoaded;
+                final isError = state is ArticleStatsError;
                 return SliverBriefCardsWg(
                   items: getMicroDataBrief(localization),
                   entity: state is ArticleStatsLoaded ? state.entity : null,
-                  isLoading: isLoading,
+                  isLoading: state is! ArticleStatsLoaded && !isError,
+                  isError: isError,
                 );
               },
             ),
@@ -140,6 +142,33 @@ class _MicroDataHomePageState extends State<MicroDataHomePage> {
                   }
                   //! Data
                   return SliverLastActionsWg(items: state.listEntity, limit: 3);
+                }
+                if (state is ReviewProcessError) {
+                  return SliverPadding(
+                    padding: const .symmetric(horizontal: 20),
+                    sliver: SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          ExtendSectionSeeAllWg(
+                            title: localization.recentActions,
+                            onTap: () {},
+                          ),
+                          SectionErrorWg(
+                            title: state.message,
+                            onRetry: () =>
+                                context.read<ReviewProcessBloc>().add(
+                                  ReviewProcessEvent(
+                                    params: ReviewProcessParams(
+                                      processType: 'data-requests',
+                                    ),
+                                  ),
+                                ),
+                          ),
+                          const SizedBox(height: 20),
+                        ],
+                      ),
+                    ),
+                  );
                 }
                 return SliverToBoxAdapter(child: SizedBox.shrink());
               },

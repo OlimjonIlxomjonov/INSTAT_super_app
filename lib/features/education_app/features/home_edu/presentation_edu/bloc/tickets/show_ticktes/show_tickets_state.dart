@@ -21,4 +21,11 @@ class ShowTicketsLoaded extends ShowTicketsState {
   List<Object?> get props => [response];
 }
 
-class ShowTicketsError extends ShowTicketsState {}
+class ShowTicketsError extends ShowTicketsState {
+  final String? message;
+
+  const ShowTicketsError({this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

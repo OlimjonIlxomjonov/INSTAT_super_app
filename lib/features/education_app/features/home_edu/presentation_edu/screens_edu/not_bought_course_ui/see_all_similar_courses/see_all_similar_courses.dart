@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
@@ -78,6 +79,13 @@ class _SeeAllSimilarCoursesState extends State<SeeAllSimilarCourses> {
             sliver: SliverToBoxAdapter(
               child: BlocBuilder<SimilarCoursesBloc, SimilarCoursesState>(
                 builder: (context, state) {
+                  if (state is SimilarCoursesError) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 24),
+                      child: SectionErrorWg(title: state.message),
+                    );
+                  }
+
                   if (state is SimilarCoursesLoaded) {
                     final data = state.listEntity;
 

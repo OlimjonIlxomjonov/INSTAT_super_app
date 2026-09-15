@@ -5,8 +5,14 @@ import 'package:my_template/features/scientific_articles_app/dummy_models/home_b
 class BriefInfoCardWg extends StatelessWidget {
   final HomeBriefInfoCardModel item;
   final String value;
+  final bool isError;
 
-  const BriefInfoCardWg({super.key, required this.item, required this.value});
+  const BriefInfoCardWg({
+    super.key,
+    required this.item,
+    required this.value,
+    this.isError = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +41,13 @@ class BriefInfoCardWg extends StatelessWidget {
               color: AppColors.greyScale.grey600,
             ),
           ),
-          Text(value, style: AppTextStyles.source.semiBold(fontSize: 24)),
+          Text(
+            isError ? 'err' : value,
+            style: AppTextStyles.source.semiBold(
+              fontSize: 24,
+              color: isError ? AppColors.redFailedTaskCard : null,
+            ),
+          ),
         ],
       ),
     );

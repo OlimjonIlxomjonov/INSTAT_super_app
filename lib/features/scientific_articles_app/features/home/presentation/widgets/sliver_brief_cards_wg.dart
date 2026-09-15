@@ -10,12 +10,14 @@ class SliverBriefCardsWg extends StatelessWidget {
   final List<HomeBriefInfoCardModel> items;
   final ArticlesStatsEntity? entity;
   final bool isLoading;
+  final bool isError;
 
   const SliverBriefCardsWg({
     super.key,
     required this.items,
     required this.entity,
     this.isLoading = false,
+    this.isError = false,
   });
 
   @override
@@ -40,8 +42,12 @@ class SliverBriefCardsWg extends StatelessWidget {
         itemBuilder: (context, index) {
           final item = items[index];
           return Skeletonizer(
-            enabled: isLoading,
-            child: BriefInfoCardWg(item: item, value: counts[index].toString()),
+            enabled: isLoading && !isError,
+            child: BriefInfoCardWg(
+              item: item,
+              value: counts[index].toString(),
+              isError: isError,
+            ),
           );
         },
       ),

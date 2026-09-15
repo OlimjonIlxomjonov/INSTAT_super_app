@@ -35,4 +35,11 @@ class ArticleEditionsLoaded extends ArticleEditionsState {
   List<Object?> get props => [response, isRefreshing];
 }
 
-class ArticleEditionsError extends ArticleEditionsState {}
+class ArticleEditionsError extends ArticleEditionsState {
+  final String? message;
+
+  const ArticleEditionsError({this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

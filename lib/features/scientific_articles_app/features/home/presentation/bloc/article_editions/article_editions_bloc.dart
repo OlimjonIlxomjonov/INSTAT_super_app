@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/network/dio_error_classifier.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/article_editions/article_editions_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_editions/article_editions_state.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
@@ -29,7 +30,7 @@ class ArticleEditionsBloc
         emit(
           previous != null
               ? previous.copyWith(isRefreshing: false)
-              : ArticleEditionsError(),
+              : ArticleEditionsError(message: apiErrorMessage(e)),
         );
       }
     });

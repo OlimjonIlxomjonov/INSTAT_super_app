@@ -21,4 +21,11 @@ class SimilarCoursesLoaded extends SimilarCoursesState {
   List<Object?> get props => [listEntity];
 }
 
-class SimilarCoursesError extends SimilarCoursesState {}
+class SimilarCoursesError extends SimilarCoursesState {
+  final String? message;
+
+  const SimilarCoursesError({this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

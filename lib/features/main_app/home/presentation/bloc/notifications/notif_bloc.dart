@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/network/dio_error_classifier.dart';
 import 'package:my_template/features/main_app/home/domain/entity/notifications/notif_enitty.dart';
 import 'package:my_template/features/main_app/home/domain/entity/notifications/notif_response.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/notifications/mark_notif_read_use_case.dart';
@@ -22,7 +23,7 @@ class NotifBloc extends Bloc<HomeEvent, NotifState> {
         final response = await useCase.call(params: event.params);
         emit(NotifLoaded(response: response));
       } catch (e) {
-        emit(NotifError());
+        emit(NotifError(message: apiErrorMessage(e)));
       }
     });
 

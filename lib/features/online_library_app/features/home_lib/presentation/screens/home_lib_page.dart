@@ -13,7 +13,6 @@ import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/wb_blocs/popular_books_with_bloc_wg.dart';
-import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/library_stats/library_stats_entity.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/library_stats/library_stats_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/library_stats/library_stats_event.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/library_stats/library_stats_state.dart';
@@ -103,27 +102,11 @@ class _HomeLibPageState extends State<HomeLibPage> {
             /// user book model info
             BlocBuilder<LibraryStatsBloc, LibraryStatsState>(
               builder: (context, state) {
-                if (state is LibraryStatsLoaded) {
-                  final item = state.entity;
-                  return SliverPadding(
-                    padding: AppPadding.horizontal20x(),
-                    sliver: SliverGrid.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisSpacing: 5,
-                            mainAxisSpacing: 5,
-                            crossAxisCount: 2,
-                            mainAxisExtent: 80,
-                          ),
-                      itemCount: 4,
-                      itemBuilder: (context, index) {
-                        //! Loaded Data
-                        return UserLibInfoWg(index: index, item: item);
-                      },
-                    ),
-                  );
-                }
-                //! Loading state
+                final isError = state is LibraryStatsError;
+                final entity = state is LibraryStatsLoaded
+                    ? state.entity
+                    : null;
+
                 return SliverPadding(
                   padding: AppPadding.horizontal20x(),
                   sliver: SliverGrid.builder(
@@ -137,16 +120,11 @@ class _HomeLibPageState extends State<HomeLibPage> {
                     itemCount: 4,
                     itemBuilder: (context, index) {
                       return Skeletonizer(
-                        enabled: true,
+                        enabled: entity == null && !isError,
                         child: UserLibInfoWg(
                           index: index,
-                          item: LibraryStatsEntity(
-                            allOnline: 0,
-                            saved: 0,
-                            loans: 0,
-                            activeLoans: 0,
-                            ok: true,
-                          ),
+                          item: entity,
+                          isError: isError,
                         ),
                       );
                     },

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/user_books/user_books_event.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import '../../../../features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/course_category_builder.dart';
@@ -52,6 +54,22 @@ class ActiveBooksWithBloc extends StatelessWidget {
                     },
                   );
                 }),
+              ),
+              const SizedBox(height: 18),
+            ],
+          );
+        } else if (state is UserBookError) {
+          return Column(
+            children: [
+              const SizedBox(height: 20),
+              ExtendSectionSeeAllWg(
+                title: AppLocalizations.of(context)!.readingBooks,
+                onTap: onTap,
+              ),
+              SectionErrorWg(
+                title: state.message,
+                onRetry: () =>
+                    context.read<UserBookBloc>().add(const UserBooksEvent()),
               ),
               const SizedBox(height: 18),
             ],

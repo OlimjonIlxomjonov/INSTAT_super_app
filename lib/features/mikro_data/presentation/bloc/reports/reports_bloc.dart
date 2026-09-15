@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/network/dio_error_classifier.dart';
 import 'package:my_template/features/mikro_data/domain/entity/reports/reports_response.dart';
 import 'package:my_template/features/mikro_data/domain/usecase/reports/reports_use_case.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_event.dart';
@@ -31,7 +32,10 @@ class ReportsBloc extends Bloc<MicroDataEvent, ReportsState> {
         final response = await useCase.call(search: _search);
         emit(ReportsLoaded(response: response));
       } catch (e) {
-        emit(previous?.copyWith(isRefreshing: false) ?? ReportsError());
+        emit(
+          previous?.copyWith(isRefreshing: false) ??
+              ReportsError(message: apiErrorMessage(e)),
+        );
       }
     });
 

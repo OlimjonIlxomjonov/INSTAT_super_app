@@ -7,7 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/common/ui_states/lost_internet_connection_state.dart';
-import 'package:my_template/core/common/ui_states/server_error_state.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
@@ -37,7 +37,6 @@ import 'package:my_template/features/main_app/home/presentation/bloc/courses/cou
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_state.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/home_event.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
-import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_state.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/mini_app_section_card.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/model/mini_app_model.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/popular_course_with_bloc/popular_with_bloc_wg.dart';
@@ -370,10 +369,29 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
               ),
             );
           } else if (state is PopularBooksError) {
-            if (state.isConnectionError) {
-              return const SliverToBoxAdapter(child: SizedBox.shrink());
-            }
-            return const SliverToBoxAdapter(child: SizedBox.shrink());
+            return SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: AppPadding.horizontal20x(),
+                    child: ExtendSectionSeeAllWg(
+                      title: localization.mostPopularBooks,
+                      onTap: () => openMiniAppSheetFamily(
+                        context,
+                        showHandler: false,
+                        child: SimilarOnlineBooksComponent(),
+                      ),
+                    ),
+                  ),
+                  SectionErrorWg(
+                    title: state.message,
+                    onRetry: () => context.read<PopularBooksBloc>().add(
+                      FetchPopularBooksEvent(),
+                    ),
+                  ),
+                ],
+              ),
+            );
           }
           // Loading or initial state
           return const SliverToBoxAdapter(child: SizedBox.shrink());
@@ -574,12 +592,8 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                       curr is UserCoursesLoading ||
                       curr is UserCoursesLoaded,
                   builder: (context, userCoursesState) {
-                    return BlocBuilder<UserMeBloc, UserMeState>(
-                      buildWhen: (prev, curr) =>
-                          curr is UserMeError ||
-                          curr is UserMeLoading ||
-                          curr is UserMeLoaded,
-                      builder: (context, userMeState) {
+                    return Builder(
+                      builder: (context) {
                         final isConnectionError =
                             (coursesState is CoursesError &&
                                 coursesState.isConnectionError) ||
@@ -595,30 +609,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                           );
                         }
 
-                        final hasServerError =
-                            (coursesState is CoursesError &&
-                                !coursesState.isConnectionError) ||
-                            (userCoursesState is UserCoursesError &&
-                                !userCoursesState.isConnectionError) ||
-                            userMeState is UserMeError;
-
-                        if (hasServerError) {
-                          final statusCode = userMeState is UserMeError
-                              ? userMeState.statusCode
-                              : null;
-                          final message = userMeState is UserMeError
-                              ? userMeState.message
-                              : null;
-                          return SliverFillRemaining(
-                            hasScrollBody: false,
-                            child: ServerErrorState(
-                              onRetry: _reloadAll,
-                              statusCode: statusCode,
-                              message: message,
-                            ),
-                          );
-                        }
-
+                        //! Server xatosi bo'lim ichida ko'rsatiladi
                         return BlocBuilder<HomeLayoutCubit, HomeLayoutState>(
                           builder: (context, layout) {
                             final sections = _sectionSlivers(

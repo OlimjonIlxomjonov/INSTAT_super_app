@@ -40,4 +40,11 @@ class SavedBooksLoaded extends SavedBooksState {
   List<Object?> get props => [response, isLoadingMore];
 }
 
-class SavedBooksError extends SavedBooksState {}
+class SavedBooksError extends SavedBooksState {
+  final String? message;
+
+  const SavedBooksError({this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

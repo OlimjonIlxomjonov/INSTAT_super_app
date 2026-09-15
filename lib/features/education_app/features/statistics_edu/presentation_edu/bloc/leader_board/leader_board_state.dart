@@ -43,4 +43,11 @@ class LeaderBoardLoaded extends LeaderBoardState {
   List<Object?> get props => [response, isLoadingMore];
 }
 
-class LeaderBoardError extends LeaderBoardState {}
+class LeaderBoardError extends LeaderBoardState {
+  final String? message;
+
+  const LeaderBoardError({this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

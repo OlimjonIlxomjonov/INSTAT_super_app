@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/network/dio_error_classifier.dart';
 import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_requests_response.dart';
 import 'package:my_template/features/mikro_data/domain/usecase/data_requests/data_requests_use_case.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/data_requests/data_requests_state.dart';
@@ -74,8 +75,8 @@ class DataRequestsBloc extends Bloc<MicroDataEvent, DataRequestsState> {
           hasMore: _hasMorePages(response),
         ),
       );
-    } catch (_) {
-      emit(DataRequestsError());
+    } catch (e) {
+      emit(DataRequestsError(message: apiErrorMessage(e)));
     }
   }
 

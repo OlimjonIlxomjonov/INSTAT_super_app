@@ -48,14 +48,7 @@ class _OneIdLoginPageState extends State<OneIdLoginPage> {
           },
         ),
       );
-    // ..loadRequest(Uri.parse(AuthConstants.authUrl));
-    _loadFreshAuthUrl();
-  }
-
-  Future<void> _loadFreshAuthUrl() async {
-    // Wipe any existing OneID session cookies first
-    await WebViewCookieManager().clearCookies();
-    await _controller.loadRequest(Uri.parse(AuthConstants.authUrl));
+    _controller.loadRequest(Uri.parse(AuthConstants.authUrl));
   }
 
   Future<NavigationDecision> _handleNavigation(

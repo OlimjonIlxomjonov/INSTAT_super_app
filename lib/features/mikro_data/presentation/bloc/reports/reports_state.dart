@@ -41,4 +41,11 @@ class ReportsLoaded extends ReportsState {
   List<Object?> get props => [response, isLoadingMore, isRefreshing];
 }
 
-class ReportsError extends ReportsState {}
+class ReportsError extends ReportsState {
+  final String? message;
+
+  const ReportsError({this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

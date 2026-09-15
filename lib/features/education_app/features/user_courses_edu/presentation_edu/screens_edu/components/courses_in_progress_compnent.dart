@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/skeletonizer_shimmer/courses/course_shimmer.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
-import 'package:my_template/core/common/ui_states/error_page.dart';
 import 'package:my_template/core/common/ui_states/lost_internet_connection_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -216,11 +216,17 @@ class _CoursesInProgressComponentState
         }
 
         if (state is UserCoursesError) {
-          return SliverFillRemaining(
-            hasScrollBody: false,
-            child: state.isConnectionError
-                ? LostInternetConnectionState(onRetry: _loadData)
-                : Center(child: ErrorPage()),
+          if (state.isConnectionError) {
+            return SliverFillRemaining(
+              hasScrollBody: false,
+              child: LostInternetConnectionState(onRetry: _loadData),
+            );
+          }
+          return SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+              child: SectionErrorWg(title: state.message, onRetry: _loadData),
+            ),
           );
         }
 

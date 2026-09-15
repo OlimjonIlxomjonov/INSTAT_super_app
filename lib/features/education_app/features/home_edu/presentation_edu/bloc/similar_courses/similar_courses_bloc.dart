@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/network/dio_error_classifier.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/similar_courses/similar_courses_use_caase.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/home_edu_event.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/similar_courses/similar_courses_state.dart';
@@ -13,7 +14,7 @@ class SimilarCoursesBloc extends Bloc<HomeEduEvent, SimilarCoursesState> {
         final listEntity = await useCase.call(params: event.params);
         emit(SimilarCoursesLoaded(listEntity: listEntity));
       } catch (e) {
-        emit(SimilarCoursesError());
+        emit(SimilarCoursesError(message: apiErrorMessage(e)));
       }
     });
   }

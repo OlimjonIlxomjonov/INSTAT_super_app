@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -46,6 +48,24 @@ class OfflineCoursesComponent extends StatelessWidget {
                 child: OfflineCourseWg(item: item),
               );
             },
+          );
+        }
+        if (state is OfflineCourseError) {
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 24,
+                ),
+                child: SectionErrorWg(
+                  title: state.message,
+                  onRetry: () => context.read<OfflineCourseBloc>().add(
+                    OfflineCourseEvent(),
+                  ),
+                ),
+              ),
+            ],
           );
         }
         return SizedBox.shrink();

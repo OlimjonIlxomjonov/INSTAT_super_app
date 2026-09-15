@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/network/dio_error_classifier.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/user_articles/user_articles_response.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/user_articles/user_articles_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
@@ -74,8 +75,8 @@ class UserArticlesBloc extends Bloc<ArticlesHomeEvent, UserArticlesState> {
           hasMore: _hasMorePages(response),
         ),
       );
-    } catch (_) {
-      emit(UserArticlesError());
+    } catch (e) {
+      emit(UserArticlesError(message: apiErrorMessage(e)));
     }
   }
 

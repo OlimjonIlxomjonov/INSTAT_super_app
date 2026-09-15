@@ -21,4 +21,11 @@ class LibraryStatsLoaded extends LibraryStatsState {
   List<Object?> get props => [entity];
 }
 
-class LibraryStatsError extends LibraryStatsState {}
+class LibraryStatsError extends LibraryStatsState {
+  final String? message;
+
+  const LibraryStatsError({this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

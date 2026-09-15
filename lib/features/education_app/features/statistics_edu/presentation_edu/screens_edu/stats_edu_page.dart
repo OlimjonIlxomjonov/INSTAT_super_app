@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/pagination/load_more_on_scroll.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
@@ -100,6 +101,21 @@ class _StatsEduPageState extends State<StatsEduPage> {
                   SliverToBoxAdapter(
                     child: BlocBuilder<LeaderBoardBloc, LeaderBoardState>(
                       builder: (context, state) {
+                        if (state is LeaderBoardError) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 20,
+                            ),
+                            child: SectionErrorWg(
+                              title: state.message,
+                              onRetry: () => context
+                                  .read<LeaderBoardBloc>()
+                                  .add(LeaderBoardEvent()),
+                            ),
+                          );
+                        }
+
                         final isLoading = state is LeaderBoardLoading;
                         final data = state is LeaderBoardLoaded
                             ? state.response.data
@@ -158,7 +174,6 @@ class _StatsEduPageState extends State<StatsEduPage> {
                                   },
                                 ),
                               ),
-                            // ── Regular cards for 4th+ ──
                             ...List.generate(data.length, (index) {
                               final item = data[index];
                               final String? thumbnail = item.avatar != null

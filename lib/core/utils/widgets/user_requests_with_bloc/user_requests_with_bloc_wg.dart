@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/skeletonizer_shimmer/data_requests/data_requests_skeletonizer.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
-import 'package:my_template/core/common/ui_states/error_page.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
@@ -62,11 +62,11 @@ class _UserRequestsSliver extends StatelessWidget {
         }
 
         if (state is DataRequestsError) {
-          return const SliverToBoxAdapter(
-            child: Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 24),
-                child: SizedBox(height: 150, child: ErrorPage()),
+          return SliverToBoxAdapter(
+            child: SectionErrorWg(
+              title: state.message,
+              onRetry: () => context.read<DataRequestsBloc>().add(
+                const DataRequestsEvent(status: '', search: ''),
               ),
             ),
           );

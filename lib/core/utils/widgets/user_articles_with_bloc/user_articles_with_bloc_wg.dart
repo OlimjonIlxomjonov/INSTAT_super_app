@@ -5,11 +5,12 @@ import 'package:my_template/core/common/skeletonizer_shimmer/user_articles/user_
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/add_article/add_article_page.dart';
 
+import '../../../../features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
 import '../../../../features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_bloc.dart';
 import '../../../../features/scientific_articles_app/features/home/presentation/bloc/user_articles/user_articles_state.dart';
 import '../../../../features/scientific_articles_app/features/home/presentation/widgets/sliver_articles_list_wg.dart';
 import '../../../common/ui_states/app_empty_state.dart';
-import '../../../common/ui_states/error_page.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 
 class UserArticlesWithBlocWg extends StatelessWidget {
   final int? limit;
@@ -50,11 +51,11 @@ class UserArticlesWithBlocWg extends StatelessWidget {
         } else if (state is UserArticlesLoading) {
           return UserArticlesSkeletonizer();
         } else if (state is UserArticlesError) {
-          return const SliverToBoxAdapter(
-            child: Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 24),
-                child: SizedBox(height: 150, child: ErrorPage()),
+          return SliverToBoxAdapter(
+            child: SectionErrorWg(
+              title: state.message,
+              onRetry: () => context.read<UserArticlesBloc>().add(
+                UserArticlesEvent(status: 'all', search: ''),
               ),
             ),
           );

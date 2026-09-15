@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/article_params/article_params.dart';
 import 'package:my_template/core/utils/widgets/promo_banners/promo_banners_carousel_wg.dart';
@@ -107,11 +108,12 @@ class _ArticlesHomePageState extends State<ArticlesHomePage> {
             /// BRIEF CARD SECTIONS
             BlocBuilder<ArticleStatsBloc, ArticleStatsState>(
               builder: (context, state) {
-                final isLoading = state is! ArticleStatsLoaded;
+                final isError = state is ArticleStatsError;
                 return SliverBriefCardsWg(
                   items: getBriefInfoCardList(localization),
                   entity: state is ArticleStatsLoaded ? state.entity : null,
-                  isLoading: isLoading,
+                  isLoading: state is! ArticleStatsLoaded && !isError,
+                  isError: isError,
                 );
               },
             ),
@@ -146,6 +148,18 @@ class _ArticlesHomePageState extends State<ArticlesHomePage> {
                     );
                   }
                   return SliverLastActionsWg(items: state.listEntity, limit: 3);
+                }
+                if (state is ReviewProcessError) {
+                  return SliverToBoxAdapter(
+                    child: SectionErrorWg(
+                      title: state.message,
+                      onRetry: () => context.read<ReviewProcessBloc>().add(
+                        ReviewProcessEvent(
+                          params: ReviewProcessParams(processType: 'reviews'),
+                        ),
+                      ),
+                    ),
+                  );
                 }
                 return SliverToBoxAdapter(child: SizedBox.shrink());
               },

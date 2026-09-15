@@ -14,4 +14,8 @@ class BannerLoaded extends BannerState {
   const BannerLoaded(this.banners);
 }
 
-class BannerError extends BannerState {}
+class BannerError extends BannerState {
+  final String? message;
+
+  const BannerError({this.message});
+}

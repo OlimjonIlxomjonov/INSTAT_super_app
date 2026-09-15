@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
@@ -115,6 +116,19 @@ class _SertificatsSettingsComponentState
                           ),
                         );
                       },
+                    );
+                  }
+                  if (state is CertificateError) {
+                    return SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 24),
+                        child: SectionErrorWg(
+                          title: state.message,
+                          onRetry: () => context.read<CertificateBloc>().add(
+                            UserCertificateEvent(),
+                          ),
+                        ),
+                      ),
                     );
                   }
                   return SliverList.builder(

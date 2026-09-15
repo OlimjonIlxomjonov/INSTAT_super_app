@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_event.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
-import 'package:my_template/core/common/ui_states/error_page.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
@@ -101,7 +102,17 @@ class PopularBooksWithBlocWg extends StatelessWidget {
         }
 
         if (state is PopularBooksError) {
-          return const SliverToBoxAdapter(child: ErrorPage());
+          return SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: SectionErrorWg(
+                title: state.message,
+                onRetry: () => context.read<PopularBooksBloc>().add(
+                  FetchPopularBooksEvent(),
+                ),
+              ),
+            ),
+          );
         }
 
         //! loading state

@@ -21,4 +21,11 @@ class ReviewFilesLoaded extends ReviewFilesState {
   List<Object?> get props => [entity];
 }
 
-class ReviewFilesError extends ReviewFilesState {}
+class ReviewFilesError extends ReviewFilesState {
+  final String? message;
+
+  const ReviewFilesError({this.message});
+
+  @override
+  List<Object?> get props => [message];
+}
