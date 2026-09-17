@@ -160,11 +160,14 @@ class _AboutThisCourseTabState extends State<AboutThisCourseTab>
               }
 
               if (state is SimilarCoursesError) {
-                return SectionErrorWg(
-                  title: state.message,
-                  onRetry: () => context.read<SimilarCoursesBloc>().add(
-                    SimilarCoursesEvent(
-                      params: PerCourseParams(courseId: widget.data.id),
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: SectionErrorWg(
+                    title: state.message,
+                    onRetry: () => context.read<SimilarCoursesBloc>().add(
+                      SimilarCoursesEvent(
+                        params: PerCourseParams(courseId: widget.data.id),
+                      ),
                     ),
                   ),
                 );

@@ -4,8 +4,10 @@ import 'package:my_template/core/common/pagination/load_more_on_scroll.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
+import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/module_categories/module_categories_with_bloc.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 import 'package:my_template/core/utils/widgets/search_bar/app_search_field_wg.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/wb_blocs/popular_books_with_bloc_wg.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_bloc.dart';
@@ -44,8 +46,6 @@ class _SeeAllOnlineBooksComponentState
     final localization = AppLocalizations.of(context)!;
 
     return Scaffold(
-      // Klaviatura ochilganda Scaffold qisqarib, oq fon kitoblarni yopib
-      // qo'yadi — offline kutubxona sahifasidagi kabi o'chirilgan.
       resizeToAvoidBottomInset: false,
       body: BlocBuilder<PopularBooksBloc, PopularBooksState>(
         buildWhen: (prev, curr) {
@@ -65,9 +65,13 @@ class _SeeAllOnlineBooksComponentState
             child: CustomScrollView(
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               slivers: [
-                SliverDefaultAppBarWg(
-                  myTitle: localization.books,
-                  isFamily: true,
+                const SliverToBoxAdapter(child: SizedBox(height: 5)),
+                SliverAppBar(
+                  titleSpacing: 0,
+                  automaticallyImplyLeading: false,
+                  title: SheetDragAreaWg(
+                    child: CustomAppBarWg(myTitle: localization.books),
+                  ),
                 ),
 
                 /// SEARCH

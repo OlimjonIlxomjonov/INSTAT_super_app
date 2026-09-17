@@ -286,12 +286,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
 
           final textBlockHeight =
               authorLineHeight + 4 + titleLineHeight + priceLineHeight;
-          final listHeight =
-              cardWidth / 0.78 +
-              10 +
-              8 +
-              textBlockHeight +
-              4; // small rounding buffer
+          final listHeight = cardWidth / 0.78 + 10 + 8 + textBlockHeight + 4;
 
           //! empty state
 

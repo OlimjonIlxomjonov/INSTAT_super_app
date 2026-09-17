@@ -80,7 +80,10 @@ class _CourseCommentsTabState extends State<CourseCommentsTab>
             }
             if (state is CommentsError) {
               return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12,
+                  horizontal: 20,
+                ),
                 child: SectionErrorWg(title: state.message),
               );
             }
