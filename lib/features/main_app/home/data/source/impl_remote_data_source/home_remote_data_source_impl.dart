@@ -381,6 +381,24 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
+  Future<void> deleteDeviceById(int id) async {
+    try {
+      final response = await _dioClient.delete(ApiUrls.deviceById(id));
+      if (response.statusCode == 200 ||
+          response.statusCode == 201 ||
+          response.statusCode == 204) {
+        logger.i(response.data);
+      } else {
+        throw Exception('EXCEPTION: ${response.statusCode}');
+      }
+    } catch (e, st) {
+      logger.e(e);
+      logger.e(st);
+      rethrow;
+    }
+  }
+
+  @override
   Future<ModuleCategoryResponseModel> fetchModuleCategory({
     required ModuleCategoryParams params,
   }) async {

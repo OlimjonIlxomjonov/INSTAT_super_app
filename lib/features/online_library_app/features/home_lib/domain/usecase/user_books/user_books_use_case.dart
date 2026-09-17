@@ -6,7 +6,7 @@ class UserBooksUseCase {
 
   UserBooksUseCase({required this.repository});
 
-  Future<BookListResponse> call({int page = 1}) {
-    return repository.getUserBooks(page: page);
+  Future<BookListResponse> call({int page = 1, String? type, String? search}) {
+    return repository.getUserBooks(page: page, type: type, search: search);
   }
 }

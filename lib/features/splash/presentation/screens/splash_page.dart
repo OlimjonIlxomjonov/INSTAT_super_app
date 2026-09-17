@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -6,6 +7,7 @@ import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
 import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
+import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/home_page.dart';
@@ -75,63 +77,66 @@ class _SplashPageState extends State<SplashPage>
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
-    return Scaffold(
-      backgroundColor: AppColors.splashBackgroundColor,
-      extendBodyBehindAppBar: true,
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: AnimatedBuilder(
-              animation: _gridController,
-              builder: (context, _) {
-                return CustomPaint(
-                  painter: GridBackgroundPainter(
-                    backgroundColor: AppColors.splashBackgroundColor,
-                    lineColor: Colors.white,
-                    cellSize: appW(100),
-                    majorEvery: 4,
-                    minorOpacity: 0.06,
-                    majorOpacity: 0.12,
-                    strokeWidth: 1,
-                    progress: _gridController.value,
-                  ),
-                );
-              },
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: TDeviceUtils.lightStatusBarIcons,
+      child: Scaffold(
+        backgroundColor: AppColors.splashBackgroundColor,
+        extendBodyBehindAppBar: true,
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: AnimatedBuilder(
+                animation: _gridController,
+                builder: (context, _) {
+                  return CustomPaint(
+                    painter: GridBackgroundPainter(
+                      backgroundColor: AppColors.splashBackgroundColor,
+                      lineColor: Colors.white,
+                      cellSize: appW(100),
+                      majorEvery: 4,
+                      minorOpacity: 0.06,
+                      majorOpacity: 0.12,
+                      strokeWidth: 1,
+                      progress: _gridController.value,
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-          //  logo with smooth fade and zoom
-          Center(
-            child: TweenAnimationBuilder<double>(
-              tween: Tween<double>(begin: 0.0, end: 1.0),
-              duration: const Duration(seconds: 2),
-              curve: Curves.easeOutCubic,
-              builder: (context, value, child) {
-                return Transform.scale(
-                  scale: 0.8 + (0.3 * value),
-                  child: Opacity(opacity: value, child: child),
-                );
-              },
-              child: SvgPicture.asset(AppVectors.mainAppLogo),
+            //  logo with smooth fade and zoom
+            Center(
+              child: TweenAnimationBuilder<double>(
+                tween: Tween<double>(begin: 0.0, end: 1.0),
+                duration: const Duration(seconds: 2),
+                curve: Curves.easeOutCubic,
+                builder: (context, value, child) {
+                  return Transform.scale(
+                    scale: 0.8 + (0.3 * value),
+                    child: Opacity(opacity: value, child: child),
+                  );
+                },
+                child: SvgPicture.asset(AppVectors.mainAppLogo),
+              ),
             ),
-          ),
 
-          //  bottom text
-          SafeArea(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: appH(20)),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Text(
-                  localization.betterElearningPlatform,
-                  style: AppTextStyles.source.regular(
-                    fontSize: 12,
-                    color: AppColors.white,
+            //  bottom text
+            SafeArea(
+              child: Padding(
+                padding: EdgeInsets.only(bottom: appH(20)),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Text(
+                    localization.betterElearningPlatform,
+                    style: AppTextStyles.source.regular(
+                      fontSize: 12,
+                      color: AppColors.white,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -46,6 +46,8 @@ abstract class HomeRemoteDataSource {
 
   Future<void> deleteAllDevices();
 
+  Future<void> deleteDeviceById(int id);
+
   Future<ModuleCategoryResponseModel> fetchModuleCategory({
     required ModuleCategoryParams params,
   });

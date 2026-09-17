@@ -70,6 +70,7 @@ import 'package:my_template/features/main_app/home/domain/usecase/active_devices
 import 'package:my_template/features/main_app/home/domain/usecase/avatar/avatar_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/courses/courses_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/delete_devices/all_devices/delete_all_devices_use_case.dart';
+import 'package:my_template/features/main_app/home/domain/usecase/delete_devices/by_id/delete_device_by_id_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/face_rec/face_rec_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/face_rec/get_my_id_session_use_case.dart';
 import 'package:my_template/features/main_app/home/domain/usecase/banner/get_active_banners_use_case.dart';
@@ -88,6 +89,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/main_app/home/presentation/bloc/avatar/avatar_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/delete_active_devices/all/delete_all_devices_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/delete_active_devices/by_id/delete_device_by_id_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/module_category/module_category_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/notifications/notif_bloc.dart';
@@ -436,6 +438,7 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => ActiveDevicesUseCase(repository: sl()));
   //? Delete
   sl.registerLazySingleton(() => DeleteAllDevicesUseCase(repository: sl()));
+  sl.registerLazySingleton(() => DeleteDeviceByIdUseCase(repository: sl()));
   //? Ticktes
   sl.registerLazySingleton(() => ShowTicketsUseCase(repository: sl()));
   sl.registerLazySingleton(() => TicketsChatUseCase(repository: sl()));
@@ -594,6 +597,7 @@ Future<void> setup() async {
   sl.registerFactory(() => ActiveDevicesBloc(useCase: sl()));
   //? Delete
   sl.registerFactory(() => DeleteAllDevicesBloc(useCase: sl()));
+  sl.registerFactory(() => DeleteDeviceByIdBloc(useCase: sl()));
   //? Tickets
   sl.registerFactory(() => ShowTicketsBloc(useCase: sl()));
   sl.registerFactory(() => TicketsChatBloc(useCase: sl()));

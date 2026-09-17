@@ -9,6 +9,7 @@ class ActiveDevicesModel extends ActiveDevicesEntity {
     required super.browser,
     required super.created,
     required super.lastSeen,
+    super.thisUser,
   });
 
   factory ActiveDevicesModel.fromJson(Map<String, dynamic> json) {
@@ -20,6 +21,7 @@ class ActiveDevicesModel extends ActiveDevicesEntity {
       browser: json['browser'] ?? 'Unknown Browser',
       created: json['created'] ?? 'Unknown Date',
       lastSeen: json['last_seen'] ?? 'Unknown Date',
+      thisUser: json['this_user'] ?? false,
     );
   }
 }

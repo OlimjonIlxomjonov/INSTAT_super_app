@@ -47,6 +47,8 @@ abstract class HomeRepository {
 
   Future<void> deleteAllDevices();
 
+  Future<void> deleteDeviceById(int id);
+
   Future<ModuleCategoryResponse> getModuleCategory({
     required ModuleCategoryParams params,
   });

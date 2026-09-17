@@ -8,8 +8,8 @@ abstract class AppVectors {
   static const baseHomePath = 'assets/home_page/';
 
   /// ONBOARDING
-  static const String firstOnboardingParticles =
-      '${baseOnboardingPath}onboarding_bg$format';
+  static const String logInOptionsBackground =
+      '${baseOnboardingPath}onboarding_bg_image$format';
 
   /// main app logo
   static const String mainAppLogo = '${basePath}main_app_logo$format';

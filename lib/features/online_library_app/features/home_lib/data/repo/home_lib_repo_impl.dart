@@ -58,8 +58,16 @@ class HomeLibRepoImpl implements HomeLibRepository {
   }
 
   @override
-  Future<BookListResponse> getUserBooks({int page = 1}) {
-    return _remoteDataSource.fetchUserBooks(page: page);
+  Future<BookListResponse> getUserBooks({
+    int page = 1,
+    String? type,
+    String? search,
+  }) {
+    return _remoteDataSource.fetchUserBooks(
+      page: page,
+      type: type,
+      search: search,
+    );
   }
 
   @override

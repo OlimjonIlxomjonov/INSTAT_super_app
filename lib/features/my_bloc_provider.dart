@@ -28,6 +28,7 @@ import 'package:my_template/features/main_app/home/presentation/bloc/avatar/avat
 import 'package:my_template/features/main_app/home/presentation/bloc/banner/banner_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/courses/courses_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/delete_active_devices/all/delete_all_devices_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/delete_active_devices/by_id/delete_device_by_id_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/home_layout/home_layout_cubit.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/module_category/module_category_bloc.dart';
@@ -174,6 +175,9 @@ class MyBlocProvider extends StatelessWidget {
         //! Delete
         BlocProvider<DeleteAllDevicesBloc>(
           create: (_) => sl<DeleteAllDevicesBloc>(),
+        ),
+        BlocProvider<DeleteDeviceByIdBloc>(
+          create: (_) => sl<DeleteDeviceByIdBloc>(),
         ),
         //! Tickets
         BlocProvider<ShowTicketsBloc>(create: (_) => sl<ShowTicketsBloc>()),

@@ -138,7 +138,7 @@ class _BoughtBookOpenerWgState extends State<BoughtBookOpenerWg> {
     final lastPage = _currentIndexNotifier.value + 1;
     _updateCurrentPageUseCase(
       UpdateBookCurrentPageParams(bookId: widget.bookId, currentPage: lastPage),
-    ).whenComplete(() => sl<UserBookBloc>().add(const UserBooksEvent()));
+    ).whenComplete(() => sl<UserBookBloc>().add(const RefreshUserBooksEvent()));
   }
 
   void _closeReader() {

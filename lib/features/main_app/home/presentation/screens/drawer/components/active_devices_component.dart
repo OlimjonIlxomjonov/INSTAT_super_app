@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
@@ -14,6 +15,8 @@ import 'package:my_template/features/main_app/home/presentation/bloc/active_devi
 import 'package:my_template/features/main_app/home/presentation/bloc/active_device/active_devices_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/delete_active_devices/all/delete_all_devices_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/delete_active_devices/all/delete_all_devices_state.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/delete_active_devices/by_id/delete_device_by_id_bloc.dart';
+import 'package:my_template/features/main_app/home/presentation/bloc/delete_active_devices/by_id/delete_device_by_id_state.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/home_event.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/active_devices/active_devices_wg.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -32,6 +35,52 @@ class _ActiveDevicesComponentState extends State<ActiveDevicesComponent> {
   void initState() {
     super.initState();
     context.read<ActiveDevicesBloc>().add(ActiveDevicesEvent());
+  }
+
+  Future<bool> _confirmDelete(int id) async {
+    final localization = AppLocalizations.of(context)!;
+
+    final confirmed =
+        await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(localization.deviceDeleteTitle),
+            content: Text(localization.deviceDeleteConfirm),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(localization.cancel),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(
+                  localization.deleteAction,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+
+    if (!confirmed || !mounted) return false;
+
+    final bloc = context.read<DeleteDeviceByIdBloc>();
+    bloc.add(DeleteDeviceByIdEvent(id: id));
+
+    final result = await bloc.stream.firstWhere(
+      (state) =>
+          state is DeleteDeviceByIdLoaded || state is DeleteDeviceByIdError,
+    );
+
+    if (!mounted) return false;
+
+    if (result is DeleteDeviceByIdError) {
+      errorFlushBar(context, localization.deviceDeleteError);
+      return false;
+    }
+
+    return true;
   }
 
   @override
@@ -57,13 +106,41 @@ class _ActiveDevicesComponentState extends State<ActiveDevicesComponent> {
               sliver: BlocBuilder<ActiveDevicesBloc, ActiveDevicesState>(
                 builder: (context, state) {
                   if (state is ActiveDevicesLoaded) {
-                    final data = state.listEntity;
+                    final data = [
+                      ...state.listEntity.where((e) => e.thisUser),
+                      ...state.listEntity.where((e) => !e.thisUser),
+                    ];
 
                     return SliverList.separated(
                       itemCount: data.length,
                       itemBuilder: (context, index) {
                         final item = data[index];
-                        return ActiveDevicesWg(item: item);
+                        return Dismissible(
+                          key: ValueKey(item.id),
+                          // The current session can't be swiped away —
+                          // that's what the "log out" button is for.
+                          direction: item.thisUser
+                              ? DismissDirection.none
+                              : DismissDirection.endToStart,
+                          background: Container(
+                            alignment: Alignment.centerRight,
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            margin: const EdgeInsets.only(top: 10),
+                            decoration: BoxDecoration(
+                              color: AppColors.redFailedTaskCard,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Icon(
+                              Icons.delete_outline,
+                              color: Colors.white,
+                            ),
+                          ),
+                          confirmDismiss: (_) => _confirmDelete(item.id),
+                          onDismissed: (_) => context
+                              .read<ActiveDevicesBloc>()
+                              .add(RemoveActiveDeviceEvent(id: item.id)),
+                          child: ActiveDevicesWg(item: item),
+                        );
                       },
                       separatorBuilder: (context, index) =>
                           const SizedBox(height: 0),

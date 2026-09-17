@@ -4,6 +4,19 @@ import 'package:flutter/services.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class TDeviceUtils {
+  // status bar icons
+  static const SystemUiOverlayStyle lightStatusBarIcons = SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.light,
+    statusBarBrightness: Brightness.dark,
+  );
+
+  static const SystemUiOverlayStyle darkStatusBarIcons = SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.dark,
+    statusBarBrightness: Brightness.light,
+  );
+
   static Future<void> systemNavigationBar(
     Color color, {
     bool isBright = false,

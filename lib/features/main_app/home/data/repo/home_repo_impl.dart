@@ -99,6 +99,11 @@ class HomeRepoImpl implements HomeRepository {
   }
 
   @override
+  Future<void> deleteDeviceById(int id) {
+    return _remoteDataSource.deleteDeviceById(id);
+  }
+
+  @override
   Future<ModuleCategoryResponse> getModuleCategory({
     required ModuleCategoryParams params,
   }) {

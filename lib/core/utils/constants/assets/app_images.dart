@@ -7,20 +7,12 @@ abstract class AppImages {
   // baseHome params
   static const baseHomePath = 'assets/home_page/';
 
-  // images
-  //? onboarding without screen
-  // static const firstOnboarding = '${baseOnboardingPath}c_onboarding_1$format';
-  // static const secondOnboarding = '${baseOnboardingPath}c_onboarding_2$format';
-  // static const thirdOnboarding = '${baseOnboardingPath}c_onboarding_3$format';
-  // static const fourthOnboarding = '${baseOnboardingPath}c_onboarding_4$format';
-  static const fifthOnboarding = '${baseOnboardingPath}c_onboarding_5$format';
-
-  //? onboarding with screen
-  static const firstOnboarding = '${baseOnboardingPath}onboarding-1$format';
-  static const secondOnboarding = '${baseOnboardingPath}onboarding-2$format';
-  static const thirdOnboarding = '${baseOnboardingPath}onboarding-3$format';
-  static const fourthOnboarding = '${baseOnboardingPath}onboarding-4$format';
-  static const onboardingLogIn = '${baseOnboardingPath}onboarding_bg_image.svg';
+  // onboarding
+  static const firstOnboarding = '${baseOnboardingPath}online_edu_onboarding$format';
+  static const secondOnboarding = '${baseOnboardingPath}library_onboarding$format';
+  static const thirdOnboarding = '${baseOnboardingPath}articles_onboarding$format';
+  static const fourthOnboarding = '${baseOnboardingPath}micro_data_onboarding$format';
+  static const fifthOnboarding = '${baseOnboardingPath}vacancy_onboarding$format';
 
   /// HOME PAGE
 

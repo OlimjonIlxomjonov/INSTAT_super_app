@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/l10n/l10n.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/language_storage/language_service_storage.dart';
 import 'package:my_template/core/streams/general_streams.dart';
+import 'package:my_template/core/utils/devices/device_unitlity.dart';
 import 'package:my_template/core/utils/theme/app_theme.dart';
 import 'package:my_template/features/splash/presentation/screens/splash_page.dart';
 
@@ -43,6 +45,10 @@ class _MyAppState extends State<MyApp> {
       builder: (context, snapshot) {
         return MaterialApp(
           // builder: DevicePreview.appBuilder,
+          builder: (context, child) => AnnotatedRegion<SystemUiOverlayStyle>(
+            value: TDeviceUtils.darkStatusBarIcons,
+            child: child!,
+          ),
           debugShowCheckedModeBanner: false,
           navigatorKey: AppRoute.navigatorKey,
           theme: TAppTheme.lightTheme,

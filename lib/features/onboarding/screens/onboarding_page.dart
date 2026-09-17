@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter/services.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -43,112 +43,100 @@ class _OnboardingPageState extends State<OnboardingPage> {
     final localization = AppLocalizations.of(context)!;
     final isMobile = Responsive.isMobile(context);
 
-    return Scaffold(
-      extendBody: true,
-      body: Stack(
-        children: [
-          Positioned(
-            left: 0,
-            right: 0,
-            child: SvgPicture.asset(
-              AppVectors.firstOnboardingParticles,
-              fit: BoxFit.cover,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: TDeviceUtils.lightStatusBarIcons,
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        body: PageView(
+          onPageChanged: (int index) {
+            _isLastPage.value = index == 4;
+          },
+          controller: pageController,
+          children: [
+            OnboardingWg(
+              title: localization.allFeaturesInOneApp,
+              subTitle: localization.coursesMikroTalim,
+              imagePath: AppImages.firstOnboarding,
+              imageWidthDivider: 0.5,
             ),
-          ),
-          Container(
-            padding: EdgeInsets.only(bottom: appH(80)),
-            child: PageView(
-              onPageChanged: (int index) {
-                _isLastPage.value = index == 4;
-              },
-              controller: pageController,
-              children: [
-                OnboardingWg(
-                  title: localization.allFeaturesInOneApp,
-                  subTitle: localization.coursesMikroTalim,
-                  imagePath: AppImages.firstOnboarding,
-                  imageWidthDivider: 1.5,
-                ),
-                OnboardingWg(
-                  title: localization.singleAccountAllFeatures,
-                  subTitle: localization.organishningBarchaFormatlari,
-                  imagePath: AppImages.secondOnboarding,
-                  imageWidthDivider: 1.2,
-                ),
-                OnboardingWg(
-                  title: localization.allInYourSurround,
-                  subTitle: localization.sizQandayOrganishniXoxlaysiz,
-                  imagePath: AppImages.thirdOnboarding,
-                  imageWidthDivider: 1,
-                ),
-                OnboardingWg(
-                  title: localization.learnInDifferentFormats,
-                  subTitle: localization.bilimniTurliYollar,
-                  imagePath: AppImages.fourthOnboarding,
-                  imageWidthDivider: 1.1,
-                ),
-                OnboardingWg(
-                  title: localization.findYourDreamJob,
-                  subTitle: localization.browseLatestVacancies,
-                  imagePath: AppImages.fifthOnboarding,
-                  imageWidthDivider: 1,
-                ),
-              ],
+            OnboardingWg(
+              title: localization.singleAccountAllFeatures,
+              subTitle: localization.organishningBarchaFormatlari,
+              imagePath: AppImages.secondOnboarding,
+              imageWidthDivider: 1.2,
             ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: SafeArea(
-        child: ColoredBox(
+            OnboardingWg(
+              title: localization.allInYourSurround,
+              subTitle: localization.sizQandayOrganishniXoxlaysiz,
+              imagePath: AppImages.thirdOnboarding,
+              imageWidthDivider: 1,
+            ),
+            OnboardingWg(
+              title: localization.learnInDifferentFormats,
+              subTitle: localization.bilimniTurliYollar,
+              imagePath: AppImages.fourthOnboarding,
+              imageWidthDivider: 1.1,
+            ),
+            OnboardingWg(
+              title: localization.findYourDreamJob,
+              subTitle: localization.browseLatestVacancies,
+              imagePath: AppImages.fifthOnboarding,
+              imageWidthDivider: 1,
+            ),
+          ],
+        ),
+        bottomNavigationBar: ColoredBox(
           color: AppColors.white,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Column(
-              mainAxisSize: .min,
-              crossAxisAlignment: isMobile ? .start : .end,
-              children: [
-                SmoothPageIndicator(
-                  controller: pageController,
-                  count: 5,
-                  effect: ExpandingDotsEffect(
-                    activeDotColor: AppColors.primaryColor,
-                    expansionFactor: 2,
-                    radius: 5,
-                    dotHeight: appH(4),
-                    dotWidth: appW(10),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Column(
+                mainAxisSize: .min,
+                crossAxisAlignment: isMobile ? .start : .end,
+                children: [
+                  SmoothPageIndicator(
+                    controller: pageController,
+                    count: 5,
+                    effect: ExpandingDotsEffect(
+                      activeDotColor: AppColors.primaryColor,
+                      expansionFactor: 2,
+                      radius: 5,
+                      dotHeight: appH(4),
+                      dotWidth: appW(10),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 25),
-                ValueListenableBuilder<bool>(
-                  valueListenable: _isLastPage,
-                  builder: (context, isLast, _) {
-                    return Row(
-                      spacing: 20,
-                      mainAxisAlignment: isMobile
-                          ? MainAxisAlignment.spaceBetween
-                          : MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.greyScale.grey50,
-                            foregroundColor: AppColors.greyScale.grey600,
+                  const SizedBox(height: 25),
+                  ValueListenableBuilder<bool>(
+                    valueListenable: _isLastPage,
+                    builder: (context, isLast, _) {
+                      return Row(
+                        spacing: 20,
+                        mainAxisAlignment: isMobile
+                            ? MainAxisAlignment.spaceBetween
+                            : MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.greyScale.grey50,
+                              foregroundColor: AppColors.greyScale.grey600,
+                            ),
+                            onPressed: () => pageController.jumpToPage(4),
+                            child: AutoSizeText(localization.skipOnboarding),
                           ),
-                          onPressed: () => pageController.jumpToPage(4),
-                          child: AutoSizeText(localization.skipOnboarding),
-                        ),
-                        ElevatedButton(
-                          onPressed: moveNextPage,
-                          child: AutoSizeText(
-                            isLast
-                                ? localization.startOnboarding
-                                : localization.nextOnboarding,
+                          ElevatedButton(
+                            onPressed: moveNextPage,
+                            child: AutoSizeText(
+                              isLast
+                                  ? localization.startOnboarding
+                                  : localization.nextOnboarding,
+                            ),
                           ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ],
+                        ],
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

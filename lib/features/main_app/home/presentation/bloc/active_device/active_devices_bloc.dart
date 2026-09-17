@@ -16,5 +16,17 @@ class ActiveDevicesBloc extends Bloc<HomeEvent, ActiveDevicesState> {
         emit(ActiveDevicesError());
       }
     });
+
+    on<RemoveActiveDeviceEvent>((event, emit) {
+      final current = state;
+      if (current is! ActiveDevicesLoaded) return;
+      emit(
+        ActiveDevicesLoaded(
+          listEntity: current.listEntity
+              .where((e) => e.id != event.id)
+              .toList(),
+        ),
+      );
+    });
   }
 }

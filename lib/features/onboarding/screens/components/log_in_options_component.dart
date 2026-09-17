@@ -255,83 +255,98 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
   }
 
   Widget _buildMobile(AppLocalizations localization) {
-    return Stack(
+    return Column(
       children: [
-        //! TEMP QR BUTTON
-        Positioned(
-          right: 10,
-          top: 0,
-          child: SafeArea(
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.transparent,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.18),
-                    blurRadius: 12,
-                    spreadRadius: 1,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: IconButton(
-                style: IconButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shape: const CircleBorder(),
-                ),
-                onPressed: _isQrLoading ? null : _handleQrScan,
-                icon: _isQrLoading
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
-                      )
-                    : const Icon(
-                        FlutterRemix.qr_scan_2_line,
-                        size: 25,
-                        color: Colors.white,
-                      ),
-              ),
-            ),
-          ),
-        ),
-
-        /// image / content
-        Align(
-          alignment: .bottomCenter,
-          child: Column(
-            mainAxisSize: .min,
+        Expanded(
+          child: Stack(
+            fit: StackFit.expand,
+            clipBehavior: Clip.none,
             children: [
-              Padding(
-                padding: const .only(bottom: 150),
-                child: SvgPicture.asset(AppVectors.mainAppLogo),
-              ),
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: .circular(25),
-                    topRight: .circular(25),
-                  ),
+              //! BACKGROUND PATTERN
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: -25,
+                child: SvgPicture.asset(
+                  AppVectors.logInOptionsBackground,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.topCenter,
                 ),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 20,
-                      horizontal: 20,
+              ),
+
+              //! LOGO
+              Align(
+                alignment: .bottomCenter,
+                child: Padding(
+                  padding: const .only(bottom: 150),
+                  child: SvgPicture.asset(AppVectors.mainAppLogo),
+                ),
+              ),
+
+              //! QR BUTTON
+              Positioned(
+                right: 10,
+                top: 0,
+                child: SafeArea(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.transparent,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.18),
+                          blurRadius: 12,
+                          spreadRadius: 1,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
-                    child: SingleChildScrollView(
-                      child: _buildLoginOptionsContent(localization),
+                    child: IconButton(
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shape: const CircleBorder(),
+                      ),
+                      onPressed: _isQrLoading ? null : _handleQrScan,
+                      icon: _isQrLoading
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Icon(
+                              FlutterRemix.qr_scan_2_line,
+                              size: 25,
+                              color: Colors.white,
+                            ),
                     ),
                   ),
                 ),
               ),
             ],
+          ),
+        ),
+
+        //! LOGIN SHEET
+        DecoratedBox(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: .circular(25),
+              topRight: .circular(25),
+            ),
+          ),
+          child: SizedBox(
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              child: SingleChildScrollView(
+                child: _buildLoginOptionsContent(localization),
+              ),
+            ),
           ),
         ),
       ],

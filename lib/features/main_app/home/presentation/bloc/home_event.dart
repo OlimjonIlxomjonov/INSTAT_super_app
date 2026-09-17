@@ -55,6 +55,19 @@ class ActiveDevicesEvent extends HomeEvent {}
 
 class DeleteActiveDevicesEvent extends HomeEvent {}
 
+class DeleteDeviceByIdEvent extends HomeEvent {
+  final int id;
+
+  DeleteDeviceByIdEvent({required this.id});
+}
+
+/// Drops an already-deleted device from the loaded list without a refetch.
+class RemoveActiveDeviceEvent extends HomeEvent {
+  final int id;
+
+  RemoveActiveDeviceEvent({required this.id});
+}
+
 class ModuleCategoryEvent extends HomeEvent {
   final ModuleCategoryParams params;
 

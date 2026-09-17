@@ -140,11 +140,19 @@ class HomeLibRemoteDataSourceImpl implements HomeLibRemoteDataSource {
   }
 
   @override
-  Future<BookListResponseModel> fetchUserBooks({int page = 1}) async {
+  Future<BookListResponseModel> fetchUserBooks({
+    int page = 1,
+    String? type,
+    String? search,
+  }) async {
     try {
       final response = await _dioClient.get(
         ApiUrls.userBooks,
-        queryParams: {'page': page},
+        queryParams: {
+          'page': page,
+          if (type != null) 'type': type,
+          if (search != null && search.isNotEmpty) 'search': search,
+        },
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;

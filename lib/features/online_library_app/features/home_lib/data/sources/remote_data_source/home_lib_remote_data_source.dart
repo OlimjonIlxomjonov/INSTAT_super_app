@@ -31,7 +31,11 @@ abstract class HomeLibRemoteDataSource {
   Future<void> addComment({required AddCommentParams params});
 
   //! user books
-  Future<BookListResponseModel> fetchUserBooks({int page = 1});
+  Future<BookListResponseModel> fetchUserBooks({
+    int page = 1,
+    String? type,
+    String? search,
+  });
 
   //! user saved (liked) books
   Future<BookListResponseModel> fetchSavedBooks({int page = 1});

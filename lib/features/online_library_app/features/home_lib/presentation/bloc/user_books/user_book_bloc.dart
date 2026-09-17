@@ -8,17 +8,22 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 class UserBookBloc extends Bloc<UserBooksBaseEvent, UserBookState> {
   final UserBooksUseCase useCase;
 
+  // current filters
+  UserBookType _type = UserBookType.all;
+  String _search = '';
+
+  // Bumped on every fresh fetch so a slow, stale response (previous tab or
+  // an earlier search term) can't overwrite a newer one.
+  int _requestId = 0;
+
   UserBookBloc({required this.useCase}) : super(UserBookInitial()) {
-    on<UserBooksEvent>((event, emit) async {
-      emit(UserBookLoading());
-      try {
-        // Always page 1 so a reload replaces rather than appends.
-        final response = await useCase.call(page: 1);
-        emit(UserBookLoaded(response: response));
-      } catch (e) {
-        emit(UserBookError(message: apiErrorMessage(e)));
-      }
+    on<UserBooksEvent>((event, emit) {
+      _type = event.type;
+      _search = event.search;
+      return _loadFirstPage(emit);
     });
+
+    on<RefreshUserBooksEvent>((event, emit) => _loadFirstPage(emit));
 
     on<LoadMoreUserBooksEvent>((event, emit) async {
       final current = state;
@@ -31,12 +36,19 @@ class UserBookBloc extends Bloc<UserBooksBaseEvent, UserBookState> {
       // nothing awaits between this check and the emit below.
       if (current.isLoadingMore || !current.hasMore) return;
 
+      final requestId = _requestId;
       emit(current.copyWith(isLoadingMore: true));
 
       try {
         final next = await useCase.call(
           page: current.response.meta!.currentPage + 1,
+          type: _type.query,
+          search: _search,
         );
+
+        // Filters changed while this page was loading — the fresh fetch owns
+        // the state now.
+        if (requestId != _requestId) return;
 
         emit(
           UserBookLoaded(
@@ -48,6 +60,7 @@ class UserBookBloc extends Bloc<UserBooksBaseEvent, UserBookState> {
           ),
         );
       } catch (e) {
+        if (requestId != _requestId) return;
         // Keep the books already on screen — emitting UserBookError here
         // would blank the list over one failed page.
         final latest = state;
@@ -56,5 +69,24 @@ class UserBookBloc extends Bloc<UserBooksBaseEvent, UserBookState> {
         }
       }
     });
+  }
+
+  Future<void> _loadFirstPage(Emitter<UserBookState> emit) async {
+    final requestId = ++_requestId;
+
+    emit(UserBookLoading());
+    try {
+      // Always page 1 so a reload replaces rather than appends.
+      final response = await useCase.call(
+        page: 1,
+        type: _type.query,
+        search: _search,
+      );
+      if (requestId != _requestId) return;
+      emit(UserBookLoaded(response: response));
+    } catch (e) {
+      if (requestId != _requestId) return;
+      emit(UserBookError(message: apiErrorMessage(e)));
+    }
   }
 }

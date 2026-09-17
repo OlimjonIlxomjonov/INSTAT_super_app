@@ -31,7 +31,11 @@ abstract class HomeLibRepository {
   Future<void> addComment({required AddCommentParams params});
 
   //! user bought books
-  Future<BookListResponse> getUserBooks({int page = 1});
+  Future<BookListResponse> getUserBooks({
+    int page = 1,
+    String? type,
+    String? search,
+  });
 
   //! user saved (liked) books
   Future<BookListResponse> getSavedBooks({int page = 1});

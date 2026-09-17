@@ -157,6 +157,7 @@ class ApiUrls {
 
   //? Active Devices // DELETE TOO
   static const String activeDevices = 'devices';
+  static String deviceById(int id) => 'devices/$id';
 
   //! Tickets
   static String showTickets(String status, String search, String page) =>
