@@ -188,7 +188,7 @@ class _OfflineBooksLibPageState extends State<OfflineBooksLibPage> {
                         itemBuilder: (context, index) {
                           final book = data[index];
                           final thumbnail = book.bookThumbnails.isNotEmpty
-                              ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${book.bookThumbnails.first.file}'
+                              ? '${ApiUrls.imageUrlBase}${book.bookThumbnails.first.file}'
                               : '';
                           return BookGridItem(
                             id: book.id,

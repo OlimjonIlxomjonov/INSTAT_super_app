@@ -153,14 +153,14 @@ class _StatsEduPageState extends State<StatsEduPage> {
                                       .take(3)
                                       .map(
                                         (e) => e.avatar != null
-                                            ? 'https://api1.instat.uz${e.avatar}'
+                                            ? '${ApiUrls.origin}${e.avatar}'
                                             : null,
                                       )
                                       .toList(),
                                   onTap: (rank) {
                                     final item = data[rank];
                                     final String? thumb = item.avatar != null
-                                        ? 'https://api1.instat.uz${item.avatar}'
+                                        ? '${ApiUrls.origin}${item.avatar}'
                                         : null;
                                     final name = item.displayName;
                                     openMiniAppSheetFamily(
@@ -177,7 +177,7 @@ class _StatsEduPageState extends State<StatsEduPage> {
                             ...List.generate(data.length, (index) {
                               final item = data[index];
                               final String? thumbnail = item.avatar != null
-                                  ? 'https://api1.instat.uz${item.avatar}'
+                                  ? '${ApiUrls.origin}${item.avatar}'
                                   : null;
                               final fullName = item.displayName;
 

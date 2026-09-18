@@ -13,6 +13,11 @@ class UserModel extends UserEntity {
     super.avatar,
     required super.isVerified,
     required super.isResident,
+    super.birthDate,
+    super.birthPlace,
+    super.permanentAddress,
+    super.temporaryAddress,
+    super.phoneNumber,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -30,6 +35,11 @@ class UserModel extends UserEntity {
       isVerified: json['is_verified'] ?? false,
 
       isResident: json['is_resident'] ?? true,
+      birthDate: json['birth_date'],
+      birthPlace: json['birth_place'],
+      permanentAddress: json['permanent_address'],
+      temporaryAddress: json['temporary_address'],
+      phoneNumber: json['phone_number'],
     );
   }
 }

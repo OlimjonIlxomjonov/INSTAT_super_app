@@ -56,7 +56,7 @@ class _LeaveCommentSectionState extends State<LeaveCommentSection> {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     final thumbnail = widget.data.bookThumbnails.isNotEmpty
-        ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${widget.data.bookThumbnails.first.file}'
+        ? '${ApiUrls.imageUrlBase}${widget.data.bookThumbnails.first.file}'
         : '';
     return SafeArea(
       child: Column(

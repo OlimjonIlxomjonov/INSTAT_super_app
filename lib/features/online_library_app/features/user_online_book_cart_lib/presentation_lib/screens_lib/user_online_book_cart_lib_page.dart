@@ -106,7 +106,7 @@ class _UserOnlineBookCartLibPageState extends State<UserOnlineBookCartLibPage> {
                         final item = items?[index];
                         final thumbnail =
                             item != null && item.bookThumbnails.isNotEmpty
-                            ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${item.bookThumbnails.first.file}'
+                            ? '${ApiUrls.imageUrlBase}${item.bookThumbnails.first.file}'
                             : '';
                         return Stack(
                           children: [

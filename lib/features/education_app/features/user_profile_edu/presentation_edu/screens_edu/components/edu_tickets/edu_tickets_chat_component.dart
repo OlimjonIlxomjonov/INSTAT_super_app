@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
@@ -129,249 +130,258 @@ class _EduTicketsChatComponentState extends State<EduTicketsChatComponent> {
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          body: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                floating: true,
-                snap: true,
-                title: SheetDragAreaWg(
-                  child: CustomAppBarWg(myTitle: localization.chatTitle),
+          body: CustomRefreshIndicator(
+            onRefresh: () async {
+              context.read<TicketsChatBloc>().add(
+                TicketsChatEvent(
+                  params: TicketsChatParams(ticketId: widget.ticketId),
                 ),
-                titleSpacing: 0,
-                automaticallyImplyLeading: false,
-              ),
-              BlocBuilder<TicketsChatBloc, TicketsChatState>(
-                builder: (context, state) {
-                  if (state is TicketsChatLoaded) {
-                    final data = state.listEntity;
-                    if (data.isEmpty) {
+              );
+          },
+            child: CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  floating: true,
+                  snap: true,
+                  title: SheetDragAreaWg(
+                    child: CustomAppBarWg(myTitle: localization.chatTitle),
+                  ),
+                  titleSpacing: 0,
+                  automaticallyImplyLeading: false,
+                ),
+                BlocBuilder<TicketsChatBloc, TicketsChatState>(
+                  builder: (context, state) {
+                    if (state is TicketsChatLoaded) {
+                      final data = state.listEntity;
+                      if (data.isEmpty) {
+                        return SliverToBoxAdapter(
+                          child: AppEmptyState(
+                            title: AppLocalizations.of(context)!.noMessagesTitle,
+                            subtitle: AppLocalizations.of(
+                              context,
+                            )!.noMessagesSubtitle,
+                          ),
+                        );
+                      }
+
+                      return SliverList.builder(
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          final item = data[index];
+                          final showDateHeader =
+                              index == 0 ||
+                              !_isSameDay(
+                                data[index - 1].createdAt,
+                                item.createdAt,
+                              );
+
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              //!Date
+                              if (showDateHeader)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
+                                  ),
+                                  child: Center(
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 4,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.greyScale.grey100,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Text(
+                                        item.createdAt
+                                            .toReadableDateWithoutTime(),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              //! Message
+                              if (item.message.isNotEmpty)
+                                Align(
+                                  alignment: item.isUser
+                                      ? Alignment.centerRight
+                                      : Alignment.centerLeft,
+                                  child: ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width *
+                                          0.95,
+                                    ),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 5,
+                                      ),
+                                      margin: const EdgeInsets.symmetric(
+                                        horizontal: 9,
+                                        vertical: 7,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: item.isUser
+                                            ? AppColors.userChatBackground
+                                            : AppColors.greyScale.grey50,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: const Radius.circular(14),
+                                          topRight: const Radius.circular(14),
+                                          bottomLeft: Radius.circular(
+                                            item.isUser ? 14 : 2,
+                                          ),
+                                          bottomRight: Radius.circular(
+                                            item.isUser ? 2 : 14,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: item.isUser
+                                            ? CrossAxisAlignment.end
+                                            : CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            item.message,
+                                            style: AppTextStyles.source.regular(
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                          Text(
+                                            textAlign: item.isUser
+                                                ? .start
+                                                : .end,
+                                            item.createdAt.toReadableTime(),
+                                            style: AppTextStyles.source.regular(
+                                              fontSize: 12,
+                                              color: AppColors.greyScale.grey600,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              //! File
+                              if (item.fileName.isNotEmpty)
+                                Align(
+                                  alignment: item.isUser
+                                      ? Alignment.centerRight
+                                      : Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 9,
+                                      vertical: 2,
+                                    ),
+                                    child: GestureDetector(
+                                      onTap: () => _openFile(item.file!),
+                                      child: ConstrainedBox(
+                                        constraints: const BoxConstraints(
+                                          maxWidth: 260,
+                                        ),
+                                        child: SelectedFileContainerWg(
+                                          fileName: item.fileName,
+                                          fileSize: formatFileSize(
+                                            item.fileSize ?? 0,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+
+                    if (state is TicketsChatError) {
                       return SliverToBoxAdapter(
-                        child: AppEmptyState(
-                          title: AppLocalizations.of(context)!.noMessagesTitle,
-                          subtitle: AppLocalizations.of(
-                            context,
-                          )!.noMessagesSubtitle,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 24),
+                          child: SectionErrorWg(
+                            title: state.message,
+                            onRetry: () => context.read<TicketsChatBloc>().add(
+                              TicketsChatEvent(
+                                params: TicketsChatParams(
+                                  ticketId: widget.ticketId,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       );
                     }
 
+                    //! Skeletonizer / loading
                     return SliverList.builder(
-                      itemCount: data.length,
+                      itemCount: 9,
                       itemBuilder: (context, index) {
-                        final item = data[index];
-                        final showDateHeader =
-                            index == 0 ||
-                            !_isSameDay(
-                              data[index - 1].createdAt,
-                              item.createdAt,
-                            );
-
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            //!Date
-                            if (showDateHeader)
-                              Padding(
+                        final isUser = index.isEven;
+                        return Skeletonizer(
+                          enabled: true,
+                          child: Align(
+                            alignment: isUser
+                                ? Alignment.centerRight
+                                : Alignment.centerLeft,
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth: MediaQuery.of(context).size.width * 0.6,
+                              ),
+                              child: Container(
                                 padding: const EdgeInsets.symmetric(
-                                  vertical: 8,
+                                  horizontal: 20,
+                                  vertical: 5,
                                 ),
-                                child: Center(
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.greyScale.grey100,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Text(
-                                      item.createdAt
-                                          .toReadableDateWithoutTime(),
-                                    ),
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 9,
+                                  vertical: 7,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.greyScale.grey50,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: const Radius.circular(14),
+                                    topRight: const Radius.circular(14),
+                                    bottomLeft: Radius.circular(isUser ? 14 : 2),
+                                    bottomRight: Radius.circular(isUser ? 2 : 14),
                                   ),
                                 ),
-                              ),
-                            //! Message
-                            if (item.message.isNotEmpty)
-                              Align(
-                                alignment: item.isUser
-                                    ? Alignment.centerRight
-                                    : Alignment.centerLeft,
-                                child: ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                    maxWidth:
-                                        MediaQuery.of(context).size.width *
-                                        0.95,
-                                  ),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 5,
-                                    ),
-                                    margin: const EdgeInsets.symmetric(
-                                      horizontal: 9,
-                                      vertical: 7,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: item.isUser
-                                          ? AppColors.userChatBackground
-                                          : AppColors.greyScale.grey50,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: const Radius.circular(14),
-                                        topRight: const Radius.circular(14),
-                                        bottomLeft: Radius.circular(
-                                          item.isUser ? 14 : 2,
-                                        ),
-                                        bottomRight: Radius.circular(
-                                          item.isUser ? 2 : 14,
-                                        ),
+                                child: Column(
+                                  crossAxisAlignment: isUser
+                                      ? CrossAxisAlignment.end
+                                      : CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      index.isEven
+                                          ? 'Bu yerda xabar matni bo\'ladi'
+                                          : 'Qisqaroq xabar',
+                                      style: AppTextStyles.source.regular(
+                                        fontSize: 15,
                                       ),
                                     ),
-                                    child: Column(
-                                      crossAxisAlignment: item.isUser
-                                          ? CrossAxisAlignment.end
-                                          : CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          item.message,
-                                          style: AppTextStyles.source.regular(
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                        Text(
-                                          textAlign: item.isUser
-                                              ? .start
-                                              : .end,
-                                          item.createdAt.toReadableTime(),
-                                          style: AppTextStyles.source.regular(
-                                            fontSize: 12,
-                                            color: AppColors.greyScale.grey600,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            //! File
-                            if (item.fileName.isNotEmpty)
-                              Align(
-                                alignment: item.isUser
-                                    ? Alignment.centerRight
-                                    : Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 9,
-                                    vertical: 2,
-                                  ),
-                                  child: GestureDetector(
-                                    onTap: () => _openFile(item.file!),
-                                    child: ConstrainedBox(
-                                      constraints: const BoxConstraints(
-                                        maxWidth: 260,
-                                      ),
-                                      child: SelectedFileContainerWg(
-                                        fileName: item.fileName,
-                                        fileSize: formatFileSize(
-                                          item.fileSize ?? 0,
-                                        ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      '00:00',
+                                      style: AppTextStyles.source.regular(
+                                        fontSize: 12,
+                                        color: AppColors.greyScale.grey600,
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
                               ),
-                          ],
+                            ),
+                          ),
                         );
                       },
                     );
-                  }
-
-                  if (state is TicketsChatError) {
-                    return SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 24),
-                        child: SectionErrorWg(
-                          title: state.message,
-                          onRetry: () => context.read<TicketsChatBloc>().add(
-                            TicketsChatEvent(
-                              params: TicketsChatParams(
-                                ticketId: widget.ticketId,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-
-                  //! Skeletonizer / loading
-                  return SliverList.builder(
-                    itemCount: 9,
-                    itemBuilder: (context, index) {
-                      final isUser = index.isEven;
-                      return Skeletonizer(
-                        enabled: true,
-                        child: Align(
-                          alignment: isUser
-                              ? Alignment.centerRight
-                              : Alignment.centerLeft,
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(
-                              maxWidth: MediaQuery.of(context).size.width * 0.6,
-                            ),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 5,
-                              ),
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 9,
-                                vertical: 7,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.greyScale.grey50,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: const Radius.circular(14),
-                                  topRight: const Radius.circular(14),
-                                  bottomLeft: Radius.circular(isUser ? 14 : 2),
-                                  bottomRight: Radius.circular(isUser ? 2 : 14),
-                                ),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: isUser
-                                    ? CrossAxisAlignment.end
-                                    : CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    index.isEven
-                                        ? 'Bu yerda xabar matni bo\'ladi'
-                                        : 'Qisqaroq xabar',
-                                    style: AppTextStyles.source.regular(
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    '00:00',
-                                    style: AppTextStyles.source.regular(
-                                      fontSize: 12,
-                                      color: AppColors.greyScale.grey600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ],
+                  },
+                ),
+              ],
+            ),
           ),
           bottomNavigationBar: Padding(
             padding: EdgeInsets.only(

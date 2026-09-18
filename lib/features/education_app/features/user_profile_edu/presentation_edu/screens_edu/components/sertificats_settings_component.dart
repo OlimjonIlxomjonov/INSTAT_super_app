@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
@@ -70,7 +71,7 @@ class _SertificatsSettingsComponentState
                       itemBuilder: (context, index) {
                         final certificate = state.response.data[index];
                         final imageUrl =
-                            'https://test.avacoder.uz${certificate.certificateImage}';
+                            '${ApiUrls.origin}${certificate.certificateImage}';
 
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 16),

@@ -3,16 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
+import 'package:my_template/core/utils/widgets/app_version/app_version_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/sub_bottom_sheet_opener.dart';
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/app_language_settings_model_component.dart';
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/edu_tickets/edu_tickets_settings_component.dart';
-import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/notification_settings_edu_component.dart';
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/widgets_edu/dot_swtich_wg.dart';
 import "package:my_template/core/utils/app_utils.dart";
 import "package:my_template/core/utils/widgets/app_widgets.dart";
 import 'package:my_template/features/main_app/home/presentation/screens/components/home_arrange_component.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/drawer/components/active_devices_component.dart';
+import 'package:my_template/features/main_app/home/presentation/screens/drawer/components/app_settings_component.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/drawer/components/log_out_options_component.dart';
+import 'package:my_template/features/main_app/home/presentation/screens/drawer/components/personal_info_component.dart';
 
 class UserSettingsComponent extends StatefulWidget {
   const UserSettingsComponent({super.key});
@@ -42,17 +44,23 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
         ProfileSettingsTileWg(
           leadingIcon: FlutterRemix.user_line,
           title: localization.personalInfo,
-          onTap: () {},
-        ),
-        //! Settings
-        ProfileSettingsTileWg(
-          leadingIcon: FlutterRemix.notification_line,
-          title: localization.notifications,
           onTap: () {
             openMiniAppSheetFamily(
               context,
               showHandler: false,
-              child: NotificationSettingsEduComponent(),
+              child: const PersonalInfoComponent(),
+            );
+          },
+        ),
+        //! App settings
+        ProfileSettingsTileWg(
+          leadingIcon: FlutterRemix.settings_3_line,
+          title: localization.appSettingsLabel,
+          onTap: () {
+            openMiniAppSheetFamily(
+              context,
+              child: const AppSettingsComponent(),
+              showHandler: false,
             );
           },
         ),
@@ -128,7 +136,10 @@ class _UserSettingsComponentState extends State<UserSettingsComponent> {
           isLogOut: true,
         ),
 
-        SizedBox(height: 30),
+        SizedBox(height: 20),
+        //! App version
+        const Center(child: AppVersionWg()),
+        SizedBox(height: 20),
       ],
     );
   }

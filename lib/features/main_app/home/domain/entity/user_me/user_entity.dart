@@ -11,6 +11,11 @@ class UserEntity {
   final bool isSuperuser;
   final bool isVerified;
   final bool isResident;
+  final String? birthDate;
+  final String? birthPlace;
+  final String? permanentAddress;
+  final String? temporaryAddress;
+  final String? phoneNumber;
 
   const UserEntity({
     required this.id,
@@ -23,5 +28,10 @@ class UserEntity {
     required this.isSuperuser,
     required this.isVerified,
     required this.isResident,
+    this.birthDate,
+    this.birthPlace,
+    this.permanentAddress,
+    this.temporaryAddress,
+    this.phoneNumber,
   });
 }

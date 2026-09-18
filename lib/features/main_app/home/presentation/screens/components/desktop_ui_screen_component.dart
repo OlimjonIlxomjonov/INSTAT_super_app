@@ -248,7 +248,7 @@ class _DesktopUiScreenComponentState extends State<DesktopUiScreenComponent> {
                             : book.starsSum / book.commentCount;
 
                         final thumbnail = book.bookThumbnails.isNotEmpty
-                            ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${book.bookThumbnails.first.file}'
+                            ? '${ApiUrls.imageUrlBase}${book.bookThumbnails.first.file}'
                             : '';
                         return SizedBox(
                           width: cardWidth,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -89,7 +90,7 @@ class UserCommentsWg extends StatelessWidget {
     return CircleAvatar(
       radius: 25,
       backgroundColor: AppColors.greyScale.grey300,
-      backgroundImage: NetworkImage('https://api1.instat.uz$avatar'),
+      backgroundImage: NetworkImage('${ApiUrls.origin}$avatar'),
       onBackgroundImageError: (exception, stackTrace) {
         logger.e('Error loading avatar: $exception');
       },

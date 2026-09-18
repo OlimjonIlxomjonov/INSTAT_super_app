@@ -47,7 +47,7 @@ class DetailedOnlineBookHeaderWg extends StatelessWidget {
                 return ClipRRect(
                   borderRadius: .circular(12),
                   child: Image.network(
-                    "${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${thumbnail.file}",
+                    "${ApiUrls.imageUrlBase}${thumbnail.file}",
                     fit: BoxFit.contain,
                     errorBuilder: (context, error, stackTrace) {
                       logger.e(error);

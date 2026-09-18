@@ -5,9 +5,6 @@ abstract class AuthConstants {
       'https://sso.egov.uz/sso/oauth/Authorization.do';
   static const String clientId = 'instat_uz';
 
-  // static const String redirectUri = 'https://test.avacoder.uz/api/one-id/login';
-  // static const String redirectUri = 'https://api1.instat.uz/api/one-id/login';
-
   static const String redirectUri = '${ApiUrls.baseUrl}one-id/login';
 
   static const String scope = 'instat_uz';

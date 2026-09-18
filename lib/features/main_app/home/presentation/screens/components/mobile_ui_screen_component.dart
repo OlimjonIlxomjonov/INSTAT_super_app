@@ -327,7 +327,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                               : book.starsSum / book.commentCount;
 
                           final thumbnail = book.bookThumbnails.isNotEmpty
-                              ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${book.bookThumbnails.first.file}'
+                              ? '${ApiUrls.imageUrlBase}${book.bookThumbnails.first.file}'
                               : '';
                           return SizedBox(
                             width: cardWidth,

@@ -3,24 +3,21 @@ import 'package:my_template/core/common/params/edu_params/params.dart';
 class ApiUrls {
   ApiUrls._();
 
-  //! base url
-  // static const baseUrl = 'https://test.avacoder.uz/api/';
-  // static const videoBase = 'https://test.avacoder.uz';
+  //! ENVIRONMENT
+  //! test ↔ production shu yerda almashadi
+  static const bool isProduction = true;
 
-  //! main base url
-  static const baseUrl = 'https://api1.instat.uz/api/';
-  static const videoBase = 'https://api1.instat.uz';
+  static const _host = isProduction ? 'api1.instat.uz' : 'test.avacoder.uz';
 
-  //! image base url
-  // static const imageUrlBase = 'https://test.avacoder.uz/media/';
-  static const imageUrlBase = 'https://api1.instat.uz/media/';
-  static const imageUrlBase2 = 'https://api1.instat.uz/';
+  //! base urls
+  static const origin = 'https://$_host';
+  static const baseUrl = '$origin/api/';
+  static const videoBase = origin;
+  static const imageUrlBase = '$origin/media/';
+  static const imageUrlBase2 = '$origin/';
 
-  /// websocket
-  //! library // debug
-  // static const webSocket = 'wss://test.avacoder.uz/ws/books/?token=';
-  //! Production
-  static const webSocket = 'wss://api1.instat.uz/ws/books/?token=';
+  //! websocket
+  static const webSocket = 'wss://$_host/ws/books/?token=';
 
   /// user
   static const me = 'me';
@@ -39,7 +36,6 @@ class ApiUrls {
   /// books
   static const activeBooks = 'books/items/active/?book_type=online';
   static const offlineBooks = 'books/items/offline/';
-  static const bookThumbnail = 'https://test.avacoder.uz/media/';
 
   // cart
   static const cart = 'books/items/cart/';

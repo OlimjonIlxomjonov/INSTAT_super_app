@@ -112,7 +112,7 @@ class _SavedBooksComponentState extends State<SavedBooksComponent> {
                     itemBuilder: (context, index) {
                       final book = visibleItems[index];
                       final thumbnail = book.bookThumbnails.isNotEmpty
-                          ? '${ApiUrls.baseUrl.replaceAll('api/', 'media/')}${book.bookThumbnails.first.file}'
+                          ? '${ApiUrls.imageUrlBase}${book.bookThumbnails.first.file}'
                           : '';
                       return BookGridItem(
                         id: book.id,
