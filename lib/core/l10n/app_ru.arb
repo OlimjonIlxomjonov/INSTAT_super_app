@@ -665,5 +665,6 @@
   "faceNotVerifiedError": "Личность не подтверждена. Ответ не принят — попробуйте снова.",
   "serverErrorWithCode": "Произошла ошибка. Код: {code}",
   "sectionLoadError": "Не удалось загрузить данные",
-  "bannersLoadError": "Не удалось загрузить баннеры"
+  "bannersLoadError": "Не удалось загрузить баннеры",
+  "coursesNotFound": "Курсы не найдены"
 }

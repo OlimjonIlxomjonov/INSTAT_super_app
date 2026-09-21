@@ -665,5 +665,6 @@
   "faceNotVerifiedError": "Шахсингиз тасдиқланмади. Жавоб қабул қилинмади — қайта уриниб кўринг.",
   "serverErrorWithCode": "Хатолик юз берди. Код: {code}",
   "sectionLoadError": "Маълумотларни юклаб бўлмади",
-  "bannersLoadError": "Баннерларни юклаб бўлмади"
+  "bannersLoadError": "Баннерларни юклаб бўлмади",
+  "coursesNotFound": "Курслар топилмади"
 }

@@ -463,7 +463,8 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => UserCategoryByIdBloc(sl()));
   sl.registerLazySingleton(() => CourseLessonTopicsBloc(sl()));
   sl.registerLazySingleton(() => CourseLessonItemsBloc(sl()));
-  sl.registerLazySingleton(() => CoursesBloc(sl()));
+  // Root'da bitta, "Barchasi" ekranlarida alohida instansiya.
+  sl.registerFactory(() => CoursesBloc(sl()));
   sl.registerLazySingleton(() => BannerBloc(sl()));
   sl.registerLazySingleton(() => AboutCourseFeaturesBloc(sl()));
   sl.registerLazySingleton(() => CourseFilesBloc(sl()));
@@ -487,7 +488,7 @@ Future<void> setup() async {
   sl.registerFactory(
     () => LessonVideoProgressBloc(putLessonVideoProgressUseCase: sl()),
   );
-  sl.registerLazySingleton(() => PopularBooksBloc(useCase: sl()));
+  sl.registerFactory(() => PopularBooksBloc(useCase: sl()));
   sl.registerFactory(() => SearchBooksBloc(useCase: sl()));
   sl.registerLazySingleton(
     () => BookActionsBloc(

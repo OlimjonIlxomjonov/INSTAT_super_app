@@ -665,5 +665,6 @@
   "faceNotVerifiedError": "Identity not verified. Your answer was not saved — please try again.",
   "serverErrorWithCode": "Something went wrong. Code: {code}",
   "sectionLoadError": "Couldn’t load data",
-  "bannersLoadError": "Couldn’t load banners"
+  "bannersLoadError": "Couldn’t load banners",
+  "coursesNotFound": "No courses found"
 }

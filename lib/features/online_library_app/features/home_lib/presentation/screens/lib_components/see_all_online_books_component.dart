@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/common/pagination/load_more_on_scroll.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
@@ -14,26 +15,35 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_event.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_state.dart';
 
-class SeeAllOnlineBooksComponent extends StatefulWidget {
+/// O'z bloc'i bilan — bu yerdagi qidiruv bosh sahifadagi ro'yxatga
+/// ta'sir qilmasin. Boshlang'ich kategoriya bosh sahifanikidan olinadi.
+class SeeAllOnlineBooksComponent extends StatelessWidget {
   const SeeAllOnlineBooksComponent({super.key});
 
   @override
-  State<SeeAllOnlineBooksComponent> createState() =>
-      _SeeAllOnlineBooksComponentState();
+  Widget build(BuildContext context) {
+    final initialCategoryId = context.read<PopularBooksBloc>().categoryId;
+    return BlocProvider(
+      create: (_) =>
+          sl<PopularBooksBloc>()
+            ..add(FetchPopularBooksEvent(categoryId: initialCategoryId)),
+      child: _SeeAllOnlineBooksView(initialCategoryId: initialCategoryId),
+    );
+  }
 }
 
-class _SeeAllOnlineBooksComponentState
-    extends State<SeeAllOnlineBooksComponent> {
-  String _search = '';
-  late int? _categoryId = context.read<PopularBooksBloc>().categoryId;
+class _SeeAllOnlineBooksView extends StatefulWidget {
+  final int? initialCategoryId;
+
+  const _SeeAllOnlineBooksView({this.initialCategoryId});
 
   @override
-  void initState() {
-    super.initState();
-    if (context.read<PopularBooksBloc>().state is PopularBooksInitial) {
-      _fetch();
-    }
-  }
+  State<_SeeAllOnlineBooksView> createState() => _SeeAllOnlineBooksViewState();
+}
+
+class _SeeAllOnlineBooksViewState extends State<_SeeAllOnlineBooksView> {
+  String _search = '';
+  late int? _categoryId = widget.initialCategoryId;
 
   void _fetch() {
     context.read<PopularBooksBloc>().add(

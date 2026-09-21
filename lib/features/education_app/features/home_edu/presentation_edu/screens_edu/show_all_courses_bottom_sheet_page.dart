@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/common/skeletonizer_shimmer/courses/course_shimmer.dart';
+import 'package:my_template/core/common/ui_states/app_empty_state.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
+import 'package:my_template/core/di/service_locator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/pagination/load_more_on_scroll.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
@@ -19,19 +23,36 @@ import 'package:my_template/features/main_app/home/presentation/bloc/home_event.
 
 import '../../../../../../core/utils/widgets/module_categories/module_categories_with_bloc.dart';
 
-class ShowAllCoursesBottomSheetPage extends StatefulWidget {
+/// O'z bloc'i bilan — bu yerdagi qidiruv bosh sahifadagi ro'yxatga
+/// ta'sir qilmasin. Boshlang'ich kategoriya bosh sahifanikidan olinadi.
+class ShowAllCoursesBottomSheetPage extends StatelessWidget {
   const ShowAllCoursesBottomSheetPage({super.key});
 
   @override
-  State<ShowAllCoursesBottomSheetPage> createState() =>
-      _ShowAllCoursesBottomSheetPageState();
+  Widget build(BuildContext context) {
+    final initialCategoryId = context.read<CoursesBloc>().categoryId;
+    return BlocProvider(
+      create: (_) =>
+          sl<CoursesBloc>()
+            ..add(AvailableCoursesEvent(categoryId: initialCategoryId)),
+      child: _ShowAllCoursesView(initialCategoryId: initialCategoryId),
+    );
+  }
 }
 
-class _ShowAllCoursesBottomSheetPageState
-    extends State<ShowAllCoursesBottomSheetPage> {
+class _ShowAllCoursesView extends StatefulWidget {
+  final int? initialCategoryId;
+
+  const _ShowAllCoursesView({this.initialCategoryId});
+
+  @override
+  State<_ShowAllCoursesView> createState() => _ShowAllCoursesViewState();
+}
+
+class _ShowAllCoursesViewState extends State<_ShowAllCoursesView> {
   CoursesLayout layout = CoursesLayout.grid;
   String _search = '';
-  late int? _categoryId = context.read<CoursesBloc>().categoryId;
+  late int? _categoryId = widget.initialCategoryId;
 
   void _fetch() {
     context.read<CoursesBloc>().add(
@@ -103,8 +124,34 @@ class _ShowAllCoursesBottomSheetPageState
                 SliverSafeArea(
                   sliver: SliverPadding(
                     padding: .symmetric(horizontal: appW(20)),
-                    sliver: loaded == null
-                        ? const SliverToBoxAdapter(child: SizedBox.shrink())
+                    sliver: state is CoursesError
+                        ? SliverToBoxAdapter(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 24),
+                              child: SectionErrorWg(
+                                title: state.message,
+                                onRetry: _fetch,
+                              ),
+                            ),
+                          )
+                        : loaded == null
+                        ? SliverToBoxAdapter(
+                            child: Column(
+                              children: [
+                                for (var i = 0; i < 3; i++)
+                                  const SkeletonExpandedCourseCard(),
+                              ],
+                            ),
+                          )
+                        : loaded.response.data.isEmpty
+                        ? SliverToBoxAdapter(
+                            child: AppEmptyState(
+                              title: _search.isEmpty
+                                  ? localization.coursesNotFound
+                                  : localization.nothingFound,
+                              subtitle: '',
+                            ),
+                          )
                         : SliverMainAxisGroup(
                             slivers: [
                               SliverToBoxAdapter(

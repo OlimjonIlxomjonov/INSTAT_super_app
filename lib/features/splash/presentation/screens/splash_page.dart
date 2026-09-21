@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
+import 'package:my_template/core/services/token_storage/jwt_utils.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
 import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
@@ -49,7 +50,13 @@ class _SplashPageState extends State<SplashPage>
     if (!mounted) return;
 
     final token = TokenStorageServiceImpl().getAccessToken();
-    final isLoggedIn = token != null && token.isNotEmpty;
+    final hasToken = token != null && token.isNotEmpty;
+
+    //! Muddati o'tgan token bilan home ochilmasin
+    if (hasToken && isJwtExpired(token)) {
+      await TokenStorageServiceImpl().deleteAccessToken();
+    }
+    final isLoggedIn = hasToken && !isJwtExpired(token);
 
     final destination = isLoggedIn ? const HomePage() : const OnboardingPage();
 
