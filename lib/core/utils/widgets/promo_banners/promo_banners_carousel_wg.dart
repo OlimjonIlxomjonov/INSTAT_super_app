@@ -2,9 +2,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
+import 'package:my_template/core/services/banners/banner_source_cubit.dart';
 import 'package:my_template/core/utils/app_utils.dart';
-import 'package:my_template/core/utils/constants/colors/app_colors.dart';
-import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
+import 'package:my_template/core/utils/constants/assets/app_images.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/features/main_app/home/domain/entity/banner/banner_entity.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/banner/banner_bloc.dart';
@@ -16,7 +16,12 @@ import 'package:url_launcher/url_launcher.dart';
 const double _bannerAspectRatio = 342 / 184;
 
 class PromoBannersCarouselWg extends StatelessWidget {
-  const PromoBannersCarouselWg({super.key});
+  final List<String> localAssets;
+
+  const PromoBannersCarouselWg({
+    super.key,
+    this.localAssets = AppImages.allBanners,
+  });
 
   Future<void> _openBanner(BannerEntity banner) async {
     if (banner.link.isEmpty) return;
@@ -32,11 +37,25 @@ class PromoBannersCarouselWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //! Lokal yoki reklama
+    final useRemote = context.watch<BannerSourceCubit>().state;
+    if (!useRemote) {
+      return _LocalBannersCarousel(assets: localAssets);
+    }
+
     return BlocBuilder<BannerBloc, BannerState>(
       builder: (context, state) {
+        if (state is BannerInitial) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (context.mounted) {
+              context.read<BannerBloc>().add(const FetchBannersEvent());
+            }
+          });
+        }
+
         if (state is BannerLoading || state is BannerInitial) {
           return Padding(
-            padding: const .symmetric(horizontal: 20),
+            padding: AppPadding.horizontal20x(),
             child: Skeletonizer(
               enabled: true,
               child: ClipRRect(
@@ -64,38 +83,79 @@ class PromoBannersCarouselWg extends StatelessWidget {
 
         final banners = state.banners;
 
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: CarouselSlider.builder(
-                itemCount: banners.length,
-                itemBuilder: (context, index, realIndex) {
-                  final banner = banners[index];
-                  return GestureDetector(
-                    onTap: () => _openBanner(banner),
-                    child: Image.network(
-                      banner.image,
-                      fit: BoxFit.contain,
-                      width: double.infinity,
-                      errorBuilder: (context, error, stackTrace) =>
-                          ColoredBox(color: AppColors.greyScale.grey200),
-                    ),
-                  );
-                },
-                options: CarouselOptions(
-                  aspectRatio: _bannerAspectRatio,
-                  viewportFraction: 1.0,
-                  enableInfiniteScroll: banners.length > 1,
-                  autoPlay: banners.length > 1,
-                  autoPlayInterval: const Duration(seconds: 5),
+        return CarouselSlider.builder(
+          itemCount: banners.length,
+          itemBuilder: (context, index, realIndex) {
+            final banner = banners[index];
+            return _BannerSlide(
+              child: GestureDetector(
+                onTap: () => _openBanner(banner),
+                child: Image.network(
+                  banner.image,
+                  fit: BoxFit.contain,
+                  width: double.infinity,
+                  errorBuilder: (context, error, stackTrace) =>
+                      ColoredBox(color: AppColors.greyScale.grey200),
                 ),
               ),
-            ),
-          ],
+            );
+          },
+          options: CarouselOptions(
+            aspectRatio: _bannerAspectRatio,
+            viewportFraction: 1.0,
+            enableInfiniteScroll: banners.length > 1,
+            autoPlay: banners.length > 1,
+            autoPlayInterval: const Duration(seconds: 5),
+          ),
         );
       },
+    );
+  }
+}
+
+class _BannerSlide extends StatelessWidget {
+  final Widget child;
+
+  const _BannerSlide({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const .symmetric(horizontal: 20),
+      child: ClipRRect(borderRadius: BorderRadius.circular(16), child: child),
+    );
+  }
+}
+
+class _LocalBannersCarousel extends StatelessWidget {
+  final List<String> assets;
+
+  const _LocalBannersCarousel({required this.assets});
+
+  @override
+  Widget build(BuildContext context) {
+    if (assets.isEmpty) return const SizedBox.shrink();
+
+    if (assets.length == 1) {
+      return AspectRatio(
+        aspectRatio: _bannerAspectRatio,
+        child: _BannerSlide(
+          child: Image.asset(assets.first, fit: BoxFit.cover),
+        ),
+      );
+    }
+
+    return CarouselSlider.builder(
+      itemCount: assets.length,
+      itemBuilder: (context, index, realIndex) => _BannerSlide(
+        child: Image.asset(assets[index], fit: BoxFit.cover, width: .infinity),
+      ),
+      options: CarouselOptions(
+        aspectRatio: _bannerAspectRatio,
+        viewportFraction: 1.0,
+        autoPlay: true,
+        autoPlayInterval: const Duration(seconds: 3),
+      ),
     );
   }
 }

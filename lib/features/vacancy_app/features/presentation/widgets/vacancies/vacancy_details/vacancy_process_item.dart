@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class VacancyProcessField {
   final String label;
   final String value;
@@ -22,7 +24,8 @@ class VacancyProcessItem {
   final String title;
   final String description;
   final String date;
-  final bool isDone;
+  final IconData icon;
+  final Color color;
 
   //! Detail
   final String? detailTitle;
@@ -35,7 +38,8 @@ class VacancyProcessItem {
     required this.title,
     required this.description,
     required this.date,
-    this.isDone = false,
+    required this.icon,
+    required this.color,
     this.detailTitle,
     this.detailDescription,
     this.fields = const [],

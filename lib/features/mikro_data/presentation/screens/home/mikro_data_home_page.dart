@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/utils/constants/assets/app_images.dart';
 import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
@@ -87,7 +88,11 @@ class _MicroDataHomePageState extends State<MicroDataHomePage> {
               title: AppSearchbarWg(onTap: widget.onSearchTap),
             ),
             //! Placeholder TEMP Banner
-            SliverToBoxAdapter(child: PromoBannersCarouselWg()),
+            SliverToBoxAdapter(
+              child: PromoBannersCarouselWg(
+                localAssets: AppImages.microDataBanners,
+              ),
+            ),
             //! Brief card lists
             BlocBuilder<ArticleStatsBloc, ArticleStatsState>(
               builder: (context, state) {

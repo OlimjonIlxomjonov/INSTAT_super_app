@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
@@ -9,16 +10,12 @@ import 'package:my_template/features/vacancy_app/features/presentation/widgets/v
 
 class VacancyProcessDetailWg extends StatelessWidget {
   final VacancyProcessItem item;
-  final String commissionTitle;
 
-  const VacancyProcessDetailWg({
-    super.key,
-    required this.item,
-    this.commissionTitle = 'Komissiya',
-  });
+  const VacancyProcessDetailWg({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -64,7 +61,7 @@ class VacancyProcessDetailWg extends StatelessWidget {
                   //! Komissiya
                   if (item.commission.isNotEmpty) ...[
                     const SizedBox(height: 4),
-                    VacancySectionTitleWg(title: commissionTitle),
+                    VacancySectionTitleWg(title: l.commissionTitle),
                     const SizedBox(height: 12),
                     for (final member in item.commission) ...[
                       VacancyCommissionMemberWg(

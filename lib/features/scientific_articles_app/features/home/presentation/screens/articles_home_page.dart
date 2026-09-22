@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/utils/constants/assets/app_images.dart';
 import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/article_params/article_params.dart';
@@ -103,7 +104,11 @@ class _ArticlesHomePageState extends State<ArticlesHomePage> {
             ),
 
             /// AD BANNERS
-            const SliverToBoxAdapter(child: PromoBannersCarouselWg()),
+            const SliverToBoxAdapter(
+              child: PromoBannersCarouselWg(
+                localAssets: AppImages.articlesBanners,
+              ),
+            ),
 
             /// BRIEF CARD SECTIONS
             BlocBuilder<ArticleStatsBloc, ArticleStatsState>(

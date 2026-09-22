@@ -235,7 +235,9 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage>
           questionTitle = localization.questionNumberTemplate(
             state.currentTestIndex + 1,
           );
-          questionText = currentTest.question;
+          questionText = currentTest.displayQuestion(
+            Localizations.localeOf(context).languageCode,
+          );
 
           optionList = TestOptionListWg(
             options: state.currentOptions,
@@ -267,7 +269,9 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage>
           questionTitle = localization.questionNumberTemplate(
             state.currentTestIndex + 1,
           );
-          questionText = currentTest.question;
+          questionText = currentTest.displayQuestion(
+            Localizations.localeOf(context).languageCode,
+          );
 
           optionList = TestOptionListWg(
             options: state.currentOptions,

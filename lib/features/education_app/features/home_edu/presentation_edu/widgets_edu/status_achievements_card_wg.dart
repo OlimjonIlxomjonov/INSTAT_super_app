@@ -4,9 +4,14 @@ import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 
 class StatusAchievementsCardWg extends StatelessWidget {
+  final String title;
   final String descText;
 
-  const StatusAchievementsCardWg({super.key, required this.descText});
+  const StatusAchievementsCardWg({
+    super.key,
+    required this.descText,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,16 +24,13 @@ class StatusAchievementsCardWg extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(
-            AppLocalizations.of(context)!.champion,
-            style: AppTextStyles.source.bold(fontSize: 17),
-          ),
+          Text(title, style: AppTextStyles.source.bold(fontSize: 17)),
           Text(
             descText,
             maxLines: 1,
             overflow: .ellipsis,
             style: AppTextStyles.source.regular(
-              fontSize: 12,
+              fontSize: 10,
               color: AppColors.greyScale.grey600,
             ),
           ),

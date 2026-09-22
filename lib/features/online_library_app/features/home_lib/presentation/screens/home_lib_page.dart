@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/utils/constants/assets/app_images.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
 import 'package:my_template/core/utils/widgets/promo_banners/promo_banners_carousel_wg.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -64,7 +66,7 @@ class _HomeLibPageState extends State<HomeLibPage> {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      body: RefreshIndicator(
+      body: CustomRefreshIndicator(
         onRefresh: () async {
           context.read<PopularBooksBloc>().add(
             FetchPopularBooksEvent(categoryId: _categoryId),
@@ -95,7 +97,9 @@ class _HomeLibPageState extends State<HomeLibPage> {
             ),
 
             /// news banner
-            const SliverToBoxAdapter(child: PromoBannersCarouselWg()),
+            const SliverToBoxAdapter(
+              child: PromoBannersCarouselWg(localAssets: AppImages.libBanners),
+            ),
 
             const SliverToBoxAdapter(child: SizedBox(height: 15)),
 

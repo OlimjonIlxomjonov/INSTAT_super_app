@@ -44,6 +44,7 @@ class DataRequestDetailModel extends DataRequestDetailEntity {
   }
 
   static String? _environmentName(dynamic value) {
+    if (value is String) return value.isEmpty ? null : value;
     if (value is Map) {
       return (value['title_uz'] ?? value['name'] ?? value['title'])?.toString();
     }

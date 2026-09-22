@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/services/banners/banner_source_cubit.dart';
 import 'package:my_template/core/di/service_locator.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/bloc/vacancies/vacancies_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/comments/comments_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/per_course/per_course_bloc.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/similar_courses/similar_courses_bloc.dart';
@@ -74,6 +76,8 @@ class MyBlocProvider extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<HomeLayoutCubit>(create: (_) => sl<HomeLayoutCubit>()),
+        BlocProvider<VacanciesBloc>(create: (_) => sl<VacanciesBloc>()),
+        BlocProvider<BannerSourceCubit>(create: (_) => BannerSourceCubit()),
         BlocProvider<UserMeBloc>(create: (_) => sl<UserMeBloc>()),
         BlocProvider<UserCoursesBloc>(create: (_) => sl<UserCoursesBloc>()),
         BlocProvider<UserCategoryByIdBloc>(

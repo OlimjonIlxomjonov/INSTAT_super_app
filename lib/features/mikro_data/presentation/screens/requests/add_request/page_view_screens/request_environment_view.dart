@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/widgets/option_picker_sheet.dart';
+import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/processing_environments.dart';
 import 'package:my_template/core/utils/general_widgets/form_fields/app_form_field_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
-import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/add_data_request/add_data_request_bloc.dart';
@@ -38,6 +39,21 @@ class _RequestEnvironmentViewState extends State<RequestEnvironmentView> {
     _expectationController.dispose();
     _planController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickEnvironment(BuildContext context, String selected) async {
+    final localization = AppLocalizations.of(context)!;
+    final bloc = context.read<AddDataRequestBloc>();
+
+    final picked = await showOptionPickerSheet(
+      context,
+      title: localization.requestProcessingEnvLabel,
+      options: kProcessingEnvironments,
+      selected: selected.isEmpty ? null : selected,
+    );
+    if (picked == null) return;
+
+    bloc.add(UpdateDataRequestFieldEvent(processingEnvironmentName: picked));
   }
 
   void _update(UpdateDataRequestFieldEvent event) {
@@ -84,7 +100,6 @@ class _RequestEnvironmentViewState extends State<RequestEnvironmentView> {
                 return RequestSectionCardWg(
                   title: localization.requestStepSecurityEnv,
                   children: [
-                    // Muhitlar endpointi kelgach ulanadi
                     AppFormFieldWg(
                       label: localization.requestProcessingEnvLabel,
                       child: AppPickerFieldWg(
@@ -92,9 +107,9 @@ class _RequestEnvironmentViewState extends State<RequestEnvironmentView> {
                         value: state.processingEnvironmentName.isEmpty
                             ? null
                             : state.processingEnvironmentName,
-                        onTap: () => technicalWorkFlushBar(
+                        onTap: () => _pickEnvironment(
                           context,
-                          localization.requestProcessingEnvSoon,
+                          state.processingEnvironmentName,
                         ),
                       ),
                     ),

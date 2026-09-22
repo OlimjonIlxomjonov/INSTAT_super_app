@@ -711,7 +711,7 @@
   "applicationInfoTab": "Ariza ma’lumotlari",
   "noProcessesYet": "Jarayonlar hali boshlanmagan",
   "publishedDateLabel": "E’lon qilingan sana:",
-  "salaryLabel": "Maosh summasi:",
+  "salaryLabel": "Maosh summasi",
   "workplaceLabel": "Ish joyi",
   "vacantPlacesLabel": "Vakant joylar",
   "myPersonalInfo": "Shaxsiy ma’lumotlarim",
@@ -777,5 +777,67 @@
   },
   "sectionLoadError": "Ma’lumotlarni yuklab bo‘lmadi",
   "bannersLoadError": "Bannerlarni yuklab bo‘lmadi",
-  "coursesNotFound": "Kurslar topilmadi"
+  "coursesNotFound": "Kurslar topilmadi",
+  "fieldRequired": "Bu maydon to‘ldirilishi shart",
+  "invalidPhoneNumber": "Telefon raqami to‘liq emas",
+  "dateRangeInvalid": "Boshlanish sanasi tugash sanasidan keyin bo‘lmasin",
+  "fixHighlightedFields": "Belgilangan maydonlarni to‘g‘rilang",
+  "departmentLabel": "Bo‘lim",
+  "allDepartments": "Barcha bo‘limlar",
+  "selectDepartment": "Bo‘limni tanlang",
+  "vacanciesNotFound": "Vakansiyalar topilmadi",
+  "noVacanciesYet": "Hozircha bo‘sh ish o‘rinlari yo‘q",
+  "searchVacanciesHint": "Vakansiya qidiring...",
+  "employmentTypeLabel": "Ish turi",
+  "experienceLabel": "Ish staji",
+  "employmentFullTime": "To‘liq stavka",
+  "employmentPartTime": "Yarim stavka",
+  "employmentRemote": "Masofaviy",
+  "employmentContract": "Shartnoma asosida",
+  "employmentInternship": "Amaliyot",
+  "offerTitle": "Biz taklif qilamiz",
+  "salaryRange": "{from} – {to} so‘m",
+  "@salaryRange": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "untilDate": "{date} gacha",
+  "@untilDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "clearFilter": "Tozalash",
+  "applicationStatusSaralash": "Saralash bosqichida",
+  "applicationStatusTest": "Test bosqichida",
+  "applicationStatusInterview": "Suhbat bosqichida",
+  "applicationStatusExtraInterview": "Qo‘shimcha suhbat bosqichida",
+  "alreadyApplied": "Siz bu vakansiyaga allaqachon ariza topshirgansiz",
+  "viewApplication": "Arizani ko‘rish",
+  "noApplicationsYet": "Hali arizalar yo‘q",
+  "searchApplicationsHint": "Arizalarni qidirish...",
+  "fullNameLabel": "F.I.SH.",
+  "assignedAtLabel": "Tayinlangan vaqt",
+  "commentLabel": "Izoh",
+  "applicationStatusReserved": "Rezervda",
+  "applicationStatusFailedTest": "Testdan o‘ta olmadi",
+  "applicationStatusFailed": "Rad etildi",
+  "applicationSentTitle": "Ariza yuborildi",
+  "applicationSentDescription": "Arizangiz ko‘rib chiqish uchun qabul qilindi.",
+  "filesRequired": "Kamida bitta fayl biriktiring",
+  "vacancyFileFormatsHint": "DOCX yoki PDF, har biri 50 MB gacha",
+  "vacancyFileInvalidExtension": "Faqat DOCX yoki PDF fayl tanlang",
+  "selectFileTitle": "Faylni tanlang",
+  "chooseButton": "Tanlash",
+  "bannersSection": "Bannerlar",
+  "promoBannersLabel": "Reklama bannerlari",
+  "promoBannersHint": "Yoqilsa — saytdagi reklama bannerlari, o‘chirilsa — ilova bannerlari ko‘rsatiladi"
 }

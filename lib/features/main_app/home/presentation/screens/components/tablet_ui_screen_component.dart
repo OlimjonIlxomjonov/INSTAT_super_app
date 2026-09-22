@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:my_template/core/services/banners/banner_source_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
@@ -87,7 +88,9 @@ class _TabletUiScreenComponentState extends State<TabletUiScreenComponent> {
 
   void _reloadAll() {
     context.read<CoursesBloc>().add(AvailableCoursesEvent());
-    context.read<BannerBloc>().add(const FetchBannersEvent());
+    if (context.read<BannerSourceCubit>().state) {
+      context.read<BannerBloc>().add(const FetchBannersEvent());
+    }
     context.read<UserCoursesBloc>().add(
       UserCoursesEvent(params: UserCoursesParams(state: 'in_progress')),
     );
@@ -420,7 +423,7 @@ class _TabletUiScreenComponentState extends State<TabletUiScreenComponent> {
           ),
           SliverToBoxAdapter(child: _buildMiniAppGrid()),
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+            padding: const EdgeInsets.only(top: 20),
             sliver: SliverToBoxAdapter(child: const PromoBannersCarouselWg()),
           ),
           BlocBuilder<CoursesBloc, CoursesState>(
@@ -510,7 +513,7 @@ class _TabletUiScreenComponentState extends State<TabletUiScreenComponent> {
                 ),
                 _buildMiniAppGrid(),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  padding: const EdgeInsets.only(top: 20),
                   child: const PromoBannersCarouselWg(),
                 ),
               ],

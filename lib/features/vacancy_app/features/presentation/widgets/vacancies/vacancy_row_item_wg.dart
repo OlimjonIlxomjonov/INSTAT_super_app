@@ -28,12 +28,17 @@ class VacancyRowItemWg extends StatelessWidget {
               color: AppColors.greyScale.grey600,
             ),
           ),
-          const Spacer(),
-          Text(
-            trailing,
-            style: AppTextStyles.source.regular(
-              fontSize: 12,
-              color: AppColors.greyScale.grey600,
+          const SizedBox(width: 50),
+          Expanded(
+            child: Text(
+              trailing,
+              textAlign: TextAlign.end,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.source.regular(
+                fontSize: 12,
+                color: AppColors.greyScale.grey600,
+              ),
             ),
           ),
         ],

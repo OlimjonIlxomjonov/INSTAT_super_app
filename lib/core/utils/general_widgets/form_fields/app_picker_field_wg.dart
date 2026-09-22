@@ -15,6 +15,7 @@ class AppPickerFieldWg extends StatelessWidget {
     this.leadingIcon,
     this.trailingIcon = Icons.keyboard_arrow_down,
     this.onTap,
+    this.hasError = false,
   });
 
   final String? title;
@@ -24,6 +25,7 @@ class AppPickerFieldWg extends StatelessWidget {
   final IconData? leadingIcon;
   final IconData trailingIcon;
   final VoidCallback? onTap;
+  final bool hasError;
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +56,10 @@ class AppPickerFieldWg extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
             decoration: BoxDecoration(
               border: Border.all(
-                color: AppColors.greyScale.grey300,
-                width: 0.5,
+                color: hasError
+                    ? AppColors.redFailedTaskCard
+                    : AppColors.greyScale.grey300,
+                width: hasError ? 1 : 0.5,
               ),
               borderRadius: BorderRadius.circular(12),
             ),

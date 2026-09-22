@@ -22,13 +22,6 @@ class ArticlesProfilePage extends StatelessWidget {
         slivers: [
           SliverToBoxAdapter(
             child: ProfileSettingsTileWg(
-              title: localization.savedItems,
-              onTap: () {},
-              leadingIcon: FlutterRemix.heart_line,
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: ProfileSettingsTileWg(
               title: localization.frQuestions,
               onTap: () {
                 openMiniAppSheetFamily(

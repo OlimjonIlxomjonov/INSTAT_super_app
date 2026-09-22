@@ -9,12 +9,14 @@ class AppFormFieldWg extends StatelessWidget {
     required this.child,
     this.isRequired = false,
     this.helperText,
+    this.errorText,
   });
 
   final String label;
   final Widget child;
   final bool isRequired;
   final String? helperText;
+  final String? errorText;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,16 @@ class AppFormFieldWg extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           child,
-          if (helperText != null) ...[
+          if (errorText != null) ...[
+            const SizedBox(height: 6),
+            Text(
+              errorText!,
+              style: AppTextStyles.source.regular(
+                fontSize: 12,
+                color: AppColors.redFailedTaskCard,
+              ),
+            ),
+          ] else if (helperText != null) ...[
             const SizedBox(height: 6),
             Text(
               helperText!,

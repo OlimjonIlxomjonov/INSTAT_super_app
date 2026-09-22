@@ -29,11 +29,6 @@ class _VacancyProfileState extends State<VacancyProfile> {
               crossAxisAlignment: .start,
               children: [
                 ProfileSettingsTileWg(
-                  leadingIcon: FlutterRemix.bookmark_line,
-                  title: localization.savedItems,
-                  onTap: () {},
-                ),
-                ProfileSettingsTileWg(
                   leadingIcon: FlutterRemix.message_2_line,
                   title: localization.frQuestions,
                   onTap: () {},

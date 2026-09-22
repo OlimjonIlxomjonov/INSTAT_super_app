@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_field.dart';
 import 'package:my_template/core/utils/general_widgets/form_fields/app_form_field_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
@@ -130,139 +131,186 @@ class _RequestPersonalInfoViewState extends State<RequestPersonalInfoView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             /// SHAXSIY MA'LUMOT
-            RequestSectionCardWg(
-              title: localization.requestPersonalInfoTitle,
-              children: [
-                AppFormFieldWg(
-                  label: localization.requestOrganizationLabel,
-                  isRequired: true,
-                  child: AppInputWg(
-                    controller: _companyController,
-                    hintText: localization.requestOrganizationHint,
-                    onChanged: (value) => _update(
-                      UpdateDataRequestFieldEvent(companyName: value),
-                    ),
-                  ),
-                ),
-                AppFormFieldWg(
-                  label: localization.requestResearcherLabel,
-                  isRequired: true,
-                  child: AppInputWg(
-                    controller: _fullNameController,
-                    hintText: localization.requestResearcherHint,
-                    onChanged: (value) =>
-                        _update(UpdateDataRequestFieldEvent(fullName: value)),
-                  ),
-                ),
-                AppFormFieldWg(
-                  label: localization.requestContactLabel,
-                  isRequired: true,
-                  child: IntlPhoneField(
-                    pickerDialogStyle: PickerDialogStyle(
-                      backgroundColor: AppColors.white,
-                    ),
-                    initialValue: _initialPhone,
-                    showCountryFlag: false,
-                    flagsButtonPadding: const EdgeInsets.only(left: 8),
-                    decoration: InputDecoration(
-                      hintText: '90 123 45 67',
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: AppColors.greyScale.grey300,
+            BlocBuilder<AddDataRequestBloc, AddDataRequestState>(
+              buildWhen: (prev, curr) => prev.fieldErrors != curr.fieldErrors,
+              builder: (context, state) {
+                final errors = state.fieldErrors;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RequestSectionCardWg(
+                      title: localization.requestPersonalInfoTitle,
+                      children: [
+                        AppFormFieldWg(
+                          label: localization.requestOrganizationLabel,
+                          errorText: errors[RequestField.companyName],
+                          isRequired: true,
+                          child: AppInputWg(
+                            controller: _companyController,
+                            hasError: errors.containsKey(
+                              RequestField.companyName,
+                            ),
+                            hintText: localization.requestOrganizationHint,
+                            onChanged: (value) => _update(
+                              UpdateDataRequestFieldEvent(companyName: value),
+                            ),
+                          ),
                         ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: AppColors.primaryColor,
+                        AppFormFieldWg(
+                          label: localization.requestResearcherLabel,
+                          errorText: errors[RequestField.fullName],
+                          isRequired: true,
+                          child: AppInputWg(
+                            controller: _fullNameController,
+                            hasError: errors.containsKey(RequestField.fullName),
+                            hintText: localization.requestResearcherHint,
+                            onChanged: (value) => _update(
+                              UpdateDataRequestFieldEvent(fullName: value),
+                            ),
+                          ),
                         ),
-                      ),
+                        AppFormFieldWg(
+                          label: localization.requestContactLabel,
+                          errorText: errors[RequestField.phoneNumber],
+                          isRequired: true,
+                          child: IntlPhoneField(
+                            pickerDialogStyle: PickerDialogStyle(
+                              backgroundColor: AppColors.white,
+                            ),
+                            initialValue: _initialPhone,
+                            showCountryFlag: false,
+                            flagsButtonPadding: const EdgeInsets.only(left: 8),
+                            decoration: InputDecoration(
+                              hintText: '90 123 45 67',
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color:
+                                      errors.containsKey(
+                                        RequestField.phoneNumber,
+                                      )
+                                      ? AppColors.redFailedTaskCard
+                                      : AppColors.greyScale.grey300,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color:
+                                      errors.containsKey(
+                                        RequestField.phoneNumber,
+                                      )
+                                      ? AppColors.redFailedTaskCard
+                                      : AppColors.primaryColor,
+                                ),
+                              ),
+                            ),
+                            initialCountryCode: 'UZ',
+                            showDropdownIcon: true,
+                            dropdownIcon: const Icon(IconlyLight.call),
+                            onChanged: (phone) => _update(
+                              UpdateDataRequestFieldEvent(
+                                phoneNumber: phone.completeNumber,
+                              ),
+                            ),
+                          ),
+                        ),
+                        AppFormFieldWg(
+                          label: localization.emailLabel,
+                          errorText: errors[RequestField.email],
+                          isRequired: true,
+                          child: AppInputWg(
+                            controller: _emailController,
+                            hasError: errors.containsKey(RequestField.email),
+                            hintText: localization.requestEmailHint,
+                            keyboardType: TextInputType.emailAddress,
+                            onChanged: (value) => _update(
+                              UpdateDataRequestFieldEvent(email: value),
+                            ),
+                          ),
+                        ),
+                        AppFormFieldWg(
+                          label: localization.requestTeamMembersLabel,
+                          child: AppInputWg(
+                            controller: _teamMembersController,
+                            hintText: localization.requestTeamMembersHint,
+                            minLines: 3,
+                            onChanged: (value) => _update(
+                              UpdateDataRequestFieldEvent(teamMembers: value),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    initialCountryCode: 'UZ',
-                    showDropdownIcon: true,
-                    dropdownIcon: const Icon(IconlyLight.call),
-                    onChanged: (phone) => _update(
-                      UpdateDataRequestFieldEvent(
-                        phoneNumber: phone.completeNumber,
-                      ),
-                    ),
-                  ),
-                ),
-                AppFormFieldWg(
-                  label: localization.emailLabel,
-                  isRequired: true,
-                  child: AppInputWg(
-                    controller: _emailController,
-                    hintText: localization.requestEmailHint,
-                    keyboardType: TextInputType.emailAddress,
-                    onChanged: (value) =>
-                        _update(UpdateDataRequestFieldEvent(email: value)),
-                  ),
-                ),
-                AppFormFieldWg(
-                  label: localization.requestTeamMembersLabel,
-                  child: AppInputWg(
-                    controller: _teamMembersController,
-                    hintText: localization.requestTeamMembersHint,
-                    minLines: 3,
-                    onChanged: (value) => _update(
-                      UpdateDataRequestFieldEvent(teamMembers: value),
-                    ),
-                  ),
-                ),
-              ],
-            ),
 
-            /// TADQIQOT LOYIHASI
-            RequestSectionCardWg(
-              title: localization.requestProjectSectionTitle,
-              children: [
-                AppFormFieldWg(
-                  label: localization.requestProjectNameLabel,
-                  isRequired: true,
-                  child: AppInputWg(
-                    controller: _projectNameController,
-                    hintText: localization.requestProjectNameHint,
-                    onChanged: (value) => _update(
-                      UpdateDataRequestFieldEvent(projectName: value),
+                    /// TADQIQOT LOYIHASI
+                    RequestSectionCardWg(
+                      title: localization.requestProjectSectionTitle,
+                      children: [
+                        AppFormFieldWg(
+                          label: localization.requestProjectNameLabel,
+                          errorText: errors[RequestField.projectName],
+                          isRequired: true,
+                          child: AppInputWg(
+                            controller: _projectNameController,
+                            hasError: errors.containsKey(
+                              RequestField.projectName,
+                            ),
+                            hintText: localization.requestProjectNameHint,
+                            onChanged: (value) => _update(
+                              UpdateDataRequestFieldEvent(projectName: value),
+                            ),
+                          ),
+                        ),
+                        AppFormFieldWg(
+                          label: localization.requestProjectAimLabel,
+                          errorText: errors[RequestField.projectAim],
+                          isRequired: true,
+                          child: AppInputWg(
+                            controller: _projectAimController,
+                            hasError: errors.containsKey(
+                              RequestField.projectAim,
+                            ),
+                            hintText: localization.requestProjectAimHint,
+                            minLines: 3,
+                            onChanged: (value) => _update(
+                              UpdateDataRequestFieldEvent(projectAim: value),
+                            ),
+                          ),
+                        ),
+                        AppFormFieldWg(
+                          label: localization.requestBenefitLabel,
+                          errorText: errors[RequestField.benefit],
+                          isRequired: true,
+                          child: AppInputWg(
+                            controller: _benefitController,
+                            hasError: errors.containsKey(RequestField.benefit),
+                            hintText: localization.requestBenefitHint,
+                            minLines: 3,
+                            onChanged: (value) => _update(
+                              UpdateDataRequestFieldEvent(benefit: value),
+                            ),
+                          ),
+                        ),
+                        AppFormFieldWg(
+                          label: localization.requestAimToUseLabel,
+                          errorText: errors[RequestField.aimToUse],
+                          isRequired: true,
+                          child: AppInputWg(
+                            controller: _aimToUseController,
+                            hasError: errors.containsKey(RequestField.aimToUse),
+                            hintText: localization.requestAimToUseHint,
+                            minLines: 3,
+                            onChanged: (value) => _update(
+                              UpdateDataRequestFieldEvent(aimToUse: value),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ),
-                AppFormFieldWg(
-                  label: localization.requestProjectAimLabel,
-                  isRequired: true,
-                  child: AppInputWg(
-                    controller: _projectAimController,
-                    hintText: localization.requestProjectAimHint,
-                    minLines: 3,
-                    onChanged: (value) =>
-                        _update(UpdateDataRequestFieldEvent(projectAim: value)),
-                  ),
-                ),
-                AppFormFieldWg(
-                  label: localization.requestBenefitLabel,
-                  isRequired: true,
-                  child: AppInputWg(
-                    controller: _benefitController,
-                    hintText: localization.requestBenefitHint,
-                    minLines: 3,
-                    onChanged: (value) =>
-                        _update(UpdateDataRequestFieldEvent(benefit: value)),
-                  ),
-                ),
-                AppFormFieldWg(
-                  label: localization.requestAimToUseLabel,
-                  isRequired: true,
-                  child: AppInputWg(
-                    controller: _aimToUseController,
-                    hintText: localization.requestAimToUseHint,
-                    minLines: 3,
-                    onChanged: (value) =>
-                        _update(UpdateDataRequestFieldEvent(aimToUse: value)),
-                  ),
-                ),
-              ],
+                  ],
+                );
+              },
             ),
 
             /// SO'RALADIGAN MA'LUMOT
@@ -270,25 +318,31 @@ class _RequestPersonalInfoViewState extends State<RequestPersonalInfoView> {
               buildWhen: (prev, curr) =>
                   prev.dataReport != curr.dataReport ||
                   prev.dateFrom != curr.dateFrom ||
-                  prev.dateTo != curr.dateTo,
+                  prev.dateTo != curr.dateTo ||
+                  prev.fieldErrors != curr.fieldErrors,
               builder: (context, state) {
+                final errors = state.fieldErrors;
                 return RequestSectionCardWg(
                   title: localization.requestRequestedDataTitle,
                   children: [
                     AppFormFieldWg(
                       label: localization.requestDataReportLabel,
+                      errorText: errors[RequestField.dataReport],
                       isRequired: true,
                       child: AppPickerFieldWg(
                         hintText: localization.requestDataReportHint,
+                        hasError: errors.containsKey(RequestField.dataReport),
                         value: state.dataReport?.name,
                         onTap: _pickReport,
                       ),
                     ),
                     AppFormFieldWg(
                       label: localization.requestPeriodFromLabel,
+                      errorText: errors[RequestField.dateFrom],
                       isRequired: true,
                       child: AppPickerFieldWg(
                         hintText: localization.requestSelectDateHint,
+                        hasError: errors.containsKey(RequestField.dateFrom),
                         value: formatRequestDate(state.dateFrom),
                         leadingIcon: IconlyLight.calendar,
                         trailingIcon: Icons.chevron_right,
@@ -297,9 +351,11 @@ class _RequestPersonalInfoViewState extends State<RequestPersonalInfoView> {
                     ),
                     AppFormFieldWg(
                       label: localization.requestPeriodToLabel,
+                      errorText: errors[RequestField.dateTo],
                       isRequired: true,
                       child: AppPickerFieldWg(
                         hintText: localization.requestSelectDateHint,
+                        hasError: errors.containsKey(RequestField.dateTo),
                         value: formatRequestDate(state.dateTo),
                         leadingIcon: IconlyLight.calendar,
                         trailingIcon: Icons.chevron_right,
@@ -311,9 +367,11 @@ class _RequestPersonalInfoViewState extends State<RequestPersonalInfoView> {
                     // maydon emas — ikkala izoh ham majburiy matn.
                     AppFormFieldWg(
                       label: localization.requestWhyNotEnoughLabel,
+                      errorText: errors[RequestField.whyNotEnough],
                       isRequired: true,
                       child: AppInputWg(
                         controller: _whyNotEnoughController,
+                        hasError: errors.containsKey(RequestField.whyNotEnough),
                         hintText: localization.requestWhyNotEnoughHint,
                         minLines: 3,
                         onChanged: (value) => _update(
@@ -323,9 +381,13 @@ class _RequestPersonalInfoViewState extends State<RequestPersonalInfoView> {
                     ),
                     AppFormFieldWg(
                       label: localization.requestNotEnoughCommentLabel,
+                      errorText: errors[RequestField.notEnoughComment],
                       isRequired: true,
                       child: AppInputWg(
                         controller: _notEnoughCommentController,
+                        hasError: errors.containsKey(
+                          RequestField.notEnoughComment,
+                        ),
                         hintText: localization.requestNotEnoughCommentHint,
                         minLines: 3,
                         onChanged: (value) => _update(

@@ -1,3 +1,5 @@
+import 'package:my_template/core/utils/localization/localized_text.dart';
+
 class LessonTestEntity {
   final int id;
   final String question;
@@ -18,4 +20,12 @@ class LessonTestEntity {
     required this.thumbnail,
     required this.createdAt,
   });
+
+  String displayQuestion(String localeCode) => localizedText(
+    localeCode: localeCode,
+    fallback: question,
+    uz: questionUz,
+    ru: questionRu,
+    en: questionEn,
+  );
 }

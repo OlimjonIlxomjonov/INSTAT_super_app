@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/di/service_locator.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/bloc/applied_check/vacancy_applied_cubit.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancy_details/vacancy_applied_bar_wg.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancy_formatters.dart';
+import 'package:my_template/features/vacancy_app/features/domain/entity/vacancy/vacancy_entity.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
@@ -9,7 +15,23 @@ import 'package:my_template/features/vacancy_app/features/presentation/widgets/v
 import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancy_details/vacancy_info_body_wg.dart';
 
 class VacancyDetailedWg extends StatelessWidget {
-  const VacancyDetailedWg({super.key});
+  final VacancyEntity item;
+
+  const VacancyDetailedWg({super.key, required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => sl<VacancyAppliedCubit>()..check(item.id),
+      child: _VacancyDetailedView(item: item),
+    );
+  }
+}
+
+class _VacancyDetailedView extends StatelessWidget {
+  final VacancyEntity item;
+
+  const _VacancyDetailedView({required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -22,25 +44,7 @@ class VacancyDetailedWg extends StatelessWidget {
             titleSpacing: 0,
             automaticallyImplyLeading: false,
             title: SheetDragAreaWg(
-              child: CustomAppBarWg(
-                myTitle: localization.vacancyDetailsTitle,
-                customActions: [
-                  IconButton(
-                    style: IconButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: .circular(12),
-                        side: BorderSide(color: AppColors.greyScale.grey200),
-                      ),
-                    ),
-                    onPressed: () {},
-                    icon: Icon(
-                      FlutterRemix.heart_line,
-                      size: 18,
-                      color: AppColors.greyScale.grey600,
-                    ),
-                  ),
-                ],
-              ),
+              child: CustomAppBarWg(myTitle: localization.vacancyDetailsTitle),
             ),
           ),
 
@@ -59,32 +63,48 @@ class VacancyDetailedWg extends StatelessWidget {
                         style: AppTextStyles.source.medium(fontSize: 14),
                       ),
                       const SizedBox(width: 4),
-                      Text(
-                        '12.01.2001 - 31.01.2001',
-                        style: AppTextStyles.source.medium(
-                          fontSize: 14,
-                          color: AppColors.greyScale.grey600,
+                      Expanded(
+                        child: Text(
+                          formatVacancyPeriod(item),
+                          style: AppTextStyles.source.medium(
+                            fontSize: 14,
+                            color: AppColors.greyScale.grey600,
+                          ),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
 
-                  const VacancyInfoBodyWg(),
+                  VacancyInfoBodyWg(item: item),
                 ],
               ),
             ),
           ),
         ],
       ),
-      bottomNavigationBar: CustomBottomNavContainerWg(
-        buttonText: localization.submitApplication,
-        onTap: () => openMiniAppSheetFamily(
-          context,
-          child: const VacancyApplyFormWg(),
-          showHandler: false,
-        ),
-      ),
+      //! Ariza holati
+      bottomNavigationBar:
+          BlocBuilder<VacancyAppliedCubit, VacancyAppliedState>(
+            builder: (context, state) {
+              if (state.status == VacancyAppliedStatus.applied) {
+                return VacancyAppliedBarWg(application: state.application!);
+              }
+              return CustomBottomNavContainerWg(
+                buttonText: localization.submitApplication,
+                isLoading: state.status == VacancyAppliedStatus.loading,
+                onTap: () => openMiniAppSheetFamily(
+                  context,
+                  child: VacancyApplyFormWg(
+                    vacancyId: item.id,
+                    onSubmitted: () =>
+                        context.read<VacancyAppliedCubit>().check(item.id),
+                  ),
+                  showHandler: false,
+                ),
+              );
+            },
+          ),
     );
   }
 }

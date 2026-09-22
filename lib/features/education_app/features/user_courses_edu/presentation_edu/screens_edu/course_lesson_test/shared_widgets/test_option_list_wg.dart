@@ -63,7 +63,9 @@ class TestOptionListWg extends StatelessWidget {
           backgroundColor: backgroundColor,
           borderColor: borderColor,
           tileAction: actionIcon,
-          tileTitle: option.text,
+          tileTitle: option.displayText(
+            Localizations.localeOf(context).languageCode,
+          ),
         );
       }),
     );

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
+import 'package:my_template/features/vacancy_app/features/domain/entity/application/vacancy_application_entity.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/widgets/applications/vacancy_application_status_wg.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancy_formatters.dart';
 
 import '../../../../../../core/utils/app_utils.dart';
 import '../../../../../../core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
-import '../../../../../scientific_articles_app/features/home/presentation/widgets/status_container_wg.dart';
 import '../applications/vacancy_application_detail_wg.dart';
 
 class RequestsCardWg extends StatelessWidget {
-  const RequestsCardWg({super.key});
+  final VacancyApplicationEntity item;
+
+  const RequestsCardWg({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +26,7 @@ class RequestsCardWg extends StatelessWidget {
       child: Column(
         crossAxisAlignment: .start,
         children: [
-          //! 1
+          //! Sana va status
           Row(
             children: [
               Icon(
@@ -32,29 +36,28 @@ class RequestsCardWg extends StatelessWidget {
               ),
               const SizedBox(width: 4),
               Text(
-                '12.03.2026',
+                formatVacancyDate(item.createdAt),
                 style: AppTextStyles.source.regular(
                   fontSize: 12,
                   color: AppColors.greyScale.grey600,
                 ),
               ),
               const Spacer(),
-              StatusContainerWg(
-                icon: FlutterRemix.loader_2_line,
-                statusTitle: ' ${localization.statusUnderReview}',
-                iconColor: AppColors.orange500,
-                backgroundColor: AppColors.orange50,
-              ),
+              VacancyApplicationStatusWg(status: item.status),
             ],
           ),
           const SizedBox(height: 8),
-          //! 2
+
+          //! Vakansiya
           Text(
-            'Senior Frontend Developer',
+            item.vacancy?.title ?? '—',
             style: AppTextStyles.source.medium(fontSize: 14),
           ),
           const SizedBox(height: 4),
-          Text('Operator', style: AppTextStyles.source.regular(fontSize: 12)),
+          Text(
+            item.vacancy?.subtitle ?? '',
+            style: AppTextStyles.source.regular(fontSize: 12),
+          ),
           const SizedBox(height: 8),
           Row(
             children: [
@@ -66,10 +69,10 @@ class RequestsCardWg extends StatelessWidget {
                   ),
                   onPressed: () => openMiniAppSheetFamily(
                     context,
-                    child: const VacancyApplicationDetailWg(),
+                    child: VacancyApplicationDetailWg(item: item),
                     showHandler: false,
                   ),
-                  child: Text(localization.viewVacancy),
+                  child: Text(localization.viewApplication),
                 ),
               ),
             ],

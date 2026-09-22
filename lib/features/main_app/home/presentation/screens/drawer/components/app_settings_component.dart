@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
+import 'package:my_template/core/services/banners/banner_source_cubit.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
+import 'package:my_template/core/utils/general_widgets/dot_switch/dot_switch_wg.dart';
 import 'package:my_template/core/utils/widgets/app_version/app_version_service.dart';
 import 'package:my_template/core/utils/widgets/bottom_sheet_sliver_default_app_bar/sliver_default_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
@@ -79,6 +82,19 @@ class _AppSettingsComponentState extends State<AppSettingsComponent>
                     onOpenSettings: openAppSettings,
                   ),
                   const SizedBox(height: 24),
+                  //! Bannerlar
+                  _SectionTitle(title: localization.bannersSection),
+                  BlocBuilder<BannerSourceCubit, bool>(
+                    builder: (context, useRemote) => _SwitchCard(
+                      icon: FlutterRemix.image_line,
+                      title: localization.promoBannersLabel,
+                      subtitle: localization.promoBannersHint,
+                      value: useRemote,
+                      onChanged: (value) =>
+                          context.read<BannerSourceCubit>().setUseRemote(value),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
                   //! About
                   _SectionTitle(title: localization.aboutAppSection),
                   _InfoCard(
@@ -90,6 +106,54 @@ class _AppSettingsComponentState extends State<AppSettingsComponent>
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SwitchCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  const _SwitchCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.greyScale.grey200),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: AppTextStyles.source.medium(fontSize: 14)),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: AppTextStyles.source.regular(
+                    fontSize: 12,
+                    color: AppColors.greyScale.grey600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          DotSwitch(value: value, onChanged: onChanged),
         ],
       ),
     );
@@ -130,19 +194,6 @@ class _PermissionCard extends StatelessWidget {
     final localization = AppLocalizations.of(context)!;
     final isGranted = status?.isGranted ?? false;
 
-    final (String label, Color color) = switch (status) {
-      null => ('...', AppColors.greyScale.grey400),
-      PermissionStatus.granted || PermissionStatus.limited => (
-        localization.permissionGranted,
-        AppColors.iconGreen,
-      ),
-      PermissionStatus.permanentlyDenied || PermissionStatus.restricted => (
-        localization.permissionBlocked,
-        AppColors.red,
-      ),
-      _ => (localization.permissionNotGranted, AppColors.greyScale.grey500),
-    };
-
     return Container(
       padding: const .all(14),
       decoration: BoxDecoration(
@@ -153,7 +204,6 @@ class _PermissionCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: .start,

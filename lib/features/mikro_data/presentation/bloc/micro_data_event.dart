@@ -1,3 +1,4 @@
+import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_field.dart';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -183,4 +184,10 @@ class ReportVariablesEvent extends MicroDataEvent {
   final ReportVariablesParams params;
 
   const ReportVariablesEvent({required this.params});
+}
+
+class SetDataRequestFieldErrorsEvent extends MicroDataEvent {
+  final Map<RequestField, String> errors;
+
+  const SetDataRequestFieldErrorsEvent(this.errors);
 }

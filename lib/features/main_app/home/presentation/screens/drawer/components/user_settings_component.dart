@@ -7,7 +7,6 @@ import 'package:my_template/core/utils/widgets/app_version/app_version_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/sub_bottom_sheet_opener.dart';
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/app_language_settings_model_component.dart';
 import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/screens_edu/components/edu_tickets/edu_tickets_settings_component.dart';
-import 'package:my_template/features/education_app/features/user_profile_edu/presentation_edu/widgets_edu/dot_swtich_wg.dart';
 import "package:my_template/core/utils/app_utils.dart";
 import "package:my_template/core/utils/widgets/app_widgets.dart";
 import 'package:my_template/features/main_app/home/presentation/screens/components/home_arrange_component.dart';

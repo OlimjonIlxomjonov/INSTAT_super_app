@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:my_template/core/services/banners/banner_source_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
@@ -18,7 +18,6 @@ import 'package:my_template/core/utils/widgets/user_articles_with_bloc/user_arti
 import 'package:my_template/core/utils/widgets/user_requests_with_bloc/user_requests_with_bloc_wg.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/home_layout/home_layout_cubit.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/home_layout/home_layout_state.dart';
-import 'package:my_template/features/main_app/home/presentation/bloc/notifications/notif_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/notifications_count/notifications_count_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/notifications_count/notifications_count_state.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/components/home_arrange_component.dart';
@@ -48,7 +47,9 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/detailed_online_book_component.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/similar_onilne_books_component.dart';
 import 'package:my_template/features/online_library_app/features/online_lib_bottom_nav_bar.dart';
-import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancy_card_wg.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancies_with_bloc_wg.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/bloc/vacancies/vacancies_bloc.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/bloc/vacancy_event.dart';
 import 'package:my_template/features/vacancy_app/features/vacancy_bottom_nav_bar.dart';
 
 import '../../../../../scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
@@ -108,7 +109,9 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
 
   void _reloadAll() {
     context.read<CoursesBloc>().add(AvailableCoursesEvent());
-    context.read<BannerBloc>().add(const FetchBannersEvent());
+    if (context.read<BannerSourceCubit>().state) {
+      context.read<BannerBloc>().add(const FetchBannersEvent());
+    }
     context.read<UserCoursesBloc>().add(
       UserCoursesEvent(params: UserCoursesParams(state: 'in_progress')),
     );
@@ -119,6 +122,7 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
     );
     context.read<UserBookBloc>().add(UserBooksEvent());
     context.read<NotifCountBloc>().add(NotificationsCountEvent());
+    context.read<VacanciesBloc>().add(const FetchVacanciesEvent());
   }
 
   @override
@@ -456,10 +460,10 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
               ),
             ),
           ),
-          SliverList.separated(
-            itemCount: _vacanciesLimit,
-            separatorBuilder: (_, _) => const SizedBox(height: 12),
-            itemBuilder: (_, _) => const VacancyCardWg(),
+          VacanciesWithBlocWg(
+            limit: _vacanciesLimit,
+            onRetry: () =>
+                context.read<VacanciesBloc>().add(const FetchVacanciesEvent()),
           ),
         ],
       ),

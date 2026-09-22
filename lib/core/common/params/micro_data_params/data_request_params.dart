@@ -24,7 +24,9 @@ class DataRequestParams {
   final String? notEnoughComment;
 
   //! Xavfsizlik, muhit va muddat
-  final int? processingEnvironmentId;
+  /// Backend statik choice sifatida string saqlaydi
+  /// (periodicity / sampling_method kabi).
+  final String? processingEnvironment;
   final DateTime? entryDateFrom;
   final DateTime? entryDateTo;
 
@@ -48,7 +50,7 @@ class DataRequestParams {
     this.dateTo,
     this.whyNotEnough,
     this.notEnoughComment,
-    this.processingEnvironmentId,
+    this.processingEnvironment,
     this.entryDateFrom,
     this.entryDateTo,
     this.expectation,
@@ -78,7 +80,7 @@ class DataRequestParams {
       'date_to': _formatDate(dateTo),
       'why_not_enough': whyNotEnough,
       'not_enough_comment': notEnoughComment,
-      'processing_environment': processingEnvironmentId,
+      'processing_environment': processingEnvironment,
       'entry_date_from': _formatDate(entryDateFrom),
       'entry_date_to': _formatDate(entryDateTo),
       'expectation': expectation,

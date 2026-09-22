@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_validation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
@@ -98,6 +99,17 @@ class _AddDataRequestViewState extends State<_AddDataRequestView> {
     localization.requestStepConfirmation,
   ];
 
+  /// Tekshiruvdagi maydonlar 1-bosqichda — xato bo'lsa o'sha yerga qaytaramiz.
+  void _goToFirstPage() {
+    if (_pageController.hasClients) {
+      _pageController.animateToPage(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
   void _moveNextOrSubmit() {
     final localization = AppLocalizations.of(context)!;
     final bloc = context.read<AddDataRequestBloc>();
@@ -111,8 +123,12 @@ class _AddDataRequestViewState extends State<_AddDataRequestView> {
       return;
     }
 
-    if (!bloc.state.canSubmit) {
-      errorFlushBar(context, localization.requestFillRequiredFields);
+    //! Backend 400'da qaysi maydon xato ekanini aytmaydi
+    final errors = validateDataRequest(bloc.state, localization);
+    bloc.add(SetDataRequestFieldErrorsEvent(errors));
+    if (errors.isNotEmpty) {
+      _goToFirstPage();
+      errorFlushBar(context, errors.values.first);
       return;
     }
 
@@ -141,8 +157,11 @@ class _AddDataRequestViewState extends State<_AddDataRequestView> {
     final bloc = context.read<AddDataRequestBloc>();
 
     // Backend POST'da 1-bosqich maydonlarini majburiy qiladi.
-    if (!bloc.state.canSaveDraft) {
-      errorFlushBar(context, localization.requestDraftNeedsStepOne);
+    final errors = validateDataRequest(bloc.state, localization);
+    bloc.add(SetDataRequestFieldErrorsEvent(errors));
+    if (errors.isNotEmpty) {
+      _goToFirstPage();
+      errorFlushBar(context, errors.values.first);
       return;
     }
 

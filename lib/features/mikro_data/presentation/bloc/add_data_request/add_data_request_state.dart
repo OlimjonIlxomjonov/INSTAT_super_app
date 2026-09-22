@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_field.dart';
 import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_report_ref_entity.dart';
 
 class AddDataRequestState extends Equatable {
@@ -55,6 +56,9 @@ class AddDataRequestState extends Equatable {
   final bool isLoadingInitialData;
   final String? initialLoadError;
 
+  /// Yuborishdan oldingi tekshiruv natijasi.
+  final Map<RequestField, String> fieldErrors;
+
   const AddDataRequestState({
     this.requestId,
     this.companyName = '',
@@ -90,6 +94,7 @@ class AddDataRequestState extends Equatable {
     this.isEditMode = false,
     this.isLoadingInitialData = false,
     this.initialLoadError,
+    this.fieldErrors = const {},
   });
 
   bool get hasFile => fileName.isNotEmpty || (fileUrl?.isNotEmpty ?? false);
@@ -157,6 +162,7 @@ class AddDataRequestState extends Equatable {
     bool? isEditMode,
     bool? isLoadingInitialData,
     String? initialLoadError,
+    Map<RequestField, String>? fieldErrors,
     bool clearInitialLoadError = false,
   }) {
     return AddDataRequestState(
@@ -205,6 +211,7 @@ class AddDataRequestState extends Equatable {
       initialLoadError: clearInitialLoadError
           ? null
           : (initialLoadError ?? this.initialLoadError),
+      fieldErrors: fieldErrors ?? this.fieldErrors,
     );
   }
 
@@ -244,5 +251,6 @@ class AddDataRequestState extends Equatable {
     isEditMode,
     isLoadingInitialData,
     initialLoadError,
+    fieldErrors,
   ];
 }

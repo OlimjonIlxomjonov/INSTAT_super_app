@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/utils/constants/assets/app_images.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/widgets/module_categories/module_categories_with_bloc.dart';
@@ -100,8 +101,11 @@ class _HomeEduPageState extends State<HomeEduPage> {
               ),
             ),
 
-            SliverToBoxAdapter(child: PromoBannersCarouselWg()),
+            SliverToBoxAdapter(
+              child: PromoBannersCarouselWg(localAssets: AppImages.eduBanners),
+            ),
 
+            //! User Achievements
             SliverPadding(
               padding: AppPadding.horizontal20x(),
               sliver: SliverToBoxAdapter(child: HomeAchievementsWg()),

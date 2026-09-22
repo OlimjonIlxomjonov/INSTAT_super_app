@@ -137,7 +137,7 @@ class _EduTicketsChatComponentState extends State<EduTicketsChatComponent> {
                   params: TicketsChatParams(ticketId: widget.ticketId),
                 ),
               );
-          },
+            },
             child: CustomScrollView(
               slivers: [
                 SliverAppBar(
@@ -156,7 +156,9 @@ class _EduTicketsChatComponentState extends State<EduTicketsChatComponent> {
                       if (data.isEmpty) {
                         return SliverToBoxAdapter(
                           child: AppEmptyState(
-                            title: AppLocalizations.of(context)!.noMessagesTitle,
+                            title: AppLocalizations.of(
+                              context,
+                            )!.noMessagesTitle,
                             subtitle: AppLocalizations.of(
                               context,
                             )!.noMessagesSubtitle,
@@ -256,7 +258,8 @@ class _EduTicketsChatComponentState extends State<EduTicketsChatComponent> {
                                             item.createdAt.toReadableTime(),
                                             style: AppTextStyles.source.regular(
                                               fontSize: 12,
-                                              color: AppColors.greyScale.grey600,
+                                              color:
+                                                  AppColors.greyScale.grey600,
                                             ),
                                           ),
                                         ],
@@ -328,7 +331,8 @@ class _EduTicketsChatComponentState extends State<EduTicketsChatComponent> {
                                 : Alignment.centerLeft,
                             child: ConstrainedBox(
                               constraints: BoxConstraints(
-                                maxWidth: MediaQuery.of(context).size.width * 0.6,
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.6,
                               ),
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
@@ -344,8 +348,12 @@ class _EduTicketsChatComponentState extends State<EduTicketsChatComponent> {
                                   borderRadius: BorderRadius.only(
                                     topLeft: const Radius.circular(14),
                                     topRight: const Radius.circular(14),
-                                    bottomLeft: Radius.circular(isUser ? 14 : 2),
-                                    bottomRight: Radius.circular(isUser ? 2 : 14),
+                                    bottomLeft: Radius.circular(
+                                      isUser ? 14 : 2,
+                                    ),
+                                    bottomRight: Radius.circular(
+                                      isUser ? 2 : 14,
+                                    ),
                                   ),
                                 ),
                                 child: Column(

@@ -1,4 +1,14 @@
 import 'package:dio/dio.dart';
+import 'package:my_template/features/vacancy_app/features/data/repo/vacancy_repo_impl.dart';
+import 'package:my_template/features/vacancy_app/features/data/source/impl_remote_data_source/vacancy_remote_data_source_impl.dart';
+import 'package:my_template/features/vacancy_app/features/data/source/remote_data_source/vacancy_remote_data_source.dart';
+import 'package:my_template/features/vacancy_app/features/domain/repository/vacancy_repository.dart';
+import 'package:my_template/features/vacancy_app/features/domain/usecase/vacancy_use_cases.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/bloc/applications/vacancy_applications_bloc.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/bloc/applied_check/vacancy_applied_cubit.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/bloc/apply/vacancy_apply_cubit.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/bloc/processes/vacancy_processes_cubit.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/bloc/vacancies/vacancies_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:my_template/features/auth/data/repo/reviewer_auth_repo_impl.dart';
 import 'package:my_template/features/auth/data/sources/impl_remote_data_source/reviewer_auth_remote_data_source_impl.dart';
@@ -455,6 +465,23 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => ArticlesStatsUseCase(repository: sl()));
   sl.registerLazySingleton(() => NotificationsCountUseCase(repository: sl()));
   sl.registerLazySingleton(() => SiteFaqsUseCase(repository: sl()));
+
+  //! {VACANCY}
+  sl.registerLazySingleton<VacancyRemoteDataSource>(
+    () => VacancyRemoteDataSourceImpl(),
+  );
+  sl.registerLazySingleton<VacancyRepository>(() => VacancyRepoImpl(sl()));
+  sl.registerLazySingleton(() => GetVacanciesUseCase(repository: sl()));
+  sl.registerLazySingleton(
+    () => GetVacancyApplicationsUseCase(repository: sl()),
+  );
+  sl.registerLazySingleton(() => GetVacancyProcessesUseCase(repository: sl()));
+  sl.registerLazySingleton(() => ApplyVacancyUseCase(repository: sl()));
+  sl.registerFactory(() => VacanciesBloc(useCase: sl()));
+  sl.registerFactory(() => VacancyApplicationsBloc(useCase: sl()));
+  sl.registerFactory(() => VacancyAppliedCubit(useCase: sl()));
+  sl.registerFactory(() => VacancyProcessesCubit(useCase: sl()));
+  sl.registerFactory(() => VacancyApplyCubit(useCase: sl()));
 
   //! {BLOC}
   sl.registerLazySingleton(() => HomeLayoutCubit());

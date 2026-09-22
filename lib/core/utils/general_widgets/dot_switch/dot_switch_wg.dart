@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 
 class DotSwitch extends StatelessWidget {
   const DotSwitch({
@@ -8,10 +9,10 @@ class DotSwitch extends StatelessWidget {
     this.width = 52,
     this.height = 30,
     this.duration = const Duration(milliseconds: 180),
-    this.activeTrackColor = const Color(0xFF2F80ED),
+    this.activeTrackColor = AppColors.primaryColor,
     this.inactiveTrackColor = const Color(0xFFE9EEF6),
     this.borderColor = const Color(0xFFCBD5E1),
-    this.dotColor = const Color(0xFF1E5FD8),
+    this.dotColor = AppColors.primaryColor,
   });
 
   final bool value;

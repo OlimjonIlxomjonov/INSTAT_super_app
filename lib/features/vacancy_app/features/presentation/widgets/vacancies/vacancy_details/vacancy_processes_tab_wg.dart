@@ -53,14 +53,7 @@ class VacancyProcessesTabWg extends StatelessWidget {
               children: List.generate(entry.value.length, (index) {
                 final item = entry.value[index];
                 return ProcessTimelineItemWg(
-                  icon: Icon(
-                    item.isDone
-                        ? Icons.check_circle
-                        : Icons.radio_button_checked,
-                    color: item.isDone
-                        ? AppColors.greenDoneTaskCard
-                        : AppColors.primaryColor,
-                  ),
+                  icon: Icon(item.icon, color: item.color),
                   title: item.title,
                   subtitle: item.description,
                   date: item.date,

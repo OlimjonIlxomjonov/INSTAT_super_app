@@ -244,7 +244,9 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage>
             questionTitle = localization.questionNumberTemplate(
               state.currentTestIndex + 1,
             );
-            questionText = currentTest.question;
+            questionText = currentTest.displayQuestion(
+              Localizations.localeOf(context).languageCode,
+            );
 
             optionList = TestOptionListWg(
               options: state.currentOptions,
@@ -285,7 +287,9 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage>
             questionTitle = localization.questionNumberTemplate(
               state.currentTestIndex + 1,
             );
-            questionText = currentTest.question;
+            questionText = currentTest.displayQuestion(
+              Localizations.localeOf(context).languageCode,
+            );
 
             optionList = TestOptionListWg(
               options: state.currentOptions,

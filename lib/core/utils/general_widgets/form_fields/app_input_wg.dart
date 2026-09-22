@@ -9,6 +9,7 @@ class AppInputWg extends StatelessWidget {
     this.onChanged,
     this.minLines = 1,
     this.keyboardType,
+    this.hasError = false,
   });
 
   final TextEditingController controller;
@@ -16,6 +17,7 @@ class AppInputWg extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final int minLines;
   final TextInputType? keyboardType;
+  final bool hasError;
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +43,21 @@ class AppInputWg extends StatelessWidget {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppColors.greyScale.grey300, width: 1),
+          borderSide: BorderSide(
+            color: hasError
+                ? AppColors.redFailedTaskCard
+                : AppColors.greyScale.grey300,
+            width: 1,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primaryColor, width: 1),
+          borderSide: BorderSide(
+            color: hasError
+                ? AppColors.redFailedTaskCard
+                : AppColors.primaryColor,
+            width: 1,
+          ),
         ),
       ),
     );

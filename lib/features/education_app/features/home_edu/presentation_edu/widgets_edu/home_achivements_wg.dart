@@ -12,13 +12,22 @@ class HomeAchievementsWg extends StatelessWidget {
       spacing: 8,
       children: [
         Expanded(
-          child: StatusAchievementsCardWg(descText: localization.yourLevel),
+          child: StatusAchievementsCardWg(
+            descText: localization.yourLevel,
+            title: AppLocalizations.of(context)!.champion,
+          ),
         ),
         Expanded(
-          child: StatusAchievementsCardWg(descText: localization.yourMedals),
+          child: StatusAchievementsCardWg(
+            descText: localization.yourMedals,
+            title: '🎖',
+          ),
         ),
         Expanded(
-          child: StatusAchievementsCardWg(descText: localization.pointsEarned),
+          child: StatusAchievementsCardWg(
+            descText: localization.pointsEarned,
+            title: '1234 ⭐️',
+          ),
         ),
       ],
     );

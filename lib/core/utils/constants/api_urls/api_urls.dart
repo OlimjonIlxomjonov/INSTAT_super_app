@@ -155,6 +155,13 @@ class ApiUrls {
   static const String activeDevices = 'devices';
   static String deviceById(int id) => 'devices/$id';
 
+  //! Vacancies
+  static const String vacancies = 'hr-vacancies/';
+  static const String vacancyApplications = 'hr-vacancy-candidates/';
+  static const String vacancyCandidates = 'hr-candidates/';
+  static String vacancyApplicationProcesses(int id) =>
+      'hr-vacancy-candidates/$id/processes/';
+
   //! Tickets
   static String showTickets(String status, String search, String page) =>
       'tickets/?status=$status&search=$search&page=$page';

@@ -1,3 +1,4 @@
+import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_field.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/micro_data_params/data_request_params.dart';
 import 'package:my_template/features/mikro_data/domain/usecase/data_requests/add_request_use_cases.dart';
@@ -47,8 +48,13 @@ class AddDataRequestBloc extends Bloc<MicroDataEvent, AddDataRequestState> {
           entryDateTo: event.entryDateTo,
           expectation: event.expectation,
           plan: event.plan,
+          fieldErrors: _clearTouched(state.fieldErrors, event),
         ),
       );
+    });
+
+    on<SetDataRequestFieldErrorsEvent>((event, emit) {
+      emit(state.copyWith(fieldErrors: event.errors));
     });
 
     on<LoadDataRequestForEditEvent>(_onLoadForEdit);
@@ -132,7 +138,7 @@ class AddDataRequestBloc extends Bloc<MicroDataEvent, AddDataRequestState> {
       dateTo: current.dateTo,
       whyNotEnough: _orNull(current.whyNotEnough),
       notEnoughComment: _orNull(current.notEnoughComment),
-      processingEnvironmentId: current.processingEnvironmentId,
+      processingEnvironment: _orNull(current.processingEnvironmentName),
       entryDateFrom: current.entryDateFrom,
       entryDateTo: current.entryDateTo,
       expectation: _orNull(current.expectation),
@@ -288,4 +294,31 @@ class AddDataRequestBloc extends Bloc<MicroDataEvent, AddDataRequestState> {
       event.onError?.call(e);
     }
   }
+}
+
+/// Foydalanuvchi maydonni tahrirlaganda o'sha maydonning xatosi yo'qoladi.
+Map<RequestField, String> _clearTouched(
+  Map<RequestField, String> errors,
+  UpdateDataRequestFieldEvent event,
+) {
+  if (errors.isEmpty) return errors;
+
+  final touched = <RequestField>{
+    if (event.companyName != null) RequestField.companyName,
+    if (event.fullName != null) RequestField.fullName,
+    if (event.email != null) RequestField.email,
+    if (event.phoneNumber != null) RequestField.phoneNumber,
+    if (event.projectName != null) RequestField.projectName,
+    if (event.projectAim != null) RequestField.projectAim,
+    if (event.benefit != null) RequestField.benefit,
+    if (event.aimToUse != null) RequestField.aimToUse,
+    if (event.dataReport != null) RequestField.dataReport,
+    if (event.dateFrom != null) RequestField.dateFrom,
+    if (event.dateTo != null) RequestField.dateTo,
+    if (event.whyNotEnough != null) RequestField.whyNotEnough,
+    if (event.notEnoughComment != null) RequestField.notEnoughComment,
+  };
+  if (touched.isEmpty) return errors;
+
+  return Map.of(errors)..removeWhere((key, _) => touched.contains(key));
 }

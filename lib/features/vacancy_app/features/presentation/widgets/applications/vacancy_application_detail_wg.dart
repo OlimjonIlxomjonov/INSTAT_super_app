@@ -1,91 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
-import 'package:my_template/core/utils/general_widgets/selected_file_container/selected_file_container_wg.dart';
 import 'package:my_template/core/utils/widgets/detail_tabs/detail_tabs_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
-import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/status_container_wg.dart';
+import 'package:my_template/features/vacancy_app/features/domain/entity/application/vacancy_application_entity.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/bloc/processes/vacancy_processes_cubit.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/widgets/applications/vacancy_application_status_wg.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/widgets/applications/vacancy_processes_with_bloc_wg.dart';
 import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancy_details/vacancy_info_body_wg.dart';
 import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancy_details/vacancy_info_field_wg.dart';
-import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancy_details/vacancy_process_item.dart';
-import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancy_details/vacancy_processes_tab_wg.dart';
 import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancy_details/vacancy_section_card_wg.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancy_formatters.dart';
 
-class VacancyApplicationDetailWg extends StatefulWidget {
-  const VacancyApplicationDetailWg({super.key});
+class VacancyApplicationDetailWg extends StatelessWidget {
+  final VacancyApplicationEntity item;
+
+  const VacancyApplicationDetailWg({super.key, required this.item});
 
   @override
-  State<VacancyApplicationDetailWg> createState() =>
-      _VacancyApplicationDetailWgState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => sl<VacancyProcessesCubit>()..load(item.id),
+      child: _VacancyApplicationDetailView(item: item),
+    );
+  }
 }
 
-class _VacancyApplicationDetailWgState
-    extends State<VacancyApplicationDetailWg> {
+class _VacancyApplicationDetailView extends StatefulWidget {
+  final VacancyApplicationEntity item;
+
+  const _VacancyApplicationDetailView({required this.item});
+
+  @override
+  State<_VacancyApplicationDetailView> createState() =>
+      _VacancyApplicationDetailViewState();
+}
+
+class _VacancyApplicationDetailViewState
+    extends State<_VacancyApplicationDetailView> {
   int _selectedTab = 0;
-
-  static const _detailDescription =
-      'Ushbu maqolada O‘zbekiston iqtisodiyotining raqamlashuv jarayonlari, '
-      'uning bugungi holati va kelajakdagi rivojlanish istiqbollari tahlil '
-      'qilinadi. Raqamli texnologiyalarning iqtisodiy o‘sishga ta’siri va '
-      'innovatsion yondashuvlar muhimligi yoritilgan. Shuningdek, sohadagi '
-      'mavjud muammolar va ularni bartaraf etish bo‘yicha tavsiyalar keltirilgan.';
-
-  static const _fields = [
-    VacancyProcessField(label: 'Manzil', value: 'Shoxruh Toshpo’latov'),
-    VacancyProcessField(label: 'Kontakt', value: 's.toshpulatov@example.uz'),
-    VacancyProcessField(label: 'Test sanasi', value: '25.02.2026'),
-    VacancyProcessField(label: 'Test vaqti', value: '13:20'),
-  ];
-
-  static const _commission = [
-    VacancyCommissionMember(name: 'Afzal Pulatov', phone: '+99899 889 90 90'),
-  ];
-
-  static const _processes = [
-    VacancyProcessItem(
-      cycle: 1,
-      title: 'Qoshimcha suhbat',
-      description: '#3310 raqamli qo’lyozma taqriz uchun yuborildi.',
-      date: '12:00 25.02.2026',
-      detailTitle: 'Testga taklif',
-      detailDescription: _detailDescription,
-      fields: _fields,
-      commission: _commission,
-    ),
-    VacancyProcessItem(
-      cycle: 1,
-      title: 'Suhbat',
-      description: '#3310 raqamli qo’lyozma tekshirilmoqda',
-      date: '13:20 25.02.2026',
-      detailTitle: 'Testga taklif',
-      detailDescription: _detailDescription,
-      fields: _fields,
-      commission: _commission,
-    ),
-    VacancyProcessItem(
-      cycle: 1,
-      title: 'Test',
-      description: '#3310 raqamli qo’lyozma tekshirilmoqda',
-      date: '13:20 25.02.2026',
-      isDone: true,
-      detailTitle: 'Testga taklif',
-      detailDescription: _detailDescription,
-      fields: _fields,
-      commission: _commission,
-    ),
-    VacancyProcessItem(
-      cycle: 1,
-      title: 'Saralash',
-      description: '#3310 raqamli qo’lyozma tekshirilmoqda',
-      date: '13:20 25.02.2026',
-      isDone: true,
-      detailTitle: 'Testga taklif',
-      detailDescription: _detailDescription,
-      fields: _fields,
-      commission: _commission,
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -128,10 +84,10 @@ class _VacancyApplicationDetailWgState
             sliver: SliverToBoxAdapter(
               child: _selectedTab == 0
                   ? _buildInfoTab()
-                  : VacancyProcessesTabWg(
-                      items: _processes,
-                      emptyTitle: localization.noProcessesYet,
-                      cycleLabel: (cycle) => '$cycle-tsikl',
+                  : VacancyProcessesWithBlocWg(
+                      onRetry: () => context.read<VacancyProcessesCubit>().load(
+                        widget.item.id,
+                      ),
                     ),
             ),
           ),
@@ -142,6 +98,8 @@ class _VacancyApplicationDetailWgState
 
   Widget _buildInfoTab() {
     final localization = AppLocalizations.of(context)!;
+    final item = widget.item;
+    final candidate = item.candidate;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,64 +114,52 @@ class _VacancyApplicationDetailWgState
             ),
             const SizedBox(width: 6),
             Text(
-              '19.02.2025',
+              formatVacancyDate(item.createdAt),
               style: AppTextStyles.source.medium(
                 fontSize: 14,
                 color: AppColors.greyScale.grey700,
               ),
             ),
             const Spacer(),
-            StatusContainerWg(
-              icon: FlutterRemix.loader_2_line,
-              statusTitle: ' ${localization.statusUnderReview}',
-              iconColor: AppColors.orange500,
-              backgroundColor: AppColors.orange50,
-            ),
+            VacancyApplicationStatusWg(status: item.status),
           ],
         ),
         const SizedBox(height: 16),
 
-        const VacancyInfoBodyWg(),
-        const SizedBox(height: 16),
+        if (item.vacancy != null) ...[
+          VacancyInfoBodyWg(item: item.vacancy!),
+          const SizedBox(height: 16),
+        ],
 
         //! Shaxsiy ma’lumotlar
-        VacancySectionCardWg(
-          title: localization.myPersonalInfo,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              VacancyInfoFieldWg(
-                label: 'F.I.SH.',
-                value: 'Shoxruh Toshpo’latov',
-              ),
-              const SizedBox(height: 16),
-              VacancyInfoFieldWg(
-                label: localization.birthDateLabel,
-                value: '12.01.2001',
-              ),
-              const SizedBox(height: 16),
-              VacancyInfoFieldWg(
-                label: localization.emailAddressLabel,
-                value: 's.toshpulatov@example.uz',
-              ),
-              const SizedBox(height: 16),
-              VacancyInfoFieldWg(
-                label: localization.phoneNumberLabel,
-                value: '+998 90 123 45 67',
-              ),
-              const SizedBox(height: 20),
-
-              //! Hujjatlar
-              VacancySectionTitleWg(title: localization.attachedDocuments),
-              const SizedBox(height: 12),
-              SelectedFileContainerWg(
-                fileName: 'Tahlil, taqqoslash va prognozlash',
-                fileSize: '3.4 MB',
-                onTap: () {},
-              ),
-            ],
+        if (candidate != null)
+          VacancySectionCardWg(
+            title: localization.myPersonalInfo,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                VacancyInfoFieldWg(
+                  label: localization.fullNameLabel,
+                  value: candidate.fullName,
+                ),
+                const SizedBox(height: 16),
+                VacancyInfoFieldWg(
+                  label: localization.birthDateLabel,
+                  value: formatVacancyDate(candidate.birthDate),
+                ),
+                const SizedBox(height: 16),
+                VacancyInfoFieldWg(
+                  label: localization.emailAddressLabel,
+                  value: candidate.email,
+                ),
+                const SizedBox(height: 16),
+                VacancyInfoFieldWg(
+                  label: localization.phoneNumberLabel,
+                  value: candidate.phoneNumber,
+                ),
+              ],
+            ),
           ),
-        ),
       ],
     );
   }
