@@ -8,6 +8,7 @@ import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_state.dart';
+import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/home_event.dart';
 import 'package:myid/enums.dart';
 import 'package:myid/myid.dart';
@@ -18,9 +19,9 @@ import '../../../../../../../core/utils/logger/logger.dart';
 class MyIdConf {
   // static const String _clientId =
   //     'instat_sdk-rLwcdCa93hJmKPxRAFf9BSgQXaXuRQ8h4vv8fe5F';
-  static const String _clientHashId = 'e07fd12c-7aee-445b-b512-51e2478d8916';
+  static const String _clientHashId = '09d6f7a4-2b55-4d66-9f6c-0ca74d713591';
   static const String _clientHash =
-      'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp64tPQLPNz+q9N6qc3ZFnJYRhFBhKsKc07bUT5aahz+QSny9u94+gcEIhMJeyFID8NeWCiUPAyntOWhWQl6JQfe+GyxAfyHPbfYNsCh+FxICwzdBo/P4q0wco8g6kQpbLxlrJO9MAC/JnG4itnOuD6tc1hDMi/pQjoJzd8eT8mWCmSxzcGKRy5uyBPtW19I9PZ2ZgPCvMbxfQULUSSPWDuTgFQAhCXOxja1dywORZkFVYFpi2+LeJ+bR+btk8wOeLJ6gm8/+E1QkxRLnH8cou8suaOa1aqJemXPLsdDkgjhIpbPgjGPW8Q3sVSxGsDZUi6dzbdRXRDHHYhpPlMvjFwIDAQAB';
+      'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv1TBK3sym74EPrt8NPJ+8o1EHUKjJU1TDPnTcoq0mu07scPGfUhzHVXmH1MjCPf7HH4KyQjkx13eo6kXDVvp8fYiDBm4QjH2D5OIGNuuUFzIuv/ZeDzmeJtNrJIovywa5YpW2TMk0cgcSL0m3CbqxgB6n3jgBsIr7VtadPknSanKBF45s0fQWk72HoqxAqLydj8qtwlYopsh6Nt9rBFkGZnvfMVwo1OOSnRiwfUDQHNtxPjaZbqxfBm90xxDzgPZn2Rumx3MpF49RUM3nwA0bdF1Vt7ULhq7djWgdVBLH1eN3O4hHB+9KD5r6hIrnRIafCj3L1MdLl2MKIcwyReJgwIDAQAB';
 
   Future<bool> startFaceVerification(
     BuildContext context, {
@@ -28,12 +29,13 @@ class MyIdConf {
   }) async {
     try {
       final result = await MyIdClient.start(
-        //! Production
         config: MyIdConfig(
           sessionId: sessionId,
           clientHash: _clientHash,
           clientHashId: _clientHashId,
-          environment: MyIdEnvironment.DEBUG,
+          environment: ApiUrls.isProduction
+              ? MyIdEnvironment.PRODUCTION
+              : MyIdEnvironment.DEBUG,
           entryType: MyIdEntryType.IDENTIFICATION,
         ),
         iosAppearance: MyIdIOSAppearance(),
