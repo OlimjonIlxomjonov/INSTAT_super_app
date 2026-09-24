@@ -4,6 +4,7 @@ import 'package:my_template/features/vacancy_app/features/data/source/remote_dat
 import 'package:my_template/features/vacancy_app/features/domain/entity/application/vacancy_application_list_response.dart';
 import 'package:my_template/features/vacancy_app/features/domain/entity/application/vacancy_process_entity.dart';
 import 'package:my_template/features/vacancy_app/features/domain/entity/vacancy/vacancy_list_response.dart';
+import 'package:my_template/features/vacancy_app/features/domain/entity/vacancy/vacancy_test_direction_entity.dart';
 import 'package:my_template/features/vacancy_app/features/domain/repository/vacancy_repository.dart';
 
 class VacancyRepoImpl implements VacancyRepository {
@@ -35,5 +36,12 @@ class VacancyRepoImpl implements VacancyRepository {
   @override
   Future<void> applyToVacancy({required ApplyVacancyParams params}) {
     return _remoteDataSource.applyToVacancy(params: params);
+  }
+
+  @override
+  Future<List<VacancyTestDirectionEntity>> getTestDirections({
+    required int vacancyId,
+  }) {
+    return _remoteDataSource.fetchTestDirections(vacancyId: vacancyId);
   }
 }

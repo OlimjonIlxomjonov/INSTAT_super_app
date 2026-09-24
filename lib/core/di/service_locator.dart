@@ -8,6 +8,7 @@ import 'package:my_template/features/vacancy_app/features/presentation/bloc/appl
 import 'package:my_template/features/vacancy_app/features/presentation/bloc/applied_check/vacancy_applied_cubit.dart';
 import 'package:my_template/features/vacancy_app/features/presentation/bloc/apply/vacancy_apply_cubit.dart';
 import 'package:my_template/features/vacancy_app/features/presentation/bloc/processes/vacancy_processes_cubit.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/bloc/test_directions/vacancy_test_directions_cubit.dart';
 import 'package:my_template/features/vacancy_app/features/presentation/bloc/vacancies/vacancies_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:my_template/features/auth/data/repo/reviewer_auth_repo_impl.dart';
@@ -477,11 +478,15 @@ Future<void> setup() async {
   );
   sl.registerLazySingleton(() => GetVacancyProcessesUseCase(repository: sl()));
   sl.registerLazySingleton(() => ApplyVacancyUseCase(repository: sl()));
+  sl.registerLazySingleton(
+    () => GetVacancyTestDirectionsUseCase(repository: sl()),
+  );
   sl.registerFactory(() => VacanciesBloc(useCase: sl()));
   sl.registerFactory(() => VacancyApplicationsBloc(useCase: sl()));
   sl.registerFactory(() => VacancyAppliedCubit(useCase: sl()));
   sl.registerFactory(() => VacancyProcessesCubit(useCase: sl()));
   sl.registerFactory(() => VacancyApplyCubit(useCase: sl()));
+  sl.registerFactory(() => VacancyTestDirectionsCubit(useCase: sl()));
 
   //! {BLOC}
   sl.registerLazySingleton(() => HomeLayoutCubit());

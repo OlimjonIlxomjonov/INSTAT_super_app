@@ -3,6 +3,7 @@ import 'package:my_template/core/common/params/vacancy_params/vacancy_params.dar
 import 'package:my_template/features/vacancy_app/features/data/model/application/vacancy_application_list_response_model.dart';
 import 'package:my_template/features/vacancy_app/features/data/model/application/vacancy_process_model.dart';
 import 'package:my_template/features/vacancy_app/features/data/model/vacancy/vacancy_list_response_model.dart';
+import 'package:my_template/features/vacancy_app/features/data/model/vacancy/vacancy_test_direction_model.dart';
 
 abstract class VacancyRemoteDataSource {
   Future<VacancyListResponseModel> fetchVacancies({
@@ -18,4 +19,8 @@ abstract class VacancyRemoteDataSource {
   });
 
   Future<void> applyToVacancy({required ApplyVacancyParams params});
+
+  Future<List<VacancyTestDirectionModel>> fetchTestDirections({
+    required int vacancyId,
+  });
 }

@@ -711,5 +711,21 @@
   "chooseButton": "Choose",
   "bannersSection": "Banners",
   "promoBannersLabel": "Promo banners",
-  "promoBannersHint": "When on, promo banners from the site are shown; when off, the app’s own banners"
+  "promoBannersHint": "When on, promo banners from the site are shown; when off, the app’s own banners",
+  "minScoreValue": "Min - {score} pts",
+  "@minScoreValue": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "maxScoreValue": "(max - {score} pts)",
+  "@maxScoreValue": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  }
 }

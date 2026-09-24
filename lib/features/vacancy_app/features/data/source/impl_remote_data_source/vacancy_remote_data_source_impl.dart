@@ -7,6 +7,7 @@ import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/features/vacancy_app/features/data/model/application/vacancy_application_list_response_model.dart';
 import 'package:my_template/features/vacancy_app/features/data/model/application/vacancy_process_model.dart';
 import 'package:my_template/features/vacancy_app/features/data/model/vacancy/vacancy_list_response_model.dart';
+import 'package:my_template/features/vacancy_app/features/data/model/vacancy/vacancy_test_direction_model.dart';
 import 'package:my_template/features/vacancy_app/features/data/source/remote_data_source/vacancy_remote_data_source.dart';
 
 class VacancyRemoteDataSourceImpl implements VacancyRemoteDataSource {
@@ -112,6 +113,32 @@ class VacancyRemoteDataSourceImpl implements VacancyRemoteDataSource {
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
         return;
+      }
+      throw Exception('ERROR ${response.statusCode}');
+    } on DioException catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<VacancyTestDirectionModel>> fetchTestDirections({
+    required int vacancyId,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        ApiUrls.vacancyTestDirections(vacancyId),
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        final raw = response.data;
+        final list = raw is List ? raw : (raw is Map ? raw['data'] : null);
+        return (list as List? ?? [])
+            .map(
+              (e) =>
+                  VacancyTestDirectionModel.fromJson(e as Map<String, dynamic>),
+            )
+            .toList();
       }
       throw Exception('ERROR ${response.statusCode}');
     } on DioException catch (e) {

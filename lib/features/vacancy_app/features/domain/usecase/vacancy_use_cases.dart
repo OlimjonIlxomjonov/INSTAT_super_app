@@ -3,6 +3,7 @@ import 'package:my_template/core/common/params/vacancy_params/vacancy_params.dar
 import 'package:my_template/features/vacancy_app/features/domain/entity/application/vacancy_application_list_response.dart';
 import 'package:my_template/features/vacancy_app/features/domain/entity/application/vacancy_process_entity.dart';
 import 'package:my_template/features/vacancy_app/features/domain/entity/vacancy/vacancy_list_response.dart';
+import 'package:my_template/features/vacancy_app/features/domain/entity/vacancy/vacancy_test_direction_entity.dart';
 import 'package:my_template/features/vacancy_app/features/domain/repository/vacancy_repository.dart';
 
 class GetVacanciesUseCase {
@@ -44,5 +45,15 @@ class ApplyVacancyUseCase {
 
   Future<void> call({required ApplyVacancyParams params}) {
     return repository.applyToVacancy(params: params);
+  }
+}
+
+class GetVacancyTestDirectionsUseCase {
+  final VacancyRepository repository;
+
+  GetVacancyTestDirectionsUseCase({required this.repository});
+
+  Future<List<VacancyTestDirectionEntity>> call({required int vacancyId}) {
+    return repository.getTestDirections(vacancyId: vacancyId);
   }
 }

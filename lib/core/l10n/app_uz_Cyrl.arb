@@ -711,5 +711,21 @@
   "chooseButton": "Танлаш",
   "bannersSection": "Баннерлар",
   "promoBannersLabel": "Реклама баннерлари",
-  "promoBannersHint": "Ёқилса — сайтдаги реклама баннерлари, ўчирилса — илова баннерлари кўрсатилади"
+  "promoBannersHint": "Ёқилса — сайтдаги реклама баннерлари, ўчирилса — илова баннерлари кўрсатилади",
+  "minScoreValue": "Мин - {score} балл",
+  "@minScoreValue": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "maxScoreValue": "(макс - {score} балл)",
+  "@maxScoreValue": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  }
 }

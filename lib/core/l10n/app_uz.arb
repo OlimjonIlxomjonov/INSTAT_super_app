@@ -839,5 +839,21 @@
   "chooseButton": "Tanlash",
   "bannersSection": "Bannerlar",
   "promoBannersLabel": "Reklama bannerlari",
-  "promoBannersHint": "Yoqilsa — saytdagi reklama bannerlari, o‘chirilsa — ilova bannerlari ko‘rsatiladi"
+  "promoBannersHint": "Yoqilsa — saytdagi reklama bannerlari, o‘chirilsa — ilova bannerlari ko‘rsatiladi",
+  "minScoreValue": "Min - {score} ball",
+  "@minScoreValue": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "maxScoreValue": "(max - {score} ball)",
+  "@maxScoreValue": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  }
 }

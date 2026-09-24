@@ -185,7 +185,7 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                         enabled: isLoading,
                         child: Column(
                           children: [
-                            SizedBox(height: 15),
+                            const SizedBox(height: 15),
                             Stack(
                               children: [
                                 /// user avatar
@@ -266,7 +266,7 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 15),
+                         const   SizedBox(height: 15),
                             Row(
                               mainAxisAlignment: .center,
                               crossAxisAlignment: .center,
@@ -281,7 +281,7 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                                 if (isVerified) _buildVerifiedBadge(),
                               ],
                             ),
-                            SizedBox(height: 8),
+                         const   SizedBox(height: 8),
                             //! Confirm account
                             if (!isVerified)
                               GestureDetector(
@@ -355,7 +355,7 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                                   ),
                                 ),
                               ),
-                            SizedBox(height: 15),
+                            const SizedBox(height: 15),
                           ],
                         ),
                       );

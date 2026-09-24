@@ -711,5 +711,21 @@
   "chooseButton": "Выбрать",
   "bannersSection": "Баннеры",
   "promoBannersLabel": "Рекламные баннеры",
-  "promoBannersHint": "Если включено — показываются рекламные баннеры с сайта, если выключено — баннеры приложения"
+  "promoBannersHint": "Если включено — показываются рекламные баннеры с сайта, если выключено — баннеры приложения",
+  "minScoreValue": "Мин - {score} балл",
+  "@minScoreValue": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "maxScoreValue": "(макс - {score} балл)",
+  "@maxScoreValue": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  }
 }

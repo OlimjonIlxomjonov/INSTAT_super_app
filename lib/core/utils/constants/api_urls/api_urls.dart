@@ -157,6 +157,8 @@ class ApiUrls {
 
   //! Vacancies
   static const String vacancies = 'hr-vacancies/';
+  static String vacancyTestDirections(int id) =>
+      'hr-vacancies/$id/test-directions/';
   static const String vacancyApplications = 'hr-vacancy-candidates/';
   static const String vacancyCandidates = 'hr-candidates/';
   static String vacancyApplicationProcesses(int id) =>

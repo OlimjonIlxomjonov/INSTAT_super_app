@@ -5,6 +5,7 @@ import 'package:my_template/core/utils/general_widgets/html_content_wg/html_cont
 import 'package:my_template/features/vacancy_app/features/domain/entity/vacancy/vacancy_entity.dart';
 import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancy_details/vacancy_provided_wg.dart';
 import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancy_details/vacancy_section_card_wg.dart';
+import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancy_details/vacancy_test_directions_wg.dart';
 
 class VacancyInfoBodyWg extends StatelessWidget {
   final VacancyEntity item;
@@ -32,6 +33,9 @@ class VacancyInfoBodyWg extends StatelessWidget {
         //! Shartlar
         VacancyProvidedWg(item: item),
         const SizedBox(height: 16),
+
+        //! Test yo'nalishlari
+        VacancyTestDirectionsWg(vacancyId: item.id),
 
         //! Talablar
         if (_hasContent(item.requirements)) ...[
