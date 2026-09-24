@@ -1,5 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:my_template/core/utils/files/remote_file_opener.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
@@ -13,8 +13,6 @@ import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_process/article_process_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_process/article_process_state.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_files/review_files_bloc.dart';
-import 'package:open_filex/open_filex.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -101,24 +99,7 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
     _isOpeningFile.value = true;
 
     try {
-      final tempDir = await getTemporaryDirectory();
-      final fileName = Uri.parse(url).pathSegments.last;
-      final savePath = '${tempDir.path}/$fileName';
-
-      final dio = Dio();
-      await dio.download(url, savePath);
-
-      final result = await OpenFilex.open(savePath);
-      if (result.type != ResultType.done && mounted) {
-        errorFlushBar(
-          context,
-          AppLocalizations.of(context)!.fileOpenError(result.message),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        errorFlushBar(context, AppLocalizations.of(context)!.fileDownloadError);
-      }
+      await openRemoteFile(context, url: url);
     } finally {
       if (mounted) _isOpeningFile.value = false;
     }

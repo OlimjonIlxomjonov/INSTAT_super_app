@@ -10,7 +10,7 @@ import 'package:my_template/features/mikro_data/presentation/bloc/add_data_reque
 import 'package:my_template/features/mikro_data/presentation/bloc/add_data_request/add_data_request_state.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_event.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_error_messages.dart';
-import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_file_opener.dart';
+import 'package:my_template/core/utils/files/remote_file_opener.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_formatters.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/widgets/request_section_card_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/widgets/article_file_picker_helper.dart';
@@ -147,7 +147,7 @@ class RequestFileSectionWg extends StatelessWidget {
                 fileName: fileName,
                 fileSize: formatRequestFileSize(fileSize),
                 onTap: () =>
-                    openRequestFile(context, url: fileUrl, fileName: fileName),
+                    openRemoteFile(context, url: fileUrl, fileName: fileName),
               ),
               const SizedBox(height: 10),
               Row(

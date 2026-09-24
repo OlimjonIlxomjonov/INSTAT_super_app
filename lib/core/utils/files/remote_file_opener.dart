@@ -1,9 +1,10 @@
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
+import 'package:my_template/core/network/dio_client.dart';
+import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -20,7 +21,7 @@ String _resolveName(String url, String? fileName) {
 }
 
 /// Serverdagi faylni vaqtinchalik papkaga yuklab, tizim ilovasida ochadi.
-Future<void> openRequestFile(
+Future<void> openRemoteFile(
   BuildContext context, {
   required String? url,
   String? fileName,
@@ -41,14 +42,16 @@ Future<void> openRequestFile(
     final file = File(savePath);
 
     if (!await file.exists() || await file.length() == 0) {
-      await Dio().download(url, savePath);
+      await DioClient().download(url, savePath);
     }
 
+    if (!context.mounted) return;
     final result = await OpenFilex.open(savePath);
     if (result.type != ResultType.done && context.mounted) {
       errorFlushBar(context, localization.fileOpenError(result.message));
     }
-  } catch (_) {
+  } catch (e) {
+    logger.e('File open error: $e');
     if (context.mounted) {
       errorFlushBar(context, localization.fileDownloadError);
     }

@@ -17,7 +17,7 @@ import 'package:my_template/features/mikro_data/presentation/bloc/add_data_reque
 import 'package:my_template/features/mikro_data/presentation/bloc/data_request_processes/data_request_processes_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/micro_data_event.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/page_view_screens/request_summary_view.dart';
-import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_file_opener.dart';
+import 'package:my_template/core/utils/files/remote_file_opener.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_formatters.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/widgets/request_process_item_wg.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/widgets/request_status_check_wg.dart';
@@ -81,7 +81,7 @@ class _DataRequestDetailViewState extends State<_DataRequestDetailView> {
     if (_isOpeningFile.value) return;
     _isOpeningFile.value = true;
     try {
-      await openRequestFile(context, url: url, fileName: fileName);
+      await openRemoteFile(context, url: url, fileName: fileName);
     } finally {
       if (mounted) _isOpeningFile.value = false;
     }

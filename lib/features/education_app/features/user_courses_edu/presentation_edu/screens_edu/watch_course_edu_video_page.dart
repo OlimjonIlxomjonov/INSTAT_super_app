@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:my_template/core/utils/files/remote_file_opener.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconly/iconly.dart';
@@ -25,9 +26,6 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/video_player_wg.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:video_player/video_player.dart';
-import 'package:dio/dio.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:open_filex/open_filex.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/video_thumbnail_wg.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/lesson_video_progress/lesson_video_progress_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/lesson_video_progress/lesson_video_progress_event.dart';
@@ -289,21 +287,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
     _isDownloadingNotifier.value = true;
 
     try {
-      final tempDir = await getTemporaryDirectory();
-      final savePath = '${tempDir.path}/$fileName';
-
-      final dio = Dio();
-      await dio.download(url, savePath);
-
-      final result = await OpenFilex.open(savePath);
-      if (result.type != ResultType.done && mounted) {
-        errorFlushBar(context, localization.fileOpenError(result.message));
-      }
-    } catch (e) {
-      if (mounted) {
-        errorFlushBar(context, localization.fileDownloadError);
-      }
-      logger.e(e.toString());
+      await openRemoteFile(context, url: url, fileName: fileName);
     } finally {
       if (mounted) _isDownloadingNotifier.value = false;
     }

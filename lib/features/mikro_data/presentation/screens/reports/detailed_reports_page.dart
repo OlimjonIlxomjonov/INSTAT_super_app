@@ -1,11 +1,8 @@
-import 'dart:io';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:my_template/core/utils/files/remote_file_opener.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
-import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/micro_data_params/data_request_params.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
@@ -18,8 +15,6 @@ import 'package:my_template/features/mikro_data/presentation/bloc/report_files/r
 import 'package:my_template/features/mikro_data/presentation/bloc/report_files/report_files_stat.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/report_variables/report_variables_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/report_variables/report_variables_state.dart';
-import 'package:open_filex/open_filex.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../../core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
@@ -61,39 +56,10 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
   }
 
   Future<void> _openFile(String? url, {String? fileName}) async {
-    if (url == null || url.isEmpty) {
-      if (mounted) {
-        errorFlushBar(context, AppLocalizations.of(context)!.fileUrlNotFound);
-      }
-      return;
-    }
-
     if (_isOpeningFile.value) return;
     _isOpeningFile.value = true;
-
     try {
-      final tempDir = await getTemporaryDirectory();
-      final resolvedFileName = fileName ?? Uri.parse(url).pathSegments.last;
-      final savePath = '${tempDir.path}/$resolvedFileName';
-      final file = File(savePath);
-
-      if (!await file.exists()) {
-        final dio = Dio();
-        await dio.download(url, savePath);
-      }
-
-      final result = await OpenFilex.open(savePath);
-      if (result.type != ResultType.done && mounted) {
-        errorFlushBar(
-          context,
-          AppLocalizations.of(context)!.fileOpenError(result.message),
-        );
-      }
-    } catch (e) {
-      debugPrint(' File error: $e');
-      if (mounted) {
-        errorFlushBar(context, AppLocalizations.of(context)!.fileDownloadError);
-      }
+      await openRemoteFile(context, url: url, fileName: fileName);
     } finally {
       if (mounted) _isOpeningFile.value = false;
     }

@@ -266,7 +266,7 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                                 ),
                               ],
                             ),
-                         const   SizedBox(height: 15),
+                            const SizedBox(height: 15),
                             Row(
                               mainAxisAlignment: .center,
                               crossAxisAlignment: .center,
@@ -281,7 +281,7 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
                                 if (isVerified) _buildVerifiedBadge(),
                               ],
                             ),
-                         const   SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             //! Confirm account
                             if (!isVerified)
                               GestureDetector(

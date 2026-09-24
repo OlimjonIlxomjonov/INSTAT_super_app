@@ -7,6 +7,8 @@ import 'package:my_template/features/auth/presentation/screens/log_in_options_pa
 
 import '../utils/constants/api_urls/api_urls.dart';
 
+const _skipAuthRedirectKey = 'skipAuthRedirect';
+
 class DioClient {
   final Dio _dio;
   bool _isHandlingSessionExpiry = false;
@@ -49,7 +51,13 @@ class DioClient {
           final isUnauthorized = statusCode == 401;
           final hasToken = token != null && token.isNotEmpty;
 
-          if (isUnauthorized && hasToken && !_isHandlingSessionExpiry) {
+          final skipRedirect =
+              error.requestOptions.extra[_skipAuthRedirectKey] == true;
+
+          if (isUnauthorized &&
+              hasToken &&
+              !skipRedirect &&
+              !_isHandlingSessionExpiry) {
             _isHandlingSessionExpiry = true;
 
             await TokenStorageServiceImpl().deleteAccessToken();
@@ -85,6 +93,28 @@ class DioClient {
   void setToken(String token) {
     _dio.options.headers['Authorization'] = "Bearer $token";
     _isHandlingSessionExpiry = false;
+  }
+
+  /// DOWNLOAD
+  ///
+  /// Token faqat o'z serverimizga qo'shiladi, begona manzilga emas.
+  /// 401 bu yerda sessiyani yopmaydi — faylga ruxsat yo'qligi
+  /// foydalanuvchini ilovadan chiqarib yubormasligi kerak.
+  Future<Response> download(String url, String savePath) async {
+    final isOwnHost = url.startsWith(ApiUrls.origin) || !url.startsWith('http');
+    if (!isOwnHost) {
+      return await Dio().download(url, savePath);
+    }
+
+    try {
+      return await _dio.download(
+        url,
+        savePath,
+        options: Options(extra: const {_skipAuthRedirectKey: true}),
+      );
+    } catch (e) {
+      rethrow;
+    }
   }
 
   /// GET

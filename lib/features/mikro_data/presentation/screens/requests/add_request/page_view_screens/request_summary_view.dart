@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/add_data_request/add_data_request_bloc.dart';
 import 'package:my_template/features/mikro_data/presentation/bloc/add_data_request/add_data_request_state.dart';
-import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_file_opener.dart';
+import 'package:my_template/core/utils/files/remote_file_opener.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/widgets/request_summary_body_wg.dart';
 
 class RequestSummaryView extends StatelessWidget {
@@ -21,12 +21,12 @@ class RequestSummaryView extends StatelessWidget {
               children: [
                 RequestSummaryBodyWg(
                   data: state.toSummaryData(),
-                  onFileTap: () => openRequestFile(
+                  onFileTap: () => openRemoteFile(
                     context,
                     url: state.fileUrl,
                     fileName: state.fileName,
                   ),
-                  onCompanyFileTap: () => openRequestFile(
+                  onCompanyFileTap: () => openRemoteFile(
                     context,
                     url: state.companyFileUrl,
                     fileName: state.companyFileName,
