@@ -14,15 +14,30 @@ import '../../bloc/reports/reports_state.dart';
 
 class ReportsPage extends StatefulWidget {
   final bool autofocusSearch;
+  final String initialQuery;
 
-  const ReportsPage({super.key, this.autofocusSearch = false});
+  const ReportsPage({
+    super.key,
+    this.autofocusSearch = false,
+    this.initialQuery = '',
+  });
 
   @override
   State<ReportsPage> createState() => _ReportsPageState();
 }
 
 class _ReportsPageState extends State<ReportsPage> {
-  String _search = '';
+  late String _search = widget.initialQuery;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialQuery.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _fetch();
+      });
+    }
+  }
 
   void _fetch() {
     context.read<ReportsBloc>().add(ReportsEvent(search: _search));
@@ -75,6 +90,7 @@ class _ReportsPageState extends State<ReportsPage> {
                     titleSpacing: 20,
                     title: AppSearchFieldWg(
                       autofocus: widget.autofocusSearch,
+                      initialValue: widget.initialQuery,
                       hintText: localization.searchReportsHint,
                       onChanged: (value) {
                         _search = value;

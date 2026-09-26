@@ -731,5 +731,24 @@
   "adjustPhotoTitle": "Adjust photo",
   "adjustPhotoHint": "Drag to move, pinch to zoom",
   "imageProcessError": "Failed to process the image",
-  "noApplicationsYetSubtitle": "Your applications will appear here. Send your first one to get started."
+  "noApplicationsYetSubtitle": "Your applications will appear here. Send your first one to get started.",
+  "recentSearches": "Recent searches",
+  "clearAllLabel": "Clear all",
+  "globalSearchHint": "Course, book, vacancy...",
+  "globalSearchIdleTitle": "What are you looking for?",
+  "globalSearchIdleSubtitle": "Search courses, books, magazines, datasets and vacancies.",
+  "searchGroupCourses": "Courses",
+  "searchGroupBooks": "Books",
+  "searchGroupMagazines": "Magazines",
+  "searchGroupReports": "Datasets",
+  "searchGroupVacancies": "Vacancies",
+  "globalSearchNothingFound": "Nothing found for “{query}”",
+  "@globalSearchNothingFound": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "searchTitle": "Search"
 }

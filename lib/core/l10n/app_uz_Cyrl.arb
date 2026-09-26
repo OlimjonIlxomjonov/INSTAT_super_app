@@ -731,5 +731,24 @@
   "adjustPhotoTitle": "Расмни мослаш",
   "adjustPhotoHint": "Бармоқ билан суринг, икки бармоқ билан катталаштиринг",
   "imageProcessError": "Расмни қайта ишлашда хатолик",
-  "noApplicationsYetSubtitle": "Юборган аризаларингиз шу ерда кўринади. Биринчи аризангизни юбориб кўринг."
+  "noApplicationsYetSubtitle": "Юборган аризаларингиз шу ерда кўринади. Биринчи аризангизни юбориб кўринг.",
+  "recentSearches": "Охирги қидирувлар",
+  "clearAllLabel": "Ҳаммасини тозалаш",
+  "globalSearchHint": "Курс, китоб, вакансия...",
+  "globalSearchIdleTitle": "Нимани излаяпсиз?",
+  "globalSearchIdleSubtitle": "Курслар, китоблар, журналлар, маълумот тўпламлари ва вакансиялар бўйича қидиринг.",
+  "searchGroupCourses": "Курслар",
+  "searchGroupBooks": "Китоблар",
+  "searchGroupMagazines": "Журналлар",
+  "searchGroupReports": "Маълумот тўпламлари",
+  "searchGroupVacancies": "Вакансиялар",
+  "globalSearchNothingFound": "“{query}” бўйича ҳеч нарса топилмади",
+  "@globalSearchNothingFound": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "searchTitle": "Қидирув"
 }

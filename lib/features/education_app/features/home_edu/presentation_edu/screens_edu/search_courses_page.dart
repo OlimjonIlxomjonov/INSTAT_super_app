@@ -20,7 +20,9 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/course_category_builder.dart';
 
 class SearchCoursesPage extends StatefulWidget {
-  const SearchCoursesPage({super.key});
+  final String initialQuery;
+
+  const SearchCoursesPage({super.key, this.initialQuery = ''});
 
   @override
   State<SearchCoursesPage> createState() => _SearchCoursesPageState();
@@ -36,11 +38,11 @@ class _SearchCoursesPageState extends State<SearchCoursesPage> {
   void initState() {
     super.initState();
     // Auto-focus keyboard when the page opens
+    _controller.text = widget.initialQuery;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) _focusNode.requestFocus();
     });
-    // Fire initial blank search to load all courses
-    _search('');
+    _search(widget.initialQuery);
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:my_template/features/main_app/global_search/presentation/screens/global_search_page.dart';
 import 'package:my_template/core/services/banners/banner_source_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
@@ -426,7 +427,13 @@ class _DesktopUiScreenComponentState extends State<DesktopUiScreenComponent> {
                               children: [
                                 Padding(
                                   padding: AppPadding.hAndV20x20(),
-                                  child: const AppSearchbarWg(),
+                                  child: AppSearchbarWg(
+                                    onTap: () => openMiniAppSheetFamily(
+                                      context,
+                                      child: const GlobalSearchPage(),
+                                      showHandler: false,
+                                    ),
+                                  ),
                                 ),
                                 _buildMiniAppGrid(),
                                 Padding(

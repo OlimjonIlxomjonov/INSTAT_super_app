@@ -13,12 +13,14 @@ class AppSearchFieldWg extends StatefulWidget {
     required this.onChanged,
     this.hintText,
     this.autofocus = false,
+    this.initialValue = '',
     this.debounce = const Duration(milliseconds: 500),
   });
 
   final ValueChanged<String> onChanged;
   final String? hintText;
   final bool autofocus;
+  final String initialValue;
   final Duration debounce;
 
   @override
@@ -26,7 +28,7 @@ class AppSearchFieldWg extends StatefulWidget {
 }
 
 class _AppSearchFieldWgState extends State<AppSearchFieldWg> {
-  final _controller = TextEditingController();
+  late final _controller = TextEditingController(text: widget.initialValue);
   final _focusNode = FocusNode();
   Timer? _debounce;
 

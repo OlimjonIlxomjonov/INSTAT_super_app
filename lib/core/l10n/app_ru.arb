@@ -731,5 +731,24 @@
   "adjustPhotoTitle": "Настройте фото",
   "adjustPhotoHint": "Перетащите пальцем, увеличьте двумя пальцами",
   "imageProcessError": "Ошибка при обработке изображения",
-  "noApplicationsYetSubtitle": "Здесь появятся отправленные вами заявки. Отправьте первую заявку."
+  "noApplicationsYetSubtitle": "Здесь появятся отправленные вами заявки. Отправьте первую заявку.",
+  "recentSearches": "Недавние запросы",
+  "clearAllLabel": "Очистить всё",
+  "globalSearchHint": "Курс, книга, вакансия...",
+  "globalSearchIdleTitle": "Что вы ищете?",
+  "globalSearchIdleSubtitle": "Ищите курсы, книги, журналы, наборы данных и вакансии.",
+  "searchGroupCourses": "Курсы",
+  "searchGroupBooks": "Книги",
+  "searchGroupMagazines": "Журналы",
+  "searchGroupReports": "Наборы данных",
+  "searchGroupVacancies": "Вакансии",
+  "globalSearchNothingFound": "По запросу «{query}» ничего не найдено",
+  "@globalSearchNothingFound": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "searchTitle": "Поиск"
 }

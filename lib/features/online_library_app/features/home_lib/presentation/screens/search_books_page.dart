@@ -18,7 +18,9 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/detailed_online_book_component.dart';
 
 class SearchBooksPage extends StatefulWidget {
-  const SearchBooksPage({super.key});
+  final String initialQuery;
+
+  const SearchBooksPage({super.key, this.initialQuery = ''});
 
   @override
   State<SearchBooksPage> createState() => _SearchBooksPageState();
@@ -33,11 +35,11 @@ class _SearchBooksPageState extends State<SearchBooksPage> {
   void initState() {
     super.initState();
     // Auto-focus keyboard when the page opens
+    _controller.text = widget.initialQuery;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) _focusNode.requestFocus();
     });
-    // Fire initial blank search to load all books
-    _search('');
+    _search(widget.initialQuery);
   }
 
   @override

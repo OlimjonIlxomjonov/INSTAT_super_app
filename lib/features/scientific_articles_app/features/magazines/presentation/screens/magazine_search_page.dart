@@ -17,7 +17,9 @@ import 'package:skeletonizer/skeletonizer.dart';
 /// Bosh sahifadagi qidiruv shu yerga olib keladi — jurnallar bo'yicha qidiradi.
 /// Jurnallar tabidagi ro'yxatga tegmasligi uchun alohida bloc bilan ishlaydi.
 class MagazineSearchPage extends StatelessWidget {
-  const MagazineSearchPage({super.key});
+  final String initialQuery;
+
+  const MagazineSearchPage({super.key, this.initialQuery = ''});
 
   @override
   Widget build(BuildContext context) {
@@ -25,23 +27,28 @@ class MagazineSearchPage extends StatelessWidget {
       create: (_) => sl<ArticleEditionsBloc>()
         ..add(
           ArticlesEditionsEvent(
-            params: ArticleEditionsParams(status: 'published'),
+            params: ArticleEditionsParams(
+              status: 'published',
+              search: initialQuery,
+            ),
           ),
         ),
-      child: const _MagazineSearchView(),
+      child: _MagazineSearchView(initialQuery: initialQuery),
     );
   }
 }
 
 class _MagazineSearchView extends StatefulWidget {
-  const _MagazineSearchView();
+  final String initialQuery;
+
+  const _MagazineSearchView({required this.initialQuery});
 
   @override
   State<_MagazineSearchView> createState() => _MagazineSearchViewState();
 }
 
 class _MagazineSearchViewState extends State<_MagazineSearchView> {
-  String _search = '';
+  late String _search = widget.initialQuery;
 
   void _fetch() {
     context.read<ArticleEditionsBloc>().add(
@@ -71,6 +78,7 @@ class _MagazineSearchViewState extends State<_MagazineSearchView> {
             titleSpacing: 20,
             title: AppSearchFieldWg(
               autofocus: true,
+              initialValue: widget.initialQuery,
               hintText: localization.searchMagazinesHint,
               onChanged: (value) {
                 _search = value;

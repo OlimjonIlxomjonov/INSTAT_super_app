@@ -19,26 +19,33 @@ import 'package:my_template/features/vacancy_app/features/presentation/widgets/v
 import '../../../../../../core/utils/app_utils.dart';
 
 class VacanciesPage extends StatelessWidget {
-  const VacanciesPage({super.key});
+  final String initialQuery;
+
+  const VacanciesPage({super.key, this.initialQuery = ''});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => sl<VacanciesBloc>()..add(const FetchVacanciesEvent()),
-      child: const _VacanciesView(),
+      create: (_) => sl<VacanciesBloc>()
+        ..add(
+          FetchVacanciesEvent(params: VacancyListParams(search: initialQuery)),
+        ),
+      child: _VacanciesView(initialQuery: initialQuery),
     );
   }
 }
 
 class _VacanciesView extends StatefulWidget {
-  const _VacanciesView();
+  final String initialQuery;
+
+  const _VacanciesView({required this.initialQuery});
 
   @override
   State<_VacanciesView> createState() => _VacanciesViewState();
 }
 
 class _VacanciesViewState extends State<_VacanciesView> {
-  String _search = '';
+  late String _search = widget.initialQuery;
   String? _employmentType;
 
   void _fetch() {
@@ -117,6 +124,7 @@ class _VacanciesViewState extends State<_VacanciesView> {
                     automaticallyImplyLeading: false,
                     titleSpacing: 20,
                     title: AppSearchFieldWg(
+                      initialValue: widget.initialQuery,
                       hintText: localization.searchVacanciesHint,
                       onChanged: (value) {
                         _search = value;

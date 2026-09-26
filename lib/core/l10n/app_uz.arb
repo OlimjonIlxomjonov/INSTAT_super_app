@@ -859,5 +859,24 @@
   "adjustPhotoTitle": "Rasmni moslang",
   "adjustPhotoHint": "Barmoq bilan suring, ikki barmoq bilan kattalashtiring",
   "imageProcessError": "Rasmni qayta ishlashda xatolik",
-  "noApplicationsYetSubtitle": "Yuborgan arizalaringiz shu yerda ko‘rinadi. Birinchi arizangizni yuborib ko‘ring."
+  "noApplicationsYetSubtitle": "Yuborgan arizalaringiz shu yerda ko‘rinadi. Birinchi arizangizni yuborib ko‘ring.",
+  "recentSearches": "Oxirgi qidiruvlar",
+  "clearAllLabel": "Hammasini tozalash",
+  "globalSearchHint": "Kurs, kitob, vakansiya...",
+  "globalSearchIdleTitle": "Nimani izlayapsiz?",
+  "globalSearchIdleSubtitle": "Kurslar, kitoblar, jurnallar, ma’lumot to‘plamlari va vakansiyalar bo‘yicha qidiring.",
+  "searchGroupCourses": "Kurslar",
+  "searchGroupBooks": "Kitoblar",
+  "searchGroupMagazines": "Jurnallar",
+  "searchGroupReports": "Ma’lumot to‘plamlari",
+  "searchGroupVacancies": "Vakansiyalar",
+  "globalSearchNothingFound": "“{query}” bo‘yicha hech narsa topilmadi",
+  "@globalSearchNothingFound": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "searchTitle": "Qidiruv"
 }
