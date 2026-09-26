@@ -858,5 +858,6 @@
   },
   "adjustPhotoTitle": "Rasmni moslang",
   "adjustPhotoHint": "Barmoq bilan suring, ikki barmoq bilan kattalashtiring",
-  "imageProcessError": "Rasmni qayta ishlashda xatolik"
+  "imageProcessError": "Rasmni qayta ishlashda xatolik",
+  "noApplicationsYetSubtitle": "Yuborgan arizalaringiz shu yerda ko‘rinadi. Birinchi arizangizni yuborib ko‘ring."
 }

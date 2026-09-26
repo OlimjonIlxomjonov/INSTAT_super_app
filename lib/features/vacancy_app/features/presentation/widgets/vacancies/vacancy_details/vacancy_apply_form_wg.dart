@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconly/iconly.dart';
+import 'package:intl_phone_field/country_picker_dialog.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/vacancy_params/vacancy_application_params.dart';
 import 'package:my_template/core/di/service_locator.dart';
@@ -63,8 +66,9 @@ class _VacancyApplyFormView extends StatefulWidget {
 class _VacancyApplyFormViewState extends State<_VacancyApplyFormView> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
-  final _phoneController = TextEditingController();
   final _emailController = TextEditingController();
+
+  String _phone = '';
 
   DateTime? _birthDate;
   final List<({File file, String name})> _files = [];
@@ -74,7 +78,6 @@ class _VacancyApplyFormViewState extends State<_VacancyApplyFormView> {
   void dispose() {
     _firstNameController.dispose();
     _lastNameController.dispose();
-    _phoneController.dispose();
     _emailController.dispose();
     super.dispose();
   }
@@ -140,7 +143,7 @@ class _VacancyApplyFormViewState extends State<_VacancyApplyFormView> {
     }
     if (_birthDate == null) errors[_ApplyField.birthDate] = l.fieldRequired;
 
-    final phone = _phoneController.text.replaceAll(RegExp(r'[^0-9+]'), '');
+    final phone = _phone.replaceAll(RegExp(r'[^0-9+]'), '');
     if (phone.isEmpty) {
       errors[_ApplyField.phone] = l.fieldRequired;
     } else if (phone.replaceAll('+', '').length < 9) {
@@ -175,7 +178,7 @@ class _VacancyApplyFormViewState extends State<_VacancyApplyFormView> {
         firstName: _firstNameController.text.trim(),
         lastName: _lastNameController.text.trim(),
         birthDate: _birthDate!,
-        phoneNumber: _phoneController.text.trim(),
+        phoneNumber: _phone.trim(),
         email: _emailController.text.trim(),
         files: [for (final f in _files) f.file],
       ),
@@ -278,7 +281,7 @@ class _VacancyApplyFormViewState extends State<_VacancyApplyFormView> {
                       errorText: _errors[_ApplyField.lastName],
                       child: AppInputWg(
                         controller: _lastNameController,
-                        hintText: 'Karimov',
+                        hintText: 'Olimjon',
                         hasError: _errors.containsKey(_ApplyField.lastName),
                         onChanged: (_) => _clearError(_ApplyField.lastName),
                       ),
@@ -289,7 +292,7 @@ class _VacancyApplyFormViewState extends State<_VacancyApplyFormView> {
                       errorText: _errors[_ApplyField.firstName],
                       child: AppInputWg(
                         controller: _firstNameController,
-                        hintText: 'Azizbek',
+                        hintText: 'Ilxomjonov',
                         hasError: _errors.containsKey(_ApplyField.firstName),
                         onChanged: (_) => _clearError(_ApplyField.firstName),
                       ),
@@ -312,12 +315,38 @@ class _VacancyApplyFormViewState extends State<_VacancyApplyFormView> {
                       label: localization.phoneNumberLabel,
                       isRequired: true,
                       errorText: _errors[_ApplyField.phone],
-                      child: AppInputWg(
-                        controller: _phoneController,
-                        hintText: '+998 (--) --- -- -',
-                        keyboardType: TextInputType.phone,
-                        hasError: _errors.containsKey(_ApplyField.phone),
-                        onChanged: (_) => _clearError(_ApplyField.phone),
+                      child: IntlPhoneField(
+                        pickerDialogStyle: PickerDialogStyle(
+                          backgroundColor: AppColors.white,
+                        ),
+                        initialCountryCode: 'UZ',
+                        showCountryFlag: false,
+                        showDropdownIcon: true,
+                        dropdownIcon: const Icon(IconlyLight.call),
+                        flagsButtonPadding: const EdgeInsets.only(left: 8),
+                        decoration: InputDecoration(
+                          hintText: '90 123 45 67',
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                              color: _errors.containsKey(_ApplyField.phone)
+                                  ? AppColors.redFailedTaskCard
+                                  : AppColors.greyScale.grey300,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                              color: _errors.containsKey(_ApplyField.phone)
+                                  ? AppColors.redFailedTaskCard
+                                  : AppColors.primaryColor,
+                            ),
+                          ),
+                        ),
+                        onChanged: (phone) {
+                          _phone = phone.completeNumber;
+                          _clearError(_ApplyField.phone);
+                        },
                       ),
                     ),
                     AppFormFieldWg(
@@ -326,7 +355,7 @@ class _VacancyApplyFormViewState extends State<_VacancyApplyFormView> {
                       errorText: _errors[_ApplyField.email],
                       child: AppInputWg(
                         controller: _emailController,
-                        hintText: 'azizbek.karimov@stat.uz',
+                        hintText: 'example@gmail.com',
                         keyboardType: TextInputType.emailAddress,
                         hasError: _errors.containsKey(_ApplyField.email),
                         onChanged: (_) => _clearError(_ApplyField.email),

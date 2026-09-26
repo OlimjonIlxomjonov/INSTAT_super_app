@@ -730,5 +730,6 @@
   },
   "adjustPhotoTitle": "Adjust photo",
   "adjustPhotoHint": "Drag to move, pinch to zoom",
-  "imageProcessError": "Failed to process the image"
+  "imageProcessError": "Failed to process the image",
+  "noApplicationsYetSubtitle": "Your applications will appear here. Send your first one to get started."
 }

@@ -54,7 +54,7 @@ class VacancyApplicationsWithBlocWg extends StatelessWidget {
             return SliverToBoxAdapter(
               child: AppEmptyState(
                 title: isSearching ? l.nothingFound : l.noApplicationsYet,
-                subtitle: '',
+                subtitle: isSearching ? '' : l.noApplicationsYetSubtitle,
               ),
             );
           }
