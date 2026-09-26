@@ -855,5 +855,8 @@
         "type": "int"
       }
     }
-  }
+  },
+  "adjustPhotoTitle": "Rasmni moslang",
+  "adjustPhotoHint": "Barmoq bilan suring, ikki barmoq bilan kattalashtiring",
+  "imageProcessError": "Rasmni qayta ishlashda xatolik"
 }

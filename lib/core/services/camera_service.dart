@@ -1,10 +1,16 @@
+import 'dart:async';
 import 'dart:convert';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image/image.dart' as img;
 import 'package:permission_handler/permission_handler.dart';
 
 import '../utils/logger/logger.dart';
+
+const bool kSilentCapture = true;
+const int kLandscapeFrameRotation = 90;
+const bool kMirrorFrontFrame = false;
 
 class CameraService extends ChangeNotifier {
   CameraController? _controller;
@@ -13,9 +19,6 @@ class CameraService extends ChangeNotifier {
 
   bool get isReady => _controller?.value.isInitialized ?? false;
 
-  /// True once the camera permission has actually been denied (including
-  /// "don't ask again"/permanently-denied) — as opposed to just "not ready
-  /// yet" while still initializing, which [isReady] alone can't tell apart.
   bool get isPermissionDenied => _isPermissionDenied;
 
   CameraController? get controller => _controller;
@@ -24,18 +27,6 @@ class CameraService extends ChangeNotifier {
 
   Future<void> init() async {
     try {
-      // Only *read* the status here — never request through
-      // permission_handler. Its iOS request path invokes the Flutter result
-      // callback directly from AVCaptureDevice's completion handler, which
-      // Apple documents as running on an arbitrary dispatch queue. Touching
-      // Flutter off the platform thread froze the app until the iOS
-      // watchdog SIGKILLed it. Reading the status is a plain synchronous
-      // AVFoundation lookup and openAppSettings() is a main-thread
-      // UIApplication call, so both are safe.
-      //
-      // The actual prompt is left to the camera plugin's own initialize()
-      // below (Flutter-team maintained, threads correctly) — which is how
-      // this screen worked before permission_handler was introduced.
       final status = await Permission.camera.status;
       if (status.isPermanentlyDenied || status.isRestricted) {
         _isPermissionDenied = true;
@@ -60,9 +51,6 @@ class CameraService extends ChangeNotifier {
       try {
         await _controller!.initialize();
       } on CameraException catch (e) {
-        // This retry exists to fall back to a lower resolution on devices
-        // that reject `medium` — it must not fire for permission errors,
-        // where a second attempt just fails again for the same reason.
         if (_isPermissionError(e)) rethrow;
 
         try {
@@ -77,16 +65,10 @@ class CameraService extends ChangeNotifier {
       }
 
       await _controller!.setFlashMode(FlashMode.off);
-      // Camera opened, so permission is granted — clears the overlay when
-      // the user grants access from settings and comes back.
       _isPermissionDenied = false;
       notifyListeners();
     } on CameraException catch (e) {
       logger.e('Camera init error: $e');
-      // This is now the primary denial signal, not just a safety net: the
-      // camera plugin is what actually shows the OS prompt, so a denial
-      // surfaces here as CameraAccessDenied / CameraAccessDeniedWithoutPrompt
-      // / CameraAccessRestricted.
       if (_isPermissionError(e)) {
         _isPermissionDenied = true;
       }
@@ -105,40 +87,87 @@ class CameraService extends ChangeNotifier {
     if (!isReady) return null;
 
     try {
-      final XFile file = await _controller!.takePicture();
-      final jpegBytes = await file.readAsBytes();
-
-      logger.f('📸 Image captured (JPEG): ${jpegBytes.length} bytes');
-
-      // Decode JPEG and encode as PNG
-      var image = img.decodeImage(jpegBytes);
-      if (image == null) {
-        logger.f('❌ Failed to decode image');
-        return null;
-      }
-
-      logger.f(
-        '🔎 sensorOrientation: ${_controller!.description.sensorOrientation}, '
-        'lensDirection: ${_controller!.description.lensDirection}',
-      );
-      logger.f(
-        '🔎 Decoded pixel buffer: ${image.width}x${image.height}, '
-        'exif orientation tag: ${image.exif.imageIfd.hasOrientation ? image.exif.imageIfd.orientation : 'none'}',
-      );
-
-      image = img.bakeOrientation(image);
-      logger.f('🔎 After bakeOrientation: ${image.width}x${image.height}');
+      img.Image? image = kSilentCapture ? await _grabStreamFrame() : null;
+      image ??= await _takePictureFrame();
+      if (image == null) return null;
 
       final pngBytes = img.encodePng(image);
-      logger.f('📸 Converted to PNG: ${pngBytes.length} bytes');
 
       _lastCaptureBase64 = 'data:image/png;base64,${base64Encode(pngBytes)}';
-      logger.f('📸 Base64 length: ${_lastCaptureBase64!.length}');
-
       notifyListeners();
       return _lastCaptureBase64;
     } catch (e) {
-      logger.f('❌ Capture error: $e');
+      logger.f(' Capture error: $e');
+      return null;
+    }
+  }
+
+  //! Ovozsiz kadr
+  Future<img.Image?> _grabStreamFrame() async {
+    if (_controller!.value.isStreamingImages) {
+      logger.e('⚠️ stream: already streaming');
+      return null;
+    }
+
+    final completer = Completer<CameraImage?>();
+    try {
+      await _controller!.startImageStream((frame) {
+        if (!completer.isCompleted) completer.complete(frame);
+      });
+    } catch (e) {
+      logger.e('⚠️ stream: start failed → $e');
+      return null;
+    }
+
+    CameraImage? frame;
+    try {
+      frame = await completer.future.timeout(
+        const Duration(seconds: 3),
+        onTimeout: () => null,
+      );
+    } finally {
+      try {
+        await _controller!.stopImageStream();
+      } catch (e) {
+        logger.e('⚠️ stream: stop failed → $e');
+      }
+    }
+
+    if (frame == null) {
+      logger.e('⚠️ stream: no frame in 3s');
+      return null;
+    }
+
+    return compute(
+      _decodeFrame,
+      _FrameData(
+        width: frame.width,
+        height: frame.height,
+        format: frame.format.group,
+        planes: [
+          for (final plane in frame.planes)
+            _PlaneData(
+              bytes: plane.bytes,
+              bytesPerRow: plane.bytesPerRow,
+              bytesPerPixel: plane.bytesPerPixel ?? 1,
+            ),
+        ],
+        sensorOrientation: _controller!.description.sensorOrientation,
+        mirror:
+            kMirrorFrontFrame &&
+            _controller!.description.lensDirection == CameraLensDirection.front,
+      ),
+    );
+  }
+
+  //! Zaxira usul
+  Future<img.Image?> _takePictureFrame() async {
+    try {
+      final file = await _controller!.takePicture();
+      final decoded = img.decodeImage(await file.readAsBytes());
+      return decoded == null ? null : img.bakeOrientation(decoded);
+    } catch (e) {
+      logger.e('takePicture fallback failed: $e');
       return null;
     }
   }
@@ -148,4 +177,114 @@ class CameraService extends ChangeNotifier {
     await _controller?.dispose();
     _controller = null;
   }
+}
+
+//! Isolate uchun kadr
+class _PlaneData {
+  final Uint8List bytes;
+  final int bytesPerRow;
+  final int bytesPerPixel;
+
+  const _PlaneData({
+    required this.bytes,
+    required this.bytesPerRow,
+    required this.bytesPerPixel,
+  });
+}
+
+class _FrameData {
+  final int width;
+  final int height;
+  final ImageFormatGroup format;
+  final List<_PlaneData> planes;
+  final int sensorOrientation;
+  final bool mirror;
+
+  const _FrameData({
+    required this.width,
+    required this.height,
+    required this.format,
+    required this.planes,
+    required this.sensorOrientation,
+    required this.mirror,
+  });
+}
+
+img.Image? _decodeFrame(_FrameData frame) {
+  img.Image? decoded;
+
+  switch (frame.format) {
+    case ImageFormatGroup.bgra8888:
+      decoded = _fromBgra(frame);
+    case ImageFormatGroup.yuv420:
+      decoded = _fromYuv420(frame);
+    case ImageFormatGroup.jpeg:
+      decoded = img.decodeImage(frame.planes.first.bytes);
+    default:
+      decoded = null;
+  }
+
+  if (decoded == null) return null;
+
+  //! iOS oqim kadrni tik holda beradi, lekin sensorOrientation 90 deydi —
+  //! shuning uchun burish faqat kadr gorizontal kelganda qo'llanadi.
+  if (decoded.width > decoded.height) {
+    decoded = img.copyRotate(decoded, angle: kLandscapeFrameRotation);
+  }
+  if (frame.mirror) {
+    decoded = img.flipHorizontal(decoded);
+  }
+  return decoded;
+}
+
+img.Image _fromBgra(_FrameData frame) {
+  final plane = frame.planes.first;
+  final out = img.Image(width: frame.width, height: frame.height);
+
+  for (var y = 0; y < frame.height; y++) {
+    final rowStart = y * plane.bytesPerRow;
+    for (var x = 0; x < frame.width; x++) {
+      final i = rowStart + x * 4;
+      out.setPixelRgb(
+        x,
+        y,
+        plane.bytes[i + 2],
+        plane.bytes[i + 1],
+        plane.bytes[i],
+      );
+    }
+  }
+  return out;
+}
+
+img.Image _fromYuv420(_FrameData frame) {
+  final yPlane = frame.planes[0];
+  final uPlane = frame.planes[1];
+  final vPlane = frame.planes[2];
+  final out = img.Image(width: frame.width, height: frame.height);
+
+  for (var y = 0; y < frame.height; y++) {
+    final uvRow = (y >> 1) * uPlane.bytesPerRow;
+    final yRow = y * yPlane.bytesPerRow;
+
+    for (var x = 0; x < frame.width; x++) {
+      final uvIndex = uvRow + (x >> 1) * uPlane.bytesPerPixel;
+      if (uvIndex >= uPlane.bytes.length || uvIndex >= vPlane.bytes.length) {
+        continue;
+      }
+
+      final yValue = yPlane.bytes[yRow + x];
+      final uValue = uPlane.bytes[uvIndex] - 128;
+      final vValue = vPlane.bytes[uvIndex] - 128;
+
+      out.setPixelRgb(
+        x,
+        y,
+        (yValue + 1.370705 * vValue).round().clamp(0, 255),
+        (yValue - 0.337633 * uValue - 0.698001 * vValue).round().clamp(0, 255),
+        (yValue + 1.732446 * uValue).round().clamp(0, 255),
+      );
+    }
+  }
+  return out;
 }

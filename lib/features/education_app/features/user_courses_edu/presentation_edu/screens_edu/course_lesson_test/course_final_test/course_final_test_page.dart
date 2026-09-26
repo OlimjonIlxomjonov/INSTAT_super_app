@@ -203,7 +203,16 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage>
   Widget build(BuildContext context) {
     return BlocConsumer<CourseFinalTestBloc, CourseFinalTestState>(
       listener: (context, state) {
-        if (state is CourseFinalTestFinished) {
+        if (state is CourseFinalTestLoaded && state.errorKind != null) {
+          errorFlushBar(
+            context,
+            lessonTestErrorText(
+              AppLocalizations.of(context)!,
+              state.errorKind!,
+              state.errorMessage,
+            ),
+          );
+        } else if (state is CourseFinalTestFinished) {
           _showFinishDialog(context, state);
         } else if (state is CourseFinalTestError) {
           errorFlushBar(

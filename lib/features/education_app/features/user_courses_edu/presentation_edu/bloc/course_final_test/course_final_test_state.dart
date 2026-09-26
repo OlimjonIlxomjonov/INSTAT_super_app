@@ -26,12 +26,18 @@ class CourseFinalTestLoaded extends CourseFinalTestState {
   final int? selectedOptionId;
   final bool isSubmitting;
 
+  //! Bir martalik xato — savol ekranda qoladi, flushbar chiqadi
+  final LessonTestErrorKind? errorKind;
+  final String errorMessage;
+
   const CourseFinalTestLoaded({
     required this.tests,
     required this.currentTestIndex,
     required this.currentOptions,
     this.selectedOptionId,
     this.isSubmitting = false,
+    this.errorKind,
+    this.errorMessage = '',
   });
 
   CourseFinalTestLoaded copyWith({
@@ -40,6 +46,9 @@ class CourseFinalTestLoaded extends CourseFinalTestState {
     List<LessonTestOptionEntity>? currentOptions,
     int? selectedOptionId,
     bool? isSubmitting,
+    LessonTestErrorKind? errorKind,
+    String? errorMessage,
+    bool clearError = false,
   }) {
     return CourseFinalTestLoaded(
       tests: tests ?? this.tests,
@@ -47,6 +56,8 @@ class CourseFinalTestLoaded extends CourseFinalTestState {
       currentOptions: currentOptions ?? this.currentOptions,
       selectedOptionId: selectedOptionId ?? this.selectedOptionId,
       isSubmitting: isSubmitting ?? this.isSubmitting,
+      errorKind: clearError ? null : (errorKind ?? this.errorKind),
+      errorMessage: clearError ? '' : (errorMessage ?? this.errorMessage),
     );
   }
 }

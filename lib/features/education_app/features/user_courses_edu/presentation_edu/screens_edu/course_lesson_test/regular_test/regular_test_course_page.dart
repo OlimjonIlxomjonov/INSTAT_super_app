@@ -212,7 +212,16 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage>
       value: _bloc,
       child: BlocConsumer<CourseLessonTestBloc, CourseLessonTestState>(
         listener: (context, state) {
-          if (state is CourseLessonTestFinished) {
+          if (state is CourseLessonTestLoaded && state.errorKind != null) {
+            errorFlushBar(
+              context,
+              lessonTestErrorText(
+                AppLocalizations.of(context)!,
+                state.errorKind!,
+                state.errorMessage,
+              ),
+            );
+          } else if (state is CourseLessonTestFinished) {
             _showFinishDialog(context, state);
           } else if (state is CourseLessonTestError) {
             errorFlushBar(

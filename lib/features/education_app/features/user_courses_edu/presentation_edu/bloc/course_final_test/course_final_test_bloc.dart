@@ -107,7 +107,7 @@ class CourseFinalTestBloc
       final currentState = state as CourseFinalTestLoaded;
       if (currentState.selectedOptionId == null) return;
 
-      emit(currentState.copyWith(isSubmitting: true));
+      emit(currentState.copyWith(isSubmitting: true, clearError: true));
 
       try {
         final currentTestId = _tests[currentState.currentTestIndex].id;
@@ -124,7 +124,7 @@ class CourseFinalTestBloc
 
         //! Yuz tekshiruvi o'tmadi
         if (!response.isRecorded) {
-          await _restoreAfterFailure(
+          _restoreAfterFailure(
             emit,
             currentState,
             kind: LessonTestErrorKind.faceNotVerified,
@@ -148,7 +148,7 @@ class CourseFinalTestBloc
       } catch (e) {
         final isFaceError = e.toString().contains('no_face_found');
         final statusCode = e is DioException ? e.response?.statusCode : null;
-        await _restoreAfterFailure(
+        _restoreAfterFailure(
           emit,
           currentState,
           kind: isFaceError
@@ -164,14 +164,13 @@ class CourseFinalTestBloc
 
   /// Xato qanday bo'lmasin savol va variantlar ekranda qoladi — foydalanuvchi
   /// qayta urinadi. Error holati flushbar uchun bir lahza chiqadi, xolos.
-  Future<void> _restoreAfterFailure(
+  /// Savol va variantlar ekranda qoladi — xato faqat flushbar bo'lib chiqadi.
+  void _restoreAfterFailure(
     Emitter<CourseFinalTestState> emit,
     CourseFinalTestLoaded currentState, {
     required LessonTestErrorKind kind,
     String message = '',
-  }) async {
-    emit(CourseFinalTestError(message: message, kind: kind));
-    await Future.delayed(const Duration(milliseconds: 100));
+  }) {
     emit(
       CourseFinalTestLoaded(
         tests: _tests,
@@ -179,6 +178,8 @@ class CourseFinalTestBloc
         currentOptions: currentState.currentOptions,
         selectedOptionId: currentState.selectedOptionId,
         isSubmitting: false,
+        errorKind: kind,
+        errorMessage: message,
       ),
     );
   }

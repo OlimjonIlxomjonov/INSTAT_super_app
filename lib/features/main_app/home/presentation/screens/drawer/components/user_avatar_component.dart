@@ -13,6 +13,7 @@ import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/app_utils.dart';
+import 'package:my_template/core/utils/general_widgets/avatar_cropper/avatar_cropper_page.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/avatar/avatar_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/avatar/avatar_state.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/home_event.dart';
@@ -49,16 +50,28 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
     if (pickedFile == null || !mounted) return;
 
     final fixedFile = await _fixImageRotation(pickedFile);
+    if (!mounted) return;
 
-    final int fixedFileSize = await fixedFile.length();
+    //! Kesish
+    final cropped = await Navigator.of(context).push<File>(
+      MaterialPageRoute(
+        builder: (_) => AvatarCropperPage(source: File(fixedFile.path)),
+      ),
+    );
+    if (cropped == null || !mounted) return;
 
-    if (fixedFileSize > _maxImageSizeBytes) {
-      errorFlushBar(context, AppLocalizations.of(context)!.imageTooLarge);
+    final int croppedSize = await cropped.length();
+
+    if (croppedSize > _maxImageSizeBytes) {
+      if (mounted) {
+        errorFlushBar(context, AppLocalizations.of(context)!.imageTooLarge);
+      }
       return;
     }
 
+    if (!mounted) return;
     context.read<AvatarBloc>().add(
-      AvatarEvent(params: AvatarParams(imagePath: fixedFile.path)),
+      AvatarEvent(params: AvatarParams(imagePath: cropped.path)),
     );
   }
 

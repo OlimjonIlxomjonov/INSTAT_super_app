@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
+import 'package:my_template/core/utils/general_widgets/shake/shake_wg.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_option_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/default_custom_tile_wg.dart';
 
@@ -56,15 +57,19 @@ class TestOptionListWg extends StatelessWidget {
           );
         }
 
-        return DefaultCustomTileWg(
-          onTap: onSelectOption != null && !isAnswered
-              ? () => onSelectOption!(option.id)
-              : () {},
-          backgroundColor: backgroundColor,
-          borderColor: borderColor,
-          tileAction: actionIcon,
-          tileTitle: option.displayText(
-            Localizations.localeOf(context).languageCode,
+        //! Xato javob silkinadi
+        return ShakeWg(
+          shake: isAnswered && isSelected && isCorrect == false,
+          child: DefaultCustomTileWg(
+            onTap: onSelectOption != null && !isAnswered
+                ? () => onSelectOption!(option.id)
+                : () {},
+            backgroundColor: backgroundColor,
+            borderColor: borderColor,
+            tileAction: actionIcon,
+            tileTitle: option.displayText(
+              Localizations.localeOf(context).languageCode,
+            ),
           ),
         );
       }),

@@ -727,5 +727,8 @@
         "type": "int"
       }
     }
-  }
+  },
+  "adjustPhotoTitle": "Adjust photo",
+  "adjustPhotoHint": "Drag to move, pinch to zoom",
+  "imageProcessError": "Failed to process the image"
 }
