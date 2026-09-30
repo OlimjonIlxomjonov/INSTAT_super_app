@@ -13,4 +13,11 @@ class ScanQrLoading extends ScanQrState {}
 
 class ScanQrLoaded extends ScanQrState {}
 
-class ScanQrError extends ScanQrState {}
+class ScanQrError extends ScanQrState {
+  final String? message;
+
+  const ScanQrError({this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

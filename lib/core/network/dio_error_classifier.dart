@@ -32,6 +32,7 @@ bool isNoInternetError(DioException error) {
 ///
 /// Qo'llab-quvvatlanadigan shakllar:
 ///   {"error": {"details": {"detail": "..."}}}
+///   {"error": "..."}
 ///   {"error": {"details": ["...", ...]}}
 ///   {"error": {"details": {"field": ["..."]}}}
 ///   {"detail": "..."}  /  {"message": "..."}
@@ -54,6 +55,10 @@ String? apiErrorMessage(Object error) {
   }
 
   final err = data['error'];
+  if (err is String) {
+    final fromString = pick(err);
+    if (fromString != null) return fromString;
+  }
   if (err is Map) {
     final fromDetails = pick(err['details']);
     if (fromDetails != null) return fromDetails;

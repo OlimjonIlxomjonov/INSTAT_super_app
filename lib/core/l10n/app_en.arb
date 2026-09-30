@@ -750,5 +750,6 @@
       }
     }
   },
-  "searchTitle": "Search"
+  "searchTitle": "Search",
+  "attendanceFailed": "Could not mark attendance"
 }

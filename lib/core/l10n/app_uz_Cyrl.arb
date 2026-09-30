@@ -750,5 +750,6 @@
       }
     }
   },
-  "searchTitle": "Қидирув"
+  "searchTitle": "Қидирув",
+  "attendanceFailed": "Давомат белгиланмади"
 }

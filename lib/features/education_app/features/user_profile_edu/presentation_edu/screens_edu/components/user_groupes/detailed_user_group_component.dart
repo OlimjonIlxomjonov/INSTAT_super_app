@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
@@ -88,6 +89,26 @@ class _DetailedUserGroupComponentState
     );
   }
 
+  //! Davomatdan keyin
+  void _reloadAfterScan(BuildContext context) {
+    final courseDate = _selectedCourseDate;
+    if (courseDate == null) return;
+
+    context.read<CourseGroupDatesBloc>().add(
+      FetchCourseGroupDatesEvent(
+        params: CourseGroupDateParams(courseGroupId: widget.courseGroupId),
+      ),
+    );
+    context.read<OfflineLessonsBloc>().add(
+      OfflineLessonsEvent(
+        params: OfflineLessonsParams(
+          id: courseDate.courseGroup.toString(),
+          groupId: courseDate.id.toString(),
+        ),
+      ),
+    );
+  }
+
   Future<void> _loadLayout() async {
     final saved = await LayoutPrefsService.loadCalendarLayout(
       'detailed_user_group_calendar',
@@ -117,12 +138,15 @@ class _DetailedUserGroupComponentState
         ),
       child: BlocListener<ScanQrBloc, ScanQrState>(
         listener: (context, state) {
-          // if (state is ScanQrLoaded) {
-          //   successFlushBar(context, AppLocalizations.of(context)!.attendanceMarked);
-          // } else if (state is ScanQrError) {
-          //   errorFlushBar(context, 'error');
-          // }
-          //! Load lessons when success
+          if (state is ScanQrLoaded) {
+            successFlushBar(context, localization.attendanceMarked);
+            _reloadAfterScan(context);
+          } else if (state is ScanQrError) {
+            errorFlushBar(
+              context,
+              state.message ?? localization.attendanceFailed,
+            );
+          }
         },
         child: Scaffold(
           body: CustomScrollView(
@@ -261,13 +285,7 @@ class _DetailedUserGroupComponentState
                                         .trim(),
                                     deadlineDate:
                                         " ${DateFormat('dd MMM • HH:mm').format(lessonDate)}",
-                                    onTap: () {
-                                      subBottomSheetOpener(
-                                        context,
-                                        child: DetailedTaskEduChild(),
-                                        isExpanded: false,
-                                      );
-                                    },
+                                    onTap: () {},
                                     isLessons: true,
                                     daysLeft:
                                         " ${daysLeft(context, lessonDate)}",

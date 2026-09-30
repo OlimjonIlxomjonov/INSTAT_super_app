@@ -750,5 +750,6 @@
       }
     }
   },
-  "searchTitle": "Поиск"
+  "searchTitle": "Поиск",
+  "attendanceFailed": "Не удалось отметить посещаемость"
 }

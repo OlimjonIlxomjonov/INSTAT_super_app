@@ -878,5 +878,6 @@
       }
     }
   },
-  "searchTitle": "Qidiruv"
+  "searchTitle": "Qidiruv",
+  "attendanceFailed": "Davomat belgilanmadi"
 }
