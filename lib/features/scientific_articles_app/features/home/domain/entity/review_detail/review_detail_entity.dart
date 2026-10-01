@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:my_template/core/utils/enums/app_enums.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/review_authors/review_author_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/user_articles/user_articles_expert_entity.dart';
 
 class ReviewDetailEntity {
@@ -21,6 +22,10 @@ class ReviewDetailEntity {
   final UserArticlesExpertEntity? expert;
   final int userId;
   final String keywords; // Raw JSON String of keywords (e.g. '["key","hello"]')
+  final List<ReviewAuthorEntity> reviewAuthors;
+  final int likesCount;
+  final int quotesCount;
+  final int downloadCount;
   final DateTime? createdAt;
 
   const ReviewDetailEntity({
@@ -41,6 +46,10 @@ class ReviewDetailEntity {
     this.expert,
     required this.userId,
     required this.keywords,
+    this.reviewAuthors = const [],
+    this.likesCount = 0,
+    this.quotesCount = 0,
+    this.downloadCount = 0,
     this.createdAt,
   });
 

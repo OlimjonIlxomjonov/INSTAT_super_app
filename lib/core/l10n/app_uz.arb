@@ -884,5 +884,22 @@
   "courseReviewSubtitle": "Kurs haqida o‘z izohingizni qoldiring!",
   "courseReviewHint": "Izohingizni yozing...",
   "skipButton": "O‘tkazib yuborish",
-  "reviewSentMessage": "Izohingiz uchun rahmat!"
+  "reviewSentMessage": "Izohingiz uchun rahmat!",
+  "openArticleFile": "Maqola faylini ochish",
+  "quoteArticle": "Iqtibos olish",
+  "quoteTitle": "Iqtibos",
+  "copyText": "Nusxa olish",
+  "copiedToClipboard": "Nusxa olindi",
+  "authorOtherArticles": "Muallifning boshqa maqolalari",
+  "similarArticles": "O‘xshash maqolalar",
+  "noAuthorArticlesTitle": "Boshqa maqolalar yo‘q",
+  "noAuthorArticlesSubtitle": "Bu muallifning hozircha boshqa chop etilgan maqolasi yo‘q.",
+  "noSimilarArticlesTitle": "O‘xshash maqolalar yo‘q",
+  "noSimilarArticlesSubtitle": "Bu bo‘limda hozircha boshqa maqolalar chop etilmagan.",
+  "quotesLabel": "Iqtiboslar",
+  "downloadsLabel": "Yuklab olishlar",
+  "viewArticle": "Ko‘rish",
+  "articleNotFoundTitle": "Maqola topilmadi",
+  "articleNotFoundSubtitle": "Maqola o‘chirilgan yoki hali chop etilmagan bo‘lishi mumkin.",
+  "downloadArticleFile": "Maqolani yuklab olish"
 }

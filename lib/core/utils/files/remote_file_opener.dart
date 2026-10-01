@@ -21,16 +21,18 @@ String _resolveName(String url, String? fileName) {
 }
 
 /// Serverdagi faylni vaqtinchalik papkaga yuklab, tizim ilovasida ochadi.
-Future<void> openRemoteFile(
+/// `true` — fayl ochildi.
+Future<bool> openRemoteFile(
   BuildContext context, {
   required String? url,
   String? fileName,
+  bool silent = false,
 }) async {
   final localization = AppLocalizations.of(context)!;
 
   if (url == null || url.isEmpty) {
-    errorFlushBar(context, localization.fileUrlNotFound);
-    return;
+    if (!silent) errorFlushBar(context, localization.fileUrlNotFound);
+    return false;
   }
 
   try {
@@ -45,15 +47,26 @@ Future<void> openRemoteFile(
       await DioClient().download(url, savePath);
     }
 
-    if (!context.mounted) return;
+    if (!context.mounted) return false;
     final result = await OpenFilex.open(savePath);
-    if (result.type != ResultType.done && context.mounted) {
-      errorFlushBar(context, localization.fileOpenError(result.message));
+    if (result.type != ResultType.done) {
+      if (!silent && context.mounted) {
+        errorFlushBar(context, localization.fileOpenError(result.message));
+      }
+      return false;
     }
+    return true;
   } catch (e) {
+    //! Jim urinish log'ni ham bulg'amasin
+    if (silent) {
+      logger.i('File open skipped: $e');
+      return false;
+    }
+
     logger.e('File open error: $e');
     if (context.mounted) {
       errorFlushBar(context, localization.fileDownloadError);
     }
+    return false;
   }
 }

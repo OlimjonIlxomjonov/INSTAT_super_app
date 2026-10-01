@@ -2,6 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/add_course_comment/add_course_comment_use_case.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/add_course_comment/add_course_comment_cubit.dart';
 import 'package:my_template/features/main_app/global_search/presentation/bloc/global_search_cubit.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/article_related/article_related_use_cases.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_quote/article_quote_cubit.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_related/article_related_cubit.dart';
 import 'package:my_template/features/vacancy_app/features/data/repo/vacancy_repo_impl.dart';
 import 'package:my_template/features/vacancy_app/features/data/source/impl_remote_data_source/vacancy_remote_data_source_impl.dart';
 import 'package:my_template/features/vacancy_app/features/data/source/remote_data_source/vacancy_remote_data_source.dart';
@@ -370,6 +373,9 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => UserArticlesUseCase(repository: sl()));
   sl.registerLazySingleton(() => ReviewAuthorsUseCase(repository: sl()));
   sl.registerLazySingleton(() => ReviewDetailUseCase(repository: sl()));
+  sl.registerLazySingleton(() => ArticlesByAuthorUseCase(repository: sl()));
+  sl.registerLazySingleton(() => ArticlesBySectionUseCase(repository: sl()));
+  sl.registerLazySingleton(() => ArticleQuoteUseCase(repository: sl()));
   sl.registerLazySingleton(() => ArticleProcessUseCase(repository: sl()));
   sl.registerLazySingleton(() => ReviewFileUseCase(repository: sl()));
   sl.registerLazySingleton(() => ArticleEditionsUseCase(repository: sl()));
@@ -559,6 +565,10 @@ Future<void> setup() async {
   sl.registerFactory(() => UserArticlesBloc(useCase: sl()));
   sl.registerFactory(() => ReviewAuthorsBloc(useCase: sl()));
   sl.registerFactory(() => ReviewDetailBloc(useCase: sl()));
+  sl.registerFactory(
+    () => ArticleRelatedCubit(byAuthorUseCase: sl(), bySectionUseCase: sl()),
+  );
+  sl.registerFactory(() => ArticleQuoteCubit(useCase: sl()));
   sl.registerFactory(() => ArticleProcessBloc(useCase: sl()));
   sl.registerFactory(() => ReviewFilesBloc(useCase: sl()));
   sl.registerFactory(() => ArticleEditionsBloc(useCase: sl()));

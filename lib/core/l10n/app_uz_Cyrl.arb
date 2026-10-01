@@ -756,5 +756,22 @@
   "courseReviewSubtitle": "Курс ҳақида ўз изоҳингизни қолдиринг!",
   "courseReviewHint": "Изоҳингизни ёзинг...",
   "skipButton": "Ўтказиб юбориш",
-  "reviewSentMessage": "Изоҳингиз учун раҳмат!"
+  "reviewSentMessage": "Изоҳингиз учун раҳмат!",
+  "openArticleFile": "Мақола файлини очиш",
+  "quoteArticle": "Иқтибос олиш",
+  "quoteTitle": "Иқтибос",
+  "copyText": "Нусха олиш",
+  "copiedToClipboard": "Нусха олинди",
+  "authorOtherArticles": "Муаллифнинг бошқа мақолалари",
+  "similarArticles": "Ўхшаш мақолалар",
+  "noAuthorArticlesTitle": "Бошқа мақолалар йўқ",
+  "noAuthorArticlesSubtitle": "Бу муаллифнинг ҳозирча бошқа чоп этилган мақоласи йўқ.",
+  "noSimilarArticlesTitle": "Ўхшаш мақолалар йўқ",
+  "noSimilarArticlesSubtitle": "Бу бўлимда ҳозирча бошқа мақолалар чоп этилмаган.",
+  "quotesLabel": "Иқтибослар",
+  "downloadsLabel": "Юклаб олишлар",
+  "viewArticle": "Кўриш",
+  "articleNotFoundTitle": "Мақола топилмади",
+  "articleNotFoundSubtitle": "Мақола ўчирилган ёки ҳали чоп этилмаган бўлиши мумкин.",
+  "downloadArticleFile": "Мақолани юклаб олиш"
 }

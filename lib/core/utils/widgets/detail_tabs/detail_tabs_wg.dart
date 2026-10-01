@@ -12,18 +12,20 @@ class DetailTabsWg extends StatelessWidget {
   final List<DetailTabItem> tabs;
   final int selectedIndex;
   final ValueChanged<int> onChanged;
+  final EdgeInsets padding;
 
   const DetailTabsWg({
     super.key,
     required this.tabs,
     required this.selectedIndex,
     required this.onChanged,
+    this.padding = const EdgeInsets.only(right: 20, bottom: 20),
   });
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.only(right: 20, bottom: 20),
+      padding: padding,
       scrollDirection: Axis.horizontal,
       child: Row(
         children: List.generate(tabs.length, (index) {

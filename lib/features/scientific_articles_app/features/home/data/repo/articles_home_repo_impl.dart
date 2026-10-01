@@ -1,3 +1,5 @@
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_brief/article_brief_entity.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_quote/article_quote_entity.dart';
 import 'package:my_template/core/common/params/article_params/article_params.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/source/remote_data_source/user_articles_remote_data_source.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/add_article/drop_down/drop_down_entity.dart';
@@ -39,6 +41,21 @@ class ArticlesHomeRepoImpl implements ArticlesHomeRepository {
   @override
   Future<ReviewDetailEntity> getReviewDetail(int reviewId) {
     return remoteDataSource.fetchReviewDetail(reviewId);
+  }
+
+  @override
+  Future<List<ArticleBriefEntity>> getArticlesByAuthor(int reviewId) {
+    return remoteDataSource.fetchArticlesByAuthor(reviewId);
+  }
+
+  @override
+  Future<List<ArticleBriefEntity>> getArticlesBySection(int reviewId) {
+    return remoteDataSource.fetchArticlesBySection(reviewId);
+  }
+
+  @override
+  Future<ArticleQuoteEntity> createArticleQuote(int reviewId) {
+    return remoteDataSource.postArticleQuote(reviewId);
   }
 
   @override

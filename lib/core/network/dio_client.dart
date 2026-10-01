@@ -8,6 +8,7 @@ import 'package:my_template/features/auth/presentation/screens/log_in_options_pa
 import '../utils/constants/api_urls/api_urls.dart';
 
 const _skipAuthRedirectKey = 'skipAuthRedirect';
+const _skipAuthKey = 'skipAuth';
 
 class DioClient {
   final Dio _dio;
@@ -22,20 +23,17 @@ class DioClient {
           headers: {'Accept': 'application/json'},
         ),
       ) {
-    // Logging
-    _dio.interceptors.add(
-      LogInterceptor(
-        request: true,
-        requestBody: true,
-        responseBody: true,
-        error: true,
-      ),
-    );
-
     /// {TOKEN}
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
+          //! Ommaviy endpoint — token yuborilsa backend natijani
+          //! foydalanuvchiga qarab filtrlab yuboradi
+          if (options.extra[_skipAuthKey] == true) {
+            options.headers.remove('Authorization');
+            return handler.next(options);
+          }
+
           final token = TokenStorageServiceImpl().getAccessToken();
           if (token != null && token.isNotEmpty) {
             options.headers['Authorization'] = 'Bearer $token';
@@ -100,6 +98,16 @@ class DioClient {
         },
       ),
     );
+
+    //! Log oxirgi bo'lsin — interceptorlar qo'shgan sarlavhalar ham ko'rinadi
+    _dio.interceptors.add(
+      LogInterceptor(
+        request: true,
+        requestBody: true,
+        responseBody: true,
+        error: true,
+      ),
+    );
   }
   void clearToken() {
     _dio.options.headers.remove('Authorization');
@@ -139,18 +147,34 @@ class DioClient {
   }
 
   /// GET
-  Future<Response> get(String path, {Map<String, dynamic>? queryParams}) async {
+  Future<Response> get(
+    String path, {
+    Map<String, dynamic>? queryParams,
+    bool skipAuth = false,
+  }) async {
     try {
-      return await _dio.get(path, queryParameters: queryParams);
+      return await _dio.get(
+        path,
+        queryParameters: queryParams,
+        options: skipAuth ? Options(extra: const {_skipAuthKey: true}) : null,
+      );
     } catch (e) {
       rethrow;
     }
   }
 
   /// POST
-  Future<Response> post(String path, {dynamic data}) async {
+  Future<Response> post(
+    String path, {
+    dynamic data,
+    bool skipAuth = false,
+  }) async {
     try {
-      return await _dio.post(path, data: data);
+      return await _dio.post(
+        path,
+        data: data,
+        options: skipAuth ? Options(extra: const {_skipAuthKey: true}) : null,
+      );
     } catch (e) {
       rethrow;
     }

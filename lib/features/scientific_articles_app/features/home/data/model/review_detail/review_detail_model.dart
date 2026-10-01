@@ -1,3 +1,4 @@
+import 'package:my_template/features/scientific_articles_app/features/home/data/model/review_authors/review_author_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/user_articles/user_articles_expert_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/review_detail/review_detail_entity.dart';
 
@@ -20,6 +21,10 @@ class ReviewDetailModel extends ReviewDetailEntity {
     super.expert,
     required super.userId,
     required super.keywords,
+    super.reviewAuthors,
+    super.likesCount,
+    super.quotesCount,
+    super.downloadCount,
     super.createdAt,
   });
 
@@ -48,6 +53,12 @@ class ReviewDetailModel extends ReviewDetailEntity {
       expert: UserArticlesExpertModel.fromJson(json['expert']),
       userId: json['user_id'] ?? 0,
       keywords: json['keywords'] ?? '',
+      reviewAuthors: (json['review_authors'] as List? ?? [])
+          .map((e) => ReviewAuthorModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      likesCount: json['likes_count'] ?? 0,
+      quotesCount: json['quotes_count'] ?? 0,
+      downloadCount: json['download_count'] ?? 0,
       createdAt: DateTime.tryParse(json['created_at']?.toString() ?? ''),
     );
   }

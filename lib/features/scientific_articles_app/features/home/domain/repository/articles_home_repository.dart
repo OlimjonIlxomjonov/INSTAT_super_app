@@ -1,3 +1,5 @@
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_brief/article_brief_entity.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_quote/article_quote_entity.dart';
 import 'package:my_template/core/common/params/article_params/article_params.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/add_article/drop_down/drop_down_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_order_payment/article_order_payment_entity.dart';
@@ -22,6 +24,12 @@ abstract class ArticlesHomeRepository {
   Future<List<ReviewAuthorEntity>> getReviewAuthors(int reviewId);
 
   Future<ReviewDetailEntity> getReviewDetail(int reviewId);
+
+  Future<List<ArticleBriefEntity>> getArticlesByAuthor(int reviewId);
+
+  Future<List<ArticleBriefEntity>> getArticlesBySection(int reviewId);
+
+  Future<ArticleQuoteEntity> createArticleQuote(int reviewId);
 
   Future<List<ArticleProcessEntity>> getArticleProcess({
     required ArticleProcessParams params,

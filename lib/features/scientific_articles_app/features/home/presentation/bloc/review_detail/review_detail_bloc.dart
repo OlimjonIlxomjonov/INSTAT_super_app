@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/network/dio_error_classifier.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_detail/review_detail_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/articles_home_event.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_detail/review_detail_state.dart';
@@ -13,7 +15,13 @@ class ReviewDetailBloc extends Bloc<ArticlesHomeEvent, ReviewDetailState> {
         final response = await useCase.call(event.reviewId);
         emit(ReviewDetailLoaded(response: response));
       } catch (e) {
-        emit(ReviewDetailError());
+        final statusCode = e is DioException ? e.response?.statusCode : null;
+        emit(
+          ReviewDetailError(
+            message: apiErrorMessage(e),
+            notFound: statusCode == 404,
+          ),
+        );
       }
     });
   }

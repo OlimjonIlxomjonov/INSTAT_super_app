@@ -756,5 +756,22 @@
   "courseReviewSubtitle": "Leave your review about the course!",
   "courseReviewHint": "Write your review...",
   "skipButton": "Skip",
-  "reviewSentMessage": "Thank you for your review!"
+  "reviewSentMessage": "Thank you for your review!",
+  "openArticleFile": "Open article file",
+  "quoteArticle": "Cite",
+  "quoteTitle": "Citation",
+  "copyText": "Copy",
+  "copiedToClipboard": "Copied to clipboard",
+  "authorOtherArticles": "Other articles by the author",
+  "similarArticles": "Similar articles",
+  "noAuthorArticlesTitle": "No other articles",
+  "noAuthorArticlesSubtitle": "This author has no other published articles yet.",
+  "noSimilarArticlesTitle": "No similar articles",
+  "noSimilarArticlesSubtitle": "No other articles have been published in this section yet.",
+  "quotesLabel": "Citations",
+  "downloadsLabel": "Downloads",
+  "viewArticle": "View",
+  "articleNotFoundTitle": "Article not found",
+  "articleNotFoundSubtitle": "The article may have been removed or is not published yet.",
+  "downloadArticleFile": "Download article"
 }

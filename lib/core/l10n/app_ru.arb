@@ -756,5 +756,22 @@
   "courseReviewSubtitle": "Оставьте свой отзыв о курсе!",
   "courseReviewHint": "Напишите отзыв...",
   "skipButton": "Пропустить",
-  "reviewSentMessage": "Спасибо за ваш отзыв!"
+  "reviewSentMessage": "Спасибо за ваш отзыв!",
+  "openArticleFile": "Открыть файл статьи",
+  "quoteArticle": "Цитировать",
+  "quoteTitle": "Цитата",
+  "copyText": "Копировать",
+  "copiedToClipboard": "Скопировано",
+  "authorOtherArticles": "Другие статьи автора",
+  "similarArticles": "Похожие статьи",
+  "noAuthorArticlesTitle": "Других статей нет",
+  "noAuthorArticlesSubtitle": "У этого автора пока нет других опубликованных статей.",
+  "noSimilarArticlesTitle": "Похожих статей нет",
+  "noSimilarArticlesSubtitle": "В этом разделе пока нет других статей.",
+  "quotesLabel": "Цитирования",
+  "downloadsLabel": "Скачивания",
+  "viewArticle": "Смотреть",
+  "articleNotFoundTitle": "Статья не найдена",
+  "articleNotFoundSubtitle": "Статья могла быть удалена или ещё не опубликована.",
+  "downloadArticleFile": "Скачать статью"
 }

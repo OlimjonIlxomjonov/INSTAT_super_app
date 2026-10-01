@@ -21,4 +21,12 @@ class ReviewDetailLoaded extends ReviewDetailState {
   List<Object?> get props => [response];
 }
 
-class ReviewDetailError extends ReviewDetailState {}
+class ReviewDetailError extends ReviewDetailState {
+  final String? message;
+  final bool notFound;
+
+  const ReviewDetailError({this.message, this.notFound = false});
+
+  @override
+  List<Object?> get props => [message, notFound];
+}

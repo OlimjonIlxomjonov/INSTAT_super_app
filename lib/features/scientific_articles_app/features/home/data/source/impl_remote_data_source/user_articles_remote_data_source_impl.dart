@@ -13,6 +13,8 @@ import 'package:my_template/features/scientific_articles_app/features/home/data/
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/review_files/review_files_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/user_articles/user_articles_response_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/review_authors/review_author_model.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_brief/article_brief_model.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_quote/article_quote_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/review_detail/review_detail_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/source/remote_data_source/user_articles_remote_data_source.dart';
 
@@ -67,6 +69,7 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
     try {
       final response = await _dioClient.get(
         '${ApiUrls.userArticles}$reviewId/',
+        skipAuth: true,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
@@ -74,6 +77,50 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
       } else {
         throw Exception('THROW EXCEPTION! ${response.statusCode}');
       }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<ArticleBriefModel>> fetchArticlesByAuthor(int reviewId) =>
+      _fetchBriefList('${ApiUrls.userArticles}$reviewId/by-author/');
+
+  @override
+  Future<List<ArticleBriefModel>> fetchArticlesBySection(int reviewId) =>
+      _fetchBriefList('${ApiUrls.userArticles}$reviewId/by-section/');
+
+  Future<List<ArticleBriefModel>> _fetchBriefList(String path) async {
+    try {
+      final response = await _dioClient.get(path, skipAuth: true);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        final raw = response.data;
+        final list = raw is List ? raw : (raw is Map ? raw['data'] : null);
+        return (list as List? ?? [])
+            .map((e) => ArticleBriefModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      }
+      throw Exception('THROW EXCEPTION! ${response.statusCode}');
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ArticleQuoteModel> postArticleQuote(int reviewId) async {
+    try {
+      final response = await _dioClient.post(
+        '${ApiUrls.userArticles}$reviewId/quote/',
+        skipAuth: true,
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return ArticleQuoteModel.fromJson(response.data);
+      }
+      throw Exception('THROW EXCEPTION! ${response.statusCode}');
     } catch (e) {
       logger.e("CATCH: $e");
       rethrow;
