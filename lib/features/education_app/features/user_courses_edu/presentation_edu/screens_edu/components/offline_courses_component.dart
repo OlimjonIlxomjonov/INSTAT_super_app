@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
+import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
@@ -15,45 +16,50 @@ class OfflineCoursesComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OfflineCourseBloc, OfflineCourseState>(
-      builder: (context, state) {
-        if (state is OfflineCourseLoaded) {
-          final data = state.response.data;
+    return CustomRefreshIndicator(
+      onRefresh: () async =>
+          context.read<OfflineCourseBloc>().add(OfflineCourseEvent()),
+      child: BlocBuilder<OfflineCourseBloc, OfflineCourseState>(
+        builder: (context, state) {
+          if (state is OfflineCourseLoaded) {
+            final data = state.response.data;
 
-          if (data.isEmpty) {
-            final localization = AppLocalizations.of(context)!;
-            return AppEmptyState(
-              title: localization.offlineCoursesNotFound,
-              subtitle: localization.offlineCoursesEmptySubtitle,
+            if (data.isEmpty) {
+              final localization = AppLocalizations.of(context)!;
+              return _Scrollable(
+                child: AppEmptyState(
+                  title: localization.offlineCoursesNotFound,
+                  subtitle: localization.offlineCoursesEmptySubtitle,
+                ),
+              );
+            }
+
+            return ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                final item = data[index];
+                return GestureDetector(
+                  behavior: .opaque,
+                  onTap: () {
+                    openMiniAppSheetFamily(
+                      context,
+                      showHandler: false,
+                      child: DetailedUserGroupComponent(
+                        courseName: item.name,
+                        courseGroupId: item.id,
+                        teacherName: item.teachers,
+                      ),
+                    );
+                  },
+                  child: OfflineCourseWg(item: item),
+                );
+              },
             );
           }
-
-          return ListView.builder(
-            itemCount: data.length,
-            itemBuilder: (context, index) {
-              final item = data[index];
-              return GestureDetector(
-                behavior: .opaque,
-                onTap: () {
-                  openMiniAppSheetFamily(
-                    context,
-                    showHandler: false,
-                    child: DetailedUserGroupComponent(
-                      courseName: item.name,
-                      courseGroupId: item.id,
-                      teacherName: item.teachers,
-                    ),
-                  );
-                },
-                child: OfflineCourseWg(item: item),
-              );
-            },
-          );
-        }
-        if (state is OfflineCourseError) {
-          return Column(
-            children: [
-              Padding(
+          if (state is OfflineCourseError) {
+            return _Scrollable(
+              child: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 24,
@@ -65,11 +71,31 @@ class OfflineCoursesComponent extends StatelessWidget {
                   ),
                 ),
               ),
-            ],
-          );
-        }
-        return SizedBox.shrink();
-      },
+            );
+          }
+          return const SizedBox.shrink();
+        },
+      ),
+    );
+  }
+}
+
+//! Bo'sh holatda ham tortib yangilansin
+class _Scrollable extends StatelessWidget {
+  final Widget child;
+
+  const _Scrollable({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: child,
+        ),
+      ),
     );
   }
 }

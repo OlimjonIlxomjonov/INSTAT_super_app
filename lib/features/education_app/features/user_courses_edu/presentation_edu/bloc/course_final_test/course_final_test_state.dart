@@ -29,6 +29,7 @@ class CourseFinalTestLoaded extends CourseFinalTestState {
   //! Bir martalik xato — savol ekranda qoladi, flushbar chiqadi
   final LessonTestErrorKind? errorKind;
   final String errorMessage;
+  final String? errorDetails;
 
   const CourseFinalTestLoaded({
     required this.tests,
@@ -38,6 +39,7 @@ class CourseFinalTestLoaded extends CourseFinalTestState {
     this.isSubmitting = false,
     this.errorKind,
     this.errorMessage = '',
+    this.errorDetails,
   });
 
   CourseFinalTestLoaded copyWith({
@@ -48,6 +50,7 @@ class CourseFinalTestLoaded extends CourseFinalTestState {
     bool? isSubmitting,
     LessonTestErrorKind? errorKind,
     String? errorMessage,
+    String? errorDetails,
     bool clearError = false,
   }) {
     return CourseFinalTestLoaded(
@@ -58,6 +61,7 @@ class CourseFinalTestLoaded extends CourseFinalTestState {
       isSubmitting: isSubmitting ?? this.isSubmitting,
       errorKind: clearError ? null : (errorKind ?? this.errorKind),
       errorMessage: clearError ? '' : (errorMessage ?? this.errorMessage),
+      errorDetails: clearError ? null : (errorDetails ?? this.errorDetails),
     );
   }
 }

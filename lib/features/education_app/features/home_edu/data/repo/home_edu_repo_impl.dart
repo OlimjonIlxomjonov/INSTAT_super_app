@@ -14,6 +14,11 @@ class HomeEduRepoImpl implements HomeEduRepository {
     : _remoteDataSource = remoteDataSource;
 
   @override
+  Future<void> addCourseComment({required AddCourseCommentParams params}) {
+    return _remoteDataSource.addCourseComment(params: params);
+  }
+
+  @override
   Future<CommentsResponse> getComments({required CommentsParams params}) {
     return _remoteDataSource.fetchComments(params: params);
   }

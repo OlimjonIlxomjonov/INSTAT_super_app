@@ -254,3 +254,15 @@ class SiteFaqsParams {
 
   SiteFaqsParams({required this.module});
 }
+
+class AddCourseCommentParams {
+  final int courseId;
+  final int stars;
+  final String text;
+
+  const AddCourseCommentParams({
+    required this.courseId,
+    required this.stars,
+    required this.text,
+  });
+}

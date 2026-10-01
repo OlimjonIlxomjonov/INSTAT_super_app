@@ -8,6 +8,8 @@ import 'package:my_template/features/education_app/features/user_courses_edu/dom
 import '../../../../user_courses_edu/data/models/courses/course_model.dart';
 
 abstract class HomeEduRemoteDataSource {
+  Future<void> addCourseComment({required AddCourseCommentParams params});
+
   Future<CommentsResponseModel> fetchComments({required CommentsParams params});
 
   Future<CourseEntity> fetchPerCourse({required PerCourseParams params});

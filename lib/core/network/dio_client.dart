@@ -44,6 +44,27 @@ class DioClient {
           }
           return handler.next(options);
         },
+        onResponse: (response, handler) {
+          //! Server xatosi 200 bilan ham kelishi mumkin.
+          //! ok:false ning o'zi yetarli emas — ayrim endpointlarda u
+          //! "ruxsat yo'q" degani, xato emas.
+          final data = response.data;
+          final error = data is Map ? data['error'] : null;
+          final isServerFailure =
+              error is Map &&
+              (error['type']?.toString() ?? '').endsWith('ServerError');
+
+          if (isServerFailure) {
+            return handler.reject(
+              DioException(
+                requestOptions: response.requestOptions,
+                response: response,
+                type: DioExceptionType.badResponse,
+              ),
+            );
+          }
+          return handler.next(response);
+        },
         onError: (DioException error, handler) async {
           final token = TokenStorageServiceImpl().getAccessToken();
           final statusCode = error.response?.statusCode;

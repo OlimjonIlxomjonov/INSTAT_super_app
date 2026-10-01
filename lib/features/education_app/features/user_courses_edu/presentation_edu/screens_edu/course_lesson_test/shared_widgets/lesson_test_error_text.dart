@@ -12,7 +12,9 @@ String lessonTestErrorText(
     case LessonTestErrorKind.faceNotVerified:
       return localization.faceNotVerifiedError;
     case LessonTestErrorKind.server:
-      return localization.serverErrorWithCode(message);
+      return message.isNotEmpty
+          ? message
+          : localization.serverErrorWithCode('');
     case LessonTestErrorKind.unknown:
       return message.isNotEmpty
           ? message

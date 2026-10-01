@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_template/core/network/dio_error_classifier.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_entity.dart';
@@ -95,7 +96,13 @@ class CourseFinalTestBloc
   ) {
     if (state is CourseFinalTestLoaded) {
       final currentState = state as CourseFinalTestLoaded;
-      emit(currentState.copyWith(selectedOptionId: event.optionId));
+      //! Yangi tanlov — eski xato takror chiqmasin
+      emit(
+        currentState.copyWith(
+          selectedOptionId: event.optionId,
+          clearError: true,
+        ),
+      );
     }
   }
 
@@ -156,7 +163,8 @@ class CourseFinalTestBloc
               : statusCode != null
               ? LessonTestErrorKind.server
               : LessonTestErrorKind.unknown,
-          message: statusCode?.toString() ?? '',
+          message: apiErrorMessage(e) ?? statusCode?.toString() ?? '',
+          details: apiErrorDetails(e),
         );
       }
     }
@@ -170,6 +178,7 @@ class CourseFinalTestBloc
     CourseFinalTestLoaded currentState, {
     required LessonTestErrorKind kind,
     String message = '',
+    String? details,
   }) {
     emit(
       CourseFinalTestLoaded(
@@ -180,6 +189,7 @@ class CourseFinalTestBloc
         isSubmitting: false,
         errorKind: kind,
         errorMessage: message,
+        errorDetails: details,
       ),
     );
   }

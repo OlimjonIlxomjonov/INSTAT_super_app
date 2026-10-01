@@ -59,6 +59,7 @@ class ApiUrls {
   //! comments
   static const userComments = '/comments/active';
   static const addBookComment = '/add-comment/';
+  static const addCourseComment = '/add-comment/';
 
   //! offline course
   static const offlineCourse = 'course-groups/list/my/';

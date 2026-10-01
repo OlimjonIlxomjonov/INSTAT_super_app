@@ -220,6 +220,7 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage>
                 state.errorKind!,
                 state.errorMessage,
               ),
+              details: state.errorDetails,
             );
           } else if (state is CourseLessonTestFinished) {
             _showFinishDialog(context, state);

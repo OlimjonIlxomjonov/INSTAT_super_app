@@ -45,8 +45,17 @@ String? apiErrorMessage(Object error) {
   final data = error.response?.data;
   if (data is! Map) return null;
 
+  //! Uzun yoki ko'p qatorli dump UI'ga sig'maydi
+  String? clean(String value) {
+    final firstLine = value.trim().split('\n').first.trim();
+    if (firstLine.isEmpty) return null;
+    return firstLine.length > 160
+        ? '${firstLine.substring(0, 160)}…'
+        : firstLine;
+  }
+
   String? pick(dynamic value) {
-    if (value is String) return value.trim().isEmpty ? null : value.trim();
+    if (value is String) return clean(value);
     if (value is List && value.isNotEmpty) return pick(value.first);
     if (value is Map && value.isNotEmpty) {
       return pick(value['detail']) ?? pick(value.values.first);
@@ -60,6 +69,13 @@ String? apiErrorMessage(Object error) {
     if (fromString != null) return fromString;
   }
   if (err is Map) {
+    //! Server xatosida details texnik dump bo'ladi — turi ko'rsatiladi
+    final type = err['type']?.toString();
+    if (type != null && type.isNotEmpty && type.endsWith('ServerError')) {
+      final message = pick(data['message']);
+      return message == null || message == type ? type : '$type · $message';
+    }
+
     final fromDetails = pick(err['details']);
     if (fromDetails != null) return fromDetails;
     final fromMessage = pick(err['message']);
@@ -67,4 +83,26 @@ String? apiErrorMessage(Object error) {
   }
 
   return pick(data['detail']) ?? pick(data['message']);
+}
+
+/// Texnik tafsilot — `error.details`. UI'da asosiy xabar ostida
+/// bitta qator bo'lib chiqadi.
+String? apiErrorDetails(Object error) {
+  if (error is! DioException) return null;
+  if (isNoInternetError(error)) return null;
+
+  final data = error.response?.data;
+  if (data is! Map) return null;
+
+  final err = data['error'];
+  if (err is! Map) return null;
+
+  final details = err['details'];
+  final text = details is List
+      ? (details.isEmpty ? null : details.first?.toString())
+      : details?.toString();
+
+  if (text == null) return null;
+  final firstLine = text.trim().split('\n').first.trim();
+  return firstLine.isEmpty ? null : firstLine;
 }

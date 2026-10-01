@@ -51,6 +51,15 @@ class CourseEntity {
     this.certificateObjects = const [],
   });
 
+  /// `rating_sum` jami ball, `ratings_count` baholovchilar soni.
+  double get averageRating {
+    final count = ratingsCount ?? 0;
+    if (count == 0) return 0;
+    return (ratingSum ?? 0) / count;
+  }
+
+  String get ratingLabel => averageRating.toStringAsFixed(1);
+
   String displayName(String localeCode) => localizedText(
     localeCode: localeCode,
     fallback: name,

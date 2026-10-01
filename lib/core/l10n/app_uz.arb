@@ -879,5 +879,10 @@
     }
   },
   "searchTitle": "Qidiruv",
-  "attendanceFailed": "Davomat belgilanmadi"
+  "attendanceFailed": "Davomat belgilanmadi",
+  "courseFinishedTitle": "Kurs yakunlandi",
+  "courseReviewSubtitle": "Kurs haqida o‘z izohingizni qoldiring!",
+  "courseReviewHint": "Izohingizni yozing...",
+  "skipButton": "O‘tkazib yuborish",
+  "reviewSentMessage": "Izohingiz uchun rahmat!"
 }

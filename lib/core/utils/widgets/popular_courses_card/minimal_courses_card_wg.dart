@@ -110,7 +110,7 @@ class MinimalCoursesCardWg extends StatelessWidget {
                             size: 20,
                           ),
                           Text(
-                            ' ${data.ratingsCount} (${data.ratingSum ?? 0})',
+                            ' ${data.ratingLabel} (${data.ratingsCount ?? 0})',
                             style: CustomTextStyles.h4,
                           ),
                           const SizedBox(width: 10),
@@ -120,7 +120,7 @@ class MinimalCoursesCardWg extends StatelessWidget {
                             color: AppColors.greyScale.grey400,
                           ),
                           Text(
-                            ' ${data.lessonsCount} ta',
+                            ' ${data.lessonsCount} ta dars',
                             style: CustomTextStyles.h4,
                           ),
                         ],

@@ -1,9 +1,20 @@
 import 'package:dio/dio.dart';
 import 'package:my_template/core/network/dio_client.dart';
+import 'package:my_template/core/network/dio_error_classifier.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
+
+class QrAuthException implements Exception {
+  final String message;
+  final String? details;
+
+  const QrAuthException({required this.message, this.details});
+
+  @override
+  String toString() => message;
+}
 
 abstract class QrAuthService {
   Future<void> loginWithQr(String rawQrData);
@@ -57,38 +68,35 @@ class QrAuthServiceImpl implements QrAuthService {
       }
     } on DioException catch (e) {
       logger.e('QR login failed', error: e.response?.data ?? e);
-      final message = _extractErrorMessage(e);
-      throw Exception(message);
+      throw _toFailure(e);
     } catch (e) {
       logger.e('QR login error', error: e);
       rethrow;
     }
   }
 
-  String _extractErrorMessage(DioException e) {
+  QrAuthException _toFailure(DioException e) {
+    final message = apiErrorMessage(e);
+    if (message != null) {
+      return QrAuthException(message: message, details: apiErrorDetails(e));
+    }
+
     final data = e.response?.data;
     if (data is Map) {
-      if (data['detail'] != null) {
-        return data['detail'].toString();
+      final qrError = data['qr_string'];
+      if (qrError is List && qrError.isNotEmpty) {
+        return QrAuthException(message: qrError.first.toString());
       }
-      if (data['message'] != null) {
-        return data['message'].toString();
-      }
-      if (data['error'] != null) {
-        final err = data['error'];
-        if (err is Map && err['message'] != null) {
-          return err['message'].toString();
-        }
-        return err.toString();
-      }
-      if (data['qr_string'] != null) {
-        final qrErr = data['qr_string'];
-        if (qrErr is List) return qrErr.join(', ');
-        return qrErr.toString();
+      if (qrError != null) {
+        return QrAuthException(message: qrError.toString());
       }
     }
-    return e.response?.statusMessage ??
-        e.message ??
-        'QR scan authentication failed';
+
+    return QrAuthException(
+      message:
+          e.response?.statusMessage ??
+          e.message ??
+          'QR scan authentication failed',
+    );
   }
 }

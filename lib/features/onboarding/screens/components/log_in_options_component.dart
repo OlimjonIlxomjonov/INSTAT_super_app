@@ -228,8 +228,11 @@ class _LogInOptionsComponentState extends State<LogInOptionsComponent> {
     } catch (e) {
       logger.e('QR login failed', error: e);
       if (mounted) {
-        final msg = e.toString().replaceAll('Exception: ', '');
-        errorFlushBar(context, msg);
+        if (e is QrAuthException) {
+          errorFlushBar(context, e.message, details: e.details);
+        } else {
+          errorFlushBar(context, e.toString().replaceAll('Exception: ', ''));
+        }
       }
     } finally {
       if (mounted) {

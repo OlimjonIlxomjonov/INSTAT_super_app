@@ -23,8 +23,6 @@ import 'package:my_template/features/main_app/home/presentation/bloc/home_event.
 
 import '../../../../../../core/utils/widgets/module_categories/module_categories_with_bloc.dart';
 
-/// O'z bloc'i bilan — bu yerdagi qidiruv bosh sahifadagi ro'yxatga
-/// ta'sir qilmasin. Boshlang'ich kategoriya bosh sahifanikidan olinadi.
 class ShowAllCoursesBottomSheetPage extends StatelessWidget {
   const ShowAllCoursesBottomSheetPage({super.key});
 

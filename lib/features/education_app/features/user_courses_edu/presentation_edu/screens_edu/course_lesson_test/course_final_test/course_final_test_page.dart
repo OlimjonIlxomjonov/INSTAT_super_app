@@ -11,6 +11,7 @@ import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/camera_service.dart';
 import 'package:my_template/core/utils/general_widgets/camera_access_denied/camera_access_denied_overlay_wg.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/course_review_dialog/course_review_dialog.dart';
 import 'package:my_template/core/utils/constants/assets/app_animations.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets/camera_preview_widget.dart';
 import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
@@ -127,12 +128,14 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage>
             ),
             _buildColumn(
               title: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     state.correctAnswers.toString(),
                     style: AppTextStyles.source.medium(fontSize: 20),
                   ),
-
+                  const SizedBox(width: 4),
                   Icon(IconlyBold.star, color: AppColors.yellow500),
                 ],
               ),
@@ -148,16 +151,26 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage>
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () {
-              AppRoute.close();
-              AppRoute.close();
-            },
+            onPressed: () => _openReviewDialog(context),
             child: Text(localization.continueButton),
           ),
         ),
       ],
       confettiController: _confettiController,
     );
+  }
+
+  //! Natijadan keyin izoh so'raladi
+  Future<void> _openReviewDialog(BuildContext context) async {
+    //! Natija oynasi
+    AppRoute.close();
+
+    try {
+      await showCourseReviewDialog(context, courseId: widget.courseId);
+    } finally {
+      //! Test sahifasi
+      AppRoute.close();
+    }
   }
 
   Widget _buildColumn({
@@ -211,6 +224,7 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage>
               state.errorKind!,
               state.errorMessage,
             ),
+            details: state.errorDetails,
           );
         } else if (state is CourseFinalTestFinished) {
           _showFinishDialog(context, state);

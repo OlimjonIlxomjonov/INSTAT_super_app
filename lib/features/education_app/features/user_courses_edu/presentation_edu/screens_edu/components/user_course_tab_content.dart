@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/common/pagination/load_more_on_scroll.dart';
+import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses/user_courses_state.dart';
@@ -44,20 +46,28 @@ class UserCoursesTabContentState extends State<UserCoursesTabContent>
             },
             builder: (context, state) {
               final loaded = state is UserCoursesLoaded ? state : null;
-              return LoadMoreOnScroll(
-                canLoadMore:
-                    (loaded?.hasMore ?? false) &&
-                    !(loaded?.isLoadingMore ?? false),
-                onLoadMore: () => context.read<UserCoursesBloc>().add(
-                  const LoadMoreUserCoursesEvent(),
+              return CustomRefreshIndicator(
+                onRefresh: () async => context.read<UserCoursesBloc>().add(
+                  UserCoursesEvent(
+                    params: UserCoursesParams(state: widget.state),
+                  ),
                 ),
-                child: CustomScrollView(
-                  slivers: [
-                    CoursesInProgressComponent(
-                      layout: widget.layout,
-                      state: widget.state,
-                    ),
-                  ],
+                child: LoadMoreOnScroll(
+                  canLoadMore:
+                      (loaded?.hasMore ?? false) &&
+                      !(loaded?.isLoadingMore ?? false),
+                  onLoadMore: () => context.read<UserCoursesBloc>().add(
+                    const LoadMoreUserCoursesEvent(),
+                  ),
+                  child: CustomScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    slivers: [
+                      CoursesInProgressComponent(
+                        layout: widget.layout,
+                        state: widget.state,
+                      ),
+                    ],
+                  ),
                 ),
               );
             },

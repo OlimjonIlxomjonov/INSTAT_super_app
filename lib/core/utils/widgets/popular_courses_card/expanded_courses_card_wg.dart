@@ -48,7 +48,7 @@ class ExpandedCoursesCardWg extends StatelessWidget {
                       margin: const EdgeInsets.only(left: 12, top: 12),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color: AppColors.white.withValues(alpha: 0.7),
+                        color: AppColors.white,
                       ),
                       child: Row(
                         children: [
@@ -58,9 +58,7 @@ class ExpandedCoursesCardWg extends StatelessWidget {
                             color: AppColors.orange500,
                             size: 18,
                           ),
-                          Text(
-                            " ${entity.userOrder?.status != 'paid' ? entity.ratingsCount ?? 0 : entity.userOrder?.scores ?? 0.0}",
-                          ),
+                          Text(" ${entity.ratingLabel}"),
                         ],
                       ),
                     ),

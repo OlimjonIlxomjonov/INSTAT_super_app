@@ -7,10 +7,11 @@ import 'package:my_template/core/utils/constants/assets/app_animations.dart';
 
 OverlayEntry? _currentEntry;
 
-void errorFlushBar(BuildContext context, String message) {
+void errorFlushBar(BuildContext context, String message, {String? details}) {
   _showBlurBanner(
     context: context,
     message: message,
+    details: details,
     color: AppColors.redFailedTaskCard,
     backgroundAlpha: 0.5,
     animationAsset: AppAnimations.errorState,
@@ -59,6 +60,7 @@ void technicalWorkFlushBar(BuildContext context, String message) {
 void _showBlurBanner({
   required BuildContext context,
   required String message,
+  String? details,
   required Color color,
   required double backgroundAlpha,
   required String animationAsset,
@@ -74,6 +76,7 @@ void _showBlurBanner({
   entry = OverlayEntry(
     builder: (context) => _BlurTopBanner(
       message: message,
+      details: details,
       color: color,
       backgroundAlpha: backgroundAlpha,
       animationAsset: animationAsset,
@@ -93,6 +96,7 @@ void _showBlurBanner({
 
 class _BlurTopBanner extends StatefulWidget {
   final String message;
+  final String? details;
   final Color color;
   final double backgroundAlpha;
   final String animationAsset;
@@ -103,6 +107,7 @@ class _BlurTopBanner extends StatefulWidget {
 
   const _BlurTopBanner({
     required this.message,
+    this.details,
     required this.color,
     required this.backgroundAlpha,
     required this.animationAsset,
@@ -259,12 +264,34 @@ class _BlurTopBannerState extends State<_BlurTopBanner>
                         ),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: Text(
-                            widget.message,
-                            style: AppTextStyles.source.semiBold(
-                              color: AppColors.white,
-                              fontSize: 16,
-                            ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                widget.message,
+                                style: AppTextStyles.source.semiBold(
+                                  color: AppColors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              //! Texnik tafsilot — bitta qator
+                              if (widget.details != null &&
+                                  widget.details!.trim().isNotEmpty) ...[
+                                const SizedBox(height: 2),
+                                Text(
+                                  widget.details!,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppTextStyles.source.regular(
+                                    color: AppColors.white.withValues(
+                                      alpha: 0.85,
+                                    ),
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
+                            ],
                           ),
                         ),
                       ],

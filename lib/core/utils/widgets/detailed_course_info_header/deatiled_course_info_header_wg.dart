@@ -49,7 +49,7 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                   children: [
                     Icon(IconlyBold.star, color: AppColors.orange, size: 17),
                     Text(
-                      " ${data.userOrder?.status != 'paid' ? data.ratingsCount ?? 0 : data.userOrder?.scores ?? 0.0}",
+                      " ${data.userOrder?.status != 'paid' ? data.ratingLabel : data.userOrder?.scores ?? 0.0}",
                       style: AppTextStyles.source.medium(
                         fontSize: 13,
                         color: AppColors.greyScale.grey600,

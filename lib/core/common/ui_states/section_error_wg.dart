@@ -11,6 +11,9 @@ class SectionErrorWg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
+    final text = (title == null || title!.trim().isEmpty)
+        ? localization.sectionLoadError
+        : title!;
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: appW(16), vertical: appH(14)),
@@ -39,7 +42,7 @@ class SectionErrorWg extends StatelessWidget {
           SizedBox(width: appW(12)),
           Expanded(
             child: Text(
-              title ?? localization.sectionLoadError,
+              text,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: AppTextStyles.source.medium(

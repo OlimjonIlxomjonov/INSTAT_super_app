@@ -1,9 +1,7 @@
 import 'package:dashed_progress_bar/dashed_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
-import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
@@ -27,7 +25,6 @@ class ActiveCoursesWg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isTablet = Responsive.isTablet(context);
-    final localization = AppLocalizations.of(context)!;
     final localeCode = Localizations.localeOf(context).languageCode;
 
     return GestureDetector(
@@ -88,27 +85,17 @@ class ActiveCoursesWg extends StatelessWidget {
                     style: AppTextStyles.source.medium(fontSize: 14),
                   ),
 
-                  /// desc
-                  Row(
-                    mainAxisAlignment: .spaceBetween,
-                    children: [
-                      Text(
-                        localization.topicsProgress(
-                          data.userOrder?.currentLesson ?? 0,
-                          data.lessonsCount,
+                  if (!showCircularProgBar)
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '0%',
+                        style: AppTextStyles.source.regular(
+                          fontSize: 12,
+                          color: AppColors.greyScale.grey600,
                         ),
-                        style: CustomTextStyles.h4,
                       ),
-                      if (!showCircularProgBar)
-                        Text(
-                          '0%',
-                          style: AppTextStyles.source.regular(
-                            fontSize: 12,
-                            color: AppColors.greyScale.grey600,
-                          ),
-                        ),
-                    ],
-                  ),
+                    ),
                   if (!showCircularProgBar)
                     CustomLinearIndicatorWg(progressIndicator: 0.0),
                 ],

@@ -112,6 +112,9 @@ class _SiteFaqsWgState extends State<SiteFaqsWg> {
                       itemBuilder: (context, index) {
                         final item = data[index];
                         final isOpen = _openIndex == index;
+                        final localeCode = Localizations.localeOf(
+                          context,
+                        ).languageCode;
 
                         return Column(
                           children: [
@@ -131,7 +134,7 @@ class _SiteFaqsWgState extends State<SiteFaqsWg> {
                                   children: [
                                     Expanded(
                                       child: Text(
-                                        item.questionUz,
+                                        item.displayQuestion(localeCode),
                                         style: AppTextStyles.source.medium(
                                           fontSize: 15,
                                           color: isOpen
@@ -157,21 +160,10 @@ class _SiteFaqsWgState extends State<SiteFaqsWg> {
                                 ),
                               ),
                             ),
-                            AnimatedCrossFade(
-                              firstChild: const SizedBox.shrink(),
-                              secondChild: Padding(
-                                padding: const EdgeInsets.only(bottom: 16),
-                                child: Text(
-                                  item.answerUz,
-                                  style: AppTextStyles.source.regular(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                              crossFadeState: isOpen
-                                  ? CrossFadeState.showSecond
-                                  : CrossFadeState.showFirst,
-                              duration: const Duration(milliseconds: 200),
+                            //! Javob ochilishi
+                            _FaqAnswer(
+                              isOpen: isOpen,
+                              text: item.displayAnswer(localeCode),
                             ),
                             Divider(
                               height: 1,
@@ -186,6 +178,50 @@ class _SiteFaqsWgState extends State<SiteFaqsWg> {
               },
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Javob tepadan pastga ochiladi: balandlik o'sadi, matn esa
+/// ozgina sirg'alib paydo bo'ladi.
+class _FaqAnswer extends StatelessWidget {
+  final bool isOpen;
+  final String text;
+
+  const _FaqAnswer({required this.isOpen, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 280),
+      curve: Curves.easeOutCubic,
+      alignment: Alignment.topCenter,
+      child: ClipRect(
+        child: Align(
+          alignment: Alignment.topCenter,
+          heightFactor: isOpen ? 1 : 0,
+          child: AnimatedOpacity(
+            opacity: isOpen ? 1 : 0,
+            duration: const Duration(milliseconds: 220),
+            curve: Curves.easeOut,
+            child: AnimatedSlide(
+              offset: isOpen ? Offset.zero : const Offset(0, -0.08),
+              duration: const Duration(milliseconds: 280),
+              curve: Curves.easeOutCubic,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: Text(
+                  text,
+                  style: AppTextStyles.source.regular(
+                    fontSize: 14,
+                    color: AppColors.greyScale.grey700,
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );

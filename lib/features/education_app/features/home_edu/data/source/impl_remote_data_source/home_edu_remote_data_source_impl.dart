@@ -15,6 +15,30 @@ class HomeEduRemoteDataSourceImpl implements HomeEduRemoteDataSource {
   final _dioClient = DioClient();
 
   @override
+  Future<void> addCourseComment({
+    required AddCourseCommentParams params,
+  }) async {
+    try {
+      final response = await _dioClient.post(
+        "${ApiUrls.courses}${params.courseId}${ApiUrls.addCourseComment}",
+        data: {
+          'stars': params.stars,
+          'text': params.text,
+          'course': params.courseId.toString(),
+        },
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return;
+      }
+      throw Exception('Throw Exception (Else): ${response.statusCode}');
+    } catch (e) {
+      logger.e("Catch: $e");
+      rethrow;
+    }
+  }
+
+  @override
   Future<CommentsResponseModel> fetchComments({
     required CommentsParams params,
   }) async {

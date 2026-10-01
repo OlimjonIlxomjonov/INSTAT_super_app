@@ -99,7 +99,7 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        widget.data.ratingsCount.toString(),
+                        widget.data.ratingLabel,
                         style: AppTextStyles.source.medium(fontSize: 12),
                       ),
                     ],

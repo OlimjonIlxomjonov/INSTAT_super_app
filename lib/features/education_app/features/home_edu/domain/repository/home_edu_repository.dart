@@ -9,6 +9,8 @@ import '../entity/tickets/show_tickets/show_tickets_response.dart';
 abstract class HomeEduRepository {
   Future<CommentsResponse> getComments({required CommentsParams params});
 
+  Future<void> addCourseComment({required AddCourseCommentParams params});
+
   Future<CourseEntity> getPerCourse({required PerCourseParams params});
 
   //? User Certificates

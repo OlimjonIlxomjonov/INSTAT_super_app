@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:my_template/features/education_app/features/home_edu/domain/usecase/add_course_comment/add_course_comment_use_case.dart';
+import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/add_course_comment/add_course_comment_cubit.dart';
 import 'package:my_template/features/main_app/global_search/presentation/bloc/global_search_cubit.dart';
 import 'package:my_template/features/vacancy_app/features/data/repo/vacancy_repo_impl.dart';
 import 'package:my_template/features/vacancy_app/features/data/source/impl_remote_data_source/vacancy_remote_data_source_impl.dart';
@@ -431,6 +433,7 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => SimilarCoursesUseCase(repository: sl()));
   //? Add Comments to the books
   sl.registerLazySingleton(() => AddCommentUseCase(repository: sl()));
+  sl.registerLazySingleton(() => AddCourseCommentUseCase(repository: sl()));
   //? User books
   sl.registerLazySingleton(() => UserBooksUseCase(repository: sl()));
   //? Saved (liked) books
@@ -620,6 +623,7 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => SimilarCoursesBloc(useCase: sl()));
   //? Add Comments to the books
   sl.registerLazySingleton(() => AddCommentsBloc(useCase: sl()));
+  sl.registerFactory(() => AddCourseCommentCubit(useCase: sl()));
   //? User books
   sl.registerLazySingleton(() => UserBookBloc(useCase: sl()));
   sl.registerLazySingleton(() => SavedBooksBloc(useCase: sl()));
