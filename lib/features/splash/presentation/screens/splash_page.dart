@@ -17,6 +17,10 @@ import 'package:my_template/features/splash/presentation/screens/no_internet_pag
 
 import '../../../../core/utils/constants/colors/app_colors.dart';
 import 'grid_background_painter.dart';
+import 'splash_logo_animation_wg.dart';
+
+//! Tajriba — false bo'lsa eski animatsiya
+const bool _kNewLogoAnimation = true;
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -112,18 +116,20 @@ class _SplashPageState extends State<SplashPage>
             ),
             //  logo with smooth fade and zoom
             Center(
-              child: TweenAnimationBuilder<double>(
-                tween: Tween<double>(begin: 0.0, end: 1.0),
-                duration: const Duration(seconds: 2),
-                curve: Curves.easeOutCubic,
-                builder: (context, value, child) {
-                  return Transform.scale(
-                    scale: 0.8 + (0.3 * value),
-                    child: Opacity(opacity: value, child: child),
-                  );
-                },
-                child: SvgPicture.asset(AppVectors.mainAppLogo),
-              ),
+              child: _kNewLogoAnimation
+                  ? const SplashLogoAnimation()
+                  : TweenAnimationBuilder<double>(
+                      tween: Tween<double>(begin: 0.0, end: 1.0),
+                      duration: const Duration(seconds: 2),
+                      curve: Curves.easeOutCubic,
+                      builder: (context, value, child) {
+                        return Transform.scale(
+                          scale: 0.8 + (0.3 * value),
+                          child: Opacity(opacity: value, child: child),
+                        );
+                      },
+                      child: SvgPicture.asset(AppVectors.mainAppLogo),
+                    ),
             ),
 
             //  bottom text

@@ -13,6 +13,8 @@ abstract class AppVectors {
 
   /// main app logo
   static const String mainAppLogo = '${basePath}main_app_logo$format';
+  static const String splashLogoIcon = '${basePath}splash_logo_icon$format';
+  static const String splashLogoText = '${basePath}splash_logo_text$format';
 
   /// one id logo
   static const String oneIdLogo = 'assets/images/oneid_logo.svg';
