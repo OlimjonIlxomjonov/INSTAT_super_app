@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/assets/app_images.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/widgets/module_categories/module_categories_with_bloc.dart';
 import 'package:my_template/core/utils/widgets/promo_banners/promo_banners_carousel_wg.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/dragble_app_bar/draggble_app_bar_wg.dart';
-import 'package:my_template/core/utils/widgets/edu_categories/edu_categories_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_section/extend_section_see_all_wg.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
@@ -19,10 +17,7 @@ import 'package:my_template/features/education_app/features/home_edu/presentatio
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/widgets_edu/home_achivements_wg.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/search_courses/search_courses_bloc.dart';
 import 'package:my_template/features/education_app/widgets/active_courses_with_bloc_wg.dart';
-import 'package:my_template/features/main_app/home/presentation/bloc/module_category/module_category_bloc.dart';
-import 'package:my_template/features/main_app/home/presentation/bloc/module_category/module_category_state.dart';
 import 'package:my_template/features/main_app/home/presentation/widgets/popular_course_with_bloc/popular_with_bloc_wg.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../../../core/common/params/edu_params/params.dart';
 import '../../../../../main_app/home/presentation/bloc/courses/courses_bloc.dart';

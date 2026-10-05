@@ -17,7 +17,6 @@ import 'package:my_template/features/main_app/home/data/model/notifications_coun
 import 'package:my_template/features/main_app/home/data/model/site_faqs/site_faqs_model.dart';
 import 'package:my_template/features/main_app/home/data/model/user_me/user_model.dart';
 import 'package:my_template/features/main_app/home/data/source/remote_data_source/home_remote_data_source.dart';
-import 'package:my_template/features/main_app/home/domain/entity/active_devices/active_devices.dart';
 import 'package:path_provider/path_provider.dart';
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {

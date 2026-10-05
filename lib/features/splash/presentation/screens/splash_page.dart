@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/token_storage/jwt_utils.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
-import 'package:my_template/core/utils/constants/assets/app_vectors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
-import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/features/main_app/home/presentation/screens/home_page.dart';
 import 'package:my_template/features/onboarding/screens/onboarding_page.dart';
@@ -18,9 +15,6 @@ import 'package:my_template/features/splash/presentation/screens/no_internet_pag
 import '../../../../core/utils/constants/colors/app_colors.dart';
 import 'grid_background_painter.dart';
 import 'splash_logo_animation_wg.dart';
-
-//! Tajriba — false bo'lsa eski animatsiya
-const bool _kNewLogoAnimation = true;
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -114,23 +108,8 @@ class _SplashPageState extends State<SplashPage>
                 },
               ),
             ),
-            //  logo with smooth fade and zoom
-            Center(
-              child: _kNewLogoAnimation
-                  ? const SplashLogoAnimation()
-                  : TweenAnimationBuilder<double>(
-                      tween: Tween<double>(begin: 0.0, end: 1.0),
-                      duration: const Duration(seconds: 2),
-                      curve: Curves.easeOutCubic,
-                      builder: (context, value, child) {
-                        return Transform.scale(
-                          scale: 0.8 + (0.3 * value),
-                          child: Opacity(opacity: value, child: child),
-                        );
-                      },
-                      child: SvgPicture.asset(AppVectors.mainAppLogo),
-                    ),
-            ),
+            //! logo
+            const Center(child: SplashLogoAnimation()),
 
             //  bottom text
             SafeArea(

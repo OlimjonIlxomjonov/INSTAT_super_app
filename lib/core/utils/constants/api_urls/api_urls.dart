@@ -21,7 +21,6 @@ class ApiUrls {
 
   /// user
   static const me = 'me';
-  static const token = 'token/';
   static const qrLogin = 'qr-login';
 
   /// courses

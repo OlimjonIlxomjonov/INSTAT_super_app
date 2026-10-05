@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/app_utils.dart';
-import 'package:my_template/core/utils/constants/colors/app_colors.dart';
-import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
-import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 
 import '../../../user_courses_edu/domain/entity/offline_course/offline_course_teacher_entity.dart';
 

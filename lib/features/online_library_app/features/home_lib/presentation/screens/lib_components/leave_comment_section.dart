@@ -17,8 +17,6 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_comments/book_comments_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/book_comments/book_comments_event.dart';
 
-import '../../bloc/popular_books/popular_books_bloc.dart';
-import '../../bloc/popular_books/popular_books_event.dart';
 
 class LeaveCommentSection extends StatefulWidget {
   final BookEntity data;

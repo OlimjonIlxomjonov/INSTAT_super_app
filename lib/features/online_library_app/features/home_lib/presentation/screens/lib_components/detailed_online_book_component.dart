@@ -10,7 +10,6 @@ import 'package:my_template/features/online_library_app/features/user_online_boo
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/core/common/ui_states/section_error_wg.dart';
-import 'package:flutter_remix/flutter_remix.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/params/online_books/online_books_params.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
