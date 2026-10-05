@@ -1,6 +1,7 @@
 import 'package:my_template/core/common/params/micro_data_params/data_request_params.dart';
 import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_request_category_entity.dart';
 import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_request_detail_entity.dart';
+import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_request_order_entity.dart';
 import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_request_process_entity.dart';
 import 'package:my_template/features/mikro_data/domain/entity/regions/region_entity.dart';
 import 'package:my_template/features/mikro_data/domain/repository/micro_repository.dart';
@@ -88,5 +89,15 @@ class DataRequestProcessesUseCase {
 
   Future<List<DataRequestProcessEntity>> call(int requestId) {
     return repository.getDataRequestProcesses(requestId);
+  }
+}
+
+class CreateDataRequestOrderUseCase {
+  final MicroRepository repository;
+
+  CreateDataRequestOrderUseCase({required this.repository});
+
+  Future<DataRequestOrderEntity> call(CreateDataRequestOrderParams params) {
+    return repository.createDataRequestOrder(params);
   }
 }

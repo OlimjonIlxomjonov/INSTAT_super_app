@@ -88,7 +88,10 @@ class _MagazinesPageState extends State<MagazinesPage> {
                   //! actual data
                   return SliverOpacity(
                     opacity: state.isRefreshing ? 0.4 : 1,
-                    sliver: SliverMagazineGridWg(items: state.response.data),
+                    sliver: SliverMagazineGridWg(
+                      items: state.response.data,
+                      animate: true,
+                    ),
                   );
                 } else if (state is ArticleEditionsLoading) {
                   //! loading sate

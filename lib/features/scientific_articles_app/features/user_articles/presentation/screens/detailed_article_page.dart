@@ -30,7 +30,9 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_detail/review_detail_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_detail/review_detail_state.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/articles_status_check_wg.dart';
+import 'package:my_template/core/utils/general_widgets/online_lib_style_custom_bottom_sheet/online_lib_style_custom_bottom_sheet_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/screens/add_article/add_article_page.dart';
+import 'package:my_template/features/scientific_articles_app/features/user_articles/presentation/widgets/article_pay_options_wg.dart';
 
 import '../../../home/domain/entity/article_process/article_process_entity.dart';
 import '../../../home/presentation/widgets/last_actions/last_actions_item_wg.dart';
@@ -77,6 +79,26 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
   void dispose() {
     _isOpeningFile.dispose();
     super.dispose();
+  }
+
+  void _openPaySheet(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+    onlineLibStyleCustomBottomSheetWg(
+      context,
+      headerTitle: localization.paymentTypeTitle,
+      child: ArticlePayOptionsWg(
+        reviewId: widget.reviewId,
+        onSuccess: () {
+          if (!mounted) return;
+          context.read<ReviewDetailBloc>().add(
+            ReviewDetailEvent(reviewId: widget.reviewId),
+          );
+          context.read<ArticleProcessBloc>().add(
+            ArticleProcessEvent(articleId: widget.reviewId),
+          );
+        },
+      ),
+    );
   }
 
   void _openEditDraft(BuildContext context) {
@@ -248,6 +270,17 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
               else ...[
                 BlocBuilder<ArticleProcessBloc, ArticleProcessState>(
                   builder: (context, state) {
+                    if (state is ArticleProcessLoaded && state.entity.isEmpty) {
+                      return SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 48),
+                          child: AppEmptyState(
+                            title: localization.requestNoProcesses,
+                            subtitle: localization.articleNoProcessesSubtitle,
+                          ),
+                        ),
+                      );
+                    }
                     if (state is ArticleProcessLoaded) {
                       final grouped = <int, List<ArticleProcessEntity>>{};
 
@@ -332,13 +365,20 @@ class _DetailedArticlePageState extends State<DetailedArticlePage> {
           ),
         ],
       ),
-      bottomNavigationBar: effectiveStatus == ArticleStatus.draft
-          ? CustomBottomNavContainerWg(
-              leadingIcon: IconlyLight.edit,
-              buttonText: localization.edit,
-              onTap: () => _openEditDraft(context),
-            )
-          : null,
+      bottomNavigationBar: switch (effectiveStatus) {
+        ArticleStatus.draft => CustomBottomNavContainerWg(
+          leadingIcon: IconlyLight.edit,
+          buttonText: localization.edit,
+          onTap: () => _openEditDraft(context),
+        ),
+        //! To'lov kutilmoqda — click/payme tanlovi
+        ArticleStatus.waitingForPayment => CustomBottomNavContainerWg(
+          leadingIcon: IconlyLight.wallet,
+          buttonText: localization.payNow,
+          onTap: () => _openPaySheet(context),
+        ),
+        _ => null,
+      },
     );
   }
 }

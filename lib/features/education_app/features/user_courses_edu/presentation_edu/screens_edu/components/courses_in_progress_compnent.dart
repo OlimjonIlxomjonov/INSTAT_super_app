@@ -1,3 +1,4 @@
+import 'package:my_template/core/utils/general_widgets/appear/appear_wg.dart';
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -97,47 +98,60 @@ class _CoursesInProgressComponentState
   /// EXTENDED COURSES
   Widget _buildList(List<CourseEntity> data) {
     if (widget.layout == CoursesLayout.grid) {
-      return SliverPadding(
-        padding: EdgeInsets.symmetric(horizontal: appW(20)),
-        sliver: SliverList(
-          delegate: SliverChildBuilderDelegate((context, index) {
-            final entity = data[index];
-            return CourseCategoryBuilder(
-              categoryId: entity.category,
-              loadingBuilder: (context) => const SkeletonExpandedCourseCard(),
-              builder: (context, categoryName) {
-                return ExpandedCoursesCardWg(
-                  onTap: () =>
-                      sheetOpener(data: entity, categoryName: categoryName),
-                  entity: entity,
-                  categoryName: categoryName,
-                );
-              },
-            );
-          }, childCount: data.length),
+      return AppearScope(
+        child: SliverPadding(
+          padding: EdgeInsets.symmetric(horizontal: appW(20)),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final entity = data[index];
+              return AppearItem(
+                key: ValueKey(entity.id),
+                id: entity.id,
+                child: CourseCategoryBuilder(
+                  categoryId: entity.category,
+                  loadingBuilder: (context) =>
+                      const SkeletonExpandedCourseCard(),
+                  builder: (context, categoryName) {
+                    return ExpandedCoursesCardWg(
+                      onTap: () =>
+                          sheetOpener(data: entity, categoryName: categoryName),
+                      entity: entity,
+                      categoryName: categoryName,
+                    );
+                  },
+                ),
+              );
+            }, childCount: data.length),
+          ),
         ),
       );
     }
 
     /// MINIMIZED COURSES
-    return SliverPadding(
-      padding: EdgeInsets.symmetric(horizontal: appW(20)),
-      sliver: SliverList(
-        delegate: SliverChildBuilderDelegate((context, index) {
-          final entity = data[index];
-          return CourseCategoryBuilder(
-            categoryId: entity.category,
-            loadingBuilder: (context) => const SkeletonMinimalCourseCard(),
-            builder: (context, categoryName) {
-              return MinimalCoursesCardWg(
-                onTap: () =>
-                    sheetOpener(data: entity, categoryName: categoryName),
-                data: entity,
-                categoryName: categoryName,
-              );
-            },
-          );
-        }, childCount: data.length),
+    return AppearScope(
+      child: SliverPadding(
+        padding: EdgeInsets.symmetric(horizontal: appW(20)),
+        sliver: SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+            final entity = data[index];
+            return AppearItem(
+              key: ValueKey(entity.id),
+              id: entity.id,
+              child: CourseCategoryBuilder(
+                categoryId: entity.category,
+                loadingBuilder: (context) => const SkeletonMinimalCourseCard(),
+                builder: (context, categoryName) {
+                  return MinimalCoursesCardWg(
+                    onTap: () =>
+                        sheetOpener(data: entity, categoryName: categoryName),
+                    data: entity,
+                    categoryName: categoryName,
+                  );
+                },
+              ),
+            );
+          }, childCount: data.length),
+        ),
       ),
     );
   }
@@ -178,10 +192,10 @@ class _CoursesInProgressComponentState
             );
           }
 
-          if (state.isLoadingMore) {
-            return SliverMainAxisGroup(
-              slivers: [
-                _buildList(data),
+          return SliverMainAxisGroup(
+            slivers: [
+              _buildList(data),
+              if (state.isLoadingMore)
                 const SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 16),
@@ -194,11 +208,8 @@ class _CoursesInProgressComponentState
                     ),
                   ),
                 ),
-              ],
-            );
-          }
-
-          return _buildList(data);
+            ],
+          );
         }
 
         if (state is UserCoursesLoading) {

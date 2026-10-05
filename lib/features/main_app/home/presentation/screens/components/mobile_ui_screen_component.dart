@@ -1,3 +1,4 @@
+import 'package:my_template/core/utils/price/price_label.dart';
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -345,10 +346,9 @@ class _MobileUiScreenComponentState extends State<MobileUiScreenComponent> {
                                 title: book.name,
                                 rating: average,
                                 author: book.author.name,
-                                price: "\u{00A0}${formatPrice(book.price)} UZS",
-                                imagePath: thumbnail.isNotEmpty
-                                    ? thumbnail
-                                    : 'assets/images/temp_book.jpg',
+                                price:
+                                    "\u{00A0}${priceLabel(AppLocalizations.of(context)!, book.price)}",
+                                imagePath: thumbnail,
                                 onTap: () {
                                   openMiniAppSheetFamily(
                                     context,

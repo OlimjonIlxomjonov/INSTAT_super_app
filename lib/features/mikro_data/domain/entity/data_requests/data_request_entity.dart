@@ -34,20 +34,6 @@ class DataRequestEntity {
     this.expertId,
   });
 
-  MicroDataRequestStatus get requestStatus {
-    switch (status) {
-      case 'paid':
-        return MicroDataRequestStatus.accepted;
-      case 'in_review':
-        return MicroDataRequestStatus.inReview;
-      case 'rejected':
-        return MicroDataRequestStatus.rejected;
-      case 'pending_payment':
-        return MicroDataRequestStatus.pendingPayment;
-      case 'draft':
-        return MicroDataRequestStatus.draft;
-      default:
-        return MicroDataRequestStatus.draft;
-    }
-  }
+  MicroDataRequestStatus get requestStatus =>
+      MicroDataRequestStatusX.fromString(status);
 }

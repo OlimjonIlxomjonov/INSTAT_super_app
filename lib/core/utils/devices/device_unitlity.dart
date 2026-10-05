@@ -95,7 +95,9 @@ String formatFileSize(int bytes) {
 extension DateTimeFormatting on String {
   String toReadableDate() {
     DateTime dateTime = DateTime.parse(this);
-    return "${dateTime.day} ${_getMonth(dateTime.month)} ${dateTime.year}, ${dateTime.hour}:${dateTime.minute}";
+    final hour = dateTime.hour.toString().padLeft(2, '0');
+    final minute = dateTime.minute.toString().padLeft(2, '0');
+    return "${dateTime.day} ${_getMonth(dateTime.month)} ${dateTime.year}, $hour:$minute";
   }
 
   String toReadableDateWithoutTime() {

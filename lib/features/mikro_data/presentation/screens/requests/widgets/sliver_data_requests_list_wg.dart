@@ -1,3 +1,4 @@
+import 'package:my_template/core/utils/general_widgets/appear/appear_wg.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_request_entity.dart';
@@ -17,12 +18,20 @@ class SliverDataRequestsListWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverPadding(
-      padding: AppPadding.horizontal20x(),
-      sliver: SliverList.builder(
-        itemCount: items.length,
-        itemBuilder: (context, index) =>
-            DataRequestCardWg(item: items[index], onUpdated: onRequestUpdated),
+    return AppearScope(
+      child: SliverPadding(
+        padding: AppPadding.horizontal20x(),
+        sliver: SliverList.builder(
+          itemCount: items.length,
+          itemBuilder: (context, index) => AppearItem(
+            key: ValueKey(items[index].id),
+            id: items[index].id,
+            child: DataRequestCardWg(
+              item: items[index],
+              onUpdated: onRequestUpdated,
+            ),
+          ),
+        ),
       ),
     );
   }

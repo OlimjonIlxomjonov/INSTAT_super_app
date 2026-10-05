@@ -1,3 +1,5 @@
+import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
+import 'package:my_template/core/utils/price/price_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
@@ -85,147 +87,153 @@ class _UserOnlineBookCartLibPageState extends State<UserOnlineBookCartLibPage> {
     );
 
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            automaticallyImplyLeading: false,
-            titleSpacing: 0,
-            title: SheetDragAreaWg(
-              child: CustomAppBarWg(myTitle: localization.cart),
+      body: CustomRefreshIndicator(
+        onRefresh: () async => context.read<CartBloc>().add(CartEvent()),
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverAppBar(
+              automaticallyImplyLeading: false,
+              titleSpacing: 0,
+              title: SheetDragAreaWg(
+                child: CustomAppBarWg(myTitle: localization.cart),
+              ),
             ),
-          ),
-          SliverPadding(
-            padding: AppPadding.hAndV20x20(),
-            sliver: SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  Skeletonizer(
-                    enabled: isLoading,
-                    child: Column(
-                      children: List.generate(itemCount, (index) {
-                        final item = items?[index];
-                        final thumbnail =
-                            item != null && item.bookThumbnails.isNotEmpty
-                            ? '${ApiUrls.imageUrlBase}${item.bookThumbnails.first.file}'
-                            : '';
-                        return Stack(
-                          children: [
-                            ShortBookDetailsWg(
-                              imagePath: thumbnail,
-                              bookName: item?.name ?? 'Placeholder Book Title',
-                              bookAuthor: item?.author.name ?? 'Author Name',
-                              newPrice: item != null
-                                  ? '${formatPrice(item.price)} UZS'
-                                  : '000 000 UZS',
-                            ),
-                            if (item != null && isMultiSelect)
-                              Positioned(
-                                top: 0,
-                                left: 0,
-                                child: GestureDetector(
-                                  behavior: HitTestBehavior.opaque,
-                                  onTap: () => _toggleSelected(item.id),
-                                  child: SizedBox(
-                                    width: 150,
-                                    height: 180,
-                                    child: Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: _SelectIndicator(
-                                          isSelected: _selectedBookIds.contains(
-                                            item.id,
+            SliverPadding(
+              padding: AppPadding.hAndV20x20(),
+              sliver: SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    Skeletonizer(
+                      enabled: isLoading,
+                      child: Column(
+                        children: List.generate(itemCount, (index) {
+                          final item = items?[index];
+                          final thumbnail =
+                              item != null && item.bookThumbnails.isNotEmpty
+                              ? '${ApiUrls.imageUrlBase}${item.bookThumbnails.first.file}'
+                              : '';
+                          return Stack(
+                            children: [
+                              ShortBookDetailsWg(
+                                imagePath: thumbnail,
+                                bookName:
+                                    item?.name ?? 'Placeholder Book Title',
+                                bookAuthor: item?.author.name ?? 'Author Name',
+                                newPrice: item != null
+                                    ? priceLabel(localization, item.price)
+                                    : '000 000 UZS',
+                              ),
+                              if (item != null && isMultiSelect)
+                                Positioned(
+                                  top: 0,
+                                  left: 0,
+                                  child: GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () => _toggleSelected(item.id),
+                                    child: SizedBox(
+                                      width: 150,
+                                      height: 180,
+                                      child: Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8),
+                                          child: _SelectIndicator(
+                                            isSelected: _selectedBookIds
+                                                .contains(item.id),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            if (item != null)
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(20),
-                                    onTap: () {
-                                      context.read<CartBloc>().add(
-                                        RemoveFromCartEvent(bookId: item.id),
-                                      );
-                                      // Keep BookActionsBloc's cached
-                                      // "in cart" flag (used by the book
-                                      // detail page) in sync — otherwise
-                                      // it stays stuck showing "in cart"
-                                      // even after removal here.
-                                      context.read<BookActionsBloc>().add(
-                                        UpdateBookStateFromSocketEvent(
-                                          bookId: item.id,
-                                          isInCart: false,
+                              if (item != null)
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(20),
+                                      onTap: () {
+                                        context.read<CartBloc>().add(
+                                          RemoveFromCartEvent(bookId: item.id),
+                                        );
+                                        // Keep BookActionsBloc's cached
+                                        // "in cart" flag (used by the book
+                                        // detail page) in sync — otherwise
+                                        // it stays stuck showing "in cart"
+                                        // even after removal here.
+                                        context.read<BookActionsBloc>().add(
+                                          UpdateBookStateFromSocketEvent(
+                                            bookId: item.id,
+                                            isInCart: false,
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(6),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.greyScale.grey50,
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: AppColors.greyScale.grey200,
+                                          ),
                                         ),
-                                      );
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.all(6),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.greyScale.grey50,
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color: AppColors.greyScale.grey200,
+                                        child: Icon(
+                                          IconlyLight.delete,
+                                          size: 20,
+                                          color: AppColors.red,
                                         ),
-                                      ),
-                                      child: Icon(
-                                        IconlyLight.delete,
-                                        size: 20,
-                                        color: AppColors.red,
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                          ],
-                        );
-                      }),
+                            ],
+                          );
+                        }),
+                      ),
                     ),
-                  ),
-                  if (isEmpty)
-                    AppEmptyState(
-                      title: localization.cartEmpty,
-                      subtitle: localization.cartEmptySubtitle,
-                    ),
-                  SizedBox(height: appH(30)),
-                  if (!isEmpty)
-                    _buildSimpleRow(
-                      localization.totalItems,
-                      localization.countSuffix(itemCount),
-                    ),
-                  SizedBox(height: 12),
-                  if (!isEmpty) Divider(color: AppColors.greyScale.grey200),
-                  SizedBox(height: 16),
-                  if (!isEmpty)
-                    Row(
-                      mainAxisAlignment: .spaceBetween,
-                      children: [
-                        Text(
-                          localization.totalAmount,
-                          style: AppTextStyles.source.medium(fontSize: 17),
-                        ),
-                        Text(
-                          '${formatPrice(totalPrice)} UZS',
-                          style: AppTextStyles.source.medium(fontSize: 17),
-                        ),
-                      ],
-                    ),
-                ],
+                    if (isEmpty)
+                      AppEmptyState(
+                        title: localization.cartEmpty,
+                        subtitle: localization.cartEmptySubtitle,
+                      ),
+                    SizedBox(height: appH(30)),
+                    if (!isEmpty)
+                      _buildSimpleRow(
+                        localization.totalItems,
+                        localization.countSuffix(itemCount),
+                      ),
+                    SizedBox(height: 12),
+                    if (!isEmpty) Divider(color: AppColors.greyScale.grey200),
+                    SizedBox(height: 16),
+                    if (!isEmpty)
+                      Row(
+                        mainAxisAlignment: .spaceBetween,
+                        children: [
+                          Text(
+                            localization.totalAmount,
+                            style: AppTextStyles.source.medium(fontSize: 17),
+                          ),
+                          Text(
+                            priceLabel(localization, totalPrice),
+                            style: AppTextStyles.source.medium(fontSize: 17),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       bottomNavigationBar: !isEmpty
           ? CustomBottomNavContainerWg(
-              buttonText: localization.buyForPrice(formatPrice(totalPrice)),
+              buttonText: totalPrice == 0
+                  ? localization.getForFree
+                  : localization.buyForPrice(formatPrice(totalPrice)),
               onTap: () {
                 if (selectedIds.isEmpty) {
                   errorFlushBar(

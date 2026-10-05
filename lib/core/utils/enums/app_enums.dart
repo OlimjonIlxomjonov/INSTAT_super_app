@@ -15,36 +15,82 @@ enum ArticleStatus {
   waitingForPayment,
 }
 
+//! `data-requests/` va uning `processes/` qaytaradigan status qiymatlari
 enum MicroDataRequestStatus {
-  accepted,
-  inReview,
-  rejected,
-  pendingPayment,
   draft,
+  inReview,
+  inProcess,
+  agreementAccepted,
+  headAgreementAccepted,
+  waitingForPayment,
+  paid,
+  finished,
+  rejected,
+  unknown,
 }
 
+extension MicroDataRequestStatusX on MicroDataRequestStatus {
+  static MicroDataRequestStatus fromString(String value) {
+    switch (value) {
+      case 'draft':
+        return MicroDataRequestStatus.draft;
+      case 'in_review':
+        return MicroDataRequestStatus.inReview;
+      case 'in_process':
+        return MicroDataRequestStatus.inProcess;
+      case 'agreement_accepted':
+        return MicroDataRequestStatus.agreementAccepted;
+      case 'head_agreement_accepted':
+        return MicroDataRequestStatus.headAgreementAccepted;
+      case 'waiting_for_payment':
+        return MicroDataRequestStatus.waitingForPayment;
+      case 'paid':
+        return MicroDataRequestStatus.paid;
+      case 'finished':
+        return MicroDataRequestStatus.finished;
+      case 'rejected':
+      case 'failed':
+        return MicroDataRequestStatus.rejected;
+      default:
+        return MicroDataRequestStatus.unknown;
+    }
+  }
+}
+
+//! `reviews/{id}/processes/` dagi status qiymatlari
 enum LastActionsStatus {
+  sent,
   inReview,
   accepted,
   addedExpert,
   rejected,
   waitingForPayment,
+  published,
+  unknown,
 }
 
 extension LastActionsStatusX on LastActionsStatus {
   static LastActionsStatus fromString(String value) {
     switch (value) {
+      case 'sent':
+        return LastActionsStatus.sent;
       case 'in_review':
         return LastActionsStatus.inReview;
       case 'added_expert':
         return LastActionsStatus.addedExpert;
       case 'rejected':
+      case 'failed':
         return LastActionsStatus.rejected;
       case 'waiting_for_payment':
         return LastActionsStatus.waitingForPayment;
+      case 'published':
+        return LastActionsStatus.published;
       case 'accepted':
-      default:
+      case 'approved':
+      case 'confirmed':
         return LastActionsStatus.accepted;
+      default:
+        return LastActionsStatus.unknown;
     }
   }
 }

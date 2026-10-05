@@ -80,7 +80,17 @@ class BookGridItem extends StatelessWidget {
           // Background Image
           ClipRRect(
             borderRadius: BorderRadius.circular(14),
-            child: imagePath.startsWith('http')
+            child: imagePath.isEmpty
+                ? Container(
+                    color: AppColors.greyScale.grey100,
+                    alignment: Alignment.center,
+                    child: Icon(
+                      Icons.menu_book_rounded,
+                      size: 32,
+                      color: AppColors.greyScale.grey400,
+                    ),
+                  )
+                : imagePath.startsWith('http')
                 ? Image.network(
                     imagePath,
                     width: double.infinity,

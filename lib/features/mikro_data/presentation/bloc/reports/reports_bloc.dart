@@ -10,6 +10,7 @@ class ReportsBloc extends Bloc<MicroDataEvent, ReportsState> {
 
   /// Load-more joriy qidiruv ichida davom etadi.
   String _search = '';
+  int _generation = 0;
 
   ReportsBloc({required this.useCase}) : super(ReportsInitial()) {
     on<ReportsEvent>((event, emit) async {
@@ -30,7 +31,7 @@ class ReportsBloc extends Bloc<MicroDataEvent, ReportsState> {
 
       try {
         final response = await useCase.call(search: _search);
-        emit(ReportsLoaded(response: response));
+        emit(ReportsLoaded(response: response, generation: ++_generation));
       } catch (e) {
         emit(
           previous?.copyWith(isRefreshing: false) ??
@@ -57,6 +58,7 @@ class ReportsBloc extends Bloc<MicroDataEvent, ReportsState> {
               data: [...current.response.data, ...next.data],
               meta: next.meta,
             ),
+            generation: current.generation,
           ),
         );
       } catch (e) {

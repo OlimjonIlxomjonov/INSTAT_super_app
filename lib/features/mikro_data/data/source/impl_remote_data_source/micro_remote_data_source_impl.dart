@@ -6,6 +6,7 @@ import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/features/mikro_data/data/model/data_requests/data_request_category_model.dart';
 import 'package:my_template/features/mikro_data/data/model/data_requests/data_request_detail_model.dart';
+import 'package:my_template/features/mikro_data/data/model/data_requests/data_request_order_model.dart';
 import 'package:my_template/features/mikro_data/data/model/data_requests/data_request_process_model.dart';
 import 'package:my_template/features/mikro_data/data/model/data_requests/data_requests_response_model.dart';
 import 'package:my_template/features/mikro_data/data/model/regions/region_model.dart';
@@ -281,6 +282,27 @@ class MicroRemoteDataSourceImpl implements MicroRemoteDataSource {
     } on DioException catch (e) {
       logger.e("CATCH: $e");
       throw ApiValidationParser.tryParse(e.response?.data) ?? e;
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<DataRequestOrderModel> createDataRequestOrder(
+    CreateDataRequestOrderParams params,
+  ) async {
+    try {
+      final response = await _dioClient.post(
+        '${ApiUrls.dataRequests}${params.requestId}/'
+        '${ApiUrls.dataRequestCreateOrder}',
+        data: {'payment_method': params.paymentMethod},
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return DataRequestOrderModel.fromJson(response.data);
+      }
+      throw Exception('THROW EXCEPTION! ${response.statusCode}');
     } catch (e) {
       logger.e("CATCH: $e");
       rethrow;

@@ -1,3 +1,4 @@
+import 'package:my_template/core/utils/general_widgets/appear/appear_wg.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -95,10 +96,17 @@ class _MagazineDetailView extends StatelessWidget {
                           ),
                         )
                       else
-                        SliverList.builder(
-                          itemCount: state.items.length,
-                          itemBuilder: (_, index) =>
-                              EditionArticleCardWg(item: state.items[index]),
+                        AppearScope(
+                          child: SliverList.builder(
+                            itemCount: state.items.length,
+                            itemBuilder: (_, index) => AppearItem(
+                              key: ValueKey(state.items[index].id),
+                              id: state.items[index].id,
+                              child: EditionArticleCardWg(
+                                item: state.items[index],
+                              ),
+                            ),
+                          ),
                         ),
                     ],
                   ),

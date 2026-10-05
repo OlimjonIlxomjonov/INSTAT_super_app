@@ -1,3 +1,4 @@
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_group_member/course_group_member_entity.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/sources/remote_data_source/user_courses_remote_data_source.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/about_course_features/about_this_course_response.dart';
@@ -149,5 +150,12 @@ class UserCoursesRepoImpl implements UserCoursesRepository {
     required OfflineLessonsParams params,
   }) {
     return _remoteDataSource.fetchOfflineLessons(params: params);
+  }
+
+  @override
+  Future<List<CourseGroupMemberEntity>> getCourseGroupDateMembers({
+    required OfflineLessonsParams params,
+  }) {
+    return _remoteDataSource.fetchCourseGroupDateMembers(params: params);
   }
 }

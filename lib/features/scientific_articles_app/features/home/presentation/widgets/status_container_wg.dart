@@ -23,11 +23,19 @@ class StatusContainerWg extends StatelessWidget {
         borderRadius: .circular(8),
       ),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, color: iconColor, size: 20),
-          Text(
-            statusTitle,
-            style: AppTextStyles.source.medium(fontSize: 12, color: iconColor),
+          Flexible(
+            child: Text(
+              statusTitle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.source.medium(
+                fontSize: 12,
+                color: iconColor,
+              ),
+            ),
           ),
         ],
       ),

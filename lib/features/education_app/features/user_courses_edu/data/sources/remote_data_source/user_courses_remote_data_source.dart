@@ -1,3 +1,4 @@
+import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_group_member/course_group_member_model.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/about_course_features/about_course_response_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/check_final_test_access_model/check_final_test_access_model.dart';
@@ -89,6 +90,10 @@ abstract class UserCoursesRemoteDataSource {
 
   //! offline lessons
   Future<List<CourseOfflineLessonsModel>> fetchOfflineLessons({
+    required OfflineLessonsParams params,
+  });
+
+  Future<List<CourseGroupMemberModel>> fetchCourseGroupDateMembers({
     required OfflineLessonsParams params,
   });
 }

@@ -48,7 +48,13 @@ class _ReportsPageState extends State<ReportsPage> {
     final localization = AppLocalizations.of(context)!;
 
     return CustomRefreshIndicator(
-      onRefresh: () async => _fetch(),
+      onRefresh: () async {
+        final bloc = context.read<ReportsBloc>();
+        _fetch();
+        await bloc.stream.firstWhere(
+          (s) => (s is ReportsLoaded && !s.isRefreshing) || s is ReportsError,
+        );
+      },
       child: Scaffold(
         // Klaviatura ochilganda oq fon hisobotlarni yopib qo'ymasligi uchun.
         resizeToAvoidBottomInset: false,

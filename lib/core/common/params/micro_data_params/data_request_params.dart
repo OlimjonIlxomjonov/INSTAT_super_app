@@ -1,5 +1,15 @@
 import 'dart:io';
 
+class CreateDataRequestOrderParams {
+  final int requestId;
+  final String paymentMethod;
+
+  CreateDataRequestOrderParams({
+    required this.requestId,
+    required this.paymentMethod,
+  });
+}
+
 class DataRequestParams {
   final int? id;
 

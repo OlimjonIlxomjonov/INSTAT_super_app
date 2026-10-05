@@ -22,6 +22,8 @@ Future<SelectedArea?> showAreaPickerSheet(
   required List<RegionEntity> regions,
   SelectedArea? initial,
 }) {
+  //! Yopilganda fokus matn maydoniga qaytmasin
+  FocusManager.instance.primaryFocus?.unfocus();
   return showModalBottomSheet<SelectedArea>(
     context: context,
     isScrollControlled: true,

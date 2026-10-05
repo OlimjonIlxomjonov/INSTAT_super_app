@@ -1,3 +1,4 @@
+import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_group_member/course_group_member_model.dart';
 import 'package:dio/dio.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/network/dio_client.dart';
@@ -491,6 +492,27 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
         logger.i(response.data);
         final data = response.data as List;
         return data.map((e) => CourseOfflineLessonsModel.fromJson(e)).toList();
+      } else {
+        throw Exception('ERROR ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<CourseGroupMemberModel>> fetchCourseGroupDateMembers({
+    required OfflineLessonsParams params,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        "${ApiUrls.courseGroups}${params.id}${ApiUrls.courseGroupDates}${params.groupId}/${ApiUrls.courseGroupDateMembers}",
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        final data = response.data as List;
+        return data.map((e) => CourseGroupMemberModel.fromJson(e)).toList();
       } else {
         throw Exception('ERROR ${response.statusCode}');
       }

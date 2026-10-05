@@ -1,3 +1,5 @@
+import 'package:my_template/core/utils/general_widgets/appear/appear_wg.dart';
+import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -68,9 +70,10 @@ class _OfflineBooksLibPageState extends State<OfflineBooksLibPage> {
       value: _bloc,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: RefreshIndicator(
+        body: CustomRefreshIndicator(
           onRefresh: () async => _fetch(),
           child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             slivers: [
               SliverAppBar(
@@ -176,40 +179,46 @@ class _OfflineBooksLibPageState extends State<OfflineBooksLibPage> {
                     }
                     return SliverPadding(
                       padding: AppPadding.hAndV20x20(),
-                      sliver: SliverGrid.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 16,
-                              crossAxisSpacing: 16,
-                              childAspectRatio: 0.51,
-                            ),
-                        itemCount: data.length,
-                        itemBuilder: (context, index) {
-                          final book = data[index];
-                          final thumbnail = book.bookThumbnails.isNotEmpty
-                              ? '${ApiUrls.imageUrlBase}${book.bookThumbnails.first.file}'
-                              : '';
-                          return BookGridItem(
-                            id: book.id,
-                            isSaved: book.isSaved,
-                            type: BookCardType.library,
-                            title: book.name,
-                            author: book.author.name,
-                            shelfNumber: book.copiesCount,
-                            rowNumber: book.copiesCount,
-                            imagePath: thumbnail.isNotEmpty
-                                ? thumbnail
-                                : 'assets/images/temp_book.jpg',
-                            onTap: () {
-                              openMiniAppSheetFamily(
-                                context,
-                                showHandler: false,
-                                child: DetailedOnlineBookComponent(data: book),
-                              );
-                            },
-                          );
-                        },
+                      sliver: AppearScope(
+                        child: SliverGrid.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 16,
+                                crossAxisSpacing: 16,
+                                childAspectRatio: 0.51,
+                              ),
+                          itemCount: data.length,
+                          itemBuilder: (context, index) {
+                            final book = data[index];
+                            final thumbnail = book.bookThumbnails.isNotEmpty
+                                ? '${ApiUrls.imageUrlBase}${book.bookThumbnails.first.file}'
+                                : '';
+                            return AppearItem(
+                              key: ValueKey(book.id),
+                              id: book.id,
+                              child: BookGridItem(
+                                id: book.id,
+                                isSaved: book.isSaved,
+                                type: BookCardType.library,
+                                title: book.name,
+                                author: book.author.name,
+                                shelfNumber: book.copiesCount,
+                                rowNumber: book.copiesCount,
+                                imagePath: thumbnail,
+                                onTap: () {
+                                  openMiniAppSheetFamily(
+                                    context,
+                                    showHandler: false,
+                                    child: DetailedOnlineBookComponent(
+                                      data: book,
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     );
                   }

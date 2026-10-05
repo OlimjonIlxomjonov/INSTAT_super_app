@@ -1,3 +1,5 @@
+import 'package:my_template/core/utils/general_widgets/appear/appear_wg.dart';
+import 'package:my_template/core/utils/price/price_label.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_event.dart';
 import 'package:my_template/core/common/ui_states/section_error_wg.dart';
@@ -44,38 +46,43 @@ class PopularBooksWithBlocWg extends StatelessWidget {
             padding: AppPadding.horizontal20x(),
             sliver: SliverOpacity(
               opacity: state.isRefreshing ? 0.4 : 1,
-              sliver: SliverGrid.builder(
-                gridDelegate: _booksGridDelegate,
-                itemCount: data.length,
-                itemBuilder: (context, index) {
-                  final book = data[index];
-                  final average = book.commentCount == 0
-                      ? 0.0
-                      : book.starsSum / book.commentCount;
+              sliver: AppearScope(
+                child: SliverGrid.builder(
+                  gridDelegate: _booksGridDelegate,
+                  itemCount: data.length,
+                  itemBuilder: (context, index) {
+                    final book = data[index];
+                    final average = book.commentCount == 0
+                        ? 0.0
+                        : book.starsSum / book.commentCount;
 
-                  final thumbnail = book.bookThumbnails.isNotEmpty
-                      ? '${ApiUrls.imageUrlBase}${book.bookThumbnails.first.file}'
-                      : '';
-                  return BookGridItem(
-                    id: book.id,
-                    isSaved: book.isSaved,
-                    type: BookCardType.market,
-                    title: book.name,
-                    author: book.author.name,
-                    rating: average,
-                    price: "\u{00A0}${formatPrice(book.price)} UZS",
-                    imagePath: thumbnail.isNotEmpty
-                        ? thumbnail
-                        : 'assets/images/temp_book.jpg',
-                    onTap: () {
-                      openMiniAppSheetFamily(
-                        context,
-                        showHandler: false,
-                        child: DetailedOnlineBookComponent(data: book),
-                      );
-                    },
-                  );
-                },
+                    final thumbnail = book.bookThumbnails.isNotEmpty
+                        ? '${ApiUrls.imageUrlBase}${book.bookThumbnails.first.file}'
+                        : '';
+                    return AppearItem(
+                      key: ValueKey(book.id),
+                      id: book.id,
+                      child: BookGridItem(
+                        id: book.id,
+                        isSaved: book.isSaved,
+                        type: BookCardType.market,
+                        title: book.name,
+                        author: book.author.name,
+                        rating: average,
+                        price:
+                            "\u{00A0}${priceLabel(AppLocalizations.of(context)!, book.price)}",
+                        imagePath: thumbnail,
+                        onTap: () {
+                          openMiniAppSheetFamily(
+                            context,
+                            showHandler: false,
+                            child: DetailedOnlineBookComponent(data: book),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           );

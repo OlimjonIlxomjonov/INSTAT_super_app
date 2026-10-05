@@ -95,8 +95,9 @@ class _SeeAllSimilarCoursesState extends State<SeeAllSimilarCourses> {
                         title: AppLocalizations.of(
                           context,
                         )!.similarCoursesEmpty,
-                        subtitle:
-                            "Hozircha ushbu mavzuga mos keladigan boshqa kurslar mavjud emas.",
+                        subtitle: AppLocalizations.of(
+                          context,
+                        )!.similarCoursesEmptySubtitle,
                       );
                     }
 

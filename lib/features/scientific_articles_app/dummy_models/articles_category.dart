@@ -1,39 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import 'package:my_template/core/utils/app_utils.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 
-const List categories = [
-  'Barchasi',
-  'Chop etilgan',
-  'Nashrga tayyor',
-  'Tekshiruda',
-  'Bekor qilingan',
-  'Qoralamalar',
-];
-
-List<IconData> categoriesIcon = [
-  IconlyLight.discovery,
-  IconlyLight.edit,
-  IconlyLight.tick_square,
-  IconlyLight.danger,
-  IconlyLight.info_circle,
-  IconlyLight.paper,
-];
-
-List<Color> categoryColors = [
-  AppColors.primaryColor,
-  AppColors.greenDoneTaskCard,
-  AppColors.yellow500,
-  AppColors.orange500,
-  AppColors.red,
-  AppColors.greyScale.grey900,
-];
-
-const List articleStatus = [
+//! Backend `reviews/?status=` qabul qiladigan qiymatlar
+const List<String> articleStatus = [
   'all',
   'published',
-  'accepted',
+  'waiting_for_payment',
   'in_review',
   'rejected',
   'draft',
+];
+
+List<String> articleCategories(AppLocalizations l) => [
+  l.categoryAll,
+  l.published,
+  l.statusWaitingForPayment,
+  l.statusUnderReview,
+  l.statusRejected,
+  l.statusDraft,
+];
+
+const List<IconData> categoriesIcon = [
+  IconlyLight.discovery,
+  IconlyLight.tick_square,
+  IconlyLight.wallet,
+  IconlyLight.danger,
+  IconlyLight.info_circle,
+  IconlyLight.paper,
 ];

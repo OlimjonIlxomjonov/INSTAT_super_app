@@ -26,9 +26,9 @@ List<DataRequestFilter> dataRequestFilters(AppLocalizations localization) {
       icon: IconlyLight.discovery,
     ),
     DataRequestFilter(
-      apiValue: 'accepted',
-      label: localization.statusConfirmed,
-      icon: IconlyLight.tick_square,
+      apiValue: 'draft',
+      label: localization.statusDraft,
+      icon: IconlyLight.paper,
     ),
     DataRequestFilter(
       apiValue: 'in_review',
@@ -36,19 +36,39 @@ List<DataRequestFilter> dataRequestFilters(AppLocalizations localization) {
       icon: IconlyLight.danger,
     ),
     DataRequestFilter(
-      apiValue: 'pending_payment',
-      label: localization.statusPendingPayment,
+      apiValue: 'in_process',
+      label: localization.statusInProcess,
+      icon: IconlyLight.time_circle,
+    ),
+    DataRequestFilter(
+      apiValue: 'agreement_accepted',
+      label: localization.statusAgreementAccepted,
+      icon: IconlyLight.tick_square,
+    ),
+    DataRequestFilter(
+      apiValue: 'head_agreement_accepted',
+      label: localization.statusHeadAgreementAccepted,
+      icon: IconlyLight.shield_done,
+    ),
+    DataRequestFilter(
+      apiValue: 'waiting_for_payment',
+      label: localization.statusWaitingForPayment,
       icon: IconlyLight.wallet,
+    ),
+    DataRequestFilter(
+      apiValue: 'paid',
+      label: localization.statusPaid,
+      icon: IconlyLight.wallet,
+    ),
+    DataRequestFilter(
+      apiValue: 'finished',
+      label: localization.statusFinished,
+      icon: IconlyLight.tick_square,
     ),
     DataRequestFilter(
       apiValue: 'rejected',
       label: localization.statusRejected,
       icon: IconlyLight.info_circle,
-    ),
-    DataRequestFilter(
-      apiValue: 'draft',
-      label: localization.statusDraft,
-      icon: IconlyLight.paper,
     ),
   ];
 }

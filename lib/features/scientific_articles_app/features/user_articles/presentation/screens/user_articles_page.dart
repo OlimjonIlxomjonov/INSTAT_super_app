@@ -164,9 +164,9 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
                 padding: EdgeInsets.only(right: 20, top: 10),
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: List.generate(categories.length, (index) {
+                  children: List.generate(articleStatus.length, (index) {
                     return EduCategoriesWg(
-                      categoryName: categories[index],
+                      categoryName: articleCategories(localization)[index],
                       isSelected: _selectedIndex == index,
                       onTap: () {
                         if (_selectedIndex == index) return;

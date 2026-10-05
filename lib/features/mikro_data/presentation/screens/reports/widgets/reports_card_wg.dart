@@ -1,3 +1,4 @@
+import 'package:my_template/core/utils/general_widgets/appear/appear_wg.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -114,17 +115,25 @@ class _ReportsCardWgState extends State<ReportsCardWg> {
                   );
                 }
 
-                return SliverGrid(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 1.0,
+                return AppearScope(
+                  key: ValueKey(state.generation),
+                  child: SliverGrid(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 1.0,
+                        ),
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final item = data[index];
+                      return AppearItem(
+                        key: ValueKey((state.generation, item.id)),
+                        id: item.id,
+                        child: _buildReportItem(context, item, localeCode),
+                      );
+                    }, childCount: data.length),
                   ),
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                    final item = data[index];
-                    return _buildReportItem(context, item, localeCode);
-                  }, childCount: data.length),
                 );
               }
 

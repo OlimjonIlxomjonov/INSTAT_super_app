@@ -1,3 +1,4 @@
+import 'package:my_template/core/utils/general_widgets/dot_switch/dot_switch_wg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -174,7 +175,8 @@ class _SectionTile extends StatelessWidget {
                   ),
                 ),
               ),
-              Switch.adaptive(value: isVisible, onChanged: (_) => onToggle()),
+              const SizedBox(width: 8),
+              DotSwitch(value: isVisible, onChanged: (_) => onToggle()),
             ],
           ),
         ),

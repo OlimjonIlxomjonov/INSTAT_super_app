@@ -58,12 +58,18 @@ class DetailedOnlineBookHeaderWg extends StatelessWidget {
               }).toList(),
             )
           else
-            ClipRRect(
-              borderRadius: .circular(12),
-              child: Image.asset(
-                'assets/images/temp_book.jpg',
-                fit: BoxFit.contain,
-                height: 300,
+            Container(
+              height: 300,
+              width: 210,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: AppColors.greyScale.grey100,
+                borderRadius: .circular(12),
+              ),
+              child: Icon(
+                Icons.menu_book_rounded,
+                size: 64,
+                color: AppColors.greyScale.grey400,
               ),
             ),
           SizedBox(height: appH(16)),

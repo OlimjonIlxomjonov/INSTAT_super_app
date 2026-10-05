@@ -1,3 +1,4 @@
+import 'package:my_template/core/utils/general_widgets/appear/appear_wg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
@@ -53,10 +54,16 @@ class VacanciesWithBlocWg extends StatelessWidget {
 
           return SliverOpacity(
             opacity: state.isRefreshing ? 0.4 : 1,
-            sliver: SliverList.separated(
-              itemCount: data.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 12),
-              itemBuilder: (_, index) => VacancyCardWg(item: data[index]),
+            sliver: AppearScope(
+              child: SliverList.separated(
+                itemCount: data.length,
+                separatorBuilder: (_, _) => const SizedBox(height: 12),
+                itemBuilder: (_, index) => AppearItem(
+                  key: ValueKey(data[index].id),
+                  id: data[index].id,
+                  child: VacancyCardWg(item: data[index]),
+                ),
+              ),
             ),
           );
         }

@@ -116,8 +116,9 @@ class _AboutThisCourseTabState extends State<AboutThisCourseTab>
                   return Center(
                     child: AppEmptyState(
                       title: AppLocalizations.of(context)!.similarCoursesEmpty,
-                      subtitle:
-                          "Hozircha ushbu mavzuga mos keladigan boshqa kurslar mavjud emas.",
+                      subtitle: AppLocalizations.of(
+                        context,
+                      )!.similarCoursesEmptySubtitle,
                       illustrationSize: 100,
                     ),
                   );

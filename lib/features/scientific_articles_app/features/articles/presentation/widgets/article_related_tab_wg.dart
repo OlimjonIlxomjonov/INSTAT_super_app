@@ -1,3 +1,4 @@
+import 'package:my_template/core/utils/general_widgets/appear/appear_wg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
@@ -43,23 +44,36 @@ class ArticleRelatedTabWg extends StatelessWidget {
 
         final items = section.items ?? _skeletonItems;
 
-        return Skeletonizer(
-          enabled: !section.isLoaded,
-          child: Column(
-            children: [
-              for (final item in items)
-                ArticleBriefCardWg(
-                  item: item,
-                  onTap: () => openMiniAppSheetFamily(
-                    context,
-                    child: ArticleDetailPage(reviewId: item.id),
-                    showHandler: false,
-                  ),
-                ),
-            ],
+        return AppearScope(
+          child: Skeletonizer(
+            enabled: !section.isLoaded,
+            child: Column(
+              children: [
+                for (final item in items)
+                  if (section.isLoaded)
+                    AppearItem(
+                      key: ValueKey((state.tab, item.id)),
+                      id: (state.tab, item.id),
+                      child: _card(context, item),
+                    )
+                  else
+                    _card(context, item),
+              ],
+            ),
           ),
         );
       },
+    );
+  }
+
+  Widget _card(BuildContext context, ArticleBriefEntity item) {
+    return ArticleBriefCardWg(
+      item: item,
+      onTap: () => openMiniAppSheetFamily(
+        context,
+        child: ArticleDetailPage(reviewId: item.id),
+        showHandler: false,
+      ),
     );
   }
 }

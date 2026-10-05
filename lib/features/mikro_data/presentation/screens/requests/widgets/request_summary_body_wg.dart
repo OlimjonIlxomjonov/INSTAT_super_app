@@ -118,8 +118,14 @@ class RequestSummaryBodyWg extends StatelessWidget {
                     ),
                   ),
                 ),
-              const Spacer(),
-              if (trailing != null) trailing!,
+              const SizedBox(width: 8),
+              if (trailing != null)
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: trailing!,
+                  ),
+                ),
             ],
           ),
           const SizedBox(height: 16),

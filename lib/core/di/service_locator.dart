@@ -1,3 +1,4 @@
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/course_group_members/course_group_members_use_case.dart';
 import 'package:dio/dio.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/add_course_comment/add_course_comment_use_case.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/add_course_comment/add_course_comment_cubit.dart';
@@ -404,6 +405,9 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => ScanQrUseCase(repository: sl()));
   //? offline lessons
   sl.registerLazySingleton(() => OfflineLessonsUseCase(repository: sl()));
+  sl.registerLazySingleton(
+    () => CourseGroupDateMembersUseCase(repository: sl()),
+  );
   //? Face Recognition
   sl.registerLazySingleton(() => FaceRecUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetMyIdSessionUseCase(repository: sl()));
@@ -432,6 +436,9 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => SendDataRequestUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetDataRequestUseCase(repository: sl()));
   sl.registerLazySingleton(() => DataRequestProcessesUseCase(repository: sl()));
+  sl.registerLazySingleton(
+    () => CreateDataRequestOrderUseCase(repository: sl()),
+  );
 
   //? book comments
   sl.registerLazySingleton(() => BookCommentsUseCase(repository: sl()));

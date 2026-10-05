@@ -31,6 +31,7 @@ class DataRequestCardWg extends StatelessWidget {
       child: DataRequestDetailPage(
         requestId: item.id,
         status: item.requestStatus,
+        price: item.price,
       ),
       showHandler: false,
     );
@@ -80,8 +81,16 @@ class DataRequestCardWg extends StatelessWidget {
                     color: AppColors.greyScale.grey400,
                   ),
                 ),
-                const Spacer(),
-                RequestStatusCheckWg(status: item.requestStatus),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: RequestStatusCheckWg(
+                      status: item.requestStatus,
+                      rawStatus: item.status,
+                    ),
+                  ),
+                ),
               ],
             ),
           ],

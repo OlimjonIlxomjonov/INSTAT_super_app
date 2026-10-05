@@ -1,3 +1,4 @@
+import 'package:my_template/core/utils/general_widgets/appear/appear_wg.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/core/common/skeletonizer_shimmer/courses/course_shimmer.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
@@ -159,38 +160,44 @@ class _ShowAllCoursesViewState extends State<_ShowAllCoursesView> {
                                 ),
                               ),
 
-                              SliverList.builder(
-                                itemCount: loaded.response.data.length,
-                                itemBuilder: (context, index) {
-                                  final item = loaded.response.data[index];
+                              AppearScope(
+                                child: SliverList.builder(
+                                  itemCount: loaded.response.data.length,
+                                  itemBuilder: (context, index) {
+                                    final item = loaded.response.data[index];
 
-                                  final total = loaded.response.meta.total;
+                                    final total = loaded.response.meta.total;
 
-                                  return CourseCategoryBuilder(
-                                    categoryId: item.category,
-                                    builder: (context, categoryName) {
-                                      return layout == CoursesLayout.grid
-                                          ? ExpandedCoursesCardWg(
-                                              onTap: () => _goToPage(
-                                                data: item,
-                                                category: categoryName,
-                                                total: total,
-                                              ),
-                                              entity: item,
-                                              categoryName: categoryName,
-                                            )
-                                          : MinimalCoursesCardWg(
-                                              onTap: () => _goToPage(
-                                                data: item,
-                                                category: categoryName,
-                                                total: total,
-                                              ),
-                                              data: item,
-                                              categoryName: categoryName,
-                                            );
-                                    },
-                                  );
-                                },
+                                    return AppearItem(
+                                      key: ValueKey(item.id),
+                                      id: item.id,
+                                      child: CourseCategoryBuilder(
+                                        categoryId: item.category,
+                                        builder: (context, categoryName) {
+                                          return layout == CoursesLayout.grid
+                                              ? ExpandedCoursesCardWg(
+                                                  onTap: () => _goToPage(
+                                                    data: item,
+                                                    category: categoryName,
+                                                    total: total,
+                                                  ),
+                                                  entity: item,
+                                                  categoryName: categoryName,
+                                                )
+                                              : MinimalCoursesCardWg(
+                                                  onTap: () => _goToPage(
+                                                    data: item,
+                                                    category: categoryName,
+                                                    total: total,
+                                                  ),
+                                                  data: item,
+                                                  categoryName: categoryName,
+                                                );
+                                        },
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
 
                               if (loaded.isLoadingMore)

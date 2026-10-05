@@ -48,7 +48,9 @@ class ActiveBooksWg extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Image.network(
-                    "${ApiUrls.imageUrlBase}${data.bookThumbnails.first.file}",
+                    data.bookThumbnails.isNotEmpty
+                        ? "${ApiUrls.imageUrlBase}${data.bookThumbnails.first.file}"
+                        : '',
                     fit: BoxFit.cover,
                     loadingBuilder: (context, child, progress) =>
                         progress == null

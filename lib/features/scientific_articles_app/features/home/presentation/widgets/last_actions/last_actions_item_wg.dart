@@ -22,61 +22,64 @@ class LastActionItem extends StatelessWidget {
               : BorderSide.none,
         ),
       ),
-      child: Row(
-        spacing: 10,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          /// TIMELINE COLUMN
-          Column(
-            children: [
-              LastActionsStatusIconWg(
-                status: LastActionsStatusX.fromString(item.status),
-              ),
-              Container(
-                margin: const .only(top: 5),
-                width: 1,
-                height: 60,
-                color: AppColors.greyScale.grey400,
-              ),
-            ],
-          ),
-
-          /// CONTENT
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: IntrinsicHeight(
+        child: Row(
+          spacing: 10,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            /// TIMELINE COLUMN
+            Column(
               children: [
-                Text(
-                  processTitleSwitch(
-                    localization,
-                    LastActionsStatusX.fromString(item.status),
-                  ),
-                  style: AppTextStyles.source.medium(fontSize: 16),
+                LastActionsStatusIconWg(
+                  status: LastActionsStatusX.fromString(item.status),
                 ),
-
-                const SizedBox(height: 4),
-
-                Text(
-                  item.comment,
-                  style: AppTextStyles.source.regular(
-                    fontSize: 13,
-                    color: AppColors.greyScale.grey600,
+                //! Oxirgi qadamdan keyin chiziq osilib qolmasligi uchun
+                if (!isLast)
+                  Expanded(
+                    child: Container(
+                      margin: const .only(top: 5),
+                      width: 1,
+                      color: AppColors.greyScale.grey400,
+                    ),
                   ),
-                ),
-
-                const SizedBox(height: 6),
-
-                Text(
-                  item.createdAt.toString().toReadableDate(),
-                  style: AppTextStyles.source.regular(
-                    fontSize: 14,
-                    color: AppColors.greyScale.grey600,
-                  ),
-                ),
               ],
             ),
-          ),
-        ],
+
+            /// CONTENT
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    processTitleSwitch(localization, item.status),
+                    style: AppTextStyles.source.medium(fontSize: 16),
+                  ),
+
+                  if (item.comment.trim().isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      item.comment,
+                      style: AppTextStyles.source.regular(
+                        fontSize: 13,
+                        color: AppColors.greyScale.grey600,
+                      ),
+                    ),
+                  ],
+
+                  const SizedBox(height: 6),
+
+                  Text(
+                    item.createdAt.toString().toReadableDate(),
+                    style: AppTextStyles.source.regular(
+                      fontSize: 14,
+                      color: AppColors.greyScale.grey600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

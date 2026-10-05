@@ -20,6 +20,10 @@ import 'package:my_template/features/mikro_data/presentation/screens/requests/ad
 import 'package:my_template/core/utils/files/remote_file_opener.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_formatters.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/widgets/request_process_item_wg.dart';
+import 'package:iconly/iconly.dart';
+import 'package:my_template/core/utils/general_widgets/online_lib_style_custom_bottom_sheet/online_lib_style_custom_bottom_sheet_wg.dart';
+import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
+import 'package:my_template/features/mikro_data/presentation/screens/requests/widgets/request_pay_options_wg.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/widgets/request_status_check_wg.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/widgets/request_summary_body_wg.dart';
 
@@ -28,10 +32,12 @@ class DataRequestDetailPage extends StatelessWidget {
     super.key,
     required this.requestId,
     required this.status,
+    this.price = '0',
   });
 
   final int requestId;
   final MicroDataRequestStatus status;
+  final String price;
 
   @override
   Widget build(BuildContext context) {
@@ -40,16 +46,25 @@ class DataRequestDetailPage extends StatelessWidget {
         BlocProvider(create: (_) => sl<AddDataRequestBloc>()),
         BlocProvider(create: (_) => sl<DataRequestProcessesBloc>()),
       ],
-      child: _DataRequestDetailView(requestId: requestId, status: status),
+      child: _DataRequestDetailView(
+        requestId: requestId,
+        status: status,
+        price: price,
+      ),
     );
   }
 }
 
 class _DataRequestDetailView extends StatefulWidget {
-  const _DataRequestDetailView({required this.requestId, required this.status});
+  const _DataRequestDetailView({
+    required this.requestId,
+    required this.status,
+    required this.price,
+  });
 
   final int requestId;
   final MicroDataRequestStatus status;
+  final String price;
 
   @override
   State<_DataRequestDetailView> createState() => _DataRequestDetailViewState();
@@ -75,6 +90,24 @@ class _DataRequestDetailViewState extends State<_DataRequestDetailView> {
   void dispose() {
     _isOpeningFile.dispose();
     super.dispose();
+  }
+
+  void _openPaySheet(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+    onlineLibStyleCustomBottomSheetWg(
+      context,
+      headerTitle: localization.paymentTypeTitle,
+      child: RequestPayOptionsWg(
+        requestId: widget.requestId,
+        price: widget.price,
+        onSuccess: () {
+          if (!mounted) return;
+          context.read<DataRequestProcessesBloc>().add(
+            DataRequestProcessesEvent(requestId: widget.requestId),
+          );
+        },
+      ),
+    );
   }
 
   Future<void> _openFile(String? url, {String? fileName}) async {
@@ -140,6 +173,15 @@ class _DataRequestDetailViewState extends State<_DataRequestDetailView> {
           ),
         ],
       ),
+      //! To'lov kutilmoqda — click/payme tanlovi
+      bottomNavigationBar:
+          widget.status == MicroDataRequestStatus.waitingForPayment
+          ? CustomBottomNavContainerWg(
+              leadingIcon: IconlyLight.wallet,
+              buttonText: localization.payNow,
+              onTap: () => _openPaySheet(context),
+            )
+          : null,
     );
   }
 
@@ -266,7 +308,10 @@ class _DataRequestDetailViewState extends State<_DataRequestDetailView> {
           return SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 48),
-              child: AppEmptyState(title: localization.requestNoProcesses),
+              child: AppEmptyState(
+                title: localization.requestNoProcesses,
+                subtitle: localization.requestNoProcessesSubtitle,
+              ),
             ),
           );
         }

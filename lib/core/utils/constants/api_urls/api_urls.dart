@@ -73,6 +73,7 @@ class ApiUrls {
 
   //? scan QR
   static const scanQr = 'create-attendance/';
+  static const courseGroupDateMembers = 'members/';
 
   //! ARTICLES
   //? user articles
@@ -113,6 +114,7 @@ class ApiUrls {
   static const dataRequestDownloadCompanyFile = 'download-company-file/';
   static const dataRequestSend = 'send/';
   static const dataRequestProcesses = 'processes/';
+  static const dataRequestCreateOrder = 'create-order/';
 
   //? Add request dropdowns
   static const microDataCategories = 'categories/items/all/?type=micro-data';

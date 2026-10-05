@@ -32,6 +32,20 @@ class UpdateBookStateFromSocketEvent extends BookActionsEvent {
   });
 }
 
+/// Serverdan yangi kelgan kitob holatini lokal xaritaga yozadi.
+/// `add-to-cart/` va saqlash endpointlari toggle — lokal holat serverdan
+/// farq qilsa, keyingi bosish teskari amal bajaradi.
+class SyncBookStateFromServerEvent extends BookActionsEvent {
+  final int bookId;
+  final bool isSaved;
+  final bool isInCart;
+  SyncBookStateFromServerEvent({
+    required this.bookId,
+    required this.isSaved,
+    required this.isInCart,
+  });
+}
+
 class _CartSyncedFromServerEvent extends BookActionsEvent {
   final List<int> cartBookIds;
   _CartSyncedFromServerEvent(this.cartBookIds);
@@ -120,6 +134,15 @@ class BookActionsBloc extends Bloc<BookActionsEvent, BookActionsState> {
 
       emit(
         state.copyWith(savedBooks: updatedSavedMap, cartBooks: updatedCartMap),
+      );
+    });
+
+    on<SyncBookStateFromServerEvent>((event, emit) {
+      emit(
+        state.copyWith(
+          savedBooks: {...state.savedBooks, event.bookId: event.isSaved},
+          cartBooks: {...state.cartBooks, event.bookId: event.isInCart},
+        ),
       );
     });
 

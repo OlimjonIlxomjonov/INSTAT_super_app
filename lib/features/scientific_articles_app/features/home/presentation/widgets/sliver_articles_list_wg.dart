@@ -1,3 +1,4 @@
+import 'package:my_template/core/utils/general_widgets/appear/appear_wg.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -13,72 +14,88 @@ class SliverArticlesListWg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverPadding(
-      padding: AppPadding.horizontal20x(),
-      sliver: SliverList.builder(
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          final item = items[index];
-          final createdAt = item.createdAt.toString().toReadableDate();
-          final updatedAt = item.updatedAt.toString().toReadableDate();
-          return GestureDetector(
-            onTap: () {
-              openMiniAppSheetFamily(
-                context,
-                child: DetailedArticlePage(
-                  reviewId: item.id,
-                  status: item.articleStatus,
-                ),
-                showHandler: false,
-                enableDrag: false,
-              );
-            },
-            child: Container(
-              margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.greyScale.grey200),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.title,
-                    style: AppTextStyles.source.medium(fontSize: 16),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "ID: ${item.id}",
-                    style: AppTextStyles.source.regular(
-                      fontSize: 12,
-                      color: AppColors.greyScale.grey400,
+    return AppearScope(
+      child: SliverPadding(
+        padding: AppPadding.horizontal20x(),
+        sliver: SliverList.builder(
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            final item = items[index];
+            final createdAt = item.createdAt.toString().toReadableDate();
+            final updatedAt = item.updatedAt.toString().toReadableDate();
+            return AppearItem(
+              key: ValueKey(item.id),
+              id: item.id,
+              child: GestureDetector(
+                onTap: () {
+                  openMiniAppSheetFamily(
+                    context,
+                    child: DetailedArticlePage(
+                      reviewId: item.id,
+                      status: item.articleStatus,
                     ),
+                    showHandler: false,
+                    enableDrag: false,
+                  );
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 12,
                   ),
-                  const SizedBox(height: 8),
-                  Row(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.greyScale.grey200),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
-                        IconlyLight.calendar,
-                        color: AppColors.greyScale.grey400,
-                      ),
-                      const SizedBox(width: 4),
                       Text(
-                        createdAt == updatedAt ? createdAt : updatedAt,
+                        item.title,
+                        style: AppTextStyles.source.medium(fontSize: 16),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "ID: ${item.id}",
                         style: AppTextStyles.source.regular(
                           fontSize: 12,
                           color: AppColors.greyScale.grey400,
                         ),
                       ),
-                      const Spacer(),
-                      ArticlesStatusCheckWg(status: item.articleStatus),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Icon(
+                            IconlyLight.calendar,
+                            color: AppColors.greyScale.grey400,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            createdAt == updatedAt ? createdAt : updatedAt,
+                            style: AppTextStyles.source.regular(
+                              fontSize: 12,
+                              color: AppColors.greyScale.grey400,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: ArticlesStatusCheckWg(
+                                status: item.articleStatus,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

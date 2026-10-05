@@ -1,3 +1,5 @@
+import 'package:my_template/core/utils/general_widgets/appear/appear_wg.dart';
+import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/pagination/load_more_on_scroll.dart';
@@ -100,49 +102,104 @@ class _UserOnlineBooksLibPageState extends State<UserOnlineBooksLibPage>
             onLoadMore: () => context.read<UserBookBloc>().add(
               const LoadMoreUserBooksEvent(),
             ),
-            child: CustomScrollView(
-              slivers: [
-                //! Search
-                SliverAppBar(
-                  primary: false,
-                  floating: true,
-                  snap: true,
-                  automaticallyImplyLeading: false,
-                  title: AppSearchFieldWg(
-                    hintText: localization.searchBooksHint,
-                    onChanged: (value) {
-                      if (value == _search) return;
-                      _search = value;
-                      _fetch();
-                    },
-                  ),
-                ),
-                //! Title
-                SliverPadding(
-                  padding: .only(left: 20, top: 20),
-                  sliver: SliverToBoxAdapter(
-                    child: Text(
-                      localization.myBooks,
-                      style: AppTextStyles.source.semiBold(fontSize: 17),
+            child: CustomRefreshIndicator(
+              onRefresh: () async => _fetch(),
+              child: CustomScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                slivers: [
+                  //! Search
+                  SliverAppBar(
+                    primary: false,
+                    floating: true,
+                    snap: true,
+                    automaticallyImplyLeading: false,
+                    title: AppSearchFieldWg(
+                      hintText: localization.searchBooksHint,
+                      onChanged: (value) {
+                        if (value == _search) return;
+                        _search = value;
+                        _fetch();
+                      },
                     ),
                   ),
-                ),
-                BlocBuilder<UserBookBloc, UserBookState>(
-                  builder: (context, state) {
-                    if (state is UserBookLoaded) {
-                      final data = state.response.data;
-                      //! Empty State
-                      if (data.isEmpty) {
-                        return SliverToBoxAdapter(
-                          child: _isFiltering
-                              ? AppEmptyState(title: localization.booksNotFound)
-                              : AppEmptyState(
-                                  title: localization.myShelfEmptyTitle,
-                                  subtitle: localization.myShelfEmptySubtitle,
-                                ),
+                  //! Title
+                  SliverPadding(
+                    padding: .only(left: 20, top: 20),
+                    sliver: SliverToBoxAdapter(
+                      child: Text(
+                        localization.myBooks,
+                        style: AppTextStyles.source.semiBold(fontSize: 17),
+                      ),
+                    ),
+                  ),
+                  BlocBuilder<UserBookBloc, UserBookState>(
+                    builder: (context, state) {
+                      if (state is UserBookLoaded) {
+                        final data = state.response.data;
+                        //! Empty State
+                        if (data.isEmpty) {
+                          return SliverToBoxAdapter(
+                            child: _isFiltering
+                                ? AppEmptyState(
+                                    title: localization.booksNotFound,
+                                  )
+                                : AppEmptyState(
+                                    title: localization.myShelfEmptyTitle,
+                                    subtitle: localization.myShelfEmptySubtitle,
+                                  ),
+                          );
+                        }
+
+                        return SliverPadding(
+                          padding: AppPadding.hAndV20x20(),
+                          sliver: AppearScope(
+                            child: SliverGrid.builder(
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 16,
+                                    crossAxisSpacing: 16,
+                                    childAspectRatio: 0.53,
+                                  ),
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                final item = data[index];
+                                final thumbnail = item.bookThumbnails.isNotEmpty
+                                    ? '${ApiUrls.imageUrlBase}${item.bookThumbnails.first.file}'
+                                    : '';
+                                final progress = item.pagesCount > 0
+                                    ? (item.currentPage / item.pagesCount)
+                                          .clamp(0.0, 1.0)
+                                    : 0.0;
+                                //! Data
+                                return AppearItem(
+                                  key: ValueKey(item.id),
+                                  id: item.id,
+                                  child: BookGridItem(
+                                    type: BookCardType.bought,
+                                    title: item.name,
+                                    author: item.author.name,
+                                    progress: progress,
+                                    currentPage: item.currentPage,
+                                    totalPages: item.pagesCount,
+                                    imagePath: thumbnail,
+                                    onTap: () {
+                                      openMiniAppSheetFamily(
+                                        context,
+                                        showHandler: false,
+                                        child: DetailedOnlineBookComponent(
+                                          isBookBought: true,
+                                          data: item,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                         );
                       }
-
                       return SliverPadding(
                         padding: AppPadding.hAndV20x20(),
                         sliver: SliverGrid.builder(
@@ -153,85 +210,42 @@ class _UserOnlineBooksLibPageState extends State<UserOnlineBooksLibPage>
                                 crossAxisSpacing: 16,
                                 childAspectRatio: 0.53,
                               ),
-                          itemCount: data.length,
+                          itemCount: 6,
                           itemBuilder: (context, index) {
-                            final item = data[index];
-                            final thumbnail = item.bookThumbnails.first.file;
-                            final progress = item.pagesCount > 0
-                                ? (item.currentPage / item.pagesCount).clamp(
-                                    0.0,
-                                    1.0,
-                                  )
-                                : 0.0;
-                            //! Data
-                            return BookGridItem(
-                              type: BookCardType.bought,
-                              title: item.name,
-                              author: item.author.name,
-                              progress: progress,
-                              currentPage: item.currentPage,
-                              totalPages: item.pagesCount,
-                              imagePath: '${ApiUrls.imageUrlBase}$thumbnail',
-                              onTap: () {
-                                openMiniAppSheetFamily(
-                                  context,
-                                  showHandler: false,
-                                  child: DetailedOnlineBookComponent(
-                                    isBookBought: true,
-                                    data: item,
-                                  ),
-                                );
-                              },
+                            return Skeletonizer(
+                              enabled: true,
+                              child: BookGridItem(
+                                type: BookCardType.bought,
+                                title: "Jajji shahzoda",
+                                author: "Antuan de Sent-Ekzyuperi",
+                                progress: 0.75,
+                                currentPage: 122,
+                                totalPages: 354,
+                                imagePath: 'assets/images/temp_book.jpg',
+                                onTap: () {},
+                              ),
                             );
                           },
                         ),
                       );
-                    }
-                    return SliverPadding(
-                      padding: AppPadding.hAndV20x20(),
-                      sliver: SliverGrid.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 16,
-                              crossAxisSpacing: 16,
-                              childAspectRatio: 0.53,
-                            ),
-                        itemCount: 6,
-                        itemBuilder: (context, index) {
-                          return Skeletonizer(
-                            enabled: true,
-                            child: BookGridItem(
-                              type: BookCardType.bought,
-                              title: "Jajji shahzoda",
-                              author: "Antuan de Sent-Ekzyuperi",
-                              progress: 0.75,
-                              currentPage: 122,
-                              totalPages: 354,
-                              imagePath: 'assets/images/temp_book.jpg',
-                              onTap: () {},
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
+                    },
+                  ),
 
-                if (loaded?.isLoadingMore ?? false)
-                  const SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 24),
-                      child: Center(
-                        child: SizedBox(
-                          width: 28,
-                          height: 28,
-                          child: CircularProgressIndicator(strokeWidth: 2.5),
+                  if (loaded?.isLoadingMore ?? false)
+                    const SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 24),
+                        child: Center(
+                          child: SizedBox(
+                            width: 28,
+                            height: 28,
+                            child: CircularProgressIndicator(strokeWidth: 2.5),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
           );
         },

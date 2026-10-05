@@ -26,3 +26,19 @@ bool isJwtExpired(
   if (expiry == null) return true;
   return DateTime.now().toUtc().add(leeway).isAfter(expiry);
 }
+
+//! JWT'dagi `user_id`
+int? jwtUserId(String token) {
+  final parts = token.split('.');
+  if (parts.length != 3) return null;
+  try {
+    final payload = utf8.decode(
+      base64Url.decode(base64Url.normalize(parts[1])),
+    );
+    final map = jsonDecode(payload);
+    final id = map is Map ? map['user_id'] : null;
+    return id is int ? id : int.tryParse('$id');
+  } catch (_) {
+    return null;
+  }
+}

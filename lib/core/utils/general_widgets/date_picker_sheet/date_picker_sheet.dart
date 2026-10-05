@@ -21,6 +21,8 @@ Future<DateTime?> showDatePickerSheet(
   if (initial.isBefore(first)) initial = first;
   if (initial.isAfter(last)) initial = last;
 
+  //! Yopilganda fokus matn maydoniga qaytmasin
+  FocusManager.instance.primaryFocus?.unfocus();
   return showModalBottomSheet<DateTime>(
     context: context,
     isScrollControlled: true,

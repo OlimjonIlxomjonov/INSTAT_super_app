@@ -1,3 +1,5 @@
+import 'package:my_template/core/utils/general_widgets/appear/appear_wg.dart';
+import 'package:my_template/core/utils/price/price_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/pagination/load_more_on_scroll.dart';
@@ -100,39 +102,43 @@ class _SavedBooksComponentState extends State<SavedBooksComponent> {
                     horizontal: appW(20),
                     vertical: appH(16),
                   ),
-                  sliver: SliverGrid.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 16,
-                          crossAxisSpacing: 16,
-                          childAspectRatio: 0.56,
-                        ),
-                    itemCount: visibleItems.length,
-                    itemBuilder: (context, index) {
-                      final book = visibleItems[index];
-                      final thumbnail = book.bookThumbnails.isNotEmpty
-                          ? '${ApiUrls.imageUrlBase}${book.bookThumbnails.first.file}'
-                          : '';
-                      return BookGridItem(
-                        id: book.id,
-                        isSaved: true,
-                        type: BookCardType.market,
-                        title: book.name,
-                        author: book.author.name,
-                        price: "${formatPrice(book.price)} UZS",
-                        imagePath: thumbnail.isNotEmpty
-                            ? thumbnail
-                            : 'assets/images/temp_book.jpg',
-                        onTap: () {
-                          openMiniAppSheetFamily(
-                            context,
-                            showHandler: false,
-                            child: DetailedOnlineBookComponent(data: book),
-                          );
-                        },
-                      );
-                    },
+                  sliver: AppearScope(
+                    child: SliverGrid.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 16,
+                            crossAxisSpacing: 16,
+                            childAspectRatio: 0.56,
+                          ),
+                      itemCount: visibleItems.length,
+                      itemBuilder: (context, index) {
+                        final book = visibleItems[index];
+                        final thumbnail = book.bookThumbnails.isNotEmpty
+                            ? '${ApiUrls.imageUrlBase}${book.bookThumbnails.first.file}'
+                            : '';
+                        return AppearItem(
+                          key: ValueKey(book.id),
+                          id: book.id,
+                          child: BookGridItem(
+                            id: book.id,
+                            isSaved: true,
+                            type: BookCardType.market,
+                            title: book.name,
+                            author: book.author.name,
+                            price: priceLabel(localization, book.price),
+                            imagePath: thumbnail,
+                            onTap: () {
+                              openMiniAppSheetFamily(
+                                context,
+                                showHandler: false,
+                                child: DetailedOnlineBookComponent(data: book),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
                 if (state.isLoadingMore)

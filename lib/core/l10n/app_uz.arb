@@ -202,6 +202,19 @@
   "underReview": "Tekshiruvda",
   "needsCorrection": "Tuzatish kerak",
   "published": "Chop etilgan",
+  "statusInProcess": "Jarayonda",
+  "statusAgreementAccepted": "Kelishuvchi tomonidan tasdiqlandi",
+  "statusHeadAgreementAccepted": "Bo'lim boshlig'i tomonidan tasdiqlandi",
+  "statusPaid": "To'landi",
+  "statusFinished": "Yakunlandi",
+  "requestPrice": "So'rov narxi: {price} UZS",
+  "@requestPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
   "statusDraft": "Qoralama",
   "statusConfirmed": "Tasdiqlangan",
   "statusRejected": "Rad etilgan",
@@ -434,6 +447,13 @@
   "aboutCourseTab": "Kurs haqida",
   "curriculumTab": "O'quv reja",
   "commentsTab": "Izohlar",
+  "getForFree": "Bepul olish",
+  "similarBooksEmpty": "O‘xshash kitoblar topilmadi.",
+  "similarBooksEmptySubtitle": "Hozircha ushbu turkumga mos keladigan boshqa kitoblar mavjud emas.",
+  "similarCoursesEmptySubtitle": "Hozircha ushbu mavzuga mos keladigan boshqa kurslar mavjud emas.",
+  "articleNoProcessesSubtitle": "Maqola ko'rib chiqila boshlangach, barcha bosqichlar shu yerda ko'rinadi.",
+  "requestNoProcessesSubtitle": "So'rov ko'rib chiqila boshlangach, barcha bosqichlar shu yerda ko'rinadi.",
+  "payNow": "To'lash",
   "paymentTypeTitle": "To'lov turi",
   "pendingReview": "Ko'rib chiqilmoqda",
   "checkingPaymentStatus": "To'lov holati tekshirilmoqda...",
@@ -739,7 +759,7 @@
   "queueEmptyTitle": "Navbat bo‘sh",
   "queueEmptySubtitle": "Jarayonni boshlash uchun birinchi arizangizni yuboring.",
   "reportsEmptyTitle": "Hozircha hisobotlar yaratilmagan.",
-  "reportsEmptySubtitle": "Asosiy samaradorlik ko‘rsatkichlarini kuzatish va natijalarni tahlil qilish uchun birinchi hisobotingizni yarating.",
+  "reportsEmptySubtitle": "Statistik hisobotlar e'lon qilinishi bilan shu yerda paydo bo'ladi.",
   "leaderboardEmptyTitle": "Hali hech kim ball to‘plamadi!",
   "leaderboardEmptySubtitle": "Kurs testini yakunlang va o‘z bilimingizni isbotlang",
   "myShelfEmptyTitle": "Javoningiz bo‘sh",

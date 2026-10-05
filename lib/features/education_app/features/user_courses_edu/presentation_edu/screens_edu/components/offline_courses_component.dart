@@ -1,3 +1,4 @@
+import 'package:my_template/core/utils/general_widgets/appear/appear_wg.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
@@ -34,27 +35,33 @@ class OfflineCoursesComponent extends StatelessWidget {
               );
             }
 
-            return ListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                final item = data[index];
-                return GestureDetector(
-                  behavior: .opaque,
-                  onTap: () {
-                    openMiniAppSheetFamily(
-                      context,
-                      showHandler: false,
-                      child: DetailedUserGroupComponent(
-                        courseName: item.name,
-                        courseGroupId: item.id,
-                        teacherName: item.teachers,
-                      ),
-                    );
-                  },
-                  child: OfflineCourseWg(item: item),
-                );
-              },
+            return AppearScope(
+              child: ListView.builder(
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  final item = data[index];
+                  return AppearItem(
+                    key: ValueKey(item.id),
+                    id: item.id,
+                    child: GestureDetector(
+                      behavior: .opaque,
+                      onTap: () {
+                        openMiniAppSheetFamily(
+                          context,
+                          showHandler: false,
+                          child: DetailedUserGroupComponent(
+                            courseName: item.name,
+                            courseGroupId: item.id,
+                            teacherName: item.teachers,
+                          ),
+                        );
+                      },
+                      child: OfflineCourseWg(item: item),
+                    ),
+                  );
+                },
+              ),
             );
           }
           if (state is OfflineCourseError) {

@@ -56,19 +56,6 @@ class DataRequestProcessEntity {
     return segments.last;
   }
 
-  MicroDataRequestStatus get processStatus {
-    switch (status) {
-      case 'accepted':
-        return MicroDataRequestStatus.accepted;
-      case 'rejected':
-        return MicroDataRequestStatus.rejected;
-      case 'pending_payment':
-        return MicroDataRequestStatus.pendingPayment;
-      case 'draft':
-        return MicroDataRequestStatus.draft;
-      case 'in_review':
-      default:
-        return MicroDataRequestStatus.inReview;
-    }
-  }
+  MicroDataRequestStatus get processStatus =>
+      MicroDataRequestStatusX.fromString(status);
 }

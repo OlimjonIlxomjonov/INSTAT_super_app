@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
+import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/common/ui_states/section_error_wg.dart';
-import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/similar_book/similar_book_entity.dart';
@@ -31,9 +32,15 @@ class SimilarBooksWithBlocWg extends StatelessWidget {
           );
         }
 
-        //! Bo'sh bo'lsa bo'lim ko'rinmaydi
         if (state is SimilarBooksLoaded && state.items.isEmpty) {
-          return const SizedBox.shrink();
+          return Padding(
+            padding: AppPadding.horizontal20x(),
+            child: AppEmptyState(
+              title: l.similarBooksEmpty,
+              subtitle: l.similarBooksEmptySubtitle,
+              illustrationSize: 100,
+            ),
+          );
         }
 
         final loaded = state is SimilarBooksLoaded ? state : null;
@@ -86,8 +93,6 @@ class _SimilarBookCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context)!;
-
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: isOpening ? null : onTap,

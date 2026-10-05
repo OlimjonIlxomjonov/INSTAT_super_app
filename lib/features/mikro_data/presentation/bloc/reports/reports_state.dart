@@ -17,10 +17,14 @@ class ReportsLoaded extends ReportsState {
   final bool isLoadingMore;
   final bool isRefreshing;
 
+  //! Yangi yuklashda o'zgaradi, load-more'da emas
+  final int generation;
+
   const ReportsLoaded({
     required this.response,
     this.isLoadingMore = false,
     this.isRefreshing = false,
+    this.generation = 0,
   });
 
   bool get hasMore => response.meta.currentPage < response.meta.lastPage;
@@ -34,11 +38,17 @@ class ReportsLoaded extends ReportsState {
       response: response ?? this.response,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       isRefreshing: isRefreshing ?? this.isRefreshing,
+      generation: generation,
     );
   }
 
   @override
-  List<Object?> get props => [response, isLoadingMore, isRefreshing];
+  List<Object?> get props => [
+    response,
+    isLoadingMore,
+    isRefreshing,
+    generation,
+  ];
 }
 
 class ReportsError extends ReportsState {

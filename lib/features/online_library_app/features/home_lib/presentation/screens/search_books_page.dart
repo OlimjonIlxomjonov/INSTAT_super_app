@@ -1,3 +1,4 @@
+import 'package:my_template/core/utils/price/price_label.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -199,10 +200,8 @@ class _SearchBooksPageState extends State<SearchBooksPage> {
                                   title: book.name,
                                   author: book.author.name,
                                   price:
-                                      "\u{00A0}${formatPrice(book.price)} UZS",
-                                  imagePath: thumbnail.isNotEmpty
-                                      ? thumbnail
-                                      : 'assets/images/temp_book.jpg',
+                                      "\u{00A0}${priceLabel(localization, book.price)}",
+                                  imagePath: thumbnail,
                                   onTap: () {
                                     openMiniAppSheetFamily(
                                       context,

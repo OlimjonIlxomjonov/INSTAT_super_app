@@ -1,6 +1,12 @@
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/similar_books_with_bloc_wg.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/similar_books/similar_books_cubit.dart';
 import 'package:my_template/core/di/service_locator.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/add_to_cart_use_case.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/user_books/user_book_bloc.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/user_books/user_books_event.dart';
+import 'package:my_template/core/network/dio_error_classifier.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/similar_books/similar_books_use_case.dart';
+import 'package:my_template/features/online_library_app/features/user_online_book_cart_lib/domain/usercase/buy_book/buy_book_use_case.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/core/common/ui_states/section_error_wg.dart';
@@ -55,6 +61,13 @@ class DetailedOnlineBookComponent extends StatefulWidget {
 class _DetailedOnlineBookComponentState
     extends State<DetailedOnlineBookComponent> {
   bool isTextFullShown = false;
+  bool _isGettingFree = false;
+  bool _boughtNow = false;
+
+  bool get _isFree => widget.data.price == 0;
+
+  bool get _isPaid =>
+      widget.isBookBought || widget.data.status == 'paid' || _boughtNow;
 
   @override
   void initState() {
@@ -64,6 +77,50 @@ class _DetailedOnlineBookComponentState
         params: OnlineBookCommentsParams(bookId: widget.data.id),
       ),
     );
+    _syncStateFromServer();
+  }
+
+  //! Lokal savat/saqlangan holati eskirgan bo'lishi mumkin
+  Future<void> _syncStateFromServer() async {
+    try {
+      final fresh = await sl<BookByIdUseCase>()(widget.data.id);
+      if (!mounted) return;
+      context.read<my_template_book.BookActionsBloc>().add(
+        my_template_book.SyncBookStateFromServerEvent(
+          bookId: fresh.id,
+          isSaved: fresh.isSaved,
+          isInCart: fresh.isInCart,
+        ),
+      );
+    } catch (_) {}
+  }
+
+  Future<void> _getFreeBook() async {
+    if (_isGettingFree) return;
+    setState(() => _isGettingFree = true);
+    try {
+      //! Saytdagidek — order faqat savatdagi kitobni `paid` qiladi
+      final fresh = await sl<BookByIdUseCase>()(widget.data.id);
+      if (!fresh.isInCart) {
+        await sl<AddToCartUseCase>()(widget.data.id);
+      }
+      await sl<BuyBookUseCase>()(
+        params: BuyBookParams(bookId: [widget.data.id], paymentMethod: 'click'),
+      );
+      if (!mounted) return;
+      setState(() => _boughtNow = true);
+      sl<UserBookBloc>().add(const RefreshUserBooksEvent());
+      _syncStateFromServer();
+    } catch (e) {
+      if (!mounted) return;
+      errorFlushBar(
+        context,
+        apiErrorMessage(e) ?? AppLocalizations.of(context)!.savingError,
+        details: apiErrorDetails(e),
+      );
+    } finally {
+      if (mounted) setState(() => _isGettingFree = false);
+    }
   }
 
   @override
@@ -372,7 +429,7 @@ class _DetailedOnlineBookComponentState
       return const SizedBox.shrink();
     }
 
-    final bool isPaid = widget.isBookBought || widget.data.status == 'paid';
+    final bool isPaid = _isPaid;
 
     return BlocBuilder<
       my_template_book.BookActionsBloc,
@@ -391,6 +448,7 @@ class _DetailedOnlineBookComponentState
               ? _buildRemoveFromCartButton(context)
               : const SizedBox.shrink(),
           buttonText: _bottomBarButtonText(localization, inCart),
+          isLoading: _isGettingFree,
           onTap: () => _onBottomBarTap(context, localization, inCart),
         );
       },
@@ -398,9 +456,10 @@ class _DetailedOnlineBookComponentState
   }
 
   String _bottomBarButtonText(AppLocalizations localization, bool inCart) {
-    final bool isPaid = widget.isBookBought || widget.data.status == 'paid';
+    final bool isPaid = _isPaid;
     if (isPaid) return localization.continueReadingButton;
     if (inCart) return localization.goToCart;
+    if (_isFree) return localization.getForFree;
     return localization.buyForPrice(formatPrice(widget.data.price));
   }
 
@@ -431,10 +490,15 @@ class _DetailedOnlineBookComponentState
     AppLocalizations localization,
     bool inCart,
   ) {
-    final bool isPaid = widget.isBookBought || widget.data.status == 'paid';
+    final bool isPaid = _isPaid;
 
     if (isPaid) {
       AppRoute.go(BoughtBookOpenerWg(bookId: widget.data.id));
+      return;
+    }
+
+    if (!inCart && _isFree) {
+      _getFreeBook();
       return;
     }
 

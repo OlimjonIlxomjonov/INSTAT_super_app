@@ -13,6 +13,8 @@ Future<DataReportRefEntity?> showReportPickerSheet(
   required ReportsBloc reportsBloc,
   int? selectedId,
 }) {
+  //! Yopilganda fokus matn maydoniga qaytmasin
+  FocusManager.instance.primaryFocus?.unfocus();
   return showModalBottomSheet<DataReportRefEntity>(
     context: context,
     isScrollControlled: true,

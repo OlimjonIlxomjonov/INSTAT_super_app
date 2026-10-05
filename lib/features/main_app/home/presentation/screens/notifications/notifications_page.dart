@@ -1,3 +1,4 @@
+import 'package:my_template/core/utils/general_widgets/appear/appear_wg.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -199,29 +200,42 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         .add(item);
                   }
 
-                  return SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(20, 4, 20, 30),
-                    sliver: SliverList.list(
-                      children: [
-                        for (final entry in grouped.entries) ...[
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10, top: 6),
-                            child: Text(
-                              _dayLabel(localization, entry.key),
-                              style: AppTextStyles.source.medium(
-                                fontSize: 14,
-                                color: AppColors.greyScale.grey600,
+                  return AppearScope(
+                    child: SliverPadding(
+                      padding: const EdgeInsets.fromLTRB(20, 4, 20, 30),
+                      sliver: SliverList.list(
+                        children: [
+                          for (final entry in grouped.entries) ...[
+                            AppearItem(
+                              key: ValueKey(('day', entry.key)),
+                              id: ('day', entry.key),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  bottom: 10,
+                                  top: 6,
+                                ),
+                                child: Text(
+                                  _dayLabel(localization, entry.key),
+                                  style: AppTextStyles.source.medium(
+                                    fontSize: 14,
+                                    color: AppColors.greyScale.grey600,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                          for (final item in entry.value)
-                            NotifItemWg(
-                              item: item,
-                              timeLabel: _itemTimeLabel(localization, item),
-                              onTap: () => _openNotification(item),
-                            ),
+                            for (final item in entry.value)
+                              AppearItem(
+                                key: ValueKey(item.id),
+                                id: item.id,
+                                child: NotifItemWg(
+                                  item: item,
+                                  timeLabel: _itemTimeLabel(localization, item),
+                                  onTap: () => _openNotification(item),
+                                ),
+                              ),
+                          ],
                         ],
-                      ],
+                      ),
                     ),
                   );
                 }

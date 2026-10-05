@@ -9,6 +9,8 @@ Future<String?> showOptionPickerSheet(
   required List<String> options,
   String? selected,
 }) {
+  //! Yopilganda fokus matn maydoniga qaytmasin
+  FocusManager.instance.primaryFocus?.unfocus();
   return showModalBottomSheet<String>(
     context: context,
     isScrollControlled: true,

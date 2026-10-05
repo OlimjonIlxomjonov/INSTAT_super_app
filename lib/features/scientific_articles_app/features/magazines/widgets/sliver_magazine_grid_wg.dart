@@ -1,3 +1,4 @@
+import 'package:my_template/core/utils/general_widgets/appear/appear_wg.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
@@ -8,13 +9,18 @@ import 'package:my_template/features/scientific_articles_app/features/magazines/
 
 class SliverMagazineGridWg extends StatelessWidget {
   final List<ArticleEditionsEntity> items;
+  final bool animate;
 
-  const SliverMagazineGridWg({super.key, required this.items});
+  const SliverMagazineGridWg({
+    super.key,
+    required this.items,
+    this.animate = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
-    return SliverPadding(
+    final grid = SliverPadding(
       padding: AppPadding.horizontal20x(),
       sliver: SliverGrid.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -25,7 +31,7 @@ class SliverMagazineGridWg extends StatelessWidget {
         itemCount: items.length,
         itemBuilder: (_, index) {
           final item = items[index];
-          return GestureDetector(
+          final card = GestureDetector(
             onTap: () {
               openMiniAppSheetFamily(
                 context,
@@ -98,8 +104,12 @@ class SliverMagazineGridWg extends StatelessWidget {
               ],
             ),
           );
+          return animate
+              ? AppearItem(key: ValueKey(item.id), id: item.id, child: card)
+              : card;
         },
       ),
     );
+    return animate ? AppearScope(child: grid) : grid;
   }
 }

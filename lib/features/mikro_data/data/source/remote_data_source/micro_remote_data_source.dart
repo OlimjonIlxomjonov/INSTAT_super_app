@@ -1,6 +1,7 @@
 import 'package:my_template/core/common/params/micro_data_params/data_request_params.dart';
 import 'package:my_template/features/mikro_data/data/model/data_requests/data_request_category_model.dart';
 import 'package:my_template/features/mikro_data/data/model/data_requests/data_request_detail_model.dart';
+import 'package:my_template/features/mikro_data/data/model/data_requests/data_request_order_model.dart';
 import 'package:my_template/features/mikro_data/data/model/data_requests/data_request_process_model.dart';
 import 'package:my_template/features/mikro_data/data/model/data_requests/data_requests_response_model.dart';
 import 'package:my_template/features/mikro_data/data/model/regions/region_model.dart';
@@ -50,6 +51,10 @@ abstract class MicroRemoteDataSource {
 
   Future<List<DataRequestProcessModel>> fetchDataRequestProcesses(
     int requestId,
+  );
+
+  Future<DataRequestOrderModel> createDataRequestOrder(
+    CreateDataRequestOrderParams params,
   );
 
   Future<List<ReportFilesModel>> fetchReportFiles({
