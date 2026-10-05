@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/assets/app_animations.dart';
 
@@ -12,6 +14,7 @@ void errorFlushBar(BuildContext context, String message, {String? details}) {
     context: context,
     message: message,
     details: details,
+    isCopyable: true,
     color: AppColors.redFailedTaskCard,
     backgroundAlpha: 0.5,
     animationAsset: AppAnimations.errorState,
@@ -67,6 +70,7 @@ void _showBlurBanner({
   required Duration duration,
   required EdgeInsets padding,
   EdgeInsets iconPadding = EdgeInsets.zero,
+  bool isCopyable = false,
 }) {
   _currentEntry?.remove();
 
@@ -83,6 +87,7 @@ void _showBlurBanner({
       duration: duration,
       padding: padding,
       iconPadding: iconPadding,
+      isCopyable: isCopyable,
       onDismissed: () {
         entry.remove();
         if (_currentEntry == entry) _currentEntry = null;
@@ -104,6 +109,7 @@ class _BlurTopBanner extends StatefulWidget {
   final EdgeInsets padding;
   final EdgeInsets iconPadding;
   final VoidCallback onDismissed;
+  final bool isCopyable;
 
   const _BlurTopBanner({
     required this.message,
@@ -115,6 +121,7 @@ class _BlurTopBanner extends StatefulWidget {
     required this.padding,
     required this.iconPadding,
     required this.onDismissed,
+    this.isCopyable = false,
   });
 
   @override
@@ -124,6 +131,7 @@ class _BlurTopBanner extends StatefulWidget {
 class _BlurTopBannerState extends State<_BlurTopBanner>
     with TickerProviderStateMixin {
   static const double _dismissDragDistance = 40;
+  bool _copied = false;
   static const double _dismissFlingVelocity = -300;
   static const double _maxDragOffset = -300;
 
@@ -158,6 +166,20 @@ class _BlurTopBannerState extends State<_BlurTopBanner>
     _isDismissing = true;
     await _controller.reverse();
     if (mounted) widget.onDismissed();
+  }
+
+  //! Xato matnini nusxaga olish — foydalanuvchi uni yuborib bera oladi
+  Future<void> _copy() async {
+    final text = widget.details == null || widget.details!.trim().isEmpty
+        ? widget.message
+        : '${widget.message}\n${widget.details}';
+
+    await Clipboard.setData(ClipboardData(text: text));
+    if (!mounted) return;
+
+    setState(() => _copied = true);
+    _autoDismissTimer?.cancel();
+    _autoDismissTimer = Timer(const Duration(seconds: 2), _dismiss);
   }
 
   void _onVerticalDragUpdate(DragUpdateDetails details) {
@@ -229,6 +251,7 @@ class _BlurTopBannerState extends State<_BlurTopBanner>
       right: 8,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
+        onTap: widget.isCopyable ? _copy : null,
         onVerticalDragUpdate: _onVerticalDragUpdate,
         onVerticalDragEnd: _onVerticalDragEnd,
         child: SlideTransition(
@@ -289,6 +312,34 @@ class _BlurTopBannerState extends State<_BlurTopBanner>
                                     ),
                                     fontSize: 13,
                                   ),
+                                ),
+                              ],
+                              //! Nusxa olish holati
+                              if (widget.isCopyable && _copied) ...[
+                                const SizedBox(height: 4),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.check_rounded,
+                                      size: 14,
+                                      color: AppColors.white.withValues(
+                                        alpha: 0.9,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.errorCopiedMessage,
+                                      style: AppTextStyles.source.medium(
+                                        color: AppColors.white.withValues(
+                                          alpha: 0.9,
+                                        ),
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ],

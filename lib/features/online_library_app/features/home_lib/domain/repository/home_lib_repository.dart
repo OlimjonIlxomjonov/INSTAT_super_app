@@ -1,3 +1,5 @@
+import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_entity.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/similar_book/similar_book_entity.dart';
 import 'package:my_template/core/common/params/online_books/online_books_params.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/entity/comments/comments_response.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_list_response.dart';
@@ -29,6 +31,10 @@ abstract class HomeLibRepository {
 
   //! Add a Comment
   Future<void> addComment({required AddCommentParams params});
+
+  Future<List<SimilarBookEntity>> getBooksByCategory(int bookId);
+
+  Future<BookEntity> getBookById(int bookId);
 
   //! user bought books
   Future<BookListResponse> getUserBooks({

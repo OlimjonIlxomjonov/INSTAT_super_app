@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
+import 'package:my_template/core/utils/greeting/time_greeting.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/app_widgets.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
@@ -60,7 +61,7 @@ class DraggableAppBarWg extends StatelessWidget implements PreferredSize {
               crossAxisAlignment: .start,
               children: [
                 Text(
-                  localization.goodDay,
+                  timeGreeting(localization),
                   style: AppTextStyles.source.regular(fontSize: 14),
                 ),
                 Text(

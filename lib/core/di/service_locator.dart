@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/add_course_comment/add_course_comment_use_case.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/add_course_comment/add_course_comment_cubit.dart';
 import 'package:my_template/features/main_app/global_search/presentation/bloc/global_search_cubit.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/similar_books/similar_books_use_case.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/similar_books/similar_books_cubit.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/article_related/article_related_use_cases.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_quote/article_quote_cubit.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/article_related/article_related_cubit.dart';
@@ -439,6 +441,8 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => SimilarCoursesUseCase(repository: sl()));
   //? Add Comments to the books
   sl.registerLazySingleton(() => AddCommentUseCase(repository: sl()));
+  sl.registerLazySingleton(() => SimilarBooksUseCase(repository: sl()));
+  sl.registerLazySingleton(() => BookByIdUseCase(repository: sl()));
   sl.registerLazySingleton(() => AddCourseCommentUseCase(repository: sl()));
   //? User books
   sl.registerLazySingleton(() => UserBooksUseCase(repository: sl()));
@@ -633,6 +637,9 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => SimilarCoursesBloc(useCase: sl()));
   //? Add Comments to the books
   sl.registerLazySingleton(() => AddCommentsBloc(useCase: sl()));
+  sl.registerFactory(
+    () => SimilarBooksCubit(similarBooksUseCase: sl(), bookByIdUseCase: sl()),
+  );
   sl.registerFactory(() => AddCourseCommentCubit(useCase: sl()));
   //? User books
   sl.registerLazySingleton(() => UserBookBloc(useCase: sl()));

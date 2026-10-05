@@ -773,5 +773,20 @@
   "viewArticle": "View",
   "articleNotFoundTitle": "Article not found",
   "articleNotFoundSubtitle": "The article may have been removed or is not published yet.",
-  "downloadArticleFile": "Download article"
+  "downloadArticleFile": "Download article",
+  "verificationFailedWithCode": "Verification failed (code: {code})",
+  "@verificationFailedWithCode": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "verificationCancelled": "Verification cancelled",
+  "errorCopiedMessage": "Error text copied",
+  "goodMorning": "Good morning!",
+  "goodAfternoon": "Good afternoon!",
+  "goodEvening": "Good evening!",
+  "goodNight": "Good night!",
+  "freeLabel": "Free"
 }

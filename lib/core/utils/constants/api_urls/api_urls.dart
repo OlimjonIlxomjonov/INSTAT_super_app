@@ -36,6 +36,8 @@ class ApiUrls {
   /// books
   static const activeBooks = 'books/items/active/?book_type=online';
   static const offlineBooks = 'books/items/offline/';
+  static const books = 'books/';
+  static String booksByCategory(int id) => 'books/$id/by-category/';
 
   // cart
   static const cart = 'books/items/cart/';

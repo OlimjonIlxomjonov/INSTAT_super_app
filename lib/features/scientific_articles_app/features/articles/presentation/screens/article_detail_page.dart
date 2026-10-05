@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidcator.dart';
-import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -185,23 +184,15 @@ class _ArticleDetailViewState extends State<_ArticleDetailView> {
 
                 if (state is ReviewDetailError)
                   SliverToBoxAdapter(
-                    child: state.notFound
-                        ? AppEmptyState(
-                            title: l.articleNotFoundTitle,
-                            subtitle: l.articleNotFoundSubtitle,
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                            child: SectionErrorWg(
-                              title: state.message,
-                              onRetry: () =>
-                                  context.read<ReviewDetailBloc>().add(
-                                    ReviewDetailEvent(
-                                      reviewId: widget.reviewId,
-                                    ),
-                                  ),
-                            ),
-                          ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                      child: SectionErrorWg(
+                        title: state.message,
+                        onRetry: () => context.read<ReviewDetailBloc>().add(
+                          ReviewDetailEvent(reviewId: widget.reviewId),
+                        ),
+                      ),
+                    ),
                   )
                 else ...[
                   //! Maqola

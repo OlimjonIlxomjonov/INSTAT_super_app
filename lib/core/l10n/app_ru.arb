@@ -773,5 +773,20 @@
   "viewArticle": "Смотреть",
   "articleNotFoundTitle": "Статья не найдена",
   "articleNotFoundSubtitle": "Статья могла быть удалена или ещё не опубликована.",
-  "downloadArticleFile": "Скачать статью"
+  "downloadArticleFile": "Скачать статью",
+  "verificationFailedWithCode": "Проверка не удалась (код: {code})",
+  "@verificationFailedWithCode": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "verificationCancelled": "Проверка отменена",
+  "errorCopiedMessage": "Текст ошибки скопирован",
+  "goodMorning": "Доброе утро!",
+  "goodAfternoon": "Добрый день!",
+  "goodEvening": "Добрый вечер!",
+  "goodNight": "Доброй ночи!",
+  "freeLabel": "Бесплатно"
 }

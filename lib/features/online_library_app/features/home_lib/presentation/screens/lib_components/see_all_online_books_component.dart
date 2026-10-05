@@ -15,8 +15,6 @@ import 'package:my_template/features/online_library_app/features/home_lib/presen
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_event.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/popular_books/popular_books_state.dart';
 
-/// O'z bloc'i bilan — bu yerdagi qidiruv bosh sahifadagi ro'yxatga
-/// ta'sir qilmasin. Boshlang'ich kategoriya bosh sahifanikidan olinadi.
 class SeeAllOnlineBooksComponent extends StatelessWidget {
   const SeeAllOnlineBooksComponent({super.key});
 

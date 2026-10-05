@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_template/core/utils/greeting/time_greeting.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
@@ -24,7 +26,7 @@ class MiniAppHomeHeaderWg extends StatelessWidget {
             crossAxisAlignment: .start,
             children: [
               Text(
-                'Hayrli kun! ✌️',
+                '${timeGreeting(AppLocalizations.of(context)!)} ✌️',
                 style: AppTextStyles.source.regular(fontSize: 14),
               ),
               Text(

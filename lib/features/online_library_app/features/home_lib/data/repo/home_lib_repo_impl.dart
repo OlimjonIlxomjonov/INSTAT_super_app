@@ -1,3 +1,5 @@
+import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/book/book_entity.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/domain/entity/similar_book/similar_book_entity.dart';
 import 'package:my_template/core/common/params/online_books/online_books_params.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/entity/comments/comments_response.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/data/sources/remote_data_source/home_lib_remote_data_source.dart';
@@ -50,6 +52,16 @@ class HomeLibRepoImpl implements HomeLibRepository {
     required OnlineBookCommentsParams params,
   }) {
     return _remoteDataSource.fetchBookComments(params: params);
+  }
+
+  @override
+  Future<List<SimilarBookEntity>> getBooksByCategory(int bookId) {
+    return _remoteDataSource.fetchBooksByCategory(bookId);
+  }
+
+  @override
+  Future<BookEntity> getBookById(int bookId) {
+    return _remoteDataSource.fetchBookById(bookId);
   }
 
   @override

@@ -1,3 +1,5 @@
+import 'package:my_template/features/online_library_app/features/home_lib/data/models/book/book_model.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/data/models/similar_book/similar_book_model.dart';
 import 'package:my_template/core/common/params/online_books/online_books_params.dart';
 import 'package:my_template/core/network/dio_client.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
@@ -120,6 +122,40 @@ class HomeLibRemoteDataSourceImpl implements HomeLibRemoteDataSource {
   }
 
   //! Add Comment
+  @override
+  Future<List<SimilarBookModel>> fetchBooksByCategory(int bookId) async {
+    try {
+      final response = await _dioClient.get(ApiUrls.booksByCategory(bookId));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        final raw = response.data;
+        final list = raw is List ? raw : (raw is Map ? raw['data'] : null);
+        return (list as List? ?? [])
+            .map((e) => SimilarBookModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      }
+      throw Exception('ERROR ${response.statusCode}');
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<BookModel> fetchBookById(int bookId) async {
+    try {
+      final response = await _dioClient.get('${ApiUrls.books}$bookId/');
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return BookModel.fromJson(response.data);
+      }
+      throw Exception('ERROR ${response.statusCode}');
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
   @override
   Future<void> addComment({required AddCommentParams params}) async {
     try {

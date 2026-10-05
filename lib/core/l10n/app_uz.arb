@@ -901,5 +901,20 @@
   "viewArticle": "Ko‘rish",
   "articleNotFoundTitle": "Maqola topilmadi",
   "articleNotFoundSubtitle": "Maqola o‘chirilgan yoki hali chop etilmagan bo‘lishi mumkin.",
-  "downloadArticleFile": "Maqolani yuklab olish"
+  "downloadArticleFile": "Maqolani yuklab olish",
+  "verificationFailedWithCode": "Tasdiqlash amalga oshmadi (kod: {code})",
+  "@verificationFailedWithCode": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "verificationCancelled": "Tasdiqlash bekor qilindi",
+  "errorCopiedMessage": "Xato matni nusxalandi",
+  "goodMorning": "Xayrli tong!",
+  "goodAfternoon": "Xayrli kun!",
+  "goodEvening": "Xayrli kech!",
+  "goodNight": "Xayrli tun!",
+  "freeLabel": "Bepul"
 }

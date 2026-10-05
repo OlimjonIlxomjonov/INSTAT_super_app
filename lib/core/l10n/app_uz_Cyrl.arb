@@ -773,5 +773,20 @@
   "viewArticle": "Кўриш",
   "articleNotFoundTitle": "Мақола топилмади",
   "articleNotFoundSubtitle": "Мақола ўчирилган ёки ҳали чоп этилмаган бўлиши мумкин.",
-  "downloadArticleFile": "Мақолани юклаб олиш"
+  "downloadArticleFile": "Мақолани юклаб олиш",
+  "verificationFailedWithCode": "Тасдиқлаш амалга ошмади (код: {code})",
+  "@verificationFailedWithCode": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "verificationCancelled": "Тасдиқлаш бекор қилинди",
+  "errorCopiedMessage": "Хато матни нусхаланди",
+  "goodMorning": "Хайрли тонг!",
+  "goodAfternoon": "Хайрли кун!",
+  "goodEvening": "Хайрли кеч!",
+  "goodNight": "Хайрли тун!",
+  "freeLabel": "Бепул"
 }

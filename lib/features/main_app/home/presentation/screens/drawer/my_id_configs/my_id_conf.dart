@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image/image.dart' as img;
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/face_rec/face_rec_state.dart';
@@ -37,6 +38,8 @@ class MyIdConf {
               ? MyIdEnvironment.PRODUCTION
               : MyIdEnvironment.DEBUG,
           entryType: MyIdEntryType.IDENTIFICATION,
+          //! SDK o'z ekranlari va xabarlarini shu tilda ko'rsatadi
+          locale: _sdkLocale(context),
         ),
         iosAppearance: MyIdIOSAppearance(),
       );
@@ -88,15 +91,36 @@ class MyIdConf {
       final finalState = await resultState;
       return finalState is FaceRecLoaded;
     } on PlatformException catch (e) {
-      logger.e('${e.message ?? "Verification failed"} ');
-      if (context.mounted) {
-        errorFlushBar(context, e.message ?? "Verification failed");
+      logger.e('MyID failed — code: ${e.code}, message: ${e.message}');
+      if (!context.mounted) return false;
+
+      final localization = AppLocalizations.of(context)!;
+
+      //! 101 — foydalanuvchi o'zi chiqib ketdi
+      if (e.code == '101') {
+        errorFlushBar(context, localization.verificationCancelled);
+        return false;
       }
+
+      errorFlushBar(
+        context,
+        localization.verificationFailedWithCode(e.code),
+        details: e.message,
+      );
       return false;
     } catch (e, st) {
       logger.e("Unexpected error: $e\n$st");
       return false;
     }
+  }
+
+  MyIdLocale _sdkLocale(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    if (locale.languageCode == 'ru') return MyIdLocale.RUSSIAN;
+    if (locale.languageCode == 'en') return MyIdLocale.ENGLISH;
+    return locale.scriptCode == 'Cyrl'
+        ? MyIdLocale.UZBEK_CYRILLIC
+        : MyIdLocale.UZBEK;
   }
 
   String? cleanBase64(String? input) {

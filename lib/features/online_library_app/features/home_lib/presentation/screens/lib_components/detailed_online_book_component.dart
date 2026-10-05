@@ -1,3 +1,6 @@
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/similar_books_with_bloc_wg.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/similar_books/similar_books_cubit.dart';
+import 'package:my_template/core/di/service_locator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/core/common/ui_states/section_error_wg.dart';
@@ -11,7 +14,6 @@ import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/general_widgets/custom_rating_star/custom_rating_star_wg.dart';
 import 'package:my_template/core/utils/general_widgets/html_content_wg/html_content_wg.dart';
-import 'package:my_template/core/utils/general_widgets/online_book_wg/online_book_wg.dart';
 import 'package:my_template/core/utils/general_widgets/online_lib_style_custom_bottom_sheet/online_lib_style_custom_bottom_sheet_wg.dart';
 import 'package:my_template/core/utils/widgets/custom_bottom_nav_container/custom_bottom_nav_container_wg.dart';
 import 'package:my_template/core/utils/widgets/extend_comment/extend_comment_wg.dart';
@@ -334,52 +336,24 @@ class _DetailedOnlineBookComponentState
             ),
           ),
 
-          /// BOOKS
-          if (!widget.isBookBought)
+          //! O'xshash kitoblar
+          if (!widget.isBookBought) ...[
             SliverPadding(
-              padding: const .only(left: 20, right: 20, top: 40),
+              padding: const .only(left: 20, right: 20, top: 40, bottom: 12),
               sliver: SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    ExtendSectionSeeAllWg(
-                      title: localization.similarBooks,
-                      onTap: () {
-                        // FamilyNavigation.familyPush(
-                        //   context,
-                        //   SimilarOnlineBooksComponent(),
-                        // );
-                      },
-                    ),
-                  ],
+                child: Text(
+                  localization.similarBooks,
+                  style: AppTextStyles.source.semiBold(fontSize: 18),
                 ),
               ),
             ),
-          if (!widget.isBookBought)
             SliverToBoxAdapter(
-              child: SizedBox(
-                height: 330,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 3,
-                  itemBuilder: (context, index) => SizedBox(
-                    width: 200,
-                    child: Padding(
-                      padding: .only(left: 10, right: 10),
-                      child: BookGridItem(
-                        type: BookCardType.market,
-                        title: "Jajji shahzoda",
-                        author: "Antuan de Sent-Ekzyuperi",
-                        rating: 4.5,
-                        price: "300 000 UZS",
-                        oldPrice: "330 000 UZS",
-                        imagePath: 'assets/images/temp_book.jpg',
-                        onTap: () {},
-                      ),
-                    ),
-                  ),
-                ),
+              child: BlocProvider(
+                create: (_) => sl<SimilarBooksCubit>()..load(widget.data.id),
+                child: SimilarBooksWithBlocWg(bookId: widget.data.id),
               ),
             ),
+          ],
 
           SliverPadding(padding: .only(bottom: 20)),
         ],
