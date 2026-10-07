@@ -29,7 +29,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>We need camera access to update your avatar</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We need gallery access to update your avatar</string>
+	<string>We need gallery access to update your avatar and attach photos to support requests</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

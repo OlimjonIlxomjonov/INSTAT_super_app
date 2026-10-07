@@ -33,12 +33,7 @@ class _SertificatsSettingsComponentState
   }
 
   void _openCertificateViewer(String imageUrl) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) =>
-            ImageViewerPage(image: NetworkImage(imageUrl), heroTag: imageUrl),
-      ),
-    );
+    showImageViewer(context, image: NetworkImage(imageUrl), heroTag: imageUrl);
   }
 
   @override

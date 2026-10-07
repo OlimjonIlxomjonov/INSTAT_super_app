@@ -21,7 +21,7 @@ class TicketsChatModel extends TicketsChatEntity {
       ticket: json['ticket'] ?? 0,
       user: TicketsChatUserModel.fromJson(json['user']),
       isUser: json['is_user'] ?? false,
-      message: json['message'] ?? 'Unknown',
+      message: json['message'] ?? '',
       fileName: json['file_name'] ?? '',
       fileExt: json['file_extension'] ?? '',
       file: json['file'] ?? '',

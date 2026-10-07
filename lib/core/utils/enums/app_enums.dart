@@ -57,14 +57,20 @@ extension MicroDataRequestStatusX on MicroDataRequestStatus {
   }
 }
 
-//! `reviews/{id}/processes/` dagi status qiymatlari
+//! Maqola va so'rov jarayonlaridagi status qiymatlari
 enum LastActionsStatus {
+  draft,
   sent,
   inReview,
+  inProcess,
   accepted,
+  agreementAccepted,
+  headAgreementAccepted,
   addedExpert,
   rejected,
   waitingForPayment,
+  paid,
+  finished,
   published,
   unknown,
 }
@@ -72,10 +78,22 @@ enum LastActionsStatus {
 extension LastActionsStatusX on LastActionsStatus {
   static LastActionsStatus fromString(String value) {
     switch (value) {
+      case 'draft':
+        return LastActionsStatus.draft;
       case 'sent':
         return LastActionsStatus.sent;
       case 'in_review':
         return LastActionsStatus.inReview;
+      case 'in_process':
+        return LastActionsStatus.inProcess;
+      case 'agreement_accepted':
+        return LastActionsStatus.agreementAccepted;
+      case 'head_agreement_accepted':
+        return LastActionsStatus.headAgreementAccepted;
+      case 'paid':
+        return LastActionsStatus.paid;
+      case 'finished':
+        return LastActionsStatus.finished;
       case 'added_expert':
         return LastActionsStatus.addedExpert;
       case 'rejected':
