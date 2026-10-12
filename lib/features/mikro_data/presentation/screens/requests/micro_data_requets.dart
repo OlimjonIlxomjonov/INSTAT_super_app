@@ -123,17 +123,6 @@ class _MicroDataRequestsViewState extends State<_MicroDataRequestsView> {
           controller: _scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
-            //! HEADER
-
-            // SliverToBoxAdapter(
-            //   child: SheetDragAreaWg(
-            //     child: CustomAppBarWg(
-            //       myTitle: localization.myRequests,
-            //       showArrow: true,
-            //     ),
-            //   ),
-            // ),
-
             //! SEARCH BAR
             SliverAppBar(
               toolbarHeight: 80,
@@ -264,22 +253,6 @@ class _MicroDataRequestsViewState extends State<_MicroDataRequestsView> {
           ],
         ),
       ),
-      // bottomNavigationBar: keyboardVisible
-      ///     ? null
-      //     : CustomBottomNavContainerWg(
-      //         buttonText: localization.submitRequest,
-      //         leadingIcon: Icons.add,
-      //         onTap: () async {
-      //           await openMiniAppSheetFamily(
-      //             context,
-      //             child: const AddDataRequestPage(),
-      //             enableDrag: false,
-      //             showHandler: false,
-      //           );
-      //           if (!mounted) return;
-      //           _fetch();
-      //         },
-      //       ),
     );
   }
 }

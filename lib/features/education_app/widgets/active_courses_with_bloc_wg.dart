@@ -135,4 +135,5 @@ final _skeletonCourse = CourseEntity(
     progress: 0,
     scores: 0,
   ),
+  isFaceIdEnabled: false,
 );

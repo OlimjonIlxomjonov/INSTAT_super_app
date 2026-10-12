@@ -26,10 +26,10 @@ class CourseModel extends CourseEntity {
     super.nameUz,
     super.userOrder,
     super.certificateObjects,
+    required super.isFaceIdEnabled,
   });
 
   factory CourseModel.fromJson(Map<String, dynamic> json) {
-    // category can be an int (detail endpoint) or a Map (list endpoint)
     final categoryRaw = json['category'];
     final int categoryId = categoryRaw is Map
         ? (categoryRaw['id'] as int)
@@ -64,6 +64,7 @@ class CourseModel extends CourseEntity {
               ?.map((e) => CertificateObjModel.fromJson(e))
               .toList() ??
           [],
+      isFaceIdEnabled: json['is_face_id_enabled'],
     );
   }
 }

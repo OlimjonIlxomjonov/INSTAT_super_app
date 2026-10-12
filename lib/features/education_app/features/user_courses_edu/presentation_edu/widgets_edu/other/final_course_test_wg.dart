@@ -84,7 +84,10 @@ class FinalCourseTestWg extends StatelessWidget {
             Navigator.of(context, rootNavigator: true).push(
               PageRouteBuilder(
                 pageBuilder: (context, animation, secondaryAnimation) =>
-                    CourseFinalTestPage(courseId: courseId),
+                    CourseFinalTestPage(
+                      courseId: courseId,
+
+                    ),
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
                       const begin = Offset(0.0, 1.0);

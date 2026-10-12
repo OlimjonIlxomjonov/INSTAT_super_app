@@ -25,6 +25,7 @@ class CourseEntity {
   final int? score;
   final UserOrder? userOrder;
   final List<CertificateObject> certificateObjects;
+  final bool isFaceIdEnabled;
 
   CourseEntity({
     required this.id,
@@ -49,9 +50,9 @@ class CourseEntity {
     this.score,
     this.userOrder,
     this.certificateObjects = const [],
+    required this.isFaceIdEnabled,
   });
 
-  /// `rating_sum` jami ball, `ratings_count` baholovchilar soni.
   double get averageRating {
     final count = ratingsCount ?? 0;
     if (count == 0) return 0;

@@ -804,5 +804,6 @@
   "goodAfternoon": "Good afternoon!",
   "goodEvening": "Good evening!",
   "goodNight": "Good night!",
-  "freeLabel": "Free"
+  "freeLabel": "Free",
+  "expired": "Expired"
 }

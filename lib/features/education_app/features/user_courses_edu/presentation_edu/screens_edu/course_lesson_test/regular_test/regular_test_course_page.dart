@@ -31,12 +31,14 @@ class RegularTestCoursePage extends StatefulWidget {
   final int courseId;
   final int blockId;
   final int lessonId;
+  final bool isFaceIdEnabled;
 
   const RegularTestCoursePage({
     super.key,
     required this.courseId,
     required this.blockId,
     required this.lessonId,
+    required this.isFaceIdEnabled,
   });
 
   @override
@@ -59,8 +61,7 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage>
       duration: const Duration(seconds: 2),
     );
     _cameraService = CameraService();
-
-    _cameraService.init();
+    if (widget.isFaceIdEnabled) _cameraService.init();
     _bloc = sl<CourseLessonTestBloc>();
     _bloc.add(
       LoadCourseLessonTestsEvent(
@@ -76,7 +77,8 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.resumed &&
+    if (widget.isFaceIdEnabled &&
+        state == AppLifecycleState.resumed &&
         _cameraService.isPermissionDenied) {
       _cameraService.init();
     }
@@ -161,7 +163,7 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage>
                 ),
               );
               AppRoute.close();
-              AppRoute.close(); // Close the test page context as well
+              AppRoute.close();
             },
             child: Text(localization.continueButton),
           ),
@@ -269,6 +271,13 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage>
                 !state.isSubmitting &&
                 !_isCapturing) {
               onButtonTap = () async {
+                if (!widget.isFaceIdEnabled) {
+                  context.read<CourseLessonTestBloc>().add(
+                    const SubmitLessonTestAnswerEvent(),
+                  );
+                  return;
+                }
+
                 setState(() => _isCapturing = true);
                 try {
                   final image = await _cameraService.captureBase64();
@@ -340,10 +349,12 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage>
                         _isCapturing ||
                         (state is CourseLessonTestLoaded && state.isSubmitting),
                   ),
-                  if (_cameraService.isReady &&
+                  if (widget.isFaceIdEnabled &&
+                      _cameraService.isReady &&
                       _cameraService.controller != null)
                     CameraPreviewWidget(controller: _cameraService.controller!),
-                  if (_cameraService.isPermissionDenied)
+                  if (widget.isFaceIdEnabled &&
+                      _cameraService.isPermissionDenied)
                     const CameraAccessDeniedOverlayWg(),
                 ],
               );

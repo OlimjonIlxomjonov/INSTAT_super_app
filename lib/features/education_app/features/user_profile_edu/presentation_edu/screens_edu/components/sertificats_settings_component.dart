@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,6 +65,7 @@ class _SertificatsSettingsComponentState
                     return SliverList.builder(
                       itemCount: state.response.data.length,
                       itemBuilder: (context, index) {
+                        final item = state.response.data[index];
                         final certificate = state.response.data[index];
                         final imageUrl =
                             '${ApiUrls.origin}${certificate.certificateImage}';
@@ -97,16 +99,24 @@ class _SertificatsSettingsComponentState
                                   ),
                                 ),
                                 const SizedBox(height: 16),
-                                GestureDetector(
-                                  onTap: () => _openCertificateViewer(imageUrl),
-                                  child: Hero(
-                                    tag: imageUrl,
-                                    child: Image.network(
-                                      imageUrl,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
+                                item.certificateImage != null
+                                    ? GestureDetector(
+                                        onTap: () =>
+                                            _openCertificateViewer(imageUrl),
+                                        child: Hero(
+                                          tag: imageUrl,
+                                          child: Image.network(
+                                            imageUrl,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      )
+                                    : Center(
+                                        child: Icon(
+                                          Icons.broken_image_rounded,
+                                          color: AppColors.red,
+                                        ),
+                                      ),
                               ],
                             ),
                           ),

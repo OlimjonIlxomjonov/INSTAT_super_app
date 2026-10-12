@@ -804,5 +804,6 @@
   "goodAfternoon": "Добрый день!",
   "goodEvening": "Добрый вечер!",
   "goodNight": "Доброй ночи!",
-  "freeLabel": "Бесплатно"
+  "freeLabel": "Бесплатно",
+  "expired": "Срок истек"
 }

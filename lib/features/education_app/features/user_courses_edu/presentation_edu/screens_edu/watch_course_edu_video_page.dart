@@ -38,6 +38,7 @@ class WatchCourseEduVideoPage extends StatefulWidget {
   final String? imagePath;
   final int courseId, topicId, lessonId;
   final int? testCount;
+  final bool isFaceIdEnabled;
 
   const WatchCourseEduVideoPage({
     super.key,
@@ -47,6 +48,7 @@ class WatchCourseEduVideoPage extends StatefulWidget {
     required this.topicId,
     required this.lessonId,
     required this.testCount,
+    required this.isFaceIdEnabled,
   });
 
   @override
@@ -457,6 +459,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                                   courseId: widget.courseId,
                                   blockId: widget.topicId,
                                   lessonId: widget.lessonId,
+                                  isFaceIdEnabled: widget.isFaceIdEnabled,
                                 ),
                               );
                             },

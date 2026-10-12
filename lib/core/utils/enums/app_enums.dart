@@ -27,6 +27,7 @@ enum MicroDataRequestStatus {
   finished,
   rejected,
   unknown,
+  expired,
 }
 
 extension MicroDataRequestStatusX on MicroDataRequestStatus {
@@ -51,6 +52,8 @@ extension MicroDataRequestStatusX on MicroDataRequestStatus {
       case 'rejected':
       case 'failed':
         return MicroDataRequestStatus.rejected;
+      case 'expired':
+        return MicroDataRequestStatus.expired;
       default:
         return MicroDataRequestStatus.unknown;
     }

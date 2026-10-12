@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:my_template/core/common/flush_bar/flush_bars.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/features/mikro_data/domain/entity/data_requests/data_request_entity.dart';
@@ -15,6 +17,10 @@ class DataRequestCardWg extends StatelessWidget {
   final VoidCallback? onUpdated;
 
   Future<void> _open(BuildContext context) async {
+    if (item.status == 'expired') {
+      errorFlushBar(context, AppLocalizations.of(context)!.expired);
+      return;
+    }
     if (item.requestStatus == MicroDataRequestStatus.draft) {
       await openMiniAppSheetFamily(
         context,

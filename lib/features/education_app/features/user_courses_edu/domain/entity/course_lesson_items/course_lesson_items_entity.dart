@@ -19,6 +19,7 @@ class CourseLessonItemsEntity {
   final DateTime createdAt;
   final double progress;
   final int courseBlock;
+  final bool isFaceIdEnabled;
 
   const CourseLessonItemsEntity({
     required this.id,
@@ -41,5 +42,6 @@ class CourseLessonItemsEntity {
     required this.createdAt,
     required this.progress,
     required this.courseBlock,
+    required this.isFaceIdEnabled,
   });
 }

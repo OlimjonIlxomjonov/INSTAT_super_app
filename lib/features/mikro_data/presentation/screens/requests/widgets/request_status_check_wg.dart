@@ -6,8 +6,6 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 
 class RequestStatusCheckWg extends StatelessWidget {
   final MicroDataRequestStatus status;
-
-  /// Noma'lum status kelganda xom matnni ko'rsatish uchun.
   final String rawStatus;
 
   const RequestStatusCheckWg({
@@ -40,6 +38,7 @@ class RequestStatusCheckWg extends StatelessWidget {
     MicroDataRequestStatus.rejected => l.statusRejected,
     MicroDataRequestStatus.unknown =>
       rawStatus.isEmpty ? l.statusDraft : rawStatus,
+    MicroDataRequestStatus.expired => l.expired,
   };
 
   IconData get _icon => switch (status) {
@@ -53,6 +52,7 @@ class RequestStatusCheckWg extends StatelessWidget {
     MicroDataRequestStatus.finished => Icons.check_circle,
     MicroDataRequestStatus.rejected => IconlyLight.info_circle,
     MicroDataRequestStatus.unknown => IconlyLight.info_circle,
+    MicroDataRequestStatus.expired => FlutterRemix.error_warning_line,
   };
 
   Color get _color => switch (status) {

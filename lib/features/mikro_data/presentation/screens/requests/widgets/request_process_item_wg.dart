@@ -41,6 +41,7 @@ class RequestProcessItemWg extends StatelessWidget {
     MicroDataRequestStatus.paid => l.statusPaid,
     MicroDataRequestStatus.finished => l.statusFinished,
     MicroDataRequestStatus.rejected => l.statusRejected,
+    MicroDataRequestStatus.expired => 'Expired',
     MicroDataRequestStatus.unknown => item.status,
   };
 
@@ -55,6 +56,7 @@ class RequestProcessItemWg extends StatelessWidget {
     MicroDataRequestStatus.finished => IconlyBold.tick_square,
     MicroDataRequestStatus.rejected => IconlyBold.info_circle,
     MicroDataRequestStatus.unknown => IconlyBold.info_circle,
+    MicroDataRequestStatus.expired => FlutterRemix.error_warning_line,
   };
 
   Color get _color => switch (item.processStatus) {

@@ -41,10 +41,6 @@ class CourseVideoBriefTileWg extends StatelessWidget {
                         blockId: item.id,
                         lessonCount: item.lessonsCount,
                       ),
-
-                      /// final test page
-                      // if (index == data.length - 1)
-                      //   FinalCourseTestWg(courseId: item.course),
                     ],
                   );
                 }),
@@ -60,7 +56,7 @@ class CourseVideoBriefTileWg extends StatelessWidget {
         ),
 
         //! Course final test
-        FinalCourseTestWg(courseId: courseId),
+        FinalCourseTestWg(courseId: courseId, ),
       ],
     );
   }

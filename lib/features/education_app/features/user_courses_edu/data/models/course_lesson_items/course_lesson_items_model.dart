@@ -22,6 +22,7 @@ class CourseLessonItemsModel extends CourseLessonItemsEntity {
     required super.createdAt,
     required super.progress,
     required super.courseBlock,
+    required super.isFaceIdEnabled,
   });
 
   factory CourseLessonItemsModel.fromJson(Map<String, dynamic> json) {
@@ -46,6 +47,7 @@ class CourseLessonItemsModel extends CourseLessonItemsEntity {
       createdAt: DateTime.parse(json['created_at']),
       progress: (json['progress'] as num).toDouble(),
       courseBlock: json['course_block'],
+      isFaceIdEnabled: json['is_face_id_enabled'],
     );
   }
 }

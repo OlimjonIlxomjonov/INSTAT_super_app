@@ -6,8 +6,6 @@ import 'package:my_template/features/mikro_data/presentation/screens/requests/wi
 
 class SliverDataRequestsListWg extends StatelessWidget {
   final List<DataRequestEntity> items;
-
-  /// Qoralama tahrirlanib yopilgach ro'yxatni yangilash uchun.
   final VoidCallback? onRequestUpdated;
 
   const SliverDataRequestsListWg({

@@ -157,6 +157,7 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
                             topicId: widget.blockId,
                             lessonId: lesson.id,
                             testCount: lesson.testsCount,
+                            isFaceIdEnabled: lesson.isFaceIdEnabled,
                           ),
                         );
                       } else {

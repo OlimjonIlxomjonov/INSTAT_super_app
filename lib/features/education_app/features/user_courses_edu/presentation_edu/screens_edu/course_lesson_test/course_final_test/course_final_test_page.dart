@@ -54,15 +54,12 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage>
         params: CourseLessonTestParams(
           courseId: widget.courseId,
           blockId: 0,
-          // Block and lesson IDs are not strictly needed for final test
           lessonId: 0,
         ),
       ),
     );
   }
 
-  // Retry init on resume so granting the permission in system settings and
-  // coming back clears the denied overlay without restarting the test.
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
@@ -160,7 +157,6 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage>
     );
   }
 
-  //! Natijadan keyin izoh so'raladi
   Future<void> _openReviewDialog(BuildContext context) async {
     //! Natija oynasi
     AppRoute.close();

@@ -170,9 +170,6 @@ class CourseFinalTestBloc
     }
   }
 
-  /// Xato qanday bo'lmasin savol va variantlar ekranda qoladi — foydalanuvchi
-  /// qayta urinadi. Error holati flushbar uchun bir lahza chiqadi, xolos.
-  /// Savol va variantlar ekranda qoladi — xato faqat flushbar bo'lib chiqadi.
   void _restoreAfterFailure(
     Emitter<CourseFinalTestState> emit,
     CourseFinalTestLoaded currentState, {
