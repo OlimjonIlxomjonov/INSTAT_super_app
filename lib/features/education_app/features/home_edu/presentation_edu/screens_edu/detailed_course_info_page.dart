@@ -52,6 +52,7 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late TabController _tabController;
   bool _awaitingPaymentReturn = false;
+  bool _launchingPayment = false;
 
   bool get _isFree => widget.data.price == '0';
 
@@ -117,9 +118,9 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
     return BlocListener<BuyCourseBloc, BuyCourseState>(
       listener: (context, state) {
         if (state is BuyCourseLoaded) {
-          if (state.payment.redirectUrl.isNotEmpty) {
+          if (state.payment.code.isNotEmpty) {
             _awaitingPaymentReturn = true;
-            _openPaymentUrl(state.payment.redirectUrl, context);
+            _openPaymentUrl(_buildPaymentUrl(state.payment.code), context);
           } else {
             //! free kurs
             context.read<PerCourseBloc>().add(
@@ -269,13 +270,34 @@ class _DetailedCourseInfoPageState extends State<DetailedCourseInfoPage>
   }
 
   Future<void> _openPaymentUrl(String url, BuildContext context) async {
+    if (_launchingPayment) return; // dublikat chaqiruvni o'tkazib yuborish
+    _launchingPayment = true;
     try {
       logger.i('Opening payment URL: $url');
-      final uri = Uri.parse(url);
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-      logger.i('URL launched successfully');
+      final opened = await launchUrl(
+        Uri.parse(url),
+        mode: LaunchMode.externalApplication,
+      );
+      if (!opened) {
+        _awaitingPaymentReturn = false;
+        logger.e('Payment URL could not be launched');
+      }
     } catch (e) {
+      _awaitingPaymentReturn = false;
       logger.e('Failed to open payment URL: $e');
+    } finally {
+      Future.delayed(
+        const Duration(seconds: 2),
+        () => _launchingPayment = false,
+      );
     }
+  }
+
+  String _buildPaymentUrl(String code) {
+    final isClick =
+        code.contains('service_id=') && code.contains('merchant_id=');
+    return isClick
+        ? 'https://my.click.uz/services/pay?$code'
+        : 'https://checkout.paycom.uz/$code';
   }
 }

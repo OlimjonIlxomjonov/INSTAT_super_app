@@ -4,14 +4,14 @@ class OrderPaymentModel extends OrderPaymentEntity {
   OrderPaymentModel({
     required super.id,
     required super.status,
-    required super.redirectUrl,
+    required super.code,
   });
 
   factory OrderPaymentModel.fromJson(Map<String, dynamic> json) {
     return OrderPaymentModel(
       id: json['id'] ?? 0,
       status: json['status'] ?? '',
-      redirectUrl: json['redirect_url'] ?? '',
+      code: json['code'] ?? '',
     );
   }
 }

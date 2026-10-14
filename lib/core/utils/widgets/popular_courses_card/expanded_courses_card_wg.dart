@@ -37,7 +37,13 @@ class ExpandedCoursesCardWg extends StatelessWidget {
                   aspectRatio: 16 / 9,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.network(entity.thumbnail, fit: BoxFit.cover),
+                    child: Image.network(
+                      entity.thumbnail,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, e, t) {
+                        return Icon(Icons.broken_image);
+                      },
+                    ),
                   ),
                 ),
                 Row(

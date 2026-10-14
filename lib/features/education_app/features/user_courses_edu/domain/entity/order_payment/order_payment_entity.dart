@@ -1,11 +1,11 @@
 class OrderPaymentEntity {
   final int id;
   final String status;
-  final String redirectUrl;
+  final String code;
 
   OrderPaymentEntity({
     required this.id,
     required this.status,
-    required this.redirectUrl,
+    required this.code,
   });
 }

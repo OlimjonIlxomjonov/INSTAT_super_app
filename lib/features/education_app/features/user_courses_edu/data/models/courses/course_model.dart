@@ -47,7 +47,7 @@ class CourseModel extends CourseEntity {
       price: json['price'],
       certificateImage: json['certificate_image'],
       isActive: json['is_active'],
-      thumbnail: json['thumbnail'],
+      thumbnail: json['thumbnail'] ?? '',
       isOnline: json['is_online'],
       category: categoryId,
       lessonsCount: json['lessons_count'] ?? 0,

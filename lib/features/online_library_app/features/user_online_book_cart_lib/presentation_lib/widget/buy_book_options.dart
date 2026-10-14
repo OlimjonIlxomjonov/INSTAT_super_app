@@ -22,8 +22,7 @@ class BuyBookOptions extends StatefulWidget {
 }
 
 class _BuyBookOptionsState extends State<BuyBookOptions> {
-  /// Tracks which button was tapped so the loading spinner only shows on
-  /// that one, and so the redirect uses the method the user actually chose.
+  bool _launchingPayment = false;
   String? _selectedPaymentMethod;
 
   void _buyBook(BuildContext context, String paymentMethod) {
@@ -39,8 +38,25 @@ class _BuyBookOptionsState extends State<BuyBookOptions> {
   }
 
   Future<void> _openPaymentUrl(String url) async {
-    final uri = Uri.parse(url);
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
+    try {
+      final opened = await launchUrl(
+        Uri.parse(url),
+        mode: LaunchMode.externalApplication,
+      );
+      if (!opened) debugPrint('Payment URL could not be launched: $url');
+    } catch (e) {
+      debugPrint('Failed to open payment URL: $e');
+    }
+  }
+
+  String _buildPaymentUrl(String code) {
+    switch (_selectedPaymentMethod) {
+      case _paymentMethodClick:
+        return 'https://my.click.uz/services/pay?$code';
+      case _paymentMethodPayme:
+      default:
+        return 'https://checkout.paycom.uz/$code';
+    }
   }
 
   @override
@@ -49,7 +65,7 @@ class _BuyBookOptionsState extends State<BuyBookOptions> {
       listener: (context, state) {
         if (state is BuyBookLoaded) {
           AppRoute.close();
-          _openPaymentUrl(state.entity.redirectUrl);
+          _openPaymentUrl(_buildPaymentUrl(state.entity.code));
         }
       },
       child: SafeArea(

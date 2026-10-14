@@ -10,7 +10,6 @@ import 'package:my_template/features/vacancy_app/features/presentation/bloc/vaca
 import 'package:my_template/features/vacancy_app/features/presentation/widgets/vacancies/vacancy_card_wg.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-/// Ro'yxat sliveri — bloc holatiga qarab skeleton / bo'sh / xato / kartalar.
 class VacanciesWithBlocWg extends StatelessWidget {
   final int? limit;
   final bool isSearching;
@@ -47,7 +46,8 @@ class VacanciesWithBlocWg extends StatelessWidget {
             return SliverToBoxAdapter(
               child: AppEmptyState(
                 title: isSearching ? l.nothingFound : l.noVacanciesYet,
-                subtitle: '',
+                subtitle:
+                    'Hozirda bo‘sh ish o‘rinlari mavjud emas. Kechroq qayta tekshirib ko‘ring.',
               ),
             );
           }

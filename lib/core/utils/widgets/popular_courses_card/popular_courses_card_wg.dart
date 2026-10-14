@@ -82,6 +82,9 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
                   child: Image.network(
                     widget.data.thumbnail,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, e, t) {
+                      return Icon(Icons.broken_image);
+                    },
                   ),
                 ),
               ),

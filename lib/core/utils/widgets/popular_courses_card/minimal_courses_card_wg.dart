@@ -34,12 +34,19 @@ class MinimalCoursesCardWg extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              //! thumbnail
               Expanded(
                 child: AspectRatio(
                   aspectRatio: 16 / 9,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.network(data.thumbnail, fit: BoxFit.cover),
+                    child: Image.network(
+                      data.thumbnail,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, e, t) {
+                        return Icon(Icons.broken_image);
+                      },
+                    ),
                   ),
                 ),
               ),

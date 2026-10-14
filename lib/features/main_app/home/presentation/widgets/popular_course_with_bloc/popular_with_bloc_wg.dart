@@ -23,8 +23,6 @@ class PopularWithBlocWg extends StatelessWidget {
     return BlocBuilder<CoursesBloc, CoursesState>(
       builder: (context, state) {
         if (state is CoursesLoaded) {
-          //! Kategoriya almashganda
-
           final data = state.response.data;
 
           return Opacity(

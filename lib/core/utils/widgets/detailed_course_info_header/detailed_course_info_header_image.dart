@@ -18,7 +18,13 @@ class DetailedCourseInfoHeaderImage extends StatelessWidget {
       flexibleSpace: FlexibleSpaceBar(
         stretchModes: [.zoomBackground],
         background: RepaintBoundary(
-          child: Image.network(imagePath, fit: .cover),
+          child: Image.network(
+            imagePath,
+            fit: .cover,
+            errorBuilder: (context, e, t) {
+              return Icon(Icons.broken_image);
+            },
+          ),
         ),
       ),
       automaticallyImplyLeading: false,
