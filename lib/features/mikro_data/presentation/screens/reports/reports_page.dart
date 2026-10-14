@@ -56,7 +56,6 @@ class _ReportsPageState extends State<ReportsPage> {
         );
       },
       child: Scaffold(
-        // Klaviatura ochilganda oq fon hisobotlarni yopib qo'ymasligi uchun.
         resizeToAvoidBottomInset: false,
         body: BlocBuilder<ReportsBloc, ReportsState>(
           buildWhen: (prev, curr) {

@@ -14,8 +14,6 @@ import 'package:url_launcher/url_launcher.dart';
 const String _paymentMethodClick = 'click';
 const String _paymentMethodPayme = 'payme';
 
-/// To'lov kutayotgan ma'lumot so'rovi uchun click/payme tanlovi.
-/// Narx so'rovning o'z `price` maydonidan keladi.
 class RequestPayOptionsWg extends StatefulWidget {
   final int requestId;
   final String price;
@@ -47,9 +45,10 @@ class _RequestPayOptionsWgState extends State<RequestPayOptionsWg> {
       );
       if (!mounted) return;
       AppRoute.close();
-      if (order.redirectUrl.isNotEmpty) {
+      final url = order.buildRedirectUrl(paymentMethod);
+      if (url != null && url.isNotEmpty) {
         await launchUrl(
-          Uri.parse(order.redirectUrl),
+          Uri.parse(url),
           mode: LaunchMode.externalApplication,
         );
       }

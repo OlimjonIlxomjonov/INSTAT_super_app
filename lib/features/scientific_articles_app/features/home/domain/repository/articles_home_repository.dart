@@ -85,4 +85,8 @@ abstract class ArticlesHomeRepository {
   });
 
   Future<ArticlesStatsEntity> getArticlesStats({required String countType});
+
+  /// Sends the review for editorial processing.
+  /// Calls POST /api/reviews/{reviewId}/send/ — 201 on success.
+  Future<void> sendArticleForReview(int reviewId);
 }

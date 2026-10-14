@@ -83,4 +83,7 @@ abstract class UserArticlesRemoteDataSource {
   });
 
   Future<ArticlesStatsModel> fetchArticlesStats({required String countType});
+
+  /// POST /api/reviews/{reviewId}/send/ — transitions draft → in_review.
+  Future<void> sendArticleForReview(int reviewId);
 }

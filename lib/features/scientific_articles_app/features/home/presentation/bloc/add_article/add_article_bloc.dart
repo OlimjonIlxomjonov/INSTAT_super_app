@@ -5,6 +5,7 @@ import 'package:my_template/core/common/params/article_params/article_params.dar
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/create_article_order_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/send_article_for_review_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/create_review_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/update_review_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/review_authors/create_review_author_use_case.dart';
@@ -22,6 +23,7 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
   final ReviewAuthorsUseCase getReviewAuthorsUseCase;
   final ReviewDetailUseCase reviewDetailUseCase;
   final CreateArticleOrderUseCase createArticleOrderUseCase;
+  final SendArticleForReviewUseCase sendArticleForReviewUseCase;
 
   AddArticleBloc({
     required this.createReviewUseCase,
@@ -31,6 +33,7 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
     required this.getReviewAuthorsUseCase,
     required this.reviewDetailUseCase,
     required this.createArticleOrderUseCase,
+    required this.sendArticleForReviewUseCase,
   }) : super(const AddArticleState()) {
     on<ResetAddArticleEvent>((event, emit) {
       emit(const AddArticleState());
@@ -234,17 +237,49 @@ class AddArticleBloc extends Bloc<ArticlesHomeEvent, AddArticleState> {
           ),
         );
 
-        // Payment redirect
-        if (order.redirectUrl.isNotEmpty) {
+        // Payment redirect — URL is built from the backend response fields
+        // (not a ready-made redirect_url anymore).
+        final url = order.buildRedirectUrl(event.paymentMethod);
+        if (url != null && url.isNotEmpty) {
           try {
             await launchUrl(
-              Uri.parse(order.redirectUrl),
+              Uri.parse(url),
               mode: LaunchMode.externalApplication,
             );
           } catch (e) {
             logger.e('Failed to open payment URL: $e');
           }
         }
+
+        final saved = await getReviewAuthorsUseCase(finalReviewId);
+
+        emit(
+          state.copyWith(
+            reviewId: finalReviewId,
+            localAuthors: const [],
+            savedAuthors: saved,
+            isSaving: false,
+            isSuccess: true,
+            isEditMode: state.isEditMode || finalReviewId > 0,
+          ),
+        );
+        event.onSuccess?.call();
+      } catch (e) {
+        emit(state.copyWith(isSaving: false, errorMessage: e.toString()));
+        event.onError?.call(e.toString());
+      }
+    });
+
+    on<SendArticleForReviewEvent>((event, emit) async {
+      emit(
+        state.copyWith(isSaving: true, isSuccess: false, errorMessage: null),
+      );
+      try {
+        final finalReviewId = await _saveReviewFields(state);
+
+        // This is the actual "send for review" action —
+        // POST /reviews/{id}/send/ transitions the status away from draft.
+        await sendArticleForReviewUseCase(finalReviewId);
 
         final saved = await getReviewAuthorsUseCase(finalReviewId);
 

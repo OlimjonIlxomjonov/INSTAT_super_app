@@ -71,7 +71,6 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
 
   @override
   void dispose() {
-    // only reset if user changed the filter away from 'all'
     if (_selectedIndex != 0) {
       _bloc.add(UserArticlesEvent(status: 'all', search: ''));
     }
@@ -239,7 +238,7 @@ class _UserArticlesPageState extends State<UserArticlesPage> {
                     ),
                   );
                 }
-                // Initial or any fallback state
+
                 return const SliverToBoxAdapter(child: SizedBox.shrink());
               },
             ),

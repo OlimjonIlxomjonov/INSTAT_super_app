@@ -168,4 +168,9 @@ class ArticlesHomeRepoImpl implements ArticlesHomeRepository {
   Future<ArticlesStatsEntity> getArticlesStats({required String countType}) {
     return remoteDataSource.fetchArticlesStats(countType: countType);
   }
+
+  @override
+  Future<void> sendArticleForReview(int reviewId) {
+    return remoteDataSource.sendArticleForReview(reviewId);
+  }
 }

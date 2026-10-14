@@ -4,14 +4,14 @@ class DataRequestOrderModel extends DataRequestOrderEntity {
   const DataRequestOrderModel({
     required super.id,
     required super.status,
-    required super.redirectUrl,
+    super.code,
   });
 
   factory DataRequestOrderModel.fromJson(Map<String, dynamic> json) {
     return DataRequestOrderModel(
       id: json['id'] ?? 0,
       status: json['status'] ?? '',
-      redirectUrl: json['redirect_url'] ?? '',
+      code: json['code']?.toString(),
     );
   }
 }

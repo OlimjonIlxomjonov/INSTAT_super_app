@@ -532,4 +532,21 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
       rethrow;
     }
   }
+
+  @override
+  Future<void> sendArticleForReview(int reviewId) async {
+    try {
+      final response = await _dioClient.post(
+        '${ApiUrls.userArticles}$reviewId/send/',
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+      } else {
+        throw Exception('THROW EXCEPTION! ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
 }

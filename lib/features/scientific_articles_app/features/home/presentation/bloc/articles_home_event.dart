@@ -138,6 +138,15 @@ class SubmitArticleForReviewEvent extends ArticlesHomeEvent {
   });
 }
 
+/// Sends the saved article to editorial review via POST /reviews/{id}/send/.
+/// This is the wizard's final action — no payment bottom sheet is needed.
+class SendArticleForReviewEvent extends ArticlesHomeEvent {
+  final Function()? onSuccess;
+  final Function(String)? onError;
+
+  SendArticleForReviewEvent({this.onSuccess, this.onError});
+}
+
 class CreateReviewAuthorEvent extends ArticlesHomeEvent {
   final ReviewAuthorParams author;
   final Function()? onSuccess;

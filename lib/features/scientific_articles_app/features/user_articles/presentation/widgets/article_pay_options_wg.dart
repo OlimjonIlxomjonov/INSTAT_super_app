@@ -16,9 +16,6 @@ const String _paymentMethodClick = 'click';
 const String _paymentMethodPayme = 'payme';
 const String _reviewPriceKey = 'review_price';
 
-/// Allaqachon yaratilgan, to'lov kutayotgan maqola uchun to'lov tanlovi.
-/// Sehrgardagi [ArticlePaymentOptionsWg] dan farqi — bu yerda maqola
-/// saqlangan bo'ladi, shuning uchun faqat create-order chaqiriladi.
 class ArticlePayOptionsWg extends StatefulWidget {
   final int reviewId;
   final VoidCallback onSuccess;
@@ -64,9 +61,10 @@ class _ArticlePayOptionsWgState extends State<ArticlePayOptionsWg> {
       );
       if (!mounted) return;
       AppRoute.close();
-      if (order.redirectUrl.isNotEmpty) {
+      final url = order.buildRedirectUrl(paymentMethod);
+      if (url != null && url.isNotEmpty) {
         await launchUrl(
-          Uri.parse(order.redirectUrl),
+          Uri.parse(url),
           mode: LaunchMode.externalApplication,
         );
       }

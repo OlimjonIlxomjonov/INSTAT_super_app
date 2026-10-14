@@ -4,14 +4,25 @@ class ArticleOrderPaymentModel extends ArticleOrderPaymentEntity {
   ArticleOrderPaymentModel({
     required super.id,
     required super.status,
-    required super.redirectUrl,
+    super.code,
+    super.merchantId,
+    super.serviceId,
+    super.amount,
+    super.transactionParam,
   });
 
   factory ArticleOrderPaymentModel.fromJson(Map<String, dynamic> json) {
     return ArticleOrderPaymentModel(
       id: json['id'] ?? 0,
       status: json['status'] ?? '',
-      redirectUrl: json['redirect_url'] ?? '',
+      // Payme
+      code: json['code']?.toString(),
+      // Click
+      merchantId: json['merchant_id']?.toString(),
+      serviceId: json['service_id']?.toString(),
+      amount: json['amount']?.toString(),
+      transactionParam: json['transaction_param']?.toString(),
     );
   }
 }
+

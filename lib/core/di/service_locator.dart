@@ -225,6 +225,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/prese
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_authors/review_authors_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/bloc/review_detail/review_detail_bloc.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/create_article_order_use_case.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/send_article_for_review_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/get_site_data_value_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/create_review_use_case.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/usecase/add_article/update_review_use_case.dart';
@@ -372,6 +373,7 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => CreateReviewUseCase(repository: sl()));
   sl.registerLazySingleton(() => UpdateReviewUseCase(repository: sl()));
   sl.registerLazySingleton(() => CreateArticleOrderUseCase(repository: sl()));
+  sl.registerLazySingleton(() => SendArticleForReviewUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetSiteDataValueUseCase(repository: sl()));
   sl.registerLazySingleton(() => CreateReviewAuthorUseCase(repository: sl()));
   sl.registerLazySingleton(() => UpdateReviewAuthorUseCase(repository: sl()));
@@ -577,6 +579,7 @@ Future<void> setup() async {
       getReviewAuthorsUseCase: sl(),
       reviewDetailUseCase: sl(),
       createArticleOrderUseCase: sl(),
+      sendArticleForReviewUseCase: sl(),
     ),
   );
   //? Drop Downs
