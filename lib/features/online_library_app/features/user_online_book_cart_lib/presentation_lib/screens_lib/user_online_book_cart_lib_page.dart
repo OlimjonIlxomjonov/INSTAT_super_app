@@ -2,7 +2,7 @@ import 'package:my_template/core/common/refresh_indicator/custom_refresh_insidca
 import 'package:my_template/core/utils/price/price_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/common/ui_states/app_empty_state.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';

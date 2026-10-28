@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:intl/intl.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/entity/comments/comments_entity.dart';

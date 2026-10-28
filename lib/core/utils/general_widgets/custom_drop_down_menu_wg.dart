@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/add_article/drop_down/drop_down_entity.dart';
@@ -58,7 +58,7 @@ class CustomDropDownMenuWg extends StatelessWidget {
               ),
             ),
             icon: Icon(
-              IconlyLight.arrow_down_2,
+              IconlyLight.arrowDown2,
               size: 20,
               color: AppColors.greyScale.grey400,
             ),

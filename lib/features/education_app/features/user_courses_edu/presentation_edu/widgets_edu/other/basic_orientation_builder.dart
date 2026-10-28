@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:video_player/video_player.dart';
 import 'fullscreen_video_page.dart';
@@ -176,7 +176,7 @@ class _BasicOverlayWidgetState extends State<BasicOverlayWidget> {
                                     shape: const CircleBorder(),
                                   ),
                                   icon: const Icon(
-                                    IconlyLight.arrow_left_2,
+                                    IconlyLight.arrowLeft2,
                                     color: Colors.white,
                                     size: 20,
                                   ),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/files/remote_file_opener.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -466,7 +466,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                             tileTitle: localization.testAssignmentTileTitle,
                             subTitle: localization.testAssignmentTileSubtitle,
                             tileAction: Icon(
-                              IconlyLight.arrow_right_2,
+                              IconlyLight.arrowRight2,
                               color: AppColors.greyScale.grey400,
                             ),
                           )
@@ -628,7 +628,7 @@ class _VideoAreaWidget extends StatelessWidget {
           shape: const CircleBorder(),
         ),
         icon: const Icon(
-          IconlyLight.arrow_left_2,
+          IconlyLight.arrowLeft2,
           color: Colors.white,
           size: 20,
         ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 
 //! Backend `reviews/?status=` qabul qiladigan qiymatlar
@@ -23,9 +23,9 @@ List<String> articleCategories(AppLocalizations l) => [
 
 const List<IconData> categoriesIcon = [
   IconlyLight.discovery,
-  IconlyLight.tick_square,
+  IconlyLight.tickSquare,
   IconlyLight.wallet,
-  IconlyLight.danger,
-  IconlyLight.info_circle,
+  IconlyLight.dangerTriangle,
+  IconlyLight.dangerCircle,
   IconlyLight.paper,
 ];

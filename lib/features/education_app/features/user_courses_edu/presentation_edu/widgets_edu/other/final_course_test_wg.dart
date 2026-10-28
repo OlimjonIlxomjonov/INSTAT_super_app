@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/di/service_locator.dart';
@@ -68,7 +68,7 @@ class FinalCourseTestWg extends StatelessWidget {
                   ),
 
                   Icon(
-                    IconlyLight.arrow_right_2,
+                    IconlyLight.arrowRight2,
                     color: AppColors.greyScale.grey400,
                   ),
                 ],

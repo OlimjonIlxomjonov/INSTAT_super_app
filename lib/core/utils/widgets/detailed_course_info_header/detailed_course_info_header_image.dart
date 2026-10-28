@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
@@ -46,7 +46,7 @@ class DetailedCourseInfoHeaderImage extends StatelessWidget {
                     backgroundColor: AppColors.white,
                     shape: RoundedRectangleBorder(borderRadius: .circular(50)),
                   ),
-                  icon: const Icon(IconlyLight.arrow_left_2, size: 20),
+                  icon: const Icon(IconlyLight.arrowLeft2, size: 20),
                 ),
               ],
             ),

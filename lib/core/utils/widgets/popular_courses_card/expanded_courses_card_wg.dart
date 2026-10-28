@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/custom_text_styles/custom_text_styles.dart';
 import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
@@ -124,7 +124,7 @@ class ExpandedCoursesCardWg extends StatelessWidget {
               Row(
                 spacing: 5,
                 children: [
-                  Icon(IconlyLight.time_circle),
+                  Icon(IconlyLight.timeCircle),
                   Text(
                     formatDuration(entity.totalDuration),
                     style: AppTextStyles.source.regular(fontSize: 13),

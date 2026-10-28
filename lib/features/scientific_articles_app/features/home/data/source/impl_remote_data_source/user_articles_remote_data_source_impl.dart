@@ -69,6 +69,7 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
     try {
       final response = await _dioClient.get(
         '${ApiUrls.userArticles}$reviewId/',
+        skipAuth: true,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
@@ -92,7 +93,7 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
 
   Future<List<ArticleBriefModel>> _fetchBriefList(String path) async {
     try {
-      final response = await _dioClient.get(path);
+      final response = await _dioClient.get(path, skipAuth: true);
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
         final raw = response.data;

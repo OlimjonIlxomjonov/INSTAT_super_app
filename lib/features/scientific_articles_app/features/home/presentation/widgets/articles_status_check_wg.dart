@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/status_container_wg.dart';
@@ -29,21 +29,21 @@ class ArticlesStatusCheckWg extends StatelessWidget {
         );
       case ArticleStatus.pending:
         return StatusContainerWg(
-          icon: IconlyLight.paper_upload,
+          icon: IconlyLight.paperUpload,
           statusTitle: ' ${localization.statusPending}',
           iconColor: AppColors.orange500,
           backgroundColor: AppColors.orange50,
         );
       case ArticleStatus.rejected:
         return StatusContainerWg(
-          icon: IconlyLight.info_circle,
+          icon: IconlyLight.dangerTriangle,
           statusTitle: ' ${localization.statusRejected}',
           iconColor: AppColors.redFailedTaskCard,
           backgroundColor: AppColors.redBackground,
         );
       case ArticleStatus.inReview:
         return StatusContainerWg(
-          icon: IconlyLight.danger,
+          icon: IconlyLight.dangerCircle,
           statusTitle: ' ${localization.statusUnderReview}',
           iconColor: AppColors.orange500,
           backgroundColor: AppColors.orange50,

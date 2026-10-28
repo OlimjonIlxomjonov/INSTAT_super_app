@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_validation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/custom_linear_indicator/custom_linear_indicator_wg.dart';
 
@@ -134,7 +134,7 @@ class TasksCardWg extends StatelessWidget {
                 ),
                 Expanded(child: Container()),
                 Icon(
-                  IconlyLight.time_circle,
+                  IconlyLight.timeCircle,
                   color: AppColors.greyScale.grey400,
                   size: 18,
                 ),

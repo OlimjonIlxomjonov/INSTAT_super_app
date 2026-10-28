@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -37,7 +37,7 @@ class CourseTileVideosShimmer extends StatelessWidget {
                   subtitle: Row(
                     children: [
                       Icon(
-                        IconlyLight.time_circle,
+                        IconlyLight.timeCircle,
                         size: 20,
                         color: AppColors.greyScale.grey600,
                       ),

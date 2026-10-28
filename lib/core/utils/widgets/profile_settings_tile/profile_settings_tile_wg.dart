@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
@@ -43,7 +43,7 @@ class ProfileSettingsTileWg extends StatelessWidget {
             color: isLogOut ? AppColors.red : AppColors.greyScale.grey600,
           ),
         ),
-        trailing: trailingIcon ?? Icon(IconlyLight.arrow_right_2, size: 20),
+        trailing: trailingIcon ?? Icon(IconlyLight.arrowRight2, size: 20),
       ),
     );
   }

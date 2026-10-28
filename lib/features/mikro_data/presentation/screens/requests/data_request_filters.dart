@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 
 /// Requests sahifasidagi status filtrlari.
@@ -33,22 +33,22 @@ List<DataRequestFilter> dataRequestFilters(AppLocalizations localization) {
     DataRequestFilter(
       apiValue: 'in_review',
       label: localization.statusUnderReview,
-      icon: IconlyLight.danger,
+      icon: IconlyLight.dangerCircle,
     ),
     DataRequestFilter(
       apiValue: 'in_process',
       label: localization.statusInProcess,
-      icon: IconlyLight.time_circle,
+      icon: IconlyLight.timeCircle,
     ),
     DataRequestFilter(
       apiValue: 'agreement_accepted',
       label: localization.statusAgreementAccepted,
-      icon: IconlyLight.tick_square,
+      icon: IconlyLight.tickSquare,
     ),
     DataRequestFilter(
       apiValue: 'head_agreement_accepted',
       label: localization.statusHeadAgreementAccepted,
-      icon: IconlyLight.shield_done,
+      icon: IconlyLight.shieldDone,
     ),
     DataRequestFilter(
       apiValue: 'waiting_for_payment',
@@ -63,12 +63,12 @@ List<DataRequestFilter> dataRequestFilters(AppLocalizations localization) {
     DataRequestFilter(
       apiValue: 'finished',
       label: localization.statusFinished,
-      icon: IconlyLight.tick_square,
+      icon: IconlyLight.tickSquare,
     ),
     DataRequestFilter(
       apiValue: 'rejected',
       label: localization.statusRejected,
-      icon: IconlyLight.info_circle,
+      icon: IconlyLight.dangerTriangle,
     ),
   ];
 }

@@ -5,7 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
@@ -142,7 +142,7 @@ class _UserAvatarComponentState extends State<UserAvatarComponent> {
               onPressed: () {
                 AppRoute.close();
               },
-              icon: Icon(IconlyLight.arrow_left_2, size: 20),
+              icon: Icon(IconlyLight.arrowLeft2, size: 20),
             ),
           ),
           //! TEMP QR BUTTON

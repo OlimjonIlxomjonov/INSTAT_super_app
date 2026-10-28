@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/presentation/widgets/status_container_wg.dart';
@@ -43,15 +43,15 @@ class RequestStatusCheckWg extends StatelessWidget {
 
   IconData get _icon => switch (status) {
     MicroDataRequestStatus.draft => IconlyLight.paper,
-    MicroDataRequestStatus.inReview => IconlyLight.danger,
-    MicroDataRequestStatus.inProcess => IconlyLight.time_circle,
-    MicroDataRequestStatus.agreementAccepted => IconlyLight.tick_square,
-    MicroDataRequestStatus.headAgreementAccepted => IconlyLight.shield_done,
+    MicroDataRequestStatus.inReview => IconlyLight.dangerCircle,
+    MicroDataRequestStatus.inProcess => IconlyLight.timeCircle,
+    MicroDataRequestStatus.agreementAccepted => IconlyLight.tickSquare,
+    MicroDataRequestStatus.headAgreementAccepted => IconlyLight.shieldDone,
     MicroDataRequestStatus.waitingForPayment => IconlyLight.wallet,
     MicroDataRequestStatus.paid => IconlyLight.wallet,
     MicroDataRequestStatus.finished => Icons.check_circle,
-    MicroDataRequestStatus.rejected => IconlyLight.info_circle,
-    MicroDataRequestStatus.unknown => IconlyLight.info_circle,
+    MicroDataRequestStatus.rejected => IconlyLight.dangerCircle,
+    MicroDataRequestStatus.unknown => IconlyLight.dangerCircle,
     MicroDataRequestStatus.expired => FlutterRemix.error_warning_line,
   };
 

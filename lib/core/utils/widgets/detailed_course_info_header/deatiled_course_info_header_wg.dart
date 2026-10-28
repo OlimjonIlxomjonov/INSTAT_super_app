@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/html_content_wg/html_content_wg.dart';
@@ -70,7 +70,7 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                     ),
                     SizedBox(width: appH(12)),
                     Icon(
-                      IconlyLight.time_circle,
+                      IconlyLight.timeCircle,
                       color: AppColors.greyScale.grey600,
                       size: 17,
                     ),

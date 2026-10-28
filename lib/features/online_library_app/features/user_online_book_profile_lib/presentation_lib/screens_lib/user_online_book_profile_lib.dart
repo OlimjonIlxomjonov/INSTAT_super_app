@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
@@ -77,7 +77,7 @@ class _UserOnlineBookProfileLibState extends State<UserOnlineBookProfileLib> {
                     ),
                   ),
                   trailing: Icon(
-                    IconlyLight.arrow_right_2,
+                    IconlyLight.arrowRight2,
                     size: 20,
                     color: AppColors.greyScale.grey600,
                   ),

@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/glass_badge/glass_badge_wg.dart';
@@ -152,7 +152,7 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
           Row(
             spacing: 5,
             children: [
-              Icon(IconlyLight.time_circle, size: 18),
+              Icon(IconlyLight.timeCircle, size: 18),
               AutoSizeText(
                 formatDuration(widget.data.totalDuration),
                 style: AppTextStyles.source.regular(fontSize: 13),

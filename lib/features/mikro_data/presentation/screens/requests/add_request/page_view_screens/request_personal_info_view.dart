@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/requests/add_request/request_field.dart';
 import 'package:my_template/core/utils/general_widgets/form_fields/app_form_field_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';

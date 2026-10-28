@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/features/main_app/home/domain/entity/active_devices/active_devices.dart';
 
@@ -15,7 +15,7 @@ class ActiveDevicesWg extends StatelessWidget {
       case 'Mac':
         return Icons.laptop;
       default:
-        return item.thisUser ? Icons.smartphone : IconlyLight.more_circle;
+        return item.thisUser ? Icons.smartphone : IconlyLight.moreCircle;
     }
   }
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/widgets/family_bottom_sheet_navigation/family_bottom_sheet_navigation.dart';
@@ -45,7 +45,7 @@ class CustomAppBarWg extends StatelessWidget implements PreferredSize {
                 ),
               ),
               onPressed: onClose,
-              icon: Icon(IconlyLight.arrow_left_2, size: 20),
+              icon: Icon(IconlyLight.arrowLeft2, size: 20),
             )
           : null,
       automaticallyImplyLeading: false,

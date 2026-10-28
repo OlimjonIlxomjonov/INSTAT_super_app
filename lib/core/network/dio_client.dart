@@ -27,8 +27,6 @@ class DioClient {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          //! Ommaviy endpoint — token yuborilsa backend natijani
-          //! foydalanuvchiga qarab filtrlab yuboradi
           if (options.extra[_skipAuthKey] == true) {
             options.headers.remove('Authorization');
             return handler.next(options);
@@ -43,9 +41,6 @@ class DioClient {
           return handler.next(options);
         },
         onResponse: (response, handler) {
-          //! Server xatosi 200 bilan ham kelishi mumkin.
-          //! ok:false ning o'zi yetarli emas — ayrim endpointlarda u
-          //! "ruxsat yo'q" degani, xato emas.
           final data = response.data;
           final error = data is Map ? data['error'] : null;
           final isServerFailure =
@@ -99,7 +94,6 @@ class DioClient {
       ),
     );
 
-    //! Log oxirgi bo'lsin — interceptorlar qo'shgan sarlavhalar ham ko'rinadi
     _dio.interceptors.add(
       LogInterceptor(
         request: true,
@@ -109,6 +103,7 @@ class DioClient {
       ),
     );
   }
+
   void clearToken() {
     _dio.options.headers.remove('Authorization');
     _isHandlingSessionExpiry = false;
@@ -125,10 +120,6 @@ class DioClient {
   }
 
   /// DOWNLOAD
-  ///
-  /// Token faqat o'z serverimizga qo'shiladi, begona manzilga emas.
-  /// 401 bu yerda sessiyani yopmaydi — faylga ruxsat yo'qligi
-  /// foydalanuvchini ilovadan chiqarib yubormasligi kerak.
   Future<Response> download(String url, String savePath) async {
     final isOwnHost = url.startsWith(ApiUrls.origin) || !url.startsWith('http');
     if (!isOwnHost) {

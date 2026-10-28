@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 
@@ -14,31 +14,31 @@ class LastActionsStatusIconWg extends StatelessWidget {
       case LastActionsStatus.draft:
         return Icon(IconlyBold.paper, color: AppColors.greyScale.grey500);
       case LastActionsStatus.sent:
-        return Icon(IconlyBold.paper_upload, color: AppColors.primaryColor);
+        return Icon(IconlyBold.paperUpload, color: AppColors.primaryColor);
       case LastActionsStatus.inReview:
-        return Icon(IconlyBold.time_circle, color: AppColors.orange500);
+        return Icon(IconlyBold.timeCircle, color: AppColors.orange500);
       case LastActionsStatus.inProcess:
-        return Icon(IconlyBold.time_circle, color: AppColors.orange500);
+        return Icon(IconlyBold.timeCircle, color: AppColors.orange500);
       case LastActionsStatus.agreementAccepted:
-        return Icon(IconlyBold.tick_square, color: AppColors.greenDoneTaskCard);
+        return Icon(IconlyBold.tickSquare, color: AppColors.greenDoneTaskCard);
       case LastActionsStatus.headAgreementAccepted:
-        return Icon(IconlyBold.shield_done, color: AppColors.greenDoneTaskCard);
+        return Icon(IconlyBold.shieldDone, color: AppColors.greenDoneTaskCard);
       case LastActionsStatus.paid:
         return Icon(IconlyBold.wallet, color: AppColors.greenDoneTaskCard);
       case LastActionsStatus.finished:
-        return Icon(IconlyBold.tick_square, color: AppColors.greenDoneTaskCard);
+        return Icon(IconlyBold.tickSquare, color: AppColors.greenDoneTaskCard);
       case LastActionsStatus.addedExpert:
-        return Icon(IconlyBold.add_user, color: AppColors.orange500);
+        return Icon(IconlyBold.addUser, color: AppColors.orange500);
       case LastActionsStatus.waitingForPayment:
         return Icon(IconlyBold.wallet, color: AppColors.yellow500);
       case LastActionsStatus.accepted:
-        return Icon(IconlyBold.tick_square, color: AppColors.greenDoneTaskCard);
+        return Icon(IconlyBold.tickSquare, color: AppColors.greenDoneTaskCard);
       case LastActionsStatus.published:
         return Icon(IconlyBold.document, color: AppColors.greenDoneTaskCard);
       case LastActionsStatus.rejected:
-        return Icon(IconlyBold.info_circle, color: AppColors.red);
+        return Icon(IconlyBold.infoCircle, color: AppColors.red);
       case LastActionsStatus.unknown:
-        return Icon(IconlyBold.info_circle, color: AppColors.greyScale.grey500);
+        return Icon(IconlyBold.infoCircle, color: AppColors.greyScale.grey500);
     }
   }
 }

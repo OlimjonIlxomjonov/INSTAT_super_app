@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_template/core/utils/files/remote_file_opener.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/common/params/micro_data_params/data_request_params.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
@@ -624,7 +624,7 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
             child: Row(
               children: [
                 Icon(
-                  IconlyLight.info_square,
+                  IconlyLight.infoSquare,
                   size: 20,
                   color: AppColors.greyScale.grey400,
                 ),
@@ -875,7 +875,7 @@ class _DetailedReportsPageState extends State<DetailedReportsPage> {
             child: Row(
               children: [
                 Icon(
-                  IconlyLight.info_square,
+                  IconlyLight.infoSquare,
                   size: 20,
                   color: AppColors.greyScale.grey400,
                 ),

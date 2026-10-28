@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:my_template/core/utils/general_widgets/process_timeline/process_timeline_item_wg.dart';
@@ -47,15 +47,15 @@ class RequestProcessItemWg extends StatelessWidget {
 
   IconData get _icon => switch (item.processStatus) {
     MicroDataRequestStatus.draft => IconlyBold.paper,
-    MicroDataRequestStatus.inReview => IconlyBold.paper_upload,
-    MicroDataRequestStatus.inProcess => IconlyBold.time_circle,
-    MicroDataRequestStatus.agreementAccepted => IconlyBold.tick_square,
-    MicroDataRequestStatus.headAgreementAccepted => IconlyBold.shield_done,
+    MicroDataRequestStatus.inReview => IconlyBold.paperUpload,
+    MicroDataRequestStatus.inProcess => IconlyBold.timeCircle,
+    MicroDataRequestStatus.agreementAccepted => IconlyBold.tickSquare,
+    MicroDataRequestStatus.headAgreementAccepted => IconlyBold.shieldDone,
     MicroDataRequestStatus.waitingForPayment => IconlyBold.wallet,
     MicroDataRequestStatus.paid => IconlyBold.wallet,
-    MicroDataRequestStatus.finished => IconlyBold.tick_square,
-    MicroDataRequestStatus.rejected => IconlyBold.info_circle,
-    MicroDataRequestStatus.unknown => IconlyBold.info_circle,
+    MicroDataRequestStatus.finished => IconlyBold.tickSquare,
+    MicroDataRequestStatus.rejected => IconlyBold.infoCircle,
+    MicroDataRequestStatus.unknown => IconlyBold.infoCircle,
     MicroDataRequestStatus.expired => FlutterRemix.error_warning_line,
   };
 
