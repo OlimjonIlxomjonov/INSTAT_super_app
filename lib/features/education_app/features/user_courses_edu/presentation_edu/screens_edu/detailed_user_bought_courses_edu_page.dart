@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
-import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/core/utils/widgets/detailed_course_info_header/deatiled_course_info_header_wg.dart';
 import 'package:my_template/core/utils/widgets/detailed_course_info_header/detailed_course_info_header_image.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
@@ -10,6 +9,7 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_topics/course_lesson_topics_state.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/course_video_brif_tile_wg.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/other/final_course_test_wg.dart';
 
 class DetailedUserBoughtCoursesEduPage extends StatefulWidget {
   final CourseEntity data;
@@ -42,8 +42,6 @@ class _DetailedUserBoughtCoursesEduPageState
         }
       }
     }
-    logger.f("rating count: ${widget.data.ratingsCount}");
-    logger.f("desc: ${widget.data.descriptionUz}");
 
     if (shouldFetch) {
       bloc.add(
@@ -67,13 +65,12 @@ class _DetailedUserBoughtCoursesEduPageState
           SliverSafeArea(
             sliver: SliverPadding(
               padding: AppPadding.hAndV20x20(),
-              sliver: SliverToBoxAdapter(
-                child: CourseVideoBriefTileWg(courseId: widget.data.id),
-              ),
+              sliver: const CourseVideoBriefTileWg(),
             ),
           ),
         ],
       ),
+      bottomNavigationBar: FinalCourseTestWg(courseId: widget.data.id),
     );
   }
 }

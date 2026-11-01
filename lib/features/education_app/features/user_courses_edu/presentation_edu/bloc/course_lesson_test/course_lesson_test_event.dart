@@ -23,3 +23,9 @@ class SubmitLessonTestAnswerEvent extends CourseLessonTestEvent {
 }
 
 class NextLessonTestQuestionEvent extends CourseLessonTestEvent {}
+
+class GoToLessonTestQuestionEvent extends CourseLessonTestEvent {
+  final int index;
+
+  const GoToLessonTestQuestionEvent(this.index);
+}

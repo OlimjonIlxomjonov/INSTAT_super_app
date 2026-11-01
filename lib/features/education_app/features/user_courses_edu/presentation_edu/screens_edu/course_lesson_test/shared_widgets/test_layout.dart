@@ -19,6 +19,7 @@ class TestLayout extends StatelessWidget {
   final VoidCallback? onButtonTap;
   final Widget? banner;
   final bool isSubmitting;
+  final Widget? navigator;
 
   const TestLayout({
     super.key,
@@ -31,6 +32,7 @@ class TestLayout extends StatelessWidget {
     this.onButtonTap,
     this.banner,
     this.isSubmitting = false,
+    this.navigator,
   });
 
   @override
@@ -39,6 +41,13 @@ class TestLayout extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           TestHeaderWg(progress: progress),
+          if (navigator != null)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: navigator,
+              ),
+            ),
           SliverPadding(
             padding: AppPadding.hAndV20x20(),
             sliver: SliverToBoxAdapter(

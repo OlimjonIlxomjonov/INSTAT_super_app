@@ -10,6 +10,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/data/
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/user_articles/user_articles_response_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/review_authors/review_author_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_brief/article_brief_model.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_brief/article_brief_page_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_quote/article_quote_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/review_detail/review_detail_model.dart';
 
@@ -27,6 +28,11 @@ abstract class UserArticlesRemoteDataSource {
   Future<List<ArticleBriefModel>> fetchArticlesByAuthor(int reviewId);
 
   Future<List<ArticleBriefModel>> fetchArticlesBySection(int reviewId);
+
+  Future<ArticleBriefPageModel> fetchArticlesByKeyword({
+    required String keyword,
+    int page = 1,
+  });
 
   Future<ArticleQuoteModel> postArticleQuote(int reviewId);
 

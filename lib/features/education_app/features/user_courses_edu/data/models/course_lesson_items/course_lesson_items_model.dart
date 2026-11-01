@@ -27,27 +27,29 @@ class CourseLessonItemsModel extends CourseLessonItemsEntity {
 
   factory CourseLessonItemsModel.fromJson(Map<String, dynamic> json) {
     return CourseLessonItemsModel(
-      id: json['id'],
-      testsCount: json['tests_count'],
-      filesCount: json['files_count'],
-      userLessons: json['user_lessons'],
-      viewedLessons: json['viewed_lessons'],
-      title: json['title'],
+      id: json['id'] ?? 0,
+      testsCount: json['tests_count'] ?? 0,
+      filesCount: json['files_count'] ?? 0,
+      userLessons: json['user_lessons'] ?? 0,
+      viewedLessons: json['viewed_lessons'] ?? 0,
+      title: json['title'] ?? '',
       titleUz: json['title_uz'],
       titleRu: json['title_ru'],
       titleEn: json['title_en'],
       descriptionUz: json['description_uz'],
       descriptionRu: json['description_ru'],
       descriptionEn: json['description_en'],
-      isActive: json['is_active'],
+      isActive: json['is_active'] ?? false,
       thumbnail: json['thumbnail'],
       hlsFolder: json['hls_folder'],
-      status: json['status'],
-      duration: json['duration'],
-      createdAt: DateTime.parse(json['created_at']),
-      progress: (json['progress'] as num).toDouble(),
-      courseBlock: json['course_block'],
-      isFaceIdEnabled: json['is_face_id_enabled'],
+      status: json['status'] ?? '',
+      duration: json['duration'] ?? 0,
+      createdAt:
+          DateTime.tryParse(json['created_at']?.toString() ?? '') ??
+          DateTime.now(),
+      progress: (json['progress'] as num?)?.toDouble() ?? 0,
+      courseBlock: json['course_block'] ?? 0,
+      isFaceIdEnabled: json['is_face_id_enabled'] == true,
     );
   }
 }

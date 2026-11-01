@@ -1,3 +1,5 @@
+import 'package:my_template/core/utils/enums/app_enums.dart';
+import 'package:my_template/features/auth/presentation/screens/log_in_options_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
@@ -54,9 +56,14 @@ class _SplashPageState extends State<SplashPage>
     if (hasToken && isJwtExpired(token)) {
       await TokenStorageServiceImpl().deleteAccessToken();
     }
-    final isLoggedIn = hasToken && !isJwtExpired(token);
+    final isSessionExpired = hasToken && isJwtExpired(token);
+    final isLoggedIn = hasToken && !isSessionExpired;
 
-    final destination = isLoggedIn ? const HomePage() : const OnboardingPage();
+    final Widget destination = isLoggedIn
+        ? const HomePage()
+        : isSessionExpired
+        ? const LogInOptionsPage(sessionEndReason: SessionEndReason.expired)
+        : const OnboardingPage();
 
     bool hasInternet = true;
     try {

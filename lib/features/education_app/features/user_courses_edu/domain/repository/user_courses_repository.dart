@@ -1,3 +1,4 @@
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/test_answer/test_answer_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_group_member/course_group_member_entity.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/about_course_features/about_this_course_response.dart';
@@ -94,4 +95,10 @@ abstract class UserCoursesRepository {
   Future<List<CourseGroupMemberEntity>> getCourseGroupDateMembers({
     required OfflineLessonsParams params,
   });
+
+  Future<bool> getLessonFaceIdEnabled(int lessonId);
+
+  Future<List<TestAnswerEntity>> getLessonTestAnswers(int lessonId);
+
+  Future<List<TestAnswerEntity>> getCourseTestAnswers(int courseId);
 }

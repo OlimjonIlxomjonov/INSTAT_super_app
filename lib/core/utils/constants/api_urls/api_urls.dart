@@ -47,6 +47,9 @@ class ApiUrls {
   /// lessons topic
   static const lessonsTopic = '/course_blocks/items/all-active/';
   static const lessonItems = '/lessons/items/all-active/';
+  static String lessonDetail(int id) => 'lessons/$id';
+  static String lessonTestAnswers(int id) => 'lessons/$id/test-answers';
+  static String courseTestAnswers(int id) => 'courses/$id/test-answers';
 
   /// course test
   static const checkCourseTestAccess = '/test-accessible/';

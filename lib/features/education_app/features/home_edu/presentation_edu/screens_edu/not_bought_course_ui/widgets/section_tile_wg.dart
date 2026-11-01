@@ -26,7 +26,7 @@ class SectionTile extends StatelessWidget {
           iconColor: AppColors.black,
           controlAffinity: ListTileControlAffinity.leading,
           title: Text(
-            entity.text,
+            entity.displayText(Localizations.localeOf(context).languageCode),
             style: AppTextStyles.source.regular(fontSize: 14),
           ),
           initiallyExpanded: index == 0,

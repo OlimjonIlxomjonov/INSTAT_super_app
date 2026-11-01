@@ -433,6 +433,28 @@
   "cancelledBrief": "Bekor qilingan",
   "greatResultTitle": "Ajoyib natija",
   "regularTestFinishSubtitle": "Keyingi safar ko'proq o'rganing va barcha to'g'ri javoblarni oling.",
+  "lessonTestFailedTitle": "Testdan o'ta olmadingiz",
+  "lessonTestFailedSubtitle": "Videoni qayta ko'rib chiqib, testni qayta topshiring",
+  "keywordArticlesTitle": "Kalit so'z bo'yicha",
+  "articlesFoundCount": "{count} ta maqola",
+  "@articlesFoundCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noKeywordArticlesTitle": "Maqolalar topilmadi",
+  "noKeywordArticlesSubtitle": "Bu kalit so'z bo'yicha hozircha nashr etilgan maqolalar yo'q",
+  "bookTrimMargins": "Hoshiyalarni kesish",
+  "bookPagesLeft": "{count} sahifa qoldi",
+  "@bookPagesLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "finalTestFinishSubtitle": "Yakuniy testni muvaffaqiyatli yakunladingiz!",
   "wrongAnswer": "Noto'g'ri javob",
   "correctAnswerBanner": "To'g'ri javob",
@@ -456,6 +478,39 @@
   "attachTitle": "Biriktirish",
   "attachGallery": "Galereya",
   "attachFile": "Fayl",
+  "finalTestButton": "Yakuniy test",
+  "finalTestLockedHint": "Barcha darslarni tugatgach ochiladi",
+  "durationHours": "{count} soat",
+  "durationMinutes": "{count} daqiqa",
+  "durationSeconds": "{count} soniya",
+  "@durationHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@durationMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@durationSeconds": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "finishTestButton": "Yakunlash",
+  "alreadyAnsweredMessage": "Bu savolga allaqachon javob berilgan",
+  "finalTestNotAddedHint": "Yakuniy test hali qo'shilmagan",
+  "sessionExpiredTitle": "Sessiya muddati tugadi",
+  "sessionExpiredDescription": "Xavfsizlik maqsadida hisobingizdan chiqarildingiz. Davom etish uchun qaytadan kiring.",
+  "sessionEndedTitle": "Sessiya yakunlandi",
+  "sessionEndedDescription": "Hisobingizdan chiqildi. Davom etish uchun qaytadan kiring.",
   "payNow": "To'lash",
   "paymentTypeTitle": "To'lov turi",
   "pendingReview": "Ko'rib chiqilmoqda",

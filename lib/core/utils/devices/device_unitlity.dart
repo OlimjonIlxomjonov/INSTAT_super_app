@@ -1,3 +1,4 @@
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -55,17 +56,17 @@ abstract class AppPadding {
   static EdgeInsets hAndV20x20() => .symmetric(horizontal: 20, vertical: 20);
 }
 
-String formatDuration(int totalSeconds) {
+String formatDuration(AppLocalizations l, int totalSeconds) {
   final hours = totalSeconds ~/ 3600;
   final minutes = (totalSeconds % 3600) ~/ 60;
+  final seconds = totalSeconds % 60;
 
-  if (hours > 0 && minutes > 0) {
-    return '$hours soat $minutes daqiqa';
-  } else if (hours > 0) {
-    return '$hours soat';
-  } else {
-    return '$minutes daqiqa';
-  }
+  final parts = <String>[
+    if (hours > 0) l.durationHours(hours),
+    if (minutes > 0) l.durationMinutes(minutes),
+    if (hours == 0 && (seconds > 0 || minutes == 0)) l.durationSeconds(seconds),
+  ];
+  return parts.join(' ');
 }
 
 String formatPrice(Object price) {

@@ -1,3 +1,4 @@
+import 'package:my_template/features/education_app/features/user_courses_edu/data/models/test_answer/test_answer_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_group_member/course_group_member_model.dart';
 import 'package:dio/dio.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
@@ -516,6 +517,47 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
       } else {
         throw Exception('ERROR ${response.statusCode}');
       }
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<bool> fetchLessonFaceIdEnabled(int lessonId) async {
+    try {
+      final response = await _dioClient.get(ApiUrls.lessonDetail(lessonId));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data;
+        return data is Map && data['is_face_id_enabled'] == true;
+      }
+      throw Exception('ERROR ${response.statusCode}');
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<TestAnswerModel>> fetchLessonTestAnswers(int lessonId) =>
+      _fetchTestAnswers(ApiUrls.lessonTestAnswers(lessonId));
+
+  @override
+  Future<List<TestAnswerModel>> fetchCourseTestAnswers(int courseId) =>
+      _fetchTestAnswers(ApiUrls.courseTestAnswers(courseId));
+
+  Future<List<TestAnswerModel>> _fetchTestAnswers(String path) async {
+    try {
+      final response = await _dioClient.get(path);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data;
+        if (data is! List) return [];
+        return data
+            .whereType<Map<String, dynamic>>()
+            .map(TestAnswerModel.fromJson)
+            .toList();
+      }
+      throw Exception('ERROR ${response.statusCode}');
     } catch (e) {
       logger.e(e);
       rethrow;

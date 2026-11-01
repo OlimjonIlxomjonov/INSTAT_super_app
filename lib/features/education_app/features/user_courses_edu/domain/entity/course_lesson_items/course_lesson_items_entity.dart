@@ -1,3 +1,5 @@
+import 'package:my_template/core/utils/localization/localized_text.dart';
+
 class CourseLessonItemsEntity {
   final int id;
   final int testsCount;
@@ -44,4 +46,12 @@ class CourseLessonItemsEntity {
     required this.courseBlock,
     required this.isFaceIdEnabled,
   });
+
+  String displayTitle(String localeCode) => localizedText(
+    localeCode: localeCode,
+    fallback: title,
+    uz: titleUz,
+    ru: titleRu,
+    en: titleEn,
+  );
 }

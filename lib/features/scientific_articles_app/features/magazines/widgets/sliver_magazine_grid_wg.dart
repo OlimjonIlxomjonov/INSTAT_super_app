@@ -26,6 +26,7 @@ class SliverMagazineGridWg extends StatelessWidget {
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 10,
+          mainAxisSpacing: 15,
           childAspectRatio: 0.55,
         ),
         itemCount: items.length,

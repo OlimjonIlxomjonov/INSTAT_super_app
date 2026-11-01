@@ -126,7 +126,7 @@ class ExpandedCoursesCardWg extends StatelessWidget {
                 children: [
                   Icon(IconlyLight.timeCircle),
                   Text(
-                    formatDuration(entity.totalDuration),
+                    formatDuration(localization, entity.totalDuration),
                     style: AppTextStyles.source.regular(fontSize: 13),
                   ),
                   SizedBox(width: appW(12)),

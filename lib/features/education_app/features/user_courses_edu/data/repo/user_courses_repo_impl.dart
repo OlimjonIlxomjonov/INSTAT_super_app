@@ -1,3 +1,4 @@
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/test_answer/test_answer_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_group_member/course_group_member_entity.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/sources/remote_data_source/user_courses_remote_data_source.dart';
@@ -157,5 +158,20 @@ class UserCoursesRepoImpl implements UserCoursesRepository {
     required OfflineLessonsParams params,
   }) {
     return _remoteDataSource.fetchCourseGroupDateMembers(params: params);
+  }
+
+  @override
+  Future<bool> getLessonFaceIdEnabled(int lessonId) {
+    return _remoteDataSource.fetchLessonFaceIdEnabled(lessonId);
+  }
+
+  @override
+  Future<List<TestAnswerEntity>> getLessonTestAnswers(int lessonId) {
+    return _remoteDataSource.fetchLessonTestAnswers(lessonId);
+  }
+
+  @override
+  Future<List<TestAnswerEntity>> getCourseTestAnswers(int courseId) {
+    return _remoteDataSource.fetchCourseTestAnswers(courseId);
   }
 }

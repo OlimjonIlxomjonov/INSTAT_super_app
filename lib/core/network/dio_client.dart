@@ -1,6 +1,6 @@
+import 'package:my_template/core/utils/enums/app_enums.dart';
+import 'package:my_template/core/services/token_storage/jwt_utils.dart';
 import 'package:dio/dio.dart';
-import 'package:my_template/core/common/flush_bar/flush_bars.dart';
-import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
 import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
 import 'package:my_template/features/auth/presentation/screens/log_in_options_page.dart';
@@ -73,20 +73,12 @@ class DioClient {
               !skipRedirect &&
               !_isHandlingSessionExpiry) {
             _isHandlingSessionExpiry = true;
+            final reason = isJwtExpired(token)
+                ? SessionEndReason.expired
+                : SessionEndReason.ended;
 
             await TokenStorageServiceImpl().deleteAccessToken();
-
-            try {
-              final context = AppRoute.navigatorKey.currentContext;
-              if (context != null) {
-                errorFlushBar(
-                  context,
-                  AppLocalizations.of(context)!.sessionExpiredMessage,
-                );
-              }
-            } catch (_) {}
-
-            AppRoute.open(const LogInOptionsPage());
+            AppRoute.open(LogInOptionsPage(sessionEndReason: reason));
           }
 
           return handler.next(error);
@@ -120,16 +112,28 @@ class DioClient {
   }
 
   /// DOWNLOAD
-  Future<Response> download(String url, String savePath) async {
+  Future<Response> download(
+    String url,
+    String savePath, {
+    ProgressCallback? onReceiveProgress,
+    CancelToken? cancelToken,
+  }) async {
     final isOwnHost = url.startsWith(ApiUrls.origin) || !url.startsWith('http');
     if (!isOwnHost) {
-      return await Dio().download(url, savePath);
+      return await Dio().download(
+        url,
+        savePath,
+        onReceiveProgress: onReceiveProgress,
+        cancelToken: cancelToken,
+      );
     }
 
     try {
       return await _dio.download(
         url,
         savePath,
+        onReceiveProgress: onReceiveProgress,
+        cancelToken: cancelToken,
         options: Options(extra: const {_skipAuthRedirectKey: true}),
       );
     } catch (e) {

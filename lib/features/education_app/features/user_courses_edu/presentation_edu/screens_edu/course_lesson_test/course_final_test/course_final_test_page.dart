@@ -1,3 +1,5 @@
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/shared_widgets/test_options_placeholder_wg.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/shared_widgets/test_question_navigator_wg.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/shared_widgets/lesson_test_error_text.dart';
@@ -27,8 +29,13 @@ import 'package:my_template/features/education_app/features/user_courses_edu/pre
 
 class CourseFinalTestPage extends StatefulWidget {
   final int courseId;
+  final bool isFaceIdEnabled;
 
-  const CourseFinalTestPage({super.key, required this.courseId});
+  const CourseFinalTestPage({
+    super.key,
+    required this.courseId,
+    required this.isFaceIdEnabled,
+  });
 
   @override
   State<CourseFinalTestPage> createState() => _CourseFinalTestPageState();
@@ -39,6 +46,8 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage>
   late ConfettiController _confettiController;
   late CameraService _cameraService;
 
+  bool _isCapturing = false;
+
   @override
   void initState() {
     super.initState();
@@ -47,7 +56,7 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage>
       duration: const Duration(seconds: 2),
     );
     _cameraService = CameraService();
-    _cameraService.init();
+    if (widget.isFaceIdEnabled) _cameraService.init();
 
     context.read<CourseFinalTestBloc>().add(
       LoadCourseFinalTestsEvent(
@@ -63,7 +72,8 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.resumed &&
+    if (widget.isFaceIdEnabled &&
+        state == AppLifecycleState.resumed &&
         _cameraService.isPermissionDenied) {
       _cameraService.init();
     }
@@ -222,6 +232,13 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage>
             ),
             details: state.errorDetails,
           );
+        } else if (state is CourseFinalTestFinished &&
+            state.totalQuestions == 0) {
+          errorFlushBar(
+            context,
+            AppLocalizations.of(context)!.finalTestNotAddedHint,
+          );
+          AppRoute.close();
         } else if (state is CourseFinalTestFinished) {
           _showFinishDialog(context, state);
         } else if (state is CourseFinalTestError) {
@@ -245,11 +262,10 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage>
         String buttonText = localization.confirm;
         VoidCallback? onButtonTap;
         Widget? banner;
+        Widget? navigator;
 
         if (state is CourseFinalTestLoaded) {
-          progress = state.tests.isNotEmpty
-              ? ((state.currentTestIndex) / state.tests.length)
-              : 0.0;
+          progress = state.progress;
           final currentTest = state.tests[state.currentTestIndex];
           questionTitle = localization.questionNumberTemplate(
             state.currentTestIndex + 1,
@@ -258,56 +274,82 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage>
             Localizations.localeOf(context).languageCode,
           );
 
-          optionList = TestOptionListWg(
-            options: state.currentOptions,
-            selectedOptionId: state.selectedOptionId,
-            onSelectOption: (id) => context.read<CourseFinalTestBloc>().add(
-              SelectCourseFinalTestOptionEvent(optionId: id),
-            ),
+          final bloc = context.read<CourseFinalTestBloc>();
+          final isBusy =
+              _isCapturing || state.isSubmitting || state.isOptionsLoading;
+          navigator = TestQuestionNavigatorWg(
+            count: state.tests.length,
+            currentIndex: state.currentTestIndex,
+            statusOf: (index) {
+              final answer = state.answerAt(index);
+              if (answer == null) return TestQuestionStatus.unanswered;
+              return answer.isCorrect
+                  ? TestQuestionStatus.correct
+                  : TestQuestionStatus.wrong;
+            },
+            onSelect: isBusy
+                ? null
+                : (index) => bloc.add(GoToCourseFinalTestQuestionEvent(index)),
           );
 
-          if (state.selectedOptionId != null && !state.isSubmitting) {
-            onButtonTap = () async {
-              final image = await _cameraService.captureBase64();
-              if (image == null && mounted) {
-                errorFlushBar(context, localization.cameraCaptureFailedMessage);
-                return;
-              }
-              if (mounted) {
-                context.read<CourseFinalTestBloc>().add(
-                  SubmitCourseFinalTestAnswerEvent(proctorImage: image),
-                );
-              }
-            };
+          final answer = state.currentAnswer;
+          if (state.isOptionsLoading) {
+            isLoading = true;
+            optionList = const TestOptionsPlaceholderWg();
+            onButtonTap = null;
+          } else if (answer != null) {
+            optionList = TestOptionListWg(
+              key: ValueKey(currentTest.id),
+              options: state.currentOptions,
+              selectedOptionId: answer.optionId,
+              isAnswered: true,
+              isCorrect: answer.isCorrect,
+            );
+            banner = buildTestResultBanner(
+              isCorrect: answer.isCorrect,
+              localization: localization,
+            );
+            buttonText = state.isAllAnswered
+                ? localization.finishTestButton
+                : localization.nextQuestionButton;
+            onButtonTap = () => bloc.add(NextCourseFinalTestQuestionEvent());
+          } else {
+            optionList = TestOptionListWg(
+              key: ValueKey(currentTest.id),
+              options: state.currentOptions,
+              selectedOptionId: state.selectedOptionId,
+              onSelectOption: (id) =>
+                  bloc.add(SelectCourseFinalTestOptionEvent(optionId: id)),
+            );
+
+            if (state.selectedOptionId != null && !isBusy) {
+              onButtonTap = () async {
+                if (!widget.isFaceIdEnabled) {
+                  bloc.add(const SubmitCourseFinalTestAnswerEvent());
+                  return;
+                }
+
+                setState(() => _isCapturing = true);
+                try {
+                  final image = await _cameraService.captureBase64();
+                  if (image == null && mounted) {
+                    errorFlushBar(
+                      this.context,
+                      localization.cameraCaptureFailedMessage,
+                    );
+                    return;
+                  }
+                  if (mounted) {
+                    bloc.add(
+                      SubmitCourseFinalTestAnswerEvent(proctorImage: image),
+                    );
+                  }
+                } finally {
+                  if (mounted) setState(() => _isCapturing = false);
+                }
+              };
+            }
           }
-        } else if (state is CourseFinalTestAnswerResult) {
-          progress = state.tests.isNotEmpty
-              ? ((state.currentTestIndex + 1) / state.tests.length)
-              : 0.0;
-          final currentTest = state.tests[state.currentTestIndex];
-          questionTitle = localization.questionNumberTemplate(
-            state.currentTestIndex + 1,
-          );
-          questionText = currentTest.displayQuestion(
-            Localizations.localeOf(context).languageCode,
-          );
-
-          optionList = TestOptionListWg(
-            options: state.currentOptions,
-            selectedOptionId: state.selectedOptionId,
-            isAnswered: true,
-            isCorrect: state.answerResponse.isCorrect,
-          );
-
-          buttonText = localization.nextQuestionButton;
-          onButtonTap = () => context.read<CourseFinalTestBloc>().add(
-            NextCourseFinalTestQuestionEvent(),
-          );
-
-          banner = buildTestResultBanner(
-            isCorrect: state.answerResponse.isCorrect,
-            localization: localization,
-          );
         } else if (isLoading) {
           questionTitle = localization.loadingEllipsis;
           questionText = '';
@@ -327,13 +369,16 @@ class _CourseFinalTestPageState extends State<CourseFinalTestPage>
                   buttonText: buttonText,
                   onButtonTap: onButtonTap,
                   banner: banner,
-                  isSubmitting: state is CourseFinalTestLoaded
-                      ? state.isSubmitting
-                      : false,
+                  navigator: navigator,
+                  isSubmitting:
+                      _isCapturing ||
+                      (state is CourseFinalTestLoaded && state.isSubmitting),
                 ),
-                if (_cameraService.isReady && _cameraService.controller != null)
+                if (widget.isFaceIdEnabled &&
+                    _cameraService.isReady &&
+                    _cameraService.controller != null)
                   CameraPreviewWidget(controller: _cameraService.controller!),
-                if (_cameraService.isPermissionDenied)
+                if (widget.isFaceIdEnabled && _cameraService.isPermissionDenied)
                   const CameraAccessDeniedOverlayWg(),
               ],
             );

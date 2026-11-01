@@ -5,7 +5,6 @@ import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/app_utils.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 
-
 class QrScanConfigs extends StatefulWidget {
   const QrScanConfigs({super.key});
 

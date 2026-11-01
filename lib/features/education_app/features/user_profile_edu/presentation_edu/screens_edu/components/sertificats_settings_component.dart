@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_remix/flutter_remix.dart';
 import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +8,7 @@ import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
 import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
 import 'package:my_template/core/utils/devices/device_unitlity.dart';
+import 'package:my_template/core/utils/files/remote_file_opener.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/home_edu_event.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/bloc/user_certificate/certificate_bloc.dart';
@@ -33,8 +33,17 @@ class _SertificatsSettingsComponentState
     context.read<CertificateBloc>().add(UserCertificateEvent());
   }
 
-  void _openCertificateViewer(String imageUrl) {
-    showImageViewer(context, image: NetworkImage(imageUrl), heroTag: imageUrl);
+  void _openCertificateViewer(String imageUrl, int? id) {
+    showImageViewer(
+      context,
+      image: NetworkImage(imageUrl),
+      heroTag: imageUrl,
+      onOpenExternal: () => openRemoteFile(
+        context,
+        url: imageUrl,
+        fileName: 'certificate_${id ?? 0}',
+      ),
+    );
   }
 
   @override
@@ -101,8 +110,10 @@ class _SertificatsSettingsComponentState
                                 const SizedBox(height: 16),
                                 item.certificateImage != null
                                     ? GestureDetector(
-                                        onTap: () =>
-                                            _openCertificateViewer(imageUrl),
+                                        onTap: () => _openCertificateViewer(
+                                          imageUrl,
+                                          certificate.id,
+                                        ),
                                         child: Hero(
                                           tag: imageUrl,
                                           child: Image.network(

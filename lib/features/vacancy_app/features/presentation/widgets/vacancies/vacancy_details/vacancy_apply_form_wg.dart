@@ -281,7 +281,7 @@ class _VacancyApplyFormViewState extends State<_VacancyApplyFormView> {
                       errorText: _errors[_ApplyField.lastName],
                       child: AppInputWg(
                         controller: _lastNameController,
-                        hintText: 'Olimjon',
+                        hintText: localization.lastNameLabel,
                         hasError: _errors.containsKey(_ApplyField.lastName),
                         onChanged: (_) => _clearError(_ApplyField.lastName),
                       ),
@@ -292,7 +292,7 @@ class _VacancyApplyFormViewState extends State<_VacancyApplyFormView> {
                       errorText: _errors[_ApplyField.firstName],
                       child: AppInputWg(
                         controller: _firstNameController,
-                        hintText: 'Ilxomjonov',
+                        hintText: localization.firstNameLabel,
                         hasError: _errors.containsKey(_ApplyField.firstName),
                         onChanged: (_) => _clearError(_ApplyField.firstName),
                       ),

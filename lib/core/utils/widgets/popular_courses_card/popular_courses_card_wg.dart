@@ -154,7 +154,7 @@ class _PopularCoursesCardWgState extends State<PopularCoursesCardWg> {
             children: [
               Icon(IconlyLight.timeCircle, size: 18),
               AutoSizeText(
-                formatDuration(widget.data.totalDuration),
+                formatDuration(localization, widget.data.totalDuration),
                 style: AppTextStyles.source.regular(fontSize: 13),
               ),
               const SizedBox(width: 12),

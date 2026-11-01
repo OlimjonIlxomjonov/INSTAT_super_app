@@ -75,7 +75,7 @@ class DetailedCourseInfoHeaderWg extends StatelessWidget {
                       size: 17,
                     ),
                     Text(
-                      formatDuration(data.totalDuration),
+                      formatDuration(localization, data.totalDuration),
                       style: AppTextStyles.source.medium(
                         fontSize: 13,
                         color: AppColors.greyScale.grey600,

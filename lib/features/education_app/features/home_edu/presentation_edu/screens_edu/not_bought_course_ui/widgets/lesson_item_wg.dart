@@ -80,7 +80,9 @@ class _LessonItemState extends State<LessonItem> {
               return ListTile(
                 leading: const Icon(Icons.video_collection),
                 title: Text(
-                  lessons[index].title,
+                  lessons[index].displayTitle(
+                    Localizations.localeOf(context).languageCode,
+                  ),
                   style: AppTextStyles.source.regular(fontSize: 13),
                 ),
                 tileColor: AppColors.greyScale.grey100,

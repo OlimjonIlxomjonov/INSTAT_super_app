@@ -38,7 +38,14 @@ class CourseFeaturesListState extends State<CourseFeaturesList> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ...List.generate(count, (index) => StudyItemWg(data[index].text)),
+              ...List.generate(
+                count,
+                (index) => StudyItemWg(
+                  data[index].displayText(
+                    Localizations.localeOf(context).languageCode,
+                  ),
+                ),
+              ),
               if (data.length > 5)
                 Align(
                   alignment: Alignment.center,

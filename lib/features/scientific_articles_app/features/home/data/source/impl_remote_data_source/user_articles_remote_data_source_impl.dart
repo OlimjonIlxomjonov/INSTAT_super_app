@@ -14,6 +14,7 @@ import 'package:my_template/features/scientific_articles_app/features/home/data/
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/user_articles/user_articles_response_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/review_authors/review_author_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_brief/article_brief_model.dart';
+import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_brief/article_brief_page_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/article_quote/article_quote_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/model/review_detail/review_detail_model.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/data/source/remote_data_source/user_articles_remote_data_source.dart';
@@ -66,17 +67,25 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
 
   @override
   Future<ReviewDetailModel> fetchReviewDetail(int reviewId) async {
+    final path = '${ApiUrls.userArticles}$reviewId/';
     try {
-      final response = await _dioClient.get(
-        '${ApiUrls.userArticles}$reviewId/',
-        skipAuth: true,
-      );
+      final response = await _dioClient.get(path);
       if (response.statusCode == 200 || response.statusCode == 201) {
         logger.i(response.data);
         return ReviewDetailModel.fromJson(response.data);
-      } else {
-        throw Exception('THROW EXCEPTION! ${response.statusCode}');
       }
+      throw Exception('THROW EXCEPTION! ${response.statusCode}');
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        final pub = await _dioClient.get(path, skipAuth: true);
+        if (pub.statusCode == 200 || pub.statusCode == 201) {
+          logger.i(pub.data);
+          return ReviewDetailModel.fromJson(pub.data);
+        }
+        throw Exception('THROW EXCEPTION! ${pub.statusCode}');
+      }
+      logger.e("CATCH: $e");
+      rethrow;
     } catch (e) {
       logger.e("CATCH: $e");
       rethrow;
@@ -90,6 +99,30 @@ class UserArticlesRemoteDataSourceImpl implements UserArticlesRemoteDataSource {
   @override
   Future<List<ArticleBriefModel>> fetchArticlesBySection(int reviewId) =>
       _fetchBriefList('${ApiUrls.userArticles}$reviewId/by-section/');
+
+  @override
+  Future<ArticleBriefPageModel> fetchArticlesByKeyword({
+    required String keyword,
+    int page = 1,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        ApiUrls.userArticles,
+        queryParams: {'keyword': keyword, 'page': page},
+        skipAuth: true,
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        logger.i(response.data);
+        return ArticleBriefPageModel.fromJson(
+          response.data as Map<String, dynamic>,
+        );
+      }
+      throw Exception('THROW EXCEPTION! ${response.statusCode}');
+    } catch (e) {
+      logger.e("CATCH: $e");
+      rethrow;
+    }
+  }
 
   Future<List<ArticleBriefModel>> _fetchBriefList(String path) async {
     try {

@@ -1,33 +1,27 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_realistic_flipbook/flutter_realistic_flipbook.dart';
 import 'package:my_template/core/common/params/online_books/online_books_params.dart';
+import 'package:my_template/core/common/ui_states/section_error_wg.dart';
 import 'package:my_template/core/di/service_locator.dart';
+import 'package:my_template/core/l10n/app_localizations.dart';
 import 'package:my_template/core/routes/route_generator.dart';
-import 'package:my_template/core/services/token_storage/token_storage_service_impl.dart';
-import 'package:my_template/core/utils/constants/api_urls/api_urls.dart';
 import 'package:my_template/core/utils/constants/colors/app_colors.dart';
+import 'package:my_template/core/utils/constants/textstyles/app_text_style.dart';
+import 'package:my_template/core/utils/devices/device_unitlity.dart';
+import 'package:my_template/core/utils/general_widgets/bought_book_opener/book_page_loader.dart';
 import 'package:my_template/core/utils/logger/logger.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/fetch_book_pages_count_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/fetch_book_pages_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/domain/usecase/update_book_current_page_use_case.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/user_books/user_book_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/user_books/user_books_event.dart';
-import 'package:turn_page_transition/turn_page_transition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-/// Opens a bought book for reading, page by page, using the real backend:
-/// - GET books/{id}/pages-count/ once, to know total pages + where to resume
-/// - GET books/{id}/pages/?page_number=N as needed, which returns a small
-///   window {N-1, N, N+1} of {id, page_number} pairs
-/// - GET book-pages/{id} for the actual page image (needs auth, unlike
-///   plain /media/ files)
-///
-/// TurnPageView.builder (the page-curl package) builds every page widget
-/// up front regardless of itemCount, so the only way to avoid fetching the
-/// whole book's images at once is to make each page responsible for
-/// deciding, on its own, whether it's currently close enough to the page
-/// being read to bother loading anything at all.
+enum _PageStatus { loading, ready, failed }
+
 class BoughtBookOpenerWg extends StatefulWidget {
   final int bookId;
 
@@ -37,105 +31,145 @@ class BoughtBookOpenerWg extends StatefulWidget {
   State<BoughtBookOpenerWg> createState() => _BoughtBookOpenerWgState();
 }
 
-class _BoughtBookOpenerWgState extends State<BoughtBookOpenerWg> {
-  final _fetchPagesCountUseCase = sl<FetchBookPagesCountUseCase>();
-  final _fetchPagesUseCase = sl<FetchBookPagesUseCase>();
-  final _updateCurrentPageUseCase = sl<UpdateBookCurrentPageUseCase>();
+class _BoughtBookOpenerWgState extends State<BoughtBookOpenerWg>
+    with SingleTickerProviderStateMixin {
+  static const _fitContentKey = 'book_reader_fit_content';
+  static const _overlayAutoHideDelay = Duration(seconds: 3);
+  static const _doubleTapTimeout = Duration(milliseconds: 260);
+  static const _doubleTapScale = 2.5;
+  static const _sideTapZone = 0.28;
 
+  final _fetchPagesCountUseCase = sl<FetchBookPagesCountUseCase>();
+  final _updateCurrentPageUseCase = sl<UpdateBookCurrentPageUseCase>();
+  final _flipbook = FlipbookController();
+  final _transform = TransformationController();
+  final _currentIndex = ValueNotifier<int>(0);
+  late final AnimationController _zoomAnimation = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 220),
+  );
+  Animation<Matrix4>? _zoomTween;
+
+  BookPageLoader? _loader;
+  int _pagesCount = 0;
+  int _startPage = 1;
   bool _isLoading = true;
   bool _hasError = false;
-  int _pagesCount = 0;
-
-  late final TurnPageController _turnController;
-  final ValueNotifier<int> _currentIndexNotifier = ValueNotifier(0);
-
-  // page_number (1-based) -> book-page id. Shared across all page widgets
-  // so flipping through pages already seen in a neighboring window is free.
-  final Map<int, int> _pageIdCache = {};
-  final Map<int, Future<int?>> _pageIdInFlight = {};
-
-  // Debounced so rapidly flipping through several pages only reports
-  // wherever the user actually settles, not every page passed through.
-  Timer? _progressDebounce;
+  bool _fitContent = true;
+  bool _isZoomed = false;
+  bool _overlayVisible = true;
   bool _finalized = false;
 
-  // Immersive mode: the overlay (back/zoom/page count) shows briefly on
-  // every page turn — so progress is visible right when it's useful — then
-  // fades out. TurnPageView treats any tap as "turn the page," so there's
-  // no safe tap zone left for a dedicated show/hide toggle; long-press is
-  // used instead since it doesn't compete with TurnPageView's tap/drag
-  // recognizers.
-  bool _overlayVisible = true;
+  List<FlipbookPage?> _pages = const [];
+  Object? _pagesSignature;
+  final Map<int, int> _pageGenerations = {};
+  int _generationVersion = 0;
+
+  _PageStatus _pageStatus = _PageStatus.loading;
+  ImageStream? _watchedStream;
+  ImageStreamListener? _watchedListener;
+
   Timer? _hideOverlayTimer;
-  static const _overlayAutoHideDelay = Duration(seconds: 3);
+  Timer? _overlayTapTimer;
+  Timer? _progressDebounce;
+  DateTime? _lastTapAt;
+  Offset? _lastTapPosition;
 
   @override
   void initState() {
     super.initState();
+    _zoomAnimation
+      ..addListener(() {
+        final tween = _zoomTween;
+        if (tween != null) _transform.value = tween.value;
+      })
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) _syncZoom();
+      });
+    _restoreFitContent();
     _load();
   }
 
   @override
   void dispose() {
-    // Swipe-back ham shu yerdan o'tadi.
     _finalizeProgress();
+    _unwatchCurrentPage();
     _hideOverlayTimer?.cancel();
-    _currentIndexNotifier.dispose();
+    _overlayTapTimer?.cancel();
+    _progressDebounce?.cancel();
+    _loader?.dispose();
+    _zoomAnimation.dispose();
+    _transform.dispose();
+    _currentIndex.dispose();
     super.dispose();
   }
 
-  void _showOverlayBriefly() {
-    setState(() => _overlayVisible = true);
-    _hideOverlayTimer?.cancel();
-    _hideOverlayTimer = Timer(_overlayAutoHideDelay, () {
-      if (mounted) setState(() => _overlayVisible = false);
-    });
+  Future<void> _restoreFitContent() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final saved = prefs.getBool(_fitContentKey);
+      if (saved != null && mounted) setState(() => _fitContent = saved);
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
-  void _toggleOverlayManually() {
-    if (_overlayVisible) {
-      _hideOverlayTimer?.cancel();
-      setState(() => _overlayVisible = false);
-    } else {
-      _showOverlayBriefly();
+  Future<void> _toggleFitContent() async {
+    setState(() => _fitContent = !_fitContent);
+    _showOverlayBriefly();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_fitContentKey, _fitContent);
+    } catch (e) {
+      logger.e(e);
     }
   }
 
   Future<void> _load() async {
+    setState(() {
+      _isLoading = true;
+      _hasError = false;
+    });
+
     try {
       final result = await _fetchPagesCountUseCase(widget.bookId);
-      final initialIndex = result.pagesCount > 0
-          ? (result.currentPage - 1).clamp(0, result.pagesCount - 1)
-          : 0;
-      _turnController = TurnPageController(initialPage: initialIndex);
-      _currentIndexNotifier.value = initialIndex;
       if (!mounted) return;
+
+      final count = result.pagesCount;
+      final initial = count > 0
+          ? (result.currentPage - 1).clamp(0, count - 1)
+          : 0;
+      _loader?.dispose();
+      _currentIndex.value = initial;
       setState(() {
-        _pagesCount = result.pagesCount;
+        _loader = BookPageLoader(
+          bookId: widget.bookId,
+          fetchPages: sl<FetchBookPagesUseCase>(),
+        );
+        _pagesCount = count;
+        _startPage = initial + 1;
+        _pagesSignature = null;
         _isLoading = false;
+        _hasError = count == 0;
       });
       _showOverlayBriefly();
     } catch (e) {
       logger.e(e);
-      if (mounted)
+      if (mounted) {
         setState(() {
           _isLoading = false;
           _hasError = true;
         });
+      }
     }
   }
 
-  /// YOPISH
-  ///
-  /// Progress hisoboti debounce bilan yuborilardi — chiqishda u hali
-  /// yuborilmagan bo'lishi mumkin. Avval oxirgi sahifa yozib olinadi,
-  /// keyin ro'yxat qayta so'raladi, aks holda kartada eski sahifa qoladi.
   void _finalizeProgress() {
-    if (_finalized) return;
+    if (_finalized || _pagesCount == 0) return;
     _finalized = true;
     _progressDebounce?.cancel();
 
-    final lastPage = _currentIndexNotifier.value + 1;
+    final lastPage = _currentIndex.value + 1;
     _updateCurrentPageUseCase(
       UpdateBookCurrentPageParams(bookId: widget.bookId, currentPage: lastPage),
     ).whenComplete(() => sl<UserBookBloc>().add(const RefreshUserBooksEvent()));
@@ -146,62 +180,99 @@ class _BoughtBookOpenerWgState extends State<BoughtBookOpenerWg> {
     AppRoute.close();
   }
 
-  /// Resolves the book-page id for [pageNumber], using the cache first.
-  /// A single request also fills in the id for its neighbors, so this
-  /// naturally gets cheaper the more of the book has already been visited.
-  Future<int?> _resolvePageId(int pageNumber) {
-    final cached = _pageIdCache[pageNumber];
-    if (cached != null) return Future.value(cached);
+  List<FlipbookPage?> _pagesFor(
+    BookPageLoader loader,
+    Size size,
+    double pixelRatio,
+    EdgeInsets padding,
+  ) {
+    final pixelSize = Size(
+      (size.width * pixelRatio).roundToDouble(),
+      (size.height * pixelRatio).roundToDouble(),
+    );
+    final pixelPadding = padding * pixelRatio;
+    final signature = (
+      pixelSize,
+      pixelPadding,
+      _fitContent,
+      _generationVersion,
+    );
+    if (signature == _pagesSignature) return _pages;
 
-    return _pageIdInFlight.putIfAbsent(pageNumber, () async {
-      try {
-        final pages = await _fetchPagesUseCase(
-          BookPagesParams(bookId: widget.bookId, pageNumber: pageNumber),
-        );
-        for (final page in pages) {
-          _pageIdCache[page.pageNumber] = page.id;
-        }
-        return _pageIdCache[pageNumber];
-      } catch (e) {
-        logger.e(e);
-        return null;
-      } finally {
-        _pageIdInFlight.remove(pageNumber);
-      }
-    });
-  }
-
-  /// Opens the current page full-screen with pinch-to-zoom. Deliberately a
-  /// separate screen rather than wrapping the page itself in an
-  /// InteractiveViewer — TurnPageView already owns horizontal drag gestures
-  /// for turning pages, and a pinch/pan zoom on the same surface would
-  /// constantly compete with it for the gesture arena. Opening a dedicated
-  /// view sidesteps that entirely.
-  Future<void> _openZoom() async {
-    final pageNumber = _currentIndexNotifier.value + 1;
-    final id = await _resolvePageId(pageNumber);
-    if (!mounted || id == null) return;
-
-    final token = TokenStorageServiceImpl().getAccessToken();
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => _BookPageZoomView(
-          imageUrl: ApiUrls.bookPageImageUrl(id),
-          headers: token != null ? {'Authorization': 'Bearer $token'} : null,
+    if (_pagesSignature != null) _startPage = _currentIndex.value + 1;
+    _pagesSignature = signature;
+    _pages = List<FlipbookPage?>.generate(
+      _pagesCount,
+      (index) => FlipbookPage(
+        image: BookPageImage(
+          loader: loader,
+          pageNumber: index + 1,
+          fitContent: _fitContent,
+          pixelSize: pixelSize,
+          pixelPadding: pixelPadding,
+          generation: _pageGenerations[index + 1] ?? 0,
         ),
       ),
     );
+    WidgetsBinding.instance.addPostFrameCallback((_) => _watchCurrentPage());
+    return _pages;
   }
 
-  void _onPageChanged() {
-    final index = _turnController.currentIndex;
-    _currentIndexNotifier.value = index;
-    _showOverlayBriefly();
+  void _watchCurrentPage() {
+    if (!mounted) return;
+    final index = _currentIndex.value;
+    if (index < 0 || index >= _pages.length) return;
+    final provider = _pages[index]?.image;
+    if (provider == null) return;
+
+    _unwatchCurrentPage();
+    setState(() => _pageStatus = _PageStatus.loading);
+
+    final stream = provider.resolve(ImageConfiguration.empty);
+    final listener = ImageStreamListener(
+      (info, _) {
+        info.dispose();
+        _setPageStatus(index, _PageStatus.ready);
+      },
+      onError: (error, stackTrace) {
+        logger.e(error);
+        _setPageStatus(index, _PageStatus.failed);
+      },
+    );
+    _watchedStream = stream;
+    _watchedListener = listener;
+    stream.addListener(listener);
+  }
+
+  void _unwatchCurrentPage() {
+    final stream = _watchedStream;
+    final listener = _watchedListener;
+    if (stream != null && listener != null) stream.removeListener(listener);
+    _watchedStream = null;
+    _watchedListener = null;
+  }
+
+  void _setPageStatus(int index, _PageStatus status) {
+    if (!mounted || index != _currentIndex.value || _pageStatus == status) {
+      return;
+    }
+    setState(() => _pageStatus = status);
+  }
+
+  void _retryCurrentPage() {
+    final page = _currentIndex.value + 1;
+    _pageGenerations[page] = (_pageGenerations[page] ?? 0) + 1;
+    setState(() => _generationVersion++);
+  }
+
+  void _onFlipEnd(int page) {
+    final index = (page - 1).clamp(0, _pagesCount - 1);
+    if (index == _currentIndex.value) return;
+    _currentIndex.value = index;
+    _watchCurrentPage();
 
     _progressDebounce?.cancel();
     _progressDebounce = Timer(const Duration(milliseconds: 400), () {
-      // Fire-and-forget — the use case itself swallows errors so a failed
-      // report never disrupts reading.
       _updateCurrentPageUseCase(
         UpdateBookCurrentPageParams(
           bookId: widget.bookId,
@@ -211,277 +282,331 @@ class _BoughtBookOpenerWgState extends State<BoughtBookOpenerWg> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Scaffold(
-        backgroundColor: Colors.black,
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    if (_hasError || _pagesCount == 0) {
-      return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: _closeReader,
-            icon: const Icon(Icons.arrow_back),
-          ),
-        ),
-        body: const Center(child: Icon(Icons.error_outline, size: 48)),
-      );
-    }
-
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: GestureDetector(
-        onLongPress: _toggleOverlayManually,
-        child: Stack(
-          children: [
-            TurnPageView.builder(
-              controller: _turnController,
-              animationTransitionPoint: .35,
-              overleafColorBuilder: (index) => AppColors.greyScale.grey400,
-              overleafBorderColorBuilder: (index) =>
-                  AppColors.greyScale.grey700,
-              overleafBorderWidthBuilder: (index) => 1,
-              itemCount: _pagesCount,
-              itemBuilder: (context, index) => _BookPageContent(
-                pageNumber: index + 1,
-                currentIndexListenable: _currentIndexNotifier,
-                resolvePageId: _resolvePageId,
-              ),
-              onTap: (_) => _onPageChanged(),
-              onSwipe: (_) => _onPageChanged(),
-            ),
-            IgnorePointer(
-              ignoring: !_overlayVisible,
-              child: AnimatedOpacity(
-                opacity: _overlayVisible ? 1 : 0,
-                duration: const Duration(milliseconds: 250),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      top: MediaQuery.of(context).padding.top + 10,
-                      left: 12,
-                      child: IconButton(
-                        onPressed: _closeReader,
-                        style: IconButton.styleFrom(
-                          backgroundColor: Colors.black38,
-                          shape: const CircleBorder(),
-                        ),
-                        icon: const Icon(Icons.arrow_back, color: Colors.white),
-                      ),
-                    ),
-                    Positioned(
-                      top: MediaQuery.of(context).padding.top + 10,
-                      right: 12,
-                      child: IconButton(
-                        onPressed: _openZoom,
-                        style: IconButton.styleFrom(
-                          backgroundColor: Colors.black38,
-                          shape: const CircleBorder(),
-                        ),
-                        icon: const Icon(Icons.zoom_in, color: Colors.white),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: MediaQuery.of(context).padding.bottom + 16,
-                      left: 0,
-                      right: 0,
-                      child: Center(
-                        child: ValueListenableBuilder<int>(
-                          valueListenable: _currentIndexNotifier,
-                          builder: (context, index, _) {
-                            final pageNumber = index + 1;
-                            final remaining = _pagesCount - pageNumber;
-                            return Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 14,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.black54,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Text(
-                                remaining > 0
-                                    ? '$pageNumber / $_pagesCount  ·  $remaining left'
-                                    : '$pageNumber / $_pagesCount',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 13,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _BookPageZoomView extends StatelessWidget {
-  final String imageUrl;
-  final Map<String, String>? headers;
-
-  const _BookPageZoomView({required this.imageUrl, this.headers});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          Center(
-            child: InteractiveViewer(
-              minScale: 1,
-              maxScale: 5,
-              child: Image.network(
-                imageUrl,
-                headers: headers,
-                fit: BoxFit.contain,
-              ),
-            ),
-          ),
-          Positioned(
-            top: MediaQuery.of(context).padding.top + 10,
-            left: 12,
-            child: IconButton(
-              onPressed: () => Navigator.of(context).pop(),
-              style: IconButton.styleFrom(
-                backgroundColor: Colors.black38,
-                shape: const CircleBorder(),
-              ),
-              icon: const Icon(Icons.close, color: Colors.white),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _BookPageContent extends StatefulWidget {
-  final int pageNumber;
-  final ValueListenable<int> currentIndexListenable;
-  final Future<int?> Function(int pageNumber) resolvePageId;
-
-  const _BookPageContent({
-    required this.pageNumber,
-    required this.currentIndexListenable,
-    required this.resolvePageId,
-  });
-
-  @override
-  State<_BookPageContent> createState() => _BookPageContentState();
-}
-
-class _BookPageContentState extends State<_BookPageContent> {
-  // Pages within this many indices of the current one start loading their
-  // image immediately, so by the time the user actually flips to them
-  // they're already decoded and ready — this is what avoids visible lag.
-  static const _preloadWindow = 1;
-
-  bool _startedLoading = false;
-  bool _failed = false;
-  int? _pageId;
-
-  @override
-  void initState() {
-    super.initState();
-    widget.currentIndexListenable.addListener(_maybeStartLoading);
-    _maybeStartLoading();
+  void _showOverlayBriefly() {
+    if (!_overlayVisible) setState(() => _overlayVisible = true);
+    _hideOverlayTimer?.cancel();
+    _hideOverlayTimer = Timer(_overlayAutoHideDelay, () {
+      if (mounted) setState(() => _overlayVisible = false);
+    });
   }
 
-  @override
-  void dispose() {
-    widget.currentIndexListenable.removeListener(_maybeStartLoading);
-    super.dispose();
-  }
-
-  void _maybeStartLoading() {
-    if (_startedLoading) return;
-    final currentIndex = widget.currentIndexListenable.value;
-    final distance = (widget.pageNumber - 1 - currentIndex).abs();
-    if (distance <= _preloadWindow) {
-      _startedLoading = true;
-      _load();
-    }
-  }
-
-  Future<void> _load() async {
-    final id = await widget.resolvePageId(widget.pageNumber);
-    if (!mounted) return;
-    if (id == null) {
-      setState(() => _failed = true);
+  void _toggleOverlay() {
+    if (_overlayVisible) {
+      _hideOverlayTimer?.cancel();
+      setState(() => _overlayVisible = false);
     } else {
-      setState(() => _pageId = id);
+      _showOverlayBriefly();
     }
+  }
+
+  void _onTapUp(TapUpDetails details) {
+    final position = details.localPosition;
+    final width = MediaQuery.sizeOf(context).width;
+    final now = DateTime.now();
+    final lastTapAt = _lastTapAt;
+    final lastTapPosition = _lastTapPosition;
+    final isDoubleTap =
+        lastTapAt != null &&
+        lastTapPosition != null &&
+        now.difference(lastTapAt) < _doubleTapTimeout &&
+        (position - lastTapPosition).distance < 48;
+
+    if (isDoubleTap) {
+      _overlayTapTimer?.cancel();
+      _lastTapAt = null;
+      _toggleZoom(position);
+      return;
+    }
+
+    if (!_isZoomed) {
+      if (position.dx < width * _sideTapZone) {
+        _flipbook.flipLeft();
+        return;
+      }
+      if (position.dx > width * (1 - _sideTapZone)) {
+        _flipbook.flipRight();
+        return;
+      }
+    }
+
+    _lastTapAt = now;
+    _lastTapPosition = position;
+    _overlayTapTimer?.cancel();
+    _overlayTapTimer = Timer(_doubleTapTimeout, _toggleOverlay);
+  }
+
+  void _toggleZoom(Offset focal) {
+    final target = _isZoomed
+        ? Matrix4.identity()
+        : (Matrix4.identity()
+            ..translateByDouble(
+              -focal.dx * (_doubleTapScale - 1),
+              -focal.dy * (_doubleTapScale - 1),
+              0,
+              1,
+            )
+            ..scaleByDouble(_doubleTapScale, _doubleTapScale, 1, 1));
+    _zoomTween = Matrix4Tween(
+      begin: _transform.value,
+      end: target,
+    ).animate(CurvedAnimation(parent: _zoomAnimation, curve: Curves.easeOut));
+    _zoomAnimation.forward(from: 0);
+  }
+
+  void _syncZoom() {
+    final zoomed = _transform.value.getMaxScaleOnAxis() > 1.01;
+    if (zoomed != _isZoomed && mounted) setState(() => _isZoomed = zoomed);
   }
 
   @override
   Widget build(BuildContext context) {
-    // TurnPageAnimation (inside the package) wraps each page in Align,
-    // which gives loose constraints — the curl/clip effect spans the full
-    // page bounds regardless, but without forcing this content to expand
-    // too, it would size itself to its own intrinsic size and just sit
-    // centered inside that space instead of filling it, making BoxFit.cover
-    // below a no-op.
-    if (_failed) {
-      return const SizedBox.expand(
-        child: ColoredBox(
-          color: Colors.white,
-          child: Center(child: Icon(Icons.broken_image_outlined)),
-        ),
-      );
-    }
+    final loader = _loader;
 
-    if (_pageId == null) {
-      return const SizedBox.expand(
-        child: ColoredBox(
-          color: Colors.white,
-          child: Center(
-            child: SizedBox(
-              width: 24,
-              height: 24,
-              child: CircularProgressIndicator(strokeWidth: 2),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: TDeviceUtils.darkStatusBarIcons,
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        body: _isLoading
+            ? _ReaderStatus(
+                onBack: _closeReader,
+                child: const CircularProgressIndicator(),
+              )
+            : (_hasError || loader == null)
+            ? _ReaderStatus(
+                onBack: _closeReader,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: SectionErrorWg(onRetry: _load),
+                ),
+              )
+            : _buildReader(context, loader),
+      ),
+    );
+  }
+
+  Widget _buildReader(BuildContext context, BookPageLoader loader) {
+    final localization = AppLocalizations.of(context)!;
+    final safe = MediaQuery.paddingOf(context);
+    final pixelRatio = MediaQuery.devicePixelRatioOf(context);
+    final pagePadding = EdgeInsets.fromLTRB(
+      8,
+      safe.top + 8,
+      8,
+      safe.bottom + 28,
+    );
+
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTapUp: _onTapUp,
+          child: InteractiveViewer(
+            transformationController: _transform,
+            minScale: 1,
+            maxScale: 4,
+            panEnabled: _isZoomed,
+            onInteractionStart: (_) => _zoomAnimation.stop(),
+            onInteractionEnd: (_) => _syncZoom(),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final pages = _pagesFor(
+                  loader,
+                  constraints.biggest,
+                  pixelRatio,
+                  pagePadding,
+                );
+                return IgnorePointer(
+                  ignoring: _isZoomed,
+                  child: RealisticFlipbook(
+                    controller: _flipbook,
+                    pages: pages,
+                    startPage: _startPage,
+                    singlePage: true,
+                    singlePageSpreadNavigation: false,
+                    tapToFlip: false,
+                    clickToZoom: false,
+                    dragToScroll: false,
+                    flipDuration: const Duration(milliseconds: 850),
+                    paperColor: AppColors.white,
+                    blankPageColor: AppColors.white,
+                    loadingBuilder: (_) => const SizedBox.shrink(),
+                    onFlipLeftEnd: _onFlipEnd,
+                    onFlipRightEnd: _onFlipEnd,
+                  ),
+                );
+              },
             ),
           ),
         ),
-      );
-    }
-
-    final token = TokenStorageServiceImpl().getAccessToken();
-    return SizedBox.expand(
-      child: ColoredBox(
-        color: Colors.white,
-        child: Image.network(
-          ApiUrls.bookPageImageUrl(_pageId!),
-          headers: token != null ? {'Authorization': 'Bearer $token'} : null,
-          fit: BoxFit.contain,
-          loadingBuilder: (context, child, progress) {
-            if (progress == null) return child;
-            return const Center(
+        if (_pageStatus == _PageStatus.loading)
+          const IgnorePointer(
+            child: Center(
               child: SizedBox(
                 width: 24,
                 height: 24,
                 child: CircularProgressIndicator(strokeWidth: 2),
               ),
-            );
-          },
-          errorBuilder: (context, error, stackTrace) =>
-              const Center(child: Icon(Icons.broken_image_outlined)),
+            ),
+          )
+        else if (_pageStatus == _PageStatus.failed)
+          Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.broken_image_outlined,
+                  size: 40,
+                  color: AppColors.greyScale.grey400,
+                ),
+                const SizedBox(height: 8),
+                TextButton(
+                  onPressed: _retryCurrentPage,
+                  child: Text(
+                    localization.retry,
+                    style: AppTextStyles.source.medium(
+                      fontSize: 14,
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: safe.bottom + 6,
+          child: IgnorePointer(
+            child: AnimatedOpacity(
+              opacity: _overlayVisible ? 0 : 1,
+              duration: const Duration(milliseconds: 200),
+              child: ValueListenableBuilder<int>(
+                valueListenable: _currentIndex,
+                builder: (context, index, _) => Text(
+                  '${index + 1} / $_pagesCount',
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.source.regular(
+                    fontSize: 12,
+                    color: AppColors.greyScale.grey500,
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
+        IgnorePointer(
+          ignoring: !_overlayVisible,
+          child: AnimatedOpacity(
+            opacity: _overlayVisible ? 1 : 0,
+            duration: const Duration(milliseconds: 200),
+            child: Stack(
+              children: [
+                Positioned(
+                  top: safe.top + 8,
+                  left: 12,
+                  child: _OverlayButton(
+                    icon: Icons.arrow_back,
+                    onPressed: _closeReader,
+                  ),
+                ),
+                Positioned(
+                  top: safe.top + 8,
+                  right: 12,
+                  child: _OverlayButton(
+                    icon: Icons.crop,
+                    tooltip: localization.bookTrimMargins,
+                    isActive: _fitContent,
+                    onPressed: _toggleFitContent,
+                  ),
+                ),
+                Positioned(
+                  bottom: safe.bottom + 16,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: ValueListenableBuilder<int>(
+                      valueListenable: _currentIndex,
+                      builder: (context, index, _) {
+                        final pageNumber = index + 1;
+                        final remaining = _pagesCount - pageNumber;
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.black54,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            remaining > 0
+                                ? '$pageNumber / $_pagesCount  ·  ${localization.bookPagesLeft(remaining)}'
+                                : '$pageNumber / $_pagesCount',
+                            style: AppTextStyles.source.regular(
+                              fontSize: 13,
+                              color: AppColors.white,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _OverlayButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onPressed;
+  final String? tooltip;
+  final bool isActive;
+
+  const _OverlayButton({
+    required this.icon,
+    required this.onPressed,
+    this.tooltip,
+    this.isActive = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      tooltip: tooltip,
+      onPressed: onPressed,
+      style: IconButton.styleFrom(
+        backgroundColor: isActive ? AppColors.primaryColor : Colors.black38,
+        shape: const CircleBorder(),
       ),
+      icon: Icon(icon, color: AppColors.white),
+    );
+  }
+}
+
+class _ReaderStatus extends StatelessWidget {
+  final VoidCallback onBack;
+  final Widget child;
+
+  const _ReaderStatus({required this.onBack, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Center(child: child),
+        Positioned(
+          top: MediaQuery.paddingOf(context).top + 8,
+          left: 12,
+          child: _OverlayButton(icon: Icons.arrow_back, onPressed: onBack),
+        ),
+      ],
     );
   }
 }

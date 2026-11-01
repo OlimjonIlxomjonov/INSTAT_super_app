@@ -53,9 +53,16 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
 
   @override
   Widget build(BuildContext context) {
+    final id = widget.blockId;
     return BlocBuilder<CourseLessonItemsBloc, CourseLessonItemsState>(
+      buildWhen: (previous, current) =>
+          previous.loadingBlocks.contains(id) !=
+              current.loadingBlocks.contains(id) ||
+          previous.errorBlocks[id] != current.errorBlocks[id] ||
+          !identical(previous.loadedBlocks[id], current.loadedBlocks[id]),
       builder: (context, state) {
         final localization = AppLocalizations.of(context)!;
+        final localeCode = Localizations.localeOf(context).languageCode;
         final isLoading = state.loadingBlocks.contains(widget.blockId);
         final hasError = state.errorBlocks.containsKey(widget.blockId);
         final loadedResponse = state.loadedBlocks[widget.blockId];
@@ -152,7 +159,7 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
                           context,
                           WatchCourseEduVideoPage(
                             imagePath: lesson.thumbnail,
-                            title: lesson.title,
+                            title: lesson.displayTitle(localeCode),
                             courseId: widget.courseId,
                             topicId: widget.blockId,
                             lessonId: lesson.id,
@@ -169,7 +176,7 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
                     },
                     contentPadding: EdgeInsets.zero,
                     title: Text(
-                      lesson.title,
+                      lesson.displayTitle(localeCode),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppTextStyles.source.medium(fontSize: 15),
@@ -182,7 +189,7 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
                           color: AppColors.greyScale.grey600,
                         ),
                         Text(
-                          ' ${formatDuration(lesson.duration)}',
+                          ' ${formatDuration(localization, lesson.duration)}',
                           style: AppTextStyles.source.medium(
                             fontSize: 13,
                             color: AppColors.greyScale.grey600,

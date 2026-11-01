@@ -63,10 +63,7 @@ class _ArticlePayOptionsWgState extends State<ArticlePayOptionsWg> {
       AppRoute.close();
       final url = order.buildRedirectUrl(paymentMethod);
       if (url != null && url.isNotEmpty) {
-        await launchUrl(
-          Uri.parse(url),
-          mode: LaunchMode.externalApplication,
-        );
+        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
       }
       widget.onSuccess();
     } catch (e) {

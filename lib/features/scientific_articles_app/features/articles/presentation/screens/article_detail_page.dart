@@ -14,7 +14,9 @@ import 'package:my_template/core/utils/files/remote_file_opener.dart';
 import 'package:my_template/core/utils/localization/localized_text.dart';
 import 'package:my_template/core/utils/general_widgets/custom_app_bar/custom_app_bar_wg.dart';
 import 'package:my_template/core/utils/widgets/detail_tabs/detail_tabs_wg.dart';
+import 'package:my_template/core/utils/widgets/open_mini_app/open_mini_app_package_family.dart';
 import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.dart';
+import 'package:my_template/features/scientific_articles_app/features/articles/presentation/screens/articles_by_keyword_page.dart';
 import 'package:my_template/features/scientific_articles_app/features/articles/presentation/widgets/article_related_tab_wg.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/article_quote/article_quote_entity.dart';
 import 'package:my_template/features/scientific_articles_app/features/home/domain/entity/review_authors/review_author_entity.dart';
@@ -482,22 +484,42 @@ class _ArticleBody extends StatelessWidget {
             runSpacing: 8,
             children: [
               for (final keyword in keywords)
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.greyScale.grey100,
+                Material(
+                  color: AppColors.greyScale.grey100,
+                  borderRadius: BorderRadius.circular(8),
+                  child: InkWell(
                     borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    keyword,
-                    style: AppTextStyles.source.regular(fontSize: 12),
+                    onTap: () => openMiniAppSheetFamily(
+                      context,
+                      child: ArticlesByKeywordPage(keyword: keyword),
+                      showHandler: false,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            FlutterRemix.hashtag,
+                            size: 12,
+                            color: AppColors.greyScale.grey500,
+                          ),
+                          const SizedBox(width: 2),
+                          Text(
+                            keyword,
+                            style: AppTextStyles.source.regular(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
             ],
           ),
+          const SizedBox(height: 20),
         ],
       ],
     );

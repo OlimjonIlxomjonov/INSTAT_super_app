@@ -1,3 +1,7 @@
+import 'package:my_template/core/utils/general_widgets/file_download_progress/file_download_progress_wg.dart';
+import 'package:dio/dio.dart' show CancelToken;
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/lesson_face_id/lesson_face_id_use_case.dart';
+import 'package:my_template/core/di/service_locator.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -29,7 +33,6 @@ import 'package:video_player/video_player.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/widgets_edu/video_thumbnail_wg.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/lesson_video_progress/lesson_video_progress_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/lesson_video_progress/lesson_video_progress_event.dart';
-import 'package:my_template/core/utils/general_widgets/file_opening_overlay/file_opening_overlay_wg.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_bloc.dart';
 import 'package:my_template/features/main_app/home/presentation/bloc/user/user_me_state.dart';
 
@@ -62,7 +65,11 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
 
   final ValueNotifier<bool> _showVideoNotifier = ValueNotifier(false);
   final ValueNotifier<bool> _hasVideoErrorNotifier = ValueNotifier(false);
-  final ValueNotifier<bool> _isDownloadingNotifier = ValueNotifier(false);
+  final ValueNotifier<Map<String, double?>> _downloadsNotifier = ValueNotifier(
+    const {},
+  );
+  final Map<String, CancelToken> _cancelTokens = {};
+  final ValueNotifier<bool> _isCheckingTestNotifier = ValueNotifier(false);
   final ValueNotifier<String> _currentResolutionNotifier = ValueNotifier('720');
 
   final ValueNotifier<bool> _isSwitchingResolutionNotifier = ValueNotifier(
@@ -91,6 +98,43 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
     );
   }
 
+  Future<void> _openLessonTest() async {
+    if (_isCheckingTestNotifier.value) return;
+    _isCheckingTestNotifier.value = true;
+
+    var isFaceIdEnabled = widget.isFaceIdEnabled;
+    try {
+      isFaceIdEnabled = await sl<LessonFaceIdUseCase>()(widget.lessonId);
+    } catch (_) {
+    } finally {
+      if (mounted) _isCheckingTestNotifier.value = false;
+    }
+    if (!mounted) return;
+
+    final userState = context.read<UserMeBloc>().state;
+    final isVerified = userState is UserMeLoaded && userState.entity.isVerified;
+    if (isFaceIdEnabled && !isVerified) {
+      errorFlushBar(
+        context,
+        AppLocalizations.of(context)!.verificationRequiredMessage,
+      );
+      return;
+    }
+
+    _controllerNotifier.value?.pause();
+    await openMiniAppSheetFamily(
+      context,
+      showHandler: false,
+      enableDrag: false,
+      child: RegularTestCoursePage(
+        courseId: widget.courseId,
+        blockId: widget.topicId,
+        lessonId: widget.lessonId,
+        isFaceIdEnabled: isFaceIdEnabled,
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _disposeController(_controllerNotifier.value);
@@ -100,7 +144,11 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
     _controllerNotifier.dispose();
     _showVideoNotifier.dispose();
     _hasVideoErrorNotifier.dispose();
-    _isDownloadingNotifier.dispose();
+    for (final token in _cancelTokens.values) {
+      token.cancel();
+    }
+    _downloadsNotifier.dispose();
+    _isCheckingTestNotifier.dispose();
     _currentResolutionNotifier.dispose();
     _isSwitchingResolutionNotifier.dispose();
     super.dispose();
@@ -285,14 +333,46 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
       return;
     }
 
-    if (_isDownloadingNotifier.value) return;
-    _isDownloadingNotifier.value = true;
-
-    try {
-      await openRemoteFile(context, url: url, fileName: fileName);
-    } finally {
-      if (mounted) _isDownloadingNotifier.value = false;
+    final running = _cancelTokens.remove(url);
+    if (running != null) {
+      running.cancel();
+      _setDownload(url, null, remove: true);
+      return;
     }
+
+    final token = CancelToken();
+    _cancelTokens[url] = token;
+    _setDownload(url, null);
+    var lastPercent = -1;
+    try {
+      await openRemoteFile(
+        context,
+        url: url,
+        fileName: fileName,
+        cancelToken: token,
+        onProgress: (progress) {
+          final percent = (progress * 100).floor();
+          if (percent == lastPercent || !mounted || token.isCancelled) return;
+          lastPercent = percent;
+          _setDownload(url, progress);
+        },
+      );
+    } finally {
+      if (_cancelTokens[url] == token) {
+        _cancelTokens.remove(url);
+        if (mounted) _setDownload(url, null, remove: true);
+      }
+    }
+  }
+
+  void _setDownload(String url, double? progress, {bool remove = false}) {
+    final next = Map<String, double?>.from(_downloadsNotifier.value);
+    if (remove) {
+      next.remove(url);
+    } else {
+      next[url] = progress;
+    }
+    _downloadsNotifier.value = next;
   }
 
   @override
@@ -380,28 +460,44 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                                   text: localization.noFilesAvailable,
                                 );
                               }
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: List.generate(data.length, (index) {
-                                  final item = data[index];
-                                  return DefaultCustomTileWg(
-                                    tileMaxLines: 1,
-                                    tileOverflow: TextOverflow.ellipsis,
-                                    tileLeading: SvgPicture.asset(
-                                      AppVectors.pdfIcon,
-                                    ),
-                                    onTap: () {
-                                      _controllerNotifier.value?.pause();
-                                      _openFile(item.file, item.fileName);
-                                    },
-                                    tileTitle:
-                                        item.fileName ??
-                                        localization.fileFallbackName,
-                                    subTitle: formatFileSize(
-                                      item.fileSize ?? 0,
-                                    ),
-                                  );
-                                }),
+                              return ValueListenableBuilder<
+                                Map<String, double?>
+                              >(
+                                valueListenable: _downloadsNotifier,
+                                builder: (context, downloads, _) => Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: List.generate(data.length, (index) {
+                                    final item = data[index];
+                                    final isDownloading =
+                                        item.file != null &&
+                                        downloads.containsKey(item.file);
+                                    final progress = isDownloading
+                                        ? downloads[item.file]
+                                        : null;
+                                    final size = item.fileSize ?? 0;
+                                    return DefaultCustomTileWg(
+                                      tileMaxLines: 1,
+                                      tileOverflow: TextOverflow.ellipsis,
+                                      tileLeading: isDownloading
+                                          ? FileDownloadProgressWg(
+                                              progress: progress,
+                                            )
+                                          : SvgPicture.asset(
+                                              AppVectors.pdfIcon,
+                                            ),
+                                      onTap: () {
+                                        _controllerNotifier.value?.pause();
+                                        _openFile(item.file, item.fileName);
+                                      },
+                                      tileTitle:
+                                          item.fileName ??
+                                          localization.fileFallbackName,
+                                      subTitle: progress != null && size > 0
+                                          ? '${formatFileSize((size * progress).round())} / ${formatFileSize(size)}'
+                                          : formatFileSize(size),
+                                    );
+                                  }),
+                                ),
                               );
                             }
                             return Skeletonizer(
@@ -434,40 +530,23 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                             tileMaxLines: 1,
                             tileOverflow: TextOverflow.ellipsis,
                             tileLeading: null,
-                            onTap: () async {
-                              final userState = context
-                                  .read<UserMeBloc>()
-                                  .state;
-                              final isVerified =
-                                  userState is UserMeLoaded &&
-                                  userState.entity.isVerified;
-
-                              if (!isVerified) {
-                                errorFlushBar(
-                                  context,
-                                  localization.verificationRequiredMessage,
-                                );
-                                return;
-                              }
-
-                              _controllerNotifier.value?.pause();
-                              await openMiniAppSheetFamily(
-                                context,
-                                showHandler: false,
-                                enableDrag: false,
-                                child: RegularTestCoursePage(
-                                  courseId: widget.courseId,
-                                  blockId: widget.topicId,
-                                  lessonId: widget.lessonId,
-                                  isFaceIdEnabled: widget.isFaceIdEnabled,
-                                ),
-                              );
-                            },
+                            onTap: _openLessonTest,
                             tileTitle: localization.testAssignmentTileTitle,
                             subTitle: localization.testAssignmentTileSubtitle,
-                            tileAction: Icon(
-                              IconlyLight.arrowRight2,
-                              color: AppColors.greyScale.grey400,
+                            tileAction: ValueListenableBuilder<bool>(
+                              valueListenable: _isCheckingTestNotifier,
+                              builder: (_, isChecking, _) => isChecking
+                                  ? const SizedBox(
+                                      width: 18,
+                                      height: 18,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : Icon(
+                                      IconlyLight.arrowRight2,
+                                      color: AppColors.greyScale.grey400,
+                                    ),
                             ),
                           )
                         else
@@ -480,13 +559,6 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                   ),
                 ),
               ],
-            ),
-            ValueListenableBuilder<bool>(
-              valueListenable: _isDownloadingNotifier,
-              builder: (context, isDownloading, _) {
-                if (!isDownloading) return const SizedBox.shrink();
-                return const FileOpeningOverlayWg();
-              },
             ),
           ],
         ),
@@ -627,11 +699,7 @@ class _VideoAreaWidget extends StatelessWidget {
           backgroundColor: Colors.black38,
           shape: const CircleBorder(),
         ),
-        icon: const Icon(
-          IconlyLight.arrowLeft2,
-          color: Colors.white,
-          size: 20,
-        ),
+        icon: const Icon(IconlyLight.arrowLeft2, color: Colors.white, size: 20),
       ),
     );
   }

@@ -64,7 +64,7 @@ class CourseModel extends CourseEntity {
               ?.map((e) => CertificateObjModel.fromJson(e))
               .toList() ??
           [],
-      isFaceIdEnabled: json['is_face_id_enabled'],
+      isFaceIdEnabled: json['is_face_id_enabled'] == true,
     );
   }
 }

@@ -47,7 +47,6 @@ dependencies:
 
   shared_preferences: ^2.5.4
   auto_size_text: ^3.0.0
-  turn_page_transition: ^0.5.0 # best option for now # open book
   webview_flutter: ^4.13.1
   flutter_html: ^3.0.0
   connectivity_plus: ^7.0.0
@@ -68,6 +67,8 @@ dependencies:
   google_sign_in: ^7.1.0
   sign_in_with_apple: ^6.1.4
   package_info_plus: ^9.0.1
+  flutter_realistic_flipbook:
+    path: packages/flutter_realistic_flipbook
 
 
 

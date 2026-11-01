@@ -106,3 +106,17 @@ String? apiErrorDetails(Object error) {
   final firstLine = text.trim().split('\n').first.trim();
   return firstLine.isEmpty ? null : firstLine;
 }
+
+bool apiErrorHasCode(Object error, String code) {
+  if (error is! DioException) return false;
+  final data = error.response?.data;
+  if (data is! Map) return false;
+  final err = data['error'];
+  if (err == code) return true;
+  if (err is Map) {
+    final details = err['details'];
+    if (details == code) return true;
+    if (details is List && details.contains(code)) return true;
+  }
+  return false;
+}

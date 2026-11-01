@@ -14,6 +14,7 @@ Future<void> finishLessonTestDialogScreen(
   subTitle,
   required List<Widget> actions,
   required ConfettiController confettiController,
+  bool showConfetti = true,
 }) {
   return showDialog(
     barrierDismissible: false,
@@ -65,10 +66,14 @@ Future<void> finishLessonTestDialogScreen(
             //     ],
             //   ),
             // ),
-            Align(
-              alignment: Alignment.center,
-              child: LottieBuilder.asset(AppAnimations.confetti, repeat: true),
-            ),
+            if (showConfetti)
+              Align(
+                alignment: Alignment.center,
+                child: LottieBuilder.asset(
+                  AppAnimations.confetti,
+                  repeat: true,
+                ),
+              ),
           ],
         ),
       );

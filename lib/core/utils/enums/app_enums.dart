@@ -142,4 +142,12 @@ enum AnnotationLanguageEnum { uz, en, ru }
 
 enum PaymentStatusEnum { paid, pending, notBought }
 
-enum LessonTestErrorKind { faceNotFound, faceNotVerified, server, unknown }
+enum LessonTestErrorKind {
+  faceNotFound,
+  faceNotVerified,
+  alreadyAnswered,
+  server,
+  unknown,
+}
+
+enum SessionEndReason { expired, ended }

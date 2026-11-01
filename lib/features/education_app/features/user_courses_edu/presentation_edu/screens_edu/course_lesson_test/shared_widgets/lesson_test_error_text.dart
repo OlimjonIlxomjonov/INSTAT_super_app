@@ -11,6 +11,8 @@ String lessonTestErrorText(
       return localization.faceNotFoundError;
     case LessonTestErrorKind.faceNotVerified:
       return localization.faceNotVerifiedError;
+    case LessonTestErrorKind.alreadyAnswered:
+      return localization.alreadyAnsweredMessage;
     case LessonTestErrorKind.server:
       return message.isNotEmpty
           ? message

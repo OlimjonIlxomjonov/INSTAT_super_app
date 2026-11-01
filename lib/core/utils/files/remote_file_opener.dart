@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:my_template/core/common/flush_bar/flush_bars.dart';
 import 'package:my_template/core/l10n/app_localizations.dart';
@@ -27,6 +28,8 @@ Future<bool> openRemoteFile(
   required String? url,
   String? fileName,
   bool silent = false,
+  ValueChanged<double>? onProgress,
+  CancelToken? cancelToken,
 }) async {
   final localization = AppLocalizations.of(context)!;
 
@@ -44,7 +47,16 @@ Future<bool> openRemoteFile(
     final file = File(savePath);
 
     if (!await file.exists() || await file.length() == 0) {
-      await DioClient().download(url, savePath);
+      final partPath = '$savePath.part';
+      await DioClient().download(
+        url,
+        partPath,
+        cancelToken: cancelToken,
+        onReceiveProgress: (received, total) {
+          if (total > 0) onProgress?.call(received / total);
+        },
+      );
+      await File(partPath).rename(savePath);
     }
 
     if (!context.mounted) return false;
@@ -57,7 +69,7 @@ Future<bool> openRemoteFile(
     }
     return true;
   } catch (e) {
-    //! Jim urinish log'ni ham bulg'amasin
+    if (e is DioException && CancelToken.isCancel(e)) return false;
     if (silent) {
       logger.i('File open skipped: $e');
       return false;
