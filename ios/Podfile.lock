@@ -1,0 +1,41 @@
+PODS:
+  - Flutter (1.0.0)
+  - myid (3.1.3):
+    - Flutter
+    - MyIdSDK (= 3.1.3)
+  - MyIdSDK (3.1.3)
+  - open_filex (0.0.2):
+    - Flutter
+  - sign_in_with_apple (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - myid (from `.symlinks/plugins/myid/ios`)
+  - open_filex (from `.symlinks/plugins/open_filex/ios`)
+  - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
+
+SPEC REPOS:
+  trunk:
+    - MyIdSDK
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  myid:
+    :path: ".symlinks/plugins/myid/ios"
+  open_filex:
+    :path: ".symlinks/plugins/open_filex/ios"
+  sign_in_with_apple:
+    :path: ".symlinks/plugins/sign_in_with_apple/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 71a624a5bc0c04062bf19101d501e466baf2fb47
+  myid: f184cc2e99cf721841da0f5bffa1a95b4bc36ddd
+  MyIdSDK: 91a3ec894152550990a1ae0f758b3f6cc7aceeae
+  open_filex: 432f3cd11432da3e39f47fcc0df2b1603854eff1
+  sign_in_with_apple: c5dcc141574c8c54d5ac99dd2163c0c72ad22418
+
+PODFILE CHECKSUM: 6565044a014cd203febc903f1eadcff9d08ecc7d
+
+COCOAPODS: 1.17.0

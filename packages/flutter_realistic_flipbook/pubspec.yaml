@@ -1,0 +1,24 @@
+name: flutter_realistic_flipbook
+description: A realistic 3D page-turn flipbook widget for Flutter, inspired by flipbook-vue.
+version: 0.1.4+instat.1
+publish_to: none
+homepage: https://github.com/88hitman/flutter_realistic_flipbook
+repository: https://github.com/88hitman/flutter_realistic_flipbook
+issue_tracker: https://github.com/88hitman/flutter_realistic_flipbook/issues
+documentation: https://github.com/88hitman/flutter_realistic_flipbook#readme
+
+topics:
+  - flipbook
+  - page-turn
+  - animation
+  - three-d
+  - reader
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+  flutter: ">=3.22.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
