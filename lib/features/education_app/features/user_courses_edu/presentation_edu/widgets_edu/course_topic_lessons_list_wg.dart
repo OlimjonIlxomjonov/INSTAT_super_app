@@ -67,7 +67,7 @@ class _CourseTopicLessonsListWgState extends State<CourseTopicLessonsListWg> {
         final hasError = state.errorBlocks.containsKey(widget.blockId);
         final loadedResponse = state.loadedBlocks[widget.blockId];
 
-        if (isLoading) {
+        if (isLoading && loadedResponse == null) {
           return Skeletonizer(
             enabled: true,
             child: Column(

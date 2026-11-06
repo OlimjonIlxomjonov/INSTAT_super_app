@@ -93,11 +93,13 @@ class CourseLessonTestFinished extends CourseLessonTestState {
   final int totalQuestions;
   final int correctAnswers;
   final int passingScore;
+  final int? nextLessonId;
 
   const CourseLessonTestFinished({
     required this.totalQuestions,
     required this.correctAnswers,
     this.passingScore = 100,
+    this.nextLessonId,
   });
 
   double get percentage =>

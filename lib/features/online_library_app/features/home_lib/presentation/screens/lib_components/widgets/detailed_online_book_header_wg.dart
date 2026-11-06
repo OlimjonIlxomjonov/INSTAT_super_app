@@ -120,11 +120,11 @@ class DetailedOnlineBookHeaderWg extends StatelessWidget {
                 value: data.orderCount.toString(),
                 label: localization.salesLabel,
               ),
-              const VerticalDividerWg(),
-              DetailedOnlineBookHeaderItemsWg(
-                value: 'N/A',
-                label: localization.sizeLabel,
-              ),
+              // const VerticalDividerWg(),
+              // DetailedOnlineBookHeaderItemsWg(
+              //   value: 'N/A',
+              //   label: localization.sizeLabel,
+              // ),
               // Can be derived if needed
             ],
           ),

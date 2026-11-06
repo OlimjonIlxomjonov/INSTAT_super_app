@@ -9,6 +9,9 @@ class LessonTestAnswerResponseModel extends LessonTestAnswerResponseEntity {
     required super.isRecorded,
     super.matched,
     super.confidenceScore,
+    super.corrects,
+    super.inCorrects,
+    super.nextLessonId,
   });
 
   factory LessonTestAnswerResponseModel.fromJson(Map<String, dynamic> json) {
@@ -24,6 +27,9 @@ class LessonTestAnswerResponseModel extends LessonTestAnswerResponseEntity {
       isRecorded: ok && hasData,
       matched: json['matched'] as bool?,
       confidenceScore: (json['confidence_score'] as num?)?.toDouble(),
+      corrects: (json['corrects'] as num?)?.toInt(),
+      inCorrects: (json['in_corrects'] as num?)?.toInt(),
+      nextLessonId: (json['next_lesson_id'] as num?)?.toInt(),
     );
   }
 }

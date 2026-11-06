@@ -1,3 +1,4 @@
+import 'package:my_template/features/education_app/features/user_courses_edu/data/models/lesson_status/lesson_status_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/test_answer/test_answer_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_group_member/course_group_member_model.dart';
 import 'package:dio/dio.dart';
@@ -524,12 +525,13 @@ class UserCoursesRemoteDataSourceImpl implements UserCoursesRemoteDataSource {
   }
 
   @override
-  Future<bool> fetchLessonFaceIdEnabled(int lessonId) async {
+  Future<LessonStatusModel> fetchLessonStatus(int lessonId) async {
     try {
       final response = await _dioClient.get(ApiUrls.lessonDetail(lessonId));
       if (response.statusCode == 200 || response.statusCode == 201) {
-        final data = response.data;
-        return data is Map && data['is_face_id_enabled'] == true;
+        return LessonStatusModel.fromJson(
+          response.data as Map<String, dynamic>,
+        );
       }
       throw Exception('ERROR ${response.statusCode}');
     } catch (e) {

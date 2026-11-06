@@ -167,6 +167,7 @@ class _StatsEduPageState extends State<StatsEduPage> {
                                       context,
                                       showHandler: false,
                                       child: TempDetailedUserEdu(
+                                        userId: item.id,
                                         imagePath: thumb,
                                         name: name,
                                       ),
@@ -185,6 +186,7 @@ class _StatsEduPageState extends State<StatsEduPage> {
                                 context,
                                 showHandler: false,
                                 child: TempDetailedUserEdu(
+                                  userId: item.id,
                                   imagePath: thumbnail,
                                   name: fullName,
                                 ),

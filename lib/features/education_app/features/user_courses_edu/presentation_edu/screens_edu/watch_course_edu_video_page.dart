@@ -1,6 +1,16 @@
 import 'package:my_template/core/utils/general_widgets/file_download_progress/file_download_progress_wg.dart';
 import 'package:dio/dio.dart' show CancelToken;
-import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/lesson_face_id/lesson_face_id_use_case.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_items/course_lesson_items_entity.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/lesson_status/lesson_status_use_case.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/test_answers/test_answers_use_cases.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_items/course_lesson_items_state.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_test/course_lesson_test_state.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_topics/course_lesson_topics_state.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/lesson_flow/lesson_nav_bar_wg.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/lesson_flow/lesson_neighbors.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/lesson_flow/lesson_watch_status_wg.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/lesson_flow/lesson_watch_store.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/lesson_flow/lesson_watch_tracker.dart';
 import 'package:my_template/core/di/service_locator.dart';
 import 'dart:io';
 import 'dart:convert';
@@ -60,6 +70,69 @@ class WatchCourseEduVideoPage extends StatefulWidget {
 }
 
 class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
+  late String _title = widget.title;
+  late String? _imagePath = widget.imagePath;
+  late int _topicId = widget.topicId;
+  late int _lessonId = widget.lessonId;
+  late int? _testCount = widget.testCount;
+  late bool _isFaceIdEnabled = widget.isFaceIdEnabled;
+
+  void _openLesson(CourseLessonItemsEntity lesson) {
+    final localeCode = Localizations.localeOf(context).languageCode;
+    setState(() {
+      _title = lesson.displayTitle(localeCode);
+      _imagePath = lesson.thumbnail;
+      _topicId = lesson.courseBlock;
+      _lessonId = lesson.id;
+      _testCount = lesson.testsCount;
+      _isFaceIdEnabled = lesson.isFaceIdEnabled;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _LessonView(
+      key: ValueKey(_lessonId),
+      title: _title,
+      imagePath: _imagePath,
+      courseId: widget.courseId,
+      topicId: _topicId,
+      lessonId: _lessonId,
+      testCount: _testCount,
+      isFaceIdEnabled: _isFaceIdEnabled,
+      onOpenLesson: _openLesson,
+    );
+  }
+}
+
+class _LessonView extends StatefulWidget {
+  final String title;
+  final String? imagePath;
+  final int courseId, topicId, lessonId;
+  final int? testCount;
+  final bool isFaceIdEnabled;
+  final ValueChanged<CourseLessonItemsEntity> onOpenLesson;
+
+  const _LessonView({
+    super.key,
+    required this.title,
+    required this.imagePath,
+    required this.courseId,
+    required this.topicId,
+    required this.lessonId,
+    required this.testCount,
+    required this.isFaceIdEnabled,
+    required this.onOpenLesson,
+  });
+
+  @override
+  State<_LessonView> createState() => _LessonViewState();
+}
+
+class _LessonViewState extends State<_LessonView> {
+  static const _refreshFromPercent = 50;
+  static const _progressRetryDelay = Duration(seconds: 10);
+
   final ValueNotifier<VideoPlayerController?> _controllerNotifier =
       ValueNotifier(null);
 
@@ -78,9 +151,14 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
 
   int _resolutionSwitchGeneration = 0;
 
-  int _lastSentProgress = -1;
-  DateTime? _lastProgressCheck;
-  static const _progressCheckInterval = Duration(seconds: 2);
+  final LessonWatchTracker _tracker = LessonWatchTracker();
+  final ValueNotifier<Set<int>> _watchedNotifier = ValueNotifier(const {});
+  final List<int> _pendingPercents = [];
+  final Set<int> _requestedBlocks = {};
+  List<int> _blockIds = const [];
+  bool _isSendingProgress = false;
+  bool _hasTestAnswers = false;
+  bool _didRefreshTopics = false;
 
   HlsProxyServer? _proxyServer;
 
@@ -96,6 +174,167 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
         ),
       ),
     );
+    _loadWatchState();
+  }
+
+  CourseLessonItemsEntity? _findLesson(CourseLessonItemsState state, int? id) {
+    if (id == null) return null;
+    for (final block in state.loadedBlocks.values) {
+      for (final lesson in block.data) {
+        if (lesson.id == id) return lesson;
+      }
+    }
+    return null;
+  }
+
+  bool _isWatchedIn(CourseLessonItemsState state) =>
+      (_findLesson(state, widget.lessonId)?.viewedLessons ?? 0) > 0;
+
+  bool get _isVideoWatched =>
+      _isWatchedIn(context.read<CourseLessonItemsBloc>().state);
+
+  LessonNeighbors _neighborsIn(CourseLessonItemsState state) {
+    return resolveLessonNeighbors(
+      blockIds: _blockIds,
+      lessonsByBlock: {
+        for (final entry in state.loadedBlocks.entries)
+          entry.key: entry.value.data,
+      },
+      blockId: widget.topicId,
+      lessonId: widget.lessonId,
+    );
+  }
+
+  void _loadBlock(int blockId) {
+    context.read<CourseLessonItemsBloc>().add(
+      CourseLessonItemsEvent(
+        params: CourseLessonItemsParams(
+          courseId: widget.courseId,
+          blockId: blockId,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _refreshBlocks(Set<int> blockIds) async {
+    if (blockIds.isEmpty) return;
+    final bloc = context.read<CourseLessonItemsBloc>();
+    final before = bloc.state.loadedBlocks;
+    final done = bloc.stream
+        .firstWhere(
+          (state) => blockIds.every(
+            (id) =>
+                !state.loadingBlocks.contains(id) &&
+                (!identical(state.loadedBlocks[id], before[id]) ||
+                    state.errorBlocks.containsKey(id)),
+          ),
+        )
+        .timeout(const Duration(seconds: 20), onTimeout: () => bloc.state);
+    blockIds.forEach(_loadBlock);
+    await done;
+  }
+
+  void _refreshTopics() {
+    context.read<CourseLessonTopicsBloc>().add(
+      CourseLessonTopicsEvent(
+        params: CourseCategoryByIdParams(id: widget.courseId),
+      ),
+    );
+  }
+
+  Future<void> _loadWatchState() async {
+    final stored = await LessonWatchStore.load(widget.lessonId);
+    double? userProgress;
+    try {
+      final status = await sl<LessonStatusUseCase>()(widget.lessonId);
+      userProgress = status.userProgress;
+    } catch (e) {
+      logger.e(e);
+    }
+    await _reloadTestAnswers();
+    if (!mounted) return;
+    await _refreshBlocks({widget.topicId});
+    if (!mounted) return;
+
+    if (userProgress != null && userProgress <= 0) {
+      if (stored.isNotEmpty) await LessonWatchStore.clear(widget.lessonId);
+      return;
+    }
+    if (stored.isEmpty || !mounted) return;
+    _tracker.restore(stored);
+    _watchedNotifier.value = _tracker.watched;
+    if (_isVideoWatched) return;
+    _enqueueProgress(_tracker.watched);
+  }
+
+  Future<void> _reloadTestAnswers() async {
+    if (widget.testCount == 0) return;
+    try {
+      final answers = await sl<LessonTestAnswersUseCase>()(widget.lessonId);
+      if (mounted) setState(() => _hasTestAnswers = answers.isNotEmpty);
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  Future<void> _resetWatchProgress() async {
+    await LessonWatchStore.clear(widget.lessonId);
+    _tracker.reset();
+    _pendingPercents.clear();
+    _watchedNotifier.value = const {};
+    _controllerNotifier.value?.seekTo(Duration.zero);
+    if (mounted) setState(() => _hasTestAnswers = false);
+  }
+
+  Future<void> _onTestFinished(CourseLessonTestFinished result) async {
+    if (!mounted) return;
+    _refreshTopics();
+
+    if (!result.isPassed) {
+      await _resetWatchProgress();
+      if (mounted) await _refreshBlocks({widget.topicId});
+      return;
+    }
+
+    final bloc = context.read<CourseLessonItemsBloc>();
+    final neighbors = _neighborsIn(bloc.state);
+    await _refreshBlocks({
+      widget.topicId,
+      ...neighbors.blocksToLoad,
+      if (neighbors.next != null) neighbors.next!.courseBlock,
+    });
+    if (!mounted) return;
+
+    final next =
+        _findLesson(bloc.state, result.nextLessonId) ??
+        _neighborsIn(bloc.state).next;
+    if (next != null) _openNeighbor(next, isNext: true);
+  }
+
+  void _openNeighbor(CourseLessonItemsEntity lesson, {required bool isNext}) {
+    if (lesson.userLessons == 0) {
+      final localization = AppLocalizations.of(context)!;
+      errorFlushBar(
+        context,
+        isNext
+            ? localization.lessonNextLockedHint
+            : localization.noAccessToLessonYet,
+      );
+      return;
+    }
+    widget.onOpenLesson(lesson);
+  }
+
+  void _showTestLockedHint() {
+    errorFlushBar(context, AppLocalizations.of(context)!.lessonTestLockedHint);
+  }
+
+  void _requestMissingBlocks(LessonNeighbors neighbors) {
+    final missing = neighbors.blocksToLoad.where(_requestedBlocks.add).toList();
+    if (missing.isEmpty) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) missing.forEach(_loadBlock);
+    });
   }
 
   Future<void> _openLessonTest() async {
@@ -104,7 +343,8 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
 
     var isFaceIdEnabled = widget.isFaceIdEnabled;
     try {
-      isFaceIdEnabled = await sl<LessonFaceIdUseCase>()(widget.lessonId);
+      final status = await sl<LessonStatusUseCase>()(widget.lessonId);
+      isFaceIdEnabled = status.isFaceIdEnabled;
     } catch (_) {
     } finally {
       if (mounted) _isCheckingTestNotifier.value = false;
@@ -131,8 +371,12 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
         blockId: widget.topicId,
         lessonId: widget.lessonId,
         isFaceIdEnabled: isFaceIdEnabled,
+        onFinished: _onTestFinished,
       ),
     );
+    if (!mounted) return;
+    await _reloadTestAnswers();
+    if (mounted) _refreshBlocks({widget.topicId});
   }
 
   @override
@@ -149,6 +393,7 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
     }
     _downloadsNotifier.dispose();
     _isCheckingTestNotifier.dispose();
+    _watchedNotifier.dispose();
     _currentResolutionNotifier.dispose();
     _isSwitchingResolutionNotifier.dispose();
     super.dispose();
@@ -169,44 +414,65 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
     final controller = _controllerNotifier.value;
     if (controller == null || !controller.value.isInitialized) return;
 
-    // Throttle: only check every 2 seconds.
-    final now = DateTime.now();
-    if (_lastProgressCheck != null &&
-        now.difference(_lastProgressCheck!) < _progressCheckInterval) {
-      return;
-    }
-    _lastProgressCheck = now;
+    final value = controller.value;
+    final completed = _tracker.onTick(
+      position: value.position.inMilliseconds / 1000,
+      duration: value.duration.inMilliseconds / 1000,
+      isPlaying: value.isPlaying || value.isCompleted,
+      speed: value.playbackSpeed,
+      now: DateTime.now(),
+    );
+    if (completed.isEmpty) return;
 
-    final position = controller.value.position.inSeconds;
-    final duration = controller.value.duration.inSeconds;
-
-    if (duration <= 0) return;
-
-    int currentProgress = ((position / duration) * 100).toInt();
-    if (currentProgress > 100) currentProgress = 100;
-
-    // First send: initialise with 0.
-    if (_lastSentProgress < 0 && currentProgress >= 0) {
-      _sendVideoProgress(0);
-      return;
-    }
-
-    // Don't re-send after 100% has already been sent.
-    if (_lastSentProgress == 100) return;
-
-    if (currentProgress >= _lastSentProgress + 5 || currentProgress == 100) {
-      _sendVideoProgress(currentProgress);
-    }
+    _watchedNotifier.value = _tracker.watched;
+    LessonWatchStore.save(widget.lessonId, _tracker.watched);
+    if (mounted && !_isVideoWatched) _enqueueProgress(completed);
   }
 
-  void _sendVideoProgress(int progress) {
-    _lastSentProgress = progress;
+  void _enqueueProgress(Iterable<int> buckets) {
+    final percents = buckets.map(LessonWatchTracker.percentOf).toList()..sort();
+    _pendingPercents.addAll(percents);
+    _sendNextProgress();
+  }
+
+  void _sendNextProgress() {
+    if (!mounted || _isSendingProgress || _pendingPercents.isEmpty) return;
+    _isSendingProgress = true;
     context.read<LessonVideoProgressBloc>().add(
       PutLessonVideoProgressEvent(
         lessonId: widget.lessonId.toString(),
-        progress: progress,
+        progress: _pendingPercents.first,
       ),
     );
+  }
+
+  void _onProgressState(LessonVideoProgressState state) {
+    if (!_isSendingProgress) return;
+
+    if (state is LessonVideoProgressFailure) {
+      _isSendingProgress = false;
+      Future.delayed(_progressRetryDelay, _sendNextProgress);
+      return;
+    }
+    if (state is! LessonVideoProgressSuccess) return;
+
+    _isSendingProgress = false;
+    if (_pendingPercents.isNotEmpty &&
+        _pendingPercents.first == state.progress) {
+      _pendingPercents.removeAt(0);
+    }
+    if (_pendingPercents.isNotEmpty) {
+      _sendNextProgress();
+      return;
+    }
+
+    if (_tracker.watchedPercent >= _refreshFromPercent) {
+      _refreshBlocks({widget.topicId});
+    }
+    if (_tracker.watchedPercent == 100 && !_didRefreshTopics) {
+      _didRefreshTopics = true;
+      _refreshTopics();
+    }
   }
 
   Future<void> _initVideo() async {
@@ -215,7 +481,6 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
       logger.e('No token found');
       return;
     }
-    logger.f(token);
     _hasVideoErrorNotifier.value = false;
 
     // Start HLS Local Proxy Server
@@ -379,28 +644,9 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return BlocListener<LessonVideoProgressBloc, LessonVideoProgressState>(
-      listener: (context, state) {
-        if (state is LessonVideoProgressSuccess && state.progress == 100) {
-          Future.delayed(const Duration(milliseconds: 300), () {
-            if (context.mounted) {
-              context.read<CourseLessonTopicsBloc>().add(
-                CourseLessonTopicsEvent(
-                  params: CourseCategoryByIdParams(id: widget.courseId),
-                ),
-              );
-              context.read<CourseLessonItemsBloc>().add(
-                CourseLessonItemsEvent(
-                  params: CourseLessonItemsParams(
-                    courseId: widget.courseId,
-                    blockId: widget.topicId,
-                  ),
-                ),
-              );
-            }
-          });
-        }
-      },
+      listener: (context, state) => _onProgressState(state),
       child: Scaffold(
+        bottomNavigationBar: _buildNavBar(),
         body: Stack(
           children: [
             CustomScrollView(
@@ -439,6 +685,24 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                           style: AppTextStyles.source.medium(fontSize: 20),
                         ),
                         Divider(color: AppColors.greyScale.grey200),
+                        BlocBuilder<
+                          CourseLessonItemsBloc,
+                          CourseLessonItemsState
+                        >(
+                          buildWhen: (previous, current) =>
+                              _isWatchedIn(previous) != _isWatchedIn(current),
+                          builder: (context, state) {
+                            if (_isWatchedIn(state)) {
+                              return const SizedBox.shrink();
+                            }
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 8, bottom: 6),
+                              child: LessonWatchStatusWg(
+                                watched: _watchedNotifier,
+                              ),
+                            );
+                          },
+                        ),
 
                         /// Files section
                         const SizedBox(height: 10),
@@ -526,28 +790,53 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
                         ),
                         const SizedBox(height: 16),
                         if (widget.testCount != 0)
-                          DefaultCustomTileWg(
-                            tileMaxLines: 1,
-                            tileOverflow: TextOverflow.ellipsis,
-                            tileLeading: null,
-                            onTap: _openLessonTest,
-                            tileTitle: localization.testAssignmentTileTitle,
-                            subTitle: localization.testAssignmentTileSubtitle,
-                            tileAction: ValueListenableBuilder<bool>(
-                              valueListenable: _isCheckingTestNotifier,
-                              builder: (_, isChecking, _) => isChecking
-                                  ? const SizedBox(
-                                      width: 18,
-                                      height: 18,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
+                          BlocBuilder<
+                            CourseLessonItemsBloc,
+                            CourseLessonItemsState
+                          >(
+                            buildWhen: (previous, current) =>
+                                _isWatchedIn(previous) != _isWatchedIn(current),
+                            builder: (context, state) {
+                              final isLocked =
+                                  !_isWatchedIn(state) && !_hasTestAnswers;
+                              return DefaultCustomTileWg(
+                                tileMaxLines: 1,
+                                tileOverflow: TextOverflow.ellipsis,
+                                tileLeading: null,
+                                onTap: isLocked
+                                    ? _showTestLockedHint
+                                    : _openLessonTest,
+                                tileTitle: localization.testAssignmentTileTitle,
+                                subTitle: isLocked
+                                    ? localization.lessonTestLockedHint
+                                    : localization.testAssignmentTileSubtitle,
+                                tileAction: isLocked
+                                    ? Icon(
+                                        IconlyBold.lock,
+                                        size: 18,
+                                        color: AppColors.greyScale.grey400,
+                                      )
+                                    : ValueListenableBuilder<bool>(
+                                        valueListenable:
+                                            _isCheckingTestNotifier,
+                                        builder: (_, isChecking, _) =>
+                                            isChecking
+                                            ? const SizedBox(
+                                                width: 18,
+                                                height: 18,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                      strokeWidth: 2,
+                                                    ),
+                                              )
+                                            : Icon(
+                                                IconlyLight.arrowRight2,
+                                                color:
+                                                    AppColors.greyScale.grey400,
+                                              ),
                                       ),
-                                    )
-                                  : Icon(
-                                      IconlyLight.arrowRight2,
-                                      color: AppColors.greyScale.grey400,
-                                    ),
-                            ),
+                              );
+                            },
                           )
                         else
                           _emptyFileAndTest(
@@ -563,6 +852,44 @@ class _WatchCourseEduVideoPageState extends State<WatchCourseEduVideoPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildNavBar() {
+    return BlocBuilder<CourseLessonTopicsBloc, CourseLessonTopicsState>(
+      buildWhen: (_, current) => current is CourseLessonTopicsLoaded,
+      builder: (context, topics) {
+        if (topics is CourseLessonTopicsLoaded) {
+          _blockIds = topics.response.data.map((topic) => topic.id).toList();
+        }
+        return BlocBuilder<CourseLessonItemsBloc, CourseLessonItemsState>(
+          builder: (context, items) {
+            final neighbors = _neighborsIn(items);
+            _requestMissingBlocks(neighbors);
+            final previous = neighbors.previous;
+            final next = neighbors.next;
+            final isNextLoading =
+                next == null &&
+                neighbors.isNextPending &&
+                neighbors.blocksToLoad.any(items.loadingBlocks.contains);
+
+            return LessonNavBarWg(
+              showPrevious: previous != null,
+              showNext: next != null || neighbors.isNextPending,
+              isNextLocked: next == null || next.userLessons == 0,
+              isNextLoading: isNextLoading,
+              onPrevious: previous == null
+                  ? null
+                  : () => _openNeighbor(previous, isNext: false),
+              onNext: next != null
+                  ? () => _openNeighbor(next, isNext: true)
+                  : isNextLoading
+                  ? null
+                  : () => neighbors.blocksToLoad.forEach(_loadBlock),
+            );
+          },
+        );
+      },
     );
   }
 

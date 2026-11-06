@@ -57,14 +57,18 @@ class _SearchStudentsPageState extends State<SearchStudentsPage> {
     });
   }
 
-  void _openDetail(String? avatar, String fullName) {
+  void _openDetail(int userId, String? avatar, String fullName) {
     final String? thumb = avatar != null
         ? '${ApiUrls.imageUrlBase2}$avatar'
         : null;
     openMiniAppSheetFamily(
       context,
       showHandler: false,
-      child: TempDetailedUserEdu(imagePath: thumb, name: fullName),
+      child: TempDetailedUserEdu(
+        userId: userId,
+        imagePath: thumb,
+        name: fullName,
+      ),
     );
   }
 
@@ -228,7 +232,8 @@ class _SearchStudentsPageState extends State<SearchStudentsPage> {
                         return GestureDetector(
                           onTap: item == null
                               ? null
-                              : () => _openDetail(item.avatar, fullName),
+                              : () =>
+                                    _openDetail(item.id, item.avatar, fullName),
                           child: Skeletonizer(
                             enabled: isLoading,
                             child: Container(

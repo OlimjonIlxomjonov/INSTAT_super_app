@@ -435,6 +435,24 @@
   "regularTestFinishSubtitle": "Keyingi safar ko'proq o'rganing va barcha to'g'ri javoblarni oling.",
   "lessonTestFailedTitle": "Testdan o'ta olmadingiz",
   "lessonTestFailedSubtitle": "Videoni qayta ko'rib chiqib, testni qayta topshiring",
+  "lessonTestLockedHint": "Testga kirish uchun videoni oxirigacha tugatishingiz kerak",
+  "lessonWatchedPercent": "Video ko'rildi: {percent}%",
+  "@lessonWatchedPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "lessonWatchHint": "Surib o'tilgan joylar hisoblanmaydi",
+  "previousLessonButton": "Oldingi dars",
+  "nextLessonButton": "Keyingi dars",
+  "lessonNextLockedHint": "Keyingi dars joriy darsni tugatgandan keyin ochiladi",
+  "rewatchVideoButton": "Videoni qayta ko'rish",
+  "noMedalsTitle": "Hozircha medallar yo'q",
+  "noMedalsSubtitle": "Medallar kurslarni muvaffaqiyatli tugatgandan keyin shu yerda ko'rinadi",
+  "studentNoCertificatesTitle": "Hozircha sertifikat yo'q",
+  "studentNoCertificatesSubtitle": "Kurs tugatilgach, sertifikatlar shu yerda ko'rinadi",
   "keywordArticlesTitle": "Kalit so'z bo'yicha",
   "articlesFoundCount": "{count} ta maqola",
   "@articlesFoundCount": {

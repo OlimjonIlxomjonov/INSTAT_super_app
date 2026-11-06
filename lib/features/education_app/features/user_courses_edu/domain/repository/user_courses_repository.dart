@@ -1,3 +1,4 @@
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/lesson_status/lesson_status_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/test_answer/test_answer_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_group_member/course_group_member_entity.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
@@ -96,7 +97,7 @@ abstract class UserCoursesRepository {
     required OfflineLessonsParams params,
   });
 
-  Future<bool> getLessonFaceIdEnabled(int lessonId);
+  Future<LessonStatusEntity> getLessonStatus(int lessonId);
 
   Future<List<TestAnswerEntity>> getLessonTestAnswers(int lessonId);
 

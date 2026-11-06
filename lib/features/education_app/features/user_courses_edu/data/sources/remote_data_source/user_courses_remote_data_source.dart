@@ -1,3 +1,4 @@
+import 'package:my_template/features/education_app/features/user_courses_edu/data/models/lesson_status/lesson_status_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/test_answer/test_answer_model.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/data/models/course_group_member/course_group_member_model.dart';
 import 'package:my_template/core/common/params/edu_params/params.dart';
@@ -98,7 +99,7 @@ abstract class UserCoursesRemoteDataSource {
     required OfflineLessonsParams params,
   });
 
-  Future<bool> fetchLessonFaceIdEnabled(int lessonId);
+  Future<LessonStatusModel> fetchLessonStatus(int lessonId);
 
   Future<List<TestAnswerModel>> fetchLessonTestAnswers(int lessonId);
 

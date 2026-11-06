@@ -21,9 +21,6 @@ import 'package:my_template/core/utils/responsiveness/app_responsiveness.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_test/course_lesson_test_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_test/course_lesson_test_event.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_test/course_lesson_test_state.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_items/course_lesson_items_bloc.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/course_lesson_topics/course_lesson_topics_bloc.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/user_courses_event.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/finish_lesson_test_dialog/finish_lesson_test_dialog_screen.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/shared_widgets/test_layout.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/course_lesson_test/shared_widgets/test_option_list_wg.dart';
@@ -34,6 +31,7 @@ class RegularTestCoursePage extends StatefulWidget {
   final int blockId;
   final int lessonId;
   final bool isFaceIdEnabled;
+  final ValueChanged<CourseLessonTestFinished>? onFinished;
 
   const RegularTestCoursePage({
     super.key,
@@ -41,6 +39,7 @@ class RegularTestCoursePage extends StatefulWidget {
     required this.blockId,
     required this.lessonId,
     required this.isFaceIdEnabled,
+    this.onFinished,
   });
 
   @override
@@ -166,23 +165,17 @@ class _RegularTestCoursePageState extends State<RegularTestCoursePage>
           width: double.infinity,
           child: ElevatedButton(
             onPressed: () {
-              context.read<CourseLessonTopicsBloc>().add(
-                CourseLessonTopicsEvent(
-                  params: CourseCategoryByIdParams(id: widget.courseId),
-                ),
-              );
-              context.read<CourseLessonItemsBloc>().add(
-                CourseLessonItemsEvent(
-                  params: CourseLessonItemsParams(
-                    courseId: widget.courseId,
-                    blockId: widget.blockId,
-                  ),
-                ),
-              );
               AppRoute.close();
               AppRoute.close();
+              widget.onFinished?.call(state);
             },
-            child: Text(localization.continueButton),
+            child: Text(
+              !isPassed
+                  ? localization.rewatchVideoButton
+                  : state.nextLessonId != null
+                  ? localization.nextLessonButton
+                  : localization.continueButton,
+            ),
           ),
         ),
       ],

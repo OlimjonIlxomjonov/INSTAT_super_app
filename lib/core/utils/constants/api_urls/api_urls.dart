@@ -56,6 +56,7 @@ class ApiUrls {
 
   /// Leader board
   static const leaderBoard = 'courses/students/';
+  static String studentRating(int id) => 'courses/students/$id/rating/';
 
   /// uploadAvatar
   static const uploadAvatar = 'upload-avatar';

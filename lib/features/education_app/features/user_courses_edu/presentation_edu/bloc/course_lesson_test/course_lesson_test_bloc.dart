@@ -4,6 +4,7 @@ import 'package:my_template/core/common/params/edu_params/params.dart';
 import 'package:my_template/core/network/dio_error_classifier.dart';
 import 'package:my_template/core/utils/enums/app_enums.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/per_course/per_course_use_case.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_answer_response_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/course_lesson_test/lesson_test_option_entity.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/entity/courses/courses_entity.dart';
@@ -27,6 +28,7 @@ class CourseLessonTestBloc
   Map<int, TestAnswerEntity> _answers = {};
   final Map<int, List<LessonTestOptionEntity>> _optionsCache = {};
   Future<CourseEntity?>? _courseFuture;
+  LessonTestAnswerResponseEntity? _finishedResponse;
   int _courseId = 0;
   int _blockId = 0;
   int _lessonId = 0;
@@ -56,6 +58,7 @@ class CourseLessonTestBloc
     _lessonId = event.params.lessonId;
     _answers = {};
     _optionsCache.clear();
+    _finishedResponse = null;
     _courseFuture = _fetchCourse();
 
     try {
@@ -214,8 +217,9 @@ class CourseLessonTestBloc
       emit(
         CourseLessonTestFinished(
           totalQuestions: _tests.length,
-          correctAnswers: current.correctCount,
+          correctAnswers: _finishedResponse?.corrects ?? current.correctCount,
           passingScore: passingScore,
+          nextLessonId: _finishedResponse?.nextLessonId,
         ),
       );
       return;
@@ -256,6 +260,7 @@ class CourseLessonTestBloc
         return;
       }
 
+      if (response.isFinished) _finishedResponse = response;
       _answers = {
         ..._answers,
         test.id: TestAnswerEntity(

@@ -1,5 +1,7 @@
+import 'package:my_template/features/education_app/features/statistics_edu/domain/usecase/student_rating/student_rating_use_case.dart';
+import 'package:my_template/features/education_app/features/statistics_edu/presentation_edu/bloc/student_rating/student_rating_cubit.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/test_answers/test_answers_use_cases.dart';
-import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/lesson_face_id/lesson_face_id_use_case.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/lesson_status/lesson_status_use_case.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/domain/usecase/course_group_members/course_group_members_use_case.dart';
 import 'package:dio/dio.dart';
 import 'package:my_template/features/education_app/features/home_edu/domain/usecase/add_course_comment/add_course_comment_use_case.dart';
@@ -355,6 +357,7 @@ Future<void> setup() async {
   );
   sl.registerLazySingleton(() => LeaderBoardUseCase(repository: sl()));
   sl.registerLazySingleton(() => SearchStudentsUseCase(repository: sl()));
+  sl.registerLazySingleton(() => StudentRatingUseCase(repository: sl()));
   sl.registerLazySingleton(() => AvatarUseCase(repository: sl()));
   sl.registerLazySingleton(() => CommentsUseCase(repository: sl()));
   sl.registerLazySingleton(() => OfflineCourseUseCase(repository: sl()));
@@ -395,7 +398,7 @@ Future<void> setup() async {
   sl.registerLazySingleton(() => ScanQrUseCase(repository: sl()));
   //? offline lessons
   sl.registerLazySingleton(() => OfflineLessonsUseCase(repository: sl()));
-  sl.registerLazySingleton(() => LessonFaceIdUseCase(repository: sl()));
+  sl.registerLazySingleton(() => LessonStatusUseCase(repository: sl()));
   sl.registerLazySingleton(() => LessonTestAnswersUseCase(repository: sl()));
   sl.registerLazySingleton(() => CourseTestAnswersUseCase(repository: sl()));
   sl.registerLazySingleton(
@@ -561,6 +564,7 @@ Future<void> setup() async {
   );
   sl.registerLazySingleton(() => LeaderBoardBloc(sl()));
   sl.registerFactory(() => SearchStudentsBloc(useCase: sl()));
+  sl.registerFactory(() => StudentRatingCubit(useCase: sl()));
   sl.registerLazySingleton(() => AvatarBloc(useCase: sl()));
   sl.registerLazySingleton(() => CommentsBloc(useCase: sl()));
   sl.registerLazySingleton(() => OfflineCourseBloc(useCase: sl()));

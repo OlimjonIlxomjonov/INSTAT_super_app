@@ -12,6 +12,9 @@ class LessonTestAnswerResponseEntity {
   /// `data` bo'lmaydi va `ok: false` keladi — bu noto'g'ri javob emas,
   /// javob umuman qabul qilinmagan.
   final bool isRecorded;
+  final int? corrects;
+  final int? inCorrects;
+  final int? nextLessonId;
 
   LessonTestAnswerResponseEntity({
     required this.data,
@@ -21,6 +24,9 @@ class LessonTestAnswerResponseEntity {
     required this.isRecorded,
     this.matched,
     this.confidenceScore,
+    this.corrects,
+    this.inCorrects,
+    this.nextLessonId,
   });
 }
 

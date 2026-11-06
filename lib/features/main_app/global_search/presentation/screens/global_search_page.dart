@@ -10,6 +10,7 @@ import 'package:my_template/core/utils/widgets/open_mini_app/sheet_drag_area_wg.
 import 'package:my_template/core/utils/widgets/search_bar/app_search_field_wg.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/detailed_course_info_page.dart';
 import 'package:my_template/features/education_app/features/home_edu/presentation_edu/screens_edu/search_courses_page.dart';
+import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/bloc/search_courses/search_courses_bloc.dart';
 import 'package:my_template/features/education_app/features/user_courses_edu/presentation_edu/screens_edu/components/course_category_builder.dart';
 import 'package:my_template/features/main_app/global_search/presentation/bloc/global_search_cubit.dart';
 import 'package:my_template/features/main_app/global_search/presentation/bloc/global_search_state.dart';
@@ -17,6 +18,7 @@ import 'package:my_template/features/main_app/global_search/presentation/widgets
 import 'package:my_template/features/main_app/global_search/presentation/widgets/search_module_chips_wg.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/reports/detailed_reports_page.dart';
 import 'package:my_template/features/mikro_data/presentation/screens/reports/reports_page.dart';
+import 'package:my_template/features/online_library_app/features/home_lib/presentation/bloc/search_books/search_books_bloc.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/lib_components/detailed_online_book_component.dart';
 import 'package:my_template/features/online_library_app/features/home_lib/presentation/screens/search_books_page.dart';
 import 'package:my_template/features/scientific_articles_app/features/magazines/presentation/screens/magazine_detail_page.dart';
@@ -130,7 +132,10 @@ class _GlobalSearchView extends StatelessWidget {
                       ),
                       onSeeAll: () => _openSheet(
                         context,
-                        SearchCoursesPage(initialQuery: state.query),
+                        BlocProvider(
+                          create: (_) => sl<SearchCoursesBloc>(),
+                          child: SearchCoursesPage(initialQuery: state.query),
+                        ),
                       ),
                       onRetry: () => cubit.search(state.query),
                     ),
@@ -150,7 +155,10 @@ class _GlobalSearchView extends StatelessWidget {
                       ),
                       onSeeAll: () => _openSheet(
                         context,
-                        SearchBooksPage(initialQuery: state.query),
+                        BlocProvider(
+                          create: (_) => sl<SearchBooksBloc>(),
+                          child: SearchBooksPage(initialQuery: state.query),
+                        ),
                       ),
                       onRetry: () => cubit.search(state.query),
                     ),
