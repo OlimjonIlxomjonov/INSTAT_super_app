@@ -111,14 +111,16 @@ class UserInfoTab extends StatelessWidget {
               children: [
                 Icon(Icons.star, color: AppColors.primaryColor),
                 SizedBox(width: appW(8)),
-                Text(
-                  userInfoCard[index],
-                  style: AppTextStyles.source.medium(
-                    fontSize: 14,
-                    color: AppColors.greyScale.grey600,
+                Expanded(
+                  child: Text(
+                    userInfoCard[index],
+                    style: AppTextStyles.source.medium(
+                      fontSize: 14,
+                      color: AppColors.greyScale.grey600,
+                    ),
                   ),
                 ),
-                Expanded(child: Container()),
+                SizedBox(width: appW(8)),
                 Text(
                   userTrailing[index],
                   style: AppTextStyles.source.medium(fontSize: 16),
